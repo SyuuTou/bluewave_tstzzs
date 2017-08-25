@@ -2,6 +2,8 @@ package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.LoginReqBody;
+import com.lhjl.tzzs.proxy.dto.SendsecuritycodeReqBody;
+import com.lhjl.tzzs.proxy.dto.ZhuceReqBody;
 import com.lhjl.tzzs.proxy.service.CommonHttpService;
 import com.lhjl.tzzs.proxy.service.common.JedisCommonService;
 import org.springframework.beans.factory.annotation.Autowired;
