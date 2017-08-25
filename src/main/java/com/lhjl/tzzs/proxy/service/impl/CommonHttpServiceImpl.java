@@ -1,15 +1,16 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.LoginReqBody;
-import com.lhjl.tzzs.proxy.dto.SendsecuritycodeReqBody;
-import com.lhjl.tzzs.proxy.dto.ZhuceReqBody;
+import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.service.CommonHttpService;
+import net.minidev.json.JSONObject;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
@@ -26,7 +27,11 @@ import java.util.List;
 public class CommonHttpServiceImpl implements CommonHttpService {
 
 
-
+    /**
+     * 登录接口
+     * @param loginReqBody
+     * @return
+     */
     @Override
     public String requestLogin(LoginReqBody loginReqBody) {
 
@@ -64,9 +69,14 @@ public class CommonHttpServiceImpl implements CommonHttpService {
         return result;
     }
 
+    /**
+     * 验证码接口
+     * @param sendsecuritycodeReqBody
+     * @return
+     */
     @Override
     public String requestSendsecuritycode(SendsecuritycodeReqBody sendsecuritycodeReqBody) {
-        HttpPost httpRequest = new HttpPost("https://chuangxinzhishu.wware.org/v/auth/sendsecuritycode.json");
+        HttpPost httpRequest = new HttpPost("https://chuangxinzhishu.wware.org/v/auth/sendsecuritycode.json?_ajax=true&ct=public_json");
         String result = "";
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("mobile",sendsecuritycodeReqBody.getSecuritycode()));
@@ -87,6 +97,11 @@ public class CommonHttpServiceImpl implements CommonHttpService {
         return result;
     }
 
+    /**
+     * 注册接口
+     * @param zhuceReqBody
+     * @return
+     */
     @Override
     public String requestZhuce(ZhuceReqBody zhuceReqBody) {
         HttpPost httpRequest = new HttpPost("https://chuangxinzhishu.wware.org/rest/user/zhuce.json?ct=public_json");
@@ -115,6 +130,16 @@ public class CommonHttpServiceImpl implements CommonHttpService {
         return result;
     }
 
+    @Override
+    public String requestFindPwd(FindPwdReqBody findPwdReqBody) {
+        return null;
+    }
+
+
+    /**
+     * 测试登录
+     * @param args
+     */
 //    public static void main(String[] args) {
 //        HttpPost httpRequst = new HttpPost("https://chuangxinzhishu.wware.org/v/auth/login.json?ct=public_json");
 //        //创建HttpPost对象
@@ -152,8 +177,12 @@ public class CommonHttpServiceImpl implements CommonHttpService {
 //    }
 
 
+    /**
+     * 测试验证码
+     * @param args
+     */
 //    public static void main(String[] args) {
-//        HttpPost httpRequest = new HttpPost("https://chuangxinzhishu.wware.org/v/auth/sendsecuritycode.json");
+//        HttpPost httpRequest = new HttpPost("https://chuangxinzhishu.wware.org/v/auth/sendsecuritycode.json?_ajax=true&ct=public_json");
 //        String result = "";
 //        List<NameValuePair> params = new ArrayList<NameValuePair>();
 //        params.add(new BasicNameValuePair("mobile","15135332285"));
@@ -177,29 +206,71 @@ public class CommonHttpServiceImpl implements CommonHttpService {
 //            result = e.getMessage().toString();
 //        }
 //    }
+
+
+    /**
+     * 测试注册
+     * @param args
+     */
+//    public static void main(String[] args) {
+//        HttpPost httpRequest = new HttpPost("https://chuangxinzhishu.wware.org/rest/user/zhuce.json");
+//        String result = "";
+//        List<NameValuePair> params = new ArrayList<NameValuePair>();
+//        params.add(new BasicNameValuePair("mobile","13683273656"));
+//        params.add(new BasicNameValuePair("username","luo"));
+//        params.add(new BasicNameValuePair("password","123456"));
+//        params.add(new BasicNameValuePair("securitycode","130816"));
+//        try {
+//            httpRequest.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+//            HttpResponse httpResponse = new DefaultHttpClient().execute(httpRequest);
+//            if (httpResponse.getStatusLine().getStatusCode()==200){
+//                HttpEntity httpEntity = httpResponse.getEntity();
+//                result = EntityUtils.toString(httpEntity);//取出应答字符串
+//            }
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//                result = e.getMessage().toString();
+//        } catch (ClientProtocolException e) {
+//            e.printStackTrace();
+ //                result = e.getMessage().toString();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//                 result = e.getMessage().toString();
+//        }
+//
+//    }
+
+
+    /**
+     * 找回密码测试
+     * @param args
+     */
     public static void main(String[] args) {
-        HttpPost httpRequest = new HttpPost("https://chuangxinzhishu.wware.org/rest/user/zhuce.json");
+        HttpPost httpRequest = new HttpPost("https://chuangxinzhishu.wware.org/rest/user/umima.json?_ajax=true&ct=public_json");
+        CloseableHttpClient client = HttpClients.createDefault();
+
         String result = "";
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("mobile","13683273656"));
-        params.add(new BasicNameValuePair("username","luo"));
-        params.add(new BasicNameValuePair("password","123456"));
-        params.add(new BasicNameValuePair("securitycode","130816"));
+
+        JSONObject jsonParam = new JSONObject();
+        jsonParam.put("mobile", "15135332285");
+        jsonParam.put("securitycode", "019912");
+        jsonParam.put("password", "369369");
+        jsonParam.put("passworda", "369369");
+            StringEntity entity = new StringEntity(jsonParam.toString(), "utf-8");
+            entity.setContentEncoding("UTF-8");
+            entity.setContentType("application/json");
+            httpRequest.setEntity(entity);
+
         try {
-            httpRequest.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
-            HttpResponse httpResponse = new DefaultHttpClient().execute(httpRequest);
-            if (httpResponse.getStatusLine().getStatusCode()==200){
-                HttpEntity httpEntity = httpResponse.getEntity();
-                result = EntityUtils.toString(httpEntity);//取出应答字符串
+            HttpResponse response = new DefaultHttpClient().execute(httpRequest);
+            if (response.getStatusLine().getStatusCode() == 200){
+                HttpEntity he=  response.getEntity();
+                result = EntityUtils.toString(he,"UTF-8");
             }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-    }
 
+    }
 }
