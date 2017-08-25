@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,17 +26,26 @@ public class LoginController {
     private Environment env;
 
     @PostMapping(value = "/login")
-    @ResponseBody
-    public CommonDto<List<String>> login(@RequestBody LoginReqBody loginReqBody){
+    public String login(@RequestBody LoginReqBody loginReqBody){
 
+        String  resData = commonHttpService.requestLogin(loginReqBody);
 
         System.out.println(env.getProperty("server.port"));
         Jedis jedis = jedisCommonService.getJedis();
         jedis.set("1111","hello world");
-
         System.out.println(jedis.get("1111"));
-        CommonDto<List<String>> resData = commonHttpService.requestLogin(loginReqBody);
 
+        return resData;
+    }
+
+    @PostMapping(value = "/code")
+    public String code(@RequestBody SendsecuritycodeReqBody sendsecuritycodeReqBody){
+        String resData = commonHttpService.requestSendsecuritycode(sendsecuritycodeReqBody);
+        return resData;
+    }
+    @PostMapping(value = "/zhuce")
+    public String zhu(@RequestBody ZhuceReqBody zhuceReqBody){
+        String resData = commonHttpService.requestZhuce(zhuceReqBody);
         return resData;
     }
 }
