@@ -20,6 +20,7 @@ import org.apache.http.NameValuePair;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -246,26 +247,39 @@ public class CommonHttpServiceImpl implements CommonHttpService {
      * @param args
      */
     public static void main(String[] args) {
-        HttpPost httpRequest = new HttpPost("https://chuangxinzhishu.wware.org/rest/user/umima.json?_ajax=true&ct=public_json");
+        HttpPost httpRequest = new HttpPost("https://chuangxinzhishu.wware.org/rest/user/umima.json");
         CloseableHttpClient client = HttpClients.createDefault();
 
         String result = "";
 
-        JSONObject jsonParam = new JSONObject();
-        jsonParam.put("mobile", "15135332285");
-        jsonParam.put("securitycode", "019912");
-        jsonParam.put("password", "369369");
-        jsonParam.put("passworda", "369369");
-            StringEntity entity = new StringEntity(jsonParam.toString(), "utf-8");
-            entity.setContentEncoding("UTF-8");
-            entity.setContentType("application/json");
-            httpRequest.setEntity(entity);
+//        JSONObject jsonParam = new JSONObject();
+//        jsonParam.put("mobile", "15135332285");
+//        jsonParam.put("securitycode", "019912");
+//        jsonParam.put("password", "369369");
+//        jsonParam.put("passworda", "369369");
+        List <NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("mobile", "13269279933"));
+        params.add(new BasicNameValuePair("securitycode", "995316"));
+        params.add(new BasicNameValuePair("password", "123456"));
+        params.add(new BasicNameValuePair("passworda", "123456"));
+
+//            StringEntity entity = new StringEntity(jsonParam.toString(), "utf-8");
+//            entity.setContentEncoding("UTF-8");
+//            entity.setContentType("application/json");
 
         try {
+            httpRequest.setEntity(new UrlEncodedFormEntity(params, "utf-8"));
+            httpRequest.setHeader("Host","chuangxinzhishu.wware.org");
+            httpRequest.setHeader("Content-Type","application/x-www-form-urlencoded");
+            httpRequest.setHeader("Access-Control-Allow-Origin","*");
+            httpRequest.setHeader("Access-Control-Allow-Methods","POST");
+            httpRequest.setHeader("Access-Control-Allow-Headers","x-requested-with,content-type");
+            httpRequest.setHeader("User-Agent","Mozilla/5.0 Firefox/26.0");
             HttpResponse response = new DefaultHttpClient().execute(httpRequest);
             if (response.getStatusLine().getStatusCode() == 200){
                 HttpEntity he=  response.getEntity();
                 result = EntityUtils.toString(he,"UTF-8");
+                System.out.println(result);
             }
         } catch (IOException e) {
             e.printStackTrace();
