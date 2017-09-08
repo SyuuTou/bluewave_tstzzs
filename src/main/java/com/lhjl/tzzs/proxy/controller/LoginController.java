@@ -8,6 +8,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -33,8 +34,11 @@ public class LoginController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @PostMapping(value = "/login")
-    public String login(@RequestBody LoginReqBody loginReqBody){
+    @GetMapping(value = "/login", consumes = {"text/plain", "application/*"})
+    public String login(@RequestParam String username,@RequestParam String password){
+        LoginReqBody loginReqBody = new LoginReqBody();
+        loginReqBody.setUserName(username);
+        loginReqBody.setPassword(password);
 
         String  resData = commonHttpService.requestLogin(loginReqBody);
 
@@ -60,6 +64,9 @@ public class LoginController {
         HttpEntity<ResetPasswordReqBody> request = new HttpEntity<ResetPasswordReqBody>(reqBody,headers);
 
         String result = this.restTemplate.postForObject("https://chuangxinzhishu.wware.org/rest/user/umima.json?_ajax=true&ct=public_json",request,String.class);
+        ResponseEntity<String> responseEntity =  this.restTemplate.postForEntity("https://chuangxinzhishu.wware.org/rest/user/umima.json?_ajax=true&ct=public_json",request,String.class);
+        responseEntity.getHeaders().get(HttpHeaders.COOKIE);
+
 
 //        String resData = commonHttpService.requestSendsecuritycode(sendsecuritycodeReqBody);
         return result;
