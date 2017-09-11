@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.DistributedCommonDto;
 import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.dto.LabelList;
 import com.lhjl.tzzs.proxy.mapper.MetaFinancingMapper;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +55,8 @@ public class EvaluateServiceImpl implements EvaluateService {
     @Override
     public CommonDto<List<HistogramList>> valuation(String roundName, String industryName, String cityName, String educationName, String workName) {
 
-        CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
+        DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
+//        roundName= "Pre-A轮";
         if (StringUtils.isEmpty(roundName)){
             result.setStatus(511);
             result.setMessage("融资阶段必须选择。");
@@ -63,14 +66,16 @@ public class EvaluateServiceImpl implements EvaluateService {
 
         List<HistogramList> dataList = financingMapper.queryValuation(roundName,industryName,cityName,educationName,workName);
 
-        Integer total = financingMapper.queryCount(roundName,industryName,cityName,educationName,workName);
-
+        Map<String, Object> collect = financingMapper.queryValuationCount(roundName,industryName,cityName,educationName,workName);
+        if (null != collect.get("avgMoney")) {
+            result.setAvgMoney(new BigDecimal(collect.get("avgMoney").toString()).intValue());
+        }
         NumberFormat numberFormat = NumberFormat.getInstance();
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
         for (HistogramList histogramList: dataList) {
             histogramList.setX(String.valueOf(histogramList.getMoney()));
-            histogramList.setY(numberFormat.format((float) histogramList.getDcount() / (float) total * 100));
+            histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(collect.get("total").toString()) * 100));
         }
 
         result.setMessage("success");
@@ -82,22 +87,26 @@ public class EvaluateServiceImpl implements EvaluateService {
 
     @Override
     public CommonDto<List<HistogramList>> financingAmount(String roundName, String industryName, String cityName, String educationName, String workName) {
-        CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
+        DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
+//        roundName= "Pre-A轮";
         if (StringUtils.isEmpty(roundName)){
             result.setStatus(511);
             result.setMessage("融资阶段必须选择。");
             return result;
         }
 
-        List<HistogramList> dataList = financingMapper.queryFinancingAmount(roundName, industryName, cityName, educationName, workName);
-        Integer total = financingMapper.queryCount(roundName,industryName,cityName,educationName,workName);
 
+        List<HistogramList> dataList = financingMapper.queryFinancingAmount(roundName, industryName, cityName, educationName, workName);
+        Map<String, Object> collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,educationName,workName);
+        if (null != collect.get("avgMoney")) {
+            result.setAvgMoney(new BigDecimal(collect.get("avgMoney").toString()).intValue());
+        }
         NumberFormat numberFormat = NumberFormat.getInstance();
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
         for (HistogramList histogramList: dataList) {
             histogramList.setX(String.valueOf(histogramList.getMoney()));
-            histogramList.setY(numberFormat.format((float) histogramList.getDcount() / (float) total * 100));
+            histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(collect.get("total").toString()) * 100));
         }
 
         result.setMessage("success");

@@ -50,9 +50,30 @@
   </select>
 
 
-    <select id="queryCount" resultType="Integer">
-        SELECT COUNT(1) FROM meta_financing mf LEFT JOIN meta_financing_education mfe on mf.id = mfe.financing_id
+    <select id="queryFinancingCount" resultType="map">
+        SELECT COUNT(1) total,AVG(mf.money) avgMoney FROM meta_financing mf LEFT JOIN meta_financing_education mfe on mf.id = mfe.financing_id
         LEFT JOIN meta_financing_work mfw on mf.id = mfw.financing_id WHERE mf.money != 0
+        <if test="roundName != '' and roundName != null">
+            AND mf.round = #{roundName}
+        </if>
+        <if test="industryName != '' and industryName != null">
+            AND mf.main_Industry = #{industryName}
+        </if>
+        <if test="cityName != '' and cityName != null">
+            AND mf.register_area = #{cityName}
+        </if>
+        <if test="educationName != '' and educationName != null">
+            AND mfe.education_experience = #{educationName}
+        </if>
+        <if test="workName != '' and workName != null">
+            AND mfw.work_experience = #{workName}
+        </if>
+
+    </select>
+
+    <select id="queryValuationCount" resultType="map">
+        SELECT COUNT(1) total,AVG(mf.money) avgMoney FROM meta_financing mf LEFT JOIN meta_financing_education mfe on mf.id = mfe.financing_id
+        LEFT JOIN meta_financing_work mfw on mf.id = mfw.financing_id WHERE mf.valuation != 0
         <if test="roundName != '' and roundName != null">
             AND mf.round = #{roundName}
         </if>
