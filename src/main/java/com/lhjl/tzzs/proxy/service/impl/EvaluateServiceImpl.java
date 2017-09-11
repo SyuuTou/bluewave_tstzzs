@@ -54,13 +54,12 @@ public class EvaluateServiceImpl implements EvaluateService {
     public CommonDto<List<HistogramList>> valuation(String roundName, String industryName, String cityName, String educationName, String workName) {
 
         CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
-//        if (StringUtils.isEmpty(roundName)){
-//            result.setStatus(511);
-//            result.setMessage("融资阶段必须选择。");
-//            return result;
-//        }
+        if (StringUtils.isEmpty(roundName)){
+            result.setStatus(511);
+            result.setMessage("融资阶段必须选择。");
+            return result;
+        }
 
-        roundName = "A轮";
 
         List<HistogramList> dataList = financingMapper.queryValuation(roundName,industryName,cityName,educationName,workName);
 

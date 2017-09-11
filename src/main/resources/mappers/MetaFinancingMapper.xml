@@ -73,8 +73,25 @@
 
     <select id="queryValuation" resultMap="histogramResultMap">
 
-        SELECT Valuation money, Valuation dcount FROM meta_financing WHERE 1=1 AND ID = 1 AND round = ${roundName}
-
+        SELECT dis money, COUNT(dis) dcount FROM (
+        SELECT CEILING(mf.Valuation/500) * 500 as dis, mf.Valuation FROM meta_financing mf LEFT JOIN meta_financing_education mfe on mf.id = mfe.financing_id
+        LEFT JOIN meta_financing_work mfw on mf.id = mfw.financing_id WHERE mf.valuation != 0
+        <if test="roundName != '' and roundName != null">
+            AND mf.round = #{roundName}
+        </if>
+        <if test="industryName != '' and industryName != null">
+            AND mf.main_Industry = #{industryName}
+        </if>
+        <if test="cityName != '' and cityName != null">
+            AND mf.register_area = #{cityName}
+        </if>
+        <if test="educationName != '' and educationName != null">
+            AND mfe.education_experience = #{educationName}
+        </if>
+        <if test="workName != '' and workName != null">
+            AND mfw.work_experience = #{workName}
+        </if>
+        ) a GROUP BY dis
 
     </select>
 
