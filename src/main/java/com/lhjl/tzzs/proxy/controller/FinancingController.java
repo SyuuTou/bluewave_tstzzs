@@ -7,18 +7,17 @@ import com.lhjl.tzzs.proxy.dto.LabelList;
 import com.lhjl.tzzs.proxy.service.EvaluateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 public class FinancingController {
+
     private static final Logger log = LoggerFactory.getLogger(FinancingController.class);
 
 
@@ -93,5 +92,37 @@ public class FinancingController {
         }
 
         return result;
+    }
+
+//    @GetMapping("users/list")
+//    @GetMapping("users/{id}")
+    @GetMapping("users/list")
+    public CommonDto<String> users(@RequestParam String name, @RequestParam Integer id){
+        log.info("name={}",name);
+        log.info("id={}", id);
+
+        CommonDto<String> result = new CommonDto<String>();
+        result.setData("Hello World");
+        result.setStatus(200);
+        result.setMessage("success.");
+
+        return result;
+    }
+
+
+    @PostMapping("users/post")
+    public CommonDto<String> users(@RequestBody Map<String, Object> body){
+
+        log.info("name={}",body.get("name"));
+        log.info("id={}", body.get("id"));
+
+        CommonDto<String> result = new CommonDto<String>();
+        result.setData("Hello World");
+        result.setStatus(200);
+        result.setMessage("success.");
+
+
+        return result;
+
     }
 }

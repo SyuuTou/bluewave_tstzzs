@@ -56,7 +56,8 @@ public class EvaluateServiceImpl implements EvaluateService {
     public CommonDto<List<HistogramList>> valuation(String roundName, String industryName, String cityName, String educationName, String workName) {
 
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
-//        roundName= "Pre-A轮";
+        roundName= "Pre-A轮";
+        industryName="游戏";
         if (StringUtils.isEmpty(roundName)){
             result.setStatus(511);
             result.setMessage("融资阶段必须选择。");
@@ -67,15 +68,20 @@ public class EvaluateServiceImpl implements EvaluateService {
         List<HistogramList> dataList = financingMapper.queryValuation(roundName,industryName,cityName,educationName,workName);
 
         Map<String, Object> collect = financingMapper.queryValuationCount(roundName,industryName,cityName,educationName,workName);
-        if (null != collect.get("avgMoney")) {
-            result.setAvgMoney(new BigDecimal(collect.get("avgMoney").toString()).intValue());
-        }
+
         NumberFormat numberFormat = NumberFormat.getInstance();
+        Integer totalMoney = 0;
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
         for (HistogramList histogramList: dataList) {
             histogramList.setX(String.valueOf(histogramList.getMoney()));
             histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(collect.get("total").toString()) * 100));
+
+            totalMoney += histogramList.getMoney()*histogramList.getDcount();
+        }
+
+        if (totalMoney > 0) {
+            result.setAvgMoney(totalMoney/Integer.valueOf(collect.get("total").toString()));
         }
 
         result.setMessage("success");
@@ -88,7 +94,8 @@ public class EvaluateServiceImpl implements EvaluateService {
     @Override
     public CommonDto<List<HistogramList>> financingAmount(String roundName, String industryName, String cityName, String educationName, String workName) {
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
-//        roundName= "Pre-A轮";
+        roundName= "Pre-A轮";
+        industryName="游戏";
         if (StringUtils.isEmpty(roundName)){
             result.setStatus(511);
             result.setMessage("融资阶段必须选择。");
@@ -98,17 +105,22 @@ public class EvaluateServiceImpl implements EvaluateService {
 
         List<HistogramList> dataList = financingMapper.queryFinancingAmount(roundName, industryName, cityName, educationName, workName);
         Map<String, Object> collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,educationName,workName);
-        if (null != collect.get("avgMoney")) {
-            result.setAvgMoney(new BigDecimal(collect.get("avgMoney").toString()).intValue());
-        }
+
         NumberFormat numberFormat = NumberFormat.getInstance();
+
+        Integer totalMoney = 0;
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
         for (HistogramList histogramList: dataList) {
             histogramList.setX(String.valueOf(histogramList.getMoney()));
             histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(collect.get("total").toString()) * 100));
+
+            totalMoney += histogramList.getMoney()*histogramList.getDcount();
         }
 
+        if (totalMoney > 0) {
+            result.setAvgMoney(totalMoney/Integer.valueOf(collect.get("total").toString()));
+        }
         result.setMessage("success");
         result.setStatus(200);
         result.setData(dataList);
