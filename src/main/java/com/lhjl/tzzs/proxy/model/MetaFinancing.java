@@ -77,7 +77,7 @@ public class MetaFinancing {
     /**
      * 融资金额
      */
-    private String money;
+    private Integer money;
 
     /**
      * 币种
@@ -93,7 +93,7 @@ public class MetaFinancing {
      * 估值
      */
     @Column(name = "Valuation")
-    private String valuation;
+    private Integer valuation;
 
     /**
      * 估值币种
@@ -336,7 +336,7 @@ public class MetaFinancing {
      *
      * @return money - 融资金额
      */
-    public String getMoney() {
+    public Integer getMoney() {
         return money;
     }
 
@@ -345,7 +345,7 @@ public class MetaFinancing {
      *
      * @param money 融资金额
      */
-    public void setMoney(String money) {
+    public void setMoney(Integer money) {
         this.money = money;
     }
 
@@ -390,7 +390,7 @@ public class MetaFinancing {
      *
      * @return Valuation - 估值
      */
-    public String getValuation() {
+    public Integer getValuation() {
         return valuation;
     }
 
@@ -399,7 +399,7 @@ public class MetaFinancing {
      *
      * @param valuation 估值
      */
-    public void setValuation(String valuation) {
+    public void setValuation(Integer valuation) {
         this.valuation = valuation;
     }
 
