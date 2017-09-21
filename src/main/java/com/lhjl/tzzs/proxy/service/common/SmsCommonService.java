@@ -81,6 +81,9 @@ public class SmsCommonService {
             result.setStatus(50002);
             return result;
         }
+        result.setData("验证成功。");
+        result.setMessage("success");
+        result.setStatus(200);
 
 
         return result;
