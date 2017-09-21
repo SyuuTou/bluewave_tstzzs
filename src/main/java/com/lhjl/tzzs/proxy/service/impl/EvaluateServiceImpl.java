@@ -58,8 +58,8 @@ public class EvaluateServiceImpl implements EvaluateService {
     public CommonDto<List<HistogramList>> valuation(String roundName, String industryName, String cityName, String educationName, String workName) {
 
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
-        roundName= "Pre-A轮";
-        industryName="游戏";
+//        roundName= "Pre-A轮";
+//        industryName="游戏";
         if (StringUtils.isEmpty(roundName)){
             result.setStatus(511);
             result.setMessage("融资阶段必须选择。");
@@ -96,8 +96,8 @@ public class EvaluateServiceImpl implements EvaluateService {
     @Override
     public CommonDto<List<HistogramList>> financingAmount(String roundName, String industryName, String cityName, String educationName, String workName) {
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
-        roundName= "Pre-A轮";
-        industryName="游戏";
+//        roundName= "Pre-A轮";
+//        industryName="游戏";
         if (StringUtils.isEmpty(roundName)){
             result.setStatus(511);
             result.setMessage("融资阶段必须选择。");

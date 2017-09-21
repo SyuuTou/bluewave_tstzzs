@@ -1,66 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lhjl.tzzs.proxy.mapper.MetaFinancingMapper">
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.MetaFinancing">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="ID" jdbcType="BIGINT" property="id" />
-    <result column="company_brand" jdbcType="VARCHAR" property="companyBrand" />
-    <result column="company_all_name" jdbcType="VARCHAR" property="companyAllName" />
-    <result column="company_intro" jdbcType="VARCHAR" property="companyIntro" />
-    <result column="established_time" jdbcType="VARCHAR" property="establishedTime" />
-    <result column="register_area" jdbcType="VARCHAR" property="registerArea" />
-    <result column="main_Industry" jdbcType="VARCHAR" property="mainIndustry" />
-    <result column="sub_industry" jdbcType="VARCHAR" property="subIndustry" />
-    <result column="company_tag" jdbcType="VARCHAR" property="companyTag" />
-    <result column="product_name" jdbcType="VARCHAR" property="productName" />
-    <result column="financing_last_time" jdbcType="VARCHAR" property="financingLastTime" />
-    <result column="round" jdbcType="VARCHAR" property="round" />
-    <result column="money" jdbcType="INTEGER" property="money" />
-    <result column="currency" jdbcType="VARCHAR" property="currency" />
-    <result column="share" jdbcType="VARCHAR" property="share" />
-    <result column="Valuation" jdbcType="INTEGER" property="valuation" />
-    <result column="Valuation_currency" jdbcType="VARCHAR" property="valuationCurrency" />
-    <result column="Investors" jdbcType="VARCHAR" property="investors" />
-    <result column="education_experience" jdbcType="VARCHAR" property="educationExperience" />
-    <result column="work_experience" jdbcType="VARCHAR" property="workExperience" />
-  </resultMap>
     <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.MetaFinancing">
         <!--
           WARNING - @mbg.generated
         -->
-        <id column="ID" jdbcType="BIGINT" property="id" />
-        <result column="company_brand" jdbcType="VARCHAR" property="companyBrand" />
-        <result column="company_all_name" jdbcType="VARCHAR" property="companyAllName" />
-        <result column="company_intro" jdbcType="VARCHAR" property="companyIntro" />
-        <result column="established_time" jdbcType="VARCHAR" property="establishedTime" />
-        <result column="register_area" jdbcType="VARCHAR" property="registerArea" />
-        <result column="main_Industry" jdbcType="VARCHAR" property="mainIndustry" />
-        <result column="sub_industry" jdbcType="VARCHAR" property="subIndustry" />
-        <result column="company_tag" jdbcType="VARCHAR" property="companyTag" />
-        <result column="product_name" jdbcType="VARCHAR" property="productName" />
-        <result column="financing_last_time" jdbcType="VARCHAR" property="financingLastTime" />
-        <result column="round" jdbcType="VARCHAR" property="round" />
-        <result column="money" jdbcType="VARCHAR" property="money" />
-        <result column="currency" jdbcType="VARCHAR" property="currency" />
-        <result column="share" jdbcType="VARCHAR" property="share" />
-        <result column="Valuation" jdbcType="VARCHAR" property="valuation" />
-        <result column="Valuation_currency" jdbcType="VARCHAR" property="valuationCurrency" />
-        <result column="Investors" jdbcType="VARCHAR" property="investors" />
-        <result column="education_experience" jdbcType="VARCHAR" property="educationExperience" />
-        <result column="work_experience" jdbcType="VARCHAR" property="workExperience" />
+        <id column="ID" jdbcType="BIGINT" property="id"/>
+        <result column="company_brand" jdbcType="VARCHAR" property="companyBrand"/>
+        <result column="company_all_name" jdbcType="VARCHAR" property="companyAllName"/>
+        <result column="company_intro" jdbcType="VARCHAR" property="companyIntro"/>
+        <result column="established_time" jdbcType="VARCHAR" property="establishedTime"/>
+        <result column="register_area" jdbcType="VARCHAR" property="registerArea"/>
+        <result column="main_Industry" jdbcType="VARCHAR" property="mainIndustry"/>
+        <result column="sub_industry" jdbcType="VARCHAR" property="subIndustry"/>
+        <result column="company_tag" jdbcType="VARCHAR" property="companyTag"/>
+        <result column="product_name" jdbcType="VARCHAR" property="productName"/>
+        <result column="financing_last_time" jdbcType="VARCHAR" property="financingLastTime"/>
+        <result column="round" jdbcType="VARCHAR" property="round"/>
+        <result column="money" jdbcType="INTEGER" property="money"/>
+        <result column="currency" jdbcType="VARCHAR" property="currency"/>
+        <result column="share" jdbcType="VARCHAR" property="share"/>
+        <result column="Valuation" jdbcType="INTEGER" property="valuation"/>
+        <result column="Valuation_currency" jdbcType="VARCHAR" property="valuationCurrency"/>
+        <result column="Investors" jdbcType="VARCHAR" property="investors"/>
+        <result column="education_experience" jdbcType="VARCHAR" property="educationExperience"/>
+        <result column="work_experience" jdbcType="VARCHAR" property="workExperience"/>
     </resultMap>
 
 
     <resultMap id="labelResultMap" type="com.lhjl.tzzs.proxy.dto.LabelList">
-        <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="value" jdbcType="VARCHAR" property="value" />
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="value" jdbcType="VARCHAR" property="value"/>
     </resultMap>
 
     <resultMap id="histogramResultMap" type="com.lhjl.tzzs.proxy.dto.HistogramList">
-        <result column="money" jdbcType="BIGINT" property="money" />
-        <result column="dcount" jdbcType="BIGINT" property="dcount" />
+        <result column="money" jdbcType="BIGINT" property="money"/>
+        <result column="dcount" jdbcType="BIGINT" property="dcount"/>
     </resultMap>
 
     <select id="queryHotCity" resultMap="labelResultMap">
@@ -76,7 +51,8 @@
 
 
     <select id="queryFinancingCount" resultType="map">
-        SELECT COUNT(1) total,AVG(mf.money) avgMoney FROM meta_financing mf LEFT JOIN meta_financing_education mfe on mf.id = mfe.financing_id
+        SELECT COUNT(1) total,AVG(mf.money) avgMoney FROM meta_financing mf LEFT JOIN meta_financing_education mfe on
+        mf.id = mfe.financing_id
         LEFT JOIN meta_financing_work mfw on mf.id = mfw.financing_id WHERE mf.money != 0
         <if test="roundName != '' and roundName != null">
             AND mf.round = #{roundName}
@@ -97,7 +73,8 @@
     </select>
 
     <select id="queryValuationCount" resultType="map">
-        SELECT COUNT(1) total,AVG(mf.money) avgMoney FROM meta_financing mf LEFT JOIN meta_financing_education mfe on mf.id = mfe.financing_id
+        SELECT COUNT(1) total,AVG(mf.money) avgMoney FROM meta_financing mf LEFT JOIN meta_financing_education mfe on
+        mf.id = mfe.financing_id
         LEFT JOIN meta_financing_work mfw on mf.id = mfw.financing_id WHERE mf.valuation != 0
         <if test="roundName != '' and roundName != null">
             AND mf.round = #{roundName}
@@ -120,7 +97,8 @@
     <select id="queryValuation" resultMap="histogramResultMap">
 
         SELECT dis money, COUNT(dis) dcount FROM (
-        SELECT CEILING(mf.Valuation/500) * 500 as dis, mf.Valuation FROM meta_financing mf LEFT JOIN meta_financing_education mfe on mf.id = mfe.financing_id
+        SELECT CEILING(mf.Valuation/500) * 500 as dis, mf.Valuation FROM meta_financing mf LEFT JOIN
+        meta_financing_education mfe on mf.id = mfe.financing_id
         LEFT JOIN meta_financing_work mfw on mf.id = mfw.financing_id WHERE mf.valuation != 0
         <if test="roundName != '' and roundName != null">
             AND mf.round = #{roundName}
@@ -144,7 +122,8 @@
     <select id="queryFinancingAmount" resultMap="histogramResultMap">
 
         SELECT dis money, COUNT(dis) dcount FROM (
-        SELECT CEILING(mf.money/500) * 500 as dis, mf.money FROM meta_financing mf LEFT JOIN meta_financing_education mfe on mf.id = mfe.financing_id
+        SELECT CEILING(mf.money/500) * 500 as dis, mf.money FROM meta_financing mf LEFT JOIN meta_financing_education
+        mfe on mf.id = mfe.financing_id
         LEFT JOIN meta_financing_work mfw on mf.id = mfw.financing_id WHERE mf.money != 0
         <if test="roundName != '' and roundName != null">
             AND mf.round = #{roundName}
