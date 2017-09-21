@@ -45,7 +45,7 @@ public class SmsController {
      * @param code 验证码
      * @return
      */
-    @GetMapping("send/sms/{userId}/{phoneNum}/{code}")
+    @GetMapping("verify/sms/{userId}/{phoneNum}/{code}")
     public CommonDto<String> verifySMS(@PathVariable String userId, @PathVariable String phoneNum, @PathVariable String code){
 
         CommonDto<String> result = new CommonDto<String>();
