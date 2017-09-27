@@ -23,4 +23,5 @@
     FROM investment_institutions b
     WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
   </select>
+
 </mapper>

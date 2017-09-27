@@ -4,11 +4,9 @@ import com.lhjl.tzzs.proxy.dto.SerchHistoryDto;
 import com.lhjl.tzzs.proxy.model.MetaHotSearchWord;
 import com.lhjl.tzzs.proxy.model.UserSearchLog;
 import com.lhjl.tzzs.proxy.service.SerchHistoryService;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 
 import javax.annotation.Resource;
@@ -45,16 +43,18 @@ public class SerchHistoryController {
 
     /**
      * 插入搜索记录
-     * @user_id 用户id
-     * @search_content 搜索内容
-     * @search_time 搜索时间
-     * @amount 热度/数量
-     * @yn 是否删除
+     * @userId 用户id
+     * @searchContent 搜索内容
      * @return
      */
-    @RequestMapping("user/log/csearch/{user_id}/{search_content}")
-    public CommonDto<String> insertOne(@PathVariable String user_id,@PathVariable String search_content){
+    @PostMapping("user/log/csearch")
+    public CommonDto<String> insertOne(@RequestBody UserSearchLog body){
         CommonDto<String> result = new CommonDto<String>();
+        String user_id = body.getUserId();
+        String search_content = "";
+        if (body.getSearchContent() != null){
+            search_content = body.getSearchContent();
+        }
 
         try{
             result = serchHistoryService.addSearchHistoryLog(user_id,search_content);
