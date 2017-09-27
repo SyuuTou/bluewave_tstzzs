@@ -1,20 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.UserSearchLogMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.UserSearchLog" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.UserSearchLogMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.UserSearchLog">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="search_content" property="searchContent" jdbcType="VARCHAR" />
-    <result column="search_time" property="searchTime" jdbcType="TIMESTAMP" />
-    <result column="amount" property="amount" jdbcType="INTEGER" />
-    <result column="yn" property="yn" jdbcType="INTEGER" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="search_content" jdbcType="VARCHAR" property="searchContent" />
+    <result column="search_time" jdbcType="TIMESTAMP" property="searchTime" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
   </resultMap>
 
 
-  <select id="selectNewRecords" resultMap="BaseResultMap" parameterType="INTEGER">
+
+  <select id="selectNewRecords" parameterType="VARCHAR" resultMap="BaseResultMap">
       select * from user_search_log where user_id=#{user_id} order by amount desc limit 3
   </select>
 
