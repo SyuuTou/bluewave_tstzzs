@@ -69,7 +69,6 @@
         <if test="workName != '' and workName != null">
             AND mfw.work_experience = #{workName}
         </if>
-
     </select>
 
     <select id="queryValuationCount" resultType="map">
