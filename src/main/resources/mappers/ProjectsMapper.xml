@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectsMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Projects">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+    <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc" />
+    <result column="commet" jdbcType="VARCHAR" property="commet" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="established_time" jdbcType="DATE" property="establishedTime" />
+    <result column="segmentation" jdbcType="VARCHAR" property="segmentation" />
+    <result column="item_label" jdbcType="VARCHAR" property="itemLabel" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="territory" jdbcType="VARCHAR" property="territory" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="continent" jdbcType="VARCHAR" property="continent" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="investment_institutions_id" jdbcType="INTEGER" property="investmentInstitutionsId" />
+  </resultMap>
+  <select id="maxSerialNumber" resultMap="BaseResultMap">
+    select * from projects where serial_number between 1000000 and 2000000 order by serial_number desc;
+  </select>
+</mapper>

@@ -21,7 +21,7 @@ public class FinancingController {
     private static final Logger log = LoggerFactory.getLogger(FinancingController.class);
 
 
-    @Resource(name = "evaluateService")
+    @Resource
     private EvaluateService evaluateService;
 
     /**
