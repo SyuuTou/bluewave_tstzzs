@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.SereachDto;
 import com.lhjl.tzzs.proxy.model.Projects;
 
 /**
@@ -23,9 +24,6 @@ public interface ProjectsService {
     CommonDto<List<Projects>> findProjectByUserId(String userId);
     CommonDto<List<Map<String, Object>>> findProjectByShortName(String shortName,String userId);
     CommonDto<Map<String,List<Map<String, Object>>>> findProjectByShortNameAll(String shortName,String userId);
-    CommonDto< List<Map<String, Object>>>findProjectBySview( Integer type, String segmentation,
-                                                             String stage, String city,String userId,
-                                                             String working_background_desc, String educational_background_desc
-    );
+    CommonDto< List<Map<String, Object>>>findProjectBySview(SereachDto sereachDto);
 
 }
