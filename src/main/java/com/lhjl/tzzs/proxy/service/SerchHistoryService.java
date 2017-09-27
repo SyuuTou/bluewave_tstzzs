@@ -6,9 +6,9 @@ import com.lhjl.tzzs.proxy.model.UserSearchLog;
 import java.util.List;
 
 public interface SerchHistoryService {
-    CommonDto<String> addSearchHistoryLog(Integer user_id,String search_content);
+    CommonDto<String> addSearchHistoryLog(String user_id,String search_content);
 
-    CommonDto<List<UserSearchLog>> rsearchHistory(Integer user_id);
+    CommonDto<List<UserSearchLog>> rsearchHistory(String user_id);
 
     CommonDto<String> updateUserSearchLogYn(Integer id);
 

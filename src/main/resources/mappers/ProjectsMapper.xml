@@ -1,31 +1,83 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectsMapper">
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Projects">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectsMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Projects" >
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="ID" jdbcType="INTEGER" property="id" />
-    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
-    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
-    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
-    <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc" />
-    <result column="commet" jdbcType="VARCHAR" property="commet" />
-    <result column="url" jdbcType="VARCHAR" property="url" />
-    <result column="established_time" jdbcType="DATE" property="establishedTime" />
-    <result column="segmentation" jdbcType="VARCHAR" property="segmentation" />
-    <result column="item_label" jdbcType="VARCHAR" property="itemLabel" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="territory" jdbcType="VARCHAR" property="territory" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="continent" jdbcType="VARCHAR" property="continent" />
-    <result column="country" jdbcType="VARCHAR" property="country" />
-    <result column="province" jdbcType="VARCHAR" property="province" />
-    <result column="city" jdbcType="VARCHAR" property="city" />
-    <result column="region" jdbcType="VARCHAR" property="region" />
-    <result column="investment_institutions_id" jdbcType="INTEGER" property="investmentInstitutionsId" />
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="serial_number" property="serialNumber" jdbcType="INTEGER" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+    <result column="kernel_desc" property="kernelDesc" jdbcType="VARCHAR" />
+    <result column="commet" property="commet" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="established_time" property="establishedTime" jdbcType="DATE" />
+    <result column="segmentation" property="segmentation" jdbcType="VARCHAR" />
+    <result column="item_label" property="itemLabel" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="territory" property="territory" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="continent" property="continent" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="region" property="region" jdbcType="VARCHAR" />
+    <result column="investment_institutions_id" property="investmentInstitutionsId" jdbcType="INTEGER" />
   </resultMap>
-  <select id="maxSerialNumber" resultMap="BaseResultMap">
-    select * from projects where serial_number between 1000000 and 2000000 order by serial_number desc;
+   
+    <!-- 用户关注的项目 -->
+  <select id="findProjectByUserId" parameterType="String" resultMap="BaseResultMap" >
+  	SELECT ID,short_name,kernel_desc FROM projects WHERE id IN (SELECT projects_id FROM follow WHERE STATUS=1 AND user_id=#{userId})
   </select>
+   <!-- <select id="findProjectByShortName" parameterType="String" resultMap="BaseResultMap" >
+    SELECT p.*,s.* FROM projects p LEFT JOIN (SELECT ff.* FROM follow ff WHERE ff.ID IN(SELECT MAX(f.ID) FROM follow f GROUP BY  f.projects_id)) s ON p.ID=s.projects_id WHERE p.`short_name` LIKE '%"#{shortName}"%';
+  </select> -->
+   <!-- 查询所有的-->
+  <select id="findProjectByShortNameAll" resultType="java.util.HashMap">
+   <!-- SELECT b.*,
+   (SELECT COUNT(*) FROM follow a WHERE a.projects_id = b.`ID` AND a.status = 1)num,
+   (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId,jdbcType=VARCHAR}) AND f.projects_id = b.`ID` GROUP BY f.projects_id ) zz
+   FROM projects b
+   WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')  -->
+   SELECT b.*,
+	(SELECT COUNT(*) FROM follow a WHERE a.projects_id = b.`ID` AND a.status = 1)num,
+	(SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.projects_id = b.`ID` GROUP BY f.projects_id )yn
+	FROM projects b
+	WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+	
+     </select>
+	<select id="findProjectByShortName"  parameterType="String" resultType="java.util.HashMap">
+    SELECT b.*,
+	(SELECT COUNT(*) FROM follow a WHERE a.projects_id = b.`ID` AND a.status = 1)num,
+	(SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.projects_id = b.`ID` GROUP BY f.projects_id )yn
+	FROM projects b
+	WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%') LIMIT 3
+	</select>
+	
+	<select id="findProjectBySview" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
+	
+     SELECT mf.*,
+     (SELECT COUNT(*) FROM follow a WHERE a.projects_id = mf.`ID` AND a.status = 1)num,
+     (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId} AND f.projects_id = mf.`ID` GROUP BY f.projects_id )yn
+     FROM view_projects_info mf
+	 <if test=" investment_institutions_type !='' and investment_institutions_type != null">
+            AND mf.investment_institutions_type = #{investment_institutions_type}
+        </if>
+        <if test="segmentation!= '' and segmentation != null">
+            AND mf.segmentation = #{segmentation}
+        </if>
+        <if test="stage != '' and stage != null">
+            AND mf.stage = #{stage}
+        </if>
+        <if test="city != '' and city != null">
+            AND mf.city = #{city}
+        </if>
+        <if test="working_background_desc != '' and working_background_desc!= null">
+            AND mf.working_background_desc = #{working_background_desc}
+        </if>
+        <if test="educational_background_desc!= '' and educational_background_desc!= null">
+            AND mf.educational_background_desc = #{educational_background_desc}
+        </if>
+	 </select>
 </mapper>

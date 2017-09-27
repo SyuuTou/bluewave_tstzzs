@@ -27,7 +27,7 @@
         <javaClientGenerator targetPackage="com.lhjl.tzzs.proxy.mapper" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <table tableName="founders">
+        <table tableName="user_search_log">
             <!--mysql 配置-->
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
             <!--oracle 配置-->

@@ -6,9 +6,13 @@
       WARNING - @mbg.generated
     -->
     <id column="ID" property="id" jdbcType="INTEGER" />
-    <result column="users_id" property="usersId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="projects_id" property="projectsId" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
+  <!-- 更改关注状态 -->
+  <update id="updateFollowStatus" parameterType="com.lhjl.tzzs.proxy.model.Follow">
+    UPDATE follow SET STATUS=#{status},create_time=#{createTime} WHERE projects_id=#{projectsId} and user_id = #{userId}
+  </update>
 </mapper>

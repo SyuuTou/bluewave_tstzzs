@@ -13,7 +13,7 @@ public class UserSearchLog {
      * 用户id
      */
     @Column(name = "user_id")
-    private Integer userId;
+    private String userId;
 
     /**
      * 搜索内容
@@ -56,7 +56,7 @@ public class UserSearchLog {
      *
      * @return user_id - 用户id
      */
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
@@ -65,7 +65,7 @@ public class UserSearchLog {
      *
      * @param userId 用户id
      */
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

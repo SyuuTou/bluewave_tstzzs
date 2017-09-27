@@ -28,7 +28,7 @@ public class SerchHistoryController {
      * @return
      */
     @GetMapping("user/log/rsearch/{user_id}")
-    public CommonDto<List<UserSearchLog>> getSerchHistory(@PathVariable Integer user_id){
+    public CommonDto<List<UserSearchLog>> getSerchHistory(@PathVariable String user_id){
         CommonDto<List<UserSearchLog>> result = new CommonDto<List<UserSearchLog>>();
 
         try{
@@ -53,7 +53,7 @@ public class SerchHistoryController {
      * @return
      */
     @RequestMapping("user/log/csearch/{user_id}/{search_content}")
-    public CommonDto<String> insertOne(@PathVariable Integer user_id,@PathVariable String search_content){
+    public CommonDto<String> insertOne(@PathVariable String user_id,@PathVariable String search_content){
         CommonDto<String> result = new CommonDto<String>();
 
         try{

@@ -1,18 +1,26 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutions" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutions">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="ID" property="id" jdbcType="INTEGER" />
-    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
-    <result column="commet" property="commet" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="commet" jdbcType="VARCHAR" property="commet" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="type" jdbcType="INTEGER" property="type" />
   </resultMap>
 
-  <insert id="add" parameterType="com.lhjl.tzzs.proxy.model.InvestmentInstitutions" useGeneratedKeys="true" keyProperty="id">
+  <insert id="add" keyProperty="id" parameterType="com.lhjl.tzzs.proxy.model.InvestmentInstitutions" useGeneratedKeys="true">
     insert into investment_institutions(short_name, commet,create_time) values(#{shortName}, #{commet}, #{createTime} )
   </insert>
 
+  <select id="findByInvestmentShortNameAll" parameterType="String" resultType="java.util.HashMap">
+    SELECT b.*,
+    (SELECT COUNT(*) FROM follow_investment a WHERE a.investment_id = b.`ID` AND a.yn = 1)num,
+    (SELECT MAX(f.yn)s FROM follow_investment f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.investment_id = b.`ID` GROUP BY f.investment_id )yn
+    FROM investment_institutions b
+    WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+  </select>
 </mapper>
