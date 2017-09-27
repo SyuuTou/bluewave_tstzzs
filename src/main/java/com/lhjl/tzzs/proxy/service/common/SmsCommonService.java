@@ -48,14 +48,22 @@ public class SmsCommonService {
             if (response.getCode() != null && response.getCode().equals("OK")) {
                 result.setStatus(200);
                 result.setMessage("success");
+                result.setData(code);
+            }else{
+                result.setStatus(50003);
+                result.setMessage("请求过于频繁，请60s后再试。");
+                result.setData(code);
             }
         } catch (ClientException e) {
             log.error(e.getErrMsg(), e.getErrCode(), e.getMessage());
 
             result.setMessage(e.getErrMsg());
             result.setStatus(500);
+        }finally {
+            if (jedis != null){
+                jedis.close();
+            }
         }
-
 
         return result;
     }
@@ -70,21 +78,27 @@ public class SmsCommonService {
             return result;
         }
 
-        Jedis jedis = jedisCommonService.getJedis();
-        StringBuffer cacheKey = new StringBuffer("SMS:");
-        cacheKey.append(userId).append(":").append(phoneNum);
+        Jedis jedis = null;
+        try {
+            jedis = jedisCommonService.getJedis();
+            StringBuffer cacheKey = new StringBuffer("SMS:");
+            cacheKey.append(userId).append(":").append(phoneNum);
 
 
-        String codeLocal = jedis.get(cacheKey.toString());
-        if (StringUtils.isEmpty(codeLocal) || !codeLocal.equals(code)) {
-            result.setMessage("请重新获取验证码，验证码不正确。");
-            result.setStatus(50002);
-            return result;
+            String codeLocal = jedis.get(cacheKey.toString());
+            if (StringUtils.isEmpty(codeLocal) || !codeLocal.equals(code)) {
+                result.setMessage("请重新获取验证码，验证码不正确。");
+                result.setStatus(50002);
+                return result;
+            }
+            result.setData("验证成功。");
+            result.setMessage("success");
+            result.setStatus(200);
+        } finally {
+            if (jedis != null){
+                jedis.close();
+            }
         }
-        result.setData("验证成功。");
-        result.setMessage("success");
-        result.setStatus(200);
-
 
         return result;
     }
