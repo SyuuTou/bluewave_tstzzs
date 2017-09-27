@@ -28,6 +28,12 @@ public class InvestmentInstitutions {
     private Date createTime;
 
     /**
+     * 机构类型：1: 50机构，0: 非50机构
+     */
+    @Column(name = "'type'")
+    private Integer type;
+
+    /**
      * @return ID
      */
     public Integer getId() {
@@ -93,5 +99,23 @@ public class InvestmentInstitutions {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    /**
+     * 获取机构类型：1: 50机构，0: 非50机构
+     *
+     * @return type - 机构类型：1: 50机构，0: 非50机构
+     */
+    public Integer getType() {
+        return type;
+    }
+
+    /**
+     * 设置机构类型：1: 50机构，0: 非50机构
+     *
+     * @param type 机构类型：1: 50机构，0: 非50机构
+     */
+    public void setType(Integer type) {
+        this.type = type;
     }
 }
