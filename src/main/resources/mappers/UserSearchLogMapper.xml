@@ -15,7 +15,7 @@
 
 
 
-  <select id="selectNewRecords" parameterType="VARCHAR" resultMap="BaseResultMap">
+  <select id="selectNewRecords" parameterType="String" resultMap="BaseResultMap">
       select * from user_search_log where user_id=#{user_id} order by amount desc limit 3
   </select>
 
