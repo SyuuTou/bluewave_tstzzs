@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.UserFilterLogMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.UserFilterLog">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="investment_institutions_type" jdbcType="VARCHAR" property="investmentInstitutionsType" />
+    <result column="investment_institutions_field" jdbcType="VARCHAR" property="investmentInstitutionsField" />
+    <result column="financing_stage" jdbcType="VARCHAR" property="financingStage" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="education" jdbcType="VARCHAR" property="education" />
+    <result column="work" jdbcType="VARCHAR" property="work" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="date" jdbcType="TIMESTAMP" property="date" />
+  </resultMap>
+
+
+</mapper>

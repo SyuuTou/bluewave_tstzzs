@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.FoundersMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Founders">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="introduction" jdbcType="VARCHAR" property="introduction" />
+    <result column="educational_background_desc" jdbcType="VARCHAR" property="educationalBackgroundDesc" />
+    <result column="working_background_desc" jdbcType="VARCHAR" property="workingBackgroundDesc" />
+    <result column="entrepreneurial_experience" jdbcType="VARCHAR" property="entrepreneurialExperience" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+  </resultMap>
+
+</mapper>
