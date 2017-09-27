@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentDataDto;
 import com.lhjl.tzzs.proxy.dto.SereachDto;
+import com.lhjl.tzzs.proxy.dto.ShuruDto;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
@@ -57,13 +58,13 @@ public class ProjectsController {
     }
     /**
      * 搜索结果集显示三条记录
-     * @param shortName 项目简称
-     * @param userId 用户id
      * @return
      */
-    @GetMapping("search/Mprojects/{shortName}/{userId}")
-    public CommonDto<List<Map<String, Object>>> findProjectByShortName(@PathVariable String shortName,@PathVariable String userId){
+    @PostMapping("search/Mprojects")
+    public CommonDto<List<Map<String, Object>>> findProjectByShortName(@RequestBody ShuruDto body){
         CommonDto<List<Map<String,Object>>> result =new CommonDto<List<Map<String, Object>>>();
+        String shortName=body.getShortName();
+        String userId =body.getUserId();
         try {
             result = projectsService.findProjectByShortName(shortName,userId);
         } catch (Exception e) {
@@ -78,13 +79,14 @@ public class ProjectsController {
     }
     /**
      * 搜索结果项目/机构的更多
-     * @param shortName 简称
-     * @param userId 用户id
+
      * @return
      */
-    @GetMapping("search/pandi/{shortName}/{userId}")
-    public CommonDto<Map<String,List<Map<String, Object>>>> findProjectAndInvestmentByShortNameAll(@PathVariable String shortName,@PathVariable String userId){
+    @PostMapping("search/pandi")
+    public CommonDto<Map<String,List<Map<String, Object>>>> findProjectAndInvestmentByShortNameAll(@RequestBody ShuruDto body){
         CommonDto <Map<String,List<Map<String, Object>>>> result =new CommonDto <Map<String,List<Map<String, Object>>>>();
+        String shortName =body.getShortName();
+        String userId =body.getUserId();
         try {
             result = projectsService.findProjectByShortNameAll(shortName,userId);
         } catch (Exception e) {
@@ -96,13 +98,6 @@ public class ProjectsController {
     }
     /**
      * 筛选功能
-     * @param investmentType 机构类型
-     * @param segmentation 领域
-     * @param stage  融资阶段
-     * @param city   城市
-     * @param userId   用户id
-     * @param working_background_desc  工作背景
-     * @param educational_background_desc  教育背景
      * @return
      */
     @PostMapping("choose/sview")

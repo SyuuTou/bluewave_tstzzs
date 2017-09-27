@@ -80,4 +80,12 @@
             AND mf.educational_background_desc = #{educational_background_desc}
         </if>
 	 </select>
+
+    <select id="findByTodayProjects" resultMap="BaseResultMap" parameterType="com.lhjl.tzzs.proxy.model.Projects">
+        select * from projects where investment_institutions_id =#{investmentInstitutionsId} and short_name =#{shortName} and to_days(create_time) = to_days(now())
+    </select>
+
+    <select id="maxSerialNumber" resultMap="BaseResultMap">
+        select * from projects where serial_number between 100000 and 200000 order by serial_number desc;
+    </select>
 </mapper>

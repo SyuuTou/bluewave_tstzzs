@@ -13,10 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.InterviewDto;
 import com.lhjl.tzzs.proxy.model.Interview;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.service.InterviewService;
@@ -34,9 +37,6 @@ public class InterviewController {
     private static final Logger log = LoggerFactory.getLogger(FinancingController.class);
     @Resource
     private InterviewService interviewService;
-
-    @Autowired
-    private JedisCommonService jedisCommonService;
     /**
      *
      * @param projectsId 项目id
@@ -45,9 +45,11 @@ public class InterviewController {
      * @return
      */
 
-    @GetMapping("interview/save/{projectsId}/{userId}/{desc}")
-    public CommonDto<String> insertInterview(@PathVariable Integer projectsId,@PathVariable String userId,
-                                             @PathVariable String desc){
+    @PostMapping("interview/save")
+    public CommonDto<String> insertInterview(@RequestBody InterviewDto  body){
+    	String desc =body.getDesc();
+    	Integer projectsId =body.getProjectsId();
+    	String userId=body.getUserId();
         Interview interview = new Interview();
         int status = 0;
         interview.setStatus(status);
