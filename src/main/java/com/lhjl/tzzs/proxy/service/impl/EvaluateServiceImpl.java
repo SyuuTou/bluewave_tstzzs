@@ -10,6 +10,7 @@ import com.lhjl.tzzs.proxy.service.EvaluateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -26,6 +27,12 @@ public class EvaluateServiceImpl implements EvaluateService {
 
     @Autowired
     private MetaFinancingMapper financingMapper;
+
+    @Value("${statistics.beginTime}")
+    private String beginTime ;
+
+    @Value("${statistics.endTime}")
+    private String endTime;
 
     @Override
     public CommonDto<Map<String, List<LabelList>>> queryHotData() {
@@ -66,11 +73,39 @@ public class EvaluateServiceImpl implements EvaluateService {
             result.setMessage("融资阶段必须选择。");
             return result;
         }
-
-
-        List<HistogramList> dataList = financingMapper.queryValuation(roundName,industryName,cityName,educationName,workName);
+        List<HistogramList> dataList = null;
 
         Map<String, Object> collect = financingMapper.queryValuationCount(roundName,industryName,cityName,educationName,workName);
+        Integer total = Integer.valueOf(collect.get("total").toString());
+        if (total < 5){
+            collect = financingMapper.queryValuationCount(roundName,industryName,cityName,null,workName);
+        }else{
+            dataList = financingMapper.queryValuation(roundName,industryName,cityName,educationName,workName);
+        }
+        total = Integer.valueOf(collect.get("total").toString());
+        if (total < 5){
+            collect = financingMapper.queryValuationCount(roundName,industryName,cityName,null,null);
+        }else{
+            dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,workName);
+        }
+        total = Integer.valueOf(collect.get("total").toString());
+        if (total < 5){
+            collect = financingMapper.queryValuationCount(roundName,industryName,null,null,null);
+        }else{
+            dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,null);
+        }
+        total = Integer.valueOf(collect.get("total").toString());
+        if (total < 5){
+            collect = financingMapper.queryValuationCount(roundName,null,null,null,null);
+        }else{
+            dataList = financingMapper.queryValuation(roundName,industryName,null,null,null);
+        }
+
+        total = Integer.valueOf(collect.get("total").toString());
+        if (total < 5) {
+            dataList = financingMapper.queryValuation(roundName, null, null, null, null);
+        }
+
 
         NumberFormat numberFormat = NumberFormat.getInstance();
         Integer totalMoney = 0;
@@ -106,9 +141,38 @@ public class EvaluateServiceImpl implements EvaluateService {
         }
 
 
-        List<HistogramList> dataList = financingMapper.queryFinancingAmount(roundName, industryName, cityName, educationName, workName);
-        Map<String, Object> collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,educationName,workName);
+        List<HistogramList> dataList = null;
 
+        Map<String, Object> collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,educationName,workName);
+        Integer total = Integer.valueOf(collect.get("total").toString());
+        if (total < 5){
+            collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,null,workName);
+        }else{
+            dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,educationName,workName);
+        }
+        total = Integer.valueOf(collect.get("total").toString());
+        if (total < 5){
+            collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,null,null);
+        }else{
+            dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,workName);
+        }
+        total = Integer.valueOf(collect.get("total").toString());
+        if (total < 5){
+            collect = financingMapper.queryFinancingCount(roundName,industryName,null,null,null);
+        }else{
+            dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,null);
+        }
+        total = Integer.valueOf(collect.get("total").toString());
+        if (total < 5){
+            collect = financingMapper.queryFinancingCount(roundName,null,null,null,null);
+        }else{
+            dataList = financingMapper.queryFinancingAmount(roundName,industryName,null,null,null);
+        }
+
+        total = Integer.valueOf(collect.get("total").toString());
+        if (total < 5) {
+            dataList = financingMapper.queryFinancingAmount(roundName, null, null, null, null);
+        }
         NumberFormat numberFormat = NumberFormat.getInstance();
 
         Integer totalMoney = 0;
