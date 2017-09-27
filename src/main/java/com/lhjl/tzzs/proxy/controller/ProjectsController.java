@@ -11,9 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.InvestmentDataDto;
+import com.lhjl.tzzs.proxy.dto.SereachDto;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
@@ -101,14 +105,12 @@ public class ProjectsController {
      * @param educational_background_desc  教育背景
      * @return
      */
-    @GetMapping("choose/sview/{investmentType}/{segmentation}/{stage}/{city}/{userId}/{working_background_desc}/{educational_background_desc}")
-    public CommonDto<List<Map<String,Object>>>findProjectBySview(@PathVariable Integer investmentType,@PathVariable String segmentation,
-                                                                 @PathVariable String stage,@PathVariable String city,@PathVariable String userId,
-                                                                 @PathVariable String working_background_desc,@PathVariable String educational_background_desc
-    ){
+    @PostMapping("choose/sview")
+    public CommonDto<List<Map<String,Object>>>findProjectBySview(@RequestBody SereachDto body)
+    {
         CommonDto<List<Map<String,Object>>> result =new CommonDto<List<Map<String, Object>>>();
         try {
-            result = projectsService.findProjectBySview(investmentType, segmentation, stage, city,userId,working_background_desc, educational_background_desc);
+            result = projectsService.findProjectBySview(body);
 
         } catch (Exception e) {
             result.setStatus(5104);
