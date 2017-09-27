@@ -26,7 +26,7 @@ public class SerchHistoryImpl implements SerchHistoryService {
 
 
     @Override
-    public CommonDto<List<UserSearchLog>> rsearchHistory(Integer user_id){
+    public CommonDto<List<UserSearchLog>> rsearchHistory(String user_id){
         CommonDto<List<UserSearchLog>> result = new CommonDto<List<UserSearchLog>>();
 
         List<UserSearchLog> userSearchLogs = userSearchLogMapper.selectNewRecords(user_id);
@@ -41,7 +41,7 @@ public class SerchHistoryImpl implements SerchHistoryService {
 
 
    @Override
-  public  CommonDto<String> addSearchHistoryLog(Integer user_id,String search_content){
+  public  CommonDto<String> addSearchHistoryLog(String user_id,String search_content){
         CommonDto<String> result = new CommonDto<String>();
 
        Date search_time = new Date();
