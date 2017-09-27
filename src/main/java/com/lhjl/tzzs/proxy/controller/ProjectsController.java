@@ -82,7 +82,7 @@ public class ProjectsController {
 
      * @return
      */
-    @GetMapping("search/pandi")
+    @PostMapping("search/pandi")
     public CommonDto<Map<String,List<Map<String, Object>>>> findProjectAndInvestmentByShortNameAll(@RequestBody ShuruDto body){
         CommonDto <Map<String,List<Map<String, Object>>>> result =new CommonDto <Map<String,List<Map<String, Object>>>>();
         String shortName =body.getShortName();
