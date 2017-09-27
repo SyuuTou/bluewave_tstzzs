@@ -1,6 +1,5 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.LabelList;
+import com.lhjl.tzzs.proxy.dto.SereachDto;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
 import com.lhjl.tzzs.proxy.model.Projects;
@@ -79,24 +79,18 @@ public class ProjectsServiceImpl implements ProjectsService {
         return result;
     }
 
-    @Override
-    public CommonDto<List<Map<String, Object>>> findProjectBySview(Integer type, String segmentation,
-                                                                   String stage, String city,String userId, String working_background_desc, String educational_background_desc) {
-        CommonDto<List<Map<String,Object>>> result =new CommonDto<List<Map<String, Object>>>();
-        List<Map<String, Object>> list =projectsMapper.findProjectBySview(type, segmentation, stage, city, userId,working_background_desc, educational_background_desc);
+	@Override
+	public CommonDto<List<Map<String, Object>>> findProjectBySview(SereachDto sereachDto) {
+		CommonDto<List<Map<String,Object>>> result =new CommonDto<List<Map<String, Object>>>();
+        List<Map<String, Object>> list =projectsMapper.findProjectBySview(sereachDto);
         List<Map<String, Object>> list2 = new ArrayList<Map<String,Object>>();
         for(Map<String, Object> map :list){
             if(map.get("yn") == null){
                 map.put("yn", 0);
             }
             list2.add(map);
-        }
-        result.setData(list2);
-        result.setStatus(200);
-        result.setMessage("ok");
-        return result;
-    }
-
-
-
+            }
+            result.setData(list2);
+		return result;
+	}
 }
