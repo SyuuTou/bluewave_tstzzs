@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
+import com.github.pagehelper.Page;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.InvestmentDataService;
@@ -11,6 +12,7 @@ import tk.mybatis.mapper.util.StringUtil;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,6 +37,9 @@ public class InvestmentDataImpl implements InvestmentDataService{
 
     @Resource
     private FoundersWorkMapper foundersWorkMapper;
+
+    @Resource
+    private ProjectSegmentationMapper projectSegmentationMapper;
 
     @Override
     public CommonDto<String> addInvestmentData(String investment_institution_name , String project_name, String project_full_name, String summary, String field,  String city, String rounds, String amount,  String currency,  String stock_right,  Date date,  String founder_name, String founder_work, String founder_education){
@@ -174,30 +179,63 @@ public class InvestmentDataImpl implements InvestmentDataService{
             //构造查询项目表实例
             Projects projectsSearch = new Projects();
             projectsSearch.setInvestmentInstitutionsId(jgid);
-            projectsSearch.setFullName(project_full_name);
+            projectsSearch.setShortName(project_name);
+
 
             //查询项目是否存在,若存在继续判断轮次是否存在，若不存在创建项目，创建融资信息，创始人信息
-            List<Projects> projectsList = projectsMapper.select(projectsSearch);
+            List<Projects> projectsList = projectsMapper.findByTodayProjects(projectsSearch);
+
+
+            //构造创建项目实例
+            //构造编号
+            int bh = 0;
+            List<Projects> projectsLista = projectsMapper.maxSerialNumber();
+            if (projectsLista.size() > 0){
+                Projects projectsa = projectsLista.get(0);
+                bh = projectsa.getSerialNumber();
+            }else {
+                bh= 1000000;
+            }
+
+
+            int aa = bh+1;
+            //构造新建实例
+            Projects projects = new Projects();
+            projects.setShortName(project_name);
+            projects.setFullName(project_full_name);
+            projects.setKernelDesc(summary);
+            projects.setSegmentation(field);
+            projects.setCity(city);
+            projects.setSerialNumber(aa);
+            projects.setCreateTime(now);
+            projects.setInvestmentInstitutionsId(jgid);
+
 
             if (projectsList.size() > 0){
-                Projects firstProjects = projectsList.get(0);
-
-                xmid = firstProjects.getId();
-
-                //构造查询投资历史实例
-                ProjectFinancingLog projectFinancingLogSearch = new ProjectFinancingLog();
-                projectFinancingLogSearch.setProjectId(xmid);
-                projectFinancingLogSearch.setStage(rounds);
-
-                //查询融资历史是否存在；若存在抛出异常提示；若不存在创建融资历史
-                List<ProjectFinancingLog> projectFinancingLogList = projectFinancingLogMapper.select(projectFinancingLogSearch);
-                if (projectFinancingLogList.size() > 0){
-                    result.setMessage("您当前填的机构的项目，已存在。请勿重复提交！");
-                    result.setStatus(50002);
-                    result.setData(null);
-                    return result;
+                //项目存在的情况
+                if (projectsList.size() >= 3){
+                    //当天项目数量大于三个了给出提示
+                    result.setStatus(50001);
+                    result.setMessage("对不起 相同的数据一天只能提交3次 请明日再提交");
                 }else {
-                    //拿到项目id，创建融资记录信息
+                    //当天项目数量没有大于三个，继续新建项目
+                    projectsMapper.insert(projects);
+                    xmid = projects.getId();
+                    //创建项目的细分领域
+                    String[] fieldArry = field.split(",");
+
+                    List<ProjectSegmentation> projectSegmentationList =new Page<ProjectSegmentation>();
+                    for (int i=0; i < fieldArry.length;i++){
+                        ProjectSegmentation projectSegmentation =new ProjectSegmentation();
+                        projectSegmentation.setProjectId(xmid);
+                        projectSegmentation.setSegmentationName(fieldArry[i]);
+                        projectSegmentationList.add(projectSegmentation);
+                    }
+
+                    projectSegmentationMapper.insertList(projectSegmentationList);
+
+                    //创建融资记录
+                    //将数据转换过来
                     BigDecimal bigDecimalAmount = new BigDecimal(amount);
                     BigDecimal bigDecimalStockRight = new BigDecimal(stock_right);
 
@@ -216,28 +254,64 @@ public class InvestmentDataImpl implements InvestmentDataService{
                     //插入数据
                     projectFinancingLogMapper.insert(projectFinancingLog);
 
-                    result.setData(null);
+
+                    //拿到项目id,新建创始人信息
+                    Founders founders =new Founders();
+                    founders.setName(founder_name);
+                    founders.setCreateTime(date);
+                    founders.setYn(0);
+                    founders.setProjectId(xmid);
+
+                    //插入创始人信息
+                    foundersMapper.insert(founders);
+                    yhid = founders.getId();
+
+
+                    //获取到用户id创建教育经历
+                    FoundersEducation foundersEducation = new FoundersEducation();
+                    foundersEducation.setEducationExperience(founder_education);
+                    foundersEducation.setFounderId(yhid);
+
+                    List<FoundersEducation> foundersEducationsList = foundersEducationMapper.select(foundersEducation);
+                    if (foundersEducationsList.size() == 0){
+                        foundersEducationMapper.insert(foundersEducation);
+                    }
+
+
+                    //获取到用户id创建工作经历
+                    FoundersWork foundersWork = new FoundersWork();
+                    foundersWork.setFounderId(yhid);
+                    foundersWork.setWorkExperience(founder_work);
+
+                    List<FoundersWork> foundersWorkList = foundersWorkMapper.select(foundersWork);
+                    if (foundersWorkList.size() == 0){
+                        foundersWorkMapper.insert(foundersWork);
+                    }
                     result.setStatus(200);
                     result.setMessage("success");
                 }
+
             }else{
-                //构造创建项目的实例
-                int aa = (int)(Math.random()*1000000);
-
-                Projects projects = new Projects();
-                projects.setShortName(project_name);
-                projects.setFullName(project_full_name);
-                projects.setKernelDesc(summary);
-                projects.setSegmentation(field);
-                projects.setCity(city);
-                projects.setSerialNumber(aa);
-                projects.setCreateTime(now);
-                projects.setInvestmentInstitutionsId(jgid);
-
+                //项目不存在的情况
+                //创建项目
                 projectsMapper.insert(projects);
                 xmid = projects.getId();
 
-                //拿到项目id，创建融资记录信息
+                //创建项目的细分领域
+                String[] fieldArry = field.split(",");
+
+                List<ProjectSegmentation> projectSegmentationList =new Page<ProjectSegmentation>();
+                for (int i=0; i < fieldArry.length;i++){
+                    ProjectSegmentation projectSegmentation =new ProjectSegmentation();
+                    projectSegmentation.setProjectId(xmid);
+                    projectSegmentation.setSegmentationName(fieldArry[i]);
+                    projectSegmentationList.add(projectSegmentation);
+                }
+
+                projectSegmentationMapper.insertList(projectSegmentationList);
+
+                //创建融资记录
+                //将数据转换过来
                 BigDecimal bigDecimalAmount = new BigDecimal(amount);
                 BigDecimal bigDecimalStockRight = new BigDecimal(stock_right);
 
@@ -253,7 +327,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
                 projectFinancingLog.setStatus(0);
                 projectFinancingLog.setProjectId(xmid);
 
-                    //插入数据
+                //插入数据
                 projectFinancingLogMapper.insert(projectFinancingLog);
 
 
@@ -264,13 +338,12 @@ public class InvestmentDataImpl implements InvestmentDataService{
                 founders.setYn(0);
                 founders.setProjectId(xmid);
 
-                    //插入创始人信息
+                //插入创始人信息
                 foundersMapper.insert(founders);
                 yhid = founders.getId();
 
 
-
-                    //获取到用户id创建教育经历
+                //获取到用户id创建教育经历
                 FoundersEducation foundersEducation = new FoundersEducation();
                 foundersEducation.setEducationExperience(founder_education);
                 foundersEducation.setFounderId(yhid);
@@ -281,7 +354,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
                 }
 
 
-                    //获取到用户id创建工作经历
+                //获取到用户id创建工作经历
                 FoundersWork foundersWork = new FoundersWork();
                 foundersWork.setFounderId(yhid);
                 foundersWork.setWorkExperience(founder_work);
@@ -290,11 +363,8 @@ public class InvestmentDataImpl implements InvestmentDataService{
                 if (foundersWorkList.size() == 0){
                     foundersWorkMapper.insert(foundersWork);
                 }
-
                 result.setMessage("success");
                 result.setStatus(200);
-                result.setData(null);
-
             }
 
         }else {
@@ -328,6 +398,21 @@ public class InvestmentDataImpl implements InvestmentDataService{
             //创建项目信息，并获取到刚创建的项目id
            projectsMapper.insert(projects);
            xmid =projects.getId();
+
+           //创建项目的细分领域
+            String[] fieldArry = field.split(",");
+
+            List<ProjectSegmentation> projectSegmentationList =new ArrayList<ProjectSegmentation>();
+            for (int i=0; i < fieldArry.length;i++){
+                ProjectSegmentation projectSegmentation =new ProjectSegmentation();
+                projectSegmentation.setProjectId(xmid);
+                projectSegmentation.setSegmentationName(fieldArry[i]);
+                projectSegmentationList.add(projectSegmentation);
+            }
+
+            projectSegmentationMapper.insertList(projectSegmentationList);
+
+
 
 
             //拿到项目id,新建融资记录信息

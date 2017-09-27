@@ -16,4 +16,5 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
     List<Map<String, Object>> findProjectByShortName(@Param("shortName") String shortName,@Param("userId") String userId);
     List<Map<String, Object>> findProjectByShortNameAll(@Param("shortName") String shortName,@Param("userId") String userId);
     List<Map<String, Object>> findProjectBySview(SereachDto sereachDto);
+    List<Projects> findByTodayProjects(Projects projects);
 }
