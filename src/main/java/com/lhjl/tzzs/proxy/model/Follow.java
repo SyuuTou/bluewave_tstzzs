@@ -33,7 +33,7 @@ public class Follow {
     /**
      * 关注状态：0：关注，1未关注
      */
-    @Column(name = "'status'")
+    @Column(name = "`status`")
     private Integer status;
 
     public Integer getId() {

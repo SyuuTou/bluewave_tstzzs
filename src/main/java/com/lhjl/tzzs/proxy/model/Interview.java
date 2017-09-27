@@ -15,7 +15,7 @@ public class Interview {
     /**
      * 约谈状态：0未读，1已读
      */
-    @Column(name = "'status'")
+    @Column(name ="`status`")
     private Integer status;
 
     /**
@@ -33,6 +33,7 @@ public class Interview {
     /**
      * 约谈内容
      */
+    @Column(name ="`desc`")
     private String desc;
 
     /**
@@ -41,51 +42,53 @@ public class Interview {
     @Column(name = "create_time")
     private Date createTime;
 
-    public Integer getId() {
-        return id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public Integer getStatus() {
-        return status;
-    }
+	public Integer getStatus() {
+		return status;
+	}
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 
-    public Integer getProjectsId() {
-        return projectsId;
-    }
+	public Integer getProjectsId() {
+		return projectsId;
+	}
 
-    public void setProjectsId(Integer projectsId) {
-        this.projectsId = projectsId;
-    }
+	public void setProjectsId(Integer projectsId) {
+		this.projectsId = projectsId;
+	}
 
-    public String getUserId() {
-        return userId;
-    }
+	public String getUserId() {
+		return userId;
+	}
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
-    public String getDesc() {
-        return desc;
-    }
+	public String getDesc() {
+		return desc;
+	}
 
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+
 }

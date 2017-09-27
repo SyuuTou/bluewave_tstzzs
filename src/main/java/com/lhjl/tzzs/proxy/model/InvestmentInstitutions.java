@@ -30,7 +30,7 @@ public class InvestmentInstitutions {
     /**
      * 机构类型：1: 50机构，0: 非50机构
      */
-    @Column(name = "'type'")
+    @Column(name = "`type`")
     private Integer type;
 
     /**
