@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.LabelList;
+
 import com.lhjl.tzzs.proxy.dto.SereachDto;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
@@ -82,15 +82,60 @@ public class ProjectsServiceImpl implements ProjectsService {
 	@Override
 	public CommonDto<List<Map<String, Object>>> findProjectBySview(SereachDto sereachDto) {
 		CommonDto<List<Map<String,Object>>> result =new CommonDto<List<Map<String, Object>>>();
-        List<Map<String, Object>> list =projectsMapper.findProjectBySview(sereachDto);
-        List<Map<String, Object>> list2 = new ArrayList<Map<String,Object>>();
-        for(Map<String, Object> map :list){
-            if(map.get("yn") == null){
-                map.put("yn", 0);
+        String userId =sereachDto.getUserId();
+        String  type = sereachDto.getInvestment_institutions_type();
+        int[] types = {};
+        String [] segmentations ={};
+        String [] stages={};
+        String [] cities={};
+        String [] working_background_descs ={};
+        String [] educational_background_descs ={};
+
+        if(type != null ) {
+            String[] type2 = type.split(",");
+            types = new int[type2.length];
+            for (int i=0; i<type2.length; i++){
+                types[i] = Integer.parseInt(type2[i]);
             }
-            list2.add(map);
-            }
-            result.setData(list2);
-		return result;
-	}
+        }
+
+	      String segmentation = sereachDto.getSegmentation();
+        if(segmentation !=null){
+            segmentations=segmentation.split(",");
+        }
+
+        String stage =sereachDto.getStage();
+        if(stage != null){
+            stages =stage.split(",");
+        }
+
+        String  city  =sereachDto.getCity();
+        if(city != null){
+            cities =city.split(",");
+        }
+        String  working_background_desc =sereachDto.getWorking_background_desc();
+        if(working_background_desc !=null){
+            working_background_descs=working_background_desc.split(",");
+        }
+
+        String   educational_background_desc=sereachDto.getEducational_background_desc();
+        if(educational_background_desc !=null){
+            educational_background_descs=educational_background_desc.split(",");
+
+        }
+//	    List citiess = Arrays.asList(cities);
+//	        String[] stages = sereachDto.getStage().split(",");
+	        List<Map<String, Object>> list =projectsMapper.findProjectBySview(userId,types,segmentations,stages, cities, working_background_descs,educational_background_descs);
+	        List<Map<String, Object>> list2 = new ArrayList<Map<String,Object>>();
+	        for(Map<String, Object> map :list){
+	            if(map.get("yn") == null){
+	                map.put("yn", 0);
+	            }
+	            list2.add(map);
+	            }
+	            result.setData(list2);
+	      return result;
+	   }
+
+
 }
