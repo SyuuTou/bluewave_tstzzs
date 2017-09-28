@@ -51,7 +51,7 @@ public class InvestmentDataController {
 
 
         try {
-          SimpleDateFormat simpleDateFormat =new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+          SimpleDateFormat simpleDateFormat =new SimpleDateFormat("YYYY-MM-DD");
           Date dateDate = new Date();
           if (!StringUtil.isEmpty(date)) {
                dateDate = simpleDateFormat.parse(date);

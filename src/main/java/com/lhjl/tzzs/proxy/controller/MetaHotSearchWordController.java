@@ -3,10 +3,9 @@ package com.lhjl.tzzs.proxy.controller;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.model.MetaHotSearchWord;
 import com.lhjl.tzzs.proxy.service.MetaHotSearchWordService;
+import io.swagger.annotations.*;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -22,6 +21,11 @@ public class MetaHotSearchWordController {
      * 查询10条热门搜索，按热度排序
      * @return
      */
+
+    @ApiOperation(value = "查询热门搜索接口", notes = "查询热门搜索信息，按热度排序")
+    @RequestMapping(method = RequestMethod.GET, path="/hotsearchword/search/rhotword", produces = "application/json")
+
+
     @GetMapping("hotsearchword/search/rhotword")
     public CommonDto<List<MetaHotSearchWord>> searchHotword(){
         CommonDto<List<MetaHotSearchWord>> result = new CommonDto<List<MetaHotSearchWord>>();
