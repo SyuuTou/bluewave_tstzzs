@@ -25,6 +25,9 @@ import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.service.InterviewService;
 import com.lhjl.tzzs.proxy.service.common.JedisCommonService;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -44,7 +47,12 @@ public class InterviewController {
      * @param desc       约谈内容
      * @return
      */
-
+    
+    @ApiOperation(value = "发起约谈接口", notes = "根据用户ID与项目的ID来标注请求的唯一携带发送的")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "String", name = "userId", value = "用户ID", required = true),
+    	                 @ApiImplicitParam(paramType = "body", dataType = "String", name = "desc", value = "约谈内容", required = true),
+    	                 @ApiImplicitParam(paramType = "body", dataType = "Integer", name = "projects", value = "项目ID", required = true)
+    	})
     @PostMapping("interview/save")
     public CommonDto<String> insertInterview(@RequestBody InterviewDto  body){
     	String desc =body.getDesc();

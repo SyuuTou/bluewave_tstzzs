@@ -61,24 +61,34 @@
      (SELECT COUNT(*) FROM follow a WHERE a.projects_id = mf.`ID` AND a.status = 1)num,
      (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId} AND f.projects_id = mf.`ID` GROUP BY f.projects_id )yn
      FROM view_projects_info mf where 1=1
-	 <if test=" investment_institutions_type !='' and investment_institutions_type != null">
-            AND mf.investment_institutions_type = #{investment_institutions_type}
-        </if>
-        <if test="segmentation!= '' and segmentation != null">
-            AND mf.segmentation = #{segmentation}
-        </if>
-        <if test="stage != '' and stage != null">
-            AND mf.stage = #{stage}
-        </if>
-        <if test="city != '' and city != null">
-            AND mf.city = #{city}
-        </if>
-        <if test="working_background_desc != '' and working_background_desc!= null">
-            AND mf.working_background_desc = #{working_background_desc}
-        </if>
-        <if test="educational_background_desc!= '' and educational_background_desc!= null">
-            AND mf.educational_background_desc = #{educational_background_desc}
-        </if>
+	 <if test=" types !='' and types.length > 0">
+       AND mf.investment_institutions_type IN
+       <foreach item="item" index="index" collection="types" open="(" separator="," close=")">#{item}</foreach>
+     </if>
+       <if test=" segmentations !='' and segmentations.length > 0">
+       AND mf.segmentation IN
+       <foreach item="item" index="index" collection="segmentations" open="(" separator="," close=")">#{item}</foreach>
+      </if>
+        
+     <if test=" stages !='' and stages.length > 0">
+       AND mf.stage IN
+       <foreach item="item" index="index" collection="stages" open="(" separator="," close=")">#{item}</foreach>
+     </if>
+       
+       <if test=" cities !='' and cities.length > 0">
+       AND mf.city IN
+       <foreach item="item" index="index" collection="cities" open="(" separator="," close=")">#{item}</foreach>
+      </if>
+ 
+       <if test=" working_background_descs!='' and working_background_descs.length > 0">
+       AND mf.work_experience IN
+       <foreach item="item" index="index" collection="working_background_descs" open="(" separator="," close=")">#{item}</foreach>
+       </if>
+      
+       <if test="educational_background_descs!='' and educational_background_descs.length > 0">
+       AND mf.education_experience IN
+       <foreach item="item" index="index" collection="educational_background_descs" open="(" separator="," close=")">#{item}</foreach>
+       </if>
 	 </select>
 
     <select id="findByTodayProjects" resultMap="BaseResultMap" parameterType="com.lhjl.tzzs.proxy.model.Projects">
