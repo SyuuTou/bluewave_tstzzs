@@ -10,6 +10,13 @@
     <result column="commet" jdbcType="VARCHAR" property="commet" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="case_url" jdbcType="VARCHAR" property="caseUrl" />
+    <result column="kenel_case" jdbcType="VARCHAR" property="kenelCase" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="stage" jdbcType="VARCHAR" property="stage" />
+    <result column="representative" jdbcType="VARCHAR" property="representative" />
   </resultMap>
 
   <insert id="add" keyProperty="id" parameterType="com.lhjl.tzzs.proxy.model.InvestmentInstitutions" useGeneratedKeys="true">
