@@ -47,18 +47,19 @@ public class InvestmentDataController {
         String founder_name = body.getFounder_name();
         String founder_work = body.getFounder_work();
         String founder_education = body.getFounder_education();
+        String userId = body.getUserId();
 
 
 
         try {
-          SimpleDateFormat simpleDateFormat =new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+          SimpleDateFormat simpleDateFormat =new SimpleDateFormat("YYYY-MM-DD");
           Date dateDate = new Date();
           if (!StringUtil.isEmpty(date)) {
                dateDate = simpleDateFormat.parse(date);
           }
           result = investmentDataService.addInvestmentData(investment_institution_name,project_name,project_full_name,summary,field,city,rounds,amount,currency,stock_right,dateDate,founder_name,founder_work,founder_education);
       }catch (Exception e){
-          result.setMessage("提交数据失败！");
+          result.setMessage(e.getMessage());
           result.setStatus(501);
           result.setData(null);
           log.error(e.getMessage(),e.fillInStackTrace());

@@ -34,7 +34,7 @@ public class SerchHistoryController {
         }catch (Exception e){
              result = new CommonDto<List<UserSearchLog>>();
              result.setStatus(501);
-             result.setMessage("数据获取异常");
+             result.setMessage(e.getMessage());
              log.error(e.getMessage(),e.fillInStackTrace());
         }
 
@@ -60,7 +60,7 @@ public class SerchHistoryController {
             result = serchHistoryService.addSearchHistoryLog(user_id,search_content);
         }catch (Exception e){
             result.setStatus(501);
-            result.setMessage("数据插入失败");
+            result.setMessage(e.getMessage());
             result.setData(null);
 
             log.error(e.getMessage(),e.fillInStackTrace());
@@ -82,7 +82,7 @@ public class SerchHistoryController {
         result=serchHistoryService.updateUserSearchLogYn(id);
 
         }catch (Exception e){
-            result.setMessage("删除搜索历史失败");
+            result.setMessage(e.getMessage());
             result.setStatus(200);
             result.setData(null);
         }

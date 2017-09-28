@@ -29,7 +29,7 @@ public class InvestmentBackstageController {
         try {
             result = investmentBackstageService.adminAddInvestmentBackstage(body);
         }catch (Exception e){
-            result.setMessage("创建机构失败");
+            result.setMessage(e.getMessage());
             result.setStatus(501);
 
             log.error(e.getMessage(),e.fillInStackTrace());
