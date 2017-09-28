@@ -57,7 +57,7 @@ public class InvestmentDataController {
           if (!StringUtil.isEmpty(date)) {
                dateDate = simpleDateFormat.parse(date);
           }
-          result = investmentDataService.addInvestmentData(investment_institution_name,project_name,project_full_name,summary,field,city,rounds,amount,currency,stock_right,dateDate,founder_name,founder_work,founder_education);
+          result = investmentDataService.addInvestmentData(investment_institution_name,project_name,project_full_name,summary,field,city,rounds,amount,currency,stock_right,dateDate,founder_name,founder_work,founder_education,userId);
       }catch (Exception e){
           result.setMessage(e.getMessage());
           result.setStatus(501);
