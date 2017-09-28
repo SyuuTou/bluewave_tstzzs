@@ -91,7 +91,7 @@ public class ProjectsServiceImpl implements ProjectsService {
         String [] working_background_descs ={};
         String [] educational_background_descs ={};
 
-        if(type != null ) {
+        if(type != null && !"".equals(type)) {
             String[] type2 = type.split(",");
             types = new int[type2.length];
             for (int i=0; i<type2.length; i++){
@@ -100,26 +100,26 @@ public class ProjectsServiceImpl implements ProjectsService {
         }
 
 	      String segmentation = sereachDto.getSegmentation();
-        if(segmentation !=null){
+        if(segmentation !=null && !"".equals(segmentation)){
             segmentations=segmentation.split(",");
         }
 
         String stage =sereachDto.getStage();
-        if(stage != null){
+        if(stage != null && !"".equals(stage)){
             stages =stage.split(",");
         }
 
         String  city  =sereachDto.getCity();
-        if(city != null){
+        if(city != null && !"".equals(city)){
             cities =city.split(",");
         }
         String  working_background_desc =sereachDto.getWorking_background_desc();
-        if(working_background_desc !=null){
+        if(working_background_desc !=null && !"".equals(working_background_desc)){
             working_background_descs=working_background_desc.split(",");
         }
 
         String   educational_background_desc=sereachDto.getEducational_background_desc();
-        if(educational_background_desc !=null){
+        if(educational_background_desc !=null && !"".equals(educational_background_desc)){
             educational_background_descs=educational_background_desc.split(",");
 
         }
