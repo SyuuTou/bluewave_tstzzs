@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 
+import com.lhjl.tzzs.proxy.dto.SearchLimitDto;
 import com.lhjl.tzzs.proxy.dto.SerchHistoryDto;
 import com.lhjl.tzzs.proxy.mapper.UserSearchLogMapper;
 import com.lhjl.tzzs.proxy.model.UserSearchLog;
@@ -8,6 +9,7 @@ import com.lhjl.tzzs.proxy.service.SerchHistoryService;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,12 +26,17 @@ public class SerchHistoryImpl implements SerchHistoryService {
     @Resource
     private UserSearchLogMapper userSearchLogMapper;
 
+    @Value("${usersearch.limits}")
+    private int limits;
+
 
     @Override
     public CommonDto<List<UserSearchLog>> rsearchHistory(String user_id){
         CommonDto<List<UserSearchLog>> result = new CommonDto<List<UserSearchLog>>();
-
-        List<UserSearchLog> userSearchLogs = userSearchLogMapper.selectNewRecords(user_id);
+        SearchLimitDto searchLimitDto = new SearchLimitDto();
+        searchLimitDto.setUser_id(user_id);
+        searchLimitDto.setLimits(limits);
+        List<UserSearchLog> userSearchLogs = userSearchLogMapper.selectNewRecords(searchLimitDto);
 
 
         result.setMessage("success");

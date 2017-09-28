@@ -15,8 +15,8 @@
 
 
 
-  <select id="selectNewRecords" parameterType="String" resultMap="BaseResultMap">
-      select * from user_search_log where user_id=#{user_id} order by amount desc limit 3
+  <select id="selectNewRecords" parameterType="com.lhjl.tzzs.proxy.dto.SearchLimitDto" resultMap="BaseResultMap">
+      select * from user_search_log where user_id=#{user_id} order by amount desc limit #{limits}
   </select>
 
 
