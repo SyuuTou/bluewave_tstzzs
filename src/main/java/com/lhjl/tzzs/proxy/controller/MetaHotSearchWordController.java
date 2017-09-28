@@ -34,7 +34,7 @@ public class MetaHotSearchWordController {
             result = metaHotSearchWordService.selectHotWord();
 
         }catch (Exception e){
-            result.setMessage("数据读取失败");
+            result.setMessage(e.getMessage());
             result.setStatus(501);
             result.setData(null);
             log.error(e.getMessage(),e.fillInStackTrace());
@@ -55,7 +55,7 @@ public class MetaHotSearchWordController {
         try {
             result = metaHotSearchWordService.updateHotWordAmount(id);
         }catch (Exception e){
-            result.setMessage("更新失败！请检查id是否正确");
+            result.setMessage(e.getMessage());
             result.setStatus(501);
             result.setData(null);
         }

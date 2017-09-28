@@ -38,7 +38,7 @@ public class UserFilterLogController {
             result = userFilterLogService.userFilterAddLog( investment_institutions_type, investment_institutions_field, financing_stage, city, education, work, user_id);
 
         }catch (Exception e){
-            result.setMessage("创建筛选记录失败！");
+            result.setMessage(e.getMessage());
             result.setStatus(501);
             result.setData(null);
             log.error(e.getMessage(),e.fillInStackTrace());
@@ -61,7 +61,7 @@ public class UserFilterLogController {
         try {
             result = userFilterLogService.userFilterSearchLog(id);
         }catch (Exception e){
-            result.setMessage("查询上次筛选记录时出错！");
+            result.setMessage(e.getMessage());
             result.setStatus(501);
             result.setData(null);
             log.error(e.getMessage(),e.fillInStackTrace());
