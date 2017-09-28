@@ -76,36 +76,27 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public CommonDto<List<HistogramList>> financingEducationExperienceDistributed(String institutionType) {
+    public CommonDto<List<HistogramList>> financingEducationExperienceDistributed() {
         CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
         Integer type = null;
-        if (institutionType.equals("50")){
-            type = 1;
-        }
         List<HistogramList>  histogramLists = statisticsMapper.financingEducationExperienceDistributed(type,beginTime,endTime);
         result.setData(histogramLists);
         return result;
     }
 
     @Override
-    public CommonDto<List<HistogramList>> financingWorkExperienceDistributed(String institutionType) {
+    public CommonDto<List<HistogramList>> financingWorkExperienceDistributed() {
         CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
         Integer type = null;
-        if (institutionType.equals("50")){
-            type = 1;
-        }
         List<HistogramList>  histogramLists = statisticsMapper.financingWorkExperienceDistributed(type,beginTime,endTime);
         result.setData(histogramLists);
         return result;
     }
 
     @Override
-    public CommonDto<List<HistogramList>> financingInvestmentDistributed(String institutionType) {
+    public CommonDto<List<HistogramList>> financingInvestmentDistributed() {
         CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
         Integer type = null;
-        if (institutionType.equals("50")){
-            type = 1;
-        }
         List<HistogramList>  histogramLists = statisticsMapper.financingInvestmentDistributed(type,beginTime,endTime);
         result.setData(histogramLists);
         return result;

@@ -2,6 +2,9 @@ package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.service.common.SmsCommonService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +26,10 @@ public class SmsController {
      * @param phoneNum  手机号
      * @return
      */
-    @GetMapping("send/sms/{userId}/{phoneNum}")
+    @ApiOperation(value = "发送短信接口", notes = "根据用户ID和手机标注请求的唯一")
+    @ApiImplicitParams({@ApiImplicitParam(name = "userId",paramType="path" , value = "用户ID", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "phoneNum",paramType="path",  value = "手机号", required = true, dataType = "String")})
+    @GetMapping("/send/sms/{userId}/{phoneNum}")
     public CommonDto<String> sendSMS(@PathVariable String userId, @PathVariable String phoneNum){
 
         CommonDto<String> result = new CommonDto<String>();
