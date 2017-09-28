@@ -60,7 +60,7 @@
      SELECT mf.*,
      (SELECT COUNT(*) FROM follow a WHERE a.projects_id = mf.`ID` AND a.status = 1)num,
      (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId} AND f.projects_id = mf.`ID` GROUP BY f.projects_id )yn
-     FROM view_projects_info mf
+     FROM view_projects_info mf where 1=1
 	 <if test=" investment_institutions_type !='' and investment_institutions_type != null">
             AND mf.investment_institutions_type = #{investment_institutions_type}
         </if>

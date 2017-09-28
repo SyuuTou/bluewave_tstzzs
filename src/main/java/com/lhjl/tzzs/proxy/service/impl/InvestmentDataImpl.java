@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.InvestmentDataService;
+import org.apache.catalina.User;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
@@ -41,8 +42,14 @@ public class InvestmentDataImpl implements InvestmentDataService{
     @Resource
     private ProjectSegmentationMapper projectSegmentationMapper;
 
+    @Resource
+    private InvestorsMapper investorsMapper;
+
+    @Resource
+    private UsersMapper usersMapper;
+
     @Override
-    public CommonDto<String> addInvestmentData(String investment_institution_name , String project_name, String project_full_name, String summary, String field,  String city, String rounds, String amount,  String currency,  String stock_right,  Date date,  String founder_name, String founder_work, String founder_education){
+    public CommonDto<String> addInvestmentData(String investment_institution_name , String project_name, String project_full_name, String summary, String field,  String city, String rounds, String amount,  String currency,  String stock_right,  Date date,  String founder_name, String founder_work, String founder_education,String userId){
         CommonDto<String> result = new CommonDto<String>();
 
 
@@ -151,11 +158,35 @@ public class InvestmentDataImpl implements InvestmentDataService{
 
             return result;
         }
+        if (StringUtil.isEmpty(userId)){
+            result.setStatus(50001);
+            result.setMessage("缺少用户id");
+        }
 
         int currency1 =Integer.parseInt(currency);
 
         //获取现在时间
         Date now = new Date();
+
+        //判断原平台的id在新平台是否存在，不存在的话创建用户，存在拿用户id
+        Users users = new Users();
+        users.setUuid(userId);
+
+        List<Users> usersList = usersMapper.select(users);
+
+        int uid = -1;
+        if (usersList.size() > 0){
+            Users usersForId = usersList.get(0);
+            uid = usersForId.getId();
+        }else{
+            Users usersAdd = new Users();
+            usersAdd.setUuid(userId);
+            usersAdd.setCreateTime(now);
+
+            usersMapper.insert(usersAdd);
+            uid = usersAdd.getId();
+        }
+
 
         //先创建投资机构
         InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
@@ -175,6 +206,29 @@ public class InvestmentDataImpl implements InvestmentDataService{
             //获取机构id
             InvestmentInstitutions firstInvestmentInstitutions = investmentInstitutions1.get(0);
             jgid = firstInvestmentInstitutions.getId();
+
+            //查询投资人表中是否有当前投资人该机构的记录
+            Investors investors = new Investors();
+            investors.setInvestmentInstitutionsId(jgid);
+            investors.setUserId(uid);
+
+            List<Investors> investorsList = investorsMapper.select(investors);
+
+            //判断投资人信息是否存在
+            if (investorsList.size() >0){
+                //存在
+                //啥也不做
+            }else{
+                //不存在，创建投资人信息
+                Investors investorsAdd = new Investors();
+                investorsAdd.setUserId(uid);
+                investorsAdd.setInvestmentInstitutionsId(jgid);
+                investorsAdd.setCreateTime(now);
+                investorsAdd.setYn(1);
+
+                investorsMapper.insert(investorsAdd);
+
+            }
 
             //构造查询项目表实例
             Projects projectsSearch = new Projects();
@@ -371,6 +425,31 @@ public class InvestmentDataImpl implements InvestmentDataService{
             //没有该机构，则新建机构，新建项目，新建融资历史
             investmentInstitutionsMapper.insert(investmentInstitutions);
             jgid = investmentInstitutions.getId();
+
+            //查询投资人表中是否有当前投资人该机构的记录
+            Investors investors = new Investors();
+            investors.setInvestmentInstitutionsId(jgid);
+            investors.setUserId(uid);
+
+            List<Investors> investorsList = investorsMapper.select(investors);
+
+            //判断投资人信息是否存在
+            if (investorsList.size() >0){
+                //存在
+                //啥也不做
+            }else{
+                //不存在，创建投资人信息
+                Investors investorsAdd = new Investors();
+                investorsAdd.setUserId(uid);
+                investorsAdd.setInvestmentInstitutionsId(jgid);
+                investorsAdd.setCreateTime(now);
+                investorsAdd.setYn(1);
+
+                investorsMapper.insert(investorsAdd);
+
+
+            }
+
             //构造创建项目的实例
             int bh = 0;
             List<Projects> projectsList = projectsMapper.maxSerialNumber();
