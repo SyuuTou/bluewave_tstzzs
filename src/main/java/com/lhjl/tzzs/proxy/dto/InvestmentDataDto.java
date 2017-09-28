@@ -14,6 +14,15 @@ public class InvestmentDataDto {
    private String founder_name;
    private String founder_work;
    private String founder_education;
+   private String userId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getInvestment_institution_name() {
         return investment_institution_name;

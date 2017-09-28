@@ -47,6 +47,7 @@ public class InvestmentDataController {
         String founder_name = body.getFounder_name();
         String founder_work = body.getFounder_work();
         String founder_education = body.getFounder_education();
+        String userId = body.getUserId();
 
 
 
