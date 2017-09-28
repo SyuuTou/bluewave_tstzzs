@@ -2,7 +2,7 @@ package com.lhjl.tzzs.proxy.dto;
 
 public class SereachDto {
 private String userId;
-private int investment_institutions_type;
+private String  investment_institutions_type;
 private String segmentation;
 private String stage;
 private String city;
@@ -15,12 +15,12 @@ public String getUserId() {
 public void setUserId(String userId) {
 	this.userId = userId;
 }
-public int getInvestment_institutions_type() {
-	return investment_institutions_type;
-}
-public void setInvestment_institutions_type(int investment_institutions_type) {
-	this.investment_institutions_type = investment_institutions_type;
-}
+	public String getInvestment_institutions_type() {
+		return investment_institutions_type;
+	}
+	public void setInvestment_institutions_type(String investment_institutions_type) {
+		this.investment_institutions_type = investment_institutions_type;
+	}
 public String getSegmentation() {
 	return segmentation;
 }
