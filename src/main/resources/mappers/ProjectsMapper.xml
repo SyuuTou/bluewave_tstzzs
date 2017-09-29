@@ -33,7 +33,6 @@
       (SELECT e.num FROM (SELECT c.`projects_id`,SUM(c.`status`)num FROM follow c GROUP BY c.`projects_id`)e WHERE e.projects_id = b.`ID`)num
       FROM follow a LEFT JOIN projects b ON a.`projects_id` = b.`ID`
       WHERE a.user_id =#{userId} AND a.`status` = 1;
-
   </select>
    <!-- <select id="findProjectByShortName" parameterType="String" resultMap="BaseResultMap" >
     SELECT p.*,s.* FROM projects p LEFT JOIN (SELECT ff.* FROM follow ff WHERE ff.ID IN(SELECT MAX(f.ID) FROM follow f GROUP BY  f.projects_id)) s ON p.ID=s.projects_id WHERE p.`short_name` LIKE '%"#{shortName}"%';
@@ -62,7 +61,7 @@
 	
 	<select id="findProjectBySview" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
 	
-     SELECT mf.*,
+     SELECT distinct(mf.id) ID,mf.short_name,mf.kernel_desc,
      (SELECT COUNT(*) FROM follow a WHERE a.projects_id = mf.`ID` AND a.status = 1)num,
      (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId} AND f.projects_id = mf.`ID` GROUP BY f.projects_id )yn
      FROM view_projects_info mf where 1=1
