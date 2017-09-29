@@ -27,8 +27,11 @@
   </resultMap>
    
     <!-- 用户关注的项目 -->
-  <select id="findProjectByUserId" parameterType="String" resultMap="BaseResultMap" >
-  	SELECT ID,short_name,kernel_desc FROM projects WHERE id IN (SELECT projects_id FROM follow WHERE STATUS=1 AND user_id=#{userId})
+  <select id="findProjectByUserId" resultType="java.util.HashMap" >
+      SELECT a.*,b.*,
+(SELECT e.num FROM (SELECT c.`projects_id`,SUM(c.`status`)num FROM follow c GROUP BY c.`projects_id`)e WHERE e.projects_id = b.`ID`)num
+FROM follow a LEFT JOIN projects b ON a.`projects_id` = b.`ID`
+WHERE a.user_id =#{userId} AND a.`status` = 1;
   </select>
    <!-- <select id="findProjectByShortName" parameterType="String" resultMap="BaseResultMap" >
     SELECT p.*,s.* FROM projects p LEFT JOIN (SELECT ff.* FROM follow ff WHERE ff.ID IN(SELECT MAX(f.ID) FROM follow f GROUP BY  f.projects_id)) s ON p.ID=s.projects_id WHERE p.`short_name` LIKE '%"#{shortName}"%';
