@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface ProjectsMapper extends OwnerMapper<Projects> {
     List<Projects> maxSerialNumber();
-    List<Projects> findProjectByUserId(String userId);
+    List<Map<String, Object>> findProjectByUserId(@Param("userId") String userId);
     List<Map<String, Object>> findProjectByShortName(@Param("shortName") String shortName,@Param("userId") String userId);
     List<Map<String, Object>> findProjectByShortNameAll(@Param("shortName") String shortName,@Param("userId") String userId);
     List<Map<String, Object>> findProjectBySview(@Param("userId")String userId,@Param("types")int[] types,@Param("segmentations")String [] segmentations,
