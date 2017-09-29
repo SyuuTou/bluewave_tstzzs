@@ -46,10 +46,10 @@ public class ProjectsController {
     @ApiOperation(value = "查询我关注的项目列表", notes = "根据用户ID标注请求的唯一")
     @ApiImplicitParams({@ApiImplicitParam(name = "userId",paramType="path" , value = "用户ID", required = true, dataType = "String")})
     @GetMapping("search/myfollow/{userId}")
-    public CommonDto<List<Projects>> findProjectByUserId(@PathVariable String userId ){
+    public CommonDto<List<Map<String, Object>>> findProjectByUserId(@PathVariable String userId ){
 
 
-        CommonDto<List<Projects>> result =new CommonDto<List<Projects>>();
+        CommonDto<List<Map<String, Object>>> result =new CommonDto<List<Map<String, Object>>>();
         //Users user = (Users) request.getSession().getAttribute("loging_user");
 
         try {
