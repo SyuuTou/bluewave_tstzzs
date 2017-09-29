@@ -32,12 +32,12 @@ public class ProjectsServiceImpl implements ProjectsService {
 
 
     @Override
-    public CommonDto<List<Projects>> findProjectByUserId(String userId) {
-        CommonDto<List<Projects>> result = new CommonDto<List<Projects>>();
-        List<Projects> list = projectsMapper.findProjectByUserId(userId);
+    public CommonDto<List<Map<String, Object>>> findProjectByUserId(String userId) {
+        CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
+        List<Map<String, Object>> list = projectsMapper.findProjectByUserId(userId);
         result.setData(list);
         result.setStatus(200);
-        result.setMessage("ok");
+        result.setMessage("success");
         return result;
     }
 
