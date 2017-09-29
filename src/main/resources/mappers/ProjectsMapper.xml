@@ -30,9 +30,9 @@
 
   <select id="findProjectByUserId" resultType="java.util.HashMap" >
       SELECT a.*,b.*,
-(SELECT e.num FROM (SELECT c.`projects_id`,SUM(c.`status`)num FROM follow c GROUP BY c.`projects_id`)e WHERE e.projects_id = b.`ID`)num
-FROM follow a LEFT JOIN projects b ON a.`projects_id` = b.`ID`
-WHERE a.user_id =#{userId} AND a.`status` = 1;
+      (SELECT e.num FROM (SELECT c.`projects_id`,SUM(c.`status`)num FROM follow c GROUP BY c.`projects_id`)e WHERE e.projects_id = b.`ID`)num
+      FROM follow a LEFT JOIN projects b ON a.`projects_id` = b.`ID`
+      WHERE a.user_id =#{userId} AND a.`status` = 1;
 
   </select>
    <!-- <select id="findProjectByShortName" parameterType="String" resultMap="BaseResultMap" >
@@ -94,6 +94,7 @@ WHERE a.user_id =#{userId} AND a.`status` = 1;
        AND mf.education_experience IN
        <foreach item="item" index="index" collection="educational_background_descs" open="(" separator="," close=")">#{item}</foreach>
        </if>
+        LIMIT 50
 	 </select>
 
     <select id="findByTodayProjects" resultMap="BaseResultMap" parameterType="com.lhjl.tzzs.proxy.model.Projects">
