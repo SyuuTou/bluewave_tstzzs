@@ -13,6 +13,7 @@ import com.lhjl.tzzs.proxy.model.Follow;
 import com.lhjl.tzzs.proxy.service.FollowService;
 import com.lhjl.tzzs.proxy.service.common.JedisCommonService;
 
+import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
 /**
  * 关注
@@ -25,6 +26,7 @@ public class FollowServiceImpl implements FollowService {
     @Resource
     private FollowMapper followMapper;
 
+    @Transactional
     @Override
     public void updateFollowStatus(Integer status, Integer projectId,String userId) {
         Follow follow = new Follow();

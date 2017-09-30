@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
@@ -46,7 +47,7 @@ public class SerchHistoryImpl implements SerchHistoryService {
         return result;
     }
 
-
+    @Transactional
    @Override
   public  CommonDto<String> addSearchHistoryLog(String user_id,String search_content){
         CommonDto<String> result = new CommonDto<String>();
@@ -97,6 +98,7 @@ public class SerchHistoryImpl implements SerchHistoryService {
 
   }
 
+  @Transactional
   @Override
     public CommonDto<String> updateUserSearchLogYn(Integer id){
       CommonDto<String> result = new CommonDto<String>();

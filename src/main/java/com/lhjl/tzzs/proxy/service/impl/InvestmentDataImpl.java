@@ -8,6 +8,7 @@ import org.apache.catalina.User;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.annotation.Resource;
@@ -48,6 +49,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
     @Resource
     private UsersMapper usersMapper;
 
+    @Transactional
     @Override
     public CommonDto<String> addInvestmentData(String investment_institution_name , String project_name, String project_full_name, String summary, String field,  String city, String rounds, String amount,  String currency,  String stock_right,  Date date,  String founder_name, String founder_work, String founder_education,String userId){
         CommonDto<String> result = new CommonDto<String>();

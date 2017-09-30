@@ -6,6 +6,7 @@ import com.lhjl.tzzs.proxy.service.InvestmentBackstageService;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.annotation.Resource;
@@ -19,6 +20,7 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
     @Resource
     private InvestmentInstitutionsMapper investmentInstitutionsMapper;
 
+    @Transactional
     @Override
     public CommonDto<String> adminAddInvestmentBackstage(InvestmentInstitutions body){
         CommonDto<String> result =new CommonDto<String>();
