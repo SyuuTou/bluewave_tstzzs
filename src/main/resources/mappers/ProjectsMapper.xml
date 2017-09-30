@@ -29,10 +29,11 @@
     <!-- 用户关注的项目 -->
 
   <select id="findProjectByUserId" resultType="java.util.HashMap" >
-      SELECT a.*,b.*,
-      (SELECT e.num FROM (SELECT c.`projects_id`,SUM(c.`status`)num FROM follow c GROUP BY c.`projects_id`)e WHERE e.projects_id = b.`ID`)num
+     SELECT a.*,b.*,
+     (SELECT e.num FROM (SELECT c.`projects_id`,SUM(c.`status`)num FROM follow c GROUP BY c.`projects_id`)e WHERE e.projects_id = b.`ID`)num,
+     (SELECT COUNT(1) FROM interview WHERE projects_id = b.`ID`)inum
       FROM follow a LEFT JOIN projects b ON a.`projects_id` = b.`ID`
-      WHERE a.user_id =#{userId} AND a.`status` = 1;
+      WHERE a.user_id = #{userId}  AND a.`status` = 1;
   </select>
    <!-- <select id="findProjectByShortName" parameterType="String" resultMap="BaseResultMap" >
     SELECT p.*,s.* FROM projects p LEFT JOIN (SELECT ff.* FROM follow ff WHERE ff.ID IN(SELECT MAX(f.ID) FROM follow f GROUP BY  f.projects_id)) s ON p.ID=s.projects_id WHERE p.`short_name` LIKE '%"#{shortName}"%';
@@ -46,7 +47,8 @@
    WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')  -->
    SELECT b.*,
 	(SELECT COUNT(*) FROM follow a WHERE a.projects_id = b.`ID` AND a.status = 1)num,
-	(SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.projects_id = b.`ID` GROUP BY f.projects_id )yn
+	(SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.projects_id = b.`ID` GROUP BY f.projects_id )yn,
+	(SELECT COUNT(1) FROM interview WHERE projects_id = b.`ID`)inum
 	FROM projects b
 	WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
 	
@@ -54,7 +56,8 @@
 	<select id="findProjectByShortName"  parameterType="String" resultType="java.util.HashMap">
     SELECT b.*,
 	(SELECT COUNT(*) FROM follow a WHERE a.projects_id = b.`ID` AND a.status = 1)num,
-	(SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.projects_id = b.`ID` GROUP BY f.projects_id )yn
+	(SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.projects_id = b.`ID` GROUP BY f.projects_id )yn,
+	(SELECT COUNT(1) FROM interview WHERE projects_id = b.`ID`)inum
 	FROM projects b
 	WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%') LIMIT 3
 	</select>
@@ -63,7 +66,8 @@
 	
      SELECT distinct(mf.id) ID,mf.short_name,mf.kernel_desc,
      (SELECT COUNT(*) FROM follow a WHERE a.projects_id = mf.`ID` AND a.status = 1)num,
-     (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId} AND f.projects_id = mf.`ID` GROUP BY f.projects_id )yn
+     (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId} AND f.projects_id = mf.`ID` GROUP BY f.projects_id )yn,
+     (SELECT COUNT(1) FROM interview WHERE projects_id = mf.`ID`)inum
      FROM view_projects_info mf where 1=1
 	 <if test=" types !='' and types.length > 0">
        AND mf.investment_institutions_type IN
