@@ -22,6 +22,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InterviewDto;
 import com.lhjl.tzzs.proxy.model.Interview;
 import com.lhjl.tzzs.proxy.model.Projects;
+import com.lhjl.tzzs.proxy.service.FollowService;
 import com.lhjl.tzzs.proxy.service.InterviewService;
 import com.lhjl.tzzs.proxy.service.common.JedisCommonService;
 
@@ -40,6 +41,9 @@ public class InterviewController {
     private static final Logger log = LoggerFactory.getLogger(FinancingController.class);
     @Resource
     private InterviewService interviewService;
+    
+    @Resource
+    private FollowService followService;
     /**
      *
      * @param projectsId 项目id
@@ -51,7 +55,8 @@ public class InterviewController {
     @ApiOperation(value = "发起约谈接口", notes = "根据用户ID与项目的ID来标注请求的唯一携带发送的")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "String", name = "userId", value = "用户ID", required = true),
     	                 @ApiImplicitParam(paramType = "body", dataType = "String", name = "desc", value = "约谈内容", required = true),
-    	                 @ApiImplicitParam(paramType = "body", dataType = "Integer", name = "projects", value = "项目ID", required = true)
+    	                 @ApiImplicitParam(paramType = "body", dataType = "Integer", name = "projects", value = "项目ID", required = true),
+    	                 @ApiImplicitParam(paramType = "body", dataType = "Integer", name = "yn", value = "当前项目的状态值", required = true)
     	})
     @PostMapping("interview/save")
     public CommonDto<String> insertInterview(@RequestBody InterviewDto  body){
@@ -65,6 +70,7 @@ public class InterviewController {
         interview.setUserId(userId);
         interview.setDesc(desc);
         interview.setCreateTime(new Date());
+        Integer yn =body.getYn();
 		/*Jedis jedis = jedisCommonService.getJedis();
 		String userid = jedis.get("userid");
 		interview.setUsersId(Integer.valueOf(userid));*/
@@ -72,13 +78,18 @@ public class InterviewController {
         CommonDto<String> result = new CommonDto<String>();
         try {
             interviewService.insertInterview(interview);
+            interviewService.updateFollowStatus1(yn, projectsId, userId);
             result.setMessage("约谈成功");
+            result.setStatus(200);
+            result.setData("success");
         } catch (Exception e) {
             // TODO: handle exception
             result.setMessage("约谈失败");
+            result.setStatus(404);
+            result.setData("fail");
             log.error(e.getMessage(),e.fillInStackTrace());
         }
         return result;
     }
-
+    
 }
