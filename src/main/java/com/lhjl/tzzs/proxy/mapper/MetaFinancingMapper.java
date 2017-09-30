@@ -19,11 +19,11 @@ public interface MetaFinancingMapper  extends OwnerMapper<MetaFinancing> {
 
     List<LabelList> queryHotWork();
 
-    List<HistogramList> queryValuation(@Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName);
+    List<HistogramList> queryValuation(@Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("beginTime") String beginTime, @Param("endTime") String endTime);
 
-    List<HistogramList> queryFinancingAmount(@Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName);
+    List<HistogramList> queryFinancingAmount(@Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("beginTime") String beginTime, @Param("endTime") String endTime);
 
-    Map<String,Object> queryFinancingCount(@Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName);
+    Map<String,Object> queryFinancingCount(@Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("beginTime") String beginTime, @Param("endTime") String endTime);
 
-    Map<String,Object> queryValuationCount(@Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName);
+    Map<String,Object> queryValuationCount(@Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("beginTime") String beginTime, @Param("endTime") String endTime);
 }

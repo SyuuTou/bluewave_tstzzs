@@ -4,10 +4,14 @@ package com.lhjl.tzzs.proxy.controller;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.service.StatisticsService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -27,12 +31,12 @@ public class StatisticsController {
      * @return
      */
     @GetMapping("financing/{institutionType}/count/distributed")
-    public CommonDto<List<HistogramList>> financing50CountDistributed(String institutionType){
+    public CommonDto<List<HistogramList>> financing50CountDistributed(@PathVariable String institutionType){
 
         CommonDto<List<HistogramList>> result = null;
 
         try {
-            result = statisticsService.financingCountDistributed( institutionType);
+            result = statisticsService.financingCountDistributed(institutionType);
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(),e.fillInStackTrace());
@@ -50,7 +54,7 @@ public class StatisticsController {
      * @return
      */
     @GetMapping("financing/{institutionType}/amount/distributed")
-    public CommonDto<List<HistogramList>> financing50amountDistributed(String institutionType){
+    public CommonDto<List<HistogramList>> financing50amountDistributed(@PathVariable String institutionType){
 
         CommonDto<List<HistogramList>> result = null;
 
@@ -73,7 +77,7 @@ public class StatisticsController {
      * @return
      */
     @GetMapping("financing/{institutionType}/segmentation/distributed")
-    public CommonDto<List<HistogramList>> financing50SegmentationDistributed(String institutionType){
+    public CommonDto<List<HistogramList>> financing50SegmentationDistributed(@PathVariable String institutionType){
 
         CommonDto<List<HistogramList>> result = null;
 
@@ -96,7 +100,7 @@ public class StatisticsController {
      * @return
      */
     @GetMapping("financing/{institutionType}/city/distributed")
-    public CommonDto<List<HistogramList>> financing50CityDistributed(String institutionType){
+    public CommonDto<List<HistogramList>> financing50CityDistributed(@PathVariable String institutionType){
 
         CommonDto<List<HistogramList>> result = null;
 
