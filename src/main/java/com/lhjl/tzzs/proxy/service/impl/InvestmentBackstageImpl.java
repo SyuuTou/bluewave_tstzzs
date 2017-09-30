@@ -9,7 +9,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.annotation.Resource;
-import java.util.Date;
+import java.util.*;
 
 @Service
 public class InvestmentBackstageImpl implements InvestmentBackstageService{
@@ -66,4 +66,39 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
         result.setMessage("success");
         return result;
     }
+
+    /**
+     * 获取机构信息（50与非50）
+     * @return
+     */
+    @Override
+    public CommonDto<List<Map<String, Object>>>  findAllInvestment() {
+        CommonDto<List<Map<String, Object>>> list = new CommonDto<List<Map<String, Object>>>();
+        List<InvestmentInstitutions> listForfive = new ArrayList<InvestmentInstitutions>();
+        List<InvestmentInstitutions> listNotfive = new ArrayList<InvestmentInstitutions>();
+
+        //获取非50机构（所有）
+        listNotfive = investmentInstitutionsMapper.selectAll();
+        //获取50机构
+        for(InvestmentInstitutions investmentInstitutions : listNotfive){
+            if(investmentInstitutions.getType() == 1){
+                listForfive.add(investmentInstitutions);
+            }
+        }
+
+        //组装所有数据
+        List<Map<String, Object>> lists = new ArrayList<Map<String, Object>>();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("xiangmubiaoa", listForfive);
+        map.put("xiangmubiaob", listNotfive);
+        lists.add(map);
+
+        //返回结果数据组装
+        list.setStatus(200);
+        list.setMessage("success");
+        list.setData(lists);
+
+        return list;
+    }
+
 }
