@@ -53,7 +53,6 @@ public class FinancingController {
      * @return
      */
     @GetMapping("financing/amount/list")
-    @PostMapping("financing/amount/list")
     public CommonDto<List<HistogramList>> financingAmount(@RequestParam(required = false) String roundName, @RequestParam(required = false) String industryName , @RequestParam(required = false) String cityName, @RequestParam(required = false) String educationName, @RequestParam(required = false) String workName){
 
         CommonDto<List<HistogramList>> result = null;

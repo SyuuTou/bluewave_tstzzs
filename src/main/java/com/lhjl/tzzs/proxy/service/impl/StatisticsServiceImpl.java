@@ -35,6 +35,8 @@ public class StatisticsServiceImpl implements StatisticsService {
         }
         List<HistogramList>  histogramLists = statisticsMapper.financingCountDistributed(type,beginTime,endTime);
         result.setData(histogramLists);
+        result.setMessage("success");
+        result.setStatus(200);
         return result;
     }
 
@@ -48,6 +50,8 @@ public class StatisticsServiceImpl implements StatisticsService {
         }
         List<HistogramList>  histogramLists = statisticsMapper.financingAmountDistributed(type,beginTime,endTime);
         result.setData(histogramLists);
+        result.setMessage("success");
+        result.setStatus(200);
         return result;
     }
 
@@ -60,6 +64,8 @@ public class StatisticsServiceImpl implements StatisticsService {
         }
         List<HistogramList>  histogramLists = statisticsMapper.financingSegmentationDistributed(type,beginTime,endTime);
         result.setData(histogramLists);
+        result.setMessage("success");
+        result.setStatus(200);
         return result;
     }
 
@@ -72,6 +78,8 @@ public class StatisticsServiceImpl implements StatisticsService {
         }
         List<HistogramList>  histogramLists = statisticsMapper.financingCityDistributed(type,beginTime,endTime);
         result.setData(histogramLists);
+        result.setMessage("success");
+        result.setStatus(200);
         return result;
     }
 
@@ -81,6 +89,8 @@ public class StatisticsServiceImpl implements StatisticsService {
         Integer type = null;
         List<HistogramList>  histogramLists = statisticsMapper.financingEducationExperienceDistributed(type,beginTime,endTime);
         result.setData(histogramLists);
+        result.setMessage("success");
+        result.setStatus(200);
         return result;
     }
 
@@ -90,6 +100,8 @@ public class StatisticsServiceImpl implements StatisticsService {
         Integer type = null;
         List<HistogramList>  histogramLists = statisticsMapper.financingWorkExperienceDistributed(type,beginTime,endTime);
         result.setData(histogramLists);
+        result.setMessage("success");
+        result.setStatus(200);
         return result;
     }
 
@@ -99,6 +111,8 @@ public class StatisticsServiceImpl implements StatisticsService {
         Integer type = null;
         List<HistogramList>  histogramLists = statisticsMapper.financingInvestmentDistributed(type,beginTime,endTime);
         result.setData(histogramLists);
+        result.setMessage("success");
+        result.setStatus(200);
         return result;
     }
 }
