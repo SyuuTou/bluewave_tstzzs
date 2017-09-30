@@ -6,6 +6,13 @@ public class InterviewDto {
 	private  Integer projectsId;
 	private  String userId;
     private  String desc;
+    private  Integer yn;
+	public Integer getYn() {
+		return yn;
+	}
+	public void setYn(Integer yn) {
+		this.yn = yn;
+	}
 	public Integer getProjectsId() {
 		return projectsId;
 	}
