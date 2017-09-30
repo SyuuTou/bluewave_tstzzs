@@ -6,6 +6,7 @@ import com.lhjl.tzzs.proxy.service.UserFilterLogService;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -18,6 +19,7 @@ public class UserFilterLogImpl implements UserFilterLogService{
     @Resource
     private UserFilterLogMapper userFilterLogMapper;
 
+    @Transactional
     @Override
     public CommonDto<String> userFilterAddLog(String investment_institutions_type,String investment_institutions_field,String financing_stage,String city,String education,String work,String user_id){
         CommonDto<String> result =new CommonDto<String>();

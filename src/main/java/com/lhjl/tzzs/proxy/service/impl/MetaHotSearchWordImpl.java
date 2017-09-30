@@ -6,6 +6,7 @@ import com.lhjl.tzzs.proxy.service.MetaHotSearchWordService;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -31,7 +32,7 @@ public class MetaHotSearchWordImpl implements MetaHotSearchWordService {
         return result;
     }
 
-
+    @Transactional
     @Override
     public CommonDto<String> updateHotWordAmount(Integer id){
         CommonDto<String> result = new CommonDto<String>();
