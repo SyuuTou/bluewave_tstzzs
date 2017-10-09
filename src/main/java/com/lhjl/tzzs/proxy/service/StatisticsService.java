@@ -6,17 +6,17 @@ import com.lhjl.tzzs.proxy.dto.HistogramList;
 import java.util.List;
 
 public interface StatisticsService {
-    CommonDto<List<HistogramList>> financingCountDistributed(String institutionType);
+    CommonDto<List<HistogramList>> financingCountDistributed(String institutionType,String from, String size);
 
-    CommonDto<List<HistogramList>> financingAmountDistributed(String institutionType);
+    CommonDto<List<HistogramList>> financingAmountDistributed(String institutionType,String from, String size);
 
-    CommonDto<List<HistogramList>> financingSegmentationDistributed(String institutionType);
+    CommonDto<List<HistogramList>> financingSegmentationDistributed(String institutionType,String from, String size);
 
-    CommonDto<List<HistogramList>> financingCityDistributed(String institutionType);
+    CommonDto<List<HistogramList>> financingCityDistributed(String institutionType,String from, String size);
 
-    CommonDto<List<HistogramList>> financingEducationExperienceDistributed();
+    CommonDto<List<HistogramList>> financingEducationExperienceDistributed(String from, String size);
 
-    CommonDto<List<HistogramList>> financingWorkExperienceDistributed();
+    CommonDto<List<HistogramList>> financingWorkExperienceDistributed(String from, String size);
 
-    CommonDto<List<HistogramList>> financingInvestmentDistributed();
+    CommonDto<List<HistogramList>> financingInvestmentDistributed(String from, String size);
 }

@@ -22,7 +22,7 @@
         group by full_name ) b
 
         group by date_format(b.financing_time,'%Y-%m')
-        ) a order by a.financing_time
+        ) a order by a.financing_time limit #{froma},#{sizea}
 
     </select>
 
@@ -39,7 +39,7 @@
         </if>
         group by full_name ) a
         group by date_format(a.financing_time,'%Y-%m')
-        ) b order by b.financing_time
+        ) b order by b.financing_time limit #{froma},#{sizea}
 
     </select>
 
@@ -54,7 +54,7 @@
             and investment_institutions_type = #{jgtype}
         </if>
         group by segmentation ) a
-        order by a.count desc
+        order by a.count desc limit #{froma},#{sizea}
     </select>
 
     <select id="financingCityDistributed" resultMap="histogramResultMap">
@@ -68,7 +68,7 @@
             and investment_institutions_type = #{jgtype}
         </if>
         group by city ) a
-        order by a.count desc
+        order by a.count desc limit #{froma},#{sizea}
     </select>
     <select id="financingEducationExperienceDistributed" resultMap="histogramResultMap">
 
@@ -81,7 +81,7 @@
             and investment_institutions_type = #{jgtype}
         </if>
         group by education_experience ) a
-        order by a.count desc
+        order by a.count desc limit #{froma},#{sizea}
     </select>
     <select id="financingWorkExperienceDistributed" resultMap="histogramResultMap">
 
@@ -94,7 +94,7 @@
             and investment_institutions_type = #{jgtype}
         </if>
         group by work_experience ) a
-        order by a.count desc
+        order by a.count desc limit #{froma},#{sizea}
     </select>
     <select id="financingInvestmentDistributed" resultMap="histogramResultMap">
 
@@ -107,6 +107,6 @@
             and investment_institutions_type = #{jgtype}
         </if>
         group by city ) a
-        order by a.count desc
+        order by a.count desc limit #{froma},#{sizea}
     </select>
 </mapper>
