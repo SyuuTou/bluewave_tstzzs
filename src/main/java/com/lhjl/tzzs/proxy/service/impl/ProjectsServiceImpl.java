@@ -93,10 +93,12 @@ public class ProjectsServiceImpl implements ProjectsService {
         int sizeb = Integer.parseInt(size);
         int froma =Integer.parseInt(from);
         int sizea=(sizeb-1)*froma;
-        if(sizeb*froma >= 100){
+        if(sizea > 100){
             result.setStatus(201);
             result.setMessage("查询记录数超出限制（100条）");
             return result;
+        }{
+        	froma = (100 - sizea)>=froma ?froma :(100 - sizea);
         }
         Map<String,List<Map<String, Object>>> dataMap = new HashMap<String,List<Map<String, Object>>>();
         List<Map<String, Object>> list = projectsMapper.findProjectByShortNameAll(shortName,userId,sizea,froma);
@@ -147,10 +149,12 @@ public class ProjectsServiceImpl implements ProjectsService {
         int sizeb =Integer.parseInt(size);
         int froma =Integer.parseInt(from);
         int sizea=(sizeb-1)*froma;
-        if(sizeb*froma >= 100){
+        if(sizea > 100){
             result.setStatus(201);
             result.setMessage("查询记录数超出限制（100条）");
             return result;
+        }{
+        	froma = (100 - sizea)>=froma ?froma :(100 - sizea);
         }
         if(type != null && !"".equals(type)) {
             String[] type2 = type.split(",");
