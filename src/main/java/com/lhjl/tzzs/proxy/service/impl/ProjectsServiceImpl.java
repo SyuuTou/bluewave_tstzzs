@@ -139,12 +139,12 @@ public class ProjectsServiceImpl implements ProjectsService {
         String [] educational_background_descs ={};
         String size ="0";
         String from ="10";
-        if(sereachDto.getSize() != "undefined"){
-            size=sereachDto.getSize();
+        if(sereachDto.getPageNum() != null && !"".equals(sereachDto.getPageNum())){
+            size=sereachDto.getPageNum();
 
         }
-        if(sereachDto.getFrom() !="undefined"){
-            from=sereachDto.getFrom();
+        if(sereachDto.getPageSize() !=null && !"".equals(sereachDto.getPageSize())){
+            from=sereachDto.getPageSize();
         }
         int sizeb =Integer.parseInt(size);
         int froma =Integer.parseInt(from);
