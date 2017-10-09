@@ -101,12 +101,12 @@ public class ProjectsController {
         String userId =body.getUserId();
         String size ="0";
         String from ="10";
-        if(body.getSize() != "undefined"){
-            size=body.getSize();
+        if(body.getPageNum() != null ){
+            size=body.getPageNum();
 
         }
-        if(body.getFrom() !="undefined"){
-            from=body.getFrom();
+        if(body.getPageSize() != null){
+            from=body.getPageSize();
         }
 
         try {
