@@ -64,8 +64,8 @@ public class ProjectsController {
      */
     @ApiOperation(value = "搜索结果记录", notes = "根据用户的id与项目的名字来标识请求的唯一性")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "String", name = "userId", value = "用户ID", required = true),
-    	                 @ApiImplicitParam(paramType = "body", dataType = "String", name = "shortName", value = "项目的名字", required = true)
-    	})
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "shortName", value = "项目的名字", required = true)
+    })
     @PostMapping("search/Mprojects")
     public CommonDto<List<Map<String, Object>>> findProjectByShortName(@RequestBody ShuruDto body){
         CommonDto<List<Map<String,Object>>> result =new CommonDto<List<Map<String, Object>>>();
@@ -90,15 +90,27 @@ public class ProjectsController {
      */
     @ApiOperation(value = "搜索醒目列表的接口", notes = "根据用户的id与项目的名字来标识请求的唯一性")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "String", name = "userId", value = "用户ID", required = true),
-    	                 @ApiImplicitParam(paramType = "body", dataType = "String", name = "shortName", value = "项目的名字", required = true)
-    	})
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "shortName", value = "项目的名字", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "size", value = "初始页数", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "from", value = "每页数量", required = true)
+    })
     @PostMapping("search/pandi")
     public CommonDto<Map<String,List<Map<String, Object>>>> findProjectAndInvestmentByShortNameAll(@RequestBody ShuruDto body){
         CommonDto <Map<String,List<Map<String, Object>>>> result =new CommonDto <Map<String,List<Map<String, Object>>>>();
         String shortName =body.getShortName();
         String userId =body.getUserId();
+        String size ="0";
+        String from ="10";
+        if(body.getSize() != "undefined"){
+            size=body.getSize();
+
+        }
+        if(body.getFrom() !="undefined"){
+            from=body.getFrom();
+        }
+
         try {
-            result = projectsService.findProjectByShortNameAll(shortName,userId);
+            result = projectsService.findProjectByShortNameAll(shortName,userId,size,from);
         } catch (Exception e) {
             result.setStatus(5103);
             result.setMessage("搜索异常，请稍后再试");
@@ -112,12 +124,14 @@ public class ProjectsController {
      */
     @ApiOperation(value = "筛选结果页面", notes = "根据用户的id、机构类型、领域、城市、轮次、教育背景、工作背景来标注请求的唯一")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "String", name = "userId", value = "用户ID", required = true),
-    	                 @ApiImplicitParam(paramType = "body", dataType = "Integer", name = "investment_institutions_type", value = "机构类型", required = true),
-    	                 @ApiImplicitParam(paramType = "body", dataType = "String", name = "segmentation", value = "行业领域", required = true),
-    	                 @ApiImplicitParam(paramType = "body", dataType = "String", name = "stage", value = "轮次", required = true),
-    	                 @ApiImplicitParam(paramType = "body", dataType = "String", name = "city", value = "城市", required = true),
-    	                 @ApiImplicitParam(paramType = "body", dataType = "String", name = "educational_background_desc", value = "教育背景", required = true),
-    	                 @ApiImplicitParam(paramType = "body", dataType = "String", name = "working_background_desc", value = "工作背景", required = true)
+            @ApiImplicitParam(paramType = "body", dataType = "Integer", name = "investment_institutions_type", value = "机构类型", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "segmentation", value = "行业领域", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "stage", value = "轮次", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "city", value = "城市", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "educational_background_desc", value = "教育背景", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "working_background_desc", value = "工作背景", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "size", value = "初始页数", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "from", value = "每页数量", required = true)
     })
     @PostMapping("choose/sview")
     public CommonDto<List<Map<String,Object>>>findProjectBySview(@RequestBody SereachDto body)
