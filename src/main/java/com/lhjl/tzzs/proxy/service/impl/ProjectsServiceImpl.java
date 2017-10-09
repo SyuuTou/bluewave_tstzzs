@@ -84,29 +84,45 @@ public class ProjectsServiceImpl implements ProjectsService {
     }
 
     @Override
-    public CommonDto<Map<String,List<Map<String, Object>>>> findProjectByShortNameAll(String shortName,String userId) {
+    public CommonDto<Map<String,List<Map<String, Object>>>> findProjectByShortNameAll(String shortName,String userId,String size,String from) {
         CommonDto<Map<String,List<Map<String, Object>>>> result = new CommonDto<Map<String,List<Map<String, Object>>>>();
+        int sizeb = Integer.parseInt(size);
+        int froma =Integer.parseInt(from);
+        int sizea=(sizeb-1)*froma;
+        if(sizeb*froma >= 100){
+            result.setStatus(201);
+            result.setMessage("查询记录数超出限制（100条）");
+            return result;
+        }
         Map<String,List<Map<String, Object>>> dataMap = new HashMap<String,List<Map<String, Object>>>();
-        List<Map<String, Object>> list = projectsMapper.findProjectByShortNameAll(shortName,userId);
+        List<Map<String, Object>> list = projectsMapper.findProjectByShortNameAll(shortName,userId,sizea,froma);
+        if(list.size() <= 0){
+            result.setStatus(202);
+            result.setMessage("无查询数据");
+            return result;
+        }
         List<Map<String, Object>> list2 = new ArrayList<Map<String,Object>>();
+
         for(Map<String, Object> map : list){
             if(map.get("yn") == null){
                 map.put("yn", 0);
             }
+
             list2.add(map);
         }
-        List<Map<String, Object>> list3 = investmentInstitutionsMapper.findByInvestmentShortNameAll(shortName,userId);
+       /* List<Map<String, Object>> list3 = investmentInstitutionsMapper.findByInvestmentShortNameAll(shortName,userId);
         dataMap.put("projectskey", list2);
-        dataMap.put("investmentkey", list3);
+        dataMap.put("investmentkey", list3);*/
+        dataMap.put("projectskey", list2);
         result.setData(dataMap);
         result.setStatus(200);
         result.setMessage("ok");
         return result;
     }
 
-	@Override
-	public CommonDto<List<Map<String, Object>>> findProjectBySview(SereachDto sereachDto) {
-		CommonDto<List<Map<String,Object>>> result =new CommonDto<List<Map<String, Object>>>();
+    @Override
+    public CommonDto<List<Map<String, Object>>> findProjectBySview(SereachDto sereachDto) {
+        CommonDto<List<Map<String,Object>>> result =new CommonDto<List<Map<String, Object>>>();
         String userId =sereachDto.getUserId();
         String  type = sereachDto.getInvestment_institutions_type();
         int[] types = {};
@@ -115,7 +131,23 @@ public class ProjectsServiceImpl implements ProjectsService {
         String [] cities={};
         String [] working_background_descs ={};
         String [] educational_background_descs ={};
+        String size ="0";
+        String from ="10";
+        if(sereachDto.getSize() != "undefined"){
+            size=sereachDto.getSize();
 
+        }
+        if(sereachDto.getFrom() !="undefined"){
+            from=sereachDto.getFrom();
+        }
+        int sizeb =Integer.parseInt(size);
+        int froma =Integer.parseInt(from);
+        int sizea=(sizeb-1)*froma;
+        if(sizeb*froma >= 100){
+            result.setStatus(201);
+            result.setMessage("查询记录数超出限制（100条）");
+            return result;
+        }
         if(type != null && !"".equals(type)) {
             String[] type2 = type.split(",");
             types = new int[type2.length];
@@ -124,7 +156,7 @@ public class ProjectsServiceImpl implements ProjectsService {
             }
         }
 
-	      String segmentation = sereachDto.getSegmentation();
+        String segmentation = sereachDto.getSegmentation();
         if(segmentation !=null && !"".equals(segmentation)){
             segmentations=segmentation.split(",");
         }
@@ -150,17 +182,22 @@ public class ProjectsServiceImpl implements ProjectsService {
         }
 //	    List citiess = Arrays.asList(cities);
 //	        String[] stages = sereachDto.getStage().split(",");
-	        List<Map<String, Object>> list =projectsMapper.findProjectBySview(userId,types,segmentations,stages, cities, working_background_descs,educational_background_descs);
-	        List<Map<String, Object>> list2 = new ArrayList<Map<String,Object>>();
-	        for(Map<String, Object> map :list){
-	            if(map.get("yn") == null){
-	                map.put("yn", 0);
-	            }
-	            list2.add(map);
-	            }
-	            result.setData(list2);
-	      return result;
-	   }
+        List<Map<String, Object>> list =projectsMapper.findProjectBySview(userId,types,segmentations,stages, cities, working_background_descs,educational_background_descs,sizea,froma);
+        if(list.size() <= 0){
+            result.setStatus(202);
+            result.setMessage("无查询数据");
+            return result;
+        }
+        List<Map<String, Object>> list2 = new ArrayList<Map<String,Object>>();
+        for(Map<String, Object> map :list){
+            if(map.get("yn") == null){
+                map.put("yn", 0);
+            }
+            list2.add(map);
+        }
+        result.setData(list2);
+        return result;
+    }
 
 
 }
