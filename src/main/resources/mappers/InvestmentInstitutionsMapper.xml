@@ -31,4 +31,16 @@
     WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
   </select>
 
+  <select id="findFiveInvestment" resultType="java.util.HashMap">
+    SELECT ID, short_name, commet, create_time, type, logo, case_url, kenel_case, comment, city, stage, representative FROM investment_institutions
+    WHERE type = 1
+    LIMIT #{beginNum},#{pageSize}
+  </select>
+
+  <select id="findNotFiveInvestment" resultType="java.util.HashMap">
+    SELECT ID, short_name, commet, create_time, type, logo, case_url, kenel_case, comment, city, stage, representative FROM investment_institutions
+    WHERE type = 0
+    LIMIT #{beginNum},#{pageSize}
+  </select>
+
 </mapper>

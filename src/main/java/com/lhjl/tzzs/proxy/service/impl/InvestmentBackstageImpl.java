@@ -4,6 +4,8 @@ import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.service.InvestmentBackstageService;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,9 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
 
     @Resource
     private InvestmentInstitutionsMapper investmentInstitutionsMapper;
+
+    @Autowired
+    private Environment environment;
 
     @Transactional
     @Override
@@ -103,4 +108,67 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
         return list;
     }
 
+    /**
+     * 获取50机构信息（分页）
+     * @param pageNum 页数
+     * @param pageSize 每页记录数
+     * @return
+     */
+    @Override
+    public CommonDto<List<Map<String, Object>>> findFiveInvestment(Integer pageNum, Integer pageSize) {
+        CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
+        //初始化分页信息
+        if(pageNum == null){
+            pageNum = Integer.parseInt(environment.getProperty("pageNum"));
+        }
+        if(pageSize == null){
+            pageSize = Integer.parseInt(environment.getProperty("pageSize"));
+        }
+        //计算查询起始记录
+        Integer beginNum = (pageNum-1)*pageSize;
+
+        List<Map<String, Object>> list = investmentInstitutionsMapper.findFiveInvestment(beginNum, pageSize);
+        //判断是否还有查询结果
+        if(list.size() <= 0){
+            result.setStatus(202);
+            result.setMessage("无查询数据");
+            return result;
+        }
+        result.setData(list);
+        result.setStatus(200);
+        result.setMessage("success");
+        return result;
+    }
+
+    /**
+     * 获取非50机构信息（分页）
+     * @param pageNum 页数
+     * @param pageSize 每页记录数
+     * @return
+     */
+    @Override
+    public CommonDto<List<Map<String, Object>>> findNotFiveInvestment(Integer pageNum, Integer pageSize) {
+        CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
+        //初始化分页信息
+        if(pageNum == null){
+            pageNum = Integer.parseInt(environment.getProperty("pageNum"));
+        }
+        if(pageSize == null){
+            pageSize = Integer.parseInt(environment.getProperty("pageSize"));
+        }
+        //计算查询起始记录
+        Integer beginNum = (pageNum-1)*pageSize;
+
+        List<Map<String, Object>> list = investmentInstitutionsMapper.findNotFiveInvestment(beginNum, pageSize);
+        //判断是否还有查询结果
+        if(list.size() <= 0){
+            result.setStatus(202);
+            result.setMessage("无查询数据");
+            return result;
+        }
+        result.setData(list);
+        result.setStatus(200);
+        result.setMessage("success");
+        return result;
+    }
 }
