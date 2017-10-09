@@ -93,14 +93,17 @@ public class EvaluateServiceImpl implements EvaluateService {
                     if (total < 5){
                         dataList = new ArrayList<HistogramList>();
                     }else{
+                        size = Double.valueOf(total * 0.8).intValue();
                         dataList = financingMapper.queryValuation(roundName,industryName,null,null,null,beginTime,endTime,index,size);
                     }
 
                 }else{
+                    size = Double.valueOf(total * 0.8).intValue();
                     dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,null,beginTime,endTime,index,size);
                 }
 
             }else{
+                size = Double.valueOf(total * 0.8).intValue();
                 dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,workName,beginTime,endTime,index,size);
             }
 
@@ -118,7 +121,7 @@ public class EvaluateServiceImpl implements EvaluateService {
         if (dataList != null&& dataList.size()>0) {
             for (HistogramList histogramList : dataList) {
                 histogramList.setX(String.valueOf(histogramList.getMoney()));
-                histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(collect.get("total").toString()) * 100));
+                histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(size) * 100));
 
                 totalMoney += histogramList.getMoney() * histogramList.getDcount();
             }
@@ -166,19 +169,23 @@ public class EvaluateServiceImpl implements EvaluateService {
                     if (total < 5){
                         dataList = new ArrayList<HistogramList>();
                     }else{
+                        size = Double.valueOf(total * 0.8).intValue();
                         dataList = financingMapper.queryFinancingAmount(roundName,industryName,null,null,null,beginTime,endTime,index,size);
                     }
 
 
                 }else{
+                    size = Double.valueOf(total * 0.8).intValue();
                     dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,null,beginTime,endTime,index,size);
                 }
 
             }else{
+                size = Double.valueOf(total * 0.8).intValue();
                 dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,workName,beginTime,endTime,index,size);
             }
 
         }else{
+            size = Double.valueOf(total * 0.8).intValue();
             dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,educationName,workName,beginTime,endTime,index,size);
         }
 
@@ -190,7 +197,7 @@ public class EvaluateServiceImpl implements EvaluateService {
         if (dataList != null&&dataList.size()>0) {
             for (HistogramList histogramList : dataList) {
                 histogramList.setX(String.valueOf(histogramList.getMoney()));
-                histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(collect.get("total").toString()) * 100));
+                histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(size) * 100));
 
                 totalMoney += histogramList.getMoney() * histogramList.getDcount();
             }

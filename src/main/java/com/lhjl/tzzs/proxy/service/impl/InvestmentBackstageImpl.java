@@ -9,6 +9,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.annotation.Resource;
@@ -84,15 +85,14 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
         List<InvestmentInstitutions> listForfive = new ArrayList<InvestmentInstitutions>();
         List<InvestmentInstitutions> listNotfive = new ArrayList<InvestmentInstitutions>();
 
+        Example example = new Example(InvestmentInstitutions.class);
+        example.and().andNotEqualTo("shortName",null).andNotEqualTo("shortName", "");
         //获取非50机构（所有）
-        listNotfive = investmentInstitutionsMapper.selectAll();
+        listNotfive = investmentInstitutionsMapper.selectByExample(example);
         //获取50机构
-        for(InvestmentInstitutions investmentInstitutions : listNotfive){
-            if(investmentInstitutions.getType() == 1){
-                listForfive.add(investmentInstitutions);
-            }
-        }
-
+        InvestmentInstitutions query = new InvestmentInstitutions();
+        query.setType(1);
+        listForfive = investmentInstitutionsMapper.select(query);
         //组装所有数据
         List<Map<String, Object>> lists = new ArrayList<Map<String, Object>>();
         Map<String, Object> map = new HashMap<String, Object>();

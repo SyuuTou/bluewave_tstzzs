@@ -42,7 +42,7 @@ public class InvestmentBackstageController {
      * 获取所有机构数据（50与非50）
      * @return
      */
-    @GetMapping("find/investment/")
+    @GetMapping("find/investment")
     public CommonDto<List<Map<String, Object>>> findAllInvestment(){
         CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
         try {
