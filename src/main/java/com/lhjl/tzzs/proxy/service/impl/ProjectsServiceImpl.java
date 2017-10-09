@@ -204,6 +204,8 @@ public class ProjectsServiceImpl implements ProjectsService {
             list2.add(map);
         }
         result.setData(list2);
+        result.setStatus(200);
+        result.setMessage("success");
         return result;
     }
 
