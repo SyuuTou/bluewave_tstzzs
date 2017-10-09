@@ -6,19 +6,18 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.lhjl.tzzs.proxy.dto.*;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.InvestmentDataDto;
-import com.lhjl.tzzs.proxy.dto.SereachDto;
-import com.lhjl.tzzs.proxy.dto.ShuruDto;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
@@ -40,20 +39,18 @@ public class ProjectsController {
     private ProjectsService projectsService;
     /**
      * 查询我关注项目
-     * @param userId 用户id
      * @return
      */
     @ApiOperation(value = "查询我关注的项目列表", notes = "根据用户ID标注请求的唯一")
-    @ApiImplicitParams({@ApiImplicitParam(name = "userId",paramType="path" , value = "用户ID", required = true, dataType = "String")})
-    @GetMapping("search/myfollow/{userId}")
-    public CommonDto<List<Map<String, Object>>> findProjectByUserId(@PathVariable String userId ){
+    @PostMapping("search/myfollow")
+    public CommonDto<List<Map<String, Object>>> findProjectByUserId(@RequestBody MyFollowDto body){
 
 
         CommonDto<List<Map<String, Object>>> result =new CommonDto<List<Map<String, Object>>>();
         //Users user = (Users) request.getSession().getAttribute("loging_user");
 
         try {
-            result = projectsService.findProjectByUserId(userId);
+            result = projectsService.findProjectByUserId(body.getUserId(), body.getPageNum(), body.getPageSize());
         } catch (Exception e) {
             result.setStatus(5101);
             result.setMessage("项目显示页面异常，请稍后再试");

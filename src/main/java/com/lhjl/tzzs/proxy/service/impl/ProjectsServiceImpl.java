@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
@@ -29,17 +31,40 @@ public class ProjectsServiceImpl implements ProjectsService {
     private ProjectsMapper projectsMapper;
     @Resource
     private InvestmentInstitutionsMapper investmentInstitutionsMapper;
+    @Autowired
+    private Environment environment;
 
 
     @Override
-    public CommonDto<List<Map<String, Object>>> findProjectByUserId(String userId) {
+    public CommonDto<List<Map<String, Object>>> findProjectByUserId(String userId, Integer pageNum, Integer pageSize) {
         CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
-        List<Map<String, Object>> list = projectsMapper.findProjectByUserId(userId);
+        //初始化分页信息
+        if(pageNum == null){
+            pageNum = Integer.parseInt(environment.getProperty("pageNum"));
+        }
+        if(pageSize == null){
+            pageSize = Integer.parseInt(environment.getProperty("pageSize"));
+        }
+        //最多返回100条记录
+        if(pageNum*pageSize >= 100){
+            result.setStatus(201);
+            result.setMessage("查询记录数超出限制（100条）");
+            return result;
+        }
+        //计算查询起始记录
+        Integer beginNum = (pageNum-1)*pageSize;
+        List<Map<String, Object>> list = projectsMapper.findProjectByUserId(userId, beginNum, pageSize);
+        //判断是否还有查询结果
+        if(list.size() <= 0){
+            result.setStatus(202);
+            result.setMessage("无查询数据");
+            return result;
+        }
         result.setData(list);
         result.setStatus(200);
         result.setMessage("success");
         return result;
-    }
+}
 
     @Override
     public CommonDto<List<Map<String, Object>>> findProjectByShortName(String shortName,String userId) {
