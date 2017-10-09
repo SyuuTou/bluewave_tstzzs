@@ -78,47 +78,48 @@ public class EvaluateServiceImpl implements EvaluateService {
         Integer total = Integer.valueOf(collect.get("total").toString());
         if (total < 5){
             collect = financingMapper.queryValuationCount(roundName,industryName,cityName,null,workName,beginTime,endTime);
+            total = Integer.valueOf(collect.get("total").toString());
+            if (total < 5){
+                collect = financingMapper.queryValuationCount(roundName,industryName,cityName,null,null,beginTime,endTime);
+                total = Integer.valueOf(collect.get("total").toString());
+                if (total < 5){
+                    collect = financingMapper.queryValuationCount(roundName,industryName,null,null,null,beginTime,endTime);
+                    total = Integer.valueOf(collect.get("total").toString());
+                    if (total < 5){
+                        dataList = new ArrayList<HistogramList>();
+                    }else{
+                        dataList = financingMapper.queryValuation(roundName,industryName,null,null,null,beginTime,endTime);
+                    }
+
+                }else{
+                    dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,null,beginTime,endTime);
+                }
+
+            }else{
+                dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,workName,beginTime,endTime);
+            }
+
         }else{
             dataList = financingMapper.queryValuation(roundName,industryName,cityName,educationName,workName,beginTime,endTime);
         }
-        total = Integer.valueOf(collect.get("total").toString());
-        if (total < 5){
-            collect = financingMapper.queryValuationCount(roundName,industryName,cityName,null,null,beginTime,endTime);
-        }else{
-            dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,workName,beginTime,endTime);
-        }
-        total = Integer.valueOf(collect.get("total").toString());
-        if (total < 5){
-            collect = financingMapper.queryValuationCount(roundName,industryName,null,null,null,beginTime,endTime);
-        }else{
-            dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,null,beginTime,endTime);
-        }
-        total = Integer.valueOf(collect.get("total").toString());
-        if (total < 5){
-            collect = financingMapper.queryValuationCount(roundName,null,null,null,null,beginTime,endTime);
-        }else{
-            dataList = financingMapper.queryValuation(roundName,industryName,null,null,null,beginTime,endTime);
-        }
 
-        total = Integer.valueOf(collect.get("total").toString());
-        if (total < 5) {
-            dataList = financingMapper.queryValuation(roundName, null, null, null, null,beginTime,endTime);
-        }
 
 
         NumberFormat numberFormat = NumberFormat.getInstance();
         Integer totalMoney = 0;
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
-        for (HistogramList histogramList: dataList) {
-            histogramList.setX(String.valueOf(histogramList.getMoney()));
-            histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(collect.get("total").toString()) * 100));
+        if (dataList != null&& dataList.size()>0) {
+            for (HistogramList histogramList : dataList) {
+                histogramList.setX(String.valueOf(histogramList.getMoney()));
+                histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(collect.get("total").toString()) * 100));
 
-            totalMoney += histogramList.getMoney()*histogramList.getDcount();
-        }
+                totalMoney += histogramList.getMoney() * histogramList.getDcount();
+            }
 
-        if (totalMoney > 0) {
-            result.setAvgMoney(totalMoney/Integer.valueOf(collect.get("total").toString()));
+            if (totalMoney > 0) {
+                result.setAvgMoney(totalMoney / Integer.valueOf(collect.get("total").toString()));
+            }
         }
 
         result.setMessage("success");
@@ -147,46 +148,48 @@ public class EvaluateServiceImpl implements EvaluateService {
         Integer total = Integer.valueOf(collect.get("total").toString());
         if (total < 5){
             collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,null,workName, beginTime, endTime);
+            total = Integer.valueOf(collect.get("total").toString());
+            if (total < 5){
+                collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,null,null, beginTime, endTime);
+                total = Integer.valueOf(collect.get("total").toString());
+                if (total < 5){
+                    collect = financingMapper.queryFinancingCount(roundName,industryName,null,null,null, beginTime, endTime);
+                    total = Integer.valueOf(collect.get("total").toString());
+                    if (total < 5){
+                        dataList = new ArrayList<HistogramList>();
+                    }else{
+                        dataList = financingMapper.queryFinancingAmount(roundName,industryName,null,null,null,beginTime,endTime);
+                    }
+
+
+                }else{
+                    dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,null,beginTime,endTime);
+                }
+
+            }else{
+                dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,workName,beginTime,endTime);
+            }
+
         }else{
             dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,educationName,workName,beginTime,endTime);
         }
-        total = Integer.valueOf(collect.get("total").toString());
-        if (total < 5){
-            collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,null,null, beginTime, endTime);
-        }else{
-            dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,workName,beginTime,endTime);
-        }
-        total = Integer.valueOf(collect.get("total").toString());
-        if (total < 5){
-            collect = financingMapper.queryFinancingCount(roundName,industryName,null,null,null, beginTime, endTime);
-        }else{
-            dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,null,beginTime,endTime);
-        }
-        total = Integer.valueOf(collect.get("total").toString());
-        if (total < 5){
-            collect = financingMapper.queryFinancingCount(roundName,null,null,null,null, beginTime, endTime);
-        }else{
-            dataList = financingMapper.queryFinancingAmount(roundName,industryName,null,null,null,beginTime,endTime);
-        }
 
-        total = Integer.valueOf(collect.get("total").toString());
-        if (total < 5) {
-            dataList = financingMapper.queryFinancingAmount(roundName, null, null, null, null,beginTime,endTime);
-        }
         NumberFormat numberFormat = NumberFormat.getInstance();
 
         Integer totalMoney = 0;
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
-        for (HistogramList histogramList: dataList) {
-            histogramList.setX(String.valueOf(histogramList.getMoney()));
-            histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(collect.get("total").toString()) * 100));
+        if (dataList != null&&dataList.size()>0) {
+            for (HistogramList histogramList : dataList) {
+                histogramList.setX(String.valueOf(histogramList.getMoney()));
+                histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(collect.get("total").toString()) * 100));
 
-            totalMoney += histogramList.getMoney()*histogramList.getDcount();
-        }
+                totalMoney += histogramList.getMoney() * histogramList.getDcount();
+            }
 
-        if (totalMoney > 0) {
-            result.setAvgMoney(totalMoney/Integer.valueOf(collect.get("total").toString()));
+            if (totalMoney > 0) {
+                result.setAvgMoney(totalMoney / Integer.valueOf(collect.get("total").toString()));
+            }
         }
         result.setMessage("success");
         result.setStatus(200);
