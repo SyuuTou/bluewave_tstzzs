@@ -100,12 +100,13 @@
 
 
 
+
     </select>
 
     <select id="queryValuation" resultMap="histogramResultMap">
 
-        SELECT dis, valuation from (
-        select CEILING(a.valuation/500) * 500 as dis, a.valuation from (
+        SELECT dis money, cc dcount from (
+        select CEILING(a.valuation/500) * 500 as dis, count(1) cc from (
         select full_name,sum(valuation) valuation,max(financing_time) financing_time from view_projects_info where valuation > 0
         <if test="roundName != '' and roundName != null">
         and stage = #{roundName}
@@ -124,8 +125,9 @@
         </if>
         group by full_name ) a
         where a.financing_time between #{beginTime} and #{endTime}
+        group by CEILING(a.valuation/500) * 500
 
-        ) b order by b.valuation desc
+        ) b order by b.dis desc
 
 
 
@@ -133,8 +135,8 @@
 
     <select id="queryFinancingAmount" resultMap="histogramResultMap">
 
-        SELECT dis, amount from (
-        select CEILING(a.amount/500) * 500 as dis, a.amount from (
+        SELECT dis money, cc dcount from (
+        select CEILING(a.amount/500) * 500 as dis, count(1) cc from (
         select full_name,sum(amount) amount,max(financing_time) financing_time from view_projects_info where amount > 0
         <if test="roundName != '' and roundName != null">
             and stage = #{roundName}
@@ -153,8 +155,8 @@
         </if>
         group by full_name ) a
         where a.financing_time between #{beginTime} and #{endTime}
-
-        ) b order by b.amount desc
+        group by CEILING(a.amount/500) * 500
+        ) b order by b.dis desc
 
     </select>
 
