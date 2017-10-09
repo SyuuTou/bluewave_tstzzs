@@ -19,9 +19,11 @@ public interface MetaFinancingMapper  extends OwnerMapper<MetaFinancing> {
 
     List<LabelList> queryHotWork();
 
-    List<HistogramList> queryValuation(@Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("beginTime") String beginTime, @Param("endTime") String endTime);
+    List<LabelList> queryHotIndustry();
 
-    List<HistogramList> queryFinancingAmount(@Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("beginTime") String beginTime, @Param("endTime") String endTime);
+    List<HistogramList> queryValuation(@Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("index") Integer index, @Param("size") Integer size);
+
+    List<HistogramList> queryFinancingAmount(@Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("index") Integer index, @Param("size") Integer size);
 
     Map<String,Object> queryFinancingCount(@Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("beginTime") String beginTime, @Param("endTime") String endTime);
 

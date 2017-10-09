@@ -43,6 +43,20 @@ public class FinancingController {
         return result;
     }
 
+    @GetMapping("hotIndustry")
+    public CommonDto<List<LabelList>> hotIndustry(){
+        CommonDto<List<LabelList>> result = null;
+        try {
+            result = evaluateService.queryHotIndustry();
+        }catch (Exception e){
+            result = new CommonDto< List<LabelList>>();
+            result.setStatus(510);
+            result.setMessage("数据检索异常，请稍后再试");
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
+
     /**
      * 融资金额
      * @param roundName  轮次名称
@@ -53,12 +67,12 @@ public class FinancingController {
      * @return
      */
     @GetMapping("financing/amount/list")
-    public CommonDto<List<HistogramList>> financingAmount(@RequestParam(required = false) String roundName, @RequestParam(required = false) String industryName , @RequestParam(required = false) String cityName, @RequestParam(required = false) String educationName, @RequestParam(required = false) String workName){
+    public CommonDto<List<HistogramList>> financingAmount(@RequestParam(required = false) String roundName, @RequestParam(required = false) String industryName , @RequestParam(required = false) String cityName, @RequestParam(required = false) String educationName, @RequestParam(required = false) String workName, @RequestParam(required = false,defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size){
 
         CommonDto<List<HistogramList>> result = null;
 
         try {
-            result = evaluateService.financingAmount(roundName,industryName,cityName,educationName,workName);
+            result = evaluateService.financingAmount(roundName,industryName,cityName,educationName,workName,from,size);
         } catch (Exception e) {
             result = new CommonDto<List<HistogramList>>();
             result.setStatus(510);
@@ -79,11 +93,11 @@ public class FinancingController {
      * @return
      */
     @GetMapping("valuation/list")
-    public CommonDto<List<HistogramList>> valuation(@RequestParam(required = false) String roundName, @RequestParam(required = false) String industryName , @RequestParam(required = false) String cityName, @RequestParam(required = false) String educationName, @RequestParam(required = false) String workName){
+    public CommonDto<List<HistogramList>> valuation(@RequestParam(required = false) String roundName, @RequestParam(required = false) String industryName , @RequestParam(required = false) String cityName, @RequestParam(required = false) String educationName, @RequestParam(required = false) String workName, @RequestParam(required = false,defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size ){
 
         CommonDto<List<HistogramList>> result = null;
         try {
-            result = evaluateService.valuation(roundName,industryName,cityName,educationName,workName);
+            result = evaluateService.valuation(roundName,industryName,cityName,educationName,workName,from,size);
         } catch (Exception e) {
             result = new CommonDto<List<HistogramList>>();
             result.setStatus(510);

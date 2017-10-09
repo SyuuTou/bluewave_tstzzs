@@ -11,7 +11,10 @@ import java.util.Map;
 public interface EvaluateService {
     CommonDto<Map<String, List<LabelList>>> queryHotData();
 
-    CommonDto<List<HistogramList>> valuation(String roundName, String industryName, String cityName, String educationName, String workName);
+    CommonDto<List<HistogramList>> valuation(String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size);
 
-    CommonDto<List<HistogramList>> financingAmount(String roundName, String industryName, String cityName, String educationName, String workName);
+    CommonDto<List<HistogramList>> financingAmount(String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size);
+
+    CommonDto<List<LabelList>> queryHotIndustry();
+
 }

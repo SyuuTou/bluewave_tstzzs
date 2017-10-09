@@ -51,6 +51,9 @@ public class EvaluateServiceImpl implements EvaluateService {
         labelLists = financingMapper.queryHotWork();
         dataMap.put("workKey",labelLists);
 
+        labelLists = financingMapper.queryHotIndustry();
+        dataMap.put("industryKey", labelLists);
+
         result.setData(dataMap);
         result.setMessage("success");
         result.setStatus(200);
@@ -61,8 +64,10 @@ public class EvaluateServiceImpl implements EvaluateService {
         return result;
     }
 
+
+
     @Override
-    public CommonDto<List<HistogramList>> valuation(String roundName, String industryName, String cityName, String educationName, String workName) {
+    public CommonDto<List<HistogramList>> valuation(String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
 
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
 //        roundName= "Pre-A轮";
@@ -73,7 +78,7 @@ public class EvaluateServiceImpl implements EvaluateService {
             return result;
         }
         List<HistogramList> dataList = null;
-
+        Integer index = from * size;
         Map<String, Object> collect = financingMapper.queryValuationCount(roundName,industryName,cityName,educationName,workName,beginTime,endTime);
         Integer total = Integer.valueOf(collect.get("total").toString());
         if (total < 5){
@@ -88,19 +93,20 @@ public class EvaluateServiceImpl implements EvaluateService {
                     if (total < 5){
                         dataList = new ArrayList<HistogramList>();
                     }else{
-                        dataList = financingMapper.queryValuation(roundName,industryName,null,null,null,beginTime,endTime);
+                        dataList = financingMapper.queryValuation(roundName,industryName,null,null,null,beginTime,endTime,index,size);
                     }
 
                 }else{
-                    dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,null,beginTime,endTime);
+                    dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,null,beginTime,endTime,index,size);
                 }
 
             }else{
-                dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,workName,beginTime,endTime);
+                dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,workName,beginTime,endTime,index,size);
             }
 
         }else{
-            dataList = financingMapper.queryValuation(roundName,industryName,cityName,educationName,workName,beginTime,endTime);
+            size = Double.valueOf(total * 0.8).intValue();
+            dataList = financingMapper.queryValuation(roundName,industryName,cityName,educationName,workName,beginTime,endTime,index,size);
         }
 
 
@@ -130,7 +136,7 @@ public class EvaluateServiceImpl implements EvaluateService {
     }
 
     @Override
-    public CommonDto<List<HistogramList>> financingAmount(String roundName, String industryName, String cityName, String educationName, String workName) {
+    public CommonDto<List<HistogramList>> financingAmount(String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
 //        roundName= "Pre-A轮";
 //        industryName="游戏";
@@ -142,6 +148,8 @@ public class EvaluateServiceImpl implements EvaluateService {
 
 
         List<HistogramList> dataList = null;
+
+        Integer index = from * size;
 
 
         Map<String, Object> collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,educationName,workName,beginTime,endTime);
@@ -158,20 +166,20 @@ public class EvaluateServiceImpl implements EvaluateService {
                     if (total < 5){
                         dataList = new ArrayList<HistogramList>();
                     }else{
-                        dataList = financingMapper.queryFinancingAmount(roundName,industryName,null,null,null,beginTime,endTime);
+                        dataList = financingMapper.queryFinancingAmount(roundName,industryName,null,null,null,beginTime,endTime,index,size);
                     }
 
 
                 }else{
-                    dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,null,beginTime,endTime);
+                    dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,null,beginTime,endTime,index,size);
                 }
 
             }else{
-                dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,workName,beginTime,endTime);
+                dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,workName,beginTime,endTime,index,size);
             }
 
         }else{
-            dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,educationName,workName,beginTime,endTime);
+            dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,educationName,workName,beginTime,endTime,index,size);
         }
 
         NumberFormat numberFormat = NumberFormat.getInstance();
@@ -194,6 +202,18 @@ public class EvaluateServiceImpl implements EvaluateService {
         result.setMessage("success");
         result.setStatus(200);
         result.setData(dataList);
+        return result;
+    }
+
+    @Override
+    public CommonDto<List<LabelList>> queryHotIndustry() {
+        CommonDto<List<LabelList>> result = new CommonDto<List<LabelList>>();
+        List<LabelList> labelLists = financingMapper.queryHotIndustry();
+
+        result.setData(labelLists);
+        result.setMessage("success");
+        result.setStatus(200);
+
         return result;
     }
 }
