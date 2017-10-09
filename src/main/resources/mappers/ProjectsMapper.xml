@@ -39,67 +39,65 @@
    <!-- <select id="findProjectByShortName" parameterType="String" resultMap="BaseResultMap" >
     SELECT p.*,s.* FROM projects p LEFT JOIN (SELECT ff.* FROM follow ff WHERE ff.ID IN(SELECT MAX(f.ID) FROM follow f GROUP BY  f.projects_id)) s ON p.ID=s.projects_id WHERE p.`short_name` LIKE '%"#{shortName}"%';
   </select> -->
-   <!-- 查询所有的-->
-  <select id="findProjectByShortNameAll" resultType="java.util.HashMap">
-   <!-- SELECT b.*,
-   (SELECT COUNT(*) FROM follow a WHERE a.projects_id = b.`ID` AND a.status = 1)num,
-   (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId,jdbcType=VARCHAR}) AND f.projects_id = b.`ID` GROUP BY f.projects_id ) zz
-   FROM projects b
-   WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')  -->
-   SELECT b.*,
-	(SELECT COUNT(*) FROM follow a WHERE a.projects_id = b.`ID` AND a.status = 1)num,
-	(SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.projects_id = b.`ID` GROUP BY f.projects_id )yn,
-	(SELECT COUNT(1) FROM interview WHERE projects_id = b.`ID`)inum
-	FROM projects b
-	WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
-	
-     </select>
-	<select id="findProjectByShortName"  parameterType="String" resultType="java.util.HashMap">
-    SELECT b.*,
-	(SELECT COUNT(*) FROM follow a WHERE a.projects_id = b.`ID` AND a.status = 1)num,
-	(SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.projects_id = b.`ID` GROUP BY f.projects_id )yn,
-	(SELECT COUNT(1) FROM interview WHERE projects_id = b.`ID`)inum
-	FROM projects b
-	WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%') LIMIT 3
-	</select>
-	
-	<select id="findProjectBySview" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
-	
-     SELECT distinct(mf.id) ID,mf.short_name,mf.kernel_desc,
-     (SELECT COUNT(*) FROM follow a WHERE a.projects_id = mf.`ID` AND a.status = 1)num,
-     (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId} AND f.projects_id = mf.`ID` GROUP BY f.projects_id )yn,
-     (SELECT COUNT(1) FROM interview WHERE projects_id = mf.`ID`)inum
-     FROM view_projects_info mf where 1=1
-	 <if test=" types !='' and types.length > 0">
-       AND mf.investment_institutions_type IN
-       <foreach item="item" index="index" collection="types" open="(" separator="," close=")">#{item}</foreach>
-     </if>
-       <if test=" segmentations !='' and segmentations.length > 0">
-       AND mf.segmentation IN
-       <foreach item="item" index="index" collection="segmentations" open="(" separator="," close=")">#{item}</foreach>
-      </if>
-        
-     <if test=" stages !='' and stages.length > 0">
-       AND mf.stage IN
-       <foreach item="item" index="index" collection="stages" open="(" separator="," close=")">#{item}</foreach>
-     </if>
-       
-       <if test=" cities !='' and cities.length > 0">
-       AND mf.city IN
-       <foreach item="item" index="index" collection="cities" open="(" separator="," close=")">#{item}</foreach>
-      </if>
- 
-       <if test=" working_background_descs!='' and working_background_descs.length > 0">
-       AND mf.work_experience IN
-       <foreach item="item" index="index" collection="working_background_descs" open="(" separator="," close=")">#{item}</foreach>
-       </if>
-      
-       <if test="educational_background_descs!='' and educational_background_descs.length > 0">
-       AND mf.education_experience IN
-       <foreach item="item" index="index" collection="educational_background_descs" open="(" separator="," close=")">#{item}</foreach>
-       </if>
-        LIMIT 50
-	 </select>
+    <select id="findProjectByShortNameAll" resultType="java.util.HashMap">
+        <!-- SELECT b.*,
+        (SELECT COUNT(*) FROM follow a WHERE a.projects_id = b.`ID` AND a.status = 1)num,
+        (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId,jdbcType=VARCHAR}) AND f.projects_id = b.`ID` GROUP BY f.projects_id ) zz
+        FROM projects b
+        WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')  -->
+        SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage,
+        (SELECT COUNT(*) FROM follow a WHERE a.projects_id = b.`ID` AND a.status = 1)num,
+        (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.projects_id = b.`ID` GROUP BY f.projects_id )yn,
+        (SELECT COUNT(1) FROM interview WHERE projects_id = b.`ID`)inum
+        FROM  view_projects_info b
+        WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')  GROUP BY b.id LIMIT #{sizea},#{froma}
+    </select>
+    <select id="findProjectByShortName"  parameterType="String" resultType="java.util.HashMap">
+        SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage,
+        (SELECT COUNT(*) FROM follow a WHERE a.projects_id = b.`ID` AND a.status = 1)num,
+        (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.projects_id = b.`ID` GROUP BY f.projects_id )yn,
+        (SELECT COUNT(1) FROM interview WHERE projects_id = b.`ID`)inum
+        FROM  view_projects_info b
+        WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')   GROUP BY b.id LIMIT 3
+    </select>
+
+    <select id="findProjectBySview" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
+
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,mf.stage,
+        (SELECT COUNT(*) FROM follow a WHERE a.projects_id = mf.`ID` AND a.status = 1)num,
+        (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId} AND f.projects_id = mf.`ID` GROUP BY f.projects_id )yn,
+        (SELECT COUNT(1) FROM interview WHERE projects_id = mf.`ID`)inum
+        FROM view_projects_info mf where 1=1
+        <if test=" types !='' and types.length > 0">
+            AND mf.investment_institutions_type IN
+            <foreach item="item" index="index" collection="types" open="(" separator="," close=")">#{item}</foreach>
+        </if>
+        <if test=" segmentations !='' and segmentations.length > 0">
+            AND mf.segmentation IN
+            <foreach item="item" index="index" collection="segmentations" open="(" separator="," close=")">#{item}</foreach>
+        </if>
+
+        <if test=" stages !='' and stages.length > 0">
+            AND mf.stage IN
+            <foreach item="item" index="index" collection="stages" open="(" separator="," close=")">#{item}</foreach>
+        </if>
+
+        <if test=" cities !='' and cities.length > 0">
+            AND mf.city IN
+            <foreach item="item" index="index" collection="cities" open="(" separator="," close=")">#{item}</foreach>
+        </if>
+
+        <if test=" working_background_descs!='' and working_background_descs.length > 0">
+            AND mf.work_experience IN
+            <foreach item="item" index="index" collection="working_background_descs" open="(" separator="," close=")">#{item}</foreach>
+        </if>
+
+        <if test="educational_background_descs!='' and educational_background_descs.length > 0">
+            AND mf.education_experience IN
+            <foreach item="item" index="index" collection="educational_background_descs" open="(" separator="," close=")">#{item}</foreach>
+        </if>
+        GROUP BY mf.id LIMIT #{sizea},#{froma}
+    </select>
 
     <select id="findByTodayProjects" resultMap="BaseResultMap" parameterType="com.lhjl.tzzs.proxy.model.Projects">
         select * from projects where investment_institutions_id =#{investmentInstitutionsId} and short_name =#{shortName} and to_days(create_time) = to_days(now())
