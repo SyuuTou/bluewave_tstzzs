@@ -55,7 +55,8 @@ public class SerchHistoryController {
         if (body.getSearchContent() != null){
             search_content = body.getSearchContent();
         }
-
+        log.info("user_id={}",user_id);
+        log.info("search_content={}",search_content);
         try{
             result = serchHistoryService.addSearchHistoryLog(user_id,search_content);
         }catch (Exception e){
