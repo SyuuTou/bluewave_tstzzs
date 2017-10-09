@@ -14,7 +14,7 @@
         select count x, financing_time y from (
         select count(distinct b.serial_number) count, date_format(b.financing_time,'%Y-%m') financing_time from (
         select full_name,sum(amount) amount,max(financing_time) financing_time,max(serial_number) serial_number from
-        view_projects_info where financing_time between ${beginTime} and ${endTime}
+        view_projects_info where financing_time between #{beginTime} and #{endTime}
         and stage in ('种子轮','天使轮','Pre-A轮')
         <if test="jgtype != null">
             and investment_institutions_type = #{jgtype}
@@ -32,7 +32,7 @@
         select amount x, financing_time y from (
         select avg(a.amount) amount, date_format(a.financing_time,'%Y-%m') financing_time from (
         select full_name,sum(amount) amount,max(financing_time) financing_time from view_projects_info where
-        financing_time between ${beginTime} and ${endTime}
+        financing_time between #{beginTime} and #{endTime}
         and stage in ('种子轮','天使轮','Pre-A轮')
         <if test="jgtype != null">
             and investment_institutions_type = #{jgtype}
@@ -47,8 +47,9 @@
 
         select segmentation y, count x from (
         select segmentation, count(distinct full_name) count from view_projects_info where financing_time between
-        ${beginTime} and ${endTime}
+        #{beginTime} and #{endTime}
         and stage in ('种子轮','天使轮','Pre-A轮')
+        and segmentation is not null
         <if test="jgtype != null">
             and investment_institutions_type = #{jgtype}
         </if>
@@ -59,9 +60,10 @@
     <select id="financingCityDistributed" resultMap="histogramResultMap">
 
         select city y, count x from (
-        select city, count(distinct full_name) count from view_projects_info where financing_time between ${beginTime}
-        and ${endTime}
+        select city, count(distinct full_name) count from view_projects_info where financing_time between #{beginTime}
+        and #{endTime}
         and stage in ('种子轮','天使轮','Pre-A轮')
+        and city is not null
         <if test="jgtype != null">
             and investment_institutions_type = #{jgtype}
         </if>
@@ -72,8 +74,9 @@
 
         select education_experience y, count x from (
         select education_experience, count(distinct full_name) count from view_projects_info where financing_time
-        between ${beginTime} and ${endTime}
+        between #{beginTime} and #{endTime}
         and stage in ('种子轮','天使轮','Pre-A轮')
+        and education_experience is not NULL
         <if test="jgtype != null">
             and investment_institutions_type = #{jgtype}
         </if>
@@ -84,8 +87,9 @@
 
         select work_experience y, count x from (
         select work_experience, count(distinct full_name) count from view_projects_info where financing_time between
-        ${beginTime} and ${endTime}
+        #{beginTime} and #{endTime}
         and stage in ('种子轮','天使轮','Pre-A轮')
+        and work_experience is not null
         <if test="jgtype != null">
             and investment_institutions_type = #{jgtype}
         </if>
@@ -95,9 +99,10 @@
     <select id="financingInvestmentDistributed" resultMap="histogramResultMap">
 
         select city y, count x from (
-        select city, sum(amount) count from view_projects_info where financing_time between ${beginTime}
-        and ${endTime}
+        select city, sum(amount) count from view_projects_info where financing_time between #{beginTime}
+        and #{endTime}
         and stage in ('种子轮','天使轮','Pre-A轮')
+        and city is not null
         <if test="jgtype != null">
             and investment_institutions_type = #{jgtype}
         </if>

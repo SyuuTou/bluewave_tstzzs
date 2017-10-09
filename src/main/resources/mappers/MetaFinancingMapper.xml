@@ -51,7 +51,7 @@
 
 
     <select id="queryFinancingCount" resultType="map">
-        select count(b.full_name) total, AVG (b.amount) avgMoney from (
+        select count(a.full_name) total, AVG (a.amount) avgMoney from (
         select full_name,sum(amount) amount,max(financing_time) financing_time from view_projects_info where amount > 0
         <if test="roundName != '' and roundName != null">
              AND stage = #{roundName}
@@ -69,14 +69,14 @@
             and work_experience =#{workName}
         </if>
         group by full_name ) a
-        where financing_time between ${beginTime} and ${endTime}
+        where a.financing_time between #{beginTime} and #{endTime}
 
-        ) b
+
 
     </select>
 
     <select id="queryValuationCount" resultType="map">
-        select count(b.full_name) total, AVG (b.valuation) avgMoney from (
+        select count(a.full_name) total, AVG (a.valuation) avgMoney from (
         select full_name,sum(valuation) valuation,max(financing_time) financing_time from view_projects_info where valuation > 0
         <if test="roundName != '' and roundName != null">
             and stage = #{roundName}
@@ -94,9 +94,9 @@
             and work_experience =#{workName}
         </if>
         group by full_name ) a
-        where financing_time between ${beginTime} and ${endTime}
+        where a.financing_time between #{beginTime} and #{endTime}
 
-        ) b
+
 
 
 
@@ -104,7 +104,8 @@
 
     <select id="queryValuation" resultMap="histogramResultMap">
 
-        select CEILING(b.valuation/500) * 500 as dis, b.valuation from (
+        SELECT dis, valuation from (
+        select CEILING(a.valuation/500) * 500 as dis, a.valuation from (
         select full_name,sum(valuation) valuation,max(financing_time) financing_time from view_projects_info where valuation > 0
         <if test="roundName != '' and roundName != null">
         and stage = #{roundName}
@@ -122,9 +123,9 @@
         and work_experience =#{workName}
         </if>
         group by full_name ) a
-        where financing_time between ${beginTime} and ${endTime}
+        where a.financing_time between #{beginTime} and #{endTime}
 
-        ) b order by b.amount desc
+        ) b order by b.valuation desc
 
 
 
@@ -132,7 +133,8 @@
 
     <select id="queryFinancingAmount" resultMap="histogramResultMap">
 
-        select CEILING(b.amount/500) * 500 as dis, b.amount from (
+        SELECT dis, amount from (
+        select CEILING(a.amount/500) * 500 as dis, a.amount from (
         select full_name,sum(amount) amount,max(financing_time) financing_time from view_projects_info where amount > 0
         <if test="roundName != '' and roundName != null">
             and stage = #{roundName}
@@ -150,7 +152,7 @@
             and work_experience =#{workName}
         </if>
         group by full_name ) a
-        where financing_time between ${beginTime} and ${endTime}
+        where a.financing_time between #{beginTime} and #{endTime}
 
         ) b order by b.amount desc
 
