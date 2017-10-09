@@ -45,14 +45,18 @@ public class ProjectsServiceImpl implements ProjectsService {
         if(pageSize == null){
             pageSize = Integer.parseInt(environment.getProperty("pageSize"));
         }
+
+        //计算查询起始记录
+        Integer beginNum = (pageNum-1)*pageSize;
         //最多返回100条记录
-        if(pageNum*pageSize >= 100){
+        if(beginNum > 100){
             result.setStatus(201);
             result.setMessage("查询记录数超出限制（100条）");
             return result;
+        }else{
+            pageSize = (100 - beginNum)>=pageSize?pageSize:(100-beginNum);
         }
-        //计算查询起始记录
-        Integer beginNum = (pageNum-1)*pageSize;
+
         List<Map<String, Object>> list = projectsMapper.findProjectByUserId(userId, beginNum, pageSize);
         //判断是否还有查询结果
         if(list.size() <= 0){
