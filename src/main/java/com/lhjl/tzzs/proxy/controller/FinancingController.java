@@ -83,6 +83,23 @@ public class FinancingController {
         return result;
     }
 
+    @PostMapping("financing/amount/list")
+    public CommonDto<List<HistogramList>> financingAmountPost(@RequestBody Map<String, String> body, @RequestParam(required = false,defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size){
+
+        CommonDto<List<HistogramList>> result = null;
+
+        try {
+            result = evaluateService.financingAmount(body.get("roundName"),null,null,null,null,from,size);
+        } catch (Exception e) {
+            result = new CommonDto<List<HistogramList>>();
+            result.setStatus(510);
+            result.setMessage("数据检索异常，请稍后再试");
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
+
+        return result;
+    }
+
     /**
      * 估值分布
      * @param roundName  轮次名称
@@ -108,7 +125,24 @@ public class FinancingController {
         return result;
     }
 
-//    @GetMapping("users/list")
+    @PostMapping("valuation/list")
+    public CommonDto<List<HistogramList>> valuation(@RequestBody Map<String,String> req, @RequestParam(required = false,defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size ){
+
+        CommonDto<List<HistogramList>> result = null;
+        try {
+            result = evaluateService.valuation(req.get("roundName"),null,null,null,null,from,size);
+        } catch (Exception e) {
+            result = new CommonDto<List<HistogramList>>();
+            result.setStatus(510);
+            result.setMessage("数据检索异常，请稍后再试");
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
+
+        return result;
+    }
+
+
+    //    @GetMapping("users/list")
 //    @GetMapping("users/{id}")
     @GetMapping("users/list")
     public CommonDto<String> users(@RequestParam String name, @RequestParam Integer id){

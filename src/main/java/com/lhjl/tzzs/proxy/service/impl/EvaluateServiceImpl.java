@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.text.NumberFormat;
@@ -33,6 +34,7 @@ public class EvaluateServiceImpl implements EvaluateService {
     @Value("${statistics.endTime}")
     private String endTime;
 
+    @Cacheable(value = "queryHotData",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<Map<String, List<LabelList>>> queryHotData() {
 
@@ -65,7 +67,7 @@ public class EvaluateServiceImpl implements EvaluateService {
     }
 
 
-
+    @Cacheable(value = "valuation",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<HistogramList>> valuation(String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
 
@@ -138,6 +140,7 @@ public class EvaluateServiceImpl implements EvaluateService {
         return result;
     }
 
+    @Cacheable(value = "financingAmount",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<HistogramList>> financingAmount(String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
@@ -212,6 +215,7 @@ public class EvaluateServiceImpl implements EvaluateService {
         return result;
     }
 
+    @Cacheable(value = "queryHotIndustry",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<LabelList>> queryHotIndustry() {
         CommonDto<List<LabelList>> result = new CommonDto<List<LabelList>>();

@@ -7,6 +7,10 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.lhjl.tzzs.proxy.mapper.FollowMapper;
+import com.lhjl.tzzs.proxy.mapper.InterviewMapper;
+import com.lhjl.tzzs.proxy.model.Follow;
+import com.lhjl.tzzs.proxy.model.Interview;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -33,6 +37,11 @@ public class ProjectsServiceImpl implements ProjectsService {
     private InvestmentInstitutionsMapper investmentInstitutionsMapper;
     @Autowired
     private Environment environment;
+    @Autowired
+    private FollowMapper followMapper;
+
+    @Autowired
+    private InterviewMapper interviewMapper;
 
 
     @Override
@@ -190,7 +199,29 @@ public class ProjectsServiceImpl implements ProjectsService {
         }
 //	    List citiess = Arrays.asList(cities);
 //	        String[] stages = sereachDto.getStage().split(",");
-        List<Map<String, Object>> list =projectsMapper.findProjectBySview(userId,types,segmentations,stages, cities, working_background_descs,educational_background_descs,sizea,froma);
+        List<Map<String, Object>> list= null;
+        if ((cities == null||cities.length==0)&&(working_background_descs == null||working_background_descs.length==0)&&(educational_background_descs==null||educational_background_descs.length==0)){
+            list =projectsMapper.findProjectBySegmentation(userId,types,segmentations,stages, sizea, froma);
+        }else {
+            list = projectsMapper.findProjectBySview(userId, types, segmentations, stages, cities, working_background_descs, educational_background_descs, sizea, froma);
+        }
+        Follow follow = new Follow();;
+        Interview interview = new Interview();
+        for (Map<String, Object> obj : list){
+            follow.setProjectsId(Integer.valueOf(String.valueOf(obj.get("ID"))));
+            follow.setStatus(1);
+            follow.setUserId(null);
+            obj.put("num", followMapper.selectCount(follow));
+            follow.setUserId(userId);
+            if (followMapper.selectCount(follow)>0){
+                obj.put("yn", 1);
+            }else {
+                obj.put("yn", 0);
+            }
+
+            interview.setProjectsId(Integer.valueOf(String.valueOf(obj.get("ID"))));
+            obj.put("inum",interviewMapper.selectCount(interview));
+        }
         if(list.size() <= 0){
             result.setStatus(202);
             result.setMessage("无查询数据");

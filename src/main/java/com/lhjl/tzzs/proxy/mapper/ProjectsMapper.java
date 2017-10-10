@@ -22,4 +22,7 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
 
     );
     List<Projects> findByTodayProjects(Projects projects);
+
+    List<Map<String,Object>> findProjectBySegmentation(@Param("userId") String userId, @Param("types") int[] types, @Param("segmentations") String[] segmentations,
+                                                       @Param("stages") String[] stages,@Param("sizea") Integer sizea,@Param("froma") Integer froma);
 }

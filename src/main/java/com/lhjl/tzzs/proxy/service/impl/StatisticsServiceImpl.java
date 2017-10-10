@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Autowired
     private StatisticsMapper statisticsMapper;
+
+    @Cacheable(value = "financingCountDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<HistogramList>> financingCountDistributed(String institutionType,String from ,String size) {
 
@@ -46,6 +49,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         return result;
     }
 
+    @Cacheable(value = "financingAmountDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<HistogramList>> financingAmountDistributed(String institutionType,String from, String size) {
 
@@ -67,6 +71,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         return result;
     }
 
+    @Cacheable(value = "financingSegmentationDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<HistogramList>> financingSegmentationDistributed(String institutionType,String from, String size) {
 
@@ -88,6 +93,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         return result;
     }
 
+    @Cacheable(value = "financingCityDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<HistogramList>> financingCityDistributed(String institutionType,String from, String size) {
 
@@ -109,6 +115,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         return result;
     }
 
+    @Cacheable(value = "financingEducationExperienceDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<HistogramList>> financingEducationExperienceDistributed(String from, String size) {
 
@@ -127,6 +134,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         return result;
     }
 
+    @Cacheable(value = "financingWorkExperienceDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<HistogramList>> financingWorkExperienceDistributed(String from, String size) {
 
@@ -145,6 +153,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         return result;
     }
 
+    @Cacheable(value = "financingInvestmentDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<HistogramList>> financingInvestmentDistributed(String from, String size) {
 
