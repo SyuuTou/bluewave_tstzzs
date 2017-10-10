@@ -61,12 +61,29 @@
         WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')   GROUP BY b.id LIMIT 3
     </select>
 
+    <select id="findProjectBySegmentation" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,mf.stage
+        FROM view_segemention_info mf where 1=1
+        <if test=" types !='' and types.length > 0">
+            AND mf.investment_institutions_type IN
+            <foreach item="item" index="index" collection="types" open="(" separator="," close=")">#{item}</foreach>
+        </if>
+        <if test=" segmentations !='' and segmentations.length > 0">
+            AND mf.segmentation IN
+            <foreach item="item" index="index" collection="segmentations" open="(" separator="," close=")">#{item}</foreach>
+        </if>
+
+        <if test=" stages !='' and stages.length > 0">
+            AND mf.stage IN
+            <foreach item="item" index="index" collection="stages" open="(" separator="," close=")">#{item}</foreach>
+        </if>
+
+        GROUP BY mf.id LIMIT #{sizea},#{froma}
+    </select>
+    
     <select id="findProjectBySview" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
 
-        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,mf.stage,
-        (SELECT COUNT(*) FROM follow a WHERE a.projects_id = mf.`ID` AND a.status = 1)num,
-        (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId} AND f.projects_id = mf.`ID` GROUP BY f.projects_id )yn,
-        (SELECT COUNT(1) FROM interview WHERE projects_id = mf.`ID`)inum
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,mf.stage
         FROM view_projects_info mf where 1=1
         <if test=" types !='' and types.length > 0">
             AND mf.investment_institutions_type IN

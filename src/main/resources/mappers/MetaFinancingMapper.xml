@@ -111,7 +111,7 @@
     <select id="queryValuation" resultMap="histogramResultMap">
 
         SELECT dis money, cc dcount from (
-        select CEILING(a.valuation/500) * 500 as dis, count(1) cc from (
+        select CEILING(a.valuation/5000) * 5000 as dis, count(1) cc from (
         select full_name,sum(valuation) valuation,max(financing_time) financing_time from view_projects_info where valuation > 0
         <if test="roundName != '' and roundName != null">
         and stage = #{roundName}
@@ -130,7 +130,7 @@
         </if>
         group by full_name ) a
         where a.financing_time between #{beginTime} and #{endTime}
-        group by CEILING(a.valuation/500) * 500
+        group by CEILING(a.valuation/5000) * 5000
 
         ) b order by b.cc desc
         limit #{index}, #{size}

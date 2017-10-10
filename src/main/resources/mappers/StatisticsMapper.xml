@@ -19,9 +19,7 @@
         <if test="jgtype != null">
             and investment_institutions_type = #{jgtype}
         </if>
-        <if test="jgtype == null">
-            and investment_institutions_type IN (0,1)
-        </if>
+
         group by full_name ) b
 
         group by date_format(b.financing_time,'%Y-%m')
@@ -40,9 +38,7 @@
         <if test="jgtype != null">
             and investment_institutions_type = #{jgtype}
         </if>
-        <if test="jgtype == null">
-            and investment_institutions_type IN (0,1)
-        </if>
+
         group by full_name ) a
         group by date_format(a.financing_time,'%Y-%m')
         ) b order by b.financing_time limit #{froma},#{sizea}
@@ -55,13 +51,11 @@
         select segmentation, count(distinct full_name) count from view_projects_info where financing_time between
         #{beginTime} and #{endTime}
         and stage in ('种子轮','天使轮','Pre-A轮')
-        and segmentation is not null
+        and segmentation is not null and segmentation != ''
         <if test="jgtype != null">
             and investment_institutions_type = #{jgtype}
         </if>
-        <if test="jgtype == null">
-            and investment_institutions_type IN (0,1)
-        </if>
+
         group by segmentation ) a
         order by a.count desc limit #{froma},#{sizea}
     </select>
@@ -75,11 +69,8 @@
         and city is not null
         <if test="jgtype != null">
             and investment_institutions_type = #{jgtype}
+        </if>
 
-        </if>
-        <if test="jgtype == null">
-            and investment_institutions_type IN (0,1)
-        </if>
         group by city ) a
         order by a.count desc limit #{froma},#{sizea}
     </select>
@@ -93,9 +84,7 @@
         <if test="jgtype != null">
             and investment_institutions_type = #{jgtype}
         </if>
-        <if test="jgtype == null">
-            and investment_institutions_type IN (0,1)
-        </if>
+
         group by education_experience ) a
         WHERE a.education_experience is not NULL and a.education_experience != ''
         order by a.count desc limit #{froma},#{sizea}
@@ -110,9 +99,7 @@
         <if test="jgtype != null">
             and investment_institutions_type = #{jgtype}
         </if>
-        <if test="jgtype == null">
-            and investment_institutions_type IN (0,1)
-        </if>
+
         group by work_experience ) a
         WHERE a.work_experience is not NULL and a.work_experience != ''
         order by a.count desc limit #{froma},#{sizea}
@@ -127,9 +114,7 @@
         <if test="jgtype != null">
             and investment_institutions_type = #{jgtype}
         </if>
-        <if test="jgtype == null">
-            and investment_institutions_type IN (0,1)
-        </if>
+
         group by city ) a
         order by a.count desc limit #{froma},#{sizea}
     </select>
