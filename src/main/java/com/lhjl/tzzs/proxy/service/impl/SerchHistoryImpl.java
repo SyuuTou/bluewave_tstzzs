@@ -2,21 +2,18 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 
 import com.lhjl.tzzs.proxy.dto.SearchLimitDto;
-import com.lhjl.tzzs.proxy.dto.SerchHistoryDto;
 import com.lhjl.tzzs.proxy.mapper.UserSearchLogMapper;
 import com.lhjl.tzzs.proxy.model.UserSearchLog;
 import com.lhjl.tzzs.proxy.service.SerchHistoryService;
-import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -30,7 +27,7 @@ public class SerchHistoryImpl implements SerchHistoryService {
     @Value("${usersearch.limits}")
     private int limits;
 
-
+    @Cacheable(value = "rsearchHistory",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<UserSearchLog>> rsearchHistory(String user_id){
         CommonDto<List<UserSearchLog>> result = new CommonDto<List<UserSearchLog>>();
