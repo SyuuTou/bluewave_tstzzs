@@ -6,6 +6,7 @@ import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.service.InvestmentBackstageService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
@@ -82,6 +83,7 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
      * 获取机构信息（50与非50）
      * @return
      */
+    @Cacheable(value = "findAllInvestment",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<Map<String, Object>>>  findAllInvestment() {
         CommonDto<List<Map<String, Object>>> list = new CommonDto<List<Map<String, Object>>>();
@@ -119,6 +121,7 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
      * @param pageSize 每页记录数
      * @return
      */
+    @Cacheable(value = "findFiveInvestment",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<InvestmentInstitutions>> findFiveInvestment(Integer pageNum, Integer pageSize) {
         CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
@@ -150,6 +153,7 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
      * @param pageSize 每页记录数
      * @return
      */
+    @Cacheable(value = "findNotFiveInvestment",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<InvestmentInstitutions>> findNotFiveInvestment(Integer pageNum, Integer pageSize) {
         CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
