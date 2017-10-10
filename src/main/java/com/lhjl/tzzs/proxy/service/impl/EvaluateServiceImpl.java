@@ -95,22 +95,30 @@ public class EvaluateServiceImpl implements EvaluateService {
                     if (total < 5){
                         dataList = new ArrayList<HistogramList>();
                     }else{
-                        size = Double.valueOf(total * 0.8).intValue();
+                        if (total > 10) {
+                            size = Double.valueOf(total * 0.8).intValue();
+                        }
                         dataList = financingMapper.queryValuation(roundName,industryName,null,null,null,beginTime,endTime,index,size);
                     }
 
                 }else{
-                    size = Double.valueOf(total * 0.8).intValue();
+                    if (total > 10) {
+                        size = Double.valueOf(total * 0.8).intValue();
+                    }
                     dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,null,beginTime,endTime,index,size);
                 }
 
             }else{
-                size = Double.valueOf(total * 0.8).intValue();
+                if (total > 10) {
+                    size = Double.valueOf(total * 0.8).intValue();
+                }
                 dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,workName,beginTime,endTime,index,size);
             }
 
         }else{
-            size = Double.valueOf(total * 0.8).intValue();
+            if (total > 10) {
+                size = Double.valueOf(total * 0.8).intValue();
+            }
             dataList = financingMapper.queryValuation(roundName,industryName,cityName,educationName,workName,beginTime,endTime,index,size);
         }
 
@@ -172,23 +180,31 @@ public class EvaluateServiceImpl implements EvaluateService {
                     if (total < 5){
                         dataList = new ArrayList<HistogramList>();
                     }else{
-                        size = Double.valueOf(total * 0.8).intValue();
+                        if (total > 10) {
+                            size = Double.valueOf(total * 0.8).intValue();
+                        }
                         dataList = financingMapper.queryFinancingAmount(roundName,industryName,null,null,null,beginTime,endTime,index,size);
                     }
 
 
                 }else{
-                    size = Double.valueOf(total * 0.8).intValue();
+                    if (total > 10) {
+                        size = Double.valueOf(total * 0.8).intValue();
+                    }
                     dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,null,beginTime,endTime,index,size);
                 }
 
             }else{
-                size = Double.valueOf(total * 0.8).intValue();
+                if (total > 10) {
+                    size = Double.valueOf(total * 0.8).intValue();
+                }
                 dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,workName,beginTime,endTime,index,size);
             }
 
         }else{
-            size = Double.valueOf(total * 0.8).intValue();
+            if (total > 10) {
+                size = Double.valueOf(total * 0.8).intValue();
+            }
             dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,educationName,workName,beginTime,endTime,index,size);
         }
 

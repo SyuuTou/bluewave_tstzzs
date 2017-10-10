@@ -132,9 +132,10 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
         //计算查询起始记录
         Integer beginNum = (pageNum-1)*pageSize;
         PageHelper.startPage(pageNum, pageSize, false);
-        InvestmentInstitutions query = new InvestmentInstitutions();
-        query.setType(1);
-        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.select(query);
+        Example example = new Example(InvestmentInstitutions.class);
+        example.and().andEqualTo("type", 1).andNotEqualTo("shortName", null).andNotEqualTo("shortName", "");
+
+        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.selectByExample(example);
 
 
         result.setData(investmentInstitutions);
@@ -163,9 +164,9 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
         Integer beginNum = (pageNum-1)*pageSize;
 
         PageHelper.startPage(pageNum, pageSize, false);
-        InvestmentInstitutions query = new InvestmentInstitutions();
-        query.setType(0);
-        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.select(query);
+        Example example = new Example(InvestmentInstitutions.class);
+        example.and().andEqualTo("type", 0).andNotEqualTo("shortName", null).andNotEqualTo("shortName", "");
+        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.selectByExample(example);
         //判断是否还有查询结果
 
         result.setData(investmentInstitutions);
