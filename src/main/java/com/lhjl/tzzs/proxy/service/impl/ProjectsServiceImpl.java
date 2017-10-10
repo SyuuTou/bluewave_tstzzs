@@ -12,7 +12,6 @@ import com.lhjl.tzzs.proxy.mapper.InterviewMapper;
 import com.lhjl.tzzs.proxy.model.Follow;
 import com.lhjl.tzzs.proxy.model.Interview;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +43,6 @@ public class ProjectsServiceImpl implements ProjectsService {
     @Autowired
     private InterviewMapper interviewMapper;
 
-    @Cacheable(value = "findProjectByUserId",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<Map<String, Object>>> findProjectByUserId(String userId, Integer pageNum, Integer pageSize) {
         CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
@@ -79,7 +77,6 @@ public class ProjectsServiceImpl implements ProjectsService {
         result.setMessage("success");
         return result;
 }
-    @Cacheable(value = "findProjectByShortName",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<Map<String, Object>>> findProjectByShortName(String shortName,String userId) {
         CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
@@ -96,7 +93,6 @@ public class ProjectsServiceImpl implements ProjectsService {
         result.setMessage("ok");
         return result;
     }
-    @Cacheable(value = "findProjectByShortNameAll",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<Map<String,List<Map<String, Object>>>> findProjectByShortNameAll(String shortName,String userId,String size,String from) {
         CommonDto<Map<String,List<Map<String, Object>>>> result = new CommonDto<Map<String,List<Map<String, Object>>>>();
@@ -135,7 +131,6 @@ public class ProjectsServiceImpl implements ProjectsService {
         result.setMessage("ok");
         return result;
     }
-    @Cacheable(value = "findProjectBySview",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<Map<String, Object>>> findProjectBySview(SereachDto sereachDto) {
         CommonDto<List<Map<String,Object>>> result =new CommonDto<List<Map<String, Object>>>();
