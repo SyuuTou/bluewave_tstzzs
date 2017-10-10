@@ -4,6 +4,9 @@ import com.lhjl.tzzs.proxy.dto.PageInfoDto;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.service.InvestmentBackstageService;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 
@@ -17,6 +20,12 @@ public class InvestmentBackstageController {
 
     @Resource
     private InvestmentBackstageService investmentBackstageService;
+
+    @Value("${pageNum}")
+    private String defaultPageNum;
+
+    @Value("${pageSize}")
+    private String defaultPageSize;
 
     /**
      * 管理员创建机构接口
@@ -63,8 +72,17 @@ public class InvestmentBackstageController {
     @PostMapping("find/investment/five")
     public CommonDto<List<InvestmentInstitutions>> findFiveInvestment(@RequestBody PageInfoDto body){
         CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
+        Integer pageNum = body.getPageNum();
+        Integer pageSize = body.getPageSize();
         try {
-            result = investmentBackstageService.findFiveInvestment(body.getPageNum(), body.getPageSize());
+            //初始化分页信息
+            if(pageNum == null){
+                pageNum = Integer.parseInt(defaultPageNum);
+            }
+            if(pageSize == null){
+                pageSize = Integer.parseInt(defaultPageSize);
+            }
+            result = investmentBackstageService.findFiveInvestment(pageNum, pageSize);
         }catch (Exception e){
             result.setMessage(e.getMessage());
             result.setStatus(501);
@@ -80,8 +98,17 @@ public class InvestmentBackstageController {
     @PostMapping("find/investment/notfive")
     public CommonDto<List<InvestmentInstitutions>> findNotFiveInvestment(@RequestBody PageInfoDto body){
         CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
+        Integer pageNum = body.getPageNum();
+        Integer pageSize = body.getPageSize();
         try {
-            result = investmentBackstageService.findNotFiveInvestment(body.getPageNum(), body.getPageSize());
+            //初始化分页信息
+            if(pageNum == null){
+                pageNum = Integer.parseInt(defaultPageNum);
+            }
+            if(pageSize == null){
+                pageSize = Integer.parseInt(defaultPageSize);
+            }
+            result = investmentBackstageService.findNotFiveInvestment(pageNum, pageSize);
         }catch (Exception e){
             result.setMessage(e.getMessage());
             result.setStatus(501);

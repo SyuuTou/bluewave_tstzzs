@@ -46,13 +46,6 @@ public class ProjectsServiceImpl implements ProjectsService {
     @Override
     public CommonDto<List<Map<String, Object>>> findProjectByUserId(String userId, Integer pageNum, Integer pageSize) {
         CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
-        //初始化分页信息
-        if(pageNum == null){
-            pageNum = Integer.parseInt(environment.getProperty("pageNum"));
-        }
-        if(pageSize == null){
-            pageSize = Integer.parseInt(environment.getProperty("pageSize"));
-        }
 
         //计算查询起始记录
         Integer beginNum = (pageNum-1)*pageSize;
