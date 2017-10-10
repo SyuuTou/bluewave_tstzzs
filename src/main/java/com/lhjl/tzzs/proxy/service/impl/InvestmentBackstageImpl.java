@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.service.InvestmentBackstageService;
@@ -25,6 +26,8 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
 
     @Autowired
     private Environment environment;
+
+
 
     @Transactional
     @Override
@@ -85,8 +88,10 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
         List<InvestmentInstitutions> listForfive = new ArrayList<InvestmentInstitutions>();
         List<InvestmentInstitutions> listNotfive = new ArrayList<InvestmentInstitutions>();
 
+        PageHelper.startPage(1, 80, false);
+
         Example example = new Example(InvestmentInstitutions.class);
-        example.and().andNotEqualTo("shortName",null).andNotEqualTo("shortName", "");
+        example.and().andBetween("type",0,1);
         //获取非50机构（所有）
         listNotfive = investmentInstitutionsMapper.selectByExample(example);
         //获取50机构
@@ -115,8 +120,8 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
      * @return
      */
     @Override
-    public CommonDto<List<Map<String, Object>>> findFiveInvestment(Integer pageNum, Integer pageSize) {
-        CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
+    public CommonDto<List<InvestmentInstitutions>> findFiveInvestment(Integer pageNum, Integer pageSize) {
+        CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
         //初始化分页信息
         if(pageNum == null){
             pageNum = Integer.parseInt(environment.getProperty("pageNum"));
@@ -126,15 +131,13 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
         }
         //计算查询起始记录
         Integer beginNum = (pageNum-1)*pageSize;
+        PageHelper.startPage(pageNum, pageSize, false);
+        InvestmentInstitutions query = new InvestmentInstitutions();
+        query.setType(1);
+        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.select(query);
 
-        List<Map<String, Object>> list = investmentInstitutionsMapper.findFiveInvestment(beginNum, pageSize);
-        //判断是否还有查询结果
-        if(list.size() <= 0){
-            result.setStatus(202);
-            result.setMessage("无查询数据");
-            return result;
-        }
-        result.setData(list);
+
+        result.setData(investmentInstitutions);
         result.setStatus(200);
         result.setMessage("success");
         return result;
@@ -147,8 +150,8 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
      * @return
      */
     @Override
-    public CommonDto<List<Map<String, Object>>> findNotFiveInvestment(Integer pageNum, Integer pageSize) {
-        CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
+    public CommonDto<List<InvestmentInstitutions>> findNotFiveInvestment(Integer pageNum, Integer pageSize) {
+        CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
         //初始化分页信息
         if(pageNum == null){
             pageNum = Integer.parseInt(environment.getProperty("pageNum"));
@@ -159,14 +162,13 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
         //计算查询起始记录
         Integer beginNum = (pageNum-1)*pageSize;
 
-        List<Map<String, Object>> list = investmentInstitutionsMapper.findNotFiveInvestment(beginNum, pageSize);
+        PageHelper.startPage(pageNum, pageSize, false);
+        InvestmentInstitutions query = new InvestmentInstitutions();
+        query.setType(0);
+        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.select(query);
         //判断是否还有查询结果
-        if(list.size() <= 0){
-            result.setStatus(202);
-            result.setMessage("无查询数据");
-            return result;
-        }
-        result.setData(list);
+
+        result.setData(investmentInstitutions);
         result.setStatus(200);
         result.setMessage("success");
         return result;

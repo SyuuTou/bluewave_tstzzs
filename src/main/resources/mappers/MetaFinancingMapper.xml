@@ -49,6 +49,10 @@
       SELECT g.work_experience name,g.work_experience `value` FROM (select count(work_experience) counts ,work_experience FROM `meta_financing_work` mf where work_experience is not null and work_experience != "" GROUP BY work_experience ) g ORDER BY counts DESC limit 0,12
   </select>
 
+    <select id="queryHotIndustry" resultMap="labelResultMap">
+      select a.segmentation_name as `name`, a.segmentation_name as `value` from (SELECT segmentation_name ,count(1) counts FROM project_segmentation where segmentation_name != '' and segmentation_name is not null group by segmentation_name ) a order by a.counts desc
+    </select>
+
 
     <select id="queryFinancingCount" resultType="map">
         select count(a.full_name) total, AVG (a.amount) avgMoney from (
@@ -101,6 +105,7 @@
 
 
 
+
     </select>
 
     <select id="queryValuation" resultMap="histogramResultMap">
@@ -127,8 +132,8 @@
         where a.financing_time between #{beginTime} and #{endTime}
         group by CEILING(a.valuation/500) * 500
 
-        ) b order by b.dis desc
-
+        ) b order by b.cc desc
+        limit #{index}, #{size}
 
 
     </select>
@@ -156,8 +161,8 @@
         group by full_name ) a
         where a.financing_time between #{beginTime} and #{endTime}
         group by CEILING(a.amount/500) * 500
-        ) b order by b.dis desc
-
+        ) b order by b.cc desc
+        limit #{index}, #{size}
     </select>
 
 </mapper>

@@ -12,6 +12,6 @@ public interface InvestmentBackstageService {
 
     CommonDto<List<Map<String, Object>>>  findAllInvestment();
 
-    CommonDto<List<Map<String, Object>>>  findFiveInvestment(Integer pageNum, Integer pageSize);
-    CommonDto<List<Map<String, Object>>>  findNotFiveInvestment(Integer pageNum, Integer pageSize);
+    CommonDto<List<InvestmentInstitutions>> findFiveInvestment(Integer pageNum, Integer pageSize);
+    CommonDto<List<InvestmentInstitutions>> findNotFiveInvestment(Integer pageNum, Integer pageSize);
 }
