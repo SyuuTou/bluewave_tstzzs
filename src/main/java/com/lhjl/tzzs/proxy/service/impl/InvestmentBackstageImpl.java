@@ -83,7 +83,7 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
      * 获取机构信息（50与非50）
      * @return
      */
-//    @Cacheable(value = "findAllInvestment",keyGenerator = "wiselyKeyGenerator")
+    @Cacheable(value = "findAllInvestment",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<Map<String, Object>>>  findAllInvestment() {
         CommonDto<List<Map<String, Object>>> list = new CommonDto<List<Map<String, Object>>>();
@@ -127,7 +127,7 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
      * @param pageSize 每页记录数
      * @return
      */
-//    @Cacheable(value = "findFiveInvestment",keyGenerator = "wiselyKeyGenerator")
+    @Cacheable(value = "findFiveInvestment",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<InvestmentInstitutions>> findFiveInvestment(Integer pageNum, Integer pageSize) {
         CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
@@ -161,7 +161,7 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
      * @param pageSize 每页记录数
      * @return
      */
-//    @Cacheable(value = "findNotFiveInvestment",keyGenerator = "wiselyKeyGenerator")
+    @Cacheable(value = "findNotFiveInvestment",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<InvestmentInstitutions>> findNotFiveInvestment(Integer pageNum, Integer pageSize) {
         CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
