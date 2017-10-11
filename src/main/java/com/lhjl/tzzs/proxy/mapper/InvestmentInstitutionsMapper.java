@@ -11,6 +11,5 @@ import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 @Mapper
 public interface InvestmentInstitutionsMapper extends OwnerMapper<InvestmentInstitutions> {
     List<Map<String, Object>>findByInvestmentShortNameAll(@Param("shortName") String shortName,@Param("userId") String userId);
-    List<Map<String, Object>> findFiveInvestment(@Param("beginNum") Integer beginNum, @Param("pageSize") Integer pageSize);
-    List<Map<String, Object>> findNotFiveInvestment(@Param("beginNum") Integer beginNum, @Param("pageSize") Integer pageSize);
+    List<InvestmentInstitutions> findInvestment(@Param("type") String type, @Param("beginNum") Integer beginNum, @Param("pageSize") Integer pageSize);
 }

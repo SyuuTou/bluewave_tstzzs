@@ -19,6 +19,8 @@
     <result column="representative" jdbcType="VARCHAR" property="representative" />
     <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
     <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
+    <!--自定义字段，数据库中不存在，表示投资项目数量-->
+    <result column="projects_num" jdbcType="INTEGER" property="projectsNum" />
   </resultMap>
 
   <insert id="add" keyProperty="id" parameterType="com.lhjl.tzzs.proxy.model.InvestmentInstitutions" useGeneratedKeys="true">
@@ -33,16 +35,21 @@
     WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
   </select>
 
-  <select id="findFiveInvestment" resultType="java.util.HashMap">
-    SELECT ID, short_name, commet, create_time, type, logo, case_url, kenel_case, comment, city, stage, representative FROM investment_institutions
-    WHERE type = 1
-    LIMIT #{beginNum},#{pageSize}
-  </select>
-
-  <select id="findNotFiveInvestment" resultType="java.util.HashMap">
-    SELECT ID, short_name, commet, create_time, type, logo, case_url, kenel_case, comment, city, stage, representative FROM investment_institutions
-    WHERE type = 0
-    LIMIT #{beginNum},#{pageSize}
+  <select id="findInvestment" resultMap="BaseResultMap">
+    SELECT a.ID, a.short_name, a.commet, a.create_time, a.type, a.logo, a.case_url, a.kenel_case,
+    a.comment, a.city, a.stage, a.representative, COUNT(b.ID)projects_num
+    FROM investment_institutions a LEFT JOIN projects b ON a.ID = b.`investment_institutions_id`
+    WHERE 1=1
+    <if test="type != '' and type != null and type != '-1'">
+      AND type = #{type}
+    </if>
+    <if test="type == '-1'">
+      AND type IN (0,1)
+    </if>
+    GROUP BY a.ID ORDER BY projects_num DESC
+    <if test="beginNum != null and pageSize != null">
+      LIMIT #{beginNum},#{pageSize}
+    </if>
   </select>
 
 </mapper>
