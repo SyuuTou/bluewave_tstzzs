@@ -28,6 +28,7 @@ public class SerchHistoryImpl implements SerchHistoryService {
     private int limits;
 
     //@Cacheable(value = "rsearchHistory",keyGenerator = "wiselyKeyGenerator")
+    //取消缓存
     @Override
     public CommonDto<List<UserSearchLog>> rsearchHistory(String user_id){
         CommonDto<List<UserSearchLog>> result = new CommonDto<List<UserSearchLog>>();
