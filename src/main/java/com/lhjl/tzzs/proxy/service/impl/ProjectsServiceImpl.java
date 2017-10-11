@@ -68,8 +68,8 @@ public class ProjectsServiceImpl implements ProjectsService {
             pageSize = (100 - beginNum)>=pageSize?pageSize:(100-beginNum);
         }
 
-       // List<Map<String, Object>> list = projectsMapper.findProjectByUserId(userId, beginNum, pageSize);
-        List<Map<String, Object>> list =projectsServiceImplUtil.getSearchBaseMyProject(userId,beginNum,pageSize);
+        List<Map<String, Object>> list = projectsMapper.findProjectByUserId(userId, beginNum, pageSize);
+        //List<Map<String, Object>> list =projectsServiceImplUtil.getSearchBaseMyProject(userId,beginNum,pageSize);
         Follow follow = new Follow();
         Interview interview = new Interview();
         for (Map<String, Object> obj : list){
@@ -109,7 +109,7 @@ public class ProjectsServiceImpl implements ProjectsService {
     @Override
     public CommonDto<List<Map<String, Object>>> findProjectByShortName(String shortName,String userId) {
         CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
-        List<Map<String, Object>> list= projectsServiceImplUtil.getSearchBaseProject(userId,shortName);
+        List<Map<String, Object>> list= projectsMapper.findProjectByShortName(shortName,userId);
         List<Map<String, Object>> list2 = new ArrayList<Map<String,Object>>();
         Follow follow = new Follow();
         Interview interview = new Interview();
@@ -284,5 +284,82 @@ public class ProjectsServiceImpl implements ProjectsService {
         result.setMessage("success");
         return result;
     }
+    /**
+     * 图表项目筛选
+     * @param sereachDto 筛选条件
+     * @return
+     */
+    @Override
+    public CommonDto<List<Map<String, Object>>> findProjectBySviewA(SereachDto sereachDto) {
+        CommonDto<List<Map<String,Object>>> result =new CommonDto<List<Map<String, Object>>>();
 
+        String userId =sereachDto.getUserId();
+        String type = sereachDto.getInvestment_institutions_type();
+        String segmentation = sereachDto.getSegmentation();
+        String stage =sereachDto.getStage();
+        String city  =sereachDto.getCity();
+        String working_background_desc =sereachDto.getWorking_background_desc();
+        String educational_background_desc=sereachDto.getEducational_background_desc();
+
+        String size ="0";
+        String from ="10";
+        if(sereachDto.getPageNum() != null && !"".equals(sereachDto.getPageNum())){
+            size=sereachDto.getPageNum();
+        }
+        if(sereachDto.getPageSize() !=null && !"".equals(sereachDto.getPageSize())){
+            from=sereachDto.getPageSize();
+        }
+        int sizeb =Integer.parseInt(size);
+        int froma =Integer.parseInt(from);
+        int sizea=(sizeb-1)*froma;
+        if(sizea > 100){
+            result.setStatus(201);
+            result.setMessage("查询记录数超出限制（100条）");
+            return result;
+        }{
+            froma = (100 - sizea)>=froma ?froma :(100 - sizea);
+        }
+
+//	    List citiess = Arrays.asList(cities);
+//	        String[] stages = sereachDto.getStage().split(",");
+
+        //查询项目基础数据
+        List<Map<String, Object>> list= projectsServiceImplUtil.getBaseProjectInfoA(userId, type, segmentation, stage,
+                city, working_background_desc, educational_background_desc, sizea, froma);
+
+        //查询项目实时统计数据
+        Follow follow = new Follow();
+        Interview interview = new Interview();
+        for (Map<String, Object> obj : list){
+            follow.setProjectsId(Integer.valueOf(String.valueOf(obj.get("ID"))));
+            follow.setStatus(1);
+            follow.setUserId(null);
+            obj.put("num", followMapper.selectCount(follow));
+            follow.setUserId(userId);
+            if (followMapper.selectCount(follow)>0){
+                obj.put("yn", 1);
+            }else {
+                obj.put("yn", 0);
+            }
+
+            interview.setProjectsId(Integer.valueOf(String.valueOf(obj.get("ID"))));
+            obj.put("inum",interviewMapper.selectCount(interview));
+        }
+        if(list.size() <= 0){
+            result.setStatus(202);
+            result.setMessage("无查询数据");
+            return result;
+        }
+        List<Map<String, Object>> list2 = new ArrayList<Map<String,Object>>();
+        for(Map<String, Object> map :list){
+            if(map.get("yn") == null){
+                map.put("yn", 0);
+            }
+            list2.add(map);
+        }
+        result.setData(list2);
+        result.setStatus(200);
+        result.setMessage("success");
+        return result;
+    }
 }
