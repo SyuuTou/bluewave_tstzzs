@@ -98,6 +98,20 @@ public class InvestmentInstitutions {
     }
 
     /**
+     * 投机项目数量（自定义字段，数据库中不存在）
+     */
+    @Column(name = "projects_num")
+    private Integer projectsNum;
+
+    public Integer getProjectsNum() {
+        return projectsNum;
+    }
+
+    public void setProjectsNum(Integer projectsNum) {
+        this.projectsNum = projectsNum;
+    }
+
+    /**
      * @return ID
      */
     public Integer getId() {

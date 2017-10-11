@@ -83,23 +83,29 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
      * 获取机构信息（50与非50）
      * @return
      */
-    @Cacheable(value = "findAllInvestment",keyGenerator = "wiselyKeyGenerator")
+//    @Cacheable(value = "findAllInvestment",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<Map<String, Object>>>  findAllInvestment() {
         CommonDto<List<Map<String, Object>>> list = new CommonDto<List<Map<String, Object>>>();
         List<InvestmentInstitutions> listForfive = new ArrayList<InvestmentInstitutions>();
         List<InvestmentInstitutions> listNotfive = new ArrayList<InvestmentInstitutions>();
+        List<InvestmentInstitutions> listAll = new ArrayList<InvestmentInstitutions>();
 
-        PageHelper.startPage(1, 80, false);
+//        PageHelper.startPage(1, 80, false);
+//
+//        Example example = new Example(InvestmentInstitutions.class);
+//        example.and().andBetween("type",0,1);
+//        //获取非50机构（所有）
+//        listNotfive = investmentInstitutionsMapper.selectByExample(example);
+//        //获取50机构
+//        InvestmentInstitutions query = new InvestmentInstitutions();
+//        query.setType(1);
+//        listForfive = investmentInstitutionsMapper.select(query);
 
-        Example example = new Example(InvestmentInstitutions.class);
-        example.and().andBetween("type",0,1);
-        //获取非50机构（所有）
-        listNotfive = investmentInstitutionsMapper.selectByExample(example);
         //获取50机构
-        InvestmentInstitutions query = new InvestmentInstitutions();
-        query.setType(1);
-        listForfive = investmentInstitutionsMapper.select(query);
+        listForfive = investmentInstitutionsMapper.findInvestment("1", null, null);
+        //获取非50机构（所有）
+        listNotfive = investmentInstitutionsMapper.findInvestment("-1",0,80);
         //组装所有数据
         List<Map<String, Object>> lists = new ArrayList<Map<String, Object>>();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -128,13 +134,20 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
 
         //计算查询起始记录
         Integer beginNum = (pageNum-1)*pageSize;
-        PageHelper.startPage(pageNum, pageSize, false);
-        Example example = new Example(InvestmentInstitutions.class);
-        example.and().andEqualTo("type", 1).andNotEqualTo("shortName", null).andNotEqualTo("shortName", "");
-        example.setOrderByClause("ID");
+//        PageHelper.startPage(pageNum, pageSize, false);
+//        Example example = new Example(InvestmentInstitutions.class);
+//        example.and().andEqualTo("type", 1).andNotEqualTo("shortName", null).andNotEqualTo("shortName", "");
+//        example.setOrderByClause("ID");
+//
+//        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.selectByExample(example);
 
-        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.selectByExample(example);
-
+        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.findInvestment("1", beginNum, pageSize);
+        //判断是否还有查询结果
+//        if(investmentInstitutions.size() <= 0){
+//            result.setStatus(202);
+//            result.setMessage("无查询数据");
+//            return result;
+//        }
 
         result.setData(investmentInstitutions);
         result.setStatus(200);
@@ -148,7 +161,7 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
      * @param pageSize 每页记录数
      * @return
      */
-    @Cacheable(value = "findNotFiveInvestment",keyGenerator = "wiselyKeyGenerator")
+//    @Cacheable(value = "findNotFiveInvestment",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<InvestmentInstitutions>> findNotFiveInvestment(Integer pageNum, Integer pageSize) {
         CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
@@ -156,11 +169,18 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
         //计算查询起始记录
         Integer beginNum = (pageNum-1)*pageSize;
 
-        PageHelper.startPage(pageNum, pageSize, false);
-        Example example = new Example(InvestmentInstitutions.class);
-        example.and().andEqualTo("type", 0).andNotEqualTo("shortName", null).andNotEqualTo("shortName", "");
-        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.selectByExample(example);
+//        PageHelper.startPage(pageNum, pageSize, false);
+//        Example example = new Example(InvestmentInstitutions.class);
+//        example.and().andEqualTo("type", 0).andNotEqualTo("shortName", null).andNotEqualTo("shortName", "");
+//        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.selectByExample(example);
+
+        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.findInvestment("0", beginNum, pageSize);
         //判断是否还有查询结果
+//        if(investmentInstitutions.size() <= 0){
+//            result.setStatus(202);
+//            result.setMessage("无查询数据");
+//            return result;
+//        }
 
         result.setData(investmentInstitutions);
         result.setStatus(200);
