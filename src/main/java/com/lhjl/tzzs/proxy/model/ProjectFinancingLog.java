@@ -101,7 +101,7 @@ public class ProjectFinancingLog {
      */
     @Column(name = "approval_time")
     private Date approvalTime;
-
+    //
     public Integer getApprovalStatus() {
         return approvalStatus;
     }
