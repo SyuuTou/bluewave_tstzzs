@@ -9,7 +9,8 @@ public class InvestmentDataDto {
    private String city;
    private String rounds;
    private String amount;
-   private String currency;private String stock_right;
+   private String currency;
+   private String stock_right;
    private String date;
    private String founder_name;
    private String founder_work;
