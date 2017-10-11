@@ -203,6 +203,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
         InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
         investmentInstitutions.setCreateTime(now);
         investmentInstitutions.setShortName(investment_institution_name);
+        investmentInstitutions.setApprovalStatus(0);
 
         //创造查询用的实例
         InvestmentInstitutions investmentInstitutionssearch = new InvestmentInstitutions();

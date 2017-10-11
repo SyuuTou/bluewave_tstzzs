@@ -69,6 +69,34 @@ public class InvestmentInstitutions {
      */
     private String representative;
 
+    public Integer getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(Integer approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+
+    /**
+     * 审核状态
+     */
+    @Column(name = "approval_status")
+    private Integer approvalStatus;
+
+    /**
+     * 审核时间
+     */
+    @Column(name = "approval_time")
+    private Integer approvalTime;
+
+    public Integer getApprovalTime() {
+        return approvalTime;
+    }
+
+    public void setApprovalTime(Integer approvalTime) {
+        this.approvalTime = approvalTime;
+    }
+
     /**
      * @return ID
      */
