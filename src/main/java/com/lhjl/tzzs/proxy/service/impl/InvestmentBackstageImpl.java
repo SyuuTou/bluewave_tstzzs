@@ -121,22 +121,17 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
      * @param pageSize 每页记录数
      * @return
      */
-    @Cacheable(value = "findFiveInvestment",keyGenerator = "wiselyKeyGenerator")
+//    @Cacheable(value = "findFiveInvestment",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<InvestmentInstitutions>> findFiveInvestment(Integer pageNum, Integer pageSize) {
         CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
-        //初始化分页信息
-        if(pageNum == null){
-            pageNum = Integer.parseInt(environment.getProperty("pageNum"));
-        }
-        if(pageSize == null){
-            pageSize = Integer.parseInt(environment.getProperty("pageSize"));
-        }
+
         //计算查询起始记录
         Integer beginNum = (pageNum-1)*pageSize;
         PageHelper.startPage(pageNum, pageSize, false);
         Example example = new Example(InvestmentInstitutions.class);
         example.and().andEqualTo("type", 1).andNotEqualTo("shortName", null).andNotEqualTo("shortName", "");
+        example.setOrderByClause("ID");
 
         List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.selectByExample(example);
 
@@ -157,13 +152,7 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
     @Override
     public CommonDto<List<InvestmentInstitutions>> findNotFiveInvestment(Integer pageNum, Integer pageSize) {
         CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
-        //初始化分页信息
-        if(pageNum == null){
-            pageNum = Integer.parseInt(environment.getProperty("pageNum"));
-        }
-        if(pageSize == null){
-            pageSize = Integer.parseInt(environment.getProperty("pageSize"));
-        }
+
         //计算查询起始记录
         Integer beginNum = (pageNum-1)*pageSize;
 

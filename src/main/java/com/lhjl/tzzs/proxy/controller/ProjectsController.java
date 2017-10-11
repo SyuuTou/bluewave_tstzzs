@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,13 @@ public class ProjectsController {
 
     @Resource
     private ProjectsService projectsService;
+
+    @Value("${pageNum}")
+    private String defaultPageNum;
+
+    @Value("${pageSize}")
+    private String defaultPageSize;
+
     /**
      * 查询我关注项目
      * @return
@@ -48,9 +56,17 @@ public class ProjectsController {
 
         CommonDto<List<Map<String, Object>>> result =new CommonDto<List<Map<String, Object>>>();
         //Users user = (Users) request.getSession().getAttribute("loging_user");
-
+        Integer pageNum = body.getPageNum();
+        Integer pageSize = body.getPageSize();
         try {
-            result = projectsService.findProjectByUserId(body.getUserId(), body.getPageNum(), body.getPageSize());
+            //初始化分页信息
+            if(pageNum == null){
+                pageNum = Integer.parseInt(defaultPageNum);
+            }
+            if(pageSize == null){
+                pageSize = Integer.parseInt(defaultPageSize);
+            }
+            result = projectsService.findProjectByUserId(body.getUserId(), pageNum, pageSize);
         } catch (Exception e) {
             result.setStatus(5101);
             result.setMessage("项目显示页面异常，请稍后再试");
