@@ -91,6 +91,34 @@ public class ProjectFinancingLog {
     private Integer status;
 
     /**
+     * 审核状态
+     */
+    @Column(name = "approval_status")
+    private Integer approvalStatus;
+
+    /**
+     * 审核时间
+     */
+    @Column(name = "approval_time")
+    private Date approvalTime;
+
+    public Integer getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(Integer approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+
+    public Date getApprovalTime() {
+        return approvalTime;
+    }
+
+    public void setApprovalTime(Date approvalTime) {
+        this.approvalTime = approvalTime;
+    }
+
+    /**
      * @return ID
      */
     public Integer getId() {

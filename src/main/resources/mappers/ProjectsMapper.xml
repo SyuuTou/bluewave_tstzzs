@@ -24,6 +24,8 @@
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="region" property="region" jdbcType="VARCHAR" />
     <result column="investment_institutions_id" property="investmentInstitutionsId" jdbcType="INTEGER" />
+      <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
+      <result column="approval_time" jdbcType="TIMESTAMP" property="approval_time" />
   </resultMap>
    
     <!-- 用户关注的项目 -->

@@ -20,5 +20,7 @@
     <result column="proportion_list" property="proportionList" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
+    <result column="approval_time" jdbcType="TIMESTAMP" property="approval_time" />
   </resultMap>
 </mapper>

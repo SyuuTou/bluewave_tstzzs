@@ -51,6 +51,34 @@ public class Founders {
     private Integer projectId;
 
     /**
+     * 审核状态
+     */
+    @Column(name = "approval_status")
+    private Integer approvalStatus;
+
+    /**
+     * 审核时间
+     */
+    @Column(name = "approval_time")
+    private Integer approvalTime;
+
+    public Integer getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(Integer approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+
+    public Integer getApprovalTime() {
+        return approvalTime;
+    }
+
+    public void setApprovalTime(Integer approvalTime) {
+        this.approvalTime = approvalTime;
+    }
+
+    /**
      * @return ID
      */
     public Integer getId() {

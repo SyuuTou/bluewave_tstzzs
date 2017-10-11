@@ -194,6 +194,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
             usersAdd.setUuid(userId);
             usersAdd.setCreateTime(now);
 
+
             usersMapper.insert(usersAdd);
             uid = usersAdd.getId();
         }
@@ -237,6 +238,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
                 investorsAdd.setInvestmentInstitutionsId(jgid);
                 investorsAdd.setCreateTime(now);
                 investorsAdd.setYn(1);
+                investorsAdd.setApprovalStatus(0);
 
                 investorsMapper.insert(investorsAdd);
 
@@ -275,6 +277,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
             projects.setSerialNumber(aa);
             projects.setCreateTime(now);
             projects.setInvestmentInstitutionsId(jgid);
+            projects.setApprovalStatus(0);
 
 
             if (projectsList.size() > 0){
@@ -316,6 +319,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
                     projectFinancingLog.setFinancingTime(date);
                     projectFinancingLog.setStatus(0);
                     projectFinancingLog.setProjectId(xmid);
+                    projectFinancingLog.setApprovalStatus(0);
 
                     //插入数据
                     projectFinancingLogMapper.insert(projectFinancingLog);
@@ -327,6 +331,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
                     founders.setCreateTime(date);
                     founders.setYn(0);
                     founders.setProjectId(xmid);
+                    founders.setApprovalStatus(0);
 
                     //插入创始人信息
                     foundersMapper.insert(founders);
@@ -392,6 +397,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
                 projectFinancingLog.setFinancingTime(date);
                 projectFinancingLog.setStatus(0);
                 projectFinancingLog.setProjectId(xmid);
+                projectFinancingLog.setApprovalStatus(0);
 
                 //插入数据
                 projectFinancingLogMapper.insert(projectFinancingLog);
@@ -403,6 +409,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
                 founders.setCreateTime(date);
                 founders.setYn(0);
                 founders.setProjectId(xmid);
+                founders.setApprovalStatus(0);
 
                 //插入创始人信息
                 foundersMapper.insert(founders);
@@ -456,6 +463,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
                 investorsAdd.setInvestmentInstitutionsId(jgid);
                 investorsAdd.setCreateTime(now);
                 investorsAdd.setYn(1);
+                investorsAdd.setApprovalStatus(0);
 
                 investorsMapper.insert(investorsAdd);
 
@@ -484,6 +492,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
             projects.setSerialNumber(aa);
             projects.setCreateTime(now);
             projects.setInvestmentInstitutionsId(jgid);
+            projects.setApprovalStatus(0);
 
 
             //创建项目信息，并获取到刚创建的项目id
@@ -522,6 +531,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
             projectFinancingLog.setFinancingTime(date);
             projectFinancingLog.setStatus(0);
             projectFinancingLog.setProjectId(xmid);
+            projectFinancingLog.setApprovalStatus(0);
 
               //插入数据
             projectFinancingLogMapper.insert(projectFinancingLog);
@@ -533,6 +543,7 @@ public class InvestmentDataImpl implements InvestmentDataService{
             founders.setCreateTime(date);
             founders.setYn(0);
             founders.setProjectId(xmid);
+            founders.setApprovalStatus(0);
 
             //插入创始人信息
             foundersMapper.insert(founders);
