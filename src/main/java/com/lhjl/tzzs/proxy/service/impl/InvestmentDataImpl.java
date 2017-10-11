@@ -22,30 +22,39 @@ import java.util.List;
 public class InvestmentDataImpl implements InvestmentDataService{
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(InvestmentDataImpl.class);
 
+    //投资机构表
     @Resource
     private InvestmentInstitutionsMapper investmentInstitutionsMapper;
 
+    //创始人表
     @Resource
     private FoundersMapper foundersMapper;
 
+    //投融资项目表
     @Resource
     private ProjectsMapper projectsMapper;
 
+    //项目融资记录表
     @Resource
     private ProjectFinancingLogMapper projectFinancingLogMapper;
 
+    //投资人教育经历
     @Resource
     private FoundersEducationMapper foundersEducationMapper;
 
+    //投资人工作经历
     @Resource
     private FoundersWorkMapper foundersWorkMapper;
 
+    //项目细分领域表
     @Resource
     private ProjectSegmentationMapper projectSegmentationMapper;
 
+    //投资人表
     @Resource
     private InvestorsMapper investorsMapper;
 
+    //用户表
     @Resource
     private UsersMapper usersMapper;
 
