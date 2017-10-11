@@ -20,7 +20,6 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.SereachDto;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
-import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
 
 /**
@@ -59,6 +58,24 @@ public class ProjectsServiceImpl implements ProjectsService {
         }
 
         List<Map<String, Object>> list = projectsMapper.findProjectByUserId(userId, beginNum, pageSize);
+        Follow follow = new Follow();
+        Interview interview = new Interview();
+        for (Map<String, Object> obj : list){
+            follow.setProjectsId(Integer.valueOf(String.valueOf(obj.get("ID"))));
+            follow.setStatus(1);
+            follow.setUserId(null);
+            obj.put("num", followMapper.selectCount(follow));
+            follow.setUserId(userId);
+            if (followMapper.selectCount(follow)>0){
+                obj.put("yn", 1);
+            }else {
+                obj.put("yn", 0);
+            }
+
+            interview.setProjectsId(Integer.valueOf(String.valueOf(obj.get("ID"))));
+            obj.put("inum",interviewMapper.selectCount(interview));
+        }
+
         //判断是否还有查询结果
         if(list.size() <= 0){
             result.setStatus(202);
@@ -75,6 +92,23 @@ public class ProjectsServiceImpl implements ProjectsService {
         CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
         List<Map<String, Object>> list = projectsMapper.findProjectByShortName(shortName,userId);
         List<Map<String, Object>> list2 = new ArrayList<Map<String,Object>>();
+        Follow follow = new Follow();
+        Interview interview = new Interview();
+        for (Map<String, Object> obj : list){
+            follow.setProjectsId(Integer.valueOf(String.valueOf(obj.get("ID"))));
+            follow.setStatus(1);
+            follow.setUserId(null);
+            obj.put("num", followMapper.selectCount(follow));
+            follow.setUserId(userId);
+            if (followMapper.selectCount(follow)>0){
+                obj.put("yn", 1);
+            }else {
+                obj.put("yn", 0);
+            }
+
+            interview.setProjectsId(Integer.valueOf(String.valueOf(obj.get("ID"))));
+            obj.put("inum",interviewMapper.selectCount(interview));
+        }
         for(Map<String, Object> map : list){
             if(map.get("yn") == null){
                 map.put("yn", 0);
@@ -101,6 +135,23 @@ public class ProjectsServiceImpl implements ProjectsService {
         }
         Map<String,List<Map<String, Object>>> dataMap = new HashMap<String,List<Map<String, Object>>>();
         List<Map<String, Object>> list = projectsMapper.findProjectByShortNameAll(shortName,userId,sizea,froma);
+        Follow follow = new Follow();
+        Interview interview = new Interview();
+        for (Map<String, Object> obj : list){
+            follow.setProjectsId(Integer.valueOf(String.valueOf(obj.get("ID"))));
+            follow.setStatus(1);
+            follow.setUserId(null);
+            obj.put("num", followMapper.selectCount(follow));
+            follow.setUserId(userId);
+            if (followMapper.selectCount(follow)>0){
+                obj.put("yn", 1);
+            }else {
+                obj.put("yn", 0);
+            }
+
+            interview.setProjectsId(Integer.valueOf(String.valueOf(obj.get("ID"))));
+            obj.put("inum",interviewMapper.selectCount(interview));
+        }
         if(list.size() <= 0){
             result.setStatus(202);
             result.setMessage("无查询数据");
@@ -155,13 +206,15 @@ public class ProjectsServiceImpl implements ProjectsService {
         	froma = (100 - sizea)>=froma ?froma :(100 - sizea);
         }
         if(type != null && !"".equals(type)) {
+        	if(type.contains("50指数机构")){
+        	type="1";
             String[] type2 = type.split(",");
             types = new int[type2.length];
             for (int i=0; i<type2.length; i++){
                 types[i] = Integer.parseInt(type2[i]);
             }
         }
-
+        }
         String segmentation = sereachDto.getSegmentation();
         if(segmentation !=null && !"".equals(segmentation)){
             segmentations=segmentation.split(",");
@@ -194,7 +247,7 @@ public class ProjectsServiceImpl implements ProjectsService {
         }else {
             list = projectsMapper.findProjectBySview(userId, types, segmentations, stages, cities, working_background_descs, educational_background_descs, sizea, froma);
         }
-        Follow follow = new Follow();;
+        Follow follow = new Follow();
         Interview interview = new Interview();
         for (Map<String, Object> obj : list){
             follow.setProjectsId(Integer.valueOf(String.valueOf(obj.get("ID"))));
