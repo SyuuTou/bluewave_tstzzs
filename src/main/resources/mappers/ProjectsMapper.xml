@@ -50,7 +50,7 @@
     <select id="findProjectByShortName"  parameterType="String" resultType="java.util.HashMap">
         SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage
         FROM  view_projects_info b
-        WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')   GROUP BY b.id LIMIT 3
+        WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%') GROUP BY b.id LIMIT 3
     </select>
 
     <select id="findProjectBySegmentation" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
@@ -72,36 +72,36 @@
 
         GROUP BY mf.id LIMIT #{sizea},#{froma}
     </select>
-    
+
     <select id="findProjectBySview" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
 
         SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,mf.stage
         FROM view_projects_info mf where 1=1
-        <if test=" types !='' and types.length > 0">
+        <if test=" types !='' and types != null">
             AND mf.investment_institutions_type IN
             <foreach item="item" index="index" collection="types" open="(" separator="," close=")">#{item}</foreach>
         </if>
-        <if test=" segmentations !='' and segmentations.length > 0">
+        <if test=" segmentations !='' and segmentations != null">
             AND mf.segmentation IN
             <foreach item="item" index="index" collection="segmentations" open="(" separator="," close=")">#{item}</foreach>
         </if>
 
-        <if test=" stages !='' and stages.length > 0">
+        <if test=" stages !='' and stages != null">
             AND mf.stage IN
             <foreach item="item" index="index" collection="stages" open="(" separator="," close=")">#{item}</foreach>
         </if>
 
-        <if test=" cities !='' and cities.length > 0">
+        <if test=" cities !='' and cities != null ">
             AND mf.city IN
             <foreach item="item" index="index" collection="cities" open="(" separator="," close=")">#{item}</foreach>
         </if>
 
-        <if test=" working_background_descs!='' and working_background_descs.length > 0">
+        <if test=" working_background_descs!='' and working_background_descs != null">
             AND mf.work_experience IN
             <foreach item="item" index="index" collection="working_background_descs" open="(" separator="," close=")">#{item}</foreach>
         </if>
 
-        <if test="educational_background_descs!='' and educational_background_descs.length > 0">
+        <if test="educational_background_descs!='' and educational_background_descs!= null">
             AND mf.education_experience IN
             <foreach item="item" index="index" collection="educational_background_descs" open="(" separator="," close=")">#{item}</foreach>
         </if>
