@@ -45,14 +45,16 @@
         (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId,jdbcType=VARCHAR}) AND f.projects_id = b.`ID` GROUP BY f.projects_id ) zz
         FROM projects b
         WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')  -->
-        SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage
-        FROM  view_projects_info b
-        WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')  GROUP BY b.id LIMIT #{sizea},#{froma}
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,
+        (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1)stage
+        FROM projects mf
+        WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%') GROUP BY mf.id LIMIT #{sizea},#{froma}
     </select>
     <select id="findProjectByShortName"  parameterType="String" resultType="java.util.HashMap">
-         SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage
-        FROM  view_projects_info b
-        WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%') GROUP BY b.id LIMIT 3
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,
+        (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1)stage
+        FROM projects mf
+        WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%') GROUP BY mf.id LIMIT 3
     </select>
 
     <select id="findProjectBySegmentation" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
