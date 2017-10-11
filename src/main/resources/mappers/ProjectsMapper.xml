@@ -29,12 +29,10 @@
     <!-- 用户关注的项目 -->
 
   <select id="findProjectByUserId" resultType="java.util.HashMap" >
-    SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage,
-    (SELECT e.num FROM (SELECT c.`projects_id`,SUM(c.`status`)num FROM follow c GROUP BY c.`projects_id`)e WHERE e.projects_id = b.`ID`)num,
-    (SELECT COUNT(1) FROM interview WHERE projects_id = b.`ID`)inum
+    SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage
     FROM follow a LEFT JOIN view_projects_info b ON a.`projects_id` = b.`ID`
     WHERE a.user_id = #{userId}  AND a.`status` = 1
-    GROUP BY b.`id` LIMIT #{beginNum},#{pageSize}
+    GROUP BY b.`id`  ORDER BY a.create_time DESC LIMIT #{beginNum},#{pageSize}
   </select>
    <!-- <select id="findProjectByShortName" parameterType="String" resultMap="BaseResultMap" >
     SELECT p.*,s.* FROM projects p LEFT JOIN (SELECT ff.* FROM follow ff WHERE ff.ID IN(SELECT MAX(f.ID) FROM follow f GROUP BY  f.projects_id)) s ON p.ID=s.projects_id WHERE p.`short_name` LIKE '%"#{shortName}"%';
@@ -45,18 +43,12 @@
         (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId,jdbcType=VARCHAR}) AND f.projects_id = b.`ID` GROUP BY f.projects_id ) zz
         FROM projects b
         WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')  -->
-        SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage,
-        (SELECT COUNT(*) FROM follow a WHERE a.projects_id = b.`ID` AND a.status = 1)num,
-        (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.projects_id = b.`ID` GROUP BY f.projects_id )yn,
-        (SELECT COUNT(1) FROM interview WHERE projects_id = b.`ID`)inum
+        SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage
         FROM  view_projects_info b
         WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')  GROUP BY b.id LIMIT #{sizea},#{froma}
     </select>
     <select id="findProjectByShortName"  parameterType="String" resultType="java.util.HashMap">
-        SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage,
-        (SELECT COUNT(*) FROM follow a WHERE a.projects_id = b.`ID` AND a.status = 1)num,
-        (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.projects_id = b.`ID` GROUP BY f.projects_id )yn,
-        (SELECT COUNT(1) FROM interview WHERE projects_id = b.`ID`)inum
+        SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage
         FROM  view_projects_info b
         WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')   GROUP BY b.id LIMIT 3
     </select>
