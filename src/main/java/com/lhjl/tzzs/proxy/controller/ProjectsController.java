@@ -91,8 +91,8 @@ public class ProjectsController {
     @ApiOperation(value = "搜索醒目列表的接口", notes = "根据用户的id与项目的名字来标识请求的唯一性")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "String", name = "userId", value = "用户ID", required = true),
             @ApiImplicitParam(paramType = "body", dataType = "String", name = "shortName", value = "项目的名字", required = true),
-            @ApiImplicitParam(paramType = "body", dataType = "String", name = "size", value = "初始页数", required = true),
-            @ApiImplicitParam(paramType = "body", dataType = "String", name = "from", value = "每页数量", required = true)
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "pageNum", value = "初始页数", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "pageSize", value = "每页数量", required = true)
     })
     @PostMapping("search/pandi")
     public CommonDto<Map<String,List<Map<String, Object>>>> findProjectAndInvestmentByShortNameAll(@RequestBody ShuruDto body){
@@ -130,8 +130,8 @@ public class ProjectsController {
             @ApiImplicitParam(paramType = "body", dataType = "String", name = "city", value = "城市", required = true),
             @ApiImplicitParam(paramType = "body", dataType = "String", name = "educational_background_desc", value = "教育背景", required = true),
             @ApiImplicitParam(paramType = "body", dataType = "String", name = "working_background_desc", value = "工作背景", required = true),
-            @ApiImplicitParam(paramType = "body", dataType = "String", name = "size", value = "初始页数", required = true),
-            @ApiImplicitParam(paramType = "body", dataType = "String", name = "from", value = "每页数量", required = true)
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "pageNum", value = "初始页数", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "pageSize", value = "每页数量", required = true)
     })
     @PostMapping("choose/sview")
     public CommonDto<List<Map<String,Object>>>findProjectBySview(@RequestBody SereachDto body)
