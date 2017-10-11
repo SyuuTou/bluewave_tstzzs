@@ -17,4 +17,6 @@ public interface UserSearchLogMapper extends OwnerMapper<UserSearchLog> {
    // List<SerchHistoryDto> find
 
     List<UserSearchLog> selectNewRecords(SearchLimitDto searchLimitDto);
+
+    List<UserSearchLog> selectHotTen();
 }

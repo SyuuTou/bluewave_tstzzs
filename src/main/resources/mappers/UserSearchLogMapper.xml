@@ -19,5 +19,7 @@
       select * from user_search_log where user_id=#{user_id} order by amount desc limit #{limits}
   </select>
 
-
+  <select id="selectHotTen" resultMap="BaseResultMap">
+    select * from user_search_log where search_content !="" order by amount desc limit 10
+  </select>
 </mapper>
