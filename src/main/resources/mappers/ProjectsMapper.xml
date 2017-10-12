@@ -45,16 +45,34 @@
         (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId,jdbcType=VARCHAR}) AND f.projects_id = b.`ID` GROUP BY f.projects_id ) zz
         FROM projects b
         WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')  -->
-        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,
-        (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1)stage
-        FROM projects mf
-        WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%') GROUP BY mf.id LIMIT #{sizea},#{froma}
+       SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,stage.stage
+        FROM projects mf 
+        LEFT JOIN (SELECT s.project_id,s.stage,s.financing_time FROM project_financing_log s GROUP BY s.`project_id` ORDER BY financing_time DESC)stage ON mf.`id` = stage.project_id
+        WHERE 
+          mf.short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+          OR mf.kernel_desc LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+          OR mf.id IN (SELECT project_id FROM project_segmentation WHERE segmentation_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
+          OR mf.id IN
+          (SELECT project_id FROM project_financing_log WHERE stage  LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
+          OR mf.city LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+          OR mf.id IN (SELECT f.project_id FROM founders_work fw LEFT JOIN founders f ON fw.founder_id = f.id WHERE fw.work_experience LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
+          OR mf.id IN (SELECT f.project_id FROM founders_education fe LEFT JOIN founders f ON fe.founder_id = f.id WHERE fe.education_experience LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
+        GROUP BY mf.id LIMIT #{sizea},#{froma}
     </select>
     <select id="findProjectByShortName"  parameterType="String" resultType="java.util.HashMap">
-        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,
-        (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1)stage
-        FROM projects mf
-        WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%') GROUP BY mf.id LIMIT 3
+          SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,stage.stage
+          FROM projects mf
+          LEFT JOIN (SELECT s.project_id,s.stage,s.financing_time FROM project_financing_log s GROUP BY s.`project_id` ORDER BY financing_time DESC)stage ON mf.`id` = stage.project_id
+          WHERE
+          mf.short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+          OR mf.kernel_desc LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+          OR mf.id IN (SELECT project_id FROM project_segmentation WHERE segmentation_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
+          OR mf.id IN
+          (SELECT project_id FROM project_financing_log WHERE stage  LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
+          OR mf.city LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+          OR mf.id IN (SELECT f.project_id FROM founders_work fw LEFT JOIN founders f ON fw.founder_id = f.id WHERE fw.work_experience LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
+          OR mf.id IN (SELECT f.project_id FROM founders_education fe LEFT JOIN founders f ON fe.founder_id = f.id WHERE fe.education_experience LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')) 
+          GROUP BY mf.id LIMIT 3
     </select>
 
     <select id="findProjectBySegmentation" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
@@ -94,8 +112,7 @@
         </if>
 
         <if test=" stages !='' and stages != null">
-            AND mf.id IN
-            (SELECT project_id FROM project_financing_log WHERE stage IN(
+            AND mf.id IN (SELECT project_id FROM project_financing_log WHERE stage IN
             <foreach item="item" index="index" collection="stages" open="(" separator="," close=")">#{item}</foreach>
             )
         </if>
@@ -147,8 +164,7 @@
         </if>
 
         <if test=" stages !='' and stages != null">
-            AND mf.id IN
-            (SELECT project_id FROM project_financing_log WHERE stage IN(
+            AND mf.id IN (SELECT project_id FROM project_financing_log WHERE stage IN
             <foreach item="item" index="index" collection="stages" open="(" separator="," close=")">#{item}</foreach>
             )
         </if>
