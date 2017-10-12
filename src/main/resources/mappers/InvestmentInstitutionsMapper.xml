@@ -36,18 +36,22 @@
   </select>
 
   <select id="findInvestment" resultMap="BaseResultMap">
-    SELECT a.ID, a.short_name, a.commet, a.create_time, a.type, a.logo, a.case_url, a.kenel_case,
-    a.comment, a.city, a.stage, a.representative, COUNT(b.ID)projects_num
-    FROM investment_institutions a LEFT JOIN projects b ON a.ID = b.`investment_institutions_id`
-    WHERE 1=1
-    AND a.short_name IS NOT NULL AND a.short_name != ''
+    select ii.id, ii.short_name, ii.commet, ii.create_time, ii.type, ii.logo, ii.case_url, ii.kenel_case,
+    ii.comment, ii.city, ii.stage, ii.representative, count(distinct p.serial_number) projects_num from
+    project_financing_log pfl left join
+    projects p  on pfl.project_id = p.id
+    left join investment_institutions ii on p.investment_institutions_id = ii.id
+    where 1=1
+    AND ii.short_name IS NOT NULL AND ii.short_name != ''
     <if test="type != '' and type != null and type != '-1'">
-      AND type = #{type}
+      AND ii.type = #{type}
     </if>
     <if test="type == '-1'">
-      AND type IN (0,1)
+      AND ii.type IN (0,1)
     </if>
-    GROUP BY a.ID ORDER BY projects_num DESC
+    and pfl.financing_time >  '2017-01-01'
+    group by p.investment_institutions_id
+    order by projects_num desc
     <if test="beginNum != null and pageSize != null">
       LIMIT #{beginNum},#{pageSize}
     </if>
