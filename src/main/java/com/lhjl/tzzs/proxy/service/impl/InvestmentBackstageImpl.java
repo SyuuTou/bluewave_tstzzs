@@ -174,7 +174,7 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
 //        example.and().andEqualTo("type", 0).andNotEqualTo("shortName", null).andNotEqualTo("shortName", "");
 //        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.selectByExample(example);
 
-        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.findInvestment("0", beginNum, pageSize);
+        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.findInvestment("-1", beginNum, pageSize);
         //判断是否还有查询结果
 //        if(investmentInstitutions.size() <= 0){
 //            result.setStatus(202);
