@@ -163,4 +163,33 @@ public class ProjectsController {
         }
         return result;
     }
+    /**
+     * 图表筛选功能
+     * @return
+     */
+    @ApiOperation(value = "筛选结果页面", notes = "根据用户的id、机构类型、领域、城市、轮次、教育背景、工作背景来标注请求的唯一")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "String", name = "userId", value = "用户ID", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "Integer", name = "investment_institutions_type", value = "机构类型", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "segmentation", value = "行业领域", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "stage", value = "轮次", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "city", value = "城市", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "educational_background_desc", value = "教育背景", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "working_background_desc", value = "工作背景", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "pageNum", value = "初始页数", required = true),
+            @ApiImplicitParam(paramType = "body", dataType = "String", name = "pageSize", value = "每页数量", required = true)
+    })
+    @PostMapping("choose/sviewa")
+    public CommonDto<List<Map<String,Object>>>findProjectBySviewA(@RequestBody SereachDto body)
+    {
+        CommonDto<List<Map<String,Object>>> result =new CommonDto<List<Map<String, Object>>>();
+        try {
+            result = projectsService.findProjectBySviewA(body);
+
+        } catch (Exception e) {
+            result.setStatus(5104);
+            result.setMessage("页面显示异常，请稍后再试");
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
 }

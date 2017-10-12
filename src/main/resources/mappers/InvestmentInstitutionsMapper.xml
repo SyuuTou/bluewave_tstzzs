@@ -40,6 +40,7 @@
     a.comment, a.city, a.stage, a.representative, COUNT(b.ID)projects_num
     FROM investment_institutions a LEFT JOIN projects b ON a.ID = b.`investment_institutions_id`
     WHERE 1=1
+    AND a.short_name IS NOT NULL AND a.short_name != ''
     <if test="type != '' and type != null and type != '-1'">
       AND type = #{type}
     </if>
