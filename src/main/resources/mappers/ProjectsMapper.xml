@@ -31,10 +31,15 @@
     <!-- 用户关注的项目 -->
 
   <select id="findProjectByUserId" resultType="java.util.HashMap" >
-    SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage
+   <!-- SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage
     FROM follow a LEFT JOIN view_projects_info b ON a.`projects_id` = b.`ID`
+    WHERE a.user_id = #{userId}  AND a.`status` = 1-->
+
+     SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,
+    (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1)stage
+    FROM follow a LEFT JOIN projects mf  ON a.`projects_id` = mf.`ID`
     WHERE a.user_id = #{userId}  AND a.`status` = 1
-    GROUP BY b.`id`  ORDER BY a.create_time DESC LIMIT #{beginNum},#{pageSize}
+    GROUP BY mf.`id`  ORDER BY a.create_time DESC LIMIT #{beginNum},#{pageSize}
   </select>
    <!-- <select id="findProjectByShortName" parameterType="String" resultMap="BaseResultMap" >
     SELECT p.*,s.* FROM projects p LEFT JOIN (SELECT ff.* FROM follow ff WHERE ff.ID IN(SELECT MAX(f.ID) FROM follow f GROUP BY  f.projects_id)) s ON p.ID=s.projects_id WHERE p.`short_name` LIKE '%"#{shortName}"%';
