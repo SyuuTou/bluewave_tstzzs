@@ -133,7 +133,8 @@
         SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,
         (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1)stage
         FROM projects mf
-        WHERE 1=1 AND mf.create_time > '2017-01-01'
+        WHERE 1=1
+        AND mf.id IN(SELECT a.project_id FROM project_financing_log a WHERE a.financing_time>'2017-01-01')
         <if test=" types !='' and types != null">
             AND mf.`investment_institutions_id` IN (SELECT id FROM investment_institutions WHERE `type` IN
             <foreach item="item" index="index" collection="types" open="(" separator="," close=")">#{item}</foreach>
