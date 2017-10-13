@@ -20,6 +20,6 @@
   </select>
 
   <select id="selectHotTen" resultMap="BaseResultMap">
-    sselect *,count(distinct search_content)from user_search_log where search_content !="" group by search_content order by amount desc limit 10
+    select *,count(distinct search_content)from user_search_log where search_content !="" group by search_content order by amount desc limit 10
   </select>
 </mapper>
