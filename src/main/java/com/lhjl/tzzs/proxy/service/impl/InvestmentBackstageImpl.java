@@ -6,6 +6,7 @@ import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.service.InvestmentBackstageService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -84,6 +85,7 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
      * @return
      */
     @Cacheable(value = "findAllInvestment",keyGenerator = "wiselyKeyGenerator")
+//    @CacheEvict(value = "findAllInvestment", allEntries = true)
     @Override
     public CommonDto<List<Map<String, Object>>>  findAllInvestment() {
         CommonDto<List<Map<String, Object>>> list = new CommonDto<List<Map<String, Object>>>();
@@ -128,6 +130,7 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
      * @return
      */
     @Cacheable(value = "findFiveInvestment",keyGenerator = "wiselyKeyGenerator")
+//    @CacheEvict(value = "findFiveInvestment", allEntries = true)
     @Override
     public CommonDto<List<InvestmentInstitutions>> findFiveInvestment(Integer pageNum, Integer pageSize) {
         CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
@@ -162,12 +165,22 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
      * @return
      */
     @Cacheable(value = "findNotFiveInvestment",keyGenerator = "wiselyKeyGenerator")
+//    @CacheEvict(value = "findNotFiveInvestment", allEntries = true)
     @Override
     public CommonDto<List<InvestmentInstitutions>> findNotFiveInvestment(Integer pageNum, Integer pageSize) {
         CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
 
         //计算查询起始记录
         Integer beginNum = (pageNum-1)*pageSize;
+
+        //最多返回160条记录
+        if(beginNum > 160){
+            result.setStatus(201);
+            result.setMessage("查询记录数超出限制（100条）");
+            return result;
+        }else{
+            pageSize = (160 - beginNum)>=pageSize?pageSize:(160-beginNum);
+        }
 
 //        PageHelper.startPage(pageNum, pageSize, false);
 //        Example example = new Example(InvestmentInstitutions.class);
