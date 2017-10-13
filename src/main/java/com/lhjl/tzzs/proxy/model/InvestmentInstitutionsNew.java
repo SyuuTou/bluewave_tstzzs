@@ -1,10 +1,10 @@
 package com.lhjl.tzzs.proxy.model;
 
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "investment_institutions")
-public class InvestmentInstitutions {
+public class InvestmentInstitutionsNew {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -97,6 +97,19 @@ public class InvestmentInstitutions {
         this.approvalTime = approvalTime;
     }
 
+    /**
+     * 投机项目数量（自定义字段，数据库中不存在）
+     */
+    @Column(name = "projects_num")
+    private Integer projectsNum;
+
+    public Integer getProjectsNum() {
+        return projectsNum;
+    }
+
+    public void setProjectsNum(Integer projectsNum) {
+        this.projectsNum = projectsNum;
+    }
 
     /**
      * @return ID

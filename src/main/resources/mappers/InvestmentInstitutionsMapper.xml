@@ -19,6 +19,24 @@
     <result column="representative" jdbcType="VARCHAR" property="representative" />
     <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
     <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
+  </resultMap>
+
+  <resultMap id="BaseResultMapNew" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsNew">
+
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="commet" jdbcType="VARCHAR" property="commet" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="case_url" jdbcType="VARCHAR" property="caseUrl" />
+    <result column="kenel_case" jdbcType="VARCHAR" property="kenelCase" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="stage" jdbcType="VARCHAR" property="stage" />
+    <result column="representative" jdbcType="VARCHAR" property="representative" />
+    <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
+    <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
     <!--自定义字段，数据库中不存在，表示投资项目数量-->
     <result column="projects_num" jdbcType="INTEGER" property="projectsNum" />
   </resultMap>
@@ -35,7 +53,7 @@
     WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
   </select>
 
-  <select id="findInvestment" resultMap="BaseResultMap">
+  <select id="findInvestment" resultMap="BaseResultMapNew">
     select ii.id, ii.short_name, ii.commet, ii.create_time, ii.type, ii.logo, ii.case_url, ii.kenel_case,
     ii.comment, ii.city, ii.stage, ii.representative, count(distinct p.serial_number) projects_num from
     project_financing_log pfl
