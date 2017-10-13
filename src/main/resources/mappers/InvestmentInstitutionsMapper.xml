@@ -69,6 +69,8 @@
     </if>
     AND ii.yn = 1
     AND pfl.financing_time >  '2017-01-01'
+    AND ii.kenel_case IS NOT NULL AND ii.kenel_case !=''
+    AND ii.logo IS NOT NULL AND ii.logo != ''
     GROUP BY ii.`short_name`
     ORDER BY projects_num desc
     <if test="beginNum != null and pageSize != null">
