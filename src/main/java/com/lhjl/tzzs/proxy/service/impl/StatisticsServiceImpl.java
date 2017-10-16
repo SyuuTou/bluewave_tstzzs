@@ -117,7 +117,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Cacheable(value = "financingEducationExperienceDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public CommonDto<List<HistogramList>> financingEducationExperienceDistributed(String from, String size) {
+    public CommonDto<List<HistogramList>> financingEducationExperienceDistributed(String institutionType, String from, String size) {
 
         int from1  = Integer.parseInt(from);
         int size1 = Integer.parseInt(size);
@@ -127,6 +127,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
         Integer type = null;
+        if (institutionType.equals("50")){
+            type = 1;
+        }
         List<HistogramList>  histogramLists = statisticsMapper.financingEducationExperienceDistributed(type,beginTime,endTime,froma,sizea);
         result.setData(histogramLists);
         result.setMessage("success");
@@ -136,7 +139,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Cacheable(value = "financingWorkExperienceDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public CommonDto<List<HistogramList>> financingWorkExperienceDistributed(String from, String size) {
+    public CommonDto<List<HistogramList>> financingWorkExperienceDistributed(String institutionType, String from, String size) {
 
         int from1  = Integer.parseInt(from);
         int size1 = Integer.parseInt(size);
@@ -146,6 +149,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
         Integer type = null;
+        if (institutionType.equals("50")){
+            type = 1;
+        }
         List<HistogramList>  histogramLists = statisticsMapper.financingWorkExperienceDistributed(type,beginTime,endTime,froma,sizea);
         result.setData(histogramLists);
         result.setMessage("success");
@@ -155,7 +161,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Cacheable(value = "financingInvestmentDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public CommonDto<List<HistogramList>> financingInvestmentDistributed(String from, String size) {
+    public CommonDto<List<HistogramList>> financingInvestmentDistributed(String institutionType, String from, String size) {
 
         int from1  = Integer.parseInt(from);
         int size1 = Integer.parseInt(size);
@@ -165,6 +171,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
         Integer type = null;
+        if (institutionType.equals("50")){
+            type = 1;
+        }
         List<HistogramList>  histogramLists = statisticsMapper.financingInvestmentDistributed(type,beginTime,endTime,froma,sizea);
         result.setData(histogramLists);
         result.setMessage("success");

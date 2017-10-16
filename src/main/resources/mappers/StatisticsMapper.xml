@@ -12,15 +12,19 @@
     <select id="financingCountDistributed" resultMap="histogramResultMap">
 
         select count x, financing_time y from (
-        select count(distinct b.serial_number) count, date_format(b.financing_time,'%Y-%m') financing_time from (
-        select full_name,sum(amount) amount,max(financing_time) financing_time,max(serial_number) serial_number from
-        view_projects_info where financing_time between #{beginTime} and #{endTime}
-        and stage in ('种子轮','天使轮','Pre-A轮')
+        select count(distinct b.serial_number) count,
+        date_format(b.financing_time,'%Y-%m') financing_time
+        from (
+        select p.full_name,sum(pfl.amount) amount,max(pfl.financing_time) financing_time,max(p.serial_number) serial_number from
+        project_financing_log pfl  left join projects  p on pfl.project_id = p.id
+        left join investment_institutions ii on p.investment_institutions_id = ii.id
+        where pfl.financing_time between #{beginTime} and #{endTime}
+        and pfl.stage in ('种子轮','天使轮','Pre-A轮')
         <if test="jgtype != null">
-            and investment_institutions_type = #{jgtype}
+            and ii.type = #{jgtype}
         </if>
 
-        group by full_name ) b
+        group by p.full_name ) b
 
         group by date_format(b.financing_time,'%Y-%m')
         ) a order by a.financing_time limit #{froma},#{sizea}
@@ -31,15 +35,16 @@
     <select id="financingAmountDistributed" resultMap="histogramResultMap">
 
         select amount x, financing_time y from (
-        select avg(a.amount) amount, date_format(a.financing_time,'%Y-%m') financing_time from (
-        select full_name,sum(amount) amount,max(financing_time) financing_time from view_projects_info where
-        financing_time between #{beginTime} and #{endTime}
-        and stage in ('种子轮','天使轮','Pre-A轮')
+        select sum(a.amount) amount, date_format(a.financing_time,'%Y-%m') financing_time from (
+        select p.full_name,pfl.amount amount,max(pfl.financing_time) financing_time from project_financing_log pfl  left join projects  p on pfl.project_id = p.id
+        left join investment_institutions ii on p.investment_institutions_id = ii.id where pfl.amount > 0
+        and pfl.financing_time between #{beginTime} and #{endTime}
+        and pfl.stage in ('种子轮','天使轮','Pre-A轮','')
         <if test="jgtype != null">
-            and investment_institutions_type = #{jgtype}
+            and ii.type = #{jgtype}
         </if>
 
-        group by full_name ) a
+        group by p.full_name ) a
         group by date_format(a.financing_time,'%Y-%m')
         ) b order by b.financing_time limit #{froma},#{sizea}
 
@@ -48,74 +53,94 @@
     <select id="financingSegmentationDistributed" resultMap="histogramResultMap">
 
         select segmentation y, count x from (
-        select segmentation, count(distinct full_name) count from view_projects_info where financing_time between
+        select ps.segmentation_name segmentation , count(distinct p.serial_number) count
+        from project_segmentation ps left join project_financing_log pfl on ps.project_id = pfl.project_id
+        left join projects p on ps.project_id = p.id
+        left join investment_institutions ii on p.investment_institutions_id = ii.id
+        where pfl.financing_time between
         #{beginTime} and #{endTime}
-        and stage in ('种子轮','天使轮','Pre-A轮')
-        and segmentation is not null and segmentation != ''
+        and pfl.stage in ('种子轮','天使轮','Pre-A轮')
+
         <if test="jgtype != null">
-            and investment_institutions_type = #{jgtype}
+            and ii.type = #{jgtype}
         </if>
 
-        group by segmentation ) a
+        group by ps.segmentation_name ) a
         order by a.count desc limit #{froma},#{sizea}
     </select>
 
     <select id="financingCityDistributed" resultMap="histogramResultMap">
 
         select city y, count x from (
-        select city, count(distinct full_name) count from view_projects_info where financing_time between #{beginTime}
+        select p.city, count(distinct p.serial_number) count
+        from project_financing_log pfl
+        left join projects p on pfl.project_id = p.id
+        left join investment_institutions ii on p.investment_institutions_id = ii.id
+        where pfl.financing_time between #{beginTime}
         and #{endTime}
-        and stage in ('种子轮','天使轮','Pre-A轮')
-        and city is not null
+        and pfl.stage in ('种子轮','天使轮','Pre-A轮')
+        and p.city is not null
         <if test="jgtype != null">
-            and investment_institutions_type = #{jgtype}
+            and ii.type = #{jgtype}
         </if>
 
-        group by city ) a
+        group by p.city ) a
         order by a.count desc limit #{froma},#{sizea}
     </select>
     <select id="financingEducationExperienceDistributed" resultMap="histogramResultMap">
 
         select education_experience y, count x from (
-        select education_experience, count(distinct full_name) count from view_projects_info where financing_time
-        between #{beginTime} and #{endTime}
-        and stage in ('种子轮','天使轮','Pre-A轮')
-        and education_experience is not NULL
+        select fe.education_experience, count(distinct mf.serial_number) count from project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        left join investment_institutions ii on mf.`investment_institutions_id` = ii.id
+        LEFT JOIN founders f on mf.id = f.project_id
+        right join founders_education fe on fe.founder_id = f.id and fe.education_experience != ''
+        where pfl.financing_time between
+        #{beginTime} and #{endTime}
+        and pfl.stage in ('种子轮','天使轮','Pre-A轮')
+        and fe.education_experience != ''
         <if test="jgtype != null">
-            and investment_institutions_type = #{jgtype}
+            and ii.type = #{jgtype}
         </if>
 
-        group by education_experience ) a
-        WHERE a.education_experience is not NULL and a.education_experience != ''
+        group by fe.education_experience ) a
+
         order by a.count desc limit #{froma},#{sizea}
     </select>
     <select id="financingWorkExperienceDistributed" resultMap="histogramResultMap">
 
         select work_experience y, count x from (
-        select work_experience, count(distinct full_name) count from view_projects_info where financing_time between
+        select fw.work_experience, count(distinct mf.serial_number) count from project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        left join investment_institutions ii on mf.`investment_institutions_id` = ii.id
+        LEFT JOIN founders f on mf.id = f.project_id
+
+        right join founders_work fw on fw.founder_id = f.id where pfl.financing_time between
         #{beginTime} and #{endTime}
-        and stage in ('种子轮','天使轮','Pre-A轮')
-        and work_experience is not null
+        and pfl.stage in ('种子轮','天使轮','Pre-A轮')
+        and fw.work_experience != ''
         <if test="jgtype != null">
-            and investment_institutions_type = #{jgtype}
+            and ii.type = #{jgtype}
         </if>
 
-        group by work_experience ) a
+        group by fw.work_experience ) a
         WHERE a.work_experience is not NULL and a.work_experience != ''
         order by a.count desc limit #{froma},#{sizea}
     </select>
     <select id="financingInvestmentDistributed" resultMap="histogramResultMap">
 
         select city y, count x from (
-        select city, sum(amount) count from view_projects_info where financing_time between #{beginTime}
+        select p.city, count(distinct p.serial_number) count
+        from project_financing_log pfl
+        left join projects p on pfl.project_id = p.id
+        left join investment_institutions ii on p.investment_institutions_id = ii.id
+        where pfl.financing_time between #{beginTime}
         and #{endTime}
-        and stage in ('种子轮','天使轮','Pre-A轮')
-        and city is not null
+        and pfl.stage in ('种子轮','天使轮','Pre-A轮')
+        and p.city is not null
         <if test="jgtype != null">
-            and investment_institutions_type = #{jgtype}
+            and ii.type = #{jgtype}
         </if>
 
-        group by city ) a
+        group by p.city ) a
         order by a.count desc limit #{froma},#{sizea}
     </select>
 </mapper>

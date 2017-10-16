@@ -123,13 +123,13 @@ public class StatisticsController {
      *
      * @return
      */
-    @GetMapping("financing/educationExperience/distributed")
-    public CommonDto<List<HistogramList>> financing50EducationExperienceDistributed(@RequestParam(required = false, defaultValue = "0") String from, @RequestParam(required = false, defaultValue = "10") String size) {
+    @GetMapping("financing/{institutionType}/educationExperience/distributed")
+    public CommonDto<List<HistogramList>> financing50EducationExperienceDistributed(@PathVariable  String institutionType,  @RequestParam(required = false, defaultValue = "0") String from, @RequestParam(required = false, defaultValue = "10") String size) {
 
         CommonDto<List<HistogramList>> result = null;
 
         try {
-            result = statisticsService.financingEducationExperienceDistributed(from, size);
+            result = statisticsService.financingEducationExperienceDistributed(institutionType,from, size);
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e.fillInStackTrace());
@@ -146,13 +146,13 @@ public class StatisticsController {
      *
      * @return
      */
-    @GetMapping("financing/workExperience/distributed")
-    public CommonDto<List<HistogramList>> financing50WorkExperienceDistributed(@RequestParam(required = false, defaultValue = "0") String from, @RequestParam(required = false, defaultValue = "10") String size) {
+    @GetMapping("financing/{institutionType}/workExperience/distributed")
+    public CommonDto<List<HistogramList>> financing50WorkExperienceDistributed(@PathVariable  String institutionType,@RequestParam(required = false, defaultValue = "0") String from, @RequestParam(required = false, defaultValue = "10") String size) {
 
         CommonDto<List<HistogramList>> result = null;
 
         try {
-            result = statisticsService.financingWorkExperienceDistributed(from, size);
+            result = statisticsService.financingWorkExperienceDistributed(institutionType,from, size);
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e.fillInStackTrace());
@@ -169,13 +169,13 @@ public class StatisticsController {
      *
      * @return
      */
-    @GetMapping("financing/investment/distributed")
-    public CommonDto<List<HistogramList>> financing50InvestmentDistributed(@RequestParam(required = false, defaultValue = "0") String from, @RequestParam(required = false, defaultValue = "10") String size) {
+    @GetMapping("financing/{institutionType}/investment/distributed")
+    public CommonDto<List<HistogramList>> financing50InvestmentDistributed(@PathVariable  String institutionType,@RequestParam(required = false, defaultValue = "0") String from, @RequestParam(required = false, defaultValue = "10") String size) {
 
         CommonDto<List<HistogramList>> result = null;
 
         try {
-            result = statisticsService.financingInvestmentDistributed(from, size);
+            result = statisticsService.financingInvestmentDistributed(institutionType,from, size);
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e.fillInStackTrace());

@@ -39,130 +39,159 @@
     </resultMap>
 
     <select id="queryHotCity" resultMap="labelResultMap">
-      SELECT g.register_area name,g.register_area `value` FROM (select count(register_area) counts ,register_area FROM `meta_financing` WHERE register_area is not NULL and  register_area != "" GROUP BY register_area ) g ORDER BY counts DESC limit 0,12
-  </select>
+ SELECT g.city name,g.city `value`  FROM (select count(distinct p.serial_number) counts ,city FROM  project_financing_log pfl left join  projects p on pfl.project_id = p.id  WHERE p.continent != '国外' and pfl.financing_time >= '2017-01-01' and city is not NULL and  city != ""  GROUP BY city ) g ORDER BY counts DESC limit 0,11  </select>
 
     <select id="queryHotEducation" resultMap="labelResultMap">
-      SELECT g.education_experience name,g.education_experience `value` FROM (select count(education_experience) counts ,education_experience FROM `meta_financing_education` mf where education_experience is not null and education_experience != ""  GROUP BY education_experience ) g ORDER BY counts DESC limit 0,12
-  </select>
+select fe.education_experience name, fe.education_experience `value`, count(distinct mf.serial_number) count from project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+
+        LEFT JOIN founders f on mf.id = f.project_id
+
+        right join founders_education fe on fe.founder_id = f.id and fe.education_experience != ''
+        where pfl.financing_time > '2017-01-01'
+        group by fe.education_experience
+        order by count desc
+        limit 11  </select>
     <select id="queryHotWork" resultMap="labelResultMap">
-      SELECT g.work_experience name,g.work_experience `value` FROM (select count(work_experience) counts ,work_experience FROM `meta_financing_work` mf where work_experience is not null and work_experience != "" GROUP BY work_experience ) g ORDER BY counts DESC limit 0,12
-  </select>
+        select fw.work_experience name,fw.work_experience `value` , count(distinct mf.serial_number) count from project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        left join investment_institutions ii on mf.`investment_institutions_id` = ii.id
+        LEFT JOIN founders f on mf.id = f.project_id
+
+        right join founders_work fw on fw.founder_id = f.id
+        where pfl.financing_time > '2017-01-01'
+        group by fw.work_experience
+        order by count desc
+        limit 11  </select>
 
     <select id="queryHotIndustry" resultMap="labelResultMap">
-      select a.segmentation_name as `name`, a.segmentation_name as `value` from (SELECT segmentation_name ,count(1) counts FROM project_segmentation where segmentation_name != '' and segmentation_name is not null group by segmentation_name ) a order by a.counts desc
+      select ps.segmentation_name name,ps.segmentation_name `value` , count(distinct mf.serial_number) count
+      from project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        right join project_segmentation ps on ps.project_id = mf.id
+
+        where pfl.financing_time > '2017-01-01'
+        group by ps.segmentation_name
+        order by count desc
     </select>
 
 
     <select id="queryFinancingCount" resultType="map">
-        select count(a.full_name) total, AVG (a.amount) avgMoney from (
-        select full_name,sum(amount) amount,max(financing_time) financing_time from view_projects_info where amount > 0
+        select count(1) total from (
+        select CEILING(pfl.total_amount/${granularity}) * ${granularity} as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        right JOIN project_segmentation ps on ps.project_id = mf.id
+        LEFT JOIN founders f on mf.id = f.project_id
+        right join founders_education  fe on fe.founder_ID = f.id
+        right join founders_work fw on fw.founder_id = f.id
+
+        where pfl.total_amount > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
         <if test="roundName != '' and roundName != null">
-             AND stage = #{roundName}
+            and pfl.stage = #{roundName}
         </if>
         <if test="industryName != '' and industryName != null">
-            and segmentation = #{industryName}
+            and ps.segmentation_name = #{industryName}
         </if>
         <if test="cityName != '' and cityName != null">
-            and city =#{cityName}
+            and mf.city =#{cityName}
         </if>
         <if test="educationName != '' and educationName != null">
-            and education_experience =#{educationName}
+            and fe.education_experience =#{educationName}
         </if>
         <if test="workName != '' and workName != null">
-            and work_experience =#{workName}
+            and fw.work_experience =#{workName}
         </if>
-        group by full_name ) a
-        where a.financing_time between #{beginTime} and #{endTime}
+        group by pfl.stage,mf.full_name
 
-
-
+        ) b
     </select>
 
     <select id="queryValuationCount" resultType="map">
-        select count(a.full_name) total, AVG (a.valuation) avgMoney from (
-        select full_name,sum(valuation) valuation,max(financing_time) financing_time from view_projects_info where valuation > 0
+        select count(1) total from (
+        select CEILING(pfl.valuation/500) * 500 as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        right JOIN project_segmentation ps on ps.project_id = mf.id
+        LEFT JOIN founders f on mf.id = f.project_id
+        right join founders_education  fe on fe.founder_ID = f.id
+        right join founders_work fw on fw.founder_id = f.id
+
+        where pfl.valuation > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
         <if test="roundName != '' and roundName != null">
-            and stage = #{roundName}
+            and pfl.stage = #{roundName}
         </if>
         <if test="industryName != '' and industryName != null">
-            and segmentation = #{industryName}
+            and ps.segmentation_name = #{industryName}
         </if>
         <if test="cityName != '' and cityName != null">
-            and city =#{cityName}
+            and mf.city =#{cityName}
         </if>
         <if test="educationName != '' and educationName != null">
-            and education_experience =#{educationName}
+            and fe.education_experience =#{educationName}
         </if>
         <if test="workName != '' and workName != null">
-            and work_experience =#{workName}
+            and fw.work_experience =#{workName}
         </if>
-        group by full_name ) a
-        where a.financing_time between #{beginTime} and #{endTime}
+        group by pfl.stage,mf.full_name
 
-
-
-
-
-
-
+        ) b
     </select>
 
     <select id="queryValuation" resultMap="histogramResultMap">
 
-        SELECT dis money, cc dcount from (
-        select CEILING(a.valuation/5000) * 5000 as dis, count(1) cc from (
-        select full_name,sum(valuation) valuation,max(financing_time) financing_time from view_projects_info where valuation > 0
+
+        select money,dcount from (
+        SELECT dis money, count(1) dcount from (
+        select CEILING(pfl.valuation/500) * 500 as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        right JOIN project_segmentation ps on ps.project_id = mf.id
+        LEFT JOIN founders f on mf.id = f.project_id
+        right join founders_education  fe on fe.founder_ID = f.id
+        right join founders_work fw on fw.founder_id = f.id
+
+        where pfl.valuation > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
         <if test="roundName != '' and roundName != null">
-        and stage = #{roundName}
+            and pfl.stage = #{roundName}
         </if>
         <if test="industryName != '' and industryName != null">
-        and segmentation = #{industryName}
+            and ps.segmentation_name = #{industryName}
         </if>
         <if test="cityName != '' and cityName != null">
-        and city =#{cityName}
+            and mf.city =#{cityName}
         </if>
         <if test="educationName != '' and educationName != null">
-        and education_experience =#{educationName}
+            and fe.education_experience =#{educationName}
         </if>
         <if test="workName != '' and workName != null">
-        and work_experience =#{workName}
+            and fw.work_experience =#{workName}
         </if>
-        group by full_name ) a
-        where a.financing_time between #{beginTime} and #{endTime}
-        group by CEILING(a.valuation/5000) * 5000
+        group by pfl.stage,mf.full_name
 
-        ) b order by b.cc desc
-        limit #{index}, #{size}
-
+        ) b GROUP by b.dis order by money  limit 0, 15 ) c
 
     </select>
 
     <select id="queryFinancingAmount" resultMap="histogramResultMap">
+        select money,dcount from (
+        SELECT dis money, count(1) dcount from (
+        select CEILING(pfl.total_amount/${granularity}) * ${granularity} as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        right JOIN project_segmentation ps on ps.project_id = mf.id
+        LEFT JOIN founders f on mf.id = f.project_id
+        right join founders_education  fe on fe.founder_ID = f.id
+        right join founders_work fw on fw.founder_id = f.id
 
-        SELECT dis money, cc dcount from (
-        select CEILING(a.amount/500) * 500 as dis, count(1) cc from (
-        select full_name,sum(amount) amount,max(financing_time) financing_time from view_projects_info where amount > 0
+        where pfl.total_amount > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
         <if test="roundName != '' and roundName != null">
-            and stage = #{roundName}
+            and pfl.stage = #{roundName}
         </if>
         <if test="industryName != '' and industryName != null">
-            and segmentation = #{industryName}
+            and ps.segmentation_name = #{industryName}
         </if>
         <if test="cityName != '' and cityName != null">
-            and city =#{cityName}
+            and mf.city =#{cityName}
         </if>
         <if test="educationName != '' and educationName != null">
-            and education_experience =#{educationName}
+            and fe.education_experience =#{educationName}
         </if>
         <if test="workName != '' and workName != null">
-            and work_experience =#{workName}
+            and fw.work_experience =#{workName}
         </if>
-        group by full_name ) a
-        where a.financing_time between #{beginTime} and #{endTime}
-        group by CEILING(a.amount/500) * 500
-        ) b order by b.cc desc
-        limit #{index}, #{size}
+        group by pfl.stage,mf.full_name
+
+        ) b GROUP by b.dis order by money  limit 0, 15 ) c
     </select>
 
 </mapper>

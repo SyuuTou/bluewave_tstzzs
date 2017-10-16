@@ -84,60 +84,36 @@ public class EvaluateServiceImpl implements EvaluateService {
         Map<String, Object> collect = financingMapper.queryValuationCount(roundName,industryName,cityName,educationName,workName,beginTime,endTime);
         Integer total = Integer.valueOf(collect.get("total").toString());
         if (total < 5){
-            collect = financingMapper.queryValuationCount(roundName,industryName,cityName,null,workName,beginTime,endTime);
-            total = Integer.valueOf(collect.get("total").toString());
-            if (total < 5){
-                collect = financingMapper.queryValuationCount(roundName,industryName,cityName,null,null,beginTime,endTime);
-                total = Integer.valueOf(collect.get("total").toString());
-                if (total < 5){
-                    collect = financingMapper.queryValuationCount(roundName,industryName,null,null,null,beginTime,endTime);
-                    total = Integer.valueOf(collect.get("total").toString());
-                    if (total < 5){
-                        dataList = new ArrayList<HistogramList>();
-                    }else{
-                        if (total > 10) {
-                            size = Double.valueOf(total * 0.8).intValue();
-                        }
-                        dataList = financingMapper.queryValuation(roundName,industryName,null,null,null,beginTime,endTime,index,size);
-                    }
-
-                }else{
-                    if (total > 10) {
-                        size = Double.valueOf(total * 0.8).intValue();
-                    }
-                    dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,null,beginTime,endTime,index,size);
-                }
-
-            }else{
-                if (total > 10) {
-                    size = Double.valueOf(total * 0.8).intValue();
-                }
-                dataList = financingMapper.queryValuation(roundName,industryName,cityName,null,workName,beginTime,endTime,index,size);
-            }
-
+            result.setStatus(200);
+            result.setMessage("no message");
+            result.setData(new ArrayList<HistogramList>(0));
+            return result;
         }else{
-            if (total > 10) {
-                size = Double.valueOf(total * 0.8).intValue();
-            }
             dataList = financingMapper.queryValuation(roundName,industryName,cityName,educationName,workName,beginTime,endTime,index,size);
         }
 
-
+        if (dataList.size()>10){
+            dataList = new ArrayList<HistogramList>(dataList.subList(0,10));
+        }
 
         NumberFormat numberFormat = NumberFormat.getInstance();
         Integer totalMoney = 0;
+        Integer num = 0;
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
         if (dataList != null&& dataList.size()>0) {
             for (HistogramList histogramList : dataList) {
+                num += histogramList.getDcount();
+            }
+            for (HistogramList histogramList : dataList) {
                 histogramList.setX(String.valueOf(histogramList.getMoney()));
-                histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(size) * 100));
+                histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(num) * 100));
 
                 totalMoney += histogramList.getMoney() * histogramList.getDcount();
             }
 
             if (totalMoney > 0) {
-                result.setAvgMoney(totalMoney / Integer.valueOf(collect.get("total").toString()));
+                result.setAvgMoney(totalMoney / num);
             }
         }
 
@@ -165,64 +141,53 @@ public class EvaluateServiceImpl implements EvaluateService {
 
         Integer index = from * size;
 
+        Integer granularity = null;
 
-        Map<String, Object> collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,educationName,workName,beginTime,endTime);
+        if (roundName.equals("天使轮")){
+            granularity = 50;
+        }else{
+            granularity = 100;
+        }
+
+
+        Map<String, Object> collect = null;
+        collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,educationName,workName,granularity, beginTime, endTime);
+
         Integer total = Integer.valueOf(collect.get("total").toString());
         if (total < 5){
-            collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,null,workName, beginTime, endTime);
-            total = Integer.valueOf(collect.get("total").toString());
-            if (total < 5){
-                collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,null,null, beginTime, endTime);
-                total = Integer.valueOf(collect.get("total").toString());
-                if (total < 5){
-                    collect = financingMapper.queryFinancingCount(roundName,industryName,null,null,null, beginTime, endTime);
-                    total = Integer.valueOf(collect.get("total").toString());
-                    if (total < 5){
-                        dataList = new ArrayList<HistogramList>();
-                    }else{
-                        if (total > 10) {
-                            size = Double.valueOf(total * 0.8).intValue();
-                        }
-                        dataList = financingMapper.queryFinancingAmount(roundName,industryName,null,null,null,beginTime,endTime,index,size);
-                    }
-
-
-                }else{
-                    if (total > 10) {
-                        size = Double.valueOf(total * 0.8).intValue();
-                    }
-                    dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,null,beginTime,endTime,index,size);
-                }
-
-            }else{
-                if (total > 10) {
-                    size = Double.valueOf(total * 0.8).intValue();
-                }
-                dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,null,workName,beginTime,endTime,index,size);
-            }
+            result.setStatus(200);
+            result.setMessage("no message");
+            result.setData(new ArrayList<HistogramList>(0));
+            return result;
 
         }else{
-            if (total > 10) {
-                size = Double.valueOf(total * 0.8).intValue();
-            }
-            dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,educationName,workName,beginTime,endTime,index,size);
+            dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,educationName,workName,granularity,beginTime,endTime,index,size);
+        }
+
+        if (dataList.size()>10){
+            dataList = new ArrayList<HistogramList>(dataList.subList(0,10));
         }
 
         NumberFormat numberFormat = NumberFormat.getInstance();
 
         Integer totalMoney = 0;
+
+        Integer num = 0;
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
         if (dataList != null&&dataList.size()>0) {
             for (HistogramList histogramList : dataList) {
+                num += histogramList.getDcount();
+            }
+            for (HistogramList histogramList : dataList) {
                 histogramList.setX(String.valueOf(histogramList.getMoney()));
-                histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(size) * 100));
+                histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(num) * 100));
 
                 totalMoney += histogramList.getMoney() * histogramList.getDcount();
             }
 
             if (totalMoney > 0) {
-                result.setAvgMoney(totalMoney / Integer.valueOf(collect.get("total").toString()));
+                result.setAvgMoney(totalMoney / num);
             }
         }
         result.setMessage("success");
