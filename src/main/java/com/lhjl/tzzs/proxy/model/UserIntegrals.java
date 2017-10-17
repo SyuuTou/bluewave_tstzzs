@@ -16,10 +16,10 @@ public class UserIntegrals {
     private Integer userId;
 
     /**
-     * 场景ID
+     * 场景key
      */
-    @Column(name = "scene_id")
-    private Integer sceneId;
+    @Column(name = "scene_key")
+    private String sceneKey;
 
     /**
      * 积分数量
@@ -87,21 +87,21 @@ public class UserIntegrals {
     }
 
     /**
-     * 获取场景ID
+     * 获取场景key
      *
-     * @return scene_id - 场景ID
+     * @return scene_key - 场景key
      */
-    public Integer getSceneId() {
-        return sceneId;
+    public String getSceneKey() {
+        return sceneKey;
     }
 
     /**
-     * 设置场景ID
+     * 设置场景key
      *
-     * @param sceneId 场景ID
+     * @param sceneKey 场景key
      */
-    public void setSceneId(Integer sceneId) {
-        this.sceneId = sceneId;
+    public void setSceneKey(String sceneKey) {
+        this.sceneKey = sceneKey;
     }
 
     /**

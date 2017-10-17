@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.UserIntegralConsumeMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.UserIntegralConsume" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.UserIntegralConsumeMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.UserIntegralConsume">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="ID" property="id" jdbcType="INTEGER" />
-    <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="scene_id" property="sceneId" jdbcType="INTEGER" />
-    <result column="cost_num" property="costNum" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
-    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="scene_key" jdbcType="VARCHAR" property="sceneKey" />
+    <result column="cost_num" jdbcType="INTEGER" property="costNum" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
   </resultMap>
 </mapper>

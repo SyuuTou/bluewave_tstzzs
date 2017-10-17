@@ -11,10 +11,10 @@ public class MetaObtainIntegral {
     private Integer id;
 
     /**
-     * 场景Id
+     * 场景key
      */
-    @Column(name = "scene_id")
-    private Integer sceneId;
+    @Column(name = "scene_key")
+    private String sceneKey;
 
     /**
      * 用户级别
@@ -44,6 +44,17 @@ public class MetaObtainIntegral {
     private Integer yn;
 
     /**
+     * 会员金币奖励系数
+     */
+    private Float ratio;
+
+    /**
+     * 可同时投递机构个数
+     */
+    @Column(name = "deliver_num")
+    private Integer deliverNum;
+
+    /**
      * @return ID
      */
     public Integer getId() {
@@ -58,21 +69,21 @@ public class MetaObtainIntegral {
     }
 
     /**
-     * 获取场景Id
+     * 获取场景key
      *
-     * @return scene_id - 场景Id
+     * @return scene_key - 场景key
      */
-    public Integer getSceneId() {
-        return sceneId;
+    public String getSceneKey() {
+        return sceneKey;
     }
 
     /**
-     * 设置场景Id
+     * 设置场景key
      *
-     * @param sceneId 场景Id
+     * @param sceneKey 场景key
      */
-    public void setSceneId(Integer sceneId) {
-        this.sceneId = sceneId;
+    public void setSceneKey(String sceneKey) {
+        this.sceneKey = sceneKey;
     }
 
     /**
@@ -163,5 +174,41 @@ public class MetaObtainIntegral {
      */
     public void setYn(Integer yn) {
         this.yn = yn;
+    }
+
+    /**
+     * 获取会员金币奖励系数
+     *
+     * @return ratio - 会员金币奖励系数
+     */
+    public Float getRatio() {
+        return ratio;
+    }
+
+    /**
+     * 设置会员金币奖励系数
+     *
+     * @param ratio 会员金币奖励系数
+     */
+    public void setRatio(Float ratio) {
+        this.ratio = ratio;
+    }
+
+    /**
+     * 获取可同时投递机构个数
+     *
+     * @return deliver_num - 可同时投递机构个数
+     */
+    public Integer getDeliverNum() {
+        return deliverNum;
+    }
+
+    /**
+     * 设置可同时投递机构个数
+     *
+     * @param deliverNum 可同时投递机构个数
+     */
+    public void setDeliverNum(Integer deliverNum) {
+        this.deliverNum = deliverNum;
     }
 }
