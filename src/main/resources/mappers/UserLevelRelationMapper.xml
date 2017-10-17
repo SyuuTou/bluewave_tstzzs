@@ -13,16 +13,6 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="yn" jdbcType="INTEGER" property="yn" />
   </resultMap>
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.UserLevelRelation">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="level_id" jdbcType="INTEGER" property="levelId" />
-    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
-    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
-  </resultMap>
     <select id="findByMing" parameterType="INTEGER" resultType="java.util.HashMap">
      SELECT * FROM user_integrals WHERE user_id=#{userId} GROUP BY create_time DESC LIMIT #{beginNum},#{ pageSize};
     </select>
