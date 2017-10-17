@@ -34,6 +34,17 @@ public class UserLevelRelation {
     private Date endTime;
 
     /**
+     * 创建时间
+     */
+    @Column(name = "create_time")
+    private Date createTime;
+
+    /**
+     * 是否有效
+     */
+    private Integer yn;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -117,5 +128,41 @@ public class UserLevelRelation {
      */
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    /**
+     * 获取创建时间
+     *
+     * @return create_time - 创建时间
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * 设置创建时间
+     *
+     * @param createTime 创建时间
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    /**
+     * 获取是否有效
+     *
+     * @return yn - 是否有效
+     */
+    public Integer getYn() {
+        return yn;
+    }
+
+    /**
+     * 设置是否有效
+     *
+     * @param yn 是否有效
+     */
+    public void setYn(Integer yn) {
+        this.yn = yn;
     }
 }
