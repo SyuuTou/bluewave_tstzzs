@@ -11,4 +11,7 @@
     <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
   </resultMap>
+    <select id="findByMing" parameterType="INTEGER" resultType="java.util.HashMap" >
+     SELECT * FROM user_integrals WHERE user_id=#{userId} GROUP BY create_time DESC LIMIT #{beginNum},#{ pageSize};
+    </select>
 </mapper>
