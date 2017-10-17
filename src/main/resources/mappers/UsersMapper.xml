@@ -13,5 +13,19 @@
     <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
   </resultMap>
-
+    <select id="findByUuid"  parameterType="String" resultType="INTEGER" >
+     SELECT u.ID FROM users u WHERE u.uuid=#{uuids}
+    </select>
+    <select id="findByUserid" parameterType="INTEGER" resultType="INTEGER" >
+     SELECT c.level_id FROM user_level_relation c WHERE c.user_id =#{userId} AND c.yn=0
+    </select>
+    <select id="findByBei" parameterType="INTEGER" resultType="Float" >
+    SELECT m.ratio FROM meta_obtain_integral m WHERE m.user_level=#{leId} AND m.scene_key IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
+    </select>
+     <select id="findByJinE" parameterType="String" resultType="INTEGER" >
+     SELECT integral FROM meta_obtain_integral WHERE scene_key=#{skey}
+    </select>
+     <select id="findByMing" parameterType="INTEGER" resultType="INTEGER" >
+     SELECT * FROM user_integrals WHERE user_id=#{userId} GROUP BY create_time DESC LIMIT #{sizea},#{froma} ;
+    </select>
 </mapper>
