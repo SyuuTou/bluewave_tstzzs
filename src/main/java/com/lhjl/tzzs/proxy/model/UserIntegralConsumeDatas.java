@@ -16,10 +16,10 @@ public class UserIntegralConsumeDatas {
     private Integer userId;
 
     /**
-     * 场景
+     * 场景key
      */
-    @Column(name = "scene_id")
-    private Integer sceneId;
+    @Column(name = "scene_key")
+    private String sceneKey;
 
     /**
      * 数据ID
@@ -72,21 +72,21 @@ public class UserIntegralConsumeDatas {
     }
 
     /**
-     * 获取场景
+     * 获取场景key
      *
-     * @return scene_id - 场景
+     * @return scene_key - 场景key
      */
-    public Integer getSceneId() {
-        return sceneId;
+    public String getSceneKey() {
+        return sceneKey;
     }
 
     /**
-     * 设置场景
+     * 设置场景key
      *
-     * @param sceneId 场景
+     * @param sceneKey 场景key
      */
-    public void setSceneId(Integer sceneId) {
-        this.sceneId = sceneId;
+    public void setSceneKey(String sceneKey) {
+        this.sceneKey = sceneKey;
     }
 
     /**

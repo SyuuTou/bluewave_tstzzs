@@ -18,10 +18,10 @@ public class UsersPay {
     private Integer userId;
 
     /**
-     * 场景ID，场景包括：购买会员，购买积分
+     * 场景key，场景包括：购买会员，购买积分
      */
-    @Column(name = "scene_id")
-    private Integer sceneId;
+    @Column(name = "scene_key")
+    private String sceneKey;
 
     /**
      * 账单金额
@@ -107,21 +107,21 @@ public class UsersPay {
     }
 
     /**
-     * 获取场景ID，场景包括：购买会员，购买积分
+     * 获取场景key，场景包括：购买会员，购买积分
      *
-     * @return scene_id - 场景ID，场景包括：购买会员，购买积分
+     * @return scene_key - 场景key，场景包括：购买会员，购买积分
      */
-    public Integer getSceneId() {
-        return sceneId;
+    public String getSceneKey() {
+        return sceneKey;
     }
 
     /**
-     * 设置场景ID，场景包括：购买会员，购买积分
+     * 设置场景key，场景包括：购买会员，购买积分
      *
-     * @param sceneId 场景ID，场景包括：购买会员，购买积分
+     * @param sceneKey 场景key，场景包括：购买会员，购买积分
      */
-    public void setSceneId(Integer sceneId) {
-        this.sceneId = sceneId;
+    public void setSceneKey(String sceneKey) {
+        this.sceneKey = sceneKey;
     }
 
     /**

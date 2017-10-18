@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.UsersPayMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.UsersPay" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.UsersPayMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.UsersPay">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="ID" property="id" jdbcType="INTEGER" />
-    <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="scene_id" property="sceneId" jdbcType="INTEGER" />
-    <result column="amount" property="amount" jdbcType="DECIMAL" />
-    <result column="receivable" property="receivable" jdbcType="DECIMAL" />
-    <result column="received" property="received" jdbcType="DECIMAL" />
-    <result column="open_id" property="openId" jdbcType="VARCHAR" />
-    <result column="wx_order_num" property="wxOrderNum" jdbcType="VARCHAR" />
-    <result column="pay_status" property="payStatus" jdbcType="INTEGER" />
-    <result column="pay_detail" property="payDetail" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="scene_key" jdbcType="VARCHAR" property="sceneKey" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="receivable" jdbcType="DECIMAL" property="receivable" />
+    <result column="received" jdbcType="DECIMAL" property="received" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="wx_order_num" jdbcType="VARCHAR" property="wxOrderNum" />
+    <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
+    <result column="pay_detail" jdbcType="VARCHAR" property="payDetail" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
   </resultMap>
 </mapper>
