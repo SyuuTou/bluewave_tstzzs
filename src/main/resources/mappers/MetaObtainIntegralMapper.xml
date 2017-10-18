@@ -14,5 +14,6 @@
     <result column="yn" jdbcType="INTEGER" property="yn" />
     <result column="ratio" jdbcType="REAL" property="ratio" />
     <result column="deliver_num" jdbcType="INTEGER" property="deliverNum" />
+    <result column="projects_type" jdbcType="INTEGER" property="projectsType" />
   </resultMap>
 </mapper>

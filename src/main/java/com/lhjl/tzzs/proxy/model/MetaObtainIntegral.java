@@ -55,6 +55,12 @@ public class MetaObtainIntegral {
     private Integer deliverNum;
 
     /**
+     * 50项目1，非50项目0
+     */
+    @Column(name = "projects_type")
+    private Integer projectsType;
+
+    /**
      * @return ID
      */
     public Integer getId() {
@@ -210,5 +216,23 @@ public class MetaObtainIntegral {
      */
     public void setDeliverNum(Integer deliverNum) {
         this.deliverNum = deliverNum;
+    }
+
+    /**
+     * 获取50项目1，非50项目0
+     *
+     * @return projects_type - 50项目1，非50项目0
+     */
+    public Integer getProjectsType() {
+        return projectsType;
+    }
+
+    /**
+     * 设置50项目1，非50项目0
+     *
+     * @param projectsType 50项目1，非50项目0
+     */
+    public void setProjectsType(Integer projectsType) {
+        this.projectsType = projectsType;
     }
 }
