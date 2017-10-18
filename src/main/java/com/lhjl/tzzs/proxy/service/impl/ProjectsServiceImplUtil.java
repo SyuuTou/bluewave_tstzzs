@@ -158,12 +158,12 @@ public class ProjectsServiceImplUtil {
      * @param froma                       每页记录数
      * @return
      */
-   //@Cacheable(value = "getBaseProjectInfoA", keyGenerator = "wiselyKeyGenerator")
-   @CacheEvict(value = "getBaseProjectInfoA", allEntries=true)
+   @Cacheable(value = "getBaseProjectInfoA", keyGenerator = "wiselyKeyGenerator")
+   //@CacheEvict(value = "getBaseProjectInfoA", allEntries=true)
     public List<Map<String, Object>> getBaseProjectInfoA(String userId, String type, String segmentation,
                                                         String stage, String city,
                                                         String working_background_desc, String educational_background_desc,
-                                                        Integer sizea, Integer froma) {
+                                                        Integer sizea, Integer froma,String endTime,String beginTime) {
         
         String[] segmentations = null;
         String[] stages = null;
@@ -224,7 +224,7 @@ public class ProjectsServiceImplUtil {
 //        } else {
 //            list = projectsMapper.findProjectBySview(userId, types, segmentations, stages, cities, working_background_descs, educational_background_descs, sizea, froma);
 //        }
-        list = projectsMapper.findProjectBySviewA(userId,types,segmentations, stages, cities, working_background_descs, educational_background_descs, sizea, froma);
+        list = projectsMapper.findProjectBySviewA(userId,types,segmentations, stages, cities, working_background_descs, educational_background_descs, sizea, froma,beginTime,endTime);
         return list;
     }
 }
