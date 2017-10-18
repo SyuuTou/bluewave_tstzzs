@@ -25,7 +25,7 @@ public class UserIntegralConsumeDatas {
      * 数据ID
      */
     @Column(name = "datas_id")
-    private Integer datasId;
+    private String datasId;
 
     /**
      * 消费日期
@@ -94,7 +94,7 @@ public class UserIntegralConsumeDatas {
      *
      * @return datas_id - 数据ID
      */
-    public Integer getDatasId() {
+    public String getDatasId() {
         return datasId;
     }
 
@@ -103,7 +103,7 @@ public class UserIntegralConsumeDatas {
      *
      * @param datasId 数据ID
      */
-    public void setDatasId(Integer datasId) {
+    public void setDatasId(String datasId) {
         this.datasId = datasId;
     }
 

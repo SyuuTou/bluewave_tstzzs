@@ -8,8 +8,9 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="scene_key" jdbcType="VARCHAR" property="sceneKey" />
-    <result column="datas_id" jdbcType="INTEGER" property="datasId" />
+    <result column="datas_id" jdbcType="VARCHAR" property="datasId" />
     <result column="consume_date" jdbcType="DATE" property="consumeDate" />
     <result column="user_integral_consume_id" jdbcType="INTEGER" property="userIntegralConsumeId" />
   </resultMap>
+
 </mapper>
