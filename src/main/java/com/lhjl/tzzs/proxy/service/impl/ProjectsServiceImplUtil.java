@@ -47,31 +47,18 @@ public class ProjectsServiceImplUtil {
         String[] cities = null;
         String[] working_background_descs = null;
         String[] educational_background_descs = null;
-
+        int [] types=null;
         if (type != null && !"".equals(type)) {
             if (type.contains("行业指数机构")) {
-                type = "0,1";
-                String[] type2 = type.split(",");
-                int[] types = new int[type2.length];
-                for (int i = 0; i < type2.length; i++) {
-                    types[i] = Integer.parseInt(type2[i]);
-                }
+                types=null;
             }
             if ("50指数机构".equals(type)) {
                 type ="1";
-                String[] type2 = type.split(",");
-                int[] types = new int[type2.length];
+                 String [] type2 = type.split(",");
+                 types = new int[type2.length];
                 for (int i = 0; i < type2.length; i++) {
                     types[i] = Integer.parseInt(type2[i]);
                 }
-            }
-
-        }
-        String[] type2 = type.split(",");
-        int[] types = new int[type2.length];
-        if (type != null && !"".equals(type)) {
-            for (int i = 0; i < type2.length; i++) {
-                types[i] = Integer.parseInt(type2[i]);
             }
         }
 
@@ -170,33 +157,22 @@ public class ProjectsServiceImplUtil {
         String[] cities = null;
         String[] working_background_descs = null;
         String[] educational_background_descs = null;
-        
+        int [] types=null;
         if (type != null && !"".equals(type)) {
                 if (type.contains("行业指数机构")) {
-                    type = "0,1";
-                    String[] type2 = type.split(",");
-                   int[] types = new int[type2.length];
-                    for (int i = 0; i < type2.length; i++) {
-                        types[i] = Integer.parseInt(type2[i]);
-                    }
+                	types=null;
                 }
                 if ("50指数机构".equals(type)) {
                     type ="1";
                     String[] type2 = type.split(",");
-                    int[] types = new int[type2.length];
+                    types = new int[type2.length];
                     for (int i = 0; i < type2.length; i++) {
                         types[i] = Integer.parseInt(type2[i]);
                     }
                 }
 
         }
-        String[] type2 = type.split(",");
-        int[] types = new int[type2.length];
-        if (type != null && !"".equals(type)) {
-              for (int i = 0; i < type2.length; i++) {
-                  types[i] = Integer.parseInt(type2[i]);
-              }
-        }
+
         if (segmentation != null && !"".equals(segmentation)) {
             segmentations = segmentation.split(",");
         }
