@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.conf;
+package com.lhjl.tzzs.proxy.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -60,4 +60,6 @@ public class RedisConfig extends CachingConfigurerSupport{
         template.afterPropertiesSet();
         return template;
     }
+
+
 }
