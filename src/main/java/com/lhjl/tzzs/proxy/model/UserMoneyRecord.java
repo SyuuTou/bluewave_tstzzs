@@ -24,6 +24,9 @@ public class UserMoneyRecord {
     @Column(name = "create_time")
     private Date createTime;
 
+    @Column(name = "user_id")
+    private Integer userId;
+
     /**
      * 获取记录id
      *
@@ -76,5 +79,19 @@ public class UserMoneyRecord {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    /**
+     * @return user_id
+     */
+    public Integer getUserId() {
+        return userId;
+    }
+
+    /**
+     * @param userId
+     */
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }
