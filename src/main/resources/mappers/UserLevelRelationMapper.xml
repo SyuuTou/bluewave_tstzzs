@@ -13,7 +13,9 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="yn" jdbcType="INTEGER" property="yn" />
   </resultMap>
-    <select id="findByMing" parameterType="INTEGER" resultType="java.util.HashMap">
-     SELECT * FROM user_integrals WHERE user_id=#{userId} GROUP BY create_time DESC LIMIT #{beginNum},#{ pageSize};
-    </select>
+  <select id="findByMing" parameterType="INTEGER" resultType="java.util.HashMap" >
+     SELECT * FROM user_integrals WHERE user_id=#{userId} AND scene_key NOT
+     IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
+     GROUP BY create_time DESC LIMIT #{beginNum},#{ pageSize}
+  </select>
 </mapper>

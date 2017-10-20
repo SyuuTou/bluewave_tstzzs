@@ -39,6 +39,17 @@ public class UserLevelDto {
      */
     private String belong;
 
+    /**
+     * 原价
+     * @return
+     */
+    private Integer originalCost;
+
+    /**
+     * 场景key
+     */
+    private String sceneKey;
+
     public String getBelong() {
         return belong;
     }
@@ -93,5 +104,21 @@ public class UserLevelDto {
 
     public void setActualPrice(Integer actualPrice) {
         this.actualPrice = actualPrice;
+    }
+
+    public Integer getOriginalCost() {
+        return originalCost;
+    }
+
+    public void setOriginalCost(Integer originalCost) {
+        this.originalCost = originalCost;
+    }
+
+    public String getSceneKey() {
+        return sceneKey;
+    }
+
+    public void setSceneKey(String sceneKey) {
+        this.sceneKey = sceneKey;
     }
 }

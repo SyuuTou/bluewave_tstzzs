@@ -20,12 +20,12 @@
      SELECT c.level_id FROM user_level_relation c WHERE c.user_id =#{userId} AND c.yn=0
     </select>
     <select id="findByBei" parameterType="INTEGER" resultType="Float" >
-    SELECT m.ratio FROM meta_obtain_integral m WHERE m.user_level=#{leId} AND m.scene_key IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
+        SELECT m.ratio FROM meta_obtain_integral m WHERE m.user_level=#{leId} AND m.scene_key IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
     </select>
-     <select id="findByJinE" parameterType="String" resultType="INTEGER" >
-     SELECT integral FROM meta_obtain_integral WHERE scene_key=#{skey}
+    <select id="findByJinE" parameterType="String" resultType="INTEGER" >
+        SELECT integral FROM meta_obtain_integral WHERE scene_key=#{skey}
     </select>
-     <select id="findByMing" parameterType="INTEGER" resultType="INTEGER" >
-     SELECT * FROM user_integrals WHERE user_id=#{userId} GROUP BY create_time DESC LIMIT #{sizea},#{froma} ;
+    <select id="findByUserLevel" parameterType="INTEGER" resultType="String" >
+      SELECT c.name FROM meta_user_level c WHERE c.ID=#{leId}
     </select>
 </mapper>

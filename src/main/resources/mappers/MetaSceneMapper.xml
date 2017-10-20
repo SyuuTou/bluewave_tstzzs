@@ -11,4 +11,7 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="yn" property="yn" jdbcType="INTEGER" />
   </resultMap>
+  <select id="selectbyDesc"  parameterType="String" resultType="String" >
+    SELECT c.desc FROM meta_scene c WHERE c.key=#{skey}
+  </select>
 </mapper>

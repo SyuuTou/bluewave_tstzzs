@@ -13,7 +13,8 @@ import java.util.Map;
  */
 public interface UserLevelService {
     CommonDto<List<UserLevelDto>> findUserLevelList(String userId);
-    CommonDto<UserLevelDto> findLevelInfo(ActionDto action);
-    CommonDto<String> upLevel(ActionDto action);
-    CommonDto<String> consume(ActionDto action);
+    CommonDto<UserLevelDto> findLevelInfo(String userStr, int levelId);
+    CommonDto<Map<String, Object>> upLevel(String userStr, int levelId);
+    CommonDto<Map<String, Object>> consume(ActionDto action);
+    CommonDto<Map<String, Object>> cancel(ActionDto action);
 }

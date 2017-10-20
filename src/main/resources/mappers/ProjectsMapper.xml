@@ -192,4 +192,11 @@
         </if>
         GROUP BY mf.id LIMIT #{sizea},#{froma}
     </select>
+
+    <!--查询机构类型-->
+    <select id="findIvestmentTypeById" resultType="Integer">
+      SELECT ii.type FROM projects p LEFT JOIN investment_institutions ii ON p.`investment_institutions_id` = ii.`ID`
+      WHERE p.ID = #{projectsId};
+    </select>
+
 </mapper>

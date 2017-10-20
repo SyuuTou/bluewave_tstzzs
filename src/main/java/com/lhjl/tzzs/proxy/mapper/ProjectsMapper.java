@@ -34,6 +34,8 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
                                                  @Param("sizea") Integer sizea,@Param("froma") Integer froma
 
     );
+
+    Integer findIvestmentTypeById(@Param("projectsId") Integer projectsId);
 }
 
 

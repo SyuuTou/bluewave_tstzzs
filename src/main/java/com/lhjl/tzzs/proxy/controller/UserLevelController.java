@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 会员中心
@@ -49,8 +50,10 @@ public class UserLevelController {
     @PostMapping("/buylevel")
     public CommonDto<UserLevelDto> userLevelForBuy(@RequestBody ActionDto body){
         CommonDto<UserLevelDto> result = new CommonDto<UserLevelDto>();
+        String userStr = body.getUserId();
+        int levelId = body.getLevelId();
         try{
-            result = userLevelService.findLevelInfo(body);
+            result = userLevelService.findLevelInfo(userStr, levelId);
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("查询会员信息异常");
@@ -65,13 +68,15 @@ public class UserLevelController {
      * @return
      */
     @PostMapping("/uplevel")
-    public CommonDto<String> upLevel(@RequestBody ActionDto body){
-        CommonDto<String> result = new CommonDto<String>();
+    public CommonDto<Map<String, Object>> upLevel(@RequestBody ActionDto body){
+        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+        String userStr = body.getUserId();
+        int levelId = body.getLevelId();
         try{
-            result = userLevelService.upLevel(body);
+            result = userLevelService.upLevel(userStr, levelId);
         }catch(Exception e){
             result.setStatus(501);
-            result.setMessage("查询会员信息异常");
+            result.setMessage("升级会员异常");
             logger.error(e.getMessage(),e.fillInStackTrace());
         }
         return result;
@@ -83,13 +88,31 @@ public class UserLevelController {
      * @return
      */
     @PostMapping("/consume")
-    public CommonDto<String> consumeCoin(@RequestBody ActionDto body){
-        CommonDto<String> result = new CommonDto<String>();
+    public CommonDto<Map<String, Object>> consumeCoin(@RequestBody ActionDto body){
+        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
         try{
             result = userLevelService.consume(body);
         }catch(Exception e){
             result.setStatus(501);
-            result.setMessage("查询会员信息异常");
+            result.setMessage("会员消费异常");
+            logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
+
+    /**
+     * 用户取消消费提示
+     * @param body 请求对象
+     * @return
+     */
+    @PostMapping("/cancel")
+    public CommonDto<Map<String, Object>> cancelTips(@RequestBody ActionDto body){
+        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+        try{
+            result = userLevelService.cancel(body);
+        }catch(Exception e){
+            result.setStatus(501);
+            result.setMessage("用户取消消费提示异常");
             logger.error(e.getMessage(),e.fillInStackTrace());
         }
         return result;

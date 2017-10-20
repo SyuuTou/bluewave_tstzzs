@@ -21,6 +21,42 @@ public class ActionDto {
      */
     private Integer levelId;
 
+    /**
+     * 项目ID
+     * @return
+     */
+    private Integer projectsId;
+
+    /**
+     * 机构ID（多个）
+     */
+    private String investmentIds;
+
+    /**
+     * 融资阶段
+     */
+    private String roundName;
+
+    /**
+     * 所属领域
+     */
+    private String industryName;
+
+    /**
+     * 所在城市
+     */
+    private String cityName;
+
+    /**
+     * 工作背景
+     */
+    private String educationName;
+
+    /**
+     * 毕业院校
+     */
+    private String workName;
+
     public String getUserId() {
         return userId;
     }
@@ -43,5 +79,61 @@ public class ActionDto {
 
     public void setLevelId(Integer levelId) {
         this.levelId = levelId;
+    }
+
+    public Integer getProjectsId() {
+        return projectsId;
+    }
+
+    public void setProjectsId(Integer projectsId) {
+        this.projectsId = projectsId;
+    }
+
+    public String getInvestmentIds() {
+        return investmentIds;
+    }
+
+    public void setInvestmentIds(String investmentIds) {
+        this.investmentIds = investmentIds;
+    }
+
+    public String getRoundName() {
+        return roundName;
+    }
+
+    public void setRoundName(String roundName) {
+        this.roundName = roundName;
+    }
+
+    public String getIndustryName() {
+        return industryName;
+    }
+
+    public void setIndustryName(String industryName) {
+        this.industryName = industryName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getEducationName() {
+        return educationName;
+    }
+
+    public void setEducationName(String educationName) {
+        this.educationName = educationName;
+    }
+
+    public String getWorkName() {
+        return workName;
+    }
+
+    public void setWorkName(String workName) {
+        this.workName = workName;
     }
 }

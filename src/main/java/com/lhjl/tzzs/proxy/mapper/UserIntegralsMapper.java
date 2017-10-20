@@ -10,8 +10,10 @@ import com.lhjl.tzzs.proxy.model.UserIntegrals;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 @Mapper
 public interface UserIntegralsMapper extends OwnerMapper<UserIntegrals> {
-	
+
 	Integer findIntegralsZ(@Param("userId") Integer userId);
 	Integer findIntegralsX(@Param("userId") Integer userId);
+	String findBySkey(@Param("leId") Integer leId);
+	Integer findByQnum (@Param("leId") Integer leId);
 	
-	}
+}
