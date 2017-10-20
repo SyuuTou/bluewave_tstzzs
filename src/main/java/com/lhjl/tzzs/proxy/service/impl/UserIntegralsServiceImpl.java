@@ -61,7 +61,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		return result;
 	}
 	/**
-	 * 查询充值金币的接口
+	 * 页面显示固定金额
+	 * @param body
+	 * @return
 	 */
 	@Override
 	public CommonDto<Map<String,Object>> findIntegralsZeng(ZengDto body) {
@@ -307,7 +309,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		return result;
 	}
 	/**
-	 * 其他金额充值接口
+	 * 其他金额充值页面显示
 	 */
 	public CommonDto<Map<String,Object>> findIntegralsQzeng(QzengDto body) {
 		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
@@ -368,7 +370,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		return result;
 	}
 	/**
-	 * 查询细节接口
+	 * 查询交易明细接口
 	 */
 	public  CommonDto<List<Map<String, Object>>> findIntegralsDetailed(String uuids,Integer pageNum,Integer pageSize) {
 		CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
@@ -466,13 +468,14 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		return result;
 	}
 	/**
-	 * 购买金币与赠送金币记录
+	 * 购买金币后插入金币记录表记录
+	 * uuids：用户的uuid
+	 * qj:支付的金额
 	 */
 	@Transactional
-	public CommonDto<String> insertGold(QzengDto body) {
+	public CommonDto<String> insertGold(String uuids,Integer qj) {
 		CommonDto<String> result = new CommonDto<String>();
 		Map<String,Integer> map =new HashMap<String,Integer>();
-		String uuids = body.getUuids();
 		Integer userId= usersMapper.findByUuid(uuids);
 		if(userId !=0 && userId !=null){
 			Integer leId =usersMapper.findByUserid(userId);
@@ -481,7 +484,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				UserIntegrals userIntegrals =new UserIntegrals();
 				userIntegrals.setUserId(userId);
 				userIntegrals.setSceneKey("xHwofbNs");
-				userIntegrals.setIntegralNum(body.getQj());
+				userIntegrals.setIntegralNum(qj);
 				userIntegrals.setCreateTime(new Date());
 				Calendar calendar = new GregorianCalendar();
 				calendar.setTime(new Date());
@@ -500,7 +503,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals2.setUserId(userId);
 				String sKey = userIntegralsMapper.findBySkey(leId);
 				userIntegrals2.setSceneKey(sKey);
-				Integer snum =(int)(body.getQj()*bei);
+				Integer snum =(int)(qj*bei);
 				userIntegrals2.setIntegralNum(snum);
 				userIntegrals2.setCreateTime(new Date());
 				MetaObtainIntegral metaObtainIntegral1 = new MetaObtainIntegral();
@@ -518,7 +521,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				UserIntegrals userIntegrals =new UserIntegrals();
 				userIntegrals.setUserId(userId);
 				userIntegrals.setSceneKey("xHwofbNs");
-				userIntegrals.setIntegralNum(body.getQj());
+				userIntegrals.setIntegralNum(qj);
 				userIntegrals.setCreateTime(new Date());
 				//时间场景
 				Calendar calendar = new GregorianCalendar();
@@ -535,7 +538,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals2.setUserId(userId);
 				String sKey = userIntegralsMapper.findBySkey(leId+1);
 				userIntegrals2.setSceneKey(sKey);
-				Integer snum =(int)(body.getQj()*bei);
+				Integer snum =(int)(qj*bei);
 				userIntegrals2.setIntegralNum(snum);
 				userIntegrals2.setCreateTime(new Date());
 				//时间场景
@@ -578,7 +581,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		}
 		return result;
 	}
-
+/**
+ * 查询页面固定金额
+ */
 	@Override
 	public CommonDto <List<MetaObtainIntegral>>findMoney(){
 		CommonDto <List<MetaObtainIntegral>> result = new CommonDto <List<MetaObtainIntegral>>();

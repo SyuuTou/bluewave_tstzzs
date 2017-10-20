@@ -39,7 +39,7 @@ public class UserIntegralsController {
 	@Resource
 	private UserIntegralsService userIntegralsService;
 	/**
-	 * 查询余额
+	 * 查询余额接口
 	 * @param body
 	 * @return
 	 */
@@ -58,7 +58,7 @@ public class UserIntegralsController {
 		return result;
 	}
 	/**
-	 * 查询充值金币数量
+	 * 页面显示固定金额
 	 * @param body
 	 * @return
 	 */
@@ -80,7 +80,7 @@ public class UserIntegralsController {
 		return result;
 	}
 	/**
-	 * 其他金额的算法
+	 * 页面显示其他金额的算法
 	 * @param body
 	 * @return
 	 */
@@ -102,7 +102,7 @@ public class UserIntegralsController {
 		return result;
 	}
 	/**
-	 * 查找明细
+	 * 查找交易明细
 	 * @param body
 	 * @return
 	 */
@@ -133,46 +133,6 @@ public class UserIntegralsController {
 		}
 		return result;
 	}
-	/**
-	 * 购买金币的赠送金币记录
-	 * @param body
-	 * @return
-	 */
-	@PostMapping("integrals/save")
-	public CommonDto<String> insertGold(@RequestBody QzengDto body){
-		CommonDto<String> result = new CommonDto<String>();
-		//测试数据
-		try{
-			userIntegralsService.insertGold(body);
-			if(result.getStatus() == null){
-				result.setStatus(200);
-				result.setMessage("success");
-			}
-		} catch (Exception e) {
-			result.setStatus(5101);
-			result.setMessage("记录保存失败");
-			log.error(e.getMessage());
-		}
-		return result;
-	}
-	@PostMapping("member/save")
-	public CommonDto<String> insertMember1(@RequestBody MemberDto body){
-		CommonDto<String> result = new CommonDto<String>();
-		//测试数据
-		try{
-			result = userIntegralsService.insertMember1(body);
-			if(result.getStatus() == null){
-				result.setStatus(200);
-				result.setMessage("success");
-			}
-		} catch (Exception e) {
-			result.setStatus(5101);
-			result.setMessage("您已经注册过");
-			log.error(e.getMessage());
-		}
-		return result;
-	}
-
 	/**
 	 * 查询页面金额
 	 * @return
