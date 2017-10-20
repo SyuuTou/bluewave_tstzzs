@@ -38,6 +38,8 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	private MetaSceneMapper metaSceneMapper;
 	@Resource
 	private MetaObtainIntegralMapper metaObtainIntegralMapper;
+	@Resource
+	private  UserMoneyRecordMapper userMoneyRecordMapper;
 
 	/**
 	 * 查询余额的接口
@@ -48,7 +50,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		Map<String,Integer> map =new HashMap<String,Integer>();
 		String uuids = body.getUuids();
 		Integer userId= usersMapper.findByUuid(uuids);
-		if(userId !=0 && userId !=null){
+		if(userId !=null){
 			Integer z =userIntegralsMapper.findIntegralsZ(userId);
 			Integer x =userIntegralsMapper.findIntegralsX(userId);
 			int y=z+x;
@@ -72,10 +74,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		String uuids = body.getUuids();
 		Integer userId= usersMapper.findByUuid(uuids);
 		if(userId !=0 && userId !=null){
+			//获取用户id
 			Integer leId =usersMapper.findByUserid(userId);
 			if(leId != null){
 				Float bei =usersMapper.findByBei(leId);
 				String skey =body.getsKey();
+				//下个等级
 				leId=leId+1;
 				Float xbei =usersMapper.findByBei(leId);
 				Integer dnum = usersMapper.findByJinE(skey);
@@ -86,13 +90,18 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("hnum",(int) ((bei+1)*dnum));
 						if(leId<5){
 							String userName = usersMapper.findByUserLevel(leId);
-
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
 							result.setStatus(5000);
 							result.setMessage("您已经是VIP投资人");
 						}
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 
 					}
 					if("wvGw5Fh5".equals(skey)){
@@ -107,6 +116,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 							result.setStatus(5000);
 							result.setMessage("您已经是VIP投资人");
 						}
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 
 
 					}
@@ -122,6 +137,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 							result.setStatus(5000);
 							result.setMessage("您已经是VIP投资人");
 						}
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 
 
 					}
@@ -137,6 +158,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 							result.setStatus(5000);
 							result.setMessage("您已经是VIP投资人");
 						}
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 
 
 					}
@@ -152,6 +179,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 							result.setStatus(5000);
 							result.setMessage("您已经是VIP投资人");
 						}
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 
 
 					}
@@ -167,6 +200,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 							result.setStatus(5000);
 							result.setMessage("您已经是VIP投资人");
 						}
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 
 
 					}
@@ -182,6 +221,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 							result.setStatus(5000);
 							result.setMessage("您已经是VIP投资人");
 						}
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 
 
 					}
@@ -197,6 +242,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 							result.setStatus(5000);
 							result.setMessage("您已经是VIP投资人");
 						}
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 					}
 				}
 			}else{
@@ -215,6 +266,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						Float xbei =usersMapper.findByBei(leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 					}
 					if("wvGw5Fh5".equals(skey)){
 						map.put("dnum", (int) dnum);
@@ -226,6 +283,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						Float xbei =usersMapper.findByBei(leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 
 					}
 					if("watiSqHQ".equals(skey)){
@@ -238,6 +301,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						Float xbei =usersMapper.findByBei(leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 
 					}
 					if("yMQ8UfyU".equals(skey)){
@@ -250,6 +319,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						Float xbei =usersMapper.findByBei(leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 
 					}
 					if("gLzc1hRF".equals(skey)){
@@ -262,6 +337,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						Float xbei =usersMapper.findByBei(leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 
 					}
 					if("wvTAMN5e".equals(skey)){
@@ -274,6 +355,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						Float xbei =usersMapper.findByBei(leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 					}
 					if("6IigxtMh".equals(skey)){
 						map.put("dnum", (int) dnum);
@@ -285,6 +372,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						Float xbei =usersMapper.findByBei(leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 					}
 					if("tfoguHA1".equals(skey)){
 						map.put("dnum", dnum);
@@ -296,6 +389,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						Float xbei =usersMapper.findByBei(leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
+						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+						userMoneyRecord.setCreateTime(new Date());
+						userMoneyRecord.setMoney(dnum);
+						userMoneyRecord.setUserId(userId);
+						userMoneyRecordMapper.insert(userMoneyRecord);
+						map.put("Money_ID",userMoneyRecord.getId());
 					}
 				}
 
@@ -337,6 +436,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						result.setStatus(5000);
 						result.setMessage("您已经是VIP投资人");
 					}
+					UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+					userMoneyRecord.setCreateTime(new Date());
+					userMoneyRecord.setMoney(dnum);
+					userMoneyRecord.setUserId(userId);
+					userMoneyRecordMapper.insert(userMoneyRecord);
+					map.put("Money_ID",userMoneyRecord.getId());
 				}
 				else{
 					result.setStatus(5019);
@@ -355,6 +460,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					Float xbei =usersMapper.findByBei(leId);
 					map.put("xnum",(int) (xbei*dnum));
 					map.put("userName",userName);
+					UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+					userMoneyRecord.setCreateTime(new Date());
+					userMoneyRecord.setMoney(dnum);
+					userMoneyRecord.setUserId(userId);
+					userMoneyRecordMapper.insert(userMoneyRecord);
+					map.put("Money_ID",userMoneyRecord.getId());
 
 				}
 				else{
