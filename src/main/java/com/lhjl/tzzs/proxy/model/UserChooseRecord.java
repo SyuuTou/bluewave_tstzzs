@@ -18,8 +18,7 @@ public class UserChooseRecord {
     /**
      * 所选择数据
      */
-    @Column(name = "datas_id")
-    private String datasId;
+    private String datas;
 
     /**
      * 选择场景
@@ -68,19 +67,19 @@ public class UserChooseRecord {
     /**
      * 获取所选择数据
      *
-     * @return datas_id - 所选择数据
+     * @return datas - 所选择数据
      */
-    public String getDatasId() {
-        return datasId;
+    public String getDatas() {
+        return datas;
     }
 
     /**
      * 设置所选择数据
      *
-     * @param datasId 所选择数据
+     * @param datas 所选择数据
      */
-    public void setDatasId(String datasId) {
-        this.datasId = datasId;
+    public void setDatas(String datas) {
+        this.datas = datas;
     }
 
     /**
