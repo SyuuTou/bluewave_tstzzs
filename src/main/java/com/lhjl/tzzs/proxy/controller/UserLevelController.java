@@ -108,8 +108,10 @@ public class UserLevelController {
     @PostMapping("/cancel")
     public CommonDto<Map<String, Object>> cancelTips(@RequestBody ActionDto body){
         CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+        String userId = body.getUserId();
+        String sceneKey = body.getSceneKey();
         try{
-            result = userLevelService.cancel(body);
+            result = userLevelService.cancel(userId, sceneKey);
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("用户取消消费提示异常");

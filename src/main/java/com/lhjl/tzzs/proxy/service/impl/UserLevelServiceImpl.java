@@ -62,6 +62,7 @@ public class UserLevelServiceImpl implements UserLevelService {
 
     /**
      * 查找会员等级信息
+     * @param userId 用户ID
      * @return
      */
     @Override
@@ -911,14 +912,15 @@ public class UserLevelServiceImpl implements UserLevelService {
 
     /**
      * 用户取消消费提示
-     * @param action 请求对象
+     * @param userId 用户ID
+     * @param sceneKey 场景KEY
      * @return
      */
     @Override
-    public CommonDto<Map<String, Object>> cancel(ActionDto action) {
+    public CommonDto<Map<String, Object>> cancel(String userId, String sceneKey) {
         CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
         //获取本系统userId
-        Integer localUserId = this.getLocalUserId(action.getUserId());
+        Integer localUserId = this.getLocalUserId(userId);
         if(localUserId == null){
             result.setStatus(301);
             result.setMessage("当前用户信息无效");
@@ -927,7 +929,7 @@ public class UserLevelServiceImpl implements UserLevelService {
 
         UserScene userScene = new UserScene();
         userScene.setUserId(localUserId);
-        userScene.setSceneKey(action.getSceneKey());
+        userScene.setSceneKey(sceneKey);
         userScene.setYn(0);
         userScene = userSceneMapper.selectOne(userScene);
         if(userScene != null){
@@ -938,7 +940,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             //插入取消操作
             UserScene newUserScene = new UserScene();
             newUserScene.setUserId(localUserId);
-            newUserScene.setSceneKey(action.getSceneKey());
+            newUserScene.setSceneKey(sceneKey);
             newUserScene.setFlag(1);
             newUserScene.setYn(0);
             userSceneMapper.insert(newUserScene);
