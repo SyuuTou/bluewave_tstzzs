@@ -48,8 +48,10 @@ public class UserIntegralsController {
 		CommonDto<Map<String, Integer>> result = new CommonDto<Map<String, Integer>>();
 		try {
 			result =userIntegralsService.findIntegralsY(body);
-			result.setStatus(200);
-			result.setMessage("success");
+			if(result.getStatus() == null){
+				result.setStatus(200);
+				result.setMessage("success");
+			}
 		} catch (Exception e) {
 			result.setStatus(5101);
 			result.setMessage("项目显示页面异常，请稍后再试");
