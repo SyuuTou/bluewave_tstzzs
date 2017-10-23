@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -82,7 +83,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				//下个等级
 				leId=leId+1;
 				Float xbei =usersMapper.findByBei(leId);
-				Integer dnum = usersMapper.findByJinE(skey);
+				double dnum = usersMapper.findByJinE(skey);
 				if(skey !=null){
 					if("okuF3LQg".equals(skey)){
 						map.put("dnum",dnum);
@@ -96,9 +97,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 							result.setStatus(5000);
 							result.setMessage("您已经是VIP投资人");
 						}
+
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -118,7 +122,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						}
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -139,7 +145,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						}
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -160,7 +168,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						}
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -181,7 +191,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						}
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -202,7 +214,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						}
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -223,7 +237,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						}
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -244,7 +260,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						}
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -268,7 +286,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -285,7 +305,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -303,7 +325,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -321,7 +345,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -339,7 +365,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -357,7 +385,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -374,7 +404,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -391,7 +423,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 						userMoneyRecord.setCreateTime(new Date());
-						userMoneyRecord.setMoney(dnum);
+						BigDecimal jnum =new BigDecimal(dnum);
+						userMoneyRecord.setMoney(jnum );
+						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
@@ -438,7 +472,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					}
 					UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 					userMoneyRecord.setCreateTime(new Date());
-					userMoneyRecord.setMoney(dnum);
+					BigDecimal jnum =new BigDecimal(dnum);
+					userMoneyRecord.setMoney(jnum );
+					userMoneyRecord.setSceneKey("");
 					userMoneyRecord.setUserId(userId);
 					userMoneyRecordMapper.insert(userMoneyRecord);
 					map.put("Money_ID",userMoneyRecord.getId());
@@ -462,7 +498,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					map.put("userName",userName);
 					UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 					userMoneyRecord.setCreateTime(new Date());
-					userMoneyRecord.setMoney(dnum);
+					BigDecimal jnum =new BigDecimal(dnum);
+					userMoneyRecord.setMoney(jnum );
+					userMoneyRecord.setSceneKey("");
 					userMoneyRecord.setUserId(userId);
 					userMoneyRecordMapper.insert(userMoneyRecord);
 					map.put("Money_ID",userMoneyRecord.getId());
