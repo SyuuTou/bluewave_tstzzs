@@ -8,5 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface UserLevelRelationMapper extends OwnerMapper<UserLevelRelation> {
-    List<Map<String, Object>> findByMing(@Param("userId") Integer userId, @Param("beginNum") Integer beginNum, @Param("pageSize") Integer pageSize);
+	Integer findByUserIdLeid(@Param("userId") Integer userId);
+	List<Map<String, Object>> findByMing(@Param("userId") Integer userId, @Param("beginNum") Integer beginNum, @Param("pageSize") Integer pageSize);
 }
