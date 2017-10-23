@@ -12,5 +12,5 @@ public interface UsersMapper extends OwnerMapper<Users> {
 	Float findByBei(@Param("leId") Integer leId);
 	Integer findByJinE(@Param("skey") String skey);
 	String findByUserLevel(@Param("leId") Integer leId);
-	 
+
 }
