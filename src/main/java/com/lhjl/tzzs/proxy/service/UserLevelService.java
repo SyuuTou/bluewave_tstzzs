@@ -49,4 +49,12 @@ public interface UserLevelService {
      * @return
      */
     CommonDto<Map<String, Object>> cancel(String userId, String sceneKey);
+
+    /**
+     * 支付完成之后调用
+     * @param userId 用户ID（本系统）
+     * @param status 支付状态
+     * @return
+     */
+    CommonDto<Map<String, Object>> changeLevel(int userId, int status);
 }

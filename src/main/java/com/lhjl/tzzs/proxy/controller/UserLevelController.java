@@ -120,4 +120,24 @@ public class UserLevelController {
         return result;
     }
 
+
+    /**
+     * 测试支付完成之后的流程
+     * @param body
+     * @return
+     */
+//    @PostMapping("/payafter")
+//    public CommonDto<Map<String, Object>> testPayAfter(@RequestBody Map<String, Object> body){
+//        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+//        int userId = (int)body.get("userId");
+//        int status = (int)body.get("status");
+//        try{
+//            result = userLevelService.changeLevel(userId, status);
+//        }catch(Exception e){
+//            result.setStatus(501);
+//            result.setMessage("用户取消消费提示异常");
+//            logger.error(e.getMessage(),e.fillInStackTrace());
+//        }
+//        return result;
+//    }
 }

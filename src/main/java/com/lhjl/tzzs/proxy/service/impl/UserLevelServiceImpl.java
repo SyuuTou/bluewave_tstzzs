@@ -230,28 +230,9 @@ public class UserLevelServiceImpl implements UserLevelService {
         String sceneKey = this.getUserLevelKey(levelId);
         userLevelDto.setSceneKey(sceneKey);
 
-
-        //更新用户会员记录表
-        if(records.size() > 0){
-            if(levelId > records.get(0).getLevelId()){
-                //将之前的等级记录失效
-                UserLevelRelation old = records.get(0);
-                old.setYn(0);
-                userLevelRelationMapper.updateByPrimaryKey(old);
-            }else if(levelId == records.get(0).getLevelId()){
-                result.setStatus(202);
-                result.setMessage("该用户已是当前等级，无需升级");
-                return result;
-            }else if(levelId < records.get(0).getLevelId()){
-                result.setStatus(203);
-                result.setMessage("该用户已有更高等级，无需升级");
-                return result;
-            }
-        }
-
         //插入新的等级记录信息
         UserLevelRelation newOne = new UserLevelRelation();
-        newOne.setYn(1);
+        newOne.setYn(0);
         newOne.setUserId(localUserId);
         newOne.setLevelId(levelId);
         Date now = new Date();
@@ -287,29 +268,51 @@ public class UserLevelServiceImpl implements UserLevelService {
      * @return
      */
     @Transactional
+    @Override
     public CommonDto<Map<String, Object>> changeLevel(int userId, int status) {
         CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
-        //更新会员等级
-        UserLevelRelation userLevelRelation = new UserLevelRelation();
-        userLevelRelation.setUserId(userId);
-        userLevelRelation.setYn(1);
-        List<UserLevelRelation> records = userLevelRelationMapper.select(userLevelRelation);
-        //更新用户会员记录表
-        if(records.size() > 0){
-            //更新购买状态
-            UserLevelRelation old = records.get(0);
-            old.setStatus(status);
-            userLevelRelationMapper.updateByPrimaryKey(old);
+        //支付成功
+        if(status == 1){
+            //更新会员等级
+            UserLevelRelation userLevelRelation = new UserLevelRelation();
+            userLevelRelation.setUserId(userId);
+            userLevelRelation.setYn(1);
+            userLevelRelation.setStatus(1);
+            List<UserLevelRelation> records = userLevelRelationMapper.select(userLevelRelation);
 
-            //若支付成功，更新金币记录表
-            if(status == 1){
-                String sceneKeyInsert = this.getUserLevelKey(old.getLevelId());
-//            this.insertMember(userId, sceneKeyInsert, levelId);
+            if(records.size() > 0){
+                //将之前的等级记录失效
+                UserLevelRelation old = records.get(0);
+                old.setYn(0);
+                userLevelRelationMapper.updateByPrimaryKey(old);
+            }
+
+            //更新新的等级记录信息
+            Example example = new Example(UserLevelRelation.class);
+            example.and().andEqualTo("userId", userId).andEqualTo("yn", 0).andEqualTo("status", 0);
+            example.setOrderByClause("create_time desc");
+            List<UserLevelRelation> olds = userLevelRelationMapper.selectByExample(example);
+            if(olds.size() > 0){
+                UserLevelRelation old = olds.get(0);
+                old.setYn(1);
+                old.setStatus(status);
+                userLevelRelationMapper.updateByPrimaryKey(old);
+                //更新用户金币
+                String sceneKey = this.getUserLevelKey(old.getLevelId());
+                this.insertMemberChange(userId, sceneKey);
             }
         }else{
-            result.setStatus(301);
-            result.setMessage("用户会员等级更新失败，未找到会员升级记录");
-            return result;
+            //更新新的等级记录信息
+            Example example = new Example(UserLevelRelation.class);
+            example.and().andEqualTo("userId", userId).andEqualTo("yn", 0).andEqualTo("status", 0);
+            example.setOrderByClause("create_time desc");
+            List<UserLevelRelation> olds = userLevelRelationMapper.selectByExample(example);
+            if(olds.size() > 0){
+                UserLevelRelation old = olds.get(0);
+                old.setYn(0);
+                old.setStatus(status);
+                userLevelRelationMapper.updateByPrimaryKey(old);
+            }
         }
 
         result.setStatus(200);
@@ -1179,7 +1182,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         }
         return result;
     }
-    
+
     /**
      * 购买会员的金币记录表
      */

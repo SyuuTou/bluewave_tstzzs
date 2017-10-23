@@ -158,4 +158,24 @@ public class UserIntegralsController {
 
 	}
 
+//	@PostMapping("integrals/save")
+//	public CommonDto<String> insertGold(@RequestBody QzengDto body){
+//		CommonDto<String> result = new CommonDto<String>();
+//		String uuids = body.getUuids();
+//		Integer qj = body.getQj();
+//		try {
+//			result =userIntegralsService.insertGold(uuids, qj);
+//			if(result.getStatus() == null){
+//				result.setStatus(200);
+//				result.setMessage("success");
+//			}
+//		} catch (Exception e) {
+//			result.setStatus(5101);
+//			result.setMessage("显示页面异常，请稍后再试");
+//			log.error(e.getMessage());
+//		}
+//		return result;
+//
+//	}
+
 }
