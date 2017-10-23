@@ -622,7 +622,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	 * qj:支付的金额
 	 */
 	@Transactional
-	public CommonDto<String> insertGold(String uuids,Integer qj) {
+	public CommonDto<String> insertGold(String uuids,Integer qj,String skey) {
 		CommonDto<String> result = new CommonDto<String>();
 		Map<String,Integer> map =new HashMap<String,Integer>();
 		Integer userId= usersMapper.findByUuid(uuids);
@@ -632,7 +632,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				Float bei =usersMapper.findByBei(leId);
 				UserIntegrals userIntegrals =new UserIntegrals();
 				userIntegrals.setUserId(userId);
-				userIntegrals.setSceneKey("xHwofbNs");
+				userIntegrals.setSceneKey(skey);
 				userIntegrals.setIntegralNum(qj);
 				userIntegrals.setCreateTime(new Date());
 				Calendar calendar = new GregorianCalendar();
@@ -640,7 +640,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 
 				//获取该场景配置信息
 				MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
-				metaObtainIntegral.setSceneKey("xHwofbNs");
+				metaObtainIntegral.setSceneKey(skey);
 				metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
 				calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral.getPeriod());
 				Date end = calendar.getTime();
@@ -669,13 +669,13 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				Float bei =usersMapper.findByBei(leId+1);
 				UserIntegrals userIntegrals =new UserIntegrals();
 				userIntegrals.setUserId(userId);
-				userIntegrals.setSceneKey("xHwofbNs");
+				userIntegrals.setSceneKey(skey);
 				userIntegrals.setIntegralNum(qj);
 				userIntegrals.setCreateTime(new Date());
 				//时间场景
 				Calendar calendar = new GregorianCalendar();
 				MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
-				metaObtainIntegral.setSceneKey("xHwofbNs");
+				metaObtainIntegral.setSceneKey(skey);
 				metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
 				calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral.getPeriod());
 				Date end = calendar.getTime();
