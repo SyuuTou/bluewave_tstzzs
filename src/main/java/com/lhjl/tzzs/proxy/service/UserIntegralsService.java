@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -35,12 +36,13 @@ public interface UserIntegralsService {
 	 */
 	CommonDto<List<Map<String, Object>>>findIntegralsDetailed(String uuids,Integer pageNum,Integer pageSize);
 	/**
-	 * 购买金币产生金币记录表
-	 * @param qj
-	 * @param uuids
-	 * @return
+	 * 购买金币支付成功后插入金币记录表数据接口
+	 * service接口：UserIntegralsService
+	 * 方法名：insertGold
+	 * 用户的uuid： uuids
+	 * 支付的金额：qj
 	 */
-	CommonDto<String> insertGold(String uuids,Integer qj);
+	CommonDto<String> insertGold(String uuids,BigDecimal qj);
 	/**
 	 * 生成会员的接口
 	 * @param body

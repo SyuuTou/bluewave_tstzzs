@@ -618,12 +618,15 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		return result;
 	}
 	/**
-	 * 购买金币后插入金币记录表记录
-	 * uuids：用户的uuid
-	 * qj:支付的金额
+	 * 购买金币支付成功后插入金币记录表数据接口
+	 * service接口：UserIntegralsService
+	 * 方法名：insertGold
+	 * 用户的uuid： uuids
+	 * 支付的金额：qj
 	 */
 	@Transactional
-	public CommonDto<String> insertGold(String uuids,Integer qj) {
+	@Override
+	public CommonDto<String> insertGold(String uuids,BigDecimal qj) {
 		CommonDto<String> result = new CommonDto<String>();
 		Map<String,Integer> map =new HashMap<String,Integer>();
 		Integer userId= usersMapper.findByUuid(uuids);
@@ -634,7 +637,8 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				UserIntegrals userIntegrals =new UserIntegrals();
 				userIntegrals.setUserId(userId);
 				userIntegrals.setSceneKey("xHwofbNs");
-				userIntegrals.setIntegralNum(qj);
+				Integer jb=qj.intValue();
+				userIntegrals.setIntegralNum(jb);
 				userIntegrals.setCreateTime(new Date());
 				Calendar calendar = new GregorianCalendar();
 				calendar.setTime(new Date());
@@ -653,7 +657,8 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals2.setUserId(userId);
 				String sKey = userIntegralsMapper.findBySkey(leId);
 				userIntegrals2.setSceneKey(sKey);
-				Integer snum =(int)(qj*bei);
+				jb=qj.intValue();
+				Integer snum =(int)(jb*bei);
 				userIntegrals2.setIntegralNum(snum);
 				userIntegrals2.setCreateTime(new Date());
 				MetaObtainIntegral metaObtainIntegral1 = new MetaObtainIntegral();
@@ -671,7 +676,8 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				UserIntegrals userIntegrals =new UserIntegrals();
 				userIntegrals.setUserId(userId);
 				userIntegrals.setSceneKey("xHwofbNs");
-				userIntegrals.setIntegralNum(qj);
+				Integer jb=qj.intValue();
+				userIntegrals.setIntegralNum(jb);
 				userIntegrals.setCreateTime(new Date());
 				//时间场景
 				Calendar calendar = new GregorianCalendar();
@@ -688,7 +694,8 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals2.setUserId(userId);
 				String sKey = userIntegralsMapper.findBySkey(leId+1);
 				userIntegrals2.setSceneKey(sKey);
-				Integer snum =(int)(qj*bei);
+				jb=qj.intValue();
+				Integer snum =(int)(jb*bei);
 				userIntegrals2.setIntegralNum(snum);
 				userIntegrals2.setCreateTime(new Date());
 				//时间场景
