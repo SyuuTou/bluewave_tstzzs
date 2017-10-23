@@ -187,7 +187,7 @@ public class UserLevelServiceImpl implements UserLevelService {
 
         //获取当前用户拥有的会员信息
         example = new Example(UserLevelRelation.class);
-        example.and().andEqualTo("userId", localUserId).andEqualTo("yn", 0);
+        example.and().andEqualTo("userId", localUserId).andEqualTo("yn", 1).andEqualTo("status", 1);
         List<UserLevelRelation> records = userLevelRelationMapper.selectByExample(example);
         if(records.size() > 0){
             if(levelId == records.get(0).getLevelId()){
@@ -230,47 +230,13 @@ public class UserLevelServiceImpl implements UserLevelService {
         String sceneKey = this.getUserLevelKey(levelId);
         userLevelDto.setSceneKey(sceneKey);
 
-        result.setStatus(200);
-        result.setMessage("会员信息查询成功");
-        result.setData(userLevelDto);
-        return result;
-    }
-
-    /**
-     * 会员升级
-     * @param userStr 用户ID（字符串）
-     * @param levelId 要升级的会员等级
-     * @return
-     */
-    @Transactional
-    @Override
-    public CommonDto<Map<String, Object>> upLevel(String userStr, int levelId) {
-        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
-        Integer localUserId = this.getLocalUserId(userStr);
-        if(localUserId == null){
-            result.setStatus(201);
-            result.setMessage("当前用户信息无效");
-            return result;
-        }
-
-        //获取当前用户拥有的会员信息
-//        Example example = new Example(UserLevelRelation.class);
-//        example.and().andEqualTo("userId", localUserId).andEqualTo("yn", 0);
-        UserLevelRelation userLevelRelation = new UserLevelRelation();
-        userLevelRelation.setUserId(localUserId);
-        userLevelRelation.setYn(0);
-        List<UserLevelRelation> records = userLevelRelationMapper.select(userLevelRelation);
-
-        //更新金币记录表
-        String sceneKeyInsert = this.getUserLevelKey(levelId);
-        this.insertMember(localUserId, sceneKeyInsert, levelId);
 
         //更新用户会员记录表
         if(records.size() > 0){
             if(levelId > records.get(0).getLevelId()){
                 //将之前的等级记录失效
                 UserLevelRelation old = records.get(0);
-                old.setYn(1);
+                old.setYn(0);
                 userLevelRelationMapper.updateByPrimaryKey(old);
             }else if(levelId == records.get(0).getLevelId()){
                 result.setStatus(202);
@@ -285,7 +251,7 @@ public class UserLevelServiceImpl implements UserLevelService {
 
         //插入新的等级记录信息
         UserLevelRelation newOne = new UserLevelRelation();
-        newOne.setYn(0);
+        newOne.setYn(1);
         newOne.setUserId(localUserId);
         newOne.setLevelId(levelId);
         Date now = new Date();
@@ -304,6 +270,121 @@ public class UserLevelServiceImpl implements UserLevelService {
         calendar.add(Calendar.DAY_OF_YEAR, period);
         Date end = calendar.getTime();
         newOne.setEndTime(end);
+        newOne.setStatus(0);//未支付状态
+        userLevelRelationMapper.insertSelective(newOne);
+
+
+        result.setStatus(200);
+        result.setMessage("会员信息查询成功");
+        result.setData(userLevelDto);
+        return result;
+    }
+
+    /**
+     * 更新会员记录表（支付之后使用）
+     * @param userId 用户ID(本系统ID)
+     * @param status 支付状态
+     * @return
+     */
+    @Transactional
+    public CommonDto<Map<String, Object>> changeLevel(int userId, int status) {
+        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+        //更新会员等级
+        UserLevelRelation userLevelRelation = new UserLevelRelation();
+        userLevelRelation.setUserId(userId);
+        userLevelRelation.setYn(1);
+        List<UserLevelRelation> records = userLevelRelationMapper.select(userLevelRelation);
+        //更新用户会员记录表
+        if(records.size() > 0){
+            //更新购买状态
+            UserLevelRelation old = records.get(0);
+            old.setStatus(status);
+            userLevelRelationMapper.updateByPrimaryKey(old);
+
+            //若支付成功，更新金币记录表
+            if(status == 1){
+                String sceneKeyInsert = this.getUserLevelKey(old.getLevelId());
+//            this.insertMember(userId, sceneKeyInsert, levelId);
+            }
+        }else{
+            result.setStatus(301);
+            result.setMessage("用户会员等级更新失败，未找到会员升级记录");
+            return result;
+        }
+
+        result.setStatus(200);
+        result.setMessage("用户会员等级更新成功");
+        return result;
+    }
+
+    /**
+     * 会员升级(不通过支付使用)
+     * @param userStr 用户ID（字符串）
+     * @param levelId 要升级的会员等级
+     * @return
+     */
+    @Transactional
+    @Override
+    public CommonDto<Map<String, Object>> upLevel(String userStr, int levelId) {
+        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+        Integer localUserId = this.getLocalUserId(userStr);
+        if(localUserId == null){
+            result.setStatus(201);
+            result.setMessage("当前用户信息无效");
+            return result;
+        }
+
+        //获取当前用户拥有的会员信息
+        UserLevelRelation userLevelRelation = new UserLevelRelation();
+        userLevelRelation.setUserId(localUserId);
+        userLevelRelation.setYn(1);
+        userLevelRelation.setStatus(1);
+        List<UserLevelRelation> records = userLevelRelationMapper.select(userLevelRelation);
+
+        //更新金币记录表
+        String sceneKeyInsert = this.getUserLevelKey(levelId);
+        this.insertMember(localUserId, sceneKeyInsert, levelId);
+
+        //更新用户会员记录表
+        if(records.size() > 0){
+            if(levelId > records.get(0).getLevelId()){
+                //将之前的等级记录失效
+                UserLevelRelation old = records.get(0);
+                old.setYn(0);
+                userLevelRelationMapper.updateByPrimaryKey(old);
+            }else if(levelId == records.get(0).getLevelId()){
+                result.setStatus(202);
+                result.setMessage("该用户已是当前等级，无需升级");
+                return result;
+            }else if(levelId < records.get(0).getLevelId()){
+                result.setStatus(203);
+                result.setMessage("该用户已有更高等级，无需升级");
+                return result;
+            }
+        }
+
+        //插入新的等级记录信息
+        UserLevelRelation newOne = new UserLevelRelation();
+        newOne.setYn(1);
+        newOne.setUserId(localUserId);
+        newOne.setLevelId(levelId);
+        Date now = new Date();
+        newOne.setBeginTime(now);
+        newOne.setCreateTime(now);
+
+        //获取失效周期
+        MetaUserLevel metaUserLevel = new MetaUserLevel();
+        metaUserLevel.setId(levelId);
+        metaUserLevel = metaUserLevelMapper.selectOne(metaUserLevel);
+        int period = metaUserLevel.getPeriod();
+
+        //计算失效时间
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(now);
+        calendar.add(Calendar.DAY_OF_YEAR, period);
+        Date end = calendar.getTime();
+        newOne.setEndTime(end);
+        newOne.setStatus(1);
         userLevelRelationMapper.insertSelective(newOne);
 
         result.setStatus(200);
@@ -573,22 +654,22 @@ public class UserLevelServiceImpl implements UserLevelService {
 
             //普通会员
             if(userLevel == 1){
-                if(industryName != null && !"".equals(industryName)){
+                if(industryName != null && !"".equals(industryName) && !"不限".equals(industryName)){
                     result.setStatus(205);
                     result.setMessage("普通会员用户每次只能选择一个评估选项");
                     return result;
                 }
-                if(cityName != null && !"".equals(cityName)){
+                if(cityName != null && !"".equals(cityName) && !"不限".equals(cityName)){
                     result.setStatus(205);
                     result.setMessage("普通会员用户每次只能选择一个评估选项");
                     return result;
                 }
-                if(educationName != null && !"".equals(educationName)){
+                if(educationName != null && !"".equals(educationName) && !"不限".equals(educationName)){
                     result.setStatus(205);
                     result.setMessage("普通会员用户每次只能选择一个评估选项");
                     return result;
                 }
-                if(workName != null && !"".equals(workName)){
+                if(workName != null && !"".equals(workName) && !"不限".equals(workName)){
                     result.setStatus(205);
                     result.setMessage("普通会员用户每次只能选择一个评估选项");
                     return result;
@@ -683,25 +764,25 @@ public class UserLevelServiceImpl implements UserLevelService {
                     result.setMessage("融资阶段必须选择");
                     return result;
                 }
-                if(industryName != null && !"".equals(industryName)){
+                if(industryName != null && !"".equals(industryName) && !"不限".equals(industryName)){
                     boolean isBuy = isBuy(sceneKey, localUserId, industryName);
                     if(!isBuy){
                         buys.add(industryName);
                     }
                 }
-                if(cityName != null && !"".equals(cityName)){
+                if(cityName != null && !"".equals(cityName) && !"不限".equals(cityName)){
                     boolean isBuy = isBuy(sceneKey, localUserId, cityName);
                     if(!isBuy){
                         buys.add(cityName);
                     }
                 }
-                if(educationName != null && !"".equals(educationName)){
+                if(educationName != null && !"".equals(educationName) && !"不限".equals(educationName)){
                     boolean isBuy = isBuy(sceneKey, localUserId, educationName);
                     if(!isBuy){
                         buys.add(educationName);
                     }
                 }
-                if(workName != null && !"".equals(workName)){
+                if(workName != null && !"".equals(workName) && !"不限".equals(workName)){
                     boolean isBuy = isBuy(sceneKey, localUserId, workName);
                     if(!isBuy){
                         buys.add(workName);
@@ -948,6 +1029,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             newUserScene.setSceneKey(sceneKey);
             newUserScene.setFlag(1);
             newUserScene.setYn(0);
+            newUserScene.setCreateTime(new Date());
             userSceneMapper.insert(newUserScene);
         }
 
@@ -1097,6 +1179,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         }
         return result;
     }
+    
     /**
      * 购买会员的金币记录表
      */
