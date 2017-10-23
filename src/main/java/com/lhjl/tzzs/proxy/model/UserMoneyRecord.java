@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -16,7 +17,7 @@ public class UserMoneyRecord {
     /**
      * 用户输入金额
      */
-    private Integer money;
+    private BigDecimal money;
 
     /**
      * 创建时间
@@ -26,6 +27,9 @@ public class UserMoneyRecord {
 
     @Column(name = "user_id")
     private Integer userId;
+
+    @Column(name = "scene_key")
+    private String sceneKey;
 
     /**
      * 获取记录id
@@ -50,7 +54,7 @@ public class UserMoneyRecord {
      *
      * @return money - 用户输入金额
      */
-    public Integer getMoney() {
+    public BigDecimal getMoney() {
         return money;
     }
 
@@ -59,7 +63,7 @@ public class UserMoneyRecord {
      *
      * @param money 用户输入金额
      */
-    public void setMoney(Integer money) {
+    public void setMoney(BigDecimal money) {
         this.money = money;
     }
 
@@ -93,5 +97,19 @@ public class UserMoneyRecord {
      */
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    /**
+     * @return scene_key
+     */
+    public String getSceneKey() {
+        return sceneKey;
+    }
+
+    /**
+     * @param sceneKey
+     */
+    public void setSceneKey(String sceneKey) {
+        this.sceneKey = sceneKey;
     }
 }

@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.model;
 
+import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "user_scene")
@@ -29,6 +30,9 @@ public class UserScene {
      * 是否有效:0有效,1无效
      */
     private Integer yn;
+
+    @Column(name = "create_time")
+    private Date createTime;
 
     /**
      * @return id
@@ -114,5 +118,19 @@ public class UserScene {
      */
     public void setYn(Integer yn) {
         this.yn = yn;
+    }
+
+    /**
+     * @return create_time
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * @param createTime
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

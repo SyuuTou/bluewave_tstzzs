@@ -41,8 +41,18 @@ public class UserLevelRelation {
 
     /**
      * 是否有效
+0: 无效
+1：有效
      */
     private Integer yn;
+
+    /**
+     * 0: 未支付
+1: 支付完成
+2: 取消支付
+3: 支付失败
+     */
+    private Integer status;
 
     /**
      * @return id
@@ -150,8 +160,12 @@ public class UserLevelRelation {
 
     /**
      * 获取是否有效
+0: 无效
+1：有效
      *
      * @return yn - 是否有效
+0: 无效
+1：有效
      */
     public Integer getYn() {
         return yn;
@@ -159,10 +173,44 @@ public class UserLevelRelation {
 
     /**
      * 设置是否有效
+0: 无效
+1：有效
      *
      * @param yn 是否有效
+0: 无效
+1：有效
      */
     public void setYn(Integer yn) {
         this.yn = yn;
+    }
+
+    /**
+     * 获取0: 未支付
+1: 支付完成
+2: 取消支付
+3: 支付失败
+     *
+     * @return status - 0: 未支付
+1: 支付完成
+2: 取消支付
+3: 支付失败
+     */
+    public Integer getStatus() {
+        return status;
+    }
+
+    /**
+     * 设置0: 未支付
+1: 支付完成
+2: 取消支付
+3: 支付失败
+     *
+     * @param status 0: 未支付
+1: 支付完成
+2: 取消支付
+3: 支付失败
+     */
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

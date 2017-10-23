@@ -6,8 +6,9 @@
       WARNING - @mbg.generated
     -->
     <id column="ID" jdbcType="INTEGER" property="id" />
-    <result column="money" jdbcType="INTEGER" property="money" />
-    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="money" jdbcType="DECIMAL" property="money" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="scene_key" jdbcType="VARCHAR" property="sceneKey" />
   </resultMap>
 </mapper>
