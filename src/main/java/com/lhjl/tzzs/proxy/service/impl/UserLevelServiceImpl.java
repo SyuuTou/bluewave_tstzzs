@@ -1097,4 +1097,65 @@ public class UserLevelServiceImpl implements UserLevelService {
         }
         return result;
     }
+    /**
+     * 购买会员的金币记录表
+     */
+    private CommonDto<String> insertMemberChange(Integer userId,String sKey) {
+        CommonDto<String> result = new CommonDto<String>();
+        Map<String,Integer> map =new HashMap<String,Integer>();
+        if(userId !=null){
+            //当前会员状态总的金币
+               Integer leId1 =usersMapper.findByUserid(userId);
+               if(leId1 != null){
+            	 //购买或购买升级的
+                Integer dnum1 = userIntegralsMapper.findByQnum(leId1);
+                Float bei1 =usersMapper.findByBei(leId1);
+                Integer hnum1 =(int)(dnum1*(1+bei1));
+                //购买或升级前买的金币
+                Integer leId = userLevelRelationMapper.findByUserIdLeid(userId);
+                Float bei2 =usersMapper.findByBei(leId);
+                Integer qj = userIntegralsMapper.findByQnum(leId);
+                Integer hnum2 =(int)(qj*(1+bei2));
+                Integer hnum =hnum1-hnum2;
+                //userIntegrals2.setSceneKey(sKey);
+                //Integer snum =(int)(body.getQj()*bei);
+                UserIntegrals userIntegrals =new UserIntegrals();
+                userIntegrals.setUserId(userId);
+                userIntegrals.setSceneKey(sKey);
+                userIntegrals.setIntegralNum(hnum);
+                userIntegrals.setCreateTime(new Date());
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(new Date());
+                calendar.add(Calendar.YEAR, 1);
+                Date end = calendar.getTime();
+                userIntegrals.setEndTime(end);
+                userIntegrals.setBeginTime((new Date()));
+                userIntegralsMapper.insert(userIntegrals);
+            }else{
+                leId1=usersMapper.findByUserid(userId);
+                Integer hnum1 = 0;
+                //购买或升级买的金币
+                Float bei2 =usersMapper.findByBei(leId1);
+                Integer qj = userIntegralsMapper.findByQnum(leId1);
+                Integer hnum2 =(int)(qj*(1+bei2));
+                Integer hnum =hnum2-hnum1;
+                //userIntegrals2.setSceneKey(sKey);
+                //Integer snum =(int)(body.getQj()*bei);
+                UserIntegrals userIntegrals =new UserIntegrals();
+                userIntegrals.setUserId(userId);
+                userIntegrals.setSceneKey(sKey);
+                userIntegrals.setIntegralNum(hnum);
+                userIntegrals.setCreateTime(new Date());
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(new Date());
+                calendar.add(Calendar.YEAR, 1);
+                Date end = calendar.getTime();
+                userIntegrals.setEndTime(end);
+                userIntegrals.setBeginTime((new Date()));
+                userIntegralsMapper.insert(userIntegrals);
+
+            }
+        }
+        return result;
+    }
 }
