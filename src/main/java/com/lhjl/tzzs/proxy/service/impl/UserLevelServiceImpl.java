@@ -230,30 +230,32 @@ public class UserLevelServiceImpl implements UserLevelService {
         String sceneKey = this.getUserLevelKey(levelId);
         userLevelDto.setSceneKey(sceneKey);
 
-        //插入新的等级记录信息
-        UserLevelRelation newOne = new UserLevelRelation();
-        newOne.setYn(0);
-        newOne.setUserId(localUserId);
-        newOne.setLevelId(levelId);
-        Date now = new Date();
-        newOne.setBeginTime(now);
-        newOne.setCreateTime(now);
+        //当可购买时，插入新的记录
+        if("0".equals(userLevelDto.getBelong())){
+            //插入新的等级记录信息
+            UserLevelRelation newOne = new UserLevelRelation();
+            newOne.setYn(0);
+            newOne.setUserId(localUserId);
+            newOne.setLevelId(levelId);
+            Date now = new Date();
+            newOne.setBeginTime(now);
+            newOne.setCreateTime(now);
 
-        //获取失效周期
-        MetaUserLevel metaUserLevel = new MetaUserLevel();
-        metaUserLevel.setId(levelId);
-        metaUserLevel = metaUserLevelMapper.selectOne(metaUserLevel);
-        int period = metaUserLevel.getPeriod();
+            //获取失效周期
+            MetaUserLevel metaUserLevel = new MetaUserLevel();
+            metaUserLevel.setId(levelId);
+            metaUserLevel = metaUserLevelMapper.selectOne(metaUserLevel);
+            int period = metaUserLevel.getPeriod();
 
-        //计算失效时间
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(now);
-        calendar.add(Calendar.DAY_OF_YEAR, period);
-        Date end = calendar.getTime();
-        newOne.setEndTime(end);
-        newOne.setStatus(0);//未支付状态
-        userLevelRelationMapper.insertSelective(newOne);
-
+            //计算失效时间
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(now);
+            calendar.add(Calendar.DAY_OF_YEAR, period);
+            Date end = calendar.getTime();
+            newOne.setEndTime(end);
+            newOne.setStatus(0);//未支付状态
+            userLevelRelationMapper.insertSelective(newOne);
+        }
 
         result.setStatus(200);
         result.setMessage("会员信息查询成功");
@@ -416,7 +418,8 @@ public class UserLevelServiceImpl implements UserLevelService {
         //查询当前用户会员等级
         UserLevelRelation userLevelRelation = new UserLevelRelation();
         userLevelRelation.setUserId(localUserId);
-        userLevelRelation.setYn(0);
+        userLevelRelation.setYn(1);
+        userLevelRelation.setStatus(1);
         userLevelRelation = userLevelRelationMapper.selectOne(userLevelRelation);
         int userLevel = 0;
         if(userLevelRelation != null){
