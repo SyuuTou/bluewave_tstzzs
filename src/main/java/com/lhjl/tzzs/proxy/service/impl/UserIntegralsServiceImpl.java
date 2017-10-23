@@ -474,7 +474,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userMoneyRecord.setCreateTime(new Date());
 					BigDecimal jnum =new BigDecimal(dnum);
 					userMoneyRecord.setMoney(jnum );
-					userMoneyRecord.setSceneKey("");
+					userMoneyRecord.setSceneKey("dpGXuIqb");
 					userMoneyRecord.setUserId(userId);
 					userMoneyRecordMapper.insert(userMoneyRecord);
 					map.put("Money_ID",userMoneyRecord.getId());
@@ -500,7 +500,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userMoneyRecord.setCreateTime(new Date());
 					BigDecimal jnum =new BigDecimal(dnum);
 					userMoneyRecord.setMoney(jnum );
-					userMoneyRecord.setSceneKey("");
+					userMoneyRecord.setSceneKey("dpGXuIqb");
 					userMoneyRecord.setUserId(userId);
 					userMoneyRecordMapper.insert(userMoneyRecord);
 					map.put("Money_ID",userMoneyRecord.getId());
