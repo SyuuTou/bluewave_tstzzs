@@ -638,6 +638,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals.setUserId(userId);
 				userIntegrals.setSceneKey("xHwofbNs");
 				Integer jb=qj.intValue();
+				if(jb>=100){
 				userIntegrals.setIntegralNum(jb);
 				userIntegrals.setCreateTime(new Date());
 				Calendar calendar = new GregorianCalendar();
@@ -671,44 +672,52 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals2.setBeginTime((new Date()));
 				userIntegralsMapper.insert(userIntegrals2);
 			}else{
-				leId=0;
-				Float bei =usersMapper.findByBei(leId+1);
-				UserIntegrals userIntegrals =new UserIntegrals();
-				userIntegrals.setUserId(userId);
-				userIntegrals.setSceneKey("xHwofbNs");
-				Integer jb=qj.intValue();
-				userIntegrals.setIntegralNum(jb);
-				userIntegrals.setCreateTime(new Date());
-				//时间场景
-				Calendar calendar = new GregorianCalendar();
-				MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
-				metaObtainIntegral.setSceneKey("xHwofbNs");
-				metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
-				calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral.getPeriod());
-				Date end = calendar.getTime();
-				userIntegrals.setEndTime(end);
-				userIntegrals.setBeginTime((new Date()));
-				userIntegralsMapper.insert(userIntegrals);
-				//购买金币赠送的记录
-				UserIntegrals userIntegrals2 =new UserIntegrals();
-				userIntegrals2.setUserId(userId);
-				String sKey = userIntegralsMapper.findBySkey(leId+1);
-				userIntegrals2.setSceneKey(sKey);
-				jb=qj.intValue();
-				Integer snum =(int)(jb*bei);
-				userIntegrals2.setIntegralNum(snum);
-				userIntegrals2.setCreateTime(new Date());
-				//时间场景
-				MetaObtainIntegral metaObtainIntegral1 = new MetaObtainIntegral();
-				metaObtainIntegral1.setSceneKey(sKey);
-				Calendar calendar1 = new GregorianCalendar();
-				metaObtainIntegral1 = metaObtainIntegralMapper.selectOne(metaObtainIntegral1);
-				calendar1.add(Calendar.DAY_OF_YEAR, metaObtainIntegral1.getPeriod());
-				Date end1 = calendar.getTime();
-				userIntegrals2.setEndTime(end1);
-				userIntegrals2.setBeginTime((new Date()));
-				userIntegralsMapper.insert(userIntegrals2);
-
+					result.setStatus(5019);
+					result.setMessage("充值金额不能小于100元");
+				}
+			}else {
+					leId = 0;
+					Float bei = usersMapper.findByBei(leId + 1);
+					UserIntegrals userIntegrals = new UserIntegrals();
+					userIntegrals.setUserId(userId);
+					userIntegrals.setSceneKey("xHwofbNs");
+					Integer jb = qj.intValue();
+					if(jb>=100){
+					userIntegrals.setIntegralNum(jb);
+					userIntegrals.setCreateTime(new Date());
+					//时间场景
+					Calendar calendar = new GregorianCalendar();
+					MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
+					metaObtainIntegral.setSceneKey("xHwofbNs");
+					metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
+					calendar.add(Calendar.DAY_OF_YEAR, metaObtainIntegral.getPeriod());
+					Date end = calendar.getTime();
+					userIntegrals.setEndTime(end);
+					userIntegrals.setBeginTime((new Date()));
+					userIntegralsMapper.insert(userIntegrals);
+					//购买金币赠送的记录
+					UserIntegrals userIntegrals2 = new UserIntegrals();
+					userIntegrals2.setUserId(userId);
+					String sKey = userIntegralsMapper.findBySkey(leId + 1);
+					userIntegrals2.setSceneKey(sKey);
+					jb = qj.intValue();
+					Integer snum = (int) (jb * bei);
+					userIntegrals2.setIntegralNum(snum);
+					userIntegrals2.setCreateTime(new Date());
+					//时间场景
+					MetaObtainIntegral metaObtainIntegral1 = new MetaObtainIntegral();
+					metaObtainIntegral1.setSceneKey(sKey);
+					Calendar calendar1 = new GregorianCalendar();
+					metaObtainIntegral1 = metaObtainIntegralMapper.selectOne(metaObtainIntegral1);
+					calendar1.add(Calendar.DAY_OF_YEAR, metaObtainIntegral1.getPeriod());
+					Date end1 = calendar.getTime();
+					userIntegrals2.setEndTime(end1);
+					userIntegrals2.setBeginTime((new Date()));
+					userIntegralsMapper.insert(userIntegrals2);
+				}else{
+						result.setStatus(5019);
+						result.setMessage("充值金额不能小于100元");
+					}
 			}
 		}
 		return result;
