@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectSendLogsMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectSendLogs">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_desc" jdbcType="VARCHAR" property="companyDesc" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="field" jdbcType="VARCHAR" property="field" />
+    <result column="project_tags" jdbcType="VARCHAR" property="projectTags" />
+  </resultMap>
+
+</mapper>

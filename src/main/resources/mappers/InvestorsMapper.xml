@@ -1,18 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestorsMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Investors" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestorsMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Investors">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="ID" property="id" jdbcType="INTEGER" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="investment_institutions_id" property="investmentInstitutionsId" jdbcType="INTEGER" />
-    <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="yn" property="yn" jdbcType="INTEGER" />
-    <result column="position" property="position" jdbcType="VARCHAR" />
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="investment_institutions_id" jdbcType="INTEGER" property="investmentInstitutionsId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
     <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
-    <result column="approval_time" jdbcType="TIMESTAMP" property="approval_time" />
+    <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
+    <result column="investors_type" jdbcType="INTEGER" property="investorsType" />
   </resultMap>
+
 </mapper>

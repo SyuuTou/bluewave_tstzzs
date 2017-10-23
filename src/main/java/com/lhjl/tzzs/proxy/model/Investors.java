@@ -42,34 +42,23 @@ public class Investors {
      */
     private String position;
 
-
     /**
-     * 审核状态
+     * 审核状态，0表示审核未通过，1表示审核通过，默认0
      */
     @Column(name = "approval_status")
     private Integer approvalStatus;
 
-    public Integer getApprovalStatus() {
-        return approvalStatus;
-    }
-
-    public void setApprovalStatus(Integer approvalStatus) {
-        this.approvalStatus = approvalStatus;
-    }
-
-    public Date getApprovalTime() {
-        return approvalTime;
-    }
-
-    public void setApprovalTime(Date approvalTime) {
-        this.approvalTime = approvalTime;
-    }
-
     /**
-     * 审核时间
+     * 审核时间，审核时存，其他时候为空
      */
     @Column(name = "approval_time")
     private Date approvalTime;
+
+    /**
+     * 认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     */
+    @Column(name = "investors_type")
+    private Integer investorsType;
 
     /**
      * @return ID
@@ -191,5 +180,59 @@ public class Investors {
      */
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    /**
+     * 获取审核状态，0表示审核未通过，1表示审核通过，默认0
+     *
+     * @return approval_status - 审核状态，0表示审核未通过，1表示审核通过，默认0
+     */
+    public Integer getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    /**
+     * 设置审核状态，0表示审核未通过，1表示审核通过，默认0
+     *
+     * @param approvalStatus 审核状态，0表示审核未通过，1表示审核通过，默认0
+     */
+    public void setApprovalStatus(Integer approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+
+    /**
+     * 获取审核时间，审核时存，其他时候为空
+     *
+     * @return approval_time - 审核时间，审核时存，其他时候为空
+     */
+    public Date getApprovalTime() {
+        return approvalTime;
+    }
+
+    /**
+     * 设置审核时间，审核时存，其他时候为空
+     *
+     * @param approvalTime 审核时间，审核时存，其他时候为空
+     */
+    public void setApprovalTime(Date approvalTime) {
+        this.approvalTime = approvalTime;
+    }
+
+    /**
+     * 获取认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     *
+     * @return investors_type - 认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     */
+    public Integer getInvestorsType() {
+        return investorsType;
+    }
+
+    /**
+     * 设置认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     *
+     * @param investorsType 认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     */
+    public void setInvestorsType(Integer investorsType) {
+        this.investorsType = investorsType;
     }
 }

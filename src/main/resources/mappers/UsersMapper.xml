@@ -12,20 +12,34 @@
     <result column="level" jdbcType="INTEGER" property="level" />
     <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="headpic" jdbcType="VARCHAR" property="headpic" />
+    <result column="actual_name" jdbcType="VARCHAR" property="actualName" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="desc" jdbcType="VARCHAR" property="desc" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="wechat" jdbcType="VARCHAR" property="wechat" />
+    <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="identity_type" jdbcType="INTEGER" property="identityType" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_duties" jdbcType="VARCHAR" property="companyDuties" />
+    <result column="company_desc" jdbcType="VARCHAR" property="companyDesc" />
+    <result column="demand" jdbcType="VARCHAR" property="demand" />
   </resultMap>
-    <select id="findByUuid"  parameterType="String" resultType="INTEGER" >
+
+    <select id="findByUuid" parameterType="String" resultType="INTEGER">
      SELECT u.ID FROM users u WHERE u.uuid=#{uuids}
     </select>
-    <select id="findByUserid" parameterType="INTEGER" resultType="INTEGER" >
+    <select id="findByUserid" parameterType="INTEGER" resultType="INTEGER">
      SELECT c.level_id FROM user_level_relation c WHERE c.user_id =#{userId} AND c.yn=1 AND c.status =1
     </select>
-    <select id="findByBei" parameterType="INTEGER" resultType="Float" >
+    <select id="findByBei" parameterType="INTEGER" resultType="Float">
         SELECT m.ratio FROM meta_obtain_integral m WHERE m.user_level=#{leId} AND m.scene_key IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
     </select>
-    <select id="findByJinE" parameterType="String" resultType="INTEGER" >
+    <select id="findByJinE" parameterType="String" resultType="INTEGER">
         SELECT integral FROM meta_obtain_integral WHERE scene_key=#{skey}
     </select>
-    <select id="findByUserLevel" parameterType="INTEGER" resultType="String" >
+    <select id="findByUserLevel" parameterType="INTEGER" resultType="String">
       SELECT c.name FROM meta_user_level c WHERE c.ID=#{leId}
     </select>
 </mapper>
