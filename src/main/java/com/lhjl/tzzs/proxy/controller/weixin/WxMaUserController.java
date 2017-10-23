@@ -27,6 +27,7 @@ public class WxMaUserController {
     @Autowired
     private WxMaService wxService;
 
+
     /**
      * 登陆接口
      */
