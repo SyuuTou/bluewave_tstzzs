@@ -98,7 +98,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 }
                 //当前用户是否拥有当前会员的信息
                 example = new Example(UserLevelRelation.class);
-                example.and().andEqualTo("userId", localUserId).andEqualTo("yn", 0);
+                example.and().andEqualTo("userId", localUserId).andEqualTo("yn", 1).andEqualTo("status", 1);
                 List<UserLevelRelation> records = userLevelRelationMapper.selectByExample(example);
 
                 //组合返回信息
