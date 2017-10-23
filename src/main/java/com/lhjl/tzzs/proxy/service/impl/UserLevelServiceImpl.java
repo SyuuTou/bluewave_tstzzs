@@ -191,8 +191,13 @@ public class UserLevelServiceImpl implements UserLevelService {
         List<UserLevelRelation> records = userLevelRelationMapper.selectByExample(example);
         if(records.size() > 0){
             if(levelId == records.get(0).getLevelId()){
-                //可升级状态
-                userLevelDto.setBelong("1");
+                if(levelId == 4){
+                    //已是最高级，不可购买状态
+                    userLevelDto.setBelong("2");
+                }else{
+                    //可升级状态
+                    userLevelDto.setBelong("1");
+                }
             }else if(levelId < records.get(0).getLevelId()){
                 //不可购买状态
                 userLevelDto.setBelong("2");
