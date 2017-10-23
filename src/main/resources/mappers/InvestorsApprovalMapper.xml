@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestorsApprovalMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestorsApproval" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="userid" property="userid" jdbcType="INTEGER" />
+    <result column="approval_username" property="approvalUsername" jdbcType="VARCHAR" />
+    <result column="investors_type" property="investorsType" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="company_duties" property="companyDuties" jdbcType="VARCHAR" />
+    <result column="work_card" property="workCard" jdbcType="VARCHAR" />
+    <result column="approval_result" property="approvalResult" jdbcType="INTEGER" />
+    <result column="supplementary_explanation" property="supplementaryExplanation" jdbcType="VARCHAR" />
+    <result column="review_time" property="reviewTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>
