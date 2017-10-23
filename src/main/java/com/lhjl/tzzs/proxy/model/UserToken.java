@@ -13,7 +13,7 @@ public class UserToken {
      * 用户id
      */
     @Column(name = "user_id")
-    private String userId;
+    private Integer userId;
 
     /**
      * token信息
@@ -45,7 +45,7 @@ public class UserToken {
      *
      * @return user_id - 用户id
      */
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
@@ -54,7 +54,7 @@ public class UserToken {
      *
      * @param userId 用户id
      */
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
