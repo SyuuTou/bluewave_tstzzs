@@ -19,4 +19,9 @@
      IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
      GROUP BY create_time DESC LIMIT #{beginNum},#{ pageSize}
   </select>
+  <select id="findByUserIdLeid" parameterType="INTEGER" resultType="INTEGER">
+    SELECT u.level_id  FROM user_level_relation u WHERE u.user_id=#{userId} 
+    AND u.yn=0 AND u.status =1 
+    GROUP BY u.create_time DESC LIMIT 1;
+  </select>
 </mapper>
