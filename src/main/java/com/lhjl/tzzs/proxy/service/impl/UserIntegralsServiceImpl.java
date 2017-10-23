@@ -550,6 +550,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 							obj.put("hnum","+"+(int)((bei+1)*dnum));
 							obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
 							obj.put("end_time",String.valueOf(obj.get("end_time")).substring(0,10));
+							obj.put("userName",null);
 						}else{
 							Integer dnum=Integer.valueOf(String.valueOf(obj.get("integral_num")));
 							//Integer dnum1=(int)(hnum*(1-bei));
@@ -622,7 +623,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	 * qj:支付的金额
 	 */
 	@Transactional
-	public CommonDto<String> insertGold(String uuids,Integer qj,String skey) {
+	public CommonDto<String> insertGold(String uuids,Integer qj) {
 		CommonDto<String> result = new CommonDto<String>();
 		Map<String,Integer> map =new HashMap<String,Integer>();
 		Integer userId= usersMapper.findByUuid(uuids);
@@ -632,7 +633,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				Float bei =usersMapper.findByBei(leId);
 				UserIntegrals userIntegrals =new UserIntegrals();
 				userIntegrals.setUserId(userId);
-				userIntegrals.setSceneKey(skey);
+				userIntegrals.setSceneKey("xHwofbNs");
 				userIntegrals.setIntegralNum(qj);
 				userIntegrals.setCreateTime(new Date());
 				Calendar calendar = new GregorianCalendar();
@@ -640,7 +641,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 
 				//获取该场景配置信息
 				MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
-				metaObtainIntegral.setSceneKey(skey);
+				metaObtainIntegral.setSceneKey("xHwofbNs");
 				metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
 				calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral.getPeriod());
 				Date end = calendar.getTime();
@@ -669,13 +670,13 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				Float bei =usersMapper.findByBei(leId+1);
 				UserIntegrals userIntegrals =new UserIntegrals();
 				userIntegrals.setUserId(userId);
-				userIntegrals.setSceneKey(skey);
+				userIntegrals.setSceneKey("xHwofbNs");
 				userIntegrals.setIntegralNum(qj);
 				userIntegrals.setCreateTime(new Date());
 				//时间场景
 				Calendar calendar = new GregorianCalendar();
 				MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
-				metaObtainIntegral.setSceneKey(skey);
+				metaObtainIntegral.setSceneKey("xHwofbNs");
 				metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
 				calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral.getPeriod());
 				Date end = calendar.getTime();

@@ -40,7 +40,7 @@ public interface UserIntegralsService {
 	 * @param uuids
 	 * @return
 	 */
-	CommonDto<String> insertGold(String uuids,Integer qj,String skey);
+	CommonDto<String> insertGold(String uuids,Integer qj);
 	/**
 	 * 生成会员的接口
 	 * @param body
