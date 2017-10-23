@@ -41,7 +41,7 @@ public class FinancingController {
             log.error(e.getMessage(),e.fillInStackTrace());
         }
         return result;
-    }
+}
 
     @GetMapping("hotIndustry")
     public CommonDto<List<LabelList>> hotIndustry(){
