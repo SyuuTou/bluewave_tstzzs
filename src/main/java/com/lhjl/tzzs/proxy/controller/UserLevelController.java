@@ -3,12 +3,14 @@ package com.lhjl.tzzs.proxy.controller;
 import com.lhjl.tzzs.proxy.dto.ActionDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.UserLevelDto;
+import com.lhjl.tzzs.proxy.service.UserIntegralsService;
 import com.lhjl.tzzs.proxy.service.UserLevelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +24,8 @@ public class UserLevelController {
 
     @Resource
     private UserLevelService userLevelService;
+    @Resource
+    private UserIntegralsService userIntegralsService;
 
     /**
      * 获取会员等级信息
@@ -128,15 +132,17 @@ public class UserLevelController {
      * @return
      */
 //    @PostMapping("/payafter")
-//    public CommonDto<Map<String, Object>> testPayAfter(@RequestBody Map<String, Object> body){
-//        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
-//        int userId = (int)body.get("userId");
-//        int status = (int)body.get("status");
+//    public CommonDto<String> testPayAfter(@RequestBody Map<String, String> body){
+//        CommonDto<String> result = new CommonDto<>();
+//        Integer userId = Integer.parseInt(body.get("userId"));
+//        int status = Integer.parseInt(body.get("status"));
+//        String sceneKey = body.get("sceneKey");
+//        BigDecimal qj = new BigDecimal(body.get("qj"));
 //        try{
-//            result = userLevelService.changeLevel(userId, status);
+//            result = userIntegralsService.payAfter(userId,sceneKey, qj, status);
 //        }catch(Exception e){
 //            result.setStatus(501);
-//            result.setMessage("用户取消消费提示异常");
+//            result.setMessage("支付完成后流程异常");
 //            logger.error(e.getMessage(),e.fillInStackTrace());
 //        }
 //        return result;

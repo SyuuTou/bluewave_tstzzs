@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserIntegralsService;
 import com.lhjl.tzzs.proxy.service.UserLevelService;
 import com.sun.org.apache.bcel.internal.generic.NEW;
+import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
@@ -271,8 +272,8 @@ public class UserLevelServiceImpl implements UserLevelService {
      */
     @Transactional
     @Override
-    public CommonDto<Map<String, Object>> changeLevel(int userId, int status) {
-        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+    public CommonDto<String> changeLevel(Integer userId, int status) {
+        CommonDto<String> result = new CommonDto<String>();
         //支付成功
         if(status == 1){
             //更新会员等级
@@ -1202,10 +1203,17 @@ public class UserLevelServiceImpl implements UserLevelService {
                 Integer hnum1 =(int)(dnum1*(1+bei1));
                 //购买或升级前买的金币
                 Integer leId = userLevelRelationMapper.findByUserIdLeid(userId);
-                Float bei2 =usersMapper.findByBei(leId);
-                Integer qj = userIntegralsMapper.findByQnum(leId);
-                Integer hnum2 =(int)(qj*(1+bei2));
-                Integer hnum =hnum1-hnum2;
+
+                Integer hnum = null;
+                if(leId != null){
+                    Float bei2 =usersMapper.findByBei(leId);
+                    Integer qj = userIntegralsMapper.findByQnum(leId);
+                    Integer hnum2 =(int)(qj*(1+bei2));
+                    hnum =hnum1-hnum2;
+                }else{
+                    hnum = hnum1;
+                }
+
                 //userIntegrals2.setSceneKey(sKey);
                 //Integer snum =(int)(body.getQj()*bei);
                 UserIntegrals userIntegrals =new UserIntegrals();

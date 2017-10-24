@@ -56,5 +56,5 @@ public interface UserLevelService {
      * @param status 支付状态
      * @return
      */
-    CommonDto<Map<String, Object>> changeLevel(int userId, int status);
+    CommonDto<String> changeLevel(Integer userId, int status);
 }

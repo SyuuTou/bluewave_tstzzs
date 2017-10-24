@@ -42,7 +42,7 @@ public interface UserIntegralsService {
 	 * 用户的uuid： uuids
 	 * 支付的金额：qj
 	 */
-	CommonDto<String> insertGold(String uuids,BigDecimal qj);
+	CommonDto<String> insertGold(Integer userId,BigDecimal qj);
 	/**
 	 * 生成会员的接口
 	 * @param body
@@ -54,4 +54,14 @@ public interface UserIntegralsService {
 	 * @return
 	 */
 	CommonDto <List<MetaObtainIntegral>>findMoney();
+
+	/**
+	 * 支付之后调用
+	 * @param userId 用户ID
+	 * @param sceneKey 场景key
+	 * @param qj 实际支付金额
+	 * @param status 支付状态
+	 * @return
+	 */
+	CommonDto<String> payAfter(Integer userId, String sceneKey, BigDecimal qj, int status);
 }

@@ -13,6 +13,8 @@ import javax.annotation.Resource;
 
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
+import com.lhjl.tzzs.proxy.service.UserLevelService;
+import org.springframework.boot.autoconfigure.web.ConditionalOnEnabledResourceChain;
 import org.springframework.stereotype.Service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
@@ -41,6 +43,14 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	private MetaObtainIntegralMapper metaObtainIntegralMapper;
 	@Resource
 	private  UserMoneyRecordMapper userMoneyRecordMapper;
+	@Resource
+	private UserLevelService userLevelService;
+
+	//购买会员等级场景
+	private static final String ONE = "nEBlAOV9";
+	private static final String TWO = "aMvVjSju";
+	private static final String THREE = "y4Ep6YQT";
+	private static final String FOUR = "N4VlBBJP";
 
 	/**
 	 * 查询余额的接口
@@ -624,10 +634,10 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	 */
 	@Transactional
 	@Override
-	public CommonDto<String> insertGold(String uuids,BigDecimal qj) {
+	public CommonDto<String> insertGold(Integer userId,BigDecimal qj) {
 		CommonDto<String> result = new CommonDto<String>();
 		Map<String,Integer> map =new HashMap<String,Integer>();
-		Integer userId= usersMapper.findByUuid(uuids);
+//		Integer userId= usersMapper.findByUuid(uuids);
 		if(userId !=0 && userId !=null){
 			Integer leId =usersMapper.findByUserid(userId);
 			if(leId !=null){
@@ -718,6 +728,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					}
 			}
 		}
+
+		result.setStatus(200);
+		result.setMessage("用户金币更新成功");
 		return result;
 	}
 
@@ -763,6 +776,25 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 			}
 		}
 		result.setData(list2);
+		return result;
+	}
+
+	/**
+	 * 支付之后调用
+	 * @param userId 用户ID
+	 * @param sceneKey 场景key
+	 * @param qj 实际支付金额
+	 * @param status 支付状态
+	 * @return
+	 */
+	@Override
+	public CommonDto<String> payAfter(Integer userId, String sceneKey, BigDecimal qj, int status) {
+		CommonDto<String> result = new CommonDto<>();
+		if(TWO.equals(sceneKey) || THREE.equals(sceneKey) || FOUR.equals(sceneKey)){
+			result = userLevelService.changeLevel(userId, status);
+		}else{
+			result = this.insertGold(userId, qj);
+		}
 		return result;
 	}
 }
