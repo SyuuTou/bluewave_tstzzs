@@ -40,7 +40,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		CommonDto<String> result =new CommonDto<String>();
 		 InvestorsApproval  investorsApproval =new  InvestorsApproval();
 		 UserToken userToken =new UserToken();
-		 userToken.setToken(params.getMountID());
+		 userToken.setToken(params.getToken());
 	     userToken =userTokenMapper.selectOne(userToken);
 		 investorsApproval.setUserid(userToken.getUserId());
 		 investorsApproval.setApprovalUsername(params.getCompellation());
@@ -67,17 +67,17 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
    * 数据的回显
    */
 	@Override
-	public CommonDto<Map<String,Object>> findInvestorsApproval(String userID) {
+	public CommonDto<Map<String,Object>> findInvestorsApproval(String token) {
 		CommonDto<Map<String, Object>> result =new CommonDto<Map<String, Object>> ();
 		Map<String,Object> map =new HashMap<>();
 		UserToken userToken =new UserToken();
-		 userToken.setToken(userID);
+		 userToken.setToken(token);
 		 userToken = userTokenMapper.selectOne(userToken);
 		 Integer userId = userToken.getUserId();
 		 map=investorsApprovalMapper.findInvestorsApproval(userId);
 		 if(map !=null){
 
-			map.put("id", userID);
+			map.put("id", token);
 			map.put("renzhengtouzirenshenhebiao7additional","");//其他说明
 			map.put("renzhengtouzirenshenhebiao7applicantn",String.valueOf(map.get("approval_username")));
 			map.put("renzhengtouzirenshenhebiao7assumeoffi",String.valueOf(map.get("company_duties")));
@@ -104,10 +104,10 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		 }else{
 			    map=new HashMap<>();
 			    Users users =new Users();
-			    users.setUuid(userID);
+			    users.setUuid(token);
 			    users = usersMapper.selectOne(users);
 			    String username =users.getActualName();
-			    map.put("id", userID);
+			    map.put("id", token);
 			    map.put("renzhengtouzirenshenhebiao7applicantn",username);
 				map.put("renzhengtouzirenshenhebiao7additional",null);//其他说明
 				map.put("renzhengtouzirenshenhebiao7assumeoffi",null);
@@ -128,11 +128,11 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	 */
 
 	@Override
-	public CommonDto<Map<String, Object>> findInvestorsExamine(String userID) {
+	public CommonDto<Map<String, Object>> findInvestorsExamine(String token) {
 		CommonDto<Map<String, Object>> result =new CommonDto<Map<String, Object>> ();
 		Map<String,Object> map =new HashMap<>();
 		UserToken userToken =new UserToken();
-		 userToken.setToken(userID);
+		 userToken.setToken(token);
 		 userToken = userTokenMapper.selectOne(userToken);
 		 Integer userId = userToken.getUserId();
 		 map=investorsApprovalMapper.findInvestorsApproval(userId);
