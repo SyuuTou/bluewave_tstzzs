@@ -15,7 +15,7 @@ import org.apache.catalina.User;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
-import sun.plugin.dom.core.CoreConstants;
+
 
 import javax.annotation.Resource;
 import java.security.MessageDigest;
