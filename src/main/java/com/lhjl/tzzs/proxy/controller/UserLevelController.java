@@ -28,8 +28,8 @@ public class UserLevelController {
      * @param userId 用户ID
      * @return
      */
-    @GetMapping("/finduserlevel/{userId}")
-    public CommonDto<List<UserLevelDto>> findUserLevel(@PathVariable String userId){
+    @PostMapping("/finduserlevel")
+    public CommonDto<List<UserLevelDto>> findUserLevel(@RequestBody String userId){
         CommonDto<List<UserLevelDto>> result = new CommonDto<List<UserLevelDto>>();
         try{
             result = userLevelService.findUserLevelList(userId);
