@@ -25,12 +25,13 @@ public class UserLevelController {
 
     /**
      * 获取会员等级信息
-     * @param userId 用户ID
+     * @param body 请求对象
      * @return
      */
     @PostMapping("/finduserlevel")
-    public CommonDto<List<UserLevelDto>> findUserLevel(@RequestBody String userId){
+    public CommonDto<List<UserLevelDto>> findUserLevel(@RequestBody ActionDto body){
         CommonDto<List<UserLevelDto>> result = new CommonDto<List<UserLevelDto>>();
+        String userId = body.getUserId();
         try{
             result = userLevelService.findUserLevelList(userId);
         }catch(Exception e){
