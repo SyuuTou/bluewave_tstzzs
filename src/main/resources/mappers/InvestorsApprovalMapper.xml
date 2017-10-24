@@ -18,4 +18,7 @@
     <result column="review_time" property="reviewTime" jdbcType="TIMESTAMP" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
+   <select id="findInvestorsApproval" parameterType="INTEGER" resultType="java.util.HashMap" >
+   SELECT i.* FROM investors_approval i  WHERE i.userid=#{userId} GROUP BY i.review_time DESC LIMIT 1
+  </select>
 </mapper>
