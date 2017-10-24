@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "investor_demand")
@@ -10,14 +11,9 @@ public class InvestorDemand {
     private Integer id;
 
     /**
-     * 投资人需求表
+     * 用户id
      */
-    private Integer investorid;
-
-    /**
-     * 是否领投，0代表不是，1代表是；默认0
-     */
-    private Integer leadership;
+    private Integer userid;
 
     /**
      * 地域偏好
@@ -55,6 +51,23 @@ public class InvestorDemand {
     private String concernedFoundersCharacteristic;
 
     /**
+     * 行业领域
+     */
+    private String industry;
+
+    /**
+     * 融资阶段
+     */
+    @Column(name = "financing_stage")
+    private String financingStage;
+
+    /**
+     * 创建时间
+     */
+    @Column(name = "creat_time")
+    private Date creatTime;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -69,39 +82,21 @@ public class InvestorDemand {
     }
 
     /**
-     * 获取投资人需求表
+     * 获取用户id
      *
-     * @return investorid - 投资人需求表
+     * @return userid - 用户id
      */
-    public Integer getInvestorid() {
-        return investorid;
+    public Integer getUserid() {
+        return userid;
     }
 
     /**
-     * 设置投资人需求表
+     * 设置用户id
      *
-     * @param investorid 投资人需求表
+     * @param userid 用户id
      */
-    public void setInvestorid(Integer investorid) {
-        this.investorid = investorid;
-    }
-
-    /**
-     * 获取是否领投，0代表不是，1代表是；默认0
-     *
-     * @return leadership - 是否领投，0代表不是，1代表是；默认0
-     */
-    public Integer getLeadership() {
-        return leadership;
-    }
-
-    /**
-     * 设置是否领投，0代表不是，1代表是；默认0
-     *
-     * @param leadership 是否领投，0代表不是，1代表是；默认0
-     */
-    public void setLeadership(Integer leadership) {
-        this.leadership = leadership;
+    public void setUserid(Integer userid) {
+        this.userid = userid;
     }
 
     /**
@@ -210,5 +205,59 @@ public class InvestorDemand {
      */
     public void setConcernedFoundersCharacteristic(String concernedFoundersCharacteristic) {
         this.concernedFoundersCharacteristic = concernedFoundersCharacteristic;
+    }
+
+    /**
+     * 获取行业领域
+     *
+     * @return industry - 行业领域
+     */
+    public String getIndustry() {
+        return industry;
+    }
+
+    /**
+     * 设置行业领域
+     *
+     * @param industry 行业领域
+     */
+    public void setIndustry(String industry) {
+        this.industry = industry;
+    }
+
+    /**
+     * 获取融资阶段
+     *
+     * @return financing_stage - 融资阶段
+     */
+    public String getFinancingStage() {
+        return financingStage;
+    }
+
+    /**
+     * 设置融资阶段
+     *
+     * @param financingStage 融资阶段
+     */
+    public void setFinancingStage(String financingStage) {
+        this.financingStage = financingStage;
+    }
+
+    /**
+     * 获取创建时间
+     *
+     * @return creat_time - 创建时间
+     */
+    public Date getCreatTime() {
+        return creatTime;
+    }
+
+    /**
+     * 设置创建时间
+     *
+     * @param creatTime 创建时间
+     */
+    public void setCreatTime(Date creatTime) {
+        this.creatTime = creatTime;
     }
 }

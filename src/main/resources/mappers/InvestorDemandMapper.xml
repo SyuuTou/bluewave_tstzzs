@@ -1,18 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestorDemandMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestorDemand" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestorDemandMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestorDemand">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="investorid" property="investorid" jdbcType="INTEGER" />
-    <result column="leadership" property="leadership" jdbcType="INTEGER" />
-    <result column="city_preference" property="cityPreference" jdbcType="VARCHAR" />
-    <result column="demand" property="demand" jdbcType="VARCHAR" />
-    <result column="investment_amount_low" property="investmentAmountLow" jdbcType="DECIMAL" />
-    <result column="investment_amount_high" property="investmentAmountHigh" jdbcType="DECIMAL" />
-    <result column="recently_concerned_subdivision_circuit" property="recentlyConcernedSubdivisionCircuit" jdbcType="VARCHAR" />
-    <result column="concerned_founders_characteristic" property="concernedFoundersCharacteristic" jdbcType="VARCHAR" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="city_preference" jdbcType="VARCHAR" property="cityPreference" />
+    <result column="demand" jdbcType="VARCHAR" property="demand" />
+    <result column="investment_amount_low" jdbcType="DECIMAL" property="investmentAmountLow" />
+    <result column="investment_amount_high" jdbcType="DECIMAL" property="investmentAmountHigh" />
+    <result column="recently_concerned_subdivision_circuit" jdbcType="VARCHAR" property="recentlyConcernedSubdivisionCircuit" />
+    <result column="concerned_founders_characteristic" jdbcType="VARCHAR" property="concernedFoundersCharacteristic" />
+    <result column="industry" jdbcType="VARCHAR" property="industry" />
+    <result column="financing_stage" jdbcType="VARCHAR" property="financingStage" />
+    <result column="creat_time" jdbcType="TIMESTAMP" property="creatTime" />
   </resultMap>
 </mapper>
