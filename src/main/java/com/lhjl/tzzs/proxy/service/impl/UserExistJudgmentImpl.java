@@ -113,7 +113,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
             usersMapper.insertSelective(users);
 
             int userid = users.getId();
-            String uuid = String.valueOf(userid);
+            String uuid = token;
             users.setUuid(uuid);
 
             usersMapper.updateByPrimaryKeySelective(users);

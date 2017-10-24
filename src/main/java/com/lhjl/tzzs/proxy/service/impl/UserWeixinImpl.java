@@ -46,7 +46,6 @@ public class UserWeixinImpl implements UserWeixinService {
         //创建用户表的实体类
         Users users =new Users();
         users.setId(userID);
-        users.setUuid(userid);
         users.setHeadpic(userInfo.getAvatarUrl());
 
         //先判断用户的微信信息是否存在，存在即更新，不存在即新建
