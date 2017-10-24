@@ -25,6 +25,7 @@
     <result column="company_duties" jdbcType="VARCHAR" property="companyDuties" />
     <result column="company_desc" jdbcType="VARCHAR" property="companyDesc" />
     <result column="demand" jdbcType="VARCHAR" property="demand" />
+    <result column="headpic_real" jdbcType="VARCHAR" property="headpicReal" />
   </resultMap>
 
     <select id="findByUuid" parameterType="String" resultType="INTEGER">

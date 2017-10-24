@@ -114,6 +114,12 @@ public class Users {
     private String demand;
 
     /**
+     * 用户上传头像
+     */
+    @Column(name = "headpic_real")
+    private String headpicReal;
+
+    /**
      * @return ID
      */
     public Integer getId() {
@@ -463,5 +469,23 @@ public class Users {
      */
     public void setDemand(String demand) {
         this.demand = demand;
+    }
+
+    /**
+     * 获取用户上传头像
+     *
+     * @return headpic_real - 用户上传头像
+     */
+    public String getHeadpicReal() {
+        return headpicReal;
+    }
+
+    /**
+     * 设置用户上传头像
+     *
+     * @param headpicReal 用户上传头像
+     */
+    public void setHeadpicReal(String headpicReal) {
+        this.headpicReal = headpicReal;
     }
 }
