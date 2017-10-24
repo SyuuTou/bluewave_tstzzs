@@ -1,24 +1,26 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestorsApprovalMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestorsApproval" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestorsApprovalMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestorsApproval">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="userid" property="userid" jdbcType="INTEGER" />
-    <result column="approval_username" property="approvalUsername" jdbcType="VARCHAR" />
-    <result column="investors_type" property="investorsType" jdbcType="INTEGER" />
-    <result column="description" property="description" jdbcType="VARCHAR" />
-    <result column="company" property="company" jdbcType="VARCHAR" />
-    <result column="company_duties" property="companyDuties" jdbcType="VARCHAR" />
-    <result column="work_card" property="workCard" jdbcType="VARCHAR" />
-    <result column="approval_result" property="approvalResult" jdbcType="INTEGER" />
-    <result column="supplementary_explanation" property="supplementaryExplanation" jdbcType="VARCHAR" />
-    <result column="review_time" property="reviewTime" jdbcType="TIMESTAMP" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="approval_username" jdbcType="VARCHAR" property="approvalUsername" />
+    <result column="investors_type" jdbcType="INTEGER" property="investorsType" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="company_duties" jdbcType="VARCHAR" property="companyDuties" />
+    <result column="work_card" jdbcType="VARCHAR" property="workCard" />
+    <result column="approval_result" jdbcType="INTEGER" property="approvalResult" />
+    <result column="supplementary_explanation" jdbcType="VARCHAR" property="supplementaryExplanation" />
+    <result column="review_time" jdbcType="TIMESTAMP" property="reviewTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="leadership" jdbcType="INTEGER" property="leadership" />
   </resultMap>
-   <select id="findInvestorsApproval" parameterType="INTEGER" resultType="java.util.HashMap" >
+
+   <select id="findInvestorsApproval" parameterType="INTEGER" resultType="java.util.HashMap">
    SELECT i.* FROM investors_approval i  WHERE i.userid=#{userId} GROUP BY i.review_time DESC LIMIT 1
   </select>
 </mapper>

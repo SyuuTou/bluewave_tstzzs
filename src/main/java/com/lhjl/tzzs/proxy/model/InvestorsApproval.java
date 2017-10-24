@@ -73,6 +73,11 @@ public class InvestorsApproval {
     private Date createTime;
 
     /**
+     * 是否领投，0代表不是，1代表是；默认0
+     */
+    private Integer leadership;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -282,5 +287,23 @@ public class InvestorsApproval {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    /**
+     * 获取是否领投，0代表不是，1代表是；默认0
+     *
+     * @return leadership - 是否领投，0代表不是，1代表是；默认0
+     */
+    public Integer getLeadership() {
+        return leadership;
+    }
+
+    /**
+     * 设置是否领投，0代表不是，1代表是；默认0
+     *
+     * @param leadership 是否领投，0代表不是，1代表是；默认0
+     */
+    public void setLeadership(Integer leadership) {
+        this.leadership = leadership;
     }
 }
