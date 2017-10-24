@@ -23,11 +23,13 @@ public class Users {
     /**
      * 会员开通状态
      */
+    @Column(name = "`status`")
     private Integer status;
 
     /**
      * 会员级别
      */
+    @Column(name = "`level`")
     private Integer level;
 
     /**
@@ -61,6 +63,7 @@ public class Users {
     /**
      * 简介
      */
+    @Column(name = "`desc`")
     private String desc;
 
     /**
@@ -81,6 +84,7 @@ public class Users {
     /**
      * 密码
      */
+    @Column(name = "`password`")
     private String password;
 
     /**
