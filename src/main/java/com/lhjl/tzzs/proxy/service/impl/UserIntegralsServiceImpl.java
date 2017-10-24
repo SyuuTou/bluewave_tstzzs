@@ -783,17 +783,17 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	 * 支付之后调用
 	 * @param userId 用户ID
 	 * @param sceneKey 场景key
-	 * @param qj 实际支付金额
+	 * @param payMoney 实际支付金额
 	 * @param status 支付状态
 	 * @return
 	 */
 	@Override
-	public CommonDto<String> payAfter(Integer userId, String sceneKey, BigDecimal qj, int status) {
+	public CommonDto<String> payAfter(Integer userId, String sceneKey, BigDecimal payMoney, int status) {
 		CommonDto<String> result = new CommonDto<>();
 		if(TWO.equals(sceneKey) || THREE.equals(sceneKey) || FOUR.equals(sceneKey)){
 			result = userLevelService.changeLevel(userId, status);
 		}else{
-			result = this.insertGold(userId, qj);
+			result = this.insertGold(userId, payMoney);
 		}
 		return result;
 	}

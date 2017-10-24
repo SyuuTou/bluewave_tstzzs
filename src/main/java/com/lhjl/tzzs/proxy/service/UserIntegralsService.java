@@ -59,9 +59,9 @@ public interface UserIntegralsService {
 	 * 支付之后调用
 	 * @param userId 用户ID
 	 * @param sceneKey 场景key
-	 * @param qj 实际支付金额
+	 * @param payMoney 实际支付金额
 	 * @param status 支付状态
 	 * @return
 	 */
-	CommonDto<String> payAfter(Integer userId, String sceneKey, BigDecimal qj, int status);
+	CommonDto<String> payAfter(Integer userId, String sceneKey, BigDecimal payMoney, int status);
 }
