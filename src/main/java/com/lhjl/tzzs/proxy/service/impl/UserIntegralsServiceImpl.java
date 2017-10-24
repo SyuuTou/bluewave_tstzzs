@@ -524,7 +524,6 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	public  CommonDto<List<Map<String, Object>>> findIntegralsDetailed(String uuids,Integer pageNum,Integer pageSize) {
 		CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
 		List<Map<String, Object>> list =new ArrayList<Map<String, Object>>();
-		Map<String, Object> map =new HashMap<String, Object>();
 		Integer userId= usersMapper.findByUuid(uuids);
 		Integer beginNum = (pageNum-1)*pageSize;
 		//最多返回100条记录
@@ -544,7 +543,6 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					UserIntegrals u =new  UserIntegrals();
 					if(Integer.valueOf(String.valueOf(obj.get("integral_num")))>0){
 						if("xHwofbNs".equals(String.valueOf(obj.get("scene_key")))){
-
 							Integer dnum =Integer.valueOf(String.valueOf(obj.get("integral_num")));
 							obj.put("dnum","充值"+dnum+"元");
 							obj.put("hnum","+"+(int)((bei+1)*dnum));
@@ -560,6 +558,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 							String skey =String.valueOf(obj.get("scene_key"));
 							String userName = metaSceneMapper.selectbyDesc(skey);
 							obj.put("userName",userName);
+							
 						}
 					}else{
 						String skey =String.valueOf(obj.get("scene_key"));
@@ -569,8 +568,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						obj.put("dnum",dnum);
 						obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
 						obj.put("end_time",null);
-					}
+					}	
 				}
+	
 			}else{
 				leId=1;
 				Float bei =usersMapper.findByBei(leId);
@@ -578,12 +578,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					UserIntegrals u =new  UserIntegrals();
 					if(Integer.valueOf(String.valueOf(obj.get("integral_num")))>0){
 						if("xHwofbNs".equals(String.valueOf(obj.get("scene_key")))){
-
 							Integer dnum =Integer.valueOf(String.valueOf(obj.get("integral_num")));
 							obj.put("dnum","充值"+dnum+"元");
 							obj.put("hnum","+"+(int)((bei+1)*dnum));
 							obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
 							obj.put("end_time",String.valueOf(obj.get("end_time")).substring(0,10));
+							
 						}else{
 							Integer dnum=Integer.valueOf(String.valueOf(obj.get("integral_num")));
 							//Integer dnum1=(int)(hnum*(1-bei));
@@ -593,6 +593,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 							String skey =String.valueOf(obj.get("scene_key"));
 							String userName = metaSceneMapper.selectbyDesc(skey);
 							obj.put("userName",userName);
+						
 						}
 					}else{
 						String skey =String.valueOf(obj.get("scene_key"));
@@ -602,18 +603,15 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						obj.put("dnum",dnum);
 						obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
 						obj.put("end_time",null);
+						
 					}
 				}
-
 			}
-
 		}
-		if(list.size() <= 0){
+		if( list.size() <= 0){
 			result.setStatus(202);
 			result.setMessage("无查询数据");
-			return result;
 		}
-		list.add(map);
 		result.setData(list);
 		return result;
 	}
