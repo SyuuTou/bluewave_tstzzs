@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.model;
 
+import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "project_evaluation_log")
@@ -45,6 +46,12 @@ public class ProjectEvaluationLog {
      * 教育经历
      */
     private String education;
+
+    /**
+     *  创建时间
+     */
+    @Column(name = "creat_time")
+    private Date creatTime;
 
     /**
      * @return id
@@ -184,5 +191,23 @@ public class ProjectEvaluationLog {
      */
     public void setEducation(String education) {
         this.education = education;
+    }
+
+    /**
+     * 获取 创建时间
+     *
+     * @return creat_time -  创建时间
+     */
+    public Date getCreatTime() {
+        return creatTime;
+    }
+
+    /**
+     * 设置 创建时间
+     *
+     * @param creatTime  创建时间
+     */
+    public void setCreatTime(Date creatTime) {
+        this.creatTime = creatTime;
     }
 }
