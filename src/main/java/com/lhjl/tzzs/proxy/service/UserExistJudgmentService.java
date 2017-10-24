@@ -9,4 +9,5 @@ import java.util.Map;
 public interface UserExistJudgmentService {
     CommonDto<UserExsitJudgmentDto> userExistJudgment(String oppenId);
     CommonDto<UserYnDto> userYn(String token);
+    int getUserId(String token);
 }

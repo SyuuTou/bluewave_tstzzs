@@ -120,8 +120,8 @@ public class WxMaUserController {
         UserGetInfoDto userGetInfoDto = new UserGetInfoDto();
 
         //先获取到用户的id
-        CommonDto<UserYnDto> yhxinxi = userExistJudgmentService.userYn(token);
-        String userid = String.valueOf(yhxinxi.getData().getUseryn());
+        int yhxinxi = userExistJudgmentService.getUserId(token);
+        String userid = String.valueOf(yhxinxi);
         if (userid == null){
             userGetInfoDto.setSuccess(false);
             userGetInfoDto.setTips("token非法，请检查token");
