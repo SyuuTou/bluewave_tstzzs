@@ -3,6 +3,9 @@ package com.lhjl.tzzs.proxy.controller.weixin;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
+import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.UserExsitJudgmentDto;
+import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.utils.JsonUtils;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.util.Map;
 
 
 /**
@@ -27,14 +33,26 @@ public class WxMaUserController {
     @Autowired
     private WxMaService wxService;
 
+    @Resource
+    private UserExistJudgmentService userExistJudgmentService;
 
     /**
      * 登陆接口
      */
     @GetMapping("login")
-    public String login(String code) {
+    public CommonDto<UserExsitJudgmentDto> login(String code) {
+        CommonDto<UserExsitJudgmentDto> result = new CommonDto<>();
+        UserExsitJudgmentDto userExsitJudgmentDto =new UserExsitJudgmentDto();
+        logger.info("请求进来了");
         if (StringUtils.isBlank(code)) {
-            return "empty jscode";
+            userExsitJudgmentDto.setToken(null);
+            userExsitJudgmentDto.setSuccess(false);
+
+
+            result.setMessage("empty jscode");
+            result.setStatus(401);
+            result.setData(userExsitJudgmentDto);
+            return result;
         }
 
         try {
@@ -43,13 +61,37 @@ public class WxMaUserController {
             this.logger.info(session.getOpenid());
             this.logger.info(session.getExpiresin().toString());
             //TODO 可以增加自己的逻辑，关联业务相关数据
-            return JsonUtils.toJson(session);
+            String openId = session.getOpenid();
+            result = userExistJudgmentService.userExistJudgment(openId);
+            return result;
         } catch (WxErrorException e) {
             this.logger.error(e.getMessage(), e);
-            return e.toString();
+            userExsitJudgmentDto.setToken(null);
+            userExsitJudgmentDto.setSuccess(false);
+
+            result.setMessage("服务器发生错误！");
+            result.setStatus(501);
+            result.setData(userExsitJudgmentDto);
+
+            return result;
         }
     }
 
+//    @GetMapping("logina")
+//    public CommonDto<UserExsitJudgmentDto> logina(String code){
+//        CommonDto<UserExsitJudgmentDto> result = new CommonDto<UserExsitJudgmentDto>();
+//
+//        try {
+//            result = userExistJudgmentService.userExistJudgment(code);
+//        }catch (Exception e){
+//            logger.error(e.getMessage(),e.fillInStackTrace());
+//            result.setData(null);
+//            result.setStatus(501);
+//            result.setMessage("请求失败");
+//        }
+//
+//        return result;
+//    }
     /**
      * <pre>
      * 获取用户信息接口
