@@ -11,18 +11,15 @@ import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.model.UsersWeixin;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
-import org.apache.catalina.User;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 
 import javax.annotation.Resource;
-import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
 
 @Service
 public class UserExistJudgmentImpl implements UserExistJudgmentService {
