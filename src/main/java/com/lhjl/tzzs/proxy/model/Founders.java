@@ -51,32 +51,22 @@ public class Founders {
     private Integer projectId;
 
     /**
-     * 审核状态
+     * 审核状态，0表示审核未通过，1表示审核通过，默认0
      */
     @Column(name = "approval_status")
     private Integer approvalStatus;
 
     /**
-     * 审核时间
+     * 审核时间，审核时存，其他时候为空
      */
     @Column(name = "approval_time")
-    private Integer approvalTime;
+    private Date approvalTime;
 
-    public Integer getApprovalStatus() {
-        return approvalStatus;
-    }
-
-    public void setApprovalStatus(Integer approvalStatus) {
-        this.approvalStatus = approvalStatus;
-    }
-
-    public Integer getApprovalTime() {
-        return approvalTime;
-    }
-
-    public void setApprovalTime(Integer approvalTime) {
-        this.approvalTime = approvalTime;
-    }
+    /**
+     * 用户ID
+     */
+    @Column(name = "user_id")
+    private Integer userId;
 
     /**
      * @return ID
@@ -240,5 +230,59 @@ public class Founders {
      */
     public void setProjectId(Integer projectId) {
         this.projectId = projectId;
+    }
+
+    /**
+     * 获取审核状态，0表示审核未通过，1表示审核通过，默认0
+     *
+     * @return approval_status - 审核状态，0表示审核未通过，1表示审核通过，默认0
+     */
+    public Integer getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    /**
+     * 设置审核状态，0表示审核未通过，1表示审核通过，默认0
+     *
+     * @param approvalStatus 审核状态，0表示审核未通过，1表示审核通过，默认0
+     */
+    public void setApprovalStatus(Integer approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+
+    /**
+     * 获取审核时间，审核时存，其他时候为空
+     *
+     * @return approval_time - 审核时间，审核时存，其他时候为空
+     */
+    public Date getApprovalTime() {
+        return approvalTime;
+    }
+
+    /**
+     * 设置审核时间，审核时存，其他时候为空
+     *
+     * @param approvalTime 审核时间，审核时存，其他时候为空
+     */
+    public void setApprovalTime(Date approvalTime) {
+        this.approvalTime = approvalTime;
+    }
+
+    /**
+     * 获取用户ID
+     *
+     * @return user_id - 用户ID
+     */
+    public Integer getUserId() {
+        return userId;
+    }
+
+    /**
+     * 设置用户ID
+     *
+     * @param userId 用户ID
+     */
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

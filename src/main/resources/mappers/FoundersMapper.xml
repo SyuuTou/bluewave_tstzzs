@@ -16,7 +16,9 @@
     <result column="yn" jdbcType="INTEGER" property="yn" />
     <result column="project_id" jdbcType="INTEGER" property="projectId" />
     <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
-    <result column="approval_time" jdbcType="TIMESTAMP" property="approval_time" />
+    <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
   </resultMap>
+
 
 </mapper>
