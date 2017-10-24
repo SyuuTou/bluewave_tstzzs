@@ -10,7 +10,7 @@ public class TouZiDto {
 	private String fillOffice;  //担任职务
 	private String evaContent;  //说明
 	private String tempFilePaths; //图片
-	private String mountID;  //认证id
+	private String token;  //认证id
 	public String getDateName() {
 		return dateName;
 	}
@@ -44,15 +44,16 @@ public class TouZiDto {
 	public String getTempFilePaths() {
 		return tempFilePaths;
 	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
 	public void setTempFilePaths(String tempFilePaths) {
 		this.tempFilePaths = tempFilePaths;
 	}
-	public String getMountID() {
-		return mountID;
-	}
-	public void setMountID(String mountID) {
-		this.mountID = mountID;
-	}
+	
 	
 
 }

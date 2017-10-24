@@ -10,5 +10,5 @@ import com.lhjl.tzzs.proxy.model.InvestorsApproval;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 
 public interface InvestorsApprovalMapper extends OwnerMapper<InvestorsApproval> {
-	Map<String,Object> findInvestorsApproval(@Param("userId") Integer userID);
+	Map<String,Object> findInvestorsApproval(@Param("userId") Integer userId);
 }

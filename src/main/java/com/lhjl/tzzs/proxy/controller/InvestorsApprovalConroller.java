@@ -54,12 +54,12 @@ public class InvestorsApprovalConroller {
 	 * @return
 	 */
 	@GetMapping("rest/user/newryhxinxia")
-	public CommonDto<Map<String,Object>> findInvestorsExamine(String userID){
+	public CommonDto<Map<String,Object>> findInvestorsExamine(String token){
 		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
 		
 		try {
 			//初始化分页信息
-			result = investorsApprovalService.findInvestorsExamine(userID);
+			result = investorsApprovalService.findInvestorsExamine(token);
 			if(result.getStatus() == null){
 				result.setStatus(200);
 				result.setMessage("success");
@@ -78,12 +78,12 @@ public class InvestorsApprovalConroller {
 	 * @return
 	 */
 	@GetMapping("rest/renzhengtouzirenshenhebiao/newrshenhexinxi")
-	public CommonDto<Map<String,Object>> findInvestorsApproval(String userID){
+	public CommonDto<Map<String,Object>> findInvestorsApproval(String token){
 		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
 
 		try {
 			//初始化分页信息
-			result = investorsApprovalService.findInvestorsApproval(userID);
+			result = investorsApprovalService.findInvestorsApproval(token);
 			if(result.getStatus() == null){
 				result.setStatus(200);
 				result.setMessage("success");
