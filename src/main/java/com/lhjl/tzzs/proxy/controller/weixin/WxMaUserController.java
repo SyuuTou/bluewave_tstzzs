@@ -3,10 +3,10 @@ package com.lhjl.tzzs.proxy.controller.weixin;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.UserExsitJudgmentDto;
-import com.lhjl.tzzs.proxy.dto.UserGetInfoDto;
-import com.lhjl.tzzs.proxy.dto.UserYnDto;
+import cn.binarywang.wx.miniapp.util.crypt.WxMaCryptUtils;
+import cn.binarywang.wx.miniapp.util.json.WxMaGsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.service.UserWeixinService;
 import com.lhjl.tzzs.proxy.service.common.SessionKeyService;
@@ -164,6 +164,7 @@ public class WxMaUserController {
             // 解密用户信息
             WxMaUserInfo userInfo = this.wxService.getUserService().getUserInfo(sessionKey, encryptedData, iv);
 
+
             result = userWeixinService.setUsersWeixin(userInfo,userid);
         }catch (Exception e){
             logger.error(e.getMessage(),e.fillInStackTrace());
@@ -178,5 +179,33 @@ public class WxMaUserController {
 
         return result;
     }
+
+    /**
+     *
+     * @param token
+     * @param encryptedData
+     * @param iv
+     * @return
+     */
+    @GetMapping("phonenumber")
+    public CommonDto<PhonenumberInfo> phonenumber(String token,String encryptedData, String iv) {
+        CommonDto<PhonenumberInfo> result = new CommonDto<>();
+        //先获取到用户的id
+        try {
+            int yhxinxi = userExistJudgmentService.getUserId(token);
+            String userid = String.valueOf(yhxinxi);
+            String sessionKey = sessionKeyService.getSessionKey(userid);
+            String info = WxMaCryptUtils.decrypt(sessionKey, encryptedData, iv);
+            PhonenumberInfo phonenumberInfo = WxMaGsonBuilder.create().fromJson(info, PhonenumberInfo.class);
+            result.setData(phonenumberInfo);
+            result.setMessage("success");
+            result.setStatus(200);
+        } catch (Exception e) {
+            result.setStatus(500);
+            result.setMessage("failed");
+        }
+        return result;
+    }
+
 
 }

@@ -95,6 +95,7 @@ public class PaymentController extends GenericController {
     try {
       commonDto = idataVCPayService.generatePayInfo(payRequestBody);
     } catch (Exception e) {
+      e.printStackTrace();
       commonDto.setStatus(500);
       commonDto.setMessage(e.getMessage());
     }

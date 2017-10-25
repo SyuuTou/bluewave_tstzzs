@@ -12,12 +12,13 @@ public class MetaScene {
     /**
      * 场景key
      */
-    @Column(name = "key_name")
+    @Column(name = "`key`")
     private String key;
 
     /**
      * 场景描述
      */
+    @Column(name = "`desc`")
     private String desc;
 
     /**

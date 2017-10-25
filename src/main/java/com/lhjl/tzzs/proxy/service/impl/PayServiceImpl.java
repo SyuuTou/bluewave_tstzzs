@@ -123,7 +123,7 @@ public class PayServiceImpl implements PayService {
         String idStr =  String.valueOf(id);
 
         Integer length = 20;
-        String zero = "0000000000000000";
+        String zero = "0000000000000000000000000000000";
         StringBuilder stringBuilder = new StringBuilder("Idatavc");
         stringBuilder.append("_").append(zero.substring(0,length-idStr.length())).append(idStr);
         return stringBuilder.toString();
