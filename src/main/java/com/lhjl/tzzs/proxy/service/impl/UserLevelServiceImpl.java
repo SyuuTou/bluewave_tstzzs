@@ -919,18 +919,22 @@ public class UserLevelServiceImpl implements UserLevelService {
                     switch (userLevel){
                         case 1:
                             result.setMessage("普通会员只能选择"+metaObtainIntegral.getDeliverNum()+"个机构进行提交，当前已投递"+dayNum+"个");
+                            data.put("button", "0");
                             break;
                         case 2:
                             result.setMessage("高级会员只能选择"+metaObtainIntegral.getDeliverNum()+"个机构进行提交，当前已投递"+dayNum+"个");
+                            data.put("button", "0");
                             break;
                         case 3:
                             result.setMessage("VIP会员每日可选择"+metaObtainIntegral.getDeliverNum()+"个机构进行提交，当前已投递"+dayNum+"个");
+                            data.put("button", "0");
                             break;
                         case 4:
                             result.setMessage("VIP投资人每日可选择"+metaObtainIntegral.getDeliverNum()+"个机构进行提交，当前已投递"+dayNum+"个");
+                            data.put("button", "1");
                             break;
                     }
-
+                    result.setData(data);
                     return result;
                 }
 
