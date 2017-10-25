@@ -249,6 +249,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		investors = investorsMapper.selectOne(investors);
 		if(investors != null){
 			investors.setApprovalStatus(Integer.parseInt(approvalStatus));
+			investorsMapper.updateByPrimaryKey(investors);
 		}else{
 			Investors newInvestors = new Investors();
 			newInvestors.setUserId(userId);
