@@ -23,4 +23,27 @@
    <select id="findInvestorsApproval" parameterType="INTEGER" resultType="java.util.HashMap">
    SELECT i.* FROM investors_approval i  WHERE i.userid=#{userId} GROUP BY i.review_time DESC LIMIT 1
   </select>
+
+  <select id="findApproval" resultMap="BaseResultMap">
+    SELECT id,userid,approval_username,investors_type,description,company,company_duties,work_card,approval_result,
+    supplementary_explanation,review_time,create_time,leadership FROM investors_approval WHERE 1=1
+    <if test="checkName !='' and checkName != null">
+      AND
+      (approval_username LIKE CONCAT('%',#{checkName},'%')
+      OR description LIKE CONCAT('%',#{checkName},'%')
+      OR company LIKE CONCAT('%',#{checkName},'%')
+      OR company_duties LIKE CONCAT('%',#{checkName},'%')
+      )
+    </if>
+    <if test="time == 1">
+      AND to_days(create_time) = to_days(now())
+    </if>
+    <if test="time == 2">
+      AND YEARWEEK(date_format(create_time,'%Y-%m-%d')) = YEARWEEK(now())
+    </if>
+    <if test="time == 3">
+      AND DATE_FORMAT(create_time, '%Y%m') = DATE_FORMAT(CURDATE( ) , '%Y%m')
+    </if>
+    LIMIT #{beginNum},#{pageSize}
+  </select>
 </mapper>

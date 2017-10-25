@@ -11,4 +11,6 @@ import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 
 public interface InvestorsApprovalMapper extends OwnerMapper<InvestorsApproval> {
 	Map<String,Object> findInvestorsApproval(@Param("userId") Integer userId);
+	List<InvestorsApproval> findApproval(@Param("checkName") String checkName,
+										 @Param("time")String time, @Param("beginNum")Integer beginNum, @Param("pageSize")Integer pageSize);
 }

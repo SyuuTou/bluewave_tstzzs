@@ -1,12 +1,12 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.annotation.Resource;
 
+import com.lhjl.tzzs.proxy.dto.InvestorsApprovalDto;
+import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
+import com.lhjl.tzzs.proxy.model.Investors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +30,8 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	private UserTokenMapper userTokenMapper;
 	@Resource
 	private UsersMapper usersMapper;
+	@Resource
+	private InvestorsMapper investorsMapper;
     
 	/**
 	 * 认证投资人信息记录
@@ -155,8 +157,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 					map.put("shenhezhong",false);
 					map.put("weitongguo", true);
 					map.put("yiquxiao", false); 
-					map.put("success",true);
-					
+					map.put("success",true);	
 			 }
 			 if(Integer.valueOf(String.valueOf(map.get("approval_result")))==3){
 				 map.put("gongsizhiwei",String.valueOf(map.get("company_duties")));
@@ -166,8 +167,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 					map.put("shenhezhong",false);
 					map.put("weitongguo", false);
 					map.put("yiquxiao", false); 
-					map.put("success",true);
-					
+					map.put("success",true);	
 			 }
 			 if(Integer.valueOf(String.valueOf(map.get("approval_result")))==4){
 				 map.put("gongsizhiwei",String.valueOf(map.get("company_duties")));
@@ -178,7 +178,6 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 					map.put("weitongguo",false);
 					map.put("yiquxiao", false); 
 					map.put("success",true);
-					
 			 }
 			 if(Integer.valueOf(String.valueOf(map.get("approval_result")))==5){
 				 map.put("gongsizhiwei",String.valueOf(map.get("company_duties")));
@@ -197,11 +196,74 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			 map.put("shenhezhong",false);
 			 map.put("weitongguo",false);
 			 map.put("yiquxiao", false);
-
 		 }
 		result.setData(map);
 		return result;
 	}
 
+	/**
+	 * 获取投资审核信息
+	 * @param body 查询条件
+	 * @return
+	 */
+	@Override
+	public CommonDto<List<InvestorsApproval>> findApprovals(InvestorsApprovalDto body) {
+		CommonDto<List<InvestorsApproval>> result = new CommonDto<>();
+		List<InvestorsApproval> data = new ArrayList<>();
+		int beginNum = (body.getPageNum()-1)*body.getPageSize();
+		data = investorsApprovalMapper.findApproval(body.getCheckName(), body.getTime(), beginNum, body.getPageSize());
 
+		result.setStatus(200);
+		result.setMessage("获取投资审核信息成功");
+		result.setData(data);
+		return result;
+	}
+
+	/**
+	 * 后台审核操作接口
+	 * @param body 请求对象
+	 * @return
+	 */
+	@Override
+	public CommonDto<String> approval(InvestorsApprovalDto body) {
+		CommonDto<String> result = new CommonDto<>();
+		int approvalId = body.getId();
+		String approveResult = body.getApproveResult();
+		String explanation = body.getExplanation();
+		String approvalStatus = body.getApprovalStatus();
+
+		//更新投资审核记录表
+		InvestorsApproval approval = new InvestorsApproval();
+		approval.setId(approvalId);
+		approval = investorsApprovalMapper.selectOne(approval);
+		approval.setApprovalResult(Integer.parseInt(approveResult));
+		if(explanation != null && !"".equals(explanation)){
+			approval.setSupplementaryExplanation(explanation);
+		}
+		investorsApprovalMapper.updateByPrimaryKey(approval);
+
+		//更新投资人信息
+		int userId = approval.getUserid();
+		Investors investors = new Investors();
+		investors.setUserId(userId);
+		investors = investorsMapper.selectOne(investors);
+		if(investors != null){
+			investors.setApprovalStatus(Integer.parseInt(approvalStatus));
+		}else{
+			Investors newInvestors = new Investors();
+			newInvestors.setUserId(userId);
+			newInvestors.setName(approval.getApprovalUsername());
+			newInvestors.setApprovalStatus(Integer.parseInt(approvalStatus));
+			newInvestors.setCreateTime(new Date());
+			newInvestors.setPosition(approval.getCompanyDuties());
+			newInvestors.setYn(1);
+			newInvestors.setApprovalTime(new Date());
+			newInvestors.setInvestorsType(approval.getInvestorsType());
+			investorsMapper.insert(newInvestors);
+		}
+
+		result.setStatus(200);
+		result.setMessage("审核操作成功");
+		return result;
+	}
 }

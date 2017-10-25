@@ -15,5 +15,8 @@
     <result column="education" jdbcType="VARCHAR" property="education" />
     <result column="creat_time" jdbcType="TIMESTAMP" property="creatTime" />
   </resultMap>
+  <select id="findInvestorsApproval" parameterType="INTEGER" resultType="java.util.HashMap">
+    SELECT i.* FROM  project_evaluation_log  i  WHERE i.user_id=#{userId} GROUP BY i.creat_time DESC LIMIT 1
+  </select>
 
 </mapper>

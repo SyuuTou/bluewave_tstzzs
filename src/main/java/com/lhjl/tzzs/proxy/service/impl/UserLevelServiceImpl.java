@@ -210,9 +210,14 @@ public class UserLevelServiceImpl implements UserLevelService {
             long days = (failTime.getTime() - now.getTime())/(1000*60*60*24);
             //当前用户会员等级
             int userLevelId = records.get(0).getLevelId();
+            MetaUserLevel nowLevel = new MetaUserLevel();
+            nowLevel.setId(userLevelId);
+            nowLevel = metaUserLevelMapper.selectByPrimaryKey(nowLevel);
+
             if(levelId > userLevelId && userLevelId != 1){
-                userLevelDto.setActualPrice(userLevel.getAmount().intValue() - (int)days);
-                userLevelDto.setDicount((int)days);
+                int discount = (nowLevel.getAmount().intValue()/365)*(int)days;
+                userLevelDto.setActualPrice(userLevel.getAmount().intValue() - discount);
+                userLevelDto.setDicount(discount);
             }else{
                 userLevelDto.setActualPrice(userLevel.getAmount().intValue());
             }
@@ -430,7 +435,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         if(userLevelRelation != null){
             userLevel = userLevelRelation.getLevelId();
         }
-
+        data.put("levelId", userLevel);
         //查询当前用户金币余额
         Integer z =userIntegralsMapper.findIntegralsZ(localUserId);
         Integer x =userIntegralsMapper.findIntegralsX(localUserId);
@@ -443,12 +448,14 @@ public class UserLevelServiceImpl implements UserLevelService {
             if(userLevel < 4){
                 result.setStatus(202);
                 result.setMessage("查看天使投资指数统计数据和项目列表，仅对VIP投资人开放");
+                result.setData(data);
                 return result;
             }
 
             if(INDEX.equals(sceneKey)){
                 result.setStatus(200);
                 result.setMessage("进入首页不再进行收费");
+                result.setData(data);
                 return result;
             }
 
@@ -480,6 +487,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             if(valid.size() > 0){
                 result.setStatus(200);
                 result.setMessage("该功能已被购买，可直接进入");
+                result.setData(data);
                 return result;
             }
 
@@ -543,6 +551,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             if(userLevel < 4){
                 result.setStatus(202);
                 result.setMessage("约谈项目，仅对VIP投资人开放");
+                result.setData(data);
                 return result;
             }
 
@@ -561,6 +570,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             if(isBuy){
                 result.setStatus(200);
                 result.setMessage("该功能已被购买，可直接进入");
+                result.setData(data);
                 return result;
             }
 
@@ -648,6 +658,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             if(userLevel < 1){
                 result.setStatus(202);
                 result.setMessage("项目评估仅对会员用户开放，完善个人资料后赠送普通会员");
+                result.setData(data);
                 return result;
             }
             //判断权限
@@ -668,21 +679,25 @@ public class UserLevelServiceImpl implements UserLevelService {
                 if(industryName != null && !"".equals(industryName) && !"不限".equals(industryName)){
                     result.setStatus(205);
                     result.setMessage("普通会员用户每次只能选择一个评估选项");
+                    result.setData(data);
                     return result;
                 }
                 if(cityName != null && !"".equals(cityName) && !"不限".equals(cityName)){
                     result.setStatus(205);
                     result.setMessage("普通会员用户每次只能选择一个评估选项");
+                    result.setData(data);
                     return result;
                 }
                 if(educationName != null && !"".equals(educationName) && !"不限".equals(educationName)){
                     result.setStatus(205);
                     result.setMessage("普通会员用户每次只能选择一个评估选项");
+                    result.setData(data);
                     return result;
                 }
                 if(workName != null && !"".equals(workName) && !"不限".equals(workName)){
                     result.setStatus(205);
                     result.setMessage("普通会员用户每次只能选择一个评估选项");
+                    result.setData(data);
                     return result;
                 }
                 if(roundName != null && !"".equals(roundName)){
@@ -691,6 +706,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                     if(isBuy){
                         result.setStatus(200);
                         result.setMessage("该功能已被购买，可直接进入");
+                        result.setData(data);
                         return result;
                     }
                     int consumeNum = metaObtainIntegral.getIntegral();
@@ -866,6 +882,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 }else{
                     result.setStatus(200);
                     result.setMessage("该功能已被购买，可直接进入");
+                    result.setData(data);
                     return result;
                 }
             }
@@ -877,6 +894,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             if(userLevel < 1){
                 result.setStatus(202);
                 result.setMessage("投递项目仅对会员用户开放，完善个人资料后赠送普通会员");
+                result.setData(data);
                 return result;
             }
 
@@ -1004,6 +1022,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             }else{
                 result.setStatus(200);
                 result.setMessage("该功能已被购买，可直接进入");
+                result.setData(data);
                 return result;
             }
         }

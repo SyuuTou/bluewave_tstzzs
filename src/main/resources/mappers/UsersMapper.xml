@@ -26,7 +26,10 @@
     <result column="company_desc" jdbcType="VARCHAR" property="companyDesc" />
     <result column="demand" jdbcType="VARCHAR" property="demand" />
     <result column="headpic_real" jdbcType="VARCHAR" property="headpicReal" />
+    <result column="industry" jdbcType="VARCHAR" property="industry" />
+    <result column="work_card" jdbcType="VARCHAR" property="workCard" />
   </resultMap>
+
 
     <select id="findByUuid" parameterType="String" resultType="INTEGER">
      SELECT u.ID FROM users u WHERE u.uuid=#{uuids}
