@@ -698,24 +698,80 @@ public class UserEditImpl implements UserEditService {
             newIndustry.add(industryInside);
         }
 
+        //判断是null，就让它返回空
+        String userRealName = usersInfo.getActualName();
+        String userDesc = usersInfo.getDesc();
+        String userCompanyDuties = usersInfo.getCompanyDuties();
+        String userCompanyDesc = usersInfo.getCompanyDesc();
+        String userDemand = usersInfo.getDemand();
+        String userEmail = usersInfo.getEmail();
+        String userWechat = usersInfo.getWechat();
+        String userCompanyName = usersInfo.getCompanyName();
+        String userJobtitle = usersInfo.getCompanyDuties();
+        String userCitys = usersInfo.getCity();
+        String userWorkCard = usersInfo.getWorkCard();
+
+        if (userRealName == null){
+            userRealName = "";
+        }
+
+        if (userDesc == null){
+            userDesc = "";
+        }
+
+        if (userCompanyDuties == null){
+            userCompanyDuties = "";
+        }
+
+        if (userCompanyDesc == null){
+            userCompanyDesc = "";
+        }
+
+        if (userDemand == null){
+            userDemand = "";
+        }
+
+        if (userEmail == null){
+            userEmail = "";
+        }
+
+        if (userWechat == null){
+            userWechat = "";
+        }
+
+        if (userCompanyName == null){
+            userCompanyName = "";
+        }
+
+        if (userJobtitle == null){
+            userJobtitle = "";
+        }
+
+        if (userCitys == null){
+            userCitys = "";
+        }
+
+        if (userWorkCard == null){
+            userWorkCard = "";
+        }
 
         obj.put("xuexiao",educationForAdd);
         obj.put("shuzu",newIndustry);
         obj.put("gzjl",workForAdd);
         obj.put("_id",userid);
-        obj.put("user7realname_cn",usersInfo.getActualName());
-        obj.put("desc",usersInfo.getDesc());
-        obj.put("user7excessfield2",usersInfo.getCompanyDuties());
-        obj.put("user7excessfield3",usersInfo.getCompanyDesc());
-        obj.put("user7excessfield4",usersInfo.getDemand());
-        obj.put("email",usersInfo.getEmail());
-        obj.put("user7wechatnumb_noana",usersInfo.getWechat());
-        obj.put("xiangmubiao7companyful",usersInfo.getCompanyName());
-        obj.put("user7jobtitle",usersInfo.getCompanyDuties());
+        obj.put("user7realname_cn",userRealName);
+        obj.put("desc",userDesc);
+        obj.put("user7excessfield2",userCompanyDuties);
+        obj.put("user7excessfield3",userCompanyDesc);
+        obj.put("user7excessfield4",userDemand);
+        obj.put("email",userEmail);
+        obj.put("user7wechatnumb_noana",userWechat);
+        obj.put("xiangmubiao7companyful",userCompanyName);
+        obj.put("user7jobtitle",userJobtitle);
         obj.put("touzirenleixin",touziren);
         obj.put("diqu",cityKey);
-        obj.put("diquming",usersInfo.getCity());
-        obj.put("user7businesscaa_noana",usersInfo.getWorkCard());
+        obj.put("diquming",userCitys);
+        obj.put("user7businesscaa_noana",userWorkCard);
         obj.put("success",true);
 
         result.setData(obj);
