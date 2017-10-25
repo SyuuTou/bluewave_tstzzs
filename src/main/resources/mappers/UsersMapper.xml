@@ -27,6 +27,7 @@
     <result column="demand" jdbcType="VARCHAR" property="demand" />
     <result column="headpic_real" jdbcType="VARCHAR" property="headpicReal" />
     <result column="industry" jdbcType="VARCHAR" property="industry" />
+    <result column="work_card" jdbcType="VARCHAR" property="workCard" />
   </resultMap>
 
 

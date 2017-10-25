@@ -88,7 +88,7 @@ public class Users {
     private String password;
 
     /**
-     * 身份类型：0表示投资人,1表示创业者,2表示产业公司,3表示媒体,4表示研究机构;
+     * 身份类型：0表示投资人,1表示创业者,2表示产业公司,3表示媒体,4表示政府机构,5表示服务机构;
      */
     @Column(name = "identity_type")
     private Integer identityType;
@@ -123,6 +123,12 @@ public class Users {
      * 用户个人资料的行业领域
      */
     private String industry;
+
+    /**
+     * 个人资料中的工作名片
+     */
+    @Column(name = "work_card")
+    private String workCard;
 
     /**
      * @return ID
@@ -510,5 +516,23 @@ public class Users {
      */
     public void setIndustry(String industry) {
         this.industry = industry;
+    }
+
+    /**
+     * 获取个人资料中的工作名片
+     *
+     * @return work_card - 个人资料中的工作名片
+     */
+    public String getWorkCard() {
+        return workCard;
+    }
+
+    /**
+     * 设置个人资料中的工作名片
+     *
+     * @param workCard 个人资料中的工作名片
+     */
+    public void setWorkCard(String workCard) {
+        this.workCard = workCard;
     }
 }
