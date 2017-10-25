@@ -54,7 +54,8 @@ public class UserInfoServiceImpl implements UserInfoService{
             params.put("city", users.getCity());
             params.put("desc", users.getDesc());
             params.put("email", users.getEmail());
-            params.put("headpic", users.getWorkCard());
+            params.put("user7businesscaa_noana", users.getWorkCard());
+            params.put("headpic", users.getHeadpic());
             params.put("user7corporaten", users.getCompanyName());
 
             Founders founders = new Founders();
