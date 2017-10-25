@@ -120,6 +120,11 @@ public class Users {
     private String headpicReal;
 
     /**
+     * 用户个人资料的行业领域
+     */
+    private String industry;
+
+    /**
      * @return ID
      */
     public Integer getId() {
@@ -386,18 +391,18 @@ public class Users {
     }
 
     /**
-     * 获取身份类型：0表示投资人,1表示创业者,2表示产业公司,3表示媒体,4表示研究机构;
+     * 获取身份类型：0表示投资人,1表示创业者,2表示产业公司,3表示媒体,4表示政府机构,5表示服务机构;
      *
-     * @return identity_type - 身份类型：0表示投资人,1表示创业者,2表示产业公司,3表示媒体,4表示研究机构;
+     * @return identity_type - 身份类型：0表示投资人,1表示创业者,2表示产业公司,3表示媒体,4表示政府机构,5表示服务机构;
      */
     public Integer getIdentityType() {
         return identityType;
     }
 
     /**
-     * 设置身份类型：0表示投资人,1表示创业者,2表示产业公司,3表示媒体,4表示研究机构;
+     * 设置身份类型：0表示投资人,1表示创业者,2表示产业公司,3表示媒体,4表示政府机构,5表示服务机构;
      *
-     * @param identityType 身份类型：0表示投资人,1表示创业者,2表示产业公司,3表示媒体,4表示研究机构;
+     * @param identityType 身份类型：0表示投资人,1表示创业者,2表示产业公司,3表示媒体,4表示政府机构,5表示服务机构;
      */
     public void setIdentityType(Integer identityType) {
         this.identityType = identityType;
@@ -487,5 +492,23 @@ public class Users {
      */
     public void setHeadpicReal(String headpicReal) {
         this.headpicReal = headpicReal;
+    }
+
+    /**
+     * 获取用户个人资料的行业领域
+     *
+     * @return industry - 用户个人资料的行业领域
+     */
+    public String getIndustry() {
+        return industry;
+    }
+
+    /**
+     * 设置用户个人资料的行业领域
+     *
+     * @param industry 用户个人资料的行业领域
+     */
+    public void setIndustry(String industry) {
+        this.industry = industry;
     }
 }
