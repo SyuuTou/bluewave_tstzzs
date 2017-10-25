@@ -11,6 +11,7 @@ import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.model.UsersWeixin;
 import com.lhjl.tzzs.proxy.service.UserEditService;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
+import com.lhjl.tzzs.proxy.service.common.SmsCommonService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,9 @@ public class UserEditImpl implements UserEditService {
 
     @Resource
     private UserExistJudgmentService userExistJudgmentService;
+
+    @Resource
+    private SmsCommonService smsCommonService;
 
     @Override
     public CommonDto<UserSetPasswordOutputDto> editUserPassword(UserSetPasswordInputDto body,int userId,String token){
@@ -208,6 +212,77 @@ public class UserEditImpl implements UserEditService {
         result.setData(obj);
         result.setStatus(200);
 
+
+        return result;
+    }
+
+    @Override
+    public CommonDto<Map<String,Object>> sendSecurityCode(String token,String phoneNum){
+
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> obj = new HashMap<>();
+        Map<String,Object> jieguo = new HashMap<>();
+
+        if (token == null || "".equals(token) || "undefined".equals(token)){
+            jieguo.put("message","用户token不能为空");
+            jieguo.put("status",50001);
+            jieguo.put("data",null);
+
+            obj.put("jieguo",jieguo);
+            obj.put("success",false);
+
+            result.setMessage("用户token不能为空");
+            result.setData(obj);
+            result.setStatus(50001);
+
+            return result;
+        }
+
+        if (phoneNum == null || "".equals(phoneNum) || "undefined".equals(phoneNum)){
+            jieguo.put("message","手机号不能为空");
+            jieguo.put("status",50001);
+            jieguo.put("data",null);
+
+            obj.put("jieguo",jieguo);
+            obj.put("success",false);
+
+            result.setMessage("手机号不能为空");
+            result.setData(obj);
+            result.setStatus(50001);
+
+            return result;
+        }
+
+        int userid = userExistJudgmentService.getUserId(token);
+        String userId = String.valueOf(userid);
+        if (userid == -1){
+            jieguo.put("message","用户token非法");
+            jieguo.put("status",50001);
+            jieguo.put("data",null);
+
+            obj.put("jieguo",jieguo);
+            obj.put("success",false);
+
+            result.setMessage("用户token非法");
+            result.setData(obj);
+            result.setStatus(50001);
+
+            return result;
+        }
+
+
+        CommonDto<String> securityCode = smsCommonService.sendSMS(userId,phoneNum);
+
+        jieguo.put("message",securityCode.getMessage());
+        jieguo.put("status",securityCode.getStatus());
+        jieguo.put("data",securityCode.getData());
+
+        obj.put("jieguo",jieguo);
+        obj.put("success",true);
+
+        result.setStatus(200);
+        result.setData(obj);
+        result.setMessage(securityCode.getMessage());
 
         return result;
     }

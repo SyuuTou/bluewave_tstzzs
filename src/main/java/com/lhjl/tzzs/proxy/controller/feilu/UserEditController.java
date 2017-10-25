@@ -150,7 +150,37 @@ public class UserEditController {
 
         return result;
     }
+    /*
+     * 发验证码冗余接口，用于保持和以前返回格式一致
+     */
+    @GetMapping("send/message")
+    public CommonDto<Map<String,Object>> sendSecurityCode(String token,String phoneNum){
 
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> obj = new HashMap<>();
+
+        try {
+            result = userEditService.sendSecurityCode(token,phoneNum);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            Map<String,Object> jieguo = new HashMap<>();
+            jieguo.put("message","获取验证码失败");
+            jieguo.put("status",50001);
+            jieguo.put("data",null);
+
+            obj.put("jieguo",jieguo);
+            obj.put("success",false);
+
+            result.setStatus(502);
+            result.setData(obj);
+            result.setMessage("服务器端发生错误");
+
+        }
+
+
+        return result;
+
+    }
     /*
      * 读用户头像姓名接口
      */

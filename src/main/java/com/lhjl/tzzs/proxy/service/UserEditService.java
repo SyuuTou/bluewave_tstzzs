@@ -12,4 +12,5 @@ public interface UserEditService {
     CommonDto<UserSetPasswordOutputDto> editUserPassword(UserSetPasswordInputDto body,int userid,String token);
     CommonDto<Map<String,Object>> getUserHeadpic(int userid);
     CommonDto<Map<String,Object>> updateUserHeadpic(String headpic,String token);
+    CommonDto<Map<String,Object>> sendSecurityCode(String token,String phoneNum);
 }
