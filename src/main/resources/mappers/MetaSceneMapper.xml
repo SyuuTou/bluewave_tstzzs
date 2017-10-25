@@ -6,12 +6,12 @@
       WARNING - @mbg.generated
     -->
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="key" property="key" jdbcType="VARCHAR" />
+    <result column="key_name" property="key" jdbcType="VARCHAR" />
     <result column="desc" property="desc" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="yn" property="yn" jdbcType="INTEGER" />
   </resultMap>
   <select id="selectbyDesc"  parameterType="String" resultType="String" >
-    SELECT c.desc FROM meta_scene c WHERE c.key=#{skey}
+    SELECT c.desc FROM meta_scene c WHERE c.key_name=#{skey}
   </select>
 </mapper>

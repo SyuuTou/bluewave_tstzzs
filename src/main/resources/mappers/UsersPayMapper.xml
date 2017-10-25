@@ -17,5 +17,6 @@
     <result column="pay_detail" jdbcType="VARCHAR" property="payDetail" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="trade_no" jdbcType="INTEGER" property="tradeNo" />
   </resultMap>
 </mapper>

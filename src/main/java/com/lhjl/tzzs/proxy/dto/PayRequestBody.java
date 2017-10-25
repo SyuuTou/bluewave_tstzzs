@@ -1,8 +1,18 @@
 package com.lhjl.tzzs.proxy.dto;
 
 public class PayRequestBody {
-    private String uuid;
-    private String sceneId;
+    private String uuid; //用户token
+    private String sceneKey;//场景key
+    private Integer moneyId;//支付金额记录ID
+    private String localIp;// 本地用户IP
+
+    public String getLocalIp() {
+        return localIp;
+    }
+
+    public void setLocalIp(String localIp) {
+        this.localIp = localIp;
+    }
 
     public String getUuid() {
         return uuid;
@@ -12,11 +22,19 @@ public class PayRequestBody {
         this.uuid = uuid;
     }
 
-    public String getSceneId() {
-        return sceneId;
+    public String getSceneKey() {
+        return sceneKey;
     }
 
-    public void setSceneId(String sceneId) {
-        this.sceneId = sceneId;
+    public void setSceneKey(String sceneKey) {
+        this.sceneKey = sceneKey;
+    }
+
+    public Integer getMoneyId() {
+        return moneyId;
+    }
+
+    public void setMoneyId(Integer moneyId) {
+        this.moneyId = moneyId;
     }
 }

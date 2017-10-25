@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * Created by bjliumingbo on 2017/5/12.
  */
 @Configuration
-@ConfigurationProperties(prefix = "wechat.miniapp")
+@ConfigurationProperties(prefix = "wechat.pay")
 public class WxPayConfiguration {
 	private String appId;
 
@@ -22,11 +22,10 @@ public class WxPayConfiguration {
 
 	private String mchKey;
 
-	private String subAppId;
+	private String notifyUrl;
 
-	private String subMchId;
+	private String tradeType;
 
-	private String keyPath;
 
 	@Bean
 	public WxPayConfig payConfig() {
@@ -34,9 +33,8 @@ public class WxPayConfiguration {
 		payConfig.setAppId(this.appId);
 		payConfig.setMchId(this.mchId);
 		payConfig.setMchKey(this.mchKey);
-		payConfig.setSubAppId(this.subAppId);
-		payConfig.setSubMchId(this.subMchId);
-		payConfig.setKeyPath(this.keyPath);
+		payConfig.setNotifyUrl(this.notifyUrl);
+		payConfig.setTradeType(this.tradeType);
 
 		return payConfig;
 	}
