@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -43,6 +44,8 @@ public class UserLevelServiceImpl implements UserLevelService {
     private UserSceneMapper userSceneMapper;
     @Resource
     private UserIntegralsService userIntegralsService;
+    @Resource
+    private UserMoneyRecordMapper userMoneyRecordMapper;
 
     //消费场景
     private static final String INDEX = "Ys54fPbz";
@@ -265,6 +268,16 @@ public class UserLevelServiceImpl implements UserLevelService {
             newOne.setEndTime(end);
             newOne.setStatus(0);//未支付状态
             userLevelRelationMapper.insertSelective(newOne);
+
+            //保存当前会员支付金额
+            UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+            userMoneyRecord.setCreateTime(new Date());
+            BigDecimal jnum =new BigDecimal(userLevelDto.getActualPrice());
+            userMoneyRecord.setMoney(jnum );
+            userMoneyRecord.setSceneKey(sceneKey);
+            userMoneyRecord.setUserId(localUserId);
+            userMoneyRecordMapper.insert(userMoneyRecord);
+            userLevelDto.setMoneyId(userMoneyRecord.getId());
         }
 
         result.setStatus(200);
