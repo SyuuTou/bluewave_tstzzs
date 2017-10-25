@@ -126,6 +126,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         if(params.getTuisongxiangmubiao7projecttag() != null && !"".equals(params.getTuisongxiangmubiao7projecttag())){
             projectSendLogs.setProjectTags(params.getTuisongxiangmubiao7projecttag());
         }
+        projectSendLogs.setCreatTime(new Date());
         projectSendLogsMapper.updateByPrimaryKey(projectSendLogs);
         int projectId = projectSendLogs.getId();
 
