@@ -227,4 +227,25 @@ public class UserEditController {
 
         return result;
     }
+
+    @Transactional
+    @PostMapping("user/update/info")
+    public CommonDto<Map<String,Object>> updateUserInfo(@RequestBody UsersInfoInputDto body){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> obj = new HashMap<>();
+
+        try {
+            result = userEditService.updateUserInfo(body);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            obj.put("success",false);
+            obj.put("message","服务器端发生错误");
+
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(obj);
+        }
+
+        return result;
+    }
 }
