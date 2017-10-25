@@ -1,12 +1,10 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.annotation.Resource;
 
+import com.lhjl.tzzs.proxy.dto.InvestorsApprovalDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -199,5 +197,21 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		return result;
 	}
 
+	/**
+	 * 获取投资审核信息
+	 * @param body 查询条件
+	 * @return
+	 */
+	@Override
+	public CommonDto<List<InvestorsApproval>> findApprovals(InvestorsApprovalDto body) {
+		CommonDto<List<InvestorsApproval>> result = new CommonDto<>();
+		List<InvestorsApproval> data = new ArrayList<>();
+		int beginNum = (body.getPageNum()-1)*body.getPageSize();
+		data = investorsApprovalMapper.findApproval(body.getCheckName(), body.getTime(), beginNum, body.getPageSize());
 
+		result.setStatus(200);
+		result.setMessage("获取投资审核信息成功");
+		result.setData(data);
+		return result;
+	}
 }

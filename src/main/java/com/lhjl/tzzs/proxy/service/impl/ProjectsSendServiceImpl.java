@@ -154,15 +154,27 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         projectFinancingApprovalMapper.insert(projectFinancingApproval);
 
         //更新创始人记录
+        int foundersId = 0;
         Founders founders = new Founders();
         founders.setUserId(userId);
-        founders.setProjectId(projectId);
-        foundersMapper.insert(founders);
-        int foundersId = founders.getId();
+        founders = foundersMapper.selectOne(founders);
+        if(founders != null){
+            foundersId = founders.getId();
+        }else{
+            //插入
+            Founders newFounders = new Founders();
+            newFounders.setUserId(userId);
+            foundersMapper.insert(newFounders);
+            foundersId = newFounders.getId();
+        }
 
         //更新教育经历
         if(params.getTuisongxiangmubiao7educationa() != null && !"".equals(params.getTuisongxiangmubiao7educationa())){
             String[] educations = params.getTuisongxiangmubiao7educationa().split(",");
+            //删除之前的记录
+            FoundersEducation old = new FoundersEducation();
+            old.setFounderId(foundersId);
+            foundersEducationMapper.delete(old);
             for(String education : educations){
                 FoundersEducation foundersEducation = new FoundersEducation();
                 foundersEducation.setFounderId(foundersId);
@@ -174,6 +186,10 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         //更新工作经历
         if(params.getTuisongxiangmubiao7workexperi() != null && !"".equals(params.getTuisongxiangmubiao7workexperi())){
             String[] works = params.getTuisongxiangmubiao7workexperi().split(",");
+            //删除之前的记录
+            FoundersWork old = new FoundersWork();
+            old.setFounderId(foundersId);
+            foundersWorkMapper.delete(old);
             for(String work : works){
                 FoundersWork foundersWork = new FoundersWork();
                 foundersWork.setFounderId(foundersId);
@@ -356,23 +372,23 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         //项目标签
         datas.put("tuisongxiangmubiao7projecttag", sendLogs.getProjectTags());
 
-        //工作经历
+        //教育经历
         List<String> educationStr = new ArrayList<>();
         if(educations.size() > 0){
             for(FoundersEducation education : educations){
                 educationStr.add(education.getEducationExperience());
             }
         }
-        datas.put("tuisongxiangmubiao7workexperi", educationStr);
+        datas.put("tuisongxiangmubiao7educationa", educationStr);
 
-        //教育经历
+        //工作经历
         List<String> workStr = new ArrayList<>();
         if(works.size() > 0){
             for(FoundersWork work : works){
                 workStr.add(work.getWorkExperience());
             }
         }
-        datas.put("tuisongxiangmubiao7educationa", workStr);
+        datas.put("tuisongxiangmubiao7workexperi", workStr);
 
         //获取最新项目ID
         ProjectSendLogs projectSendLogs = new ProjectSendLogs();
