@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.AssessmentDto;
@@ -19,4 +20,11 @@ public interface ProjectEvaluationlogService {
 	 * @return
 	 */
 	 CommonDto<Map<String, Object>> findInvestorsApproval(String token);
+	 /**
+	 * 输入公司名称记录
+	 * @param
+	 * @param
+	 * @return
+	 */
+	 CommonDto<List<Map<String, Object>>> findEvaluationLog(String token);
 }

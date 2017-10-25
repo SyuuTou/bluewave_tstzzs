@@ -13,6 +13,7 @@ import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import javax.annotation.Resource;
@@ -36,6 +37,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
     private UserTokenMapper userTokenMapper;
 
     //判断用户是否注册过，没有即注册。
+    @Transactional
     @Override
     public CommonDto<UserExsitJudgmentDto> userExistJudgment(String oppenId){
         CommonDto<UserExsitJudgmentDto> result =new CommonDto<UserExsitJudgmentDto>();

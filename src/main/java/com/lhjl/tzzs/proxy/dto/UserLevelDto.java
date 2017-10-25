@@ -50,6 +50,11 @@ public class UserLevelDto {
      */
     private String sceneKey;
 
+    /**
+     * 保存的当前会员价格
+     */
+    private Integer moneyId;
+
     public String getBelong() {
         return belong;
     }
@@ -120,5 +125,13 @@ public class UserLevelDto {
 
     public void setSceneKey(String sceneKey) {
         this.sceneKey = sceneKey;
+    }
+
+    public Integer getMoneyId() {
+        return moneyId;
+    }
+
+    public void setMoneyId(Integer moneyId) {
+        this.moneyId = moneyId;
     }
 }
