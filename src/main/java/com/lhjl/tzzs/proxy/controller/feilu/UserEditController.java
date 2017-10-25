@@ -228,6 +228,9 @@ public class UserEditController {
         return result;
     }
 
+    /*
+     * 用户修改个人信息的接口
+     */
     @Transactional
     @PostMapping("user/update/info")
     public CommonDto<Map<String,Object>> updateUserInfo(@RequestBody UsersInfoInputDto body){
@@ -248,4 +251,27 @@ public class UserEditController {
 
         return result;
     }
+
+    /*
+     * 读用户信息的接口
+     */
+    @GetMapping("user/get/info")
+    public CommonDto<Map<String,Object>> getUserInfo(String token){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> obj = new HashMap<>();
+        try {
+            result = userEditService.getUserInfo(token);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            obj.put("message","服务器发生错误");
+            obj.put("success",false);
+            obj.put("data",null);
+
+            result.setData(obj);
+            result.setStatus(502);
+            result.setMessage("服务器发生错误");
+        }
+        return result;
+    }
+
 }

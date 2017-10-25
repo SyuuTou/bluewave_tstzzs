@@ -1,11 +1,9 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.UserSetPasswordInputDto;
-import com.lhjl.tzzs.proxy.dto.UserSetPasswordOutputDto;
-import com.lhjl.tzzs.proxy.dto.UsersInfoInputDto;
+import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
+import com.lhjl.tzzs.proxy.service.EvaluateService;
 import com.lhjl.tzzs.proxy.service.UserEditService;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.service.common.SmsCommonService;
@@ -14,10 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -47,6 +42,9 @@ public class UserEditImpl implements UserEditService {
 
     @Resource
     private FoundersWorkMapper foundersWorkMapper;
+
+    @Resource
+    private EvaluateService evaluateService;
 
     @Override
     public CommonDto<UserSetPasswordOutputDto> editUserPassword(UserSetPasswordInputDto body,int userId,String token){
@@ -501,6 +499,213 @@ public class UserEditImpl implements UserEditService {
         result.setMessage("success");
         result.setStatus(200);
         result.setData(obj);
+
+        return result;
+    }
+
+    @Override
+    public CommonDto<Map<String,Object>> getUserInfo(String token){
+        CommonDto<Map<String,Object>> result =new CommonDto<>();
+        Map<String,Object> obj = new HashMap<>();
+        if (token == null || "".equals(token) || "undefined".equals(token)){
+            obj.put("success",false);
+            obj.put("message","缺少必要参数token");
+
+            result.setMessage("缺少必要参数token");
+            result.setStatus(50001);
+            result.setData(null);
+
+            return result;
+        }
+
+        //获取用户id
+        int userid = userExistJudgmentService.getUserId(token);
+
+        // 获取用户信息
+        Users users =new Users();
+        users.setId(userid);
+
+        Users usersInfo = usersMapper.selectByPrimaryKey(users.getId());
+
+        //获取工作经历教育经历
+
+        List<String> workForAdd = new ArrayList<>();
+        List<String> educationForAdd = new ArrayList<>();
+        Founders foundersSearch = new Founders();
+        foundersSearch.setUserId(userid);
+
+        List<Founders> foundersList = foundersMapper.select(foundersSearch);
+        //如果没有founder的信息说明是第一次进来，教育经历，工作经历都为空
+        if (foundersList.size() > 0){
+            Founders foundersForId = foundersList.get(0);
+            int foundersId = foundersForId.getId();
+
+            FoundersWork foundersWork =new FoundersWork();
+            FoundersEducation foundersEducation =new FoundersEducation();
+
+            foundersWork.setFounderId(foundersId);
+            foundersEducation.setFounderId(foundersId);
+
+            List<FoundersWork> foundersWorkList = foundersWorkMapper.select(foundersWork);
+            List<FoundersEducation> foundersEducationList = foundersEducationMapper.select(foundersEducation);
+
+            if (foundersWorkList.size() > 0){
+                for(FoundersWork o :foundersWorkList){
+                    workForAdd.add(o.getWorkExperience());
+                }
+
+            }
+
+            if (foundersEducationList.size() > 0){
+                for(FoundersEducation f:foundersEducationList){
+                  educationForAdd.add(f.getEducationExperience());
+                }
+            }
+        }
+
+
+        //获取热门数据
+        CommonDto<Map<String,List<LabelList>>> remenshuju = evaluateService.queryHotData();
+
+         //获取热门城市
+         Map<String,List<LabelList>> data = remenshuju.getData();
+         List<LabelList> cityKey =data.get("cityKey");
+
+         //获取行业领域
+         List<LabelList> industryKey =data.get("industryKey");
+
+
+        //组装数据
+         //组装城市数据
+         for(LabelList l:cityKey){
+            if (usersInfo.getCity().equals(l.getName())){
+                l.setChecked(true);
+            }
+         }
+
+         //组装行业领域信息
+         String [] hangye = usersInfo.getIndustry().split(",");
+
+         for(int i=0;i<industryKey.size();i++){
+             LabelList labelList = industryKey.get(i);
+            for (int j=0;j<hangye.length;j++){
+                if (labelList.getName().equals(hangye[j])){
+                    labelList.setChecked(true);
+                }
+            }
+         }
+
+         //组装身份类型
+         String xianshi,xianshi1,xianshi2,xianshi3,xianshi4,xianshi5 ="";
+         int shenfenleixingInt  = usersInfo.getIdentityType();
+         switch (shenfenleixingInt){
+             case 0:
+                 xianshi="active";
+                 xianshi1="";
+                 xianshi2="";
+                 xianshi3="";
+                 xianshi4="";
+                 xianshi5="";
+                 break;
+             case 1:
+                 xianshi="";
+                 xianshi1="active";
+                 xianshi2="";
+                 xianshi3="";
+                 xianshi4="";
+                 xianshi5="";
+                 break;
+             case 2:
+                 xianshi="";
+                 xianshi1="";
+                 xianshi2="active";
+                 xianshi3="";
+                 xianshi4="";
+                 xianshi5="";
+                 break;
+             case 3:
+                 xianshi="";
+                 xianshi1="";
+                 xianshi2="";
+                 xianshi3="active";
+                 xianshi4="";
+                 xianshi5="";
+                 break;
+             case 4:
+                 xianshi="";
+                 xianshi1="";
+                 xianshi2="";
+                 xianshi3="";
+                 xianshi4="active";
+                 xianshi5="";
+                 break;
+             case 5:
+                 xianshi="";
+                 xianshi1="";
+                 xianshi2="";
+                 xianshi3="";
+                 xianshi4="";
+                 xianshi5="active";
+                 break;
+             default:
+                 xianshi="";
+                 xianshi1="";
+                 xianshi2="";
+                 xianshi3="";
+                 xianshi4="";
+                 xianshi5="active";
+         }
+         String [] touziren = new String[6];
+
+         touziren[0] = xianshi;
+         touziren[1] = xianshi1;
+         touziren[2] = xianshi2;
+         touziren[3] = xianshi3;
+         touziren[4] = xianshi4;
+         touziren[5] = xianshi5;
+
+
+
+
+         //开始组装返回数据
+
+        //行业领域加额外字段
+        List<Map<String,Object>> newIndustry= new ArrayList<>();
+        for (int i=0;i<industryKey.size();i++){
+            LabelList labelListForIndustryKey = industryKey.get(i);
+            Map<String,Object> industryInside = new HashMap<>();
+            industryInside.put("industrycl7tradename",labelListForIndustryKey.getName());
+            industryInside.put("industrycl7describe",i);
+            industryInside.put("isactive",labelListForIndustryKey.isChecked());
+            industryInside.put("industrycl7orderofarr",i+1);
+
+            newIndustry.add(industryInside);
+        }
+
+
+        obj.put("xuexiao",educationForAdd);
+        obj.put("shuzu",newIndustry);
+        obj.put("gzjl",workForAdd);
+        obj.put("_id",userid);
+        obj.put("user7realname_cn",usersInfo.getActualName());
+        obj.put("desc",usersInfo.getDesc());
+        obj.put("user7excessfield2",usersInfo.getCompanyDuties());
+        obj.put("user7excessfield3",usersInfo.getCompanyDesc());
+        obj.put("user7excessfield4",usersInfo.getDemand());
+        obj.put("email",usersInfo.getEmail());
+        obj.put("user7wechatnumb_noana",usersInfo.getWechat());
+        obj.put("xiangmubiao7companyful",usersInfo.getCompanyName());
+        obj.put("user7jobtitle",usersInfo.getCompanyDuties());
+        obj.put("touzirenleixin",touziren);
+        obj.put("diqu",cityKey);
+        obj.put("diquming",usersInfo.getCity());
+        obj.put("user7businesscaa_noana",usersInfo.getWorkCard());
+        obj.put("success",true);
+
+        result.setData(obj);
+        result.setStatus(200);
+        result.setMessage("success");
+
 
         return result;
     }
