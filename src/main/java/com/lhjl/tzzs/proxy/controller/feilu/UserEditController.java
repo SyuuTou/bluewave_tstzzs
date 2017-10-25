@@ -46,7 +46,7 @@ public class UserEditController {
         String user7realname_cn = body.getUser7realname_cn();
         String password =body.getPassword();
 
-        if (securitycode == null || "".equals(securitycode)){
+        if (securitycode == null || "".equals(securitycode) || "undefined".equals(securitycode)){
             userSetPasswordOutputDto.setMessage("验证码不能为空");
             userSetPasswordOutputDto.setSuccess(false);
 
@@ -57,7 +57,7 @@ public class UserEditController {
             return result;
         }
 
-        if (token == null || "".equals(token) ){
+        if (token == null || "".equals(token) || "undefined".equals(token) ){
             userSetPasswordOutputDto.setMessage("token信息不能为空");
             userSetPasswordOutputDto.setSuccess(false);
 
@@ -69,7 +69,7 @@ public class UserEditController {
         }
 
 
-        if (verify == null || "".equals(verify) ){
+        if (verify == null || "".equals(verify) || "undefined".equals(verify)){
             userSetPasswordOutputDto.setMessage("手机号不能为空");
             userSetPasswordOutputDto.setSuccess(false);
 
@@ -81,7 +81,7 @@ public class UserEditController {
         }
 
 
-        if (user7realname_cn == null || "".equals(user7realname_cn)){
+        if (user7realname_cn == null || "".equals(user7realname_cn) || "undefined".equals(user7realname_cn)){
             userSetPasswordOutputDto.setMessage("真实姓名不能为空");
             userSetPasswordOutputDto.setSuccess(false);
 
@@ -92,7 +92,7 @@ public class UserEditController {
             return result;
         }
 
-        if (password == null || "".equals(password)){
+        if (password == null || "".equals(password) || "undefined".equals(password)){
             userSetPasswordOutputDto.setMessage("密码不能为空");
             userSetPasswordOutputDto.setSuccess(false);
 
