@@ -10,6 +10,7 @@ import com.lhjl.tzzs.proxy.model.UsersWeixin;
 import com.lhjl.tzzs.proxy.service.UserWeixinService;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -25,6 +26,7 @@ public class UserWeixinImpl implements UserWeixinService {
     @Resource
     private UsersMapper usersMapper;
 
+    @Transactional
     @Override
     public CommonDto<UserGetInfoDto> setUsersWeixin(WxMaUserInfo userInfo,String userid){
         CommonDto<UserGetInfoDto> result  = new CommonDto<>();

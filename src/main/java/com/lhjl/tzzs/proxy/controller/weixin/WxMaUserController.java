@@ -52,7 +52,7 @@ public class WxMaUserController {
     /**
      * 登陆接口
      */
-    @Transactional
+
     @GetMapping("login")
     public CommonDto<UserExsitJudgmentDto> login(String code) {
         CommonDto<UserExsitJudgmentDto> result = new CommonDto<>();
@@ -113,7 +113,7 @@ public class WxMaUserController {
      * 获取用户信息接口
      * </pre>
      */
-    @Transactional
+
     @GetMapping("info")
     public CommonDto<UserGetInfoDto> info(String token, String signature, String rawData, String encryptedData, String iv) {
         CommonDto<UserGetInfoDto> result = new CommonDto<>();

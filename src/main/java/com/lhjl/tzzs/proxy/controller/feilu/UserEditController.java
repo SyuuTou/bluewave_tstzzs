@@ -33,7 +33,7 @@ public class UserEditController {
     /*
      * 设置账号密码接口
      */
-    @Transactional
+
     @PostMapping("user/editmessage")
     public CommonDto<UserSetPasswordOutputDto> editUserMessage(@RequestBody UserSetPasswordInputDto body){
         CommonDto<UserSetPasswordOutputDto> result = new CommonDto<>();
@@ -231,7 +231,6 @@ public class UserEditController {
     /*
      * 用户修改个人信息的接口
      */
-    @Transactional
     @PostMapping("user/update/info")
     public CommonDto<Map<String,Object>> updateUserInfo(@RequestBody UsersInfoInputDto body){
         CommonDto<Map<String,Object>> result = new CommonDto<>();

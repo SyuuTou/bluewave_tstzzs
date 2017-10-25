@@ -10,6 +10,7 @@ import com.lhjl.tzzs.proxy.service.common.SmsCommonService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -46,6 +47,7 @@ public class UserEditImpl implements UserEditService {
     @Resource
     private EvaluateService evaluateService;
 
+    @Transactional
     @Override
     public CommonDto<UserSetPasswordOutputDto> editUserPassword(UserSetPasswordInputDto body,int userId,String token){
         CommonDto<UserSetPasswordOutputDto> result =new CommonDto<>();
@@ -175,6 +177,7 @@ public class UserEditImpl implements UserEditService {
         return result;
     }
 
+    @Transactional
     @Override
     public CommonDto<Map<String,Object>> updateUserHeadpic(String headpic,String token){
         CommonDto<Map<String,Object>> result = new CommonDto<>();
@@ -291,6 +294,7 @@ public class UserEditImpl implements UserEditService {
         return result;
     }
 
+    @Transactional
     @Override
     public CommonDto<Map<String,Object>> updateUserInfo(UsersInfoInputDto body){
         CommonDto<Map<String,Object>> result = new CommonDto<>();
