@@ -372,6 +372,10 @@ public class UserLevelServiceImpl implements UserLevelService {
         //更新用户会员记录表
         if(records.size() > 0){
             if(levelId > records.get(0).getLevelId()){
+                //更新金币记录表
+                String sceneKeyInsert = this.getUserLevelKey(levelId);
+                this.insertMember(localUserId, sceneKeyInsert, levelId);
+
                 //将之前的等级记录失效
                 UserLevelRelation old = records.get(0);
                 old.setYn(0);
@@ -385,11 +389,11 @@ public class UserLevelServiceImpl implements UserLevelService {
                 result.setMessage("该用户已有更高等级，无需升级");
                 return result;
             }
+        }else{
+            //更新金币记录表
+            String sceneKeyInsert = this.getUserLevelKey(levelId);
+            this.insertMember(localUserId, sceneKeyInsert, levelId);
         }
-
-        //更新金币记录表
-        String sceneKeyInsert = this.getUserLevelKey(levelId);
-        this.insertMember(localUserId, sceneKeyInsert, levelId);
 
         //插入新的等级记录信息
         UserLevelRelation newOne = new UserLevelRelation();
