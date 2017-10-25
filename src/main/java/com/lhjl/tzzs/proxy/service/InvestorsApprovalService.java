@@ -37,4 +37,11 @@ public interface InvestorsApprovalService {
 	 * @return
 	 */
 	CommonDto<List<InvestorsApproval>> findApprovals(InvestorsApprovalDto body);
+
+	/**
+	 * 后台审核操作接口
+	 * @param body 请求对象
+	 * @return
+	 */
+	CommonDto<String> approval(InvestorsApprovalDto body);
 }

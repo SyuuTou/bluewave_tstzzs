@@ -133,4 +133,22 @@ public class InvestorsApprovalConroller {
 		}
 		return result;
 	}
+
+	/**
+	 * 后台审核操作接口
+	 * @param body 请求对象
+	 * @return
+	 */
+	@PostMapping("/approval")
+	public CommonDto<String> approval(@RequestBody InvestorsApprovalDto body){
+		CommonDto<String> result = new CommonDto<>();
+		try {
+			result = investorsApprovalService.approval(body);
+		} catch (Exception e) {
+			result.setStatus(5101);
+			result.setMessage("投资审核操作异常");
+			log.error(e.getMessage());
+		}
+		return result;
+	}
 }
