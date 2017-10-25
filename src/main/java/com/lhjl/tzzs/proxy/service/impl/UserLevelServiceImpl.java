@@ -231,6 +231,14 @@ public class UserLevelServiceImpl implements UserLevelService {
         String sceneKey = this.getUserLevelKey(levelId);
         userLevelDto.setSceneKey(sceneKey);
 
+        //获取原价
+        MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
+        metaObtainIntegral.setSceneKey("EWJkiU7Q");
+        metaObtainIntegral.setUserLevel(userLevel.getId());
+        metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
+        int originalCost = metaObtainIntegral.getIntegral();
+        userLevelDto.setOriginalCost(originalCost);
+
         //当可购买时，插入新的记录
         if("0".equals(userLevelDto.getBelong())){
             //插入新的等级记录信息
