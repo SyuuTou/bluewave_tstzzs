@@ -1,9 +1,7 @@
 package com.lhjl.tzzs.proxy.service;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.TouZiDto;
