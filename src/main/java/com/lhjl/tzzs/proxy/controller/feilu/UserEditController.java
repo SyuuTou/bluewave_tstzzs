@@ -1,16 +1,20 @@
 package com.lhjl.tzzs.proxy.controller.feilu;
 
 import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.model.UserToken;
 import com.lhjl.tzzs.proxy.service.UserEditService;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.service.common.SmsCommonService;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class UserEditController {
@@ -25,6 +29,11 @@ public class UserEditController {
     @Resource
     private SmsCommonService smsCommonService;
 
+
+    /*
+     * 设置账号密码接口
+     */
+    @Transactional
     @PostMapping("user/editmessage")
     public CommonDto<UserSetPasswordOutputDto> editUserMessage(@RequestBody UserSetPasswordInputDto body){
         CommonDto<UserSetPasswordOutputDto> result = new CommonDto<>();
@@ -142,4 +151,46 @@ public class UserEditController {
         return result;
     }
 
+    /*
+     * 读用户头像姓名接口
+     */
+    @GetMapping("user/headpic")
+    public CommonDto<Map<String,Object>> getUserHeadpic(String token){
+        CommonDto<Map<String,Object>> result =new CommonDto<>();
+        Map<String,Object>  obj =new HashMap<String,Object>();
+        try {
+            int userid =  userExistJudgmentService.getUserId(token);
+            result = userEditService.getUserHeadpic(userid);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+
+            obj.put("success",false);
+            obj.put("message","token非法无法获取用户头像");
+
+            result.setMessage("token非法无法获取用户头像");
+            result.setData(obj);
+            result.setStatus(501);
+        }
+
+        return result;
+    }
+
+    @GetMapping("user/update/headpic")
+    public CommonDto<Map<String,Object>> updateUserHeadpic(String headpic,String token){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> obj = new HashMap<>();
+        try {
+            result = userEditService.updateUserHeadpic(headpic,token);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            obj.put("success",false);
+            obj.put("message","服务器发生错误");
+
+            result.setMessage("服务器发生错误");
+            result.setData(obj);
+            result.setStatus(502);
+        }
+
+        return result;
+    }
 }

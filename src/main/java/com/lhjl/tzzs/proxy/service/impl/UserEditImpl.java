@@ -3,14 +3,22 @@ package com.lhjl.tzzs.proxy.service.impl;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.UserSetPasswordInputDto;
 import com.lhjl.tzzs.proxy.dto.UserSetPasswordOutputDto;
+import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
 import com.lhjl.tzzs.proxy.mapper.UsersMapper;
+import com.lhjl.tzzs.proxy.mapper.UsersWeixinMapper;
+import com.lhjl.tzzs.proxy.model.Investors;
 import com.lhjl.tzzs.proxy.model.Users;
+import com.lhjl.tzzs.proxy.model.UsersWeixin;
 import com.lhjl.tzzs.proxy.service.UserEditService;
+import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -19,6 +27,15 @@ public class UserEditImpl implements UserEditService {
 
     @Resource
     private UsersMapper usersMapper;
+
+    @Resource
+    private UsersWeixinMapper usersWeixinMapper;
+
+    @Resource
+    private InvestorsMapper investorsMapper;
+
+    @Resource
+    private UserExistJudgmentService userExistJudgmentService;
 
     @Override
     public CommonDto<UserSetPasswordOutputDto> editUserPassword(UserSetPasswordInputDto body,int userId,String token){
@@ -66,6 +83,131 @@ public class UserEditImpl implements UserEditService {
        String finalPassword = MD5Util.md5Encode(password2,"utf-8");
 
        result = finalPassword;
+
+        return result;
+    }
+
+    @Override
+    public CommonDto<Map<String,Object>> getUserHeadpic(int userid){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> obj = new HashMap<>();
+
+        Users users =new Users();
+        users.setId(userid);
+
+        Users usersForHeadpic =usersMapper.selectByPrimaryKey(users.getId());
+
+        String userHeadpic = usersForHeadpic.getHeadpic();
+        String userHeadpic_real = usersForHeadpic.getHeadpicReal();
+        String userActualName = usersForHeadpic.getActualName();
+        String headpic ="";
+        String username = "";
+        String leixing = "";
+
+        //判断用户的头像，和用户名
+        if (userHeadpic_real == null){
+          headpic = userHeadpic;
+        }else {
+          headpic = userHeadpic_real;
+        }
+
+        if (userActualName == null){
+            UsersWeixin usersWeixin =new UsersWeixin();
+            usersWeixin.setUserId(userid);
+
+            List<UsersWeixin> usersWeixins = usersWeixinMapper.select(usersWeixin);
+            if (usersWeixins.size() > 0){
+                UsersWeixin usersWeixinForUserName = new UsersWeixin();
+                usersWeixinForUserName = usersWeixins.get(0);
+                username = usersWeixinForUserName.getNickName();
+            }else {
+                username ="";
+            }
+
+        }else {
+            username = userActualName;
+        }
+
+        //获取投资人类型
+        Investors investors =new Investors();
+        investors.setUserId(userid);
+
+        List<Investors> investorsList = investorsMapper.select(investors);
+        if (investorsList.size() > 0){
+            Investors investorsForLeixing = new Investors();
+            investorsForLeixing = investorsList.get(0);
+            int leixingResult = investorsForLeixing.getInvestorsType();
+            switch (leixingResult){
+                case 0: leixing = "个人投资人";
+                break;
+                case 1:leixing = "机构投资人";
+                break;
+                case 2:leixing = "VIP投资人";
+                default:
+                    leixing ="";
+            }
+        }else {
+            leixing="";
+        }
+
+        String id = String.valueOf(userid);
+
+        //开始整理返回数据
+        obj.put("headpic",headpic);
+        obj.put("username",username);
+        obj.put("id",id);
+        obj.put("leixing",leixing);
+        obj.put("success",true);
+
+        result.setStatus(200);
+        result.setData(obj);
+        result.setMessage("success");
+
+
+        return result;
+    }
+
+    @Override
+    public CommonDto<Map<String,Object>> updateUserHeadpic(String headpic,String token){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> obj = new HashMap<>();
+
+        if (token == null || "".equals(token) || "undefined".equals(token)){
+            obj.put("success",false);
+            obj.put("message","缺少必要参数token");
+
+            result.setStatus(50001);
+            result.setData(obj);
+            result.setMessage("缺少必要参数token");
+
+            return result;
+        }
+
+        if (headpic == null || "".equals(headpic) || "undefined".equals(headpic)){
+            obj.put("success",false);
+            obj.put("message","请上传头像");
+
+            result.setStatus(50001);
+            result.setData(obj);
+            result.setMessage("请上传头像");
+
+            return result;
+        }
+
+        int userid = userExistJudgmentService.getUserId(token);
+
+        Users users = new Users();
+        users.setId(userid);
+        users.setHeadpicReal(headpic);
+
+        usersMapper.updateByPrimaryKeySelective(users);
+
+        obj.put("success",true);
+
+        result.setMessage("success");
+        result.setData(obj);
+        result.setStatus(200);
+
 
         return result;
     }
