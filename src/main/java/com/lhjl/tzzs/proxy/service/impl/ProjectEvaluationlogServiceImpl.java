@@ -23,7 +23,6 @@ public class ProjectEvaluationlogServiceImpl implements ProjectEvaluationlogServ
     private ProjectEvaluationLogMapper projectEvaluationLogMapper;
     @Resource
     private UserTokenMapper  userTokenMapper;
-    
     @Resource
     private EvaluateService evaluateService; 
     
@@ -254,6 +253,27 @@ public class ProjectEvaluationlogServiceImpl implements ProjectEvaluationlogServ
 		return result;
 	}
 	/**
-	 *
+	 *公司名称历史记录
 	 */
+@Override
+public CommonDto<List<Map<String, Object>>>findEvaluationLog(String token) {
+	CommonDto<List<Map<String, Object>>> result =new CommonDto<List<Map<String, Object>>>();
+	 UserToken userToken =new UserToken();
+	 userToken.setToken(token);
+	 userToken = userTokenMapper.selectOne(userToken);
+	 Integer userId = userToken.getUserId();
+	 List<Map<String, Object>> list = projectEvaluationLogMapper.findEvaluationLog(userId);
+	 if(list.size()>0){
+	 for(Map<String,Object> map :list){
+		 map.put("pinggulishibiao7corporaten",String.valueOf(map.get("company_name")));
+		 map.put("pinggulishibiao7assessment",String.valueOf(map.get("creat_time")));
+		 map.put("_id",token);
+	 }
+	 }else{
+		 result.setStatus(202);
+		 result.setMessage("无查询数据");
+	 }
+	 result.setData(list);
+	 return result;
+}
 }

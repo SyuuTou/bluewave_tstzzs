@@ -13,6 +13,7 @@ import com.lhjl.tzzs.proxy.dto.TouZiDto;
 import com.lhjl.tzzs.proxy.service.InvestorsApprovalService;
 import com.lhjl.tzzs.proxy.service.ProjectEvaluationlogService;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,6 +61,28 @@ public class ProjectEvaluationlogController {
 
 		try {
 			result = projectEvaluationlogService.findInvestorsApproval(token);
+			if(result.getStatus() == null){
+				result.setStatus(200);
+				result.setMessage("success");
+			}
+		} catch (Exception e) {
+			result.setStatus(5101);
+		   result.setMessage("显示页面异常，请稍后再试");
+			log.error(e.getMessage());
+		}
+		return result;
+	}
+
+	/**
+	 * 公司名称记录
+	 * @param token
+	 * @return
+	 */
+	@GetMapping("rest/zyy/rpinggujilu")
+	public CommonDto<List<Map<String, Object>>> findEvaluationLog(String token){
+		CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
+		try {
+			result = projectEvaluationlogService.findEvaluationLog(token);
 			if(result.getStatus() == null){
 				result.setStatus(200);
 				result.setMessage("success");
