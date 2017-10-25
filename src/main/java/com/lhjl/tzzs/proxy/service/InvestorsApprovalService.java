@@ -5,6 +5,7 @@ import java.util.Map;
 
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.InvestorsApprovalActionDto;
 import com.lhjl.tzzs.proxy.dto.InvestorsApprovalDto;
 import com.lhjl.tzzs.proxy.dto.TouZiDto;
 import com.lhjl.tzzs.proxy.model.InvestorsApproval;
@@ -43,5 +44,5 @@ public interface InvestorsApprovalService {
 	 * @param body 请求对象
 	 * @return
 	 */
-	CommonDto<String> approval(InvestorsApprovalDto body);
+	CommonDto<String> approval(InvestorsApprovalActionDto body);
 }

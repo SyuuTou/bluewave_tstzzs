@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import com.lhjl.tzzs.proxy.dto.InvestorsApprovalDto;
+import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.model.InvestorsApproval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.MingDto;
-import com.lhjl.tzzs.proxy.dto.TouZiDto;
 import com.lhjl.tzzs.proxy.service.InvestorsApprovalService;
 @RestController
 public class InvestorsApprovalConroller {
@@ -110,8 +107,8 @@ public class InvestorsApprovalConroller {
 	 * 获取投资审核信息(后台调用)
 	 * @return
 	 */
-	@PostMapping("/findinvestorsapproval")
-	public CommonDto<List<InvestorsApproval>> findApprovals(@RequestBody InvestorsApprovalDto body){
+	@GetMapping("/findinvestorsapproval")
+	public CommonDto<List<InvestorsApproval>> findApprovals(InvestorsApprovalDto body){
 		CommonDto<List<InvestorsApproval>>result = new CommonDto<>();
 		Integer pageNum = body.getPageNum();
 		Integer pageSize = body.getPageSize();
@@ -139,8 +136,8 @@ public class InvestorsApprovalConroller {
 	 * @param body 请求对象
 	 * @return
 	 */
-	@PostMapping("/approval")
-	public CommonDto<String> approval(@RequestBody InvestorsApprovalDto body){
+	@GetMapping("/approval")
+	public CommonDto<String> approval(InvestorsApprovalActionDto body){
 		CommonDto<String> result = new CommonDto<>();
 		try {
 			result = investorsApprovalService.approval(body);

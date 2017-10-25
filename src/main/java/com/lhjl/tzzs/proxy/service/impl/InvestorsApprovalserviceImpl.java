@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.annotation.Resource;
 
+import com.lhjl.tzzs.proxy.dto.InvestorsApprovalActionDto;
 import com.lhjl.tzzs.proxy.dto.InvestorsApprovalDto;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
 import com.lhjl.tzzs.proxy.model.Investors;
@@ -225,7 +226,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	 * @return
 	 */
 	@Override
-	public CommonDto<String> approval(InvestorsApprovalDto body) {
+	public CommonDto<String> approval(InvestorsApprovalActionDto body) {
 		CommonDto<String> result = new CommonDto<>();
 		int approvalId = body.getId();
 		String approveResult = body.getApproveResult();
