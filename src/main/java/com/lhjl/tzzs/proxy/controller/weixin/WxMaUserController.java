@@ -18,9 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.annotation.Resource;
@@ -114,15 +112,23 @@ public class WxMaUserController {
      * </pre>
      */
 
-    @GetMapping("info")
-    public CommonDto<UserGetInfoDto> info(String token, String signature, String rawData, String encryptedData, String iv) {
+//    @GetMapping("info")
+//    public CommonDto<UserGetInfoDto> info(String token, String signature, String rawData, String encryptedData, String iv) {
+      @PostMapping("info")
+      public CommonDto<UserGetInfoDto> info(@RequestBody Map<String,String> body) {
         CommonDto<UserGetInfoDto> result = new CommonDto<>();
         UserGetInfoDto userGetInfoDto = new UserGetInfoDto();
 
+        String token = body.get("token");
+        String signature = body.get("signature");
+        String rawData = body.get("rawData");
+        String encryptedData = body.get("encryptedData");
+        String iv = body.get("iv");
+
         //先获取到用户的id
-        int yhxinxi = userExistJudgmentService.getUserId(token);
+        Integer yhxinxi = userExistJudgmentService.getUserId(token);
         String userid = String.valueOf(yhxinxi);
-        if (userid == null){
+        if (userid == null || "".equals(userid)){
             userGetInfoDto.setSuccess(false);
             userGetInfoDto.setTips("token非法，请检查token");
 
