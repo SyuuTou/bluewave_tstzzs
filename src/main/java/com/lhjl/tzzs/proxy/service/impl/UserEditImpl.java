@@ -581,14 +581,22 @@ public class UserEditImpl implements UserEditService {
 
         //组装数据
          //组装城市数据
+         String userCity =usersInfo.getCity();
+         if (userCity == null){
+             userCity ="";
+         }
          for(LabelList l:cityKey){
-            if (usersInfo.getCity().equals(l.getName())){
+            if (userCity.equals(l.getName())){
                 l.setChecked(true);
             }
          }
 
          //组装行业领域信息
-         String [] hangye = usersInfo.getIndustry().split(",");
+        String userHangye = usersInfo.getIndustry();
+        if (userHangye == null){
+            userHangye ="";
+        }
+         String [] hangye = userHangye.split(",");
 
          for(int i=0;i<industryKey.size();i++){
              LabelList labelList = industryKey.get(i);
@@ -601,7 +609,11 @@ public class UserEditImpl implements UserEditService {
 
          //组装身份类型
          String xianshi,xianshi1,xianshi2,xianshi3,xianshi4,xianshi5 ="";
-         int shenfenleixingInt  = usersInfo.getIdentityType();
+         Integer shenfenleixingInt  = usersInfo.getIdentityType();
+         if (shenfenleixingInt == null){
+             shenfenleixingInt =-1;
+         }
+
          switch (shenfenleixingInt){
              case 0:
                  xianshi="active";
@@ -657,7 +669,7 @@ public class UserEditImpl implements UserEditService {
                  xianshi2="";
                  xianshi3="";
                  xianshi4="";
-                 xianshi5="active";
+                 xianshi5="";
          }
          String [] touziren = new String[6];
 
