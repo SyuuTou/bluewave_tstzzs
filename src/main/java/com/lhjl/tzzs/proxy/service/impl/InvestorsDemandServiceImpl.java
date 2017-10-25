@@ -9,7 +9,6 @@ import com.lhjl.tzzs.proxy.model.InvestorDemand;
 import com.lhjl.tzzs.proxy.service.EvaluateService;
 import com.lhjl.tzzs.proxy.service.InvestorsDemandService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 

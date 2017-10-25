@@ -1,18 +1,15 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.service.InvestmentBackstageService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import org.springframework.transaction.annotation.Transactional;
-import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.annotation.Resource;
@@ -25,10 +22,6 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
 
     @Resource
     private InvestmentInstitutionsMapper investmentInstitutionsMapper;
-
-    @Autowired
-    private Environment environment;
-
 
 
     @Transactional

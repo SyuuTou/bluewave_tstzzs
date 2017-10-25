@@ -4,9 +4,7 @@ import com.lhjl.tzzs.proxy.dto.PageInfoDto;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.service.InvestmentBackstageService;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 
