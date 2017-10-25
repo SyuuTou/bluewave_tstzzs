@@ -210,9 +210,14 @@ public class UserLevelServiceImpl implements UserLevelService {
             long days = (failTime.getTime() - now.getTime())/(1000*60*60*24);
             //当前用户会员等级
             int userLevelId = records.get(0).getLevelId();
+            MetaUserLevel nowLevel = new MetaUserLevel();
+            nowLevel.setId(userLevelId);
+            nowLevel = metaUserLevelMapper.selectByPrimaryKey(nowLevel);
+
             if(levelId > userLevelId && userLevelId != 1){
-                userLevelDto.setActualPrice(userLevel.getAmount().intValue() - (int)days);
-                userLevelDto.setDicount((int)days);
+                int discount = (nowLevel.getAmount().intValue()/365)*(int)days;
+                userLevelDto.setActualPrice(userLevel.getAmount().intValue() - discount);
+                userLevelDto.setDicount(discount);
             }else{
                 userLevelDto.setActualPrice(userLevel.getAmount().intValue());
             }
