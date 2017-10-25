@@ -369,10 +369,6 @@ public class UserLevelServiceImpl implements UserLevelService {
         userLevelRelation.setStatus(1);
         List<UserLevelRelation> records = userLevelRelationMapper.select(userLevelRelation);
 
-        //更新金币记录表
-        String sceneKeyInsert = this.getUserLevelKey(levelId);
-        this.insertMember(localUserId, sceneKeyInsert, levelId);
-
         //更新用户会员记录表
         if(records.size() > 0){
             if(levelId > records.get(0).getLevelId()){
@@ -390,6 +386,10 @@ public class UserLevelServiceImpl implements UserLevelService {
                 return result;
             }
         }
+
+        //更新金币记录表
+        String sceneKeyInsert = this.getUserLevelKey(levelId);
+        this.insertMember(localUserId, sceneKeyInsert, levelId);
 
         //插入新的等级记录信息
         UserLevelRelation newOne = new UserLevelRelation();
