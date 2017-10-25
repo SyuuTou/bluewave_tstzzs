@@ -155,8 +155,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 					map.put("shenhezhong",false);
 					map.put("weitongguo", true);
 					map.put("yiquxiao", false); 
-					map.put("success",true);
-					
+					map.put("success",true);	
 			 }
 			 if(Integer.valueOf(String.valueOf(map.get("approval_result")))==3){
 				 map.put("gongsizhiwei",String.valueOf(map.get("company_duties")));
@@ -166,8 +165,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 					map.put("shenhezhong",false);
 					map.put("weitongguo", false);
 					map.put("yiquxiao", false); 
-					map.put("success",true);
-					
+					map.put("success",true);	
 			 }
 			 if(Integer.valueOf(String.valueOf(map.get("approval_result")))==4){
 				 map.put("gongsizhiwei",String.valueOf(map.get("company_duties")));
@@ -178,7 +176,6 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 					map.put("weitongguo",false);
 					map.put("yiquxiao", false); 
 					map.put("success",true);
-					
 			 }
 			 if(Integer.valueOf(String.valueOf(map.get("approval_result")))==5){
 				 map.put("gongsizhiwei",String.valueOf(map.get("company_duties")));
@@ -197,7 +194,6 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			 map.put("shenhezhong",false);
 			 map.put("weitongguo",false);
 			 map.put("yiquxiao", false);
-
 		 }
 		result.setData(map);
 		return result;
