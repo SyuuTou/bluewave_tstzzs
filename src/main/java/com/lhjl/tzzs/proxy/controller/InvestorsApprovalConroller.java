@@ -60,7 +60,7 @@ public class InvestorsApprovalConroller {
 
 	/**
 	 * 审核状态
-	 * @param userID
+	 * @param token
 	 * @return
 	 */
 	@GetMapping("rest/user/newryhxinxia")
@@ -84,7 +84,7 @@ public class InvestorsApprovalConroller {
 
 	/**
 	 * 认证页面
-	 * @param userID
+	 * @param token
 	 * @return
 	 */
 	@GetMapping("rest/renzhengtouzirenshenhebiao/newrshenhexinxi")
