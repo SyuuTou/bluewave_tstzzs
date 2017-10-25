@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.dto.AssessmentDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.TouZiDto;
-import com.lhjl.tzzs.proxy.service.InvestorsApprovalService;
+
 import com.lhjl.tzzs.proxy.service.ProjectEvaluationlogService;
 
 import java.util.List;
