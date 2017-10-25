@@ -175,6 +175,10 @@ public class UserEditController {
         return result;
     }
 
+    /*
+     * 用户修改头像接口
+     */
+
     @GetMapping("user/update/headpic")
     public CommonDto<Map<String,Object>> updateUserHeadpic(String headpic,String token){
         CommonDto<Map<String,Object>> result = new CommonDto<>();
