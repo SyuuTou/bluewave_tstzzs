@@ -152,6 +152,10 @@ public class UserLevelServiceImpl implements UserLevelService {
     @Override
     public CommonDto<UserLevelDto> findLevelInfo(String userStr, int levelId) {
         CommonDto<UserLevelDto> result = new CommonDto<UserLevelDto>();
+
+        //测试开关
+        boolean test = false;
+
         UserLevelDto userLevelDto = new UserLevelDto();
         Integer localUserId = this.getLocalUserId(userStr);
         if(localUserId == null){
@@ -206,26 +210,37 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userLevelDto.setBelong("0");
             }
 
-            //计算当前会员实际价格
-            Date failTime = records.get(0).getEndTime();
-            Date now = new Date();
-            //剩余天数(会员余额)
-            long days = (failTime.getTime() - now.getTime())/(1000*60*60*24);
-            //当前用户会员等级
-            int userLevelId = records.get(0).getLevelId();
-            MetaUserLevel nowLevel = new MetaUserLevel();
-            nowLevel.setId(userLevelId);
-            nowLevel = metaUserLevelMapper.selectByPrimaryKey(nowLevel);
-
-            if(levelId > userLevelId && userLevelId != 1){
-                int discount = (nowLevel.getAmount().intValue()/365)*(int)days;
-                userLevelDto.setActualPrice(userLevel.getAmount().intValue() - discount);
-                userLevelDto.setDicount(discount);
+            if(test){
+                userLevelDto.setActualPrice(new BigDecimal("0.01"));
             }else{
-                userLevelDto.setActualPrice(userLevel.getAmount().intValue());
+                //计算当前会员实际价格
+                Date failTime = records.get(0).getEndTime();
+                Date now = new Date();
+                //剩余天数(会员余额)
+                long days = (failTime.getTime() - now.getTime())/(1000*60*60*24);
+                //当前用户会员等级
+                int userLevelId = records.get(0).getLevelId();
+                MetaUserLevel nowLevel = new MetaUserLevel();
+                nowLevel.setId(userLevelId);
+                nowLevel = metaUserLevelMapper.selectByPrimaryKey(nowLevel);
+
+                if(levelId > userLevelId && userLevelId != 1){
+                    int discount = (nowLevel.getAmount().intValue()/365)*(int)days;
+                    BigDecimal discountB = new BigDecimal(discount);
+                    BigDecimal actualPrice = userLevel.getAmount().subtract(discountB);
+                    userLevelDto.setActualPrice(actualPrice);
+                    userLevelDto.setDicount(discount);
+                }else{
+                    userLevelDto.setActualPrice(userLevel.getAmount());
+                }
             }
+
         }else{
-            userLevelDto.setActualPrice(userLevel.getAmount().intValue());
+            if(test){
+                userLevelDto.setActualPrice(new BigDecimal("0.01"));
+            }else{
+                userLevelDto.setActualPrice(userLevel.getAmount());
+            }
             ///可购买状态
             userLevelDto.setBelong("0");
         }
@@ -272,8 +287,8 @@ public class UserLevelServiceImpl implements UserLevelService {
             //保存当前会员支付金额
             UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
             userMoneyRecord.setCreateTime(new Date());
-            BigDecimal jnum =new BigDecimal(userLevelDto.getActualPrice());
-            userMoneyRecord.setMoney(jnum );
+            BigDecimal jnum = userLevelDto.getActualPrice();
+            userMoneyRecord.setMoney(jnum);
             userMoneyRecord.setSceneKey(sceneKey);
             userMoneyRecord.setUserId(localUserId);
             userMoneyRecordMapper.insert(userMoneyRecord);
