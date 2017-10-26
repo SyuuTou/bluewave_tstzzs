@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.annotation.Resource;
@@ -7,7 +8,7 @@ import javax.annotation.Resource;
 import com.lhjl.tzzs.proxy.dto.InvestorsApprovalActionDto;
 import com.lhjl.tzzs.proxy.dto.InvestorsApprovalDto;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
-import com.lhjl.tzzs.proxy.model.Investors;
+import com.lhjl.tzzs.proxy.model.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,9 +17,6 @@ import com.lhjl.tzzs.proxy.dto.TouZiDto;
 import com.lhjl.tzzs.proxy.mapper.InvestorsApprovalMapper;
 import com.lhjl.tzzs.proxy.mapper.UserTokenMapper;
 import com.lhjl.tzzs.proxy.mapper.UsersMapper;
-import com.lhjl.tzzs.proxy.model.InvestorsApproval;
-import com.lhjl.tzzs.proxy.model.UserToken;
-import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.InvestorsApprovalService;
 
 import net.sf.jsqlparser.expression.StringValue;
@@ -208,15 +206,35 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	 * @return
 	 */
 	@Override
-	public CommonDto<List<InvestorsApproval>> findApprovals(InvestorsApprovalDto body) {
-		CommonDto<List<InvestorsApproval>> result = new CommonDto<>();
+	public CommonDto<List<InvestorsApprovalNew>> findApprovals(InvestorsApprovalDto body) {
+		CommonDto<List<InvestorsApprovalNew>> result = new CommonDto<>();
 		List<InvestorsApproval> data = new ArrayList<>();
+		List<InvestorsApprovalNew> dataNew = new ArrayList<>();
 		int beginNum = (body.getPageNum()-1)*body.getPageSize();
 		data = investorsApprovalMapper.findApproval(body.getCheckName(), body.getTime(), beginNum, body.getPageSize());
-
+		for(InvestorsApproval approval : data){
+			InvestorsApprovalNew investorsApprovalNew = new InvestorsApprovalNew();
+			investorsApprovalNew.setId(approval.getId());
+			investorsApprovalNew.setApprovalUsername(approval.getApprovalUsername());
+			investorsApprovalNew.setApprovalResult(approval.getApprovalResult());
+			investorsApprovalNew.setCompany(approval.getCompany());
+			investorsApprovalNew.setCompanyDuties(approval.getCompanyDuties());
+			investorsApprovalNew.setDescription(approval.getDescription());
+			investorsApprovalNew.setInvestorsType(approval.getInvestorsType());
+			investorsApprovalNew.setLeadership(approval.getLeadership());
+			investorsApprovalNew.setSupplementaryExplanation(approval.getSupplementaryExplanation());
+			investorsApprovalNew.setUserid(approval.getUserid());
+			investorsApprovalNew.setWorkCard(approval.getWorkCard());
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String createTime = simpleDateFormat.format(approval.getCreateTime());
+			String reviewTime = simpleDateFormat.format(approval.getReviewTime());
+			investorsApprovalNew.setCreateTime(createTime);
+			investorsApprovalNew.setReviewTime(reviewTime);
+			dataNew.add(investorsApprovalNew);
+		}
 		result.setStatus(200);
 		result.setMessage("获取投资审核信息成功");
-		result.setData(data);
+		result.setData(dataNew);
 		return result;
 	}
 

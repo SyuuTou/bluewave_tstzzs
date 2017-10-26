@@ -8,7 +8,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestorsApprovalActionDto;
 import com.lhjl.tzzs.proxy.dto.InvestorsApprovalDto;
 import com.lhjl.tzzs.proxy.dto.TouZiDto;
-import com.lhjl.tzzs.proxy.model.InvestorsApproval;
+import com.lhjl.tzzs.proxy.model.InvestorsApprovalNew;
 
 public interface InvestorsApprovalService {
 	/**
@@ -37,7 +37,7 @@ public interface InvestorsApprovalService {
 	 * @param body 查询条件
 	 * @return
 	 */
-	CommonDto<List<InvestorsApproval>> findApprovals(InvestorsApprovalDto body);
+	CommonDto<List<InvestorsApprovalNew>> findApprovals(InvestorsApprovalDto body);
 
 	/**
 	 * 后台审核操作接口

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.model.InvestorsApproval;
+import com.lhjl.tzzs.proxy.model.InvestorsApprovalNew;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -108,8 +109,8 @@ public class InvestorsApprovalConroller {
 	 * @return
 	 */
 	@GetMapping("/findinvestorsapproval")
-	public CommonDto<List<InvestorsApproval>> findApprovals(InvestorsApprovalDto body){
-		CommonDto<List<InvestorsApproval>>result = new CommonDto<>();
+	public CommonDto<List<InvestorsApprovalNew>> findApprovals(InvestorsApprovalDto body){
+		CommonDto<List<InvestorsApprovalNew>>result = new CommonDto<>();
 		Integer pageNum = body.getPageNum();
 		Integer pageSize = body.getPageSize();
 		try {
@@ -148,4 +149,5 @@ public class InvestorsApprovalConroller {
 		}
 		return result;
 	}
+
 }
