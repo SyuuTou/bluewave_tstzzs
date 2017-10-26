@@ -111,7 +111,7 @@ public class ProjectEvaluationlogServiceImpl implements ProjectEvaluationlogServ
 				 lista.add(list);
 				 lista.addAll(cities);
 				 remenxinxi.put("cityKey",lista);//城市
-				 remenxinxi.put("chengshi","");//城市
+				 remenxinxi.put("chengshi",map.get("city"));//城市
 		   }else{
 				 List<LabelList> cities = data.getData().get("cityKey");
 			     LabelList list =new LabelList();
@@ -128,7 +128,7 @@ public class ProjectEvaluationlogServiceImpl implements ProjectEvaluationlogServ
 			     lista.add(list);
 				 lista.addAll(cities);
 				 remenxinxi.put("cityKey",lista);//城市
-				 remenxinxi.put("chengshi","");//城市
+				 remenxinxi.put("chengshi",map.get("city"));///城市
 		        }
 		     //领域
 		     if("".equals(map.get("domain"))){
@@ -171,7 +171,6 @@ public class ProjectEvaluationlogServiceImpl implements ProjectEvaluationlogServ
 				 listc.add(list);
 				 listc.addAll(educationKeies);
 				 remenxinxi.put("educationKey",listc);//
-				 remenxinxi.put("gongzuobeijing","");//
 		   }else{
 				 List<LabelList> educationKeies = data.getData().get("educationKey");
 		    	 LabelList list =new LabelList();
@@ -188,7 +187,6 @@ public class ProjectEvaluationlogServiceImpl implements ProjectEvaluationlogServ
 			     listc.add(list);
 				 listc.addAll(educationKeies);
 				 remenxinxi.put("educationKey",listc);//
-				 remenxinxi.put("gongzuobeijing","");
 		        }
 		     //工作背景
 		     if("".equals(map.get("work"))){
@@ -312,5 +310,173 @@ public CommonDto<List<Map<String, Object>>>findEvaluationLog(String token) {
 	 }
 	 result.setData(list);
 	 return result;
-}
+}   
+    /**
+     * 根据id查找到记录
+     */
+
+	@Override
+	public CommonDto<Map<String, Object>> findNameRecord(Integer id) {
+		CommonDto<Map<String, Object>> result =new CommonDto<Map<String, Object>>();
+		CommonDto<Map<String,List<LabelList>>> data = evaluateService.queryHotData();
+		Map<String,Object> map =new HashMap<>();
+		ProjectEvaluationLog p =new ProjectEvaluationLog();
+		p.setId(id);
+		ProjectEvaluationLog pi = projectEvaluationLogMapper.selectOne(p);
+			 Map<String,Object> remenxinxi =new HashMap<>();
+			 map.put("jieduan",pi.getFinancingStage());
+			 map.put("lingyu",pi.getDomain());
+			 remenxinxi.put("jiaoyubeijing",pi.getEducation());
+			 remenxinxi.put("gongzuobeijing",pi.getWork());
+			 remenxinxi.put("chengshi",pi.getCity());
+			 map.put("pinggulishibiao7corporaten",pi.getCompanyName() );
+			 if("天使轮".equals(pi.getFinancingStage())){
+			 List<LabelList> list4 = new ArrayList<>();
+			 LabelList labelList=new LabelList();
+			 LabelList labelList1=new LabelList();
+			 labelList.setName("天使轮");
+			 labelList.setValue("天使轮");
+			 labelList.setChecked(true);
+			 labelList1.setName("Pre-A轮");
+			 labelList1.setValue("Pre-A轮");
+			 labelList1.setChecked(false);
+			 list4.add(labelList);
+			 list4.add(labelList1);
+			 map.put("pinggulishibiao7financingp",list4);//轮次简称
+			 }else{
+				 List<LabelList> list4 = new ArrayList<>();
+				 LabelList labelList=new LabelList();
+				 LabelList labelList1=new LabelList();
+				 labelList.setName("天使轮");
+				 labelList.setValue("天使轮");
+				 labelList.setChecked(false);
+				 labelList1.setName("Pre-A轮");
+				 labelList1.setValue("Pre-A轮");
+				 labelList1.setChecked(true);
+				 list4.add(labelList);
+				 list4.add(labelList1);
+				 map.put("pinggulishibiao7financingp",list4);//轮次简称 
+			 }
+			 //城市
+		     if("".equals(pi.getCity())){
+				 List<LabelList> cities = data.getData().get("cityKey");
+		    	 LabelList list =new LabelList();
+		    	 List<LabelList> lista =new ArrayList();
+				 list.setName("不限");
+				 list.setValue("不限");
+				 list.setChecked(true);
+				 lista.add(list);
+				 lista.addAll(cities);
+				 remenxinxi.put("cityKey",lista);//城市
+				 remenxinxi.put("chengshi",pi.getCity());//城市
+		   }else{
+				 List<LabelList> cities = data.getData().get("cityKey");
+			     LabelList list =new LabelList();
+			     List<LabelList> lista =new ArrayList();
+				 list.setName("不限");
+				 list.setValue("不限");
+				 list.setChecked(false);
+		         String cityStr =pi.getCity();
+			     for(LabelList labellist : cities){
+			     if(cityStr.equals(labellist.getName())){
+			     labellist.setChecked(true);
+			              }
+			          }
+			     lista.add(list);
+				 lista.addAll(cities);
+				 remenxinxi.put("cityKey",lista);//城市
+				 remenxinxi.put("chengshi",pi.getCity());//城市
+		        }
+		     //领域
+		     if("".equals(pi.getDomain())){
+				 List<LabelList> industryKeies = data.getData().get("industryKey");
+		    	 LabelList list =new LabelList();
+		    	 List<LabelList>  listb =new ArrayList();
+				 list.setName("不限");
+				 list.setValue("不限");
+				 list.setChecked(true);
+				 listb.add(list);
+				 listb.addAll(industryKeies);
+				 remenxinxi.put("industryKey",listb);//
+				 map.put("industryKey",listb);
+		   }else{
+			     List<LabelList> industryKeies = data.getData().get("industryKey");
+		    	 LabelList list =new LabelList();
+		    	 List<LabelList>  listb =new ArrayList();
+				 list.setName("不限");
+				 list.setValue("不限");
+				 list.setChecked(false);
+		         String i =pi.getDomain();
+			     for(LabelList labellist : industryKeies){
+			     if(i.equals(labellist.getName())){
+			     labellist.setChecked(true);
+			              }
+			          }
+			     listb.add(list);
+				 listb.addAll(industryKeies);
+				 remenxinxi.put("industryKey",listb);//
+				 map.put("industryKey",listb);
+		        }
+		     //教育背景
+		     if("".equals(pi.getEducation())){
+				 List<LabelList> educationKeies = data.getData().get("educationKey");
+		    	 LabelList list =new LabelList();
+		    	 List<LabelList>  listc =new ArrayList();
+				 list.setName("不限");
+				 list.setValue("不限");
+				 list.setChecked(true);
+				 listc.add(list);
+				 listc.addAll(educationKeies);
+				 remenxinxi.put("educationKey",listc);//
+				 remenxinxi.put("gongzuobeijing",pi.getWork());//
+		   }else{
+				 List<LabelList> educationKeies = data.getData().get("educationKey");
+		    	 LabelList list =new LabelList();
+		    	 List<LabelList>  listc =new ArrayList();
+				 list.setName("不限");
+				 list.setValue("不限");
+				 list.setChecked(false);
+		         String eStr =pi.getEducation();
+			     for(LabelList labellist : educationKeies){
+			     if(eStr.equals(labellist.getName())){
+			     labellist.setChecked(true);
+			              }
+			          }
+			     listc.add(list);
+				 listc.addAll(educationKeies);
+				 remenxinxi.put("educationKey",listc);//
+				 remenxinxi.put("gongzuobeijing",pi.getWork());
+		        }
+		     //工作背景
+		     if("".equals(pi.getWork())){
+				 List<LabelList> workKeies = data.getData().get("workKey");
+		    	 LabelList list =new LabelList();
+		    	 List<LabelList>  listd =new ArrayList();
+				 list.setName("不限");
+				 list.setValue("不限");
+				 list.setChecked(true);
+				 listd.add(list);
+				 listd.addAll(workKeies);
+				 remenxinxi.put("workKey",listd);
+		   }else{
+			   List<LabelList> workKeies = data.getData().get("workKey");
+		    	 LabelList list =new LabelList();
+		    	 List<LabelList>  listd =new ArrayList();
+				 list.setName("不限");
+				 list.setValue("不限");
+				 list.setChecked(false);
+		         String wStr =pi.getWork();
+			     for(LabelList labellist : workKeies){
+			     if(wStr.equals(labellist.getName())){
+			     labellist.setChecked(true);
+			              }
+			          }
+			     listd.add(list);
+				 listd.addAll(workKeies);
+				 remenxinxi.put("workKey",listd);
+		        }
+			     map.put("remenxinxi",remenxinxi);
+		result.setData(map);
+		return result;
+	}
 }

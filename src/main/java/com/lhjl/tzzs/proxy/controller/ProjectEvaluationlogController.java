@@ -93,4 +93,27 @@ public class ProjectEvaluationlogController {
 		}
 		return result;
 	}
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("rest/zyy/name/record")
+	public CommonDto<Map<String,Object>> findNameRecord(Integer id){
+		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
+
+		try {
+			result = projectEvaluationlogService.findNameRecord(id);
+			if(result.getStatus() == null){
+				result.setStatus(200);
+				result.setMessage("success");
+			}
+		} catch (Exception e) {
+			result.setStatus(5101);
+		   result.setMessage("显示页面异常，请稍后再试");
+			log.error(e.getMessage());
+		}
+		return result;
+	}
+
 }

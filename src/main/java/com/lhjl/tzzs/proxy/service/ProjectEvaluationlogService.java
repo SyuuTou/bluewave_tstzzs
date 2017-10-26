@@ -27,4 +27,10 @@ public interface ProjectEvaluationlogService {
 	 * @return
 	 */
 	 CommonDto<List<Map<String, Object>>> findEvaluationLog(String token);
+	 /**
+	  * 根据公司名称的数据回显
+	  * @param id
+	  * @return
+	  */
+	 CommonDto<Map<String, Object>> findNameRecord(Integer id);
 }
