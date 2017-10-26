@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.dto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class UserLevelDto {
     /**
      * 实际价格
      */
-    private Integer actualPrice;
+    private BigDecimal actualPrice;
 
     /**
      * 会员描述
@@ -103,11 +104,11 @@ public class UserLevelDto {
         this.dicount = dicount;
     }
 
-    public Integer getActualPrice() {
+    public BigDecimal getActualPrice() {
         return actualPrice;
     }
 
-    public void setActualPrice(Integer actualPrice) {
+    public void setActualPrice(BigDecimal actualPrice) {
         this.actualPrice = actualPrice;
     }
 
