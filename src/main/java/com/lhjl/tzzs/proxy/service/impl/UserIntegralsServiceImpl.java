@@ -647,7 +647,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals.setUserId(userId);
 				userIntegrals.setSceneKey("xHwofbNs");
 				Integer jb=qj.intValue();
-				if(jb>=100){
+				//if(jb>=100){
 				userIntegrals.setIntegralNum(jb);
 				userIntegrals.setCreateTime(new Date());
 				Calendar calendar = new GregorianCalendar();
@@ -680,10 +680,10 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals2.setEndTime(end1);
 				userIntegrals2.setBeginTime((new Date()));
 				userIntegralsMapper.insert(userIntegrals2);
-			}else{
+			/*}else{
 					result.setStatus(5019);
 					result.setMessage("充值金额不能小于100元");
-				}
+				}*/
 			}else {
 					leId = 0;
 					Float bei = usersMapper.findByBei(leId + 1);
@@ -691,7 +691,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userIntegrals.setUserId(userId);
 					userIntegrals.setSceneKey("xHwofbNs");
 					Integer jb = qj.intValue();
-					if(jb>=100){
+					//if(jb>=100){
 					userIntegrals.setIntegralNum(jb);
 					userIntegrals.setCreateTime(new Date());
 					//时间场景
@@ -723,10 +723,10 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userIntegrals2.setEndTime(end1);
 					userIntegrals2.setBeginTime((new Date()));
 					userIntegralsMapper.insert(userIntegrals2);
-				}else{
+				/*}else{
 						result.setStatus(5019);
 						result.setMessage("充值金额不能小于100元");
-					}
+					}*/
 			}
 		}
 
