@@ -80,6 +80,9 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         LEFT JOIN founders f on mf.id = f.project_id
         right join founders_education  fe on fe.founder_ID = f.id
         right join founders_work fw on fw.founder_id = f.id
+        <if test="investment != '' and investment != null and investment != -1">
+            LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
+        </if>
 
         where pfl.total_amount > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
         <if test="roundName != '' and roundName != null">
@@ -97,6 +100,9 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         <if test="workName != '' and workName != null">
             and fw.work_experience =#{workName}
         </if>
+        <if test="investment != '' and investment != null and investment != -1">
+            AND ii.type = #{investment}
+        </if>
         group by pfl.stage,mf.full_name
 
         ) b
@@ -109,6 +115,9 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         LEFT JOIN founders f on mf.id = f.project_id
         right join founders_education  fe on fe.founder_ID = f.id
         right join founders_work fw on fw.founder_id = f.id
+        <if test="investment != '' and investment != null and investment != -1">
+            LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
+        </if>
 
         where pfl.valuation > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
         <if test="roundName != '' and roundName != null">
@@ -125,6 +134,9 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         </if>
         <if test="workName != '' and workName != null">
             and fw.work_experience =#{workName}
+        </if>
+        <if test="investment != '' and investment != null and investment != -1">
+            AND ii.type = #{investment}
         </if>
         group by pfl.stage,mf.full_name
 
@@ -141,6 +153,9 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         LEFT JOIN founders f on mf.id = f.project_id
         right join founders_education  fe on fe.founder_ID = f.id
         right join founders_work fw on fw.founder_id = f.id
+        <if test="investment != '' and investment != null and investment != -1">
+            LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
+        </if>
 
         where pfl.valuation > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
         <if test="roundName != '' and roundName != null">
@@ -158,6 +173,9 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         <if test="workName != '' and workName != null">
             and fw.work_experience =#{workName}
         </if>
+        <if test="investment != '' and investment != null and investment != -1">
+            AND ii.type = #{investment}
+        </if>
         group by pfl.stage,mf.full_name
 
         ) b GROUP by b.dis order by money  limit 0, 15 ) c
@@ -172,6 +190,9 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         LEFT JOIN founders f on mf.id = f.project_id
         right join founders_education  fe on fe.founder_ID = f.id
         right join founders_work fw on fw.founder_id = f.id
+        <if test="investment != '' and investment != null and investment != -1">
+            LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
+        </if>
 
         where pfl.total_amount > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
         <if test="roundName != '' and roundName != null">
@@ -188,6 +209,9 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         </if>
         <if test="workName != '' and workName != null">
             and fw.work_experience =#{workName}
+        </if>
+        <if test="investment != '' and investment != null and investment != -1">
+            AND ii.type = #{investment}
         </if>
         group by pfl.stage,mf.full_name
 

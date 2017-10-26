@@ -67,9 +67,9 @@ public class EvaluateServiceImpl implements EvaluateService {
     }
 
 
-    @Cacheable(value = "valuation",keyGenerator = "wiselyKeyGenerator")
+//    @Cacheable(value = "valuation",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public CommonDto<List<HistogramList>> valuation(String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
+    public CommonDto<List<HistogramList>> valuation(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
 
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
 //        roundName= "Pre-A轮";
@@ -81,7 +81,7 @@ public class EvaluateServiceImpl implements EvaluateService {
         }
         List<HistogramList> dataList = null;
         Integer index = from * size;
-        Map<String, Object> collect = financingMapper.queryValuationCount(roundName,industryName,cityName,educationName,workName,beginTime,endTime);
+        Map<String, Object> collect = financingMapper.queryValuationCount(investment,roundName,industryName,cityName,educationName,workName,beginTime,endTime);
         Integer total = Integer.valueOf(collect.get("total").toString());
         if (total < 5){
             result.setStatus(200);
@@ -89,7 +89,7 @@ public class EvaluateServiceImpl implements EvaluateService {
             result.setData(new ArrayList<HistogramList>(0));
             return result;
         }else{
-            dataList = financingMapper.queryValuation(roundName,industryName,cityName,educationName,workName,beginTime,endTime,index,size);
+            dataList = financingMapper.queryValuation(investment,roundName,industryName,cityName,educationName,workName,beginTime,endTime,index,size);
         }
 
         if (dataList.size()>10){
@@ -124,9 +124,9 @@ public class EvaluateServiceImpl implements EvaluateService {
         return result;
     }
 
-    @Cacheable(value = "financingAmount",keyGenerator = "wiselyKeyGenerator")
+//    @Cacheable(value = "financingAmount",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public CommonDto<List<HistogramList>> financingAmount(String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
+    public CommonDto<List<HistogramList>> financingAmount(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
 //        roundName= "Pre-A轮";
 //        industryName="游戏";
@@ -151,7 +151,7 @@ public class EvaluateServiceImpl implements EvaluateService {
 
 
         Map<String, Object> collect = null;
-        collect = financingMapper.queryFinancingCount(roundName,industryName,cityName,educationName,workName,granularity, beginTime, endTime);
+        collect = financingMapper.queryFinancingCount(investment,roundName,industryName,cityName,educationName,workName,granularity, beginTime, endTime);
 
         Integer total = Integer.valueOf(collect.get("total").toString());
         if (total < 5){
@@ -161,7 +161,7 @@ public class EvaluateServiceImpl implements EvaluateService {
             return result;
 
         }else{
-            dataList = financingMapper.queryFinancingAmount(roundName,industryName,cityName,educationName,workName,granularity,beginTime,endTime,index,size);
+            dataList = financingMapper.queryFinancingAmount(investment,roundName,industryName,cityName,educationName,workName,granularity,beginTime,endTime,index,size);
         }
 
         if (dataList.size()>10){
