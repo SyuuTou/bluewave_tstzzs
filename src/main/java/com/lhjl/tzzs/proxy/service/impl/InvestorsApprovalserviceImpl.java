@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.dto.InvestorsApprovalActionDto;
 import com.lhjl.tzzs.proxy.dto.InvestorsApprovalDto;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
 import com.lhjl.tzzs.proxy.model.*;
+import com.lhjl.tzzs.proxy.service.UserLevelService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,8 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	private UsersMapper usersMapper;
 	@Resource
 	private InvestorsMapper investorsMapper;
+	@Resource
+	private UserLevelService userLevelService;
     
 	/**
 	 * 认证投资人信息记录
@@ -287,7 +290,15 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				default:
 					investors.setInvestorsType(null);
 			}
+			//升级为VIP投资人
+			if(investors.getInvestorsType() == 2){
+				UserToken userToken = new UserToken();
+				userToken.setUserId(userId);
+				userToken = userTokenMapper.selectOne(userToken);
+				userLevelService.upLevel(userToken.getToken(), 4);
+			}
 			investorsMapper.updateByPrimaryKey(investors);
+
 		}else{
 			Investors newInvestors = new Investors();
 			newInvestors.setUserId(userId);
