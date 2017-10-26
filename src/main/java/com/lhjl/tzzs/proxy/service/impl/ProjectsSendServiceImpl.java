@@ -39,38 +39,6 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
     @Resource
     private FoundersWorkMapper foundersWorkMapper;
 
-    //身份类型
-    private static List<LabelList> IDENTIFY = new ArrayList<>();
-
-    //初始化身份类型
-    static{
-        LabelList identify1 = new LabelList();
-        identify1.setName("投资人");
-        identify1.setValue("投资人");
-        identify1.setChecked(false);
-        LabelList identify2 = new LabelList();
-        identify2.setName("创业者");
-        identify2.setValue("创业者");
-        identify2.setChecked(false);
-        LabelList identify3 = new LabelList();
-        identify3.setName("产业公司");
-        identify3.setValue("产业公司");
-        identify3.setChecked(false);
-        LabelList identify4 = new LabelList();
-        identify4.setName("媒体");
-        identify4.setValue("媒体");
-        identify4.setChecked(false);
-        LabelList identify5 = new LabelList();
-        identify5.setName("研究机构");
-        identify5.setValue("研究机构");
-        identify5.setChecked(false);
-        IDENTIFY.add(identify1);
-        IDENTIFY.add(identify2);
-        IDENTIFY.add(identify3);
-        IDENTIFY.add(identify4);
-        IDENTIFY.add(identify5);
-    }
-
     /**
      * 项目投递
      * @param params 投递参数
@@ -302,7 +270,33 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         datas.put("tuisongxiangmubiao7roundoffin", roundNameStr);
 
         //身份类型(users)
-        List<LabelList> identities = IDENTIFY;
+        List<LabelList> identities = new ArrayList<>();
+        LabelList identify1 = new LabelList();
+        identify1.setName("投资人");
+        identify1.setValue("投资人");
+        identify1.setChecked(false);
+        LabelList identify2 = new LabelList();
+        identify2.setName("创业者");
+        identify2.setValue("创业者");
+        identify2.setChecked(false);
+        LabelList identify3 = new LabelList();
+        identify3.setName("产业公司");
+        identify3.setValue("产业公司");
+        identify3.setChecked(false);
+        LabelList identify4 = new LabelList();
+        identify4.setName("媒体");
+        identify4.setValue("媒体");
+        identify4.setChecked(false);
+        LabelList identify5 = new LabelList();
+        identify5.setName("研究机构");
+        identify5.setValue("研究机构");
+        identify5.setChecked(false);
+        identities.add(identify1);
+        identities.add(identify1);
+        identities.add(identify1);
+        identities.add(identify1);
+        identities.add(identify1);
+
         if(users != null && users.getIdentityType() != null){
             int identity = users.getIdentityType();
             String identityStr = "";
