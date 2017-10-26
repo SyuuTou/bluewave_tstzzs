@@ -142,6 +142,16 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         }
 
         //更新融资申请表
+        ProjectFinancingApproval oldProjectFinancingApproval = new ProjectFinancingApproval();
+        oldProjectFinancingApproval.setProjectSendLogId(projectId);
+        oldProjectFinancingApproval.setUserId(userId);
+        oldProjectFinancingApproval = projectFinancingApprovalMapper.selectOne(oldProjectFinancingApproval);
+        if(oldProjectFinancingApproval != null){
+            result.setStatus(301);
+            result.setMessage("该项目已投递过了");
+            return result;
+        }
+
         ProjectFinancingApproval projectFinancingApproval = new ProjectFinancingApproval();
         projectFinancingApproval.setProjectSendLogId(projectId);
         projectFinancingApproval.setUserId(userId);
@@ -399,6 +409,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 
         //获取最新项目ID
         ProjectSendLogs projectSendLogs = new ProjectSendLogs();
+        projectSendLogs.setUserid(userId);
         projectSendLogsMapper.insert(projectSendLogs);
         int newId = projectSendLogs.getId();
 
@@ -425,8 +436,16 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         //保存融资历史记录
         ProjectFinancingHistory projectFinancingHistory = new ProjectFinancingHistory();
         projectFinancingHistory.setProjectSendLogId(tsid);
-        projectFinancingHistory.setHistory(rongzilishi);
-        projectFinancingHistoryMapper.insert(projectFinancingHistory);
+        projectFinancingHistory = projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
+        if(projectFinancingHistory != null){
+            projectFinancingHistory.setHistory(rongzilishi);
+            projectFinancingHistoryMapper.updateByPrimaryKey(projectFinancingHistory);
+        }else{
+            ProjectFinancingHistory newProjectFinancingHistory = new ProjectFinancingHistory();
+            newProjectFinancingHistory.setProjectSendLogId(tsid);
+            newProjectFinancingHistory.setHistory(rongzilishi);
+            projectFinancingHistoryMapper.insert(newProjectFinancingHistory);
+        }
 
         result.setStatus(200);
         result.setMessage("融资历史保存成功");
@@ -439,23 +458,26 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
      * @return
      */
     @Override
-    public CommonDto<Map<String, Object>> rtuisongthird(String tsid) {
+    public CommonDto<Map<String, Object>> rtuisongthird(String tsid, int userId) {
         CommonDto<Map<String, Object>> result = new CommonDto<>();
         Map<String, Object> data = new HashMap<>();
-        ProjectFinancingHistory projectFinancingHistory = new ProjectFinancingHistory();
-        projectFinancingHistory.setProjectSendLogId(tsid);
-        projectFinancingHistory = projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
         String history = "";
-        if(projectFinancingHistory != null){
-            history = projectFinancingHistory.getHistory();
-        }else{
-            data.put("historyList", history);
-            result.setStatus(201);
-            result.setMessage("没有回显数据");
-            result.setData(data);
-            return result;
+        //查出当前用户投递信息
+        Example example = new Example(ProjectSendLogs.class);
+        example.and().andEqualTo("userid", userId);
+        example.setOrderByClause("creat_time desc");
+        List<ProjectSendLogs> sendLogsList = projectSendLogsMapper.selectByExample(example);
+        if(sendLogsList.size() > 0){
+            for(ProjectSendLogs sendLogs : sendLogsList){
+                ProjectFinancingHistory projectFinancingHistory = new ProjectFinancingHistory();
+                projectFinancingHistory.setProjectSendLogId(sendLogs.getId() + "");
+                projectFinancingHistory = projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
+                if(projectFinancingHistory != null){
+                    history = projectFinancingHistory.getHistory();
+                    break;
+                }
+            }
         }
-
         data.put("historyList", history);
         result.setStatus(200);
         result.setMessage("融资历史回显数据获取成功");

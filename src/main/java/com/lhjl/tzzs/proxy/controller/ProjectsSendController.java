@@ -90,10 +90,12 @@ public class ProjectsSendController {
      * 融资历史回显
      */
     @GetMapping("/rest/zyy/rtuisongthird")
-    public CommonDto<Map<String, Object>> rtuisongthird(String tsid){
+    public CommonDto<Map<String, Object>> rtuisongthird(String tsid, String token){
         CommonDto<Map<String, Object>> result = new CommonDto<>();
+        //获取userId
+        int userId = commonUserService.getLocalUserId(token);
         try{
-            result = projectsSendService.rtuisongthird(tsid);
+            result = projectsSendService.rtuisongthird(tsid, userId);
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("融资历史回显异常");

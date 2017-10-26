@@ -71,7 +71,27 @@ public class UserInfoServiceImpl implements UserInfoService{
             }
             params.put("user7educatione_noana", educations);
 
-            params.put("user7excessfield", users.getIdentityType());
+
+            int identity = users.getIdentityType();
+            String identiStr = "";
+            switch(identity){
+                case 0:
+                    identiStr = "投资人";
+                    break;
+                case 1:
+                    identiStr = "创业者";
+                    break;
+                case 2:
+                    identiStr = "产业公司";
+                    break;
+                case 3:
+                    identiStr = "媒体";
+                    break;
+                case 4:
+                    identiStr = "研究机构";
+                    break;
+            }
+            params.put("user7excessfield", identiStr);
 
             List<String> industries = new ArrayList<>();
             if(users.getIndustry() != null){

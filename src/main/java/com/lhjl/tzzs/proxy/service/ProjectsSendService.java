@@ -36,7 +36,8 @@ public interface ProjectsSendService {
     /**
      * 融资历史回显
      * @param tsid 投递项目ID
+     * @param userId 用户ID
      * @return
      */
-    CommonDto<Map<String, Object>> rtuisongthird(String tsid);
+    CommonDto<Map<String, Object>> rtuisongthird(String tsid, int userId);
 }
