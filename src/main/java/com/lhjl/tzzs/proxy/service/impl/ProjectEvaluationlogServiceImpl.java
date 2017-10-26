@@ -32,8 +32,9 @@ public class ProjectEvaluationlogServiceImpl implements ProjectEvaluationlogServ
 	 */
     @Transactional
 	@Override
-	public CommonDto<String> saveAssessment(AssessmentDto params) {
-			 CommonDto<String> result =new CommonDto<String>();
+	public CommonDto<Map<String,Object>> saveAssessment(AssessmentDto params) {
+		     CommonDto<Map<String,Object>> result =new CommonDto<Map<String,Object>> ();
+		     Map<String,Object> map =new HashMap<String,Object>();
 			 ProjectEvaluationLog  projectEvaluationlog= new  ProjectEvaluationLog ();
 			 UserToken userToken =new UserToken();
 			 userToken.setToken(params.getToken());
@@ -47,6 +48,8 @@ public class ProjectEvaluationlogServiceImpl implements ProjectEvaluationlogServ
 		     projectEvaluationlog.setWork(params.getPinggulishibiao7workbackgr());
 		     projectEvaluationlog.setCreatTime(new Date());
 		     projectEvaluationLogMapper.insert(projectEvaluationlog);
+		     map.put("success",true);
+		     result.setData(map);
 			 return result;
 		}
    /**
@@ -101,99 +104,119 @@ public class ProjectEvaluationlogServiceImpl implements ProjectEvaluationlogServ
 		     if("".equals(map.get("city"))){
 				 List<LabelList> cities = data.getData().get("cityKey");
 		    	 LabelList list =new LabelList();
+		    	 List<LabelList> lista =new ArrayList();
 				 list.setName("不限");
 				 list.setValue("不限");
 				 list.setChecked(true);
-				 cities.add(list);
-		    	 remenxinxi.put("cityKey",cities);
+				 lista.add(list);
+				 lista.addAll(cities);
+				 remenxinxi.put("cityKey",lista);//城市
+				 remenxinxi.put("chengshi","");//城市
 		   }else{
 				 List<LabelList> cities = data.getData().get("cityKey");
 			     LabelList list =new LabelList();
+			     List<LabelList> lista =new ArrayList();
 				 list.setName("不限");
 				 list.setValue("不限");
 				 list.setChecked(false);
-				 cities.add(list);
 		         String cityStr =String.valueOf(map.get("city"));
 			     for(LabelList labellist : cities){
 			     if(cityStr.equals(labellist.getName())){
 			     labellist.setChecked(true);
 			              }
 			          }
-				 remenxinxi.put("cityKey",cities);
+			     lista.add(list);
+				 lista.addAll(cities);
+				 remenxinxi.put("cityKey",lista);//城市
+				 remenxinxi.put("chengshi","");//城市
 		        }
 		     //领域
 		     if("".equals(map.get("domain"))){
 				 List<LabelList> industryKeies = data.getData().get("industryKey");
 		    	 LabelList list =new LabelList();
+		    	 List<LabelList>  listb =new ArrayList();
 				 list.setName("不限");
 				 list.setValue("不限");
 				 list.setChecked(true);
-				 industryKeies.add(list);
-		    	 remenxinxi.put("industryKey",industryKeies);
-		    	 map.put("industryKey", industryKeies);
+				 listb.add(list);
+				 listb.addAll(industryKeies);
+				 remenxinxi.put("industryKey",listb);//
+				 map.put("industryKey",listb);
 		   }else{
 			     List<LabelList> industryKeies = data.getData().get("industryKey");
 		    	 LabelList list =new LabelList();
+		    	 List<LabelList>  listb =new ArrayList();
 				 list.setName("不限");
 				 list.setValue("不限");
 				 list.setChecked(false);
-				 industryKeies.add(list);
 		         String i =String.valueOf(map.get("domain"));
 			     for(LabelList labellist : industryKeies){
 			     if(i.equals(labellist.getName())){
 			     labellist.setChecked(true);
 			              }
 			          }
-			     remenxinxi.put("industryKey",industryKeies);
-		    	 map.put("industryKey", industryKeies);
+			     listb.add(list);
+				 listb.addAll(industryKeies);
+				 remenxinxi.put("industryKey",listb);//
+				 map.put("industryKey",listb);
 		        }
 		     //教育背景
 		     if("".equals(map.get("education"))){
 				 List<LabelList> educationKeies = data.getData().get("educationKey");
 		    	 LabelList list =new LabelList();
+		    	 List<LabelList>  listc =new ArrayList();
 				 list.setName("不限");
 				 list.setValue("不限");
 				 list.setChecked(true);
-				 educationKeies.add(list);
-		    	 remenxinxi.put("educationKey",educationKeies);
+				 listc.add(list);
+				 listc.addAll(educationKeies);
+				 remenxinxi.put("educationKey",listc);//
+				 remenxinxi.put("gongzuobeijing","");//
 		   }else{
 				 List<LabelList> educationKeies = data.getData().get("educationKey");
 		    	 LabelList list =new LabelList();
+		    	 List<LabelList>  listc =new ArrayList();
 				 list.setName("不限");
 				 list.setValue("不限");
 				 list.setChecked(false);
-				 educationKeies .add(list);
 		         String eStr =String.valueOf(map.get("education"));
 			     for(LabelList labellist : educationKeies){
 			     if(eStr.equals(labellist.getName())){
 			     labellist.setChecked(true);
 			              }
 			          }
-			     remenxinxi.put("educationKey",educationKeies);
+			     listc.add(list);
+				 listc.addAll(educationKeies);
+				 remenxinxi.put("educationKey",listc);//
+				 remenxinxi.put("gongzuobeijing","");
 		        }
 		     //工作背景
 		     if("".equals(map.get("work"))){
 				 List<LabelList> workKeies = data.getData().get("workKey");
 		    	 LabelList list =new LabelList();
+		    	 List<LabelList>  listd =new ArrayList();
 				 list.setName("不限");
 				 list.setValue("不限");
 				 list.setChecked(true);
-				 workKeies.add(list);
-		    	 remenxinxi.put("workKey",workKeies);
+				 listd.add(list);
+				 listd.addAll(workKeies);
+				 remenxinxi.put("workKey",listd);
 		   }else{
 			   List<LabelList> workKeies = data.getData().get("workKey");
 		    	 LabelList list =new LabelList();
+		    	 List<LabelList>  listd =new ArrayList();
 				 list.setName("不限");
 				 list.setValue("不限");
 				 list.setChecked(false);
-				 workKeies.add(list);
 		         String wStr =String.valueOf(map.get("work"));
 			     for(LabelList labellist : workKeies){
 			     if(wStr.equals(labellist.getName())){
 			     labellist.setChecked(true);
 			              }
 			          }
-			     remenxinxi.put("workKey",workKeies);
+			     listd.add(list);
+				 listd.addAll(workKeies);
+				 remenxinxi.put("workKey",listd);
 		        }
 			     map.put("remenxinxi",remenxinxi);
 		 }else{
@@ -201,38 +224,52 @@ public class ProjectEvaluationlogServiceImpl implements ProjectEvaluationlogServ
 			 map.put("jieduan","天使轮");
 			 map.put("lingyu","");
 			 Map<String,Object> remenxinxi =new HashMap<>();
+			 
 			 List<LabelList> cities = data.getData().get("cityKey");
 			 LabelList list =new LabelList();
+			 List<LabelList>  lista =new ArrayList();
 			 list.setName("不限");
 			 list.setValue("不限");
 			 list.setChecked(true);
-			 cities.add(list);
-			 remenxinxi.put("cityKey",cities);//城市
+			 lista.add(list);
+			 lista.addAll(cities);
+			 remenxinxi.put("cityKey",lista);//城市
 			 remenxinxi.put("chengshi","");//城市
+			 
 			 List<LabelList> industryKeies = data.getData().get("industryKey");
 			 LabelList list1 =new LabelList();
+			 List<LabelList>  listb =new ArrayList();
 			 list1.setName("不限");
 			 list1.setValue("不限");
 			 list1.setChecked(true);
-			 industryKeies.add(list1);
-			 remenxinxi.put("industryKey",industryKeies);//
-			 map.put("industryKey",industryKeies);
+			 listb.add(list1);
+			 listb.addAll(industryKeies);
+			 remenxinxi.put("industryKey",listb);//
+			 map.put("industryKey",listb);
 			 remenxinxi.put("jiaoyubeijing","");//
+			 
 			 List<LabelList> educationKeies = data.getData().get("educationKey");
 			 LabelList list2 =new LabelList();
+			 List<LabelList>  listc =new ArrayList();
 			 list2.setName("不限");
 			 list2.setValue("不限");
 			 list2.setChecked(true);
-			 educationKeies.add(list1);
-			 remenxinxi.put("educationKey",educationKeies);//
+			// educationKeies.add(list2);
+			 listc.add(list2);
+			 listc.addAll(educationKeies);
+			 remenxinxi.put("educationKey",listc);//
 			 remenxinxi.put("gongzuobeijing","");//
+			 
 			 List<LabelList> workKeies = data.getData().get("workKey");
 			 LabelList list3 =new LabelList();
+			 List<LabelList>  listd =new ArrayList();
 			 list3.setName("不限");
 			 list3.setValue("不限");
 			 list3.setChecked(true);
-			 workKeies.add(list1);
-			 remenxinxi.put("workKey",workKeies);//
+			// workKeies.add(list3);
+			 listd.add(list3);
+			 listd.addAll(workKeies);
+			 remenxinxi.put("workKey",listd);//
 			 map.put("remenxinxi",remenxinxi);
 			 map.put("pinggulishibiao7corporaten","");//公司简称
 			 List<LabelList> list4 = new ArrayList<>();

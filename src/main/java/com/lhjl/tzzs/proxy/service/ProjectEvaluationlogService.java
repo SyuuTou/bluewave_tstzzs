@@ -12,7 +12,7 @@ public interface ProjectEvaluationlogService {
 	 * @param params
 	 * @return
 	 */
-	CommonDto<String> saveAssessment(AssessmentDto params);
+	CommonDto<Map<String,Object>>  saveAssessment(AssessmentDto params);
 	/**
 	 * 项目评估回显
 	 * @param

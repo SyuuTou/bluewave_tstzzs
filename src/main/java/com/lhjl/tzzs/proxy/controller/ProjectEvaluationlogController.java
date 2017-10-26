@@ -29,8 +29,8 @@ public class ProjectEvaluationlogController {
 	 * @return
 	 */
 	@GetMapping("rest/zyy/cpinggujilu")
-	 public CommonDto<String> insertGold(AssessmentDto params){
-	     CommonDto<String>result = new CommonDto<String>();
+	 public CommonDto<Map<String,Object>> insertGold(AssessmentDto params){
+		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>> ();
 	     try {
 	     
 	     result= projectEvaluationlogService.saveAssessment(params);
