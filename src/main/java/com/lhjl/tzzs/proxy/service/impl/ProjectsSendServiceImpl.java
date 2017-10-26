@@ -197,7 +197,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         CommonDto<Map<String, List<LabelList>>> hotsdatas = evaluateService.queryHotData();
 
         Example example = new Example(ProjectSendLogs.class);
-        example.and().andEqualTo("userid", userId);
+        example.and().andEqualTo("userid", userId).andIsNotNull("companyName");
         example.setOrderByClause("creat_time desc");
         List<ProjectSendLogs> sendLogsList = projectSendLogsMapper.selectByExample(example);
         ProjectSendLogs sendLogs = new ProjectSendLogs();
