@@ -263,6 +263,9 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                     labellist.setChecked(true);
                 }
             }
+            datas.put("tuisongxiangmubiao7city", cityStr);
+        }else{
+            datas.put("tuisongxiangmubiao7city", "");
         }
         datas.put("chengshiming", cities);
 
@@ -316,6 +319,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                 }
             }
             datas.put("tuisongxiangmubiao7identityty", identityStr);
+        }else{
+            datas.put("tuisongxiangmubiao7identityty", "");
         }
         datas.put("bigBoss", identities);
 
