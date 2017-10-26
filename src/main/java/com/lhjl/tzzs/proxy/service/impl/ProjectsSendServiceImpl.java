@@ -315,6 +315,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                     list.setChecked(true);
                 }
             }
+            datas.put("tuisongxiangmubiao7identityty", identityStr);
         }
         datas.put("bigBoss", identities);
 
