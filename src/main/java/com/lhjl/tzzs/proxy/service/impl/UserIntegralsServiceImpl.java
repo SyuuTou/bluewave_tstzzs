@@ -463,18 +463,20 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 			Integer leId =usersMapper.findByUserid(userId);
 			if(leId !=null){
 				Float bei =usersMapper.findByBei(leId);
-				Integer dnum = body.getQj();
-				if(dnum>=100){
+				BigDecimal dnum = body.getQj();
+
+				//if(dnum>=100){
 					map.put("dnum",dnum);
-					map.put("snum",(int)(bei*dnum));
-					map.put("hnum",(int)(((bei+1)*dnum)));
+					Integer dnum1 =dnum.intValue();
+					map.put("snum",(int)(bei*dnum1));
+					map.put("hnum",(int)(((bei+1)*dnum1)));
 					System.out.println(bei);
 					System.out.println(dnum);
 					if(leId<4){
 						leId=leId+1;
 						Float xbei =usersMapper.findByBei(leId);
 						String userName = usersMapper.findByUserLevel(leId);
-						map.put("xnum",(int) (xbei*dnum));
+						map.put("xnum",(int) (xbei*dnum1));
 						map.put("userName",userName);
 					}else{
 						result.setStatus(5000);
@@ -482,44 +484,43 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					}
 					UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 					userMoneyRecord.setCreateTime(new Date());
-					BigDecimal jnum =new BigDecimal(dnum);
-					userMoneyRecord.setMoney(jnum );
+					userMoneyRecord.setMoney(dnum);
 					userMoneyRecord.setSceneKey("dpGXuIqb");
 					userMoneyRecord.setUserId(userId);
 					userMoneyRecordMapper.insert(userMoneyRecord);
 					map.put("Money_ID",userMoneyRecord.getId());
-				}
-				else{
+				//}
+				/*else{
 					result.setStatus(5019);
 					result.setMessage("充值金额不能小于100元");
-				}
+				}*/
 			}else{
 				leId=0;
 				Float bei =usersMapper.findByBei(leId+1);
-				Integer dnum = body.getQj();
-				if(dnum>=100){
+				BigDecimal dnum = body.getQj();
+				//if(dnum>=100){
 					map.put("dnum",dnum);
-					map.put("snum",(int)(bei*dnum));
-					map.put("hnum",(int)(((bei+1)*dnum)));
+					Integer dnum1=dnum.intValue();
+					map.put("snum",(int)(bei*dnum1));
+					map.put("hnum",(int)(((bei+1)*dnum1)));
 					String userName = usersMapper.findByUserLevel(leId+1);
 					leId=leId+1;
 					Float xbei =usersMapper.findByBei(leId);
-					map.put("xnum",(int) (xbei*dnum));
+					map.put("xnum",(int) (xbei*dnum1));
 					map.put("userName",userName);
 					UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 					userMoneyRecord.setCreateTime(new Date());
-					BigDecimal jnum =new BigDecimal(dnum);
-					userMoneyRecord.setMoney(jnum );
+					userMoneyRecord.setMoney(dnum);
 					userMoneyRecord.setSceneKey("dpGXuIqb");
 					userMoneyRecord.setUserId(userId);
 					userMoneyRecordMapper.insert(userMoneyRecord);
 					map.put("Money_ID",userMoneyRecord.getId());
 
-				}
-				else{
+				//}
+				/*else{
 					result.setStatus(5019);
 					result.setMessage("充值金额不能小于100元");
-				}
+				}*/
 			}
 		}else{
 			result.setStatus(5013);

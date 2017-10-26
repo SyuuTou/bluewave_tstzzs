@@ -1,7 +1,9 @@
 package com.lhjl.tzzs.proxy.dto;
 
+import java.math.BigDecimal;
+
 public class QzengDto {
-  private Integer qj;
+  private BigDecimal qj;
   private String  uuids;
   
 
@@ -13,12 +15,14 @@ public void setUuids(String uuids) {
 	this.uuids = uuids;
 }
 
-public Integer getQj() {
+public BigDecimal getQj() {
 	return qj;
 }
 
-public void setQj(Integer qj) {
+public void setQj(BigDecimal qj) {
 	this.qj = qj;
 }
+
+
   
 }
