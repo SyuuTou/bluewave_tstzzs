@@ -621,6 +621,10 @@ public class UserLevelServiceImpl implements UserLevelService {
             //金币足够
             if(totalCoins + consumeNum >= 0){
                 Date now = new Date();
+
+                //计算失效时间
+                Date end = userLevelRelation.getEndTime();
+
                 //插入消费表
                 UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
                 userIntegralConsume.setUserId(localUserId);
@@ -628,6 +632,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegralConsume.setCostNum(consumeNum);
                 userIntegralConsume.setBeginTime(now);
                 userIntegralConsume.setCreateTime(now);
+                userIntegralConsume.setEndTime(end);
                 userIntegralConsumeMapper.insert(userIntegralConsume);
                 int consumeId = userIntegralConsume.getId();
 
@@ -638,6 +643,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 newUserIntegrals.setIntegralNum(consumeNum);
                 newUserIntegrals.setBeginTime(now);
                 newUserIntegrals.setCreateTime(now);
+                newUserIntegrals.setEndTime(end);
                 userIntegralsMapper.insert(newUserIntegrals);
 
                 //插入交易记录明细表
