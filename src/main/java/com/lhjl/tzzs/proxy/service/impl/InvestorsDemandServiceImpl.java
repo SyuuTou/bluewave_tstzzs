@@ -185,8 +185,8 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
             data.put("user7singleinve_noana", "");
             data.put("user7singlethro_noana", "");
             data.put("user7excessfield4", "");
-            data.put("user7recentlyco_noana", "");
-            data.put("user7foundertra_noana", "");
+            data.put("user7recentlyco_noana", new ArrayList<String>());
+            data.put("user7foundertra_noana", new ArrayList<String>());
         }
 
         result.setStatus(200);
