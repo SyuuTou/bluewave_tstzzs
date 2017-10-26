@@ -67,7 +67,7 @@ public class EvaluateServiceImpl implements EvaluateService {
     }
 
 
-//    @Cacheable(value = "valuation",keyGenerator = "wiselyKeyGenerator")
+    @Cacheable(value = "valuation",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<HistogramList>> valuation(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
 
@@ -124,7 +124,7 @@ public class EvaluateServiceImpl implements EvaluateService {
         return result;
     }
 
-//    @Cacheable(value = "financingAmount",keyGenerator = "wiselyKeyGenerator")
+    @Cacheable(value = "financingAmount",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<HistogramList>> financingAmount(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
