@@ -61,6 +61,12 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		 investorsApproval.setReviewTime(new Date());
 		 investorsApproval.setCreateTime(new Date());
 		 investorsApprovalMapper.insert(investorsApproval);
+		 Users users =new Users();
+		 users.setUuid(params.getToken());
+		 Users u =usersMapper.selectOne(users);
+		 u.setCompanyName(params.getOrganization());
+		 u.setCompanyDuties(params.getFillOffice());
+         usersMapper.updateByPrimaryKey(u);
 		return result;
 	}
   /**
