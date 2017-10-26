@@ -404,6 +404,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         //获取最新项目ID
         ProjectSendLogs projectSendLogs = new ProjectSendLogs();
         projectSendLogs.setUserid(userId);
+        projectSendLogs.setCreatTime(new Date());
         projectSendLogsMapper.insert(projectSendLogs);
         int newId = projectSendLogs.getId();
 
