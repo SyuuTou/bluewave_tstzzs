@@ -19,7 +19,6 @@ import com.lhjl.tzzs.proxy.mapper.UserTokenMapper;
 import com.lhjl.tzzs.proxy.mapper.UsersMapper;
 import com.lhjl.tzzs.proxy.service.InvestorsApprovalService;
 
-import net.sf.jsqlparser.expression.StringValue;
 @Service
 public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	@Resource
@@ -297,6 +296,38 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 		result.setStatus(200);
 		result.setMessage("审核操作成功");
+		return result;
+	}
+
+	/**
+	 * 获取工作名片
+	 * @param approvalId 投资审核记录ID
+	 * @return
+	 */
+	@Override
+	public CommonDto<String> getWorkcard(String approvalId) {
+		CommonDto<String> result = new CommonDto<>();
+		if(approvalId == null || "".equals(approvalId)){
+			result.setStatus(301);
+			result.setMessage("无效参数");
+			return result;
+		}
+
+		String workcard = "";
+		InvestorsApproval investorsApproval = new InvestorsApproval();
+		investorsApproval.setId(Integer.parseInt(approvalId));
+		investorsApproval = investorsApprovalMapper.selectByPrimaryKey(investorsApproval);
+		if(investorsApproval != null){
+			workcard = investorsApproval.getWorkCard();
+		}else{
+			result.setStatus(302);
+			result.setMessage("未找到该审核记录");
+			return  result;
+		}
+
+		result.setStatus(200);
+		result.setMessage("查询工作名片成功");
+		result.setData(workcard);
 		return result;
 	}
 }

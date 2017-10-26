@@ -45,4 +45,11 @@ public interface InvestorsApprovalService {
 	 * @return
 	 */
 	CommonDto<String> approval(InvestorsApprovalActionDto body);
+
+	/**
+	 * 获取工作名片
+	 * @param approvalId 投资审核记录ID
+	 * @return
+	 */
+	CommonDto<String> getWorkcard(String approvalId);
 }
