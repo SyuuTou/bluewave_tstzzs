@@ -44,6 +44,7 @@
     <if test="time == 3">
       AND DATE_FORMAT(create_time, '%Y%m') = DATE_FORMAT(CURDATE( ) , '%Y%m')
     </if>
+    ORDER BY create_time desc
     LIMIT #{beginNum},#{pageSize}
   </select>
 </mapper>
