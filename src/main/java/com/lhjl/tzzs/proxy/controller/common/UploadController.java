@@ -17,8 +17,8 @@ public class UploadController {
     String handleFileUpload(
             @RequestParam("file") MultipartFile file) {
 
-        int randomnum = (int)Math.random()*10000;
-        int randomnum1 = (int)Math.random()*100;
+        int randomnum = (int)(Math.random()*10000);
+        int randomnum1 = (int)(Math.random()*9000);
 
         String randomnumString = String.valueOf(randomnum);
         String randomnumString1 = String.valueOf(randomnum1);
