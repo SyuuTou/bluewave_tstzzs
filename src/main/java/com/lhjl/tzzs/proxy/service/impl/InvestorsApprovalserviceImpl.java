@@ -66,6 +66,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		 Users u =usersMapper.selectOne(users);
 		 u.setCompanyName(params.getOrganization());
 		 u.setCompanyDuties(params.getFillOffice());
+		 u.setActualName(params.getCompellation());
          usersMapper.updateByPrimaryKey(u);
 		return result;
 	}
