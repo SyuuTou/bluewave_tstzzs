@@ -292,10 +292,10 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         identify5.setValue("研究机构");
         identify5.setChecked(false);
         identities.add(identify1);
-        identities.add(identify1);
-        identities.add(identify1);
-        identities.add(identify1);
-        identities.add(identify1);
+        identities.add(identify2);
+        identities.add(identify3);
+        identities.add(identify4);
+        identities.add(identify5);
 
         if(users != null && users.getIdentityType() != null){
             int identity = users.getIdentityType();
