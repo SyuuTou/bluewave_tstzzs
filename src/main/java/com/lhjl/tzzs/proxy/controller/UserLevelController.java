@@ -87,12 +87,29 @@ public class UserLevelController {
     }
 
     /**
+     * 消费金币提示
+     * @param body 请求对象
+     * @return
+     */
+    @PostMapping("/consumetips")
+    public CommonDto<Map<String, Object>> consumeTips(@RequestBody ActionDto body){
+        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+        try{
+            result = userLevelService.consumeTips(body);
+        }catch(Exception e){
+            result.setStatus(501);
+            result.setMessage("会员消费异常");
+            logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
+    /**
      * 消费金币
      * @param body 请求对象
      * @return
      */
     @PostMapping("/consume")
-    public CommonDto<Map<String, Object>> consumeCoin(@RequestBody ActionDto body){
+    public CommonDto<Map<String, Object>> consume(@RequestBody ActionDto body){
         CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
         try{
             result = userLevelService.consume(body);

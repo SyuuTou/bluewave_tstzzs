@@ -35,6 +35,12 @@ public interface UserLevelService {
     CommonDto<Map<String, Object>> upLevel(String userStr, int levelId);
 
     /**
+     * 消费金币提醒
+     * @param action 请求对象
+     * @return
+     */
+    CommonDto<Map<String, Object>> consumeTips(ActionDto action);
+    /**
      * 消费金币
      * @param action 请求对象
      * @return

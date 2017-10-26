@@ -440,13 +440,13 @@ public class UserLevelServiceImpl implements UserLevelService {
     }
 
     /**
-     * 消费金币
+     * 消费金币提醒
      * @param action 请求对象
      * @return
      */
     @Transactional
     @Override
-    public CommonDto<Map<String, Object>> consume(ActionDto action) {
+    public CommonDto<Map<String, Object>> consumeTips(ActionDto action) {
         CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
         Map<String, Object> data = new HashMap<String,Object>();
         //获取本系统userId
@@ -456,7 +456,6 @@ public class UserLevelServiceImpl implements UserLevelService {
             result.setMessage("当前用户信息无效");
             return result;
         }
-
         //查询当前用户会员等级
         UserLevelRelation userLevelRelation = new UserLevelRelation();
         userLevelRelation.setUserId(localUserId);
@@ -525,34 +524,6 @@ public class UserLevelServiceImpl implements UserLevelService {
 
             //余额足够
             if((totalCoins + consumeNum) >= 0){
-                Date now = new Date();
-                //计算失效时间
-                int period = metaObtainIntegral.getPeriod();
-                Calendar calendar = new GregorianCalendar();
-                calendar.setTime(now);
-                calendar.add(Calendar.DAY_OF_YEAR, period);
-                Date end = calendar.getTime();
-
-                //插入消费表
-                UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
-                userIntegralConsume.setUserId(localUserId);
-                userIntegralConsume.setSceneKey(sceneKey);
-                userIntegralConsume.setCostNum(consumeNum);
-                userIntegralConsume.setBeginTime(now);
-                userIntegralConsume.setCreateTime(now);
-                userIntegralConsume.setEndTime(end);
-                userIntegralConsumeMapper.insert(userIntegralConsume);
-
-                //插入交易记录表
-                UserIntegrals newUserIntegrals = new UserIntegrals();
-                newUserIntegrals.setSceneKey(sceneKey);
-                newUserIntegrals.setUserId(localUserId);
-                newUserIntegrals.setIntegralNum(consumeNum);
-                newUserIntegrals.setBeginTime(now);
-                newUserIntegrals.setCreateTime(now);
-                newUserIntegrals.setEndTime(end);
-                userIntegralsMapper.insert(newUserIntegrals);
-
                 result.setStatus(204);
                 result.setMessage("使用查看更多指数统计数据，消费"+(-consumeNum)+"金币，24小时内可重复查看");
                 data.put("consumeNum", -consumeNum);
@@ -620,40 +591,6 @@ public class UserLevelServiceImpl implements UserLevelService {
 
             //金币足够
             if(totalCoins + consumeNum >= 0){
-                Date now = new Date();
-
-                //计算失效时间
-                Date end = userLevelRelation.getEndTime();
-
-                //插入消费表
-                UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
-                userIntegralConsume.setUserId(localUserId);
-                userIntegralConsume.setSceneKey(sceneKey);
-                userIntegralConsume.setCostNum(consumeNum);
-                userIntegralConsume.setBeginTime(now);
-                userIntegralConsume.setCreateTime(now);
-                userIntegralConsume.setEndTime(end);
-                userIntegralConsumeMapper.insert(userIntegralConsume);
-                int consumeId = userIntegralConsume.getId();
-
-                //插入交易记录表
-                UserIntegrals newUserIntegrals = new UserIntegrals();
-                newUserIntegrals.setSceneKey(sceneKey);
-                newUserIntegrals.setUserId(localUserId);
-                newUserIntegrals.setIntegralNum(consumeNum);
-                newUserIntegrals.setBeginTime(now);
-                newUserIntegrals.setCreateTime(now);
-                newUserIntegrals.setEndTime(end);
-                userIntegralsMapper.insert(newUserIntegrals);
-
-                //插入交易记录明细表
-                UserIntegralConsumeDatas newUserIntegralConsumeDatas = new UserIntegralConsumeDatas();
-                newUserIntegralConsumeDatas.setUserId(localUserId);
-                newUserIntegralConsumeDatas.setSceneKey(sceneKey);
-                newUserIntegralConsumeDatas.setDatasId(action.getProjectsId()+"");
-                newUserIntegralConsumeDatas.setConsumeDate(new Date());
-                newUserIntegralConsumeDatas.setUserIntegralConsumeId(consumeId);
-                userIntegralConsumeDatasMapper.insert(newUserIntegralConsumeDatas);
 
                 result.setStatus(204);
                 if(type == 1){
@@ -750,42 +687,6 @@ public class UserLevelServiceImpl implements UserLevelService {
                     int consumeNum = metaObtainIntegral.getIntegral();
                     //金币足够
                     if(totalCoins + consumeNum > 0){
-                        Date now = new Date();
-                        //计算失效时间
-                        Calendar calendar = new GregorianCalendar();
-                        calendar.setTime(now);
-                        calendar.add(Calendar.DAY_OF_YEAR, metaObtainIntegral.getPeriod());
-                        Date end = calendar.getTime();
-                        //插入消费表
-                        UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
-                        userIntegralConsume.setUserId(localUserId);
-                        userIntegralConsume.setSceneKey(sceneKey);
-                        userIntegralConsume.setCostNum(consumeNum);
-                        userIntegralConsume.setBeginTime(now);
-                        userIntegralConsume.setCreateTime(now);
-                        userIntegralConsume.setEndTime(end);
-                        userIntegralConsumeMapper.insert(userIntegralConsume);
-                        int consumeId = userIntegralConsume.getId();
-
-                        //插入交易记录表
-                        UserIntegrals newUserIntegrals = new UserIntegrals();
-                        newUserIntegrals.setSceneKey(sceneKey);
-                        newUserIntegrals.setUserId(localUserId);
-                        newUserIntegrals.setIntegralNum(consumeNum);
-                        newUserIntegrals.setBeginTime(now);
-                        newUserIntegrals.setCreateTime(now);
-                        newUserIntegrals.setEndTime(end);
-                        userIntegralsMapper.insert(newUserIntegrals);
-
-                        //插入交易记录明细表
-                        UserIntegralConsumeDatas newUserIntegralConsumeDatas = new UserIntegralConsumeDatas();
-                        newUserIntegralConsumeDatas.setUserId(localUserId);
-                        newUserIntegralConsumeDatas.setSceneKey(sceneKey);
-                        newUserIntegralConsumeDatas.setDatasId(roundName);
-                        newUserIntegralConsumeDatas.setConsumeDate(new Date());
-                        newUserIntegralConsumeDatas.setUserIntegralConsumeId(consumeId);
-                        userIntegralConsumeDatasMapper.insert(newUserIntegralConsumeDatas);
-
                         result.setStatus(204);
                         result.setMessage("使用项目评估，每个选项扣除"+(-consumeNum)+"金币，共消费"+(-consumeNum)+"金币，24小时内可重复查看该选项");
                         data.put("consumeNum", -consumeNum);
@@ -857,43 +758,6 @@ public class UserLevelServiceImpl implements UserLevelService {
                 if(buys.size() > 0){
                     int consumeNum = metaObtainIntegral.getIntegral()*buys.size();
                     if(totalCoins + consumeNum >= 0){
-                        Date now = new Date();
-                        //计算失效时间
-                        Calendar calendar = new GregorianCalendar();
-                        calendar.setTime(now);
-                        calendar.add(Calendar.DAY_OF_YEAR, metaObtainIntegral.getPeriod());
-                        Date end = calendar.getTime();
-                        //插入消费表
-                        UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
-                        userIntegralConsume.setUserId(localUserId);
-                        userIntegralConsume.setSceneKey(sceneKey);
-                        userIntegralConsume.setCostNum(consumeNum);
-                        userIntegralConsume.setBeginTime(now);
-                        userIntegralConsume.setCreateTime(now);
-                        userIntegralConsume.setEndTime(end);
-                        userIntegralConsumeMapper.insert(userIntegralConsume);
-                        int consumeId = userIntegralConsume.getId();
-
-                        //插入交易记录表
-                        UserIntegrals newUserIntegrals = new UserIntegrals();
-                        newUserIntegrals.setSceneKey(sceneKey);
-                        newUserIntegrals.setUserId(localUserId);
-                        newUserIntegrals.setIntegralNum(consumeNum);
-                        newUserIntegrals.setBeginTime(now);
-                        newUserIntegrals.setCreateTime(now);
-                        newUserIntegrals.setEndTime(end);
-                        userIntegralsMapper.insert(newUserIntegrals);
-
-                        //插入交易记录明细表
-                        for(String string : buys){
-                            UserIntegralConsumeDatas newUserIntegralConsumeDatas = new UserIntegralConsumeDatas();
-                            newUserIntegralConsumeDatas.setUserId(localUserId);
-                            newUserIntegralConsumeDatas.setSceneKey(sceneKey);
-                            newUserIntegralConsumeDatas.setDatasId(string);
-                            newUserIntegralConsumeDatas.setConsumeDate(new Date());
-                            newUserIntegralConsumeDatas.setUserIntegralConsumeId(consumeId);
-                            userIntegralConsumeDatasMapper.insert(newUserIntegralConsumeDatas);
-                        }
                         result.setStatus(204);
                         result.setMessage("使用项目评估，每个选项扣除"+(-metaObtainIntegral.getIntegral())+"金币，共消费"+(-consumeNum)+"金币，24小时内可重复查看该选项");
                         data.put("consumeNum", -consumeNum);
@@ -997,43 +861,6 @@ public class UserLevelServiceImpl implements UserLevelService {
                 int consumeNum = metaObtainIntegral.getIntegral()*buys.size();
                 //金币足够
                 if(totalCoins + consumeNum >= 0){
-                    Date now = new Date();
-                    //计算失效时间
-                    Calendar calendar = new GregorianCalendar();
-                    calendar.setTime(now);
-                    calendar.add(Calendar.DAY_OF_YEAR, metaObtainIntegral.getPeriod());
-                    Date end = calendar.getTime();
-                    //插入消费表
-                    UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
-                    userIntegralConsume.setUserId(localUserId);
-                    userIntegralConsume.setSceneKey(sceneKey);
-                    userIntegralConsume.setCostNum(consumeNum);
-                    userIntegralConsume.setBeginTime(now);
-                    userIntegralConsume.setCreateTime(now);
-                    userIntegralConsume.setEndTime(end);
-                    userIntegralConsumeMapper.insert(userIntegralConsume);
-                    int consumeId = userIntegralConsume.getId();
-
-                    //插入交易记录表
-                    UserIntegrals newUserIntegrals = new UserIntegrals();
-                    newUserIntegrals.setSceneKey(sceneKey);
-                    newUserIntegrals.setUserId(localUserId);
-                    newUserIntegrals.setIntegralNum(consumeNum);
-                    newUserIntegrals.setBeginTime(now);
-                    newUserIntegrals.setCreateTime(now);
-                    newUserIntegrals.setEndTime(end);
-                    userIntegralsMapper.insert(newUserIntegrals);
-
-                    //插入交易记录明细表
-                    for(String string : buys){
-                        UserIntegralConsumeDatas newUserIntegralConsumeDatas = new UserIntegralConsumeDatas();
-                        newUserIntegralConsumeDatas.setUserId(localUserId);
-                        newUserIntegralConsumeDatas.setSceneKey(sceneKey);
-                        newUserIntegralConsumeDatas.setDatasId(string);
-                        newUserIntegralConsumeDatas.setConsumeDate(new Date());
-                        newUserIntegralConsumeDatas.setUserIntegralConsumeId(consumeId);
-                        userIntegralConsumeDatasMapper.insert(newUserIntegralConsumeDatas);
-                    }
                     result.setStatus(204);
                     result.setMessage("使用投递项目，投递1个机构扣除"+(-metaObtainIntegral.getIntegral())+"金币，共消费"+(-consumeNum)+"金币，24小时内可重复提交给该机构");
                     data.put("consumeNum", -consumeNum);
@@ -1067,6 +894,355 @@ public class UserLevelServiceImpl implements UserLevelService {
 
         return result;
     }
+
+    /**
+     * 消费金币
+     * @param action 请求对象
+     * @return
+     */
+    @Transactional
+    @Override
+    public CommonDto<Map<String, Object>> consume(ActionDto action) {
+        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+        Map<String, Object> data = new HashMap<String,Object>();
+
+        //获取本系统userId
+        Integer localUserId = this.getLocalUserId(action.getUserId());
+        if(localUserId == null){
+            result.setStatus(301);
+            result.setMessage("当前用户信息无效");
+            return result;
+        }
+
+        //查询当前用户会员等级
+        UserLevelRelation userLevelRelation = new UserLevelRelation();
+        userLevelRelation.setUserId(localUserId);
+        userLevelRelation.setYn(1);
+        userLevelRelation.setStatus(1);
+        userLevelRelation = userLevelRelationMapper.selectOne(userLevelRelation);
+        int userLevel = 0;
+        if(userLevelRelation != null){
+            userLevel = userLevelRelation.getLevelId();
+        }
+
+        String sceneKey = action.getSceneKey();
+
+        //首页消费与项目
+        if(PROJECT.equals(sceneKey)){
+
+            //获取消费金币数量
+            MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
+            metaObtainIntegral.setSceneKey(sceneKey);
+            metaObtainIntegral.setUserLevel(4);
+            metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
+            int consumeNum = metaObtainIntegral.getIntegral();
+
+            Date now = new Date();
+            //计算失效时间
+            int period = metaObtainIntegral.getPeriod();
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(now);
+            calendar.add(Calendar.DAY_OF_YEAR, period);
+            Date end = calendar.getTime();
+
+            //插入消费表
+            UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
+            userIntegralConsume.setUserId(localUserId);
+            userIntegralConsume.setSceneKey(sceneKey);
+            userIntegralConsume.setCostNum(consumeNum);
+            userIntegralConsume.setBeginTime(now);
+            userIntegralConsume.setCreateTime(now);
+            userIntegralConsume.setEndTime(end);
+            userIntegralConsumeMapper.insert(userIntegralConsume);
+
+            //插入交易记录表
+            UserIntegrals newUserIntegrals = new UserIntegrals();
+            newUserIntegrals.setSceneKey(sceneKey);
+            newUserIntegrals.setUserId(localUserId);
+            newUserIntegrals.setIntegralNum(consumeNum);
+            newUserIntegrals.setBeginTime(now);
+            newUserIntegrals.setCreateTime(now);
+            newUserIntegrals.setEndTime(end);
+            userIntegralsMapper.insert(newUserIntegrals);
+
+            result.setStatus(200);
+            result.setMessage("金币消费成功");
+            result.setData(data);
+            return result;
+
+        }
+        //约谈消费
+        if(INTERVIEW.equals(sceneKey)){
+
+            //查询项目信息(是否属于50机构)
+            Integer type = projectsMapper.findIvestmentTypeById(action.getProjectsId());
+
+            //获取消费金币数量
+            MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
+            metaObtainIntegral.setSceneKey(sceneKey);
+            metaObtainIntegral.setUserLevel(4);
+            if(type == 1){
+                metaObtainIntegral.setProjectsType(1);
+            }else{
+                metaObtainIntegral.setProjectsType(0);
+            }
+            metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
+            int consumeNum = metaObtainIntegral.getIntegral();
+
+            Date now = new Date();
+
+            //计算失效时间
+            Date end = userLevelRelation.getEndTime();
+
+            //插入消费表
+            UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
+            userIntegralConsume.setUserId(localUserId);
+            userIntegralConsume.setSceneKey(sceneKey);
+            userIntegralConsume.setCostNum(consumeNum);
+            userIntegralConsume.setBeginTime(now);
+            userIntegralConsume.setCreateTime(now);
+            userIntegralConsume.setEndTime(end);
+            userIntegralConsumeMapper.insert(userIntegralConsume);
+            int consumeId = userIntegralConsume.getId();
+
+            //插入交易记录表
+            UserIntegrals newUserIntegrals = new UserIntegrals();
+            newUserIntegrals.setSceneKey(sceneKey);
+            newUserIntegrals.setUserId(localUserId);
+            newUserIntegrals.setIntegralNum(consumeNum);
+            newUserIntegrals.setBeginTime(now);
+            newUserIntegrals.setCreateTime(now);
+            newUserIntegrals.setEndTime(end);
+            userIntegralsMapper.insert(newUserIntegrals);
+
+            //插入交易记录明细表
+            UserIntegralConsumeDatas newUserIntegralConsumeDatas = new UserIntegralConsumeDatas();
+            newUserIntegralConsumeDatas.setUserId(localUserId);
+            newUserIntegralConsumeDatas.setSceneKey(sceneKey);
+            newUserIntegralConsumeDatas.setDatasId(action.getProjectsId()+"");
+            newUserIntegralConsumeDatas.setConsumeDate(new Date());
+            newUserIntegralConsumeDatas.setUserIntegralConsumeId(consumeId);
+            userIntegralConsumeDatasMapper.insert(newUserIntegralConsumeDatas);
+
+            result.setStatus(200);
+            result.setMessage("金币消费成功");
+            result.setData(data);
+            return result;
+
+        }
+
+        //评估消费
+        if(ASSESS.equals(sceneKey)){
+
+            //判断权限
+            String roundName = action.getRoundName();
+            String industryName = action.getIndustryName();
+            String cityName = action.getCityName();
+            String educationName =action.getEducationName();
+            String workName = action.getWorkName();
+
+            //获取该场景配置信息
+            MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
+            metaObtainIntegral.setSceneKey(sceneKey);
+            metaObtainIntegral.setUserLevel(userLevel);
+            metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
+
+            //普通会员
+            if(userLevel == 1){
+                int consumeNum = metaObtainIntegral.getIntegral();
+                //金币足够
+                Date now = new Date();
+                //计算失效时间
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(now);
+                calendar.add(Calendar.DAY_OF_YEAR, metaObtainIntegral.getPeriod());
+                Date end = calendar.getTime();
+                //插入消费表
+                UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
+                userIntegralConsume.setUserId(localUserId);
+                userIntegralConsume.setSceneKey(sceneKey);
+                userIntegralConsume.setCostNum(consumeNum);
+                userIntegralConsume.setBeginTime(now);
+                userIntegralConsume.setCreateTime(now);
+                userIntegralConsume.setEndTime(end);
+                userIntegralConsumeMapper.insert(userIntegralConsume);
+                int consumeId = userIntegralConsume.getId();
+
+                //插入交易记录表
+                UserIntegrals newUserIntegrals = new UserIntegrals();
+                newUserIntegrals.setSceneKey(sceneKey);
+                newUserIntegrals.setUserId(localUserId);
+                newUserIntegrals.setIntegralNum(consumeNum);
+                newUserIntegrals.setBeginTime(now);
+                newUserIntegrals.setCreateTime(now);
+                newUserIntegrals.setEndTime(end);
+                userIntegralsMapper.insert(newUserIntegrals);
+
+                //插入交易记录明细表
+                UserIntegralConsumeDatas newUserIntegralConsumeDatas = new UserIntegralConsumeDatas();
+                newUserIntegralConsumeDatas.setUserId(localUserId);
+                newUserIntegralConsumeDatas.setSceneKey(sceneKey);
+                newUserIntegralConsumeDatas.setDatasId(roundName);
+                newUserIntegralConsumeDatas.setConsumeDate(new Date());
+                newUserIntegralConsumeDatas.setUserIntegralConsumeId(consumeId);
+                userIntegralConsumeDatasMapper.insert(newUserIntegralConsumeDatas);
+
+                result.setStatus(200);
+                result.setMessage("金币消费成功");
+                result.setData(data);
+                return result;
+            }
+            //高级以上会员
+            if(userLevel >= 2){
+                //过滤未购买的选项
+                List<String> buys = new ArrayList<String>();
+                if(roundName != null && !"".equals(roundName)){
+                    boolean isBuy = isBuy(sceneKey, localUserId, roundName);
+                    if(!isBuy){
+                        buys.add(roundName);
+                    }
+                }
+                if(industryName != null && !"".equals(industryName) && !"不限".equals(industryName)){
+                    boolean isBuy = isBuy(sceneKey, localUserId, industryName);
+                    if(!isBuy){
+                        buys.add(industryName);
+                    }
+                }
+                if(cityName != null && !"".equals(cityName) && !"不限".equals(cityName)){
+                    boolean isBuy = isBuy(sceneKey, localUserId, cityName);
+                    if(!isBuy){
+                        buys.add(cityName);
+                    }
+                }
+                if(educationName != null && !"".equals(educationName) && !"不限".equals(educationName)){
+                    boolean isBuy = isBuy(sceneKey, localUserId, educationName);
+                    if(!isBuy){
+                        buys.add(educationName);
+                    }
+                }
+                if(workName != null && !"".equals(workName) && !"不限".equals(workName)){
+                    boolean isBuy = isBuy(sceneKey, localUserId, workName);
+                    if(!isBuy){
+                        buys.add(workName);
+                    }
+                }
+                //存在需要消费的选项
+                int consumeNum = metaObtainIntegral.getIntegral()*buys.size();
+                Date now = new Date();
+                //计算失效时间
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(now);
+                calendar.add(Calendar.DAY_OF_YEAR, metaObtainIntegral.getPeriod());
+                Date end = calendar.getTime();
+                //插入消费表
+                UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
+                userIntegralConsume.setUserId(localUserId);
+                userIntegralConsume.setSceneKey(sceneKey);
+                userIntegralConsume.setCostNum(consumeNum);
+                userIntegralConsume.setBeginTime(now);
+                userIntegralConsume.setCreateTime(now);
+                userIntegralConsume.setEndTime(end);
+                userIntegralConsumeMapper.insert(userIntegralConsume);
+                int consumeId = userIntegralConsume.getId();
+
+                //插入交易记录表
+                UserIntegrals newUserIntegrals = new UserIntegrals();
+                newUserIntegrals.setSceneKey(sceneKey);
+                newUserIntegrals.setUserId(localUserId);
+                newUserIntegrals.setIntegralNum(consumeNum);
+                newUserIntegrals.setBeginTime(now);
+                newUserIntegrals.setCreateTime(now);
+                newUserIntegrals.setEndTime(end);
+                userIntegralsMapper.insert(newUserIntegrals);
+
+                //插入交易记录明细表
+                for(String string : buys){
+                    UserIntegralConsumeDatas newUserIntegralConsumeDatas = new UserIntegralConsumeDatas();
+                    newUserIntegralConsumeDatas.setUserId(localUserId);
+                    newUserIntegralConsumeDatas.setSceneKey(sceneKey);
+                    newUserIntegralConsumeDatas.setDatasId(string);
+                    newUserIntegralConsumeDatas.setConsumeDate(new Date());
+                    newUserIntegralConsumeDatas.setUserIntegralConsumeId(consumeId);
+                    userIntegralConsumeDatasMapper.insert(newUserIntegralConsumeDatas);
+                }
+
+                result.setStatus(200);
+                result.setMessage("金币消费成功");
+                result.setData(data);
+                return result;
+            }
+        }
+
+        //投递消费
+        if(SEND.equals(sceneKey)){
+            //获取机构信息
+            String[] ids = action.getInvestmentIds().split(",");
+
+            //获取该场景配置信息
+            MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
+            metaObtainIntegral.setSceneKey(sceneKey);
+            metaObtainIntegral.setUserLevel(userLevel);
+            metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
+
+            //过滤已购买机构
+            List<String> buys = new ArrayList<String>();
+            for(int i=0; i<ids.length;i++){
+                String investmentId = ids[i];
+                //判断是否购买过
+                boolean isBuy = isBuy(sceneKey, localUserId, investmentId);
+                if(!isBuy){
+                    buys.add(investmentId);
+                }
+            }
+
+            int consumeNum = metaObtainIntegral.getIntegral()*buys.size();
+            Date now = new Date();
+            //计算失效时间
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(now);
+            calendar.add(Calendar.DAY_OF_YEAR, metaObtainIntegral.getPeriod());
+            Date end = calendar.getTime();
+            //插入消费表
+            UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
+            userIntegralConsume.setUserId(localUserId);
+            userIntegralConsume.setSceneKey(sceneKey);
+            userIntegralConsume.setCostNum(consumeNum);
+            userIntegralConsume.setBeginTime(now);
+            userIntegralConsume.setCreateTime(now);
+            userIntegralConsume.setEndTime(end);
+            userIntegralConsumeMapper.insert(userIntegralConsume);
+            int consumeId = userIntegralConsume.getId();
+
+            //插入交易记录表
+            UserIntegrals newUserIntegrals = new UserIntegrals();
+            newUserIntegrals.setSceneKey(sceneKey);
+            newUserIntegrals.setUserId(localUserId);
+            newUserIntegrals.setIntegralNum(consumeNum);
+            newUserIntegrals.setBeginTime(now);
+            newUserIntegrals.setCreateTime(now);
+            newUserIntegrals.setEndTime(end);
+            userIntegralsMapper.insert(newUserIntegrals);
+
+            //插入交易记录明细表
+            for(String string : buys){
+                UserIntegralConsumeDatas newUserIntegralConsumeDatas = new UserIntegralConsumeDatas();
+                newUserIntegralConsumeDatas.setUserId(localUserId);
+                newUserIntegralConsumeDatas.setSceneKey(sceneKey);
+                newUserIntegralConsumeDatas.setDatasId(string);
+                newUserIntegralConsumeDatas.setConsumeDate(new Date());
+                newUserIntegralConsumeDatas.setUserIntegralConsumeId(consumeId);
+                userIntegralConsumeDatasMapper.insert(newUserIntegralConsumeDatas);
+            }
+
+            result.setStatus(200);
+            result.setMessage("金币消费成功");
+            result.setData(data);
+            return result;
+        }
+
+        return result;
+    }
+
 
     /**
      * 用户取消消费提示
