@@ -830,10 +830,24 @@ public class UserLevelServiceImpl implements UserLevelService {
             if(buys.size() > 0){
                 //校验投递机构个数
                 int curNum = buys.size();//当前投递机构数
+
+                //获取已经投递机构数（有效的）
                 Example example = new Example(UserIntegralConsumeDatas.class);
                 example.and().andEqualTo("userId",localUserId).andEqualTo("sceneKey",sceneKey);
                 List<UserIntegralConsumeDatas> userIntegralConsumeDatasList = userIntegralConsumeDatasMapper.selectByExample(example);
-                int dayNum = userIntegralConsumeDatasList.size();//当日已投递次数
+                int dayNum = 0;
+                for(UserIntegralConsumeDatas consumeDatas : userIntegralConsumeDatasList){
+                    UserIntegralConsume consume = new UserIntegralConsume();
+                    consume.setId(consumeDatas.getUserIntegralConsumeId());
+                    consume = userIntegralConsumeMapper.selectOne(consume);
+                    Date endTime = consume.getEndTime();
+                    if(endTime != null){
+                        Date now = new Date();
+                        if(endTime.getTime() > now.getTime()){
+                            dayNum ++;
+                        }
+                    }
+                }
                 if((curNum + dayNum) > metaObtainIntegral.getDeliverNum()){
                     result.setStatus(205);
                     switch (userLevel){
