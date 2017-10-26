@@ -12,7 +12,7 @@ public class UserFeedback {
     /**
      * 用户id
      */
-    private String userid;
+    private Integer userid;
 
     /**
      * 反馈意见
@@ -44,7 +44,7 @@ public class UserFeedback {
      *
      * @return userid - 用户id
      */
-    public String getUserid() {
+    public Integer getUserid() {
         return userid;
     }
 
@@ -53,7 +53,7 @@ public class UserFeedback {
      *
      * @param userid 用户id
      */
-    public void setUserid(String userid) {
+    public void setUserid(Integer userid) {
         this.userid = userid;
     }
 
