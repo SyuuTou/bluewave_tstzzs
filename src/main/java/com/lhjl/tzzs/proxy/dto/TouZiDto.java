@@ -6,7 +6,7 @@ public class TouZiDto {
 
 	private String dateName;  //投资
 	private String compellation; // 姓名
-	private String	Organization;  // 所在公司
+	private String organization;  // 所在公司
 	private String fillOffice;  //担任职务
 	private String evaContent;  //说明
 	private String tempFilePaths; //图片
@@ -23,12 +23,15 @@ public class TouZiDto {
 	public void setCompellation(String compellation) {
 		this.compellation = compellation;
 	}
+
 	public String getOrganization() {
-		return Organization;
+		return organization;
 	}
+
 	public void setOrganization(String organization) {
-		Organization = organization;
+		this.organization = organization;
 	}
+
 	public String getFillOffice() {
 		return fillOffice;
 	}
