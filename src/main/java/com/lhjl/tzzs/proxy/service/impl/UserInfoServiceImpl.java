@@ -62,36 +62,54 @@ public class UserInfoServiceImpl implements UserInfoService{
             founders.setUserId(userId);
             founders = foundersMapper.selectOne(founders);
 
-            List<String> educations = new ArrayList<>();
-            FoundersEducation foundersEducation = new FoundersEducation();
-            foundersEducation.setFounderId(founders.getId());
-            List<FoundersEducation> educationList = foundersEducationMapper.select(foundersEducation);
-            for(FoundersEducation education : educationList){
-                educations.add(education.getEducationExperience());
-            }
-            params.put("user7educatione_noana", educations);
+            if(founders != null){
+                List<String> educations = new ArrayList<>();
+                FoundersEducation foundersEducation = new FoundersEducation();
+                foundersEducation.setFounderId(founders.getId());
+                List<FoundersEducation> educationList = foundersEducationMapper.select(foundersEducation);
+                for(FoundersEducation education : educationList){
+                    educations.add(education.getEducationExperience());
+                }
+                params.put("user7educatione_noana", educations);
 
-
-            int identity = users.getIdentityType();
-            String identiStr = "";
-            switch(identity){
-                case 0:
-                    identiStr = "投资人";
-                    break;
-                case 1:
-                    identiStr = "创业者";
-                    break;
-                case 2:
-                    identiStr = "产业公司";
-                    break;
-                case 3:
-                    identiStr = "媒体";
-                    break;
-                case 4:
-                    identiStr = "研究机构";
-                    break;
+                List<String> works = new ArrayList<>();
+                FoundersWork foundersWork = new FoundersWork();
+                foundersWork.setFounderId(founders.getId());
+                List<FoundersWork> workList = foundersWorkMapper.select(foundersWork);
+                for(FoundersWork work : workList){
+                    works.add(work.getWorkExperience());
+                }
+                params.put("user7workexperi_noana", works);
+            }else{
+                params.put("user7educatione_noana", new ArrayList<String>());
+                params.put("user7workexperi_noana", new ArrayList<String>());
             }
-            params.put("user7excessfield", identiStr);
+
+            Integer identity = users.getIdentityType();
+            if(identity != null){
+                String identiStr = "";
+                switch(identity){
+                    case 0:
+                        identiStr = "投资人";
+                        break;
+                    case 1:
+                        identiStr = "创业者";
+                        break;
+                    case 2:
+                        identiStr = "产业公司";
+                        break;
+                    case 3:
+                        identiStr = "媒体";
+                        break;
+                    case 4:
+                        identiStr = "研究机构";
+                        break;
+                }
+                params.put("user7excessfield", identiStr);
+            }else{
+                params.put("user7excessfield", "");
+            }
+
 
             List<String> industries = new ArrayList<>();
             if(users.getIndustry() != null){
@@ -107,14 +125,7 @@ public class UserInfoServiceImpl implements UserInfoService{
             params.put("user7excessfield4", users.getDemand());
             params.put("user7wechatnumb_noana", users.getWechat());
 
-            List<String> works = new ArrayList<>();
-            FoundersWork foundersWork = new FoundersWork();
-            foundersWork.setFounderId(founders.getId());
-            List<FoundersWork> workList = foundersWorkMapper.select(foundersWork);
-            for(FoundersWork work : workList){
-                works.add(work.getWorkExperience());
-            }
-            params.put("user7workexperi_noana", works);
+
 
             paramsList.add(params);
 
