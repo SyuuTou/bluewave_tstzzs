@@ -5,6 +5,8 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.dto.AssessmentDto;
@@ -28,8 +30,8 @@ public class ProjectEvaluationlogController {
 	 * @param params
 	 * @return
 	 */
-	@GetMapping("rest/zyy/cpinggujilu")
-	 public CommonDto<Map<String,Object>> insertGold(AssessmentDto params){
+	@PostMapping("rest/zyy/cpinggujilu")
+	 public CommonDto<Map<String,Object>> insertGold(@RequestBody AssessmentDto params){
 		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>> ();
 	     try {
 	     

@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.service.InvestorsApprovalService;
@@ -32,8 +34,8 @@ public class InvestorsApprovalConroller {
 	 * @return
 	 */
 	
-	@GetMapping("rest/user/newuyhxinxi1")
-	 public CommonDto<String> insertGold( TouZiDto params){
+	@PostMapping("rest/user/newuyhxinxi1")
+	 public CommonDto<String> insertGold( @RequestBody  TouZiDto params){
 	     CommonDto<String>result = new CommonDto<String>();
 	     try {
 	     
