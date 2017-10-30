@@ -1490,6 +1490,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 Date end = calendar.getTime();
                 userIntegrals.setEndTime(end);
                 userIntegrals.setBeginTime((new Date()));
+                userIntegrals.setConsumeNum(0);
                 userIntegralsMapper.insert(userIntegrals);
                 //总表插入
                 UserIntegralConsume userIntegrals3=new UserIntegralConsume();
@@ -1531,6 +1532,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 Date end = calendar.getTime();
                 userIntegrals.setEndTime(end);
                 userIntegrals.setBeginTime((new Date()));
+                userIntegrals.setConsumeNum(0);
                 userIntegralsMapper.insert(userIntegrals);
                 UserIntegralConsume userIntegrals3=new UserIntegralConsume();
                 userIntegrals3.setUserId(userId);
