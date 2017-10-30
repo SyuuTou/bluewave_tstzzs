@@ -554,11 +554,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				Float bei =usersMapper.findByBei(leId);
 				for (Map<String, Object> obj : list){
 					//UserIntegralConsume u =new  UserIntegralConsume();
-					if(Integer.valueOf(String.valueOf(obj.get("cost_num")))>0){
+					if(Integer.valueOf(String.valueOf(obj.get("cost_num")))>=0){
 						if("xHwofbNs".equals(String.valueOf(obj.get("scene_key")))){
 							Integer dnum =Integer.valueOf(String.valueOf(obj.get("cost_num")));
 							obj.put("dnum","充值"+dnum+"元");
-							obj.put("hnum","+"+(int)((bei+1)*dnum));
+							Integer hnum =Integer.valueOf(String.valueOf(obj.get("num")));
+							obj.put("hnum","+"+hnum);
 							obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
 							obj.put("end_time",String.valueOf(obj.get("end_time")).substring(0,10));
 							obj.put("userName",null);
@@ -615,11 +616,13 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				Float bei =usersMapper.findByBei(leId);
 				for (Map<String, Object> obj : list) {
 					UserIntegrals u = new UserIntegrals();
-					if (Integer.valueOf(String.valueOf(obj.get("cost_num"))) > 0) {
+					if (Integer.valueOf(String.valueOf(obj.get("cost_num"))) >= 0) {
 						if ("xHwofbNs".equals(String.valueOf(obj.get("scene_key")))) {
 							Integer dnum = Integer.valueOf(String.valueOf(obj.get("cost_num")));
 							obj.put("dnum", "充值" + dnum + "元");
-							obj.put("hnum", "+" + (int) ((bei + 1) * dnum));
+							Integer leId1 = 1;
+							Integer hnum =Integer.valueOf(String.valueOf(obj.get("num")));
+							obj.put("hnum","+"+hnum);
 							obj.put("begin_time", String.valueOf(obj.get("begin_time")).substring(0, 10));
 							obj.put("end_time", String.valueOf(obj.get("end_time")).substring(0, 10));
 							obj.put("userName", null);
@@ -746,13 +749,13 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals3.setCostNum(jb1);
 				userIntegrals3.setCreateTime(new Date());
 				Calendar calendar3 = new GregorianCalendar();
-				calendar.setTime(new Date());
+				calendar3.setTime(new Date());
 
 				//获取该场景配置信息
 				MetaObtainIntegral metaObtainIntegral3 = new MetaObtainIntegral();
 				metaObtainIntegral3.setSceneKey("xHwofbNs");
 				metaObtainIntegral3 = metaObtainIntegralMapper.selectOne(metaObtainIntegral3);
-				calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
+				calendar3.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
 				Date end3 = calendar3.getTime();
 				userIntegrals3.setEndTime(end3);
 				userIntegrals3.setBeginTime((new Date()));
@@ -767,11 +770,11 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals4.setCostNum(snum4);
 				userIntegrals4.setCreateTime(new Date());
 				MetaObtainIntegral metaObtainIntegral4 = new MetaObtainIntegral();
-				metaObtainIntegral4.setSceneKey(sKey);
+				metaObtainIntegral4.setSceneKey(sKey4);
 				Calendar calendar4 = new GregorianCalendar();
 				metaObtainIntegral4 = metaObtainIntegralMapper.selectOne(metaObtainIntegral4);
 				calendar4.add(Calendar.DAY_OF_YEAR, metaObtainIntegral4.getPeriod());
-				Date end4 = calendar.getTime();
+				Date end4 = calendar4.getTime();
 				userIntegrals4.setEndTime(end4);
 				userIntegrals4.setBeginTime((new Date()));
 				userIntegralConsumeMapper.insert(userIntegrals4);
@@ -828,13 +831,13 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userIntegrals3.setCostNum(jb1);
 					userIntegrals3.setCreateTime(new Date());
 					Calendar calendar3 = new GregorianCalendar();
-					calendar.setTime(new Date());
+					calendar3.setTime(new Date());
 
 					//获取该场景配置信息
 					MetaObtainIntegral metaObtainIntegral3 = new MetaObtainIntegral();
 					metaObtainIntegral3.setSceneKey("xHwofbNs");
 					metaObtainIntegral3 = metaObtainIntegralMapper.selectOne(metaObtainIntegral3);
-					calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
+					calendar3.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
 					Date end3 = calendar3.getTime();
 					userIntegrals3.setEndTime(end3);
 					userIntegrals3.setBeginTime((new Date()));
@@ -849,7 +852,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userIntegrals4.setCostNum(snum4);
 					userIntegrals4.setCreateTime(new Date());
 					MetaObtainIntegral metaObtainIntegral4 = new MetaObtainIntegral();
-					metaObtainIntegral4.setSceneKey(sKey);
+					metaObtainIntegral4.setSceneKey(sKey4);
 					Calendar calendar4 = new GregorianCalendar();
 					metaObtainIntegral4 = metaObtainIntegralMapper.selectOne(metaObtainIntegral4);
 					calendar4.add(Calendar.DAY_OF_YEAR, metaObtainIntegral4.getPeriod());
