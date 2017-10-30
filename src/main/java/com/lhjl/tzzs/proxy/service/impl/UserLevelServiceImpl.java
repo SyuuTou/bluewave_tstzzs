@@ -1526,6 +1526,25 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setEndTime(end);
                 userIntegrals.setBeginTime((new Date()));
                 userIntegralsMapper.insert(userIntegrals);
+                //总表插入
+                UserIntegralConsume userIntegrals3=new UserIntegralConsume();
+                userIntegrals3.setUserId(userId);
+                userIntegrals3.setSceneKey(sKey);
+                userIntegrals3.setCostNum(hnum);
+                //if(jb>=100){
+                userIntegrals3.setCreateTime(new Date());
+                Calendar calendar3 = new GregorianCalendar();
+                calendar.setTime(new Date());
+
+                //获取该场景配置信息
+                MetaObtainIntegral metaObtainIntegral3 = new MetaObtainIntegral();
+                metaObtainIntegral3.setSceneKey(sKey);
+                metaObtainIntegral3 = metaObtainIntegralMapper.selectOne(metaObtainIntegral3);
+                calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
+                Date end3 = calendar3.getTime();
+                userIntegrals3.setEndTime(end3);
+                userIntegrals3.setBeginTime((new Date()));
+                userIntegralConsumeMapper.insert(userIntegrals3);
             }else{
                 leId1=1;
                 Integer hnum1 = 0;
@@ -1548,6 +1567,24 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setEndTime(end);
                 userIntegrals.setBeginTime((new Date()));
                 userIntegralsMapper.insert(userIntegrals);
+                UserIntegralConsume userIntegrals3=new UserIntegralConsume();
+                userIntegrals3.setUserId(userId);
+                userIntegrals3.setSceneKey(sKey);
+                userIntegrals3.setCostNum(hnum);
+                //if(jb>=100){
+                userIntegrals3.setCreateTime(new Date());
+                Calendar calendar3 = new GregorianCalendar();
+                calendar.setTime(new Date());
+
+                //获取该场景配置信息
+                MetaObtainIntegral metaObtainIntegral3 = new MetaObtainIntegral();
+                metaObtainIntegral3.setSceneKey(sKey);
+                metaObtainIntegral3 = metaObtainIntegralMapper.selectOne(metaObtainIntegral3);
+                calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
+                Date end3 = calendar3.getTime();
+                userIntegrals3.setEndTime(end3);
+                userIntegrals3.setBeginTime((new Date()));
+                userIntegralConsumeMapper.insert(userIntegrals3);
 
             }
         }
@@ -1562,9 +1599,9 @@ public class UserLevelServiceImpl implements UserLevelService {
         Map<String,Integer> map =new HashMap<String,Integer>();
         if(userId !=null){
             //当前会员状态总的金币
-               Integer leId1 =usersMapper.findByUserid(userId);
-               if(leId1 != null){
-            	 //购买或购买升级的
+            Integer leId1 =usersMapper.findByUserid(userId);
+            if(leId1 != null){
+                //购买或购买升级的
                 Integer dnum1 = userIntegralsMapper.findByQnum(leId1);
                 Float bei1 =usersMapper.findByBei(leId1);
                 Integer hnum1 =(int)(dnum1*(1+bei1));
@@ -1584,6 +1621,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 //userIntegrals2.setSceneKey(sKey);
                 //Integer snum =(int)(body.getQj()*bei);
                 UserIntegrals userIntegrals =new UserIntegrals();
+                userIntegrals.setConsumeNum(0);
                 userIntegrals.setUserId(userId);
                 userIntegrals.setSceneKey(sKey);
                 userIntegrals.setIntegralNum(hnum);
@@ -1595,6 +1633,26 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setEndTime(end);
                 userIntegrals.setBeginTime((new Date()));
                 userIntegralsMapper.insert(userIntegrals);
+
+                UserIntegralConsume userIntegrals3=new UserIntegralConsume();
+                userIntegrals3.setUserId(userId);
+                userIntegrals3.setSceneKey(sKey);
+                userIntegrals3.setCostNum(hnum);
+                //if(jb>=100){
+                userIntegrals3.setCreateTime(new Date());
+                Calendar calendar3 = new GregorianCalendar();
+                calendar.setTime(new Date());
+
+                //获取该场景配置信息
+                MetaObtainIntegral metaObtainIntegral3 = new MetaObtainIntegral();
+                metaObtainIntegral3.setSceneKey(sKey);
+                metaObtainIntegral3 = metaObtainIntegralMapper.selectOne(metaObtainIntegral3);
+                calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
+                Date end3 = calendar3.getTime();
+                userIntegrals3.setEndTime(end3);
+                userIntegrals3.setBeginTime((new Date()));
+                userIntegralConsumeMapper.insert(userIntegrals3);
+                //购买金币赠送的记录
             }else{
                 leId1=usersMapper.findByUserid(userId);
                 Integer hnum1 = 0;
@@ -1606,6 +1664,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 //userIntegrals2.setSceneKey(sKey);
                 //Integer snum =(int)(body.getQj()*bei);
                 UserIntegrals userIntegrals =new UserIntegrals();
+                userIntegrals.setConsumeNum(0);
                 userIntegrals.setUserId(userId);
                 userIntegrals.setSceneKey(sKey);
                 userIntegrals.setIntegralNum(hnum);
@@ -1617,6 +1676,25 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setEndTime(end);
                 userIntegrals.setBeginTime((new Date()));
                 userIntegralsMapper.insert(userIntegrals);
+                //插入总表
+                UserIntegralConsume userIntegrals3=new UserIntegralConsume();
+                userIntegrals3.setUserId(userId);
+                userIntegrals3.setSceneKey(sKey);
+                userIntegrals3.setCostNum(hnum);
+                //if(jb>=100){
+                userIntegrals3.setCreateTime(new Date());
+                Calendar calendar3 = new GregorianCalendar();
+                calendar.setTime(new Date());
+
+                //获取该场景配置信息
+                MetaObtainIntegral metaObtainIntegral3 = new MetaObtainIntegral();
+                metaObtainIntegral3.setSceneKey(sKey);
+                metaObtainIntegral3 = metaObtainIntegralMapper.selectOne(metaObtainIntegral3);
+                calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
+                Date end3 = calendar3.getTime();
+                userIntegrals3.setEndTime(end3);
+                userIntegrals3.setBeginTime((new Date()));
+                userIntegralConsumeMapper.insert(userIntegrals3);
 
             }
         }
