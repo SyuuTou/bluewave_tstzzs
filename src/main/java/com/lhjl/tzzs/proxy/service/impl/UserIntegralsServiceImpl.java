@@ -613,52 +613,45 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 			}else{
 				leId=1;
 				Float bei =usersMapper.findByBei(leId);
-				for (Map<String, Object> obj : list){
-					UserIntegrals u =new  UserIntegrals();
-					if(Integer.valueOf(String.valueOf(obj.get("cost_num")))>0){
-						if("xHwofbNs".equals(String.valueOf(obj.get("scene_key")))){
-							Integer dnum =Integer.valueOf(String.valueOf(obj.get("cost_num")));
-							obj.put("dnum","充值"+dnum+"元");
-							obj.put("hnum","+"+(int)((bei+1)*dnum));
-							obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
-							obj.put("end_time",String.valueOf(obj.get("end_time")).substring(0,10));
-							
-						}else{
-							Integer dnum=Integer.valueOf(String.valueOf(obj.get("cost_num")));
+				for (Map<String, Object> obj : list) {
+					UserIntegrals u = new UserIntegrals();
+					if (Integer.valueOf(String.valueOf(obj.get("cost_num"))) > 0) {
+						if ("xHwofbNs".equals(String.valueOf(obj.get("scene_key")))) {
+							Integer dnum = Integer.valueOf(String.valueOf(obj.get("cost_num")));
+							obj.put("dnum", "充值" + dnum + "元");
+							obj.put("hnum", "+" + (int) ((bei + 1) * dnum));
+							obj.put("begin_time", String.valueOf(obj.get("begin_time")).substring(0, 10));
+							obj.put("end_time", String.valueOf(obj.get("end_time")).substring(0, 10));
+							obj.put("userName", null);
+
+						} else {
+							Integer dnum = Integer.valueOf(String.valueOf(obj.get("cost_num")));
 							//Integer dnum1=(int)(hnum*(1-bei));
-							obj.put("dnum","+"+dnum);
-							obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
-							obj.put("end_time",String.valueOf(obj.get("end_time")).substring(0,10));
-							String skey =String.valueOf(obj.get("scene_key"));
-							MetaScene m =new MetaScene();
-							m.setKey(skey );
-							MetaScene m1=metaSceneMapper.selectOne(m);
-							obj.put("userName",m1.getDesc());
+							obj.put("dnum", "+" + dnum);
+							obj.put("begin_time", String.valueOf(obj.get("begin_time")).substring(0, 10));
+							obj.put("end_time", String.valueOf(obj.get("end_time")).substring(0, 10));
+							String skey = String.valueOf(obj.get("scene_key"));
+							MetaScene m = new MetaScene();
+							m.setKey(skey);
+							MetaScene m1 = metaSceneMapper.selectOne(m);
+							obj.put("userName", m1.getDesc());
 							//String userName = metaSceneMapper.selectbyDesc(skey);
 							//obj.put("userName",userName);
-						
+
 						}
-					}/*else{
+					} else{
 						String skey =String.valueOf(obj.get("scene_key"));
-						String userName = metaSceneMapper.selectbyDesc(skey);
-						obj.put("userName",userName);
+						//String userName = metaSceneMapper.selectbyDesc(skey);
+						//obj.put("userName",userName);
 						Integer dnum =Integer.valueOf(String.valueOf(obj.get("cost_num")));
 						obj.put("dnum",dnum);
 						obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
+						MetaScene m =new MetaScene();
+						m.setKey(skey );
+						MetaScene m1=metaSceneMapper.selectOne(m);
+						obj.put("userName",m1.getDesc());
 						obj.put("end_time",null);
-					}*/
-					Integer dnum=Integer.valueOf(String.valueOf(obj.get("integral_num")));
-					//Integer dnum1=(int)(hnum*(1-bei));
-					obj.put("dnum","+"+dnum);
-					obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
-					obj.put("end_time",String.valueOf(obj.get("end_time")).substring(0,10));
-					String skey =String.valueOf(obj.get("scene_key"));
-					/*String userName = metaSceneMapper.selectbyDesc(skey);
-					obj.put("userName",userName);*/
-					MetaScene m =new MetaScene();
-					m.setKey(skey );
-					MetaScene m1=metaSceneMapper.selectOne(m);
-					obj.put("userName",  m1.getDesc());
+					}
 				}
                /* UserIntegralConsume userIntegralConsume =new UserIntegralConsume();
                 userIntegralConsume.setUserId(userId);
