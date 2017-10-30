@@ -153,6 +153,7 @@ public class UserEditImpl implements UserEditService {
                 case 1:leixing = "机构投资人";
                 break;
                 case 2:leixing = "VIP投资人";
+                break;
                 default:
                     leixing ="";
             }
