@@ -21,7 +21,7 @@
   </resultMap>
 
    <select id="findInvestorsApproval" parameterType="INTEGER" resultType="java.util.HashMap">
-   SELECT i.* FROM investors_approval i  WHERE i.userid=#{userId} GROUP BY i.review_time DESC LIMIT 1
+   SELECT i.* FROM investors_approval i  WHERE i.userid=#{userId} ORDER BY i.review_time DESC LIMIT 1
   </select>
 
   <select id="findApproval" resultMap="BaseResultMap">
