@@ -21,7 +21,7 @@
         AND c.`end_time` >NOW()
     </select>
     <select id="findIntegralsX" parameterType="INTEGER" resultType="INTEGER" >
-        SELECT  IFNULL(SUM(cost_num),0) xnum  FROM user_integral_consume c WHERE user_id=#{userId,jdbcType=INTEGER}
+        SELECT  IFNULL(SUM(cost_num),0) xnum  FROM user_integral_consume c WHERE user_id=107 AND c.cost_num    &lt;  0
     </select>
     <select id="findBySkey" parameterType="INTEGER" resultType="String" >
         SELECT m.scene_key FROM meta_obtain_integral m WHERE m.user_level=#{leId} AND m.scene_key IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')

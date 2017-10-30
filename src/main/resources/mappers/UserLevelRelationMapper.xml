@@ -15,7 +15,7 @@
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
   <select id="findByMing" parameterType="INTEGER" resultType="java.util.HashMap">
-     SELECT * FROM user_integrals WHERE user_id=#{userId} AND scene_key NOT
+     SELECT * FROM user_integral_consume WHERE user_id=#{userId} AND scene_key NOT
      IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
      GROUP BY create_time DESC LIMIT #{beginNum},#{ pageSize}
   </select>
