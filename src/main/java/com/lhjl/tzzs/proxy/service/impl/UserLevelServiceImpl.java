@@ -580,14 +580,14 @@ public class UserLevelServiceImpl implements UserLevelService {
             int consumeNum = metaObtainIntegral.getIntegral();
 
             //查询是否购买过此功能且在有效期内
-            UserIntegrals userIntegrals = new UserIntegrals();
-            userIntegrals.setSceneKey(sceneKey);
-            userIntegrals.setUserId(localUserId);
-            List<UserIntegrals> userIntegralsList = userIntegralsMapper.select(userIntegrals);
+            UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
+            userIntegralConsume.setSceneKey(sceneKey);
+            userIntegralConsume.setUserId(localUserId);
+            List<UserIntegralConsume> userIntegralsList = userIntegralConsumeMapper.select(userIntegralConsume);
             //有效数据
-            List<UserIntegrals> valid = new ArrayList<UserIntegrals>();
+            List<UserIntegralConsume> valid = new ArrayList<UserIntegralConsume>();
             if(userIntegralsList.size() > 0){
-                for(UserIntegrals integrals : userIntegralsList){
+                for(UserIntegralConsume integrals : userIntegralsList){
                     //计算是否失效
                     Date endTime = integrals.getEndTime();
                     Date now = new Date();
