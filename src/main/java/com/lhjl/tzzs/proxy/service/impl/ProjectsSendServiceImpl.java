@@ -98,39 +98,43 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         projectSendLogsMapper.updateByPrimaryKey(projectSendLogs);
         int projectId = projectSendLogs.getId();
 
-        //更新投递项目-机构关系表
-        //插入
-        String[] investmentIds = params.getTsid().split(",");
-        for(String investmentId : investmentIds){
-            ProjectFinancingInvestmentInstitutionRelationship relationship = new ProjectFinancingInvestmentInstitutionRelationship();
-            relationship.setProjectSendLogId(projectId);
-            relationship.setInvestmentInstitutionId(Integer.parseInt(investmentId));
-            relationship.setAssociatedTime(new Date());
-            projectFinancingInvestmentInstitutionRelationshipMapper.insert(relationship);
-        }
-
         //更新融资申请表
         ProjectFinancingApproval oldProjectFinancingApproval = new ProjectFinancingApproval();
         oldProjectFinancingApproval.setProjectSendLogId(projectId);
         oldProjectFinancingApproval.setUserId(userId);
         oldProjectFinancingApproval = projectFinancingApprovalMapper.selectOne(oldProjectFinancingApproval);
         if(oldProjectFinancingApproval != null){
-            result.setStatus(301);
-            result.setMessage("该项目已投递过了");
-            return result;
+            if(params.getTuisongxiangmubiao7currentdem() != null && !"".equals(params.getTuisongxiangmubiao7currentdem())){
+                oldProjectFinancingApproval.setCurrentDemand(params.getTuisongxiangmubiao7currentdem());
+            }
+            oldProjectFinancingApproval.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
+            oldProjectFinancingApproval.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
+            oldProjectFinancingApproval.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
+            oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+            projectFinancingApprovalMapper.updateByPrimaryKey(oldProjectFinancingApproval);
+        }else{
+            ProjectFinancingApproval projectFinancingApproval = new ProjectFinancingApproval();
+            projectFinancingApproval.setProjectSendLogId(projectId);
+            projectFinancingApproval.setUserId(userId);
+            if(params.getTuisongxiangmubiao7currentdem() != null && !"".equals(params.getTuisongxiangmubiao7currentdem())){
+                projectFinancingApproval.setCurrentDemand(params.getTuisongxiangmubiao7currentdem());
+            }
+            projectFinancingApproval.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
+            projectFinancingApproval.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
+            projectFinancingApproval.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
+            projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+            projectFinancingApprovalMapper.insert(projectFinancingApproval);
+            //更新投递项目-机构关系表
+            //插入
+            String[] investmentIds = params.getTsid().split(",");
+            for(String investmentId : investmentIds){
+                ProjectFinancingInvestmentInstitutionRelationship relationship = new ProjectFinancingInvestmentInstitutionRelationship();
+                relationship.setProjectSendLogId(projectId);
+                relationship.setInvestmentInstitutionId(Integer.parseInt(investmentId));
+                relationship.setAssociatedTime(new Date());
+                projectFinancingInvestmentInstitutionRelationshipMapper.insert(relationship);
+            }
         }
-
-        ProjectFinancingApproval projectFinancingApproval = new ProjectFinancingApproval();
-        projectFinancingApproval.setProjectSendLogId(projectId);
-        projectFinancingApproval.setUserId(userId);
-        if(params.getTuisongxiangmubiao7currentdem() != null && !"".equals(params.getTuisongxiangmubiao7currentdem())){
-            projectFinancingApproval.setCurrentDemand(params.getTuisongxiangmubiao7currentdem());
-        }
-        projectFinancingApproval.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
-        projectFinancingApproval.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
-        projectFinancingApproval.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
-        projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
-        projectFinancingApprovalMapper.insert(projectFinancingApproval);
 
         //更新创始人记录
         int foundersId = 0;
