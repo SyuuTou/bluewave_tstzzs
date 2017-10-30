@@ -462,46 +462,46 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		Integer userId= usersMapper.findByUuid(uuids);
 		if(userId !=0 && userId !=null){
 			Integer leId =usersMapper.findByUserid(userId);
-			if(leId !=null){
-				Float bei =usersMapper.findByBei(leId);
-				BigDecimal dnum = body.getQj();
+			if(leId !=null) {
+                Float bei = usersMapper.findByBei(leId);
+                BigDecimal dnum = body.getQj();
+                Integer dnum1 = dnum.intValue();
+                if (dnum1 >= 100) {
+                    map.put("dnum", dnum);
 
-				//if(dnum>=100){
-					map.put("dnum",dnum);
-					Integer dnum1 =dnum.intValue();
-					map.put("snum",(int)(bei*dnum1));
-					map.put("hnum",(int)(((bei+1)*dnum1)));
-					System.out.println(bei);
-					System.out.println(dnum);
-					if(leId<4){
-						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
-						String userName = usersMapper.findByUserLevel(leId);
-						map.put("xnum",(int) (xbei*dnum1));
-						map.put("userName",userName);
-					}else{
-						result.setStatus(5000);
-						result.setMessage("您已经是VIP投资人");
-					}
-					UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
-					userMoneyRecord.setCreateTime(new Date());
-					userMoneyRecord.setMoney(dnum);
-					userMoneyRecord.setSceneKey("dpGXuIqb");
-					userMoneyRecord.setUserId(userId);
-					userMoneyRecordMapper.insert(userMoneyRecord);
-					map.put("Money_ID",userMoneyRecord.getId());
-				//}
-				/*else{
-					result.setStatus(5019);
-					result.setMessage("充值金额不能小于100元");
-				}*/
+                    map.put("snum", (int) (bei * dnum1));
+                    map.put("hnum", (int) (((bei + 1) * dnum1)));
+                    System.out.println(bei);
+                    System.out.println(dnum);
+                    if (leId < 4) {
+                        leId = leId + 1;
+                        Float xbei = usersMapper.findByBei(leId);
+                        String userName = usersMapper.findByUserLevel(leId);
+                        map.put("xnum", (int) (xbei * dnum1));
+                        map.put("userName", userName);
+                    } else {
+                        result.setStatus(5000);
+                        result.setMessage("您已经是VIP投资人");
+                    }
+                    UserMoneyRecord userMoneyRecord = new UserMoneyRecord();
+                    userMoneyRecord.setCreateTime(new Date());
+                    userMoneyRecord.setMoney(dnum);
+                    userMoneyRecord.setSceneKey("dpGXuIqb");
+                    userMoneyRecord.setUserId(userId);
+                    userMoneyRecordMapper.insert(userMoneyRecord);
+                    map.put("Money_ID", userMoneyRecord.getId());
+                } else {
+                    result.setStatus(5019);
+                    result.setMessage("充值金额不能小于100元");
+                }
 			}else{
 				leId=0;
 				Float bei =usersMapper.findByBei(leId+1);
 				BigDecimal dnum = body.getQj();
-				//if(dnum>=100){
+                Integer dnum1=dnum.intValue();
+				if(dnum1>=100){
 					map.put("dnum",dnum);
-					Integer dnum1=dnum.intValue();
+
 					map.put("snum",(int)(bei*dnum1));
 					map.put("hnum",(int)(((bei+1)*dnum1)));
 					String userName = usersMapper.findByUserLevel(leId+1);
@@ -516,12 +516,11 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userMoneyRecord.setUserId(userId);
 					userMoneyRecordMapper.insert(userMoneyRecord);
 					map.put("Money_ID",userMoneyRecord.getId());
-
-				//}
-				/*else{
+				}
+				else{
 					result.setStatus(5019);
 					result.setMessage("充值金额不能小于100元");
-				}*/
+				}
 			}
 		}else{
 			result.setStatus(5013);
@@ -705,7 +704,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals.setUserId(userId);
 				userIntegrals.setSceneKey("xHwofbNs");
 				Integer jb=qj.intValue();
-				//if(jb>=100){
+				if(jb>=100){
 				userIntegrals.setConsumeNum(0);
 				userIntegrals.setIntegralNum(jb);
 				userIntegrals.setCreateTime(new Date());
@@ -770,7 +769,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals4.setCostNum(snum4);
 				userIntegrals4.setCreateTime(new Date());
 				MetaObtainIntegral metaObtainIntegral4 = new MetaObtainIntegral();
-				metaObtainIntegral4.setSceneKey(sKey4);
+				metaObtainIntegral4.setSceneKey(sKey);
 				Calendar calendar4 = new GregorianCalendar();
 				metaObtainIntegral4 = metaObtainIntegralMapper.selectOne(metaObtainIntegral4);
 				calendar4.add(Calendar.DAY_OF_YEAR, metaObtainIntegral4.getPeriod());
@@ -778,10 +777,10 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals4.setEndTime(end4);
 				userIntegrals4.setBeginTime((new Date()));
 				userIntegralConsumeMapper.insert(userIntegrals4);
-			/*}else{
+			}else{
 					result.setStatus(5019);
 					result.setMessage("充值金额不能小于100元");
-				}*/
+				}
 			}else {
 					leId = 0;
 					Float bei = usersMapper.findByBei(leId + 1);
@@ -789,7 +788,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userIntegrals.setUserId(userId);
 					userIntegrals.setSceneKey("xHwofbNs");
 					Integer jb = qj.intValue();
-					//if(jb>=100){
+					if(jb>=100){
 					userIntegrals.setConsumeNum(0);
 					userIntegrals.setIntegralNum(jb);
 					userIntegrals.setCreateTime(new Date());
@@ -860,10 +859,10 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userIntegrals4.setEndTime(end4);
 					userIntegrals4.setBeginTime((new Date()));
 					userIntegralConsumeMapper.insert(userIntegrals4);
-				/*}else{
+				}else{
 						result.setStatus(5019);
 						result.setMessage("充值金额不能小于100元");
-					}*/
+					}
 			}
 		}
 

@@ -15,9 +15,7 @@
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
   <select id="findByMing" parameterType="INTEGER" resultType="java.util.HashMap">
-    SELECT a.*,SUM(a.`cost_num`)num FROM user_integral_consume a WHERE a.user_id=#{userId}
-     AND a.scene_key NOT
-     IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
+     SELECT a.*,SUM(a.`cost_num`)num FROM user_integral_consume a WHERE a.user_id=#{userId}
      GROUP BY a.create_time ORDER BY a.create_time DESC
      LIMIT #{beginNum},#{ pageSize}
   </select>
