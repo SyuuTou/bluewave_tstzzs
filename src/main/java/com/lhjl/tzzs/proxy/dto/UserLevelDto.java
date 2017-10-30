@@ -56,6 +56,27 @@ public class UserLevelDto {
      */
     private Integer moneyId;
 
+    /**
+     * 当前会员金币赠送值
+     * @return
+     */
+    private Integer coinNum;
+
+    /**
+     * 当前会员金币赠送比例
+     */
+    private String ratio;
+
+    /**
+     * 可选投递项目个数
+     */
+    private Integer sendsNum;
+
+    /**
+     * 可选评估条件个数
+     */
+    private Integer conditionNum;
+
     public String getBelong() {
         return belong;
     }
@@ -134,5 +155,37 @@ public class UserLevelDto {
 
     public void setMoneyId(Integer moneyId) {
         this.moneyId = moneyId;
+    }
+
+    public Integer getCoinNum() {
+        return coinNum;
+    }
+
+    public void setCoinNum(Integer coinNum) {
+        this.coinNum = coinNum;
+    }
+
+    public String getRatio() {
+        return ratio;
+    }
+
+    public void setRatio(String ratio) {
+        this.ratio = ratio;
+    }
+
+    public Integer getSendsNum() {
+        return sendsNum;
+    }
+
+    public void setSendsNum(Integer sendsNum) {
+        this.sendsNum = sendsNum;
+    }
+
+    public Integer getConditionNum() {
+        return conditionNum;
+    }
+
+    public void setConditionNum(Integer conditionNum) {
+        this.conditionNum = conditionNum;
     }
 }

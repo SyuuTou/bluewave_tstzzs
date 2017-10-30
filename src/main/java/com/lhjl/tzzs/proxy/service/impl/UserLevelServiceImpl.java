@@ -128,6 +128,47 @@ public class UserLevelServiceImpl implements UserLevelService {
                 int originalCost = metaObtainIntegral.getIntegral();
                 userLevelDto.setOriginalCost(originalCost);
 
+                //获取金币赠送
+                int i;
+                boolean flag = true;
+                String ratio = "";
+                String b = metaObtainIntegral.getRatio() + "";
+                if(b.indexOf(".")!=-1)
+                {
+                    i=b.indexOf(".")+1;
+                    for (i = 0;i<b.length();i++)
+                    {
+                        if (b.charAt(i)=='0')
+                        {
+                            flag=false;
+                            break;
+                        }
+                    }
+                }
+                if (flag) {
+                    ratio = "1:" + metaObtainIntegral.getRatio();
+                }
+                else {
+                    ratio = "1:" + metaObtainIntegral.getRatio().intValue();
+                }
+
+                //权限信息
+                MetaObtainIntegral send = new MetaObtainIntegral();
+                send.setSceneKey("PnLUE0m4");
+                send.setUserLevel(userLevel.getId());
+                send = metaObtainIntegralMapper.selectOne(send);
+                userLevelDto.setSendsNum(send.getDeliverNum());
+
+                MetaObtainIntegral condition = new MetaObtainIntegral();
+                condition.setSceneKey("cIQwmmX7");
+                condition.setUserLevel(userLevel.getId());
+                condition = metaObtainIntegralMapper.selectOne(condition);
+                userLevelDto.setConditionNum(condition.getDeliverNum());
+
+                int coinsNum = (int)(originalCost * metaObtainIntegral.getRatio());
+                userLevelDto.setRatio(ratio);
+                userLevelDto.setCoinNum(coinsNum);
+
                 userLevelDtos.add(userLevelDto);
             }
         }else{
@@ -257,6 +298,47 @@ public class UserLevelServiceImpl implements UserLevelService {
         metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
         int originalCost = metaObtainIntegral.getIntegral();
         userLevelDto.setOriginalCost(originalCost);
+
+        //获取金币赠送
+        int i;
+        boolean flag = true;
+        String ratio = "";
+        String b = metaObtainIntegral.getRatio() + "";
+        if(b.indexOf(".")!=-1)
+        {
+            i=b.indexOf(".")+1;
+            for (i = 0;i<b.length();i++)
+            {
+                if (b.charAt(i)=='0')
+                {
+                    flag=false;
+                    break;
+                }
+            }
+        }
+        if (flag) {
+            ratio = "1:" + metaObtainIntegral.getRatio();
+        }
+        else {
+            ratio = "1:" + metaObtainIntegral.getRatio().intValue();
+        }
+
+        //权限信息
+        MetaObtainIntegral send = new MetaObtainIntegral();
+        send.setSceneKey("PnLUE0m4");
+        send.setUserLevel(userLevel.getId());
+        send = metaObtainIntegralMapper.selectOne(send);
+        userLevelDto.setSendsNum(send.getDeliverNum());
+
+        MetaObtainIntegral condition = new MetaObtainIntegral();
+        condition.setSceneKey("cIQwmmX7");
+        condition.setUserLevel(userLevel.getId());
+        condition = metaObtainIntegralMapper.selectOne(condition);
+        userLevelDto.setConditionNum(condition.getDeliverNum());
+
+        int coinsNum = (int)(originalCost * metaObtainIntegral.getRatio());
+        userLevelDto.setRatio(ratio);
+        userLevelDto.setCoinNum(coinsNum);
 
         //当可购买时，插入新的记录
         if("0".equals(userLevelDto.getBelong())){
@@ -1257,6 +1339,36 @@ public class UserLevelServiceImpl implements UserLevelService {
         return result;
     }
 
+    /**
+     * 更新金币记录表
+     * @param userId 用户ID
+     * @param consumeNum 此次消费金币数量
+     */
+    @Transactional
+    private void changeIntegrals(int userId, int consumeNum){
+        Example condition = new Example(UserIntegrals.class);
+        condition.and().andEqualTo("userId", userId).andGreaterThan("endTime", new Date()).andGreaterThan("integralNum", 0);
+        condition.setOrderByClause("end_time asc");
+        List<UserIntegrals> integrals = userIntegralsMapper.selectByExample(condition);
+        for(int i=0; i<integrals.size(); i++){
+            //当前金币已消费数量
+            int res = integrals.get(i).getIntegralNum() + integrals.get(i).getConsumeNum();
+            if(res >= consumeNum){
+                integrals.get(i).setConsumeNum(integrals.get(i).getConsumeNum()-consumeNum);
+                integrals.get(i).setConsumeTime(new Date());
+                userIntegralsMapper.updateByPrimaryKey(integrals.get(i));
+                consumeNum = 0;
+            }else if(res != 0){
+                integrals.get(i).setConsumeNum(-integrals.get(i).getIntegralNum());
+                integrals.get(i).setConsumeTime(new Date());
+                userIntegralsMapper.updateByPrimaryKey(integrals.get(i));
+                consumeNum = consumeNum - res;
+            }
+            if(consumeNum == 0){
+                break;
+            }
+        }
+    }
 
     /**
      * 用户取消消费提示
