@@ -304,12 +304,31 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			Investors newInvestors = new Investors();
 			newInvestors.setUserId(userId);
 			newInvestors.setName(approval.getApprovalUsername());
+			switch(Integer.parseInt(approveResult)){
+				case 3:
+					newInvestors.setInvestorsType(0);
+					break;
+				case 4:
+					newInvestors.setInvestorsType(1);
+					break;
+				case 5:
+					newInvestors.setInvestorsType(2);
+					break;
+				default:
+					newInvestors.setInvestorsType(null);
+			}
+			//升级为VIP投资人
+			if(newInvestors.getInvestorsType() == 2){
+				UserToken userToken = new UserToken();
+				userToken.setUserId(userId);
+				userToken = userTokenMapper.selectOne(userToken);
+				userLevelService.upLevel(userToken.getToken(), 4);
+			}
 			newInvestors.setApprovalStatus(Integer.parseInt(approvalStatus));
 			newInvestors.setCreateTime(new Date());
 			newInvestors.setPosition(approval.getCompanyDuties());
 			newInvestors.setYn(1);
 			newInvestors.setApprovalTime(new Date());
-			newInvestors.setInvestorsType(approval.getInvestorsType());
 			investorsMapper.insert(newInvestors);
 		}
 
