@@ -1051,15 +1051,8 @@ public class UserLevelServiceImpl implements UserLevelService {
             userIntegralConsume.setEndTime(end);
             userIntegralConsumeMapper.insert(userIntegralConsume);
 
-            //插入交易记录表
-            UserIntegrals newUserIntegrals = new UserIntegrals();
-            newUserIntegrals.setSceneKey(sceneKey);
-            newUserIntegrals.setUserId(localUserId);
-            newUserIntegrals.setIntegralNum(consumeNum);
-            newUserIntegrals.setBeginTime(now);
-            newUserIntegrals.setCreateTime(now);
-            newUserIntegrals.setEndTime(end);
-            userIntegralsMapper.insert(newUserIntegrals);
+            //更新金币记录表
+            this.changeIntegrals(localUserId, -consumeNum);
 
             result.setStatus(200);
             result.setMessage("金币消费成功");
@@ -1101,15 +1094,8 @@ public class UserLevelServiceImpl implements UserLevelService {
             userIntegralConsumeMapper.insert(userIntegralConsume);
             int consumeId = userIntegralConsume.getId();
 
-            //插入交易记录表
-            UserIntegrals newUserIntegrals = new UserIntegrals();
-            newUserIntegrals.setSceneKey(sceneKey);
-            newUserIntegrals.setUserId(localUserId);
-            newUserIntegrals.setIntegralNum(consumeNum);
-            newUserIntegrals.setBeginTime(now);
-            newUserIntegrals.setCreateTime(now);
-            newUserIntegrals.setEndTime(end);
-            userIntegralsMapper.insert(newUserIntegrals);
+            //更新金币记录表
+            this.changeIntegrals(localUserId, -consumeNum);
 
             //插入交易记录明细表
             UserIntegralConsumeDatas newUserIntegralConsumeDatas = new UserIntegralConsumeDatas();
@@ -1164,15 +1150,8 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegralConsumeMapper.insert(userIntegralConsume);
                 int consumeId = userIntegralConsume.getId();
 
-                //插入交易记录表
-                UserIntegrals newUserIntegrals = new UserIntegrals();
-                newUserIntegrals.setSceneKey(sceneKey);
-                newUserIntegrals.setUserId(localUserId);
-                newUserIntegrals.setIntegralNum(consumeNum);
-                newUserIntegrals.setBeginTime(now);
-                newUserIntegrals.setCreateTime(now);
-                newUserIntegrals.setEndTime(end);
-                userIntegralsMapper.insert(newUserIntegrals);
+                //更新金币记录表
+                this.changeIntegrals(localUserId, -consumeNum);
 
                 //插入交易记录明细表
                 UserIntegralConsumeDatas newUserIntegralConsumeDatas = new UserIntegralConsumeDatas();
@@ -1241,15 +1220,8 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegralConsumeMapper.insert(userIntegralConsume);
                 int consumeId = userIntegralConsume.getId();
 
-                //插入交易记录表
-                UserIntegrals newUserIntegrals = new UserIntegrals();
-                newUserIntegrals.setSceneKey(sceneKey);
-                newUserIntegrals.setUserId(localUserId);
-                newUserIntegrals.setIntegralNum(consumeNum);
-                newUserIntegrals.setBeginTime(now);
-                newUserIntegrals.setCreateTime(now);
-                newUserIntegrals.setEndTime(end);
-                userIntegralsMapper.insert(newUserIntegrals);
+                //更新金币记录表
+                this.changeIntegrals(localUserId, -consumeNum);
 
                 //插入交易记录明细表
                 for(String string : buys){
@@ -1309,15 +1281,8 @@ public class UserLevelServiceImpl implements UserLevelService {
             userIntegralConsumeMapper.insert(userIntegralConsume);
             int consumeId = userIntegralConsume.getId();
 
-            //插入交易记录表
-            UserIntegrals newUserIntegrals = new UserIntegrals();
-            newUserIntegrals.setSceneKey(sceneKey);
-            newUserIntegrals.setUserId(localUserId);
-            newUserIntegrals.setIntegralNum(consumeNum);
-            newUserIntegrals.setBeginTime(now);
-            newUserIntegrals.setCreateTime(now);
-            newUserIntegrals.setEndTime(end);
-            userIntegralsMapper.insert(newUserIntegrals);
+            //更新金币记录表
+            this.changeIntegrals(localUserId, -consumeNum);
 
             //插入交易记录明细表
             for(String string : buys){
