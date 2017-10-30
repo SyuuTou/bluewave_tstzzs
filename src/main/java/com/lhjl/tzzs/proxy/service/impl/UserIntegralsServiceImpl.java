@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,6 +46,8 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	private  UserMoneyRecordMapper userMoneyRecordMapper;
 	@Resource
 	private UserLevelService userLevelService;
+	@Resource
+	private UserIntegralConsumeMapper userIntegralConsumeMapper;
 
 	//购买会员等级场景
 	private static final String ONE = "nEBlAOV9";
@@ -253,8 +256,6 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setUserId(userId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
-
-
 					}
 					if("tfoguHA1".equals(skey)){
 						map.put("dnum", dnum);
@@ -535,6 +536,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	public  CommonDto<List<Map<String, Object>>> findIntegralsDetailed(String uuids,Integer pageNum,Integer pageSize) {
 		CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
 		List<Map<String, Object>> list =new ArrayList<Map<String, Object>>();
+		Map<String, Object> map =new HashMap<>();
 		Integer userId= usersMapper.findByUuid(uuids);
 		Integer beginNum = (pageNum-1)*pageSize;
 		//最多返回100条记录
@@ -551,72 +553,132 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 			if(leId !=null){
 				Float bei =usersMapper.findByBei(leId);
 				for (Map<String, Object> obj : list){
-					UserIntegrals u =new  UserIntegrals();
-					if(Integer.valueOf(String.valueOf(obj.get("integral_num")))>0){
+					//UserIntegralConsume u =new  UserIntegralConsume();
+					if(Integer.valueOf(String.valueOf(obj.get("cost_num")))>0){
 						if("xHwofbNs".equals(String.valueOf(obj.get("scene_key")))){
-							Integer dnum =Integer.valueOf(String.valueOf(obj.get("integral_num")));
+							Integer dnum =Integer.valueOf(String.valueOf(obj.get("cost_num")));
 							obj.put("dnum","充值"+dnum+"元");
 							obj.put("hnum","+"+(int)((bei+1)*dnum));
 							obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
 							obj.put("end_time",String.valueOf(obj.get("end_time")).substring(0,10));
 							obj.put("userName",null);
 						}else{
-							Integer dnum=Integer.valueOf(String.valueOf(obj.get("integral_num")));
+							Integer dnum=Integer.valueOf(String.valueOf(obj.get("cost_num")));
 							//Integer dnum1=(int)(hnum*(1-bei));
 							obj.put("dnum","+"+dnum);
 							obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
 							obj.put("end_time",String.valueOf(obj.get("end_time")).substring(0,10));
 							String skey =String.valueOf(obj.get("scene_key"));
-							String userName = metaSceneMapper.selectbyDesc(skey);
-							obj.put("userName",userName);
+							/*String userName = metaSceneMapper.selectbyDesc(skey);
+							obj.put("userName",userName);*/
+							MetaScene m =new MetaScene();
+							m.setKey(skey );
+							MetaScene m1=metaSceneMapper.selectOne(m);
+							obj.put("userName",  m1.getDesc());
 							
 						}
 					}else{
 						String skey =String.valueOf(obj.get("scene_key"));
-						String userName = metaSceneMapper.selectbyDesc(skey);
-						obj.put("userName",userName);
-						Integer dnum =Integer.valueOf(String.valueOf(obj.get("integral_num")));
+						//String userName = metaSceneMapper.selectbyDesc(skey);
+						//obj.put("userName",userName);
+						Integer dnum =Integer.valueOf(String.valueOf(obj.get("cost_num")));
 						obj.put("dnum",dnum);
 						obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
+						MetaScene m =new MetaScene();
+						m.setKey(skey );
+						MetaScene m1=metaSceneMapper.selectOne(m);
+						obj.put("userName",m1.getDesc());
 						obj.put("end_time",null);
-					}	
+					}
 				}
+				/*UserIntegralConsume userIntegralConsume =new UserIntegralConsume();
+				userIntegralConsume.setUserId(userId);
+				List<UserIntegralConsume> list2 =userIntegralConsumeMapper.select(userIntegralConsume);
+
+				for(UserIntegralConsume obj :list2) {
+                    String skey = obj.getSceneKey();
+                    //String userName = metaSceneMapper.selectbyDesc(skey);
+					MetaScene m =new MetaScene();
+					m.setKey(skey );
+					MetaScene m1=metaSceneMapper.selectOne(m);
+                    map.put("userName",m1.getDesc());
+                    Integer dnum = obj.getCostNum();
+                    map.put("dnum", dnum);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String startTime = sdf.format(obj.getBeginTime());
+                    map.put("begin_time",startTime );
+                    map.put("end_time", null);
+                }*/
 	
 			}else{
 				leId=1;
 				Float bei =usersMapper.findByBei(leId);
 				for (Map<String, Object> obj : list){
 					UserIntegrals u =new  UserIntegrals();
-					if(Integer.valueOf(String.valueOf(obj.get("integral_num")))>0){
+					if(Integer.valueOf(String.valueOf(obj.get("cost_num")))>0){
 						if("xHwofbNs".equals(String.valueOf(obj.get("scene_key")))){
-							Integer dnum =Integer.valueOf(String.valueOf(obj.get("integral_num")));
+							Integer dnum =Integer.valueOf(String.valueOf(obj.get("cost_num")));
 							obj.put("dnum","充值"+dnum+"元");
 							obj.put("hnum","+"+(int)((bei+1)*dnum));
 							obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
 							obj.put("end_time",String.valueOf(obj.get("end_time")).substring(0,10));
 							
 						}else{
-							Integer dnum=Integer.valueOf(String.valueOf(obj.get("integral_num")));
+							Integer dnum=Integer.valueOf(String.valueOf(obj.get("cost_num")));
 							//Integer dnum1=(int)(hnum*(1-bei));
 							obj.put("dnum","+"+dnum);
 							obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
 							obj.put("end_time",String.valueOf(obj.get("end_time")).substring(0,10));
 							String skey =String.valueOf(obj.get("scene_key"));
-							String userName = metaSceneMapper.selectbyDesc(skey);
-							obj.put("userName",userName);
+							MetaScene m =new MetaScene();
+							m.setKey(skey );
+							MetaScene m1=metaSceneMapper.selectOne(m);
+							obj.put("userName",m1.getDesc());
+							//String userName = metaSceneMapper.selectbyDesc(skey);
+							//obj.put("userName",userName);
 						
 						}
-					}else{
+					}/*else{
 						String skey =String.valueOf(obj.get("scene_key"));
 						String userName = metaSceneMapper.selectbyDesc(skey);
 						obj.put("userName",userName);
-						Integer dnum =Integer.valueOf(String.valueOf(obj.get("integral_num")));
+						Integer dnum =Integer.valueOf(String.valueOf(obj.get("cost_num")));
 						obj.put("dnum",dnum);
 						obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
 						obj.put("end_time",null);
-						
-					}
+					}*/
+					Integer dnum=Integer.valueOf(String.valueOf(obj.get("integral_num")));
+					//Integer dnum1=(int)(hnum*(1-bei));
+					obj.put("dnum","+"+dnum);
+					obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
+					obj.put("end_time",String.valueOf(obj.get("end_time")).substring(0,10));
+					String skey =String.valueOf(obj.get("scene_key"));
+					/*String userName = metaSceneMapper.selectbyDesc(skey);
+					obj.put("userName",userName);*/
+					MetaScene m =new MetaScene();
+					m.setKey(skey );
+					MetaScene m1=metaSceneMapper.selectOne(m);
+					obj.put("userName",  m1.getDesc());
 				}
+               /* UserIntegralConsume userIntegralConsume =new UserIntegralConsume();
+                userIntegralConsume.setUserId(userId);
+                List<UserIntegralConsume> list2 =userIntegralConsumeMapper.select(userIntegralConsume);
+                for(UserIntegralConsume obj :list2) {
+                    String skey = obj.getSceneKey();
+                    //String userName = metaSceneMapper.selectbyDesc(skey);
+					MetaScene m =new MetaScene();
+					m.setKey(skey );
+					MetaScene m1=metaSceneMapper.selectOne(m);
+					map.put("userName",  m1.getDesc());
+                    //map.put("userName", userName);
+                    Integer dnum = obj.getCostNum();
+                    map.put("dnum", dnum);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String startTime = sdf.format(obj.getBeginTime());
+                    map.put("begin_time",startTime );
+                    map.put("end_time", null);
+                    list.add(map);
+                }*/
 			}
 		}
 		if( list.size() <= 0){
@@ -648,6 +710,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals.setSceneKey("xHwofbNs");
 				Integer jb=qj.intValue();
 				//if(jb>=100){
+				userIntegrals.setConsumeNum(0);
 				userIntegrals.setIntegralNum(jb);
 				userIntegrals.setCreateTime(new Date());
 				Calendar calendar = new GregorianCalendar();
@@ -665,6 +728,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				//购买金币赠送的记录
 				UserIntegrals userIntegrals2 =new UserIntegrals();
 				userIntegrals2.setUserId(userId);
+				userIntegrals2.setConsumeNum(0);
 				String sKey = userIntegralsMapper.findBySkey(leId);
 				userIntegrals2.setSceneKey(sKey);
 				jb=qj.intValue();
@@ -680,6 +744,44 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals2.setEndTime(end1);
 				userIntegrals2.setBeginTime((new Date()));
 				userIntegralsMapper.insert(userIntegrals2);
+				//插入总表数据
+				UserIntegralConsume userIntegrals3=new UserIntegralConsume();
+				userIntegrals3.setUserId(userId);
+				userIntegrals3.setSceneKey("xHwofbNs");
+				Integer jb1=qj.intValue();
+				//if(jb>=100){
+				userIntegrals3.setCostNum(jb1);
+				userIntegrals3.setCreateTime(new Date());
+				Calendar calendar3 = new GregorianCalendar();
+				calendar.setTime(new Date());
+
+				//获取该场景配置信息
+				MetaObtainIntegral metaObtainIntegral3 = new MetaObtainIntegral();
+				metaObtainIntegral3.setSceneKey("xHwofbNs");
+				metaObtainIntegral3 = metaObtainIntegralMapper.selectOne(metaObtainIntegral3);
+				calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
+				Date end3 = calendar3.getTime();
+				userIntegrals3.setEndTime(end3);
+				userIntegrals3.setBeginTime((new Date()));
+				userIntegralConsumeMapper.insert(userIntegrals3);
+				//购买金币赠送的记录
+				UserIntegralConsume userIntegrals4 =new UserIntegralConsume();
+				userIntegrals4.setUserId(userId);
+				String sKey4 = userIntegralsMapper.findBySkey(leId);
+				userIntegrals4.setSceneKey(sKey4);
+				jb=qj.intValue();
+				Integer snum4 =(int)(jb*bei);
+				userIntegrals4.setCostNum(snum4);
+				userIntegrals4.setCreateTime(new Date());
+				MetaObtainIntegral metaObtainIntegral4 = new MetaObtainIntegral();
+				metaObtainIntegral4.setSceneKey(sKey);
+				Calendar calendar4 = new GregorianCalendar();
+				metaObtainIntegral4 = metaObtainIntegralMapper.selectOne(metaObtainIntegral4);
+				calendar4.add(Calendar.DAY_OF_YEAR, metaObtainIntegral4.getPeriod());
+				Date end4 = calendar.getTime();
+				userIntegrals4.setEndTime(end4);
+				userIntegrals4.setBeginTime((new Date()));
+				userIntegralConsumeMapper.insert(userIntegrals4);
 			/*}else{
 					result.setStatus(5019);
 					result.setMessage("充值金额不能小于100元");
@@ -692,6 +794,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userIntegrals.setSceneKey("xHwofbNs");
 					Integer jb = qj.intValue();
 					//if(jb>=100){
+					userIntegrals.setConsumeNum(0);
 					userIntegrals.setIntegralNum(jb);
 					userIntegrals.setCreateTime(new Date());
 					//时间场景
@@ -707,6 +810,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					//购买金币赠送的记录
 					UserIntegrals userIntegrals2 = new UserIntegrals();
 					userIntegrals2.setUserId(userId);
+					userIntegrals2.setConsumeNum(0);
 					String sKey = userIntegralsMapper.findBySkey(leId + 1);
 					userIntegrals2.setSceneKey(sKey);
 					jb = qj.intValue();
@@ -723,6 +827,43 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userIntegrals2.setEndTime(end1);
 					userIntegrals2.setBeginTime((new Date()));
 					userIntegralsMapper.insert(userIntegrals2);
+					UserIntegralConsume userIntegrals3=new UserIntegralConsume();
+					userIntegrals3.setUserId(userId);
+					userIntegrals3.setSceneKey("xHwofbNs");
+					Integer jb1=qj.intValue();
+					//if(jb>=100){
+					userIntegrals3.setCostNum(jb1);
+					userIntegrals3.setCreateTime(new Date());
+					Calendar calendar3 = new GregorianCalendar();
+					calendar.setTime(new Date());
+
+					//获取该场景配置信息
+					MetaObtainIntegral metaObtainIntegral3 = new MetaObtainIntegral();
+					metaObtainIntegral3.setSceneKey("xHwofbNs");
+					metaObtainIntegral3 = metaObtainIntegralMapper.selectOne(metaObtainIntegral3);
+					calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
+					Date end3 = calendar3.getTime();
+					userIntegrals3.setEndTime(end3);
+					userIntegrals3.setBeginTime((new Date()));
+					userIntegralConsumeMapper.insert(userIntegrals3);
+					//购买金币赠送的记录
+					UserIntegralConsume userIntegrals4 =new UserIntegralConsume();
+					userIntegrals4.setUserId(userId);
+					String sKey4 = userIntegralsMapper.findBySkey(leId);
+					userIntegrals4.setSceneKey(sKey4);
+					jb=qj.intValue();
+					Integer snum4 =(int)(jb*bei);
+					userIntegrals4.setCostNum(snum4);
+					userIntegrals4.setCreateTime(new Date());
+					MetaObtainIntegral metaObtainIntegral4 = new MetaObtainIntegral();
+					metaObtainIntegral4.setSceneKey(sKey);
+					Calendar calendar4 = new GregorianCalendar();
+					metaObtainIntegral4 = metaObtainIntegralMapper.selectOne(metaObtainIntegral4);
+					calendar4.add(Calendar.DAY_OF_YEAR, metaObtainIntegral4.getPeriod());
+					Date end4 = calendar.getTime();
+					userIntegrals4.setEndTime(end4);
+					userIntegrals4.setBeginTime((new Date()));
+					userIntegralConsumeMapper.insert(userIntegrals4);
 				/*}else{
 						result.setStatus(5019);
 						result.setMessage("充值金额不能小于100元");
