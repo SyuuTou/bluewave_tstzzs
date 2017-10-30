@@ -195,7 +195,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         CommonDto<UserLevelDto> result = new CommonDto<UserLevelDto>();
 
         //测试开关
-        boolean test = true;
+        boolean test = false;
 
         UserLevelDto userLevelDto = new UserLevelDto();
         Integer localUserId = this.getLocalUserId(userStr);
