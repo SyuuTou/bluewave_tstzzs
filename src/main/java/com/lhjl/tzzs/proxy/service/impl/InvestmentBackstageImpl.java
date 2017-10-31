@@ -100,7 +100,7 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService{
         //获取50机构
         listForfive = investmentInstitutionsMapper.findInvestment("1", null, null);
         //获取非50机构（所有）
-        listNotfive = investmentInstitutionsMapper.findInvestment("-1",0,80);
+        listNotfive = investmentInstitutionsMapper.findInvestment("-1",0,150);
         //组装所有数据
         List<Map<String, Object>> lists = new ArrayList<Map<String, Object>>();
         Map<String, Object> map = new HashMap<String, Object>();
