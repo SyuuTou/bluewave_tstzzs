@@ -18,10 +18,10 @@ public class DataLogEducation {
     private Integer logId;
 
     /**
-     * 教育id
+     * 教育
      */
-    @Column(name = "education_id")
-    private Integer educationId;
+    @Column(name = "education_name")
+    private String educationName;
 
     /**
      * 用户的id
@@ -66,21 +66,21 @@ public class DataLogEducation {
     }
 
     /**
-     * 获取教育id
+     * 获取教育
      *
-     * @return education_id - 教育id
+     * @return education_name - 教育
      */
-    public Integer getEducationId() {
-        return educationId;
+    public String getEducationName() {
+        return educationName;
     }
 
     /**
-     * 设置教育id
+     * 设置教育
      *
-     * @param educationId 教育id
+     * @param educationName 教育
      */
-    public void setEducationId(Integer educationId) {
-        this.educationId = educationId;
+    public void setEducationName(String educationName) {
+        this.educationName = educationName;
     }
 
     /**
