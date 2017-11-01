@@ -88,6 +88,18 @@ public class InvestmentDataLog {
     private Integer yn;
 
     /**
+     * 0:审核中，1：审核完成，2：未审核
+     */
+    @Column(name = "audit_yn")
+    private Integer auditYn;
+
+    /**
+     * 审核时间
+     */
+    @Column(name = "audit_time")
+    private Date auditTime;
+
+    /**
      * 获取记录表id
      *
      * @return id - 记录表id
@@ -337,5 +349,41 @@ public class InvestmentDataLog {
      */
     public void setYn(Integer yn) {
         this.yn = yn;
+    }
+
+    /**
+     * 获取0:审核中，1：审核完成，2：未审核
+     *
+     * @return audit_yn - 0:审核中，1：审核完成，2：未审核
+     */
+    public Integer getAuditYn() {
+        return auditYn;
+    }
+
+    /**
+     * 设置0:审核中，1：审核完成，2：未审核
+     *
+     * @param auditYn 0:审核中，1：审核完成，2：未审核
+     */
+    public void setAuditYn(Integer auditYn) {
+        this.auditYn = auditYn;
+    }
+
+    /**
+     * 获取审核时间
+     *
+     * @return audit_time - 审核时间
+     */
+    public Date getAuditTime() {
+        return auditTime;
+    }
+
+    /**
+     * 设置审核时间
+     *
+     * @param auditTime 审核时间
+     */
+    public void setAuditTime(Date auditTime) {
+        this.auditTime = auditTime;
     }
 }

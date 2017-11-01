@@ -1,23 +1,25 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentDataLogMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentDataLog" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentDataLogMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentDataLog">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="Institutional_name" property="institutionalName" jdbcType="VARCHAR" />
-    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
-    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
-    <result column="word_introduction" property="wordIntroduction" jdbcType="VARCHAR" />
-    <result column="stage" property="stage" jdbcType="VARCHAR" />
-    <result column="city" property="city" jdbcType="VARCHAR" />
-    <result column="amont" property="amont" jdbcType="DECIMAL" />
-    <result column="stock_right" property="stockRight" jdbcType="DECIMAL" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="finan_time" property="finanTime" jdbcType="TIMESTAMP" />
-    <result column="create_name" property="createName" jdbcType="VARCHAR" />
-    <result column="yn" property="yn" jdbcType="INTEGER" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="Institutional_name" jdbcType="VARCHAR" property="institutionalName" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="word_introduction" jdbcType="VARCHAR" property="wordIntroduction" />
+    <result column="stage" jdbcType="VARCHAR" property="stage" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="amont" jdbcType="DECIMAL" property="amont" />
+    <result column="stock_right" jdbcType="DECIMAL" property="stockRight" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="finan_time" jdbcType="TIMESTAMP" property="finanTime" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
+    <result column="audit_yn" jdbcType="INTEGER" property="auditYn" />
+    <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
   </resultMap>
 </mapper>
