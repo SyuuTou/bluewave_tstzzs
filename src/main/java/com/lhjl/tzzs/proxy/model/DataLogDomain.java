@@ -19,10 +19,10 @@ public class DataLogDomain {
     private Integer logId;
 
     /**
-     * 领域id
+     * 领域名字
      */
-    @Column(name = "domain_id")
-    private Integer domainId;
+    @Column(name = "domain_name")
+    private String domainName;
 
     /**
      * 用户id
@@ -73,21 +73,21 @@ public class DataLogDomain {
     }
 
     /**
-     * 获取领域id
+     * 获取领域名字
      *
-     * @return domain_id - 领域id
+     * @return domain_name - 领域名字
      */
-    public Integer getDomainId() {
-        return domainId;
+    public String getDomainName() {
+        return domainName;
     }
 
     /**
-     * 设置领域id
+     * 设置领域名字
      *
-     * @param domainId 领域id
+     * @param domainName 领域名字
      */
-    public void setDomainId(Integer domainId) {
-        this.domainId = domainId;
+    public void setDomainName(String domainName) {
+        this.domainName = domainName;
     }
 
     /**
