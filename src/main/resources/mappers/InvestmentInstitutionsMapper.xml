@@ -53,28 +53,36 @@
     WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
   </select>
 
-  <select id="findInvestment" resultMap="BaseResultMapNew">
+  <select id="findInvestment50" resultMap="BaseResultMapNew">
     select ii.id, ii.short_name, ii.commet, ii.create_time, ii.type, ii.logo, ii.case_url, ii.kenel_case,
-    ii.comment, ii.city, ii.stage, ii.representative, (CASE WHEN b.cc IS NULL THEN 0 ELSE b.cc END)projects_num
+    ii.comment, ii.city, ii.stage, ii.representative, a.cc
     from investment_institutions ii left join
-    (SELECT ii.id,COUNT(DISTINCT p.serial_number) cc FROM investment_institutions ii
-    LEFT JOIN projects p ON ii.`ID` = p.`investment_institutions_id`
-    LEFT JOIN project_financing_log pfl ON p.id = pfl.`project_id`
-    WHERE p.`ID` NOT IN(SELECT id FROM projects  WHERE serial_number > 500000 AND (continent = '国外' OR city = '' OR city IS NULL))
-    AND pfl.financing_time > '2017-01-01'
-    GROUP BY ii.`short_name`)b on ii.id = b.id
-    WHERE 1 = 1
-    AND ii.short_name IS NOT NULL AND ii.short_name != ''
-    <if test="type != '' and type != null and type != '-1'">
-      AND ii.type = #{type}
+    (
+      select count(*) cc,ps.investment_institutions_id from projects ps left join project_financing_log pfl on ps.id = pfl.project_id
+      where pfl.financing_time between #{beginTime} and #{endTime} and ps.investment_institutions_id is not null
+      group by ps.investment_institutions_id
+      order by cc desc
+    )a on ii.id = a.investment_institutions_id and ii.logo is not null and ii.logo != ''
+    where ii.type = 1
+    order by a.cc desc
+    <if test="beginNum != null and pageSize != null">
+      LIMIT #{beginNum},#{pageSize}
     </if>
-    <if test="type == '-1'">
-      AND ii.type !=2
-    </if>
-    AND ii.yn = 1
-    AND ii.kenel_case IS NOT NULL AND ii.kenel_case != ''
-    AND ii.logo IS NOT NULL AND ii.logo != ''
-    ORDER BY projects_num DESC
+  </select>
+
+  <select id="findInvestmentall" resultMap="BaseResultMapNew">
+    select ii.id, ii.short_name, ii.commet, ii.create_time, ii.type, ii.logo, ii.case_url, ii.kenel_case,
+    ii.comment, ii.city, ii.stage, ii.representative, a.cc
+    from investment_institutions ii left join
+    (
+      select count(*) cc,ps.investment_institutions_id from (select * from projects where serial_number &lt; 500000
+      union all
+      select * from projects where serial_number &gt; 500000 and continent != '国外')  ps left join project_financing_log pfl on ps.id = pfl.project_id
+      where pfl.financing_time between #{beginTime} and #{endTime} and ps.investment_institutions_id is not null
+      group by ps.investment_institutions_id
+      order by cc desc
+    )a on ii.id = a.investment_institutions_id and ii.logo is not null and ii.logo != ''
+    order by a.cc desc
     <if test="beginNum != null and pageSize != null">
       LIMIT #{beginNum},#{pageSize}
     </if>
