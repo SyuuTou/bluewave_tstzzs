@@ -15,10 +15,10 @@ public class DataLogWork {
     private Integer logId;
 
     /**
-     * 工作id
+     * 工作
      */
-    @Column(name = "work_id")
-    private Integer workId;
+    @Column(name = "work_name")
+    private String workName;
 
     /**
      * 用户id
@@ -59,21 +59,21 @@ public class DataLogWork {
     }
 
     /**
-     * 获取工作id
+     * 获取工作
      *
-     * @return work_id - 工作id
+     * @return work_name - 工作
      */
-    public Integer getWorkId() {
-        return workId;
+    public String getWorkName() {
+        return workName;
     }
 
     /**
-     * 设置工作id
+     * 设置工作
      *
-     * @param workId 工作id
+     * @param workName 工作
      */
-    public void setWorkId(Integer workId) {
-        this.workId = workId;
+    public void setWorkName(String workName) {
+        this.workName = workName;
     }
 
     /**
