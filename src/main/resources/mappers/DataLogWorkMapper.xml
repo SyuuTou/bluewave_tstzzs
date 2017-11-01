@@ -10,13 +10,5 @@
     <result column="work_name" jdbcType="VARCHAR" property="workName" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
   </resultMap>
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.DataLogWork">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="log_id" jdbcType="INTEGER" property="logId" />
-    <result column="work_id" jdbcType="INTEGER" property="workId" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-  </resultMap>
+
 </mapper>
