@@ -24,6 +24,7 @@
     SELECT a.*,SUM(a.`cost_num`)num FROM user_integral_consume a WHERE a.user_id=#{userId}
     GROUP BY a.create_time ORDER BY a.create_time DESC) b
     WHERE b.scene_key NOT IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
+    LIMIT #{beginNum},#{ pageSize}
   </select>
   <select id="findByUserIdLeid" parameterType="INTEGER" resultType="INTEGER">
     SELECT u.level_id  FROM user_level_relation u WHERE u.user_id=#{userId} 
