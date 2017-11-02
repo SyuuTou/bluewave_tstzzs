@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentDataDto;
+import com.lhjl.tzzs.proxy.dto.InvestmentDatalogDto;
 import com.lhjl.tzzs.proxy.service.InvestmentDataService;
 import com.lhjl.tzzs.proxy.service.InvestmentDatalogService;
 
@@ -63,8 +64,10 @@ public class InvestmentDatalogController {
 				dateDate = simpleDateFormat.parse(date);
 			}
 			result = investmentDatalogService.saveInvestmentData(investment_institution_name,project_name,project_full_name,summary,field,city,rounds,amount,currency,stock_right,dateDate,founder_name,founder_work,founder_education,userId,zhiwu);
-			result.setStatus(200);
-			result.setMessage("success");
+            if(result.getStatus() == null){
+                result.setStatus(200);
+                result.setMessage("success");
+            }
 		}catch (Exception e){
 			result.setMessage(e.getMessage());
 			result.setStatus(501);
@@ -129,4 +132,55 @@ public class InvestmentDatalogController {
 		}
 		return result;
 	}
+	/**
+	 * 修改页面
+	 * @param body
+	 * @return
+	 */
+	@PostMapping("investment/log")
+	public CommonDto<String> saveInvestmentData1(@RequestBody InvestmentDatalogDto body){
+		CommonDto<String> result = new CommonDto<String>();
+
+		String investment_institution_name = body.getInvestment_institution_name();
+		String project_name = body.getProject_name();
+		String project_full_name = body.getProject_full_name();
+		String summary = body.getSummary();
+		String field = body.getField();
+		String city =body.getCity();
+		String rounds = body.getRounds();
+		String amount = body.getAmount();
+		String currency = body.getCurrency();
+		String stock_right = body.getStock_right();
+		String date = body.getDate();
+		String founder_name = body.getFounder_name();
+		String founder_work = body.getFounder_work();
+		String founder_education = body.getFounder_education();
+		String userId = body.getUserId();
+		String zhiwu=body.getZhiwu();
+		Integer id =body.getId();
+
+
+
+		try {
+			SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd");
+			Date dateDate = null;
+			if (!StringUtil.isEmpty(date)) {
+				dateDate = simpleDateFormat.parse(date);
+			}
+			result = investmentDatalogService.saveInvestmentData1(investment_institution_name,project_name,project_full_name,summary,field,city,rounds,amount,currency,stock_right,dateDate,founder_name,founder_work,founder_education,userId,zhiwu,id);
+            if(result.getStatus() == null){
+                result.setStatus(200);
+                result.setMessage("success");
+            }
+		}catch (Exception e){
+			result.setMessage(e.getMessage());
+			result.setStatus(501);
+			result.setData(null);
+			log.error(e.getMessage(),e.fillInStackTrace());
+		}
+
+
+		return result;
+	}
 }
+

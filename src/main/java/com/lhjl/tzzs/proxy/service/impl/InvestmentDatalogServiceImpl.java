@@ -89,7 +89,9 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
     @Resource
     private EvaluateService evaluateService;
 
-
+    /**
+     * 首次添加
+     */
 
     @Transactional
     @Override
@@ -207,8 +209,16 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
             result.setMessage("缺少用户id");
         }
         //插入主表信息
-        int currency1 =Integer.parseInt(currency);
         Integer userID= usersMapper.findByUuid(userId);
+        InvestmentDataLog i2 =new InvestmentDataLog();
+        i2.setUserId(userID);
+        i2.setInstitutionalName(investment_institution_name);
+        i2.setShortName(project_name);
+        i2.setStage(rounds);
+        InvestmentDataLog one = investmentDataLogMapper.selectOne(i2);
+        
+        if(one==null){
+        int currency1 =Integer.parseInt(currency);
         InvestmentDataLog i =new InvestmentDataLog();
         i.setYn(currency1);
         i.setCity(city);
@@ -264,6 +274,10 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
             dataLogWorklist.add(dataLogEducation);
         }
         dataLogWorkMapper.insertList(dataLogWorklist);
+        }else{
+        	result.setStatus(204);
+            result.setMessage("不能提交重复项目");
+        }
         return result;
     }
 
@@ -285,6 +299,7 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
             list=investmentDataLogMapper.saveInformation(userId, beginNum, pageSize);
             for (Map<String, Object> obj : list){
                 obj.put("finan_time",String.valueOf(obj.get("finan_time")).substring(0,10));
+                obj.put("create_time",String.valueOf(obj.get("create_time")).substring(0,10));
             }
             InvestmentDataLog investmentDataLog =new InvestmentDataLog();
             investmentDataLog.setUserId(userId);
@@ -316,8 +331,11 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
         
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = formatter.format(pi.getFinanTime());
+        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString2 = formatter2.format(pi.getCreateTime());
         //基本信息
         map.put("FinanTime",dateString);
+        map.put("createtime",dateString2);
         map.put("Institutional_name",pi.getInstitutionalName());
         map.put("short_name",pi.getShortName());
         map.put("company_name",pi.getCompanyName());
@@ -327,6 +345,7 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
         map.put("create_name",pi.getCreateName());
         map.put("currency",pi.getYn());
         map.put("zhiwu",pi.getZhiwu());
+        map.put("id",pi.getId());
        
         if("".equals(pi.getCity())){
             List<LabelList> cities = data.getData().get("cityKey");
@@ -441,6 +460,284 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
             }
         map.put("agency",label);//轮次
         result.setData(map);
+        return result;
+    }
+    
+    /**
+     * 修改页面
+     */
+    
+    @Transactional
+    @Override
+    public CommonDto<String> saveInvestmentData1(String investment_institution_name , String project_name, String project_full_name, String summary, String field,  String city, String rounds, String amount,  String currency,  String stock_right,  Date dateDate,  String founder_name, String founder_work, String founder_education,String userId,String zhiwu,Integer id){
+        CommonDto<String> result = new CommonDto<String>();
+
+
+        //参数验证
+        if (StringUtil.isEmpty(investment_institution_name)){
+            result.setStatus(50001);
+            result.setMessage("请填写投资机构名称");
+            result.setData(null);
+
+            return result;
+        }
+        if (StringUtil.isEmpty(project_name)){
+            result.setStatus(50001);
+            result.setMessage("请填写投资项目简称");
+            result.setData(null);
+
+            return result;
+        }
+        if (StringUtil.isEmpty(project_full_name)){
+            result.setStatus(50001);
+            result.setMessage("请填写投资项目的工商注册全称");
+            result.setData(null);
+
+            return result;
+        }
+        if (StringUtil.isEmpty(summary)){
+            result.setStatus(50001);
+            result.setMessage("请填写一句话介绍");
+            result.setData(null);
+
+            return result;
+        }else if (summary.length()>50){
+            result.setStatus(50003);
+            result.setMessage("一句话介绍长度不能超过50个字符");
+            result.setData(null);
+
+            return result;
+        }
+        if (StringUtil.isEmpty(field)){
+            result.setStatus(50001);
+            result.setMessage("请填写所属细分领域");
+            result.setData(null);
+
+            return result;
+        }
+        if (StringUtil.isEmpty(city)){
+            result.setStatus(50001);
+            result.setMessage("请填写地域");
+            result.setData(null);
+
+            return result;
+        }
+        if (StringUtil.isEmpty(rounds)){
+            result.setStatus(50001);
+            result.setMessage("请填写投资轮次");
+            result.setData(null);
+
+            return result;
+        }
+        if (StringUtil.isEmpty(amount)){
+            result.setStatus(50001);
+            result.setMessage("请填写投资金额");
+            result.setData(null);
+
+            return result;
+        }
+        if (StringUtil.isEmpty(currency)){
+            result.setStatus(50001);
+            result.setMessage("请填写投资币种");
+            result.setData(null);
+
+            return result;
+        }
+        if (StringUtil.isEmpty(stock_right)){
+            result.setStatus(50001);
+            result.setMessage("请填写股份占比");
+            result.setData(null);
+
+            return result;
+        }
+        if (dateDate  == null){
+            result.setStatus(50001);
+            result.setMessage("请填写投资时间");
+            result.setData(null);
+
+            return result;
+        }
+        if (StringUtil.isEmpty(founder_name)){
+            result.setStatus(50001);
+            result.setMessage("请填写创始人姓名");
+            result.setData(null);
+
+            return result;
+        }
+        if (StringUtil.isEmpty(founder_work)){
+            result.setStatus(50001);
+            result.setMessage("请填写创始人工作背景");
+            result.setData(null);
+
+            return result;
+        }
+        if (StringUtil.isEmpty(founder_education)){
+            result.setStatus(50001);
+            result.setMessage("请填写创始人毕业院校");
+            result.setData(null);
+
+            return result;
+        }
+        if (StringUtil.isEmpty(userId)){
+            result.setStatus(50001);
+            result.setMessage("缺少用户id");
+        }
+        if(id == null){
+        	 result.setStatus(50001);
+             result.setMessage("页面出现错误");
+        }
+        //插入主表信息
+        Integer userID= usersMapper.findByUuid(userId);
+        InvestmentDataLog i2 =new InvestmentDataLog();
+        i2.setUserId(userID);
+        i2.setInstitutionalName(investment_institution_name);
+        i2.setShortName(project_name);
+        i2.setStage(rounds);
+        InvestmentDataLog one = investmentDataLogMapper.selectOne(i2);
+        
+        if(one==null ){
+
+            int currency1 =Integer.parseInt(currency);
+            InvestmentDataLog i =new InvestmentDataLog();
+            i.setYn(currency1);
+            i.setCity(city);
+            BigDecimal bigDecimalAmount = new BigDecimal(amount);
+            BigDecimal bigDecimalStockRight = new BigDecimal(stock_right);
+            i.setAmont(bigDecimalAmount);
+            i.setCompanyName(project_full_name);
+            i.setCreateName(founder_name);
+            i.setCreateTime(new Date());
+            i.setFinanTime(dateDate);
+            i.setInstitutionalName(investment_institution_name);
+            i.setShortName(project_name);
+            i.setStage(rounds);
+            i.setStockRight(bigDecimalStockRight);
+            i.setUserId(userID);
+            i.setWordIntroduction(summary);
+            i.setYn(currency1);
+            i.setZhiwu(zhiwu);
+            i.setId(id);
+            //
+            i.setAuditYn(0);
+            investmentDataLogMapper.updateByPrimaryKey(i);
+            //插入细分领域
+            DataLogDomain projectSegmentation1 =new DataLogDomain();
+            projectSegmentation1.setLogId(id);
+            dataLogDomainMapper.delete(projectSegmentation1);
+            String[] fieldArry = field.split(",");
+            List<DataLogDomain> projectSegmentationList =new Page<DataLogDomain>();
+            for (int a=0; a < fieldArry.length;a++){
+                DataLogDomain projectSegmentation =new DataLogDomain();
+                projectSegmentation.setCreateTime(new Date());
+                projectSegmentation.setDomainName(fieldArry[a]);
+                projectSegmentation.setLogId(id);
+                projectSegmentation.setUserId(userID);
+                projectSegmentationList.add(projectSegmentation);
+            }
+            dataLogDomainMapper.insertList(projectSegmentationList);
+            //教育背景
+            DataLogEducation dataLogEducation1 =new DataLogEducation();
+            dataLogEducation1.setLogId(id);
+            dataLogEducationMapper.delete(dataLogEducation1);
+            String[] educationArry = founder_education.split(",");
+            List<DataLogEducation> dataLogEducationlist =new Page<DataLogEducation>();
+            for (int a=0; a < educationArry.length;a++){
+                DataLogEducation dataLogEducation =new DataLogEducation();
+                dataLogEducation.setEducationName(educationArry[a]);
+                dataLogEducation.setLogId(id);
+                dataLogEducation.setUserId(userID);
+                dataLogEducationlist.add(dataLogEducation);
+            }
+            dataLogEducationMapper.insertList(dataLogEducationlist);
+            //工作背景
+            DataLogWork dataLogEducation2 =new DataLogWork();
+            dataLogEducation2.setLogId(id);
+            dataLogWorkMapper.delete(dataLogEducation2);
+            String[] workArry = founder_work.split(",");
+            List<DataLogWork> dataLogWorklist =new Page<DataLogWork>();
+            for (int a=0; a <  workArry.length;a++){
+                DataLogWork dataLogEducation =new DataLogWork();
+                dataLogEducation.setWorkName(workArry[a]);
+                dataLogEducation.setLogId(id);
+                dataLogEducation.setUserId(userID);
+                dataLogWorklist.add(dataLogEducation);
+            }
+            dataLogWorkMapper.insertList(dataLogWorklist);
+
+        }else{
+        	if(id == one.getId()){
+                int currency1 =Integer.parseInt(currency);
+                InvestmentDataLog i =new InvestmentDataLog();
+                i.setYn(currency1);
+                i.setCity(city);
+                BigDecimal bigDecimalAmount = new BigDecimal(amount);
+                BigDecimal bigDecimalStockRight = new BigDecimal(stock_right);
+                i.setAmont(bigDecimalAmount);
+                i.setCompanyName(project_full_name);
+                i.setCreateName(founder_name);
+                i.setCreateTime(new Date());
+                i.setFinanTime(dateDate);
+                i.setInstitutionalName(investment_institution_name);
+                i.setShortName(project_name);
+                i.setStage(rounds);
+                i.setStockRight(bigDecimalStockRight);
+                i.setUserId(userID);
+                i.setWordIntroduction(summary);
+                i.setYn(currency1);
+                i.setZhiwu(zhiwu);
+                i.setId(id);
+                //
+                i.setAuditYn(0);
+                investmentDataLogMapper.updateByPrimaryKey(i);
+                //插入细分领域
+                DataLogDomain projectSegmentation1 =new DataLogDomain();
+                projectSegmentation1.setLogId(id);
+                dataLogDomainMapper.delete(projectSegmentation1);
+                String[] fieldArry = field.split(",");
+                List<DataLogDomain> projectSegmentationList =new Page<DataLogDomain>();
+                for (int a=0; a < fieldArry.length;a++){
+                    DataLogDomain projectSegmentation =new DataLogDomain();
+                    projectSegmentation.setCreateTime(new Date());
+                    projectSegmentation.setDomainName(fieldArry[a]);
+                    projectSegmentation.setLogId(id);
+                    projectSegmentation.setUserId(userID);
+                    projectSegmentationList.add(projectSegmentation);
+                }
+                dataLogDomainMapper.insertList(projectSegmentationList);
+                //教育背景
+                DataLogEducation dataLogEducation1 =new DataLogEducation();
+                dataLogEducation1.setLogId(id);
+                dataLogEducationMapper.delete(dataLogEducation1);
+                String[] educationArry = founder_education.split(",");
+                List<DataLogEducation> dataLogEducationlist =new Page<DataLogEducation>();
+                for (int a=0; a < educationArry.length;a++){
+                    DataLogEducation dataLogEducation =new DataLogEducation();
+                    dataLogEducation.setEducationName(educationArry[a]);
+                    dataLogEducation.setLogId(id);
+                    dataLogEducation.setUserId(userID);
+                    dataLogEducationlist.add(dataLogEducation);
+                }
+                dataLogEducationMapper.insertList(dataLogEducationlist);
+                //工作背景
+                DataLogWork dataLogEducation2 =new DataLogWork();
+                dataLogEducation2.setLogId(id);
+                dataLogWorkMapper.delete(dataLogEducation2);
+                String[] workArry = founder_work.split(",");
+                List<DataLogWork> dataLogWorklist =new Page<DataLogWork>();
+                for (int a=0; a <  workArry.length;a++){
+                    DataLogWork dataLogEducation =new DataLogWork();
+                    dataLogEducation.setWorkName(workArry[a]);
+                    dataLogEducation.setLogId(id);
+                    dataLogEducation.setUserId(userID);
+                    dataLogWorklist.add(dataLogEducation);
+                }
+                dataLogWorkMapper.insertList(dataLogWorklist);
+        		
+        	}else{
+        		result.setStatus(204);
+                result.setMessage("不能提交重复项目");	
+        	}
+        }
         return result;
     }
 }
