@@ -49,7 +49,7 @@ public class FinancingController {
         try {
             result = evaluateService.queryHotIndustry();
         }catch (Exception e){
-            result = new CommonDto< List<LabelList>>();
+            result = new CommonDto<>();
             result.setStatus(510);
             result.setMessage("数据检索异常，请稍后再试");
             log.error(e.getMessage(),e.fillInStackTrace());
@@ -75,7 +75,7 @@ public class FinancingController {
         try {
             result = evaluateService.financingAmount(investment,roundName,industryName,cityName,educationName,workName,from,size);
         } catch (Exception e) {
-            result = new CommonDto<List<HistogramList>>();
+            result = new CommonDto<>();
             result.setStatus(510);
             result.setMessage("数据检索异常，请稍后再试");
             log.error(e.getMessage(),e.fillInStackTrace());
@@ -90,9 +90,9 @@ public class FinancingController {
         CommonDto<List<HistogramList>> result = null;
 
         try {
-//            result = evaluateService.financingAmount(body.get("roundName"),null,null,null,null,from,size);
+            result = evaluateService.financingAmount(body.get("investment"), body.get("roundName"),body.get("industryName"),body.get("cityName"),body.get("educationName"),body.get("workName"),from,size);
         } catch (Exception e) {
-            result = new CommonDto<List<HistogramList>>();
+            result = new CommonDto<>();
             result.setStatus(510);
             result.setMessage("数据检索异常，请稍后再试");
             log.error(e.getMessage(),e.fillInStackTrace());
@@ -118,7 +118,7 @@ public class FinancingController {
         try {
             result = evaluateService.valuation(investment,roundName,industryName,cityName,educationName,workName,from,size);
         } catch (Exception e) {
-            result = new CommonDto<List<HistogramList>>();
+            result = new CommonDto<>();
             result.setStatus(510);
             result.setMessage("数据检索异常，请稍后再试");
             log.error(e.getMessage(),e.fillInStackTrace());
@@ -128,13 +128,13 @@ public class FinancingController {
     }
 
     @PostMapping("valuation/list")
-    public CommonDto<List<HistogramList>> valuation(@RequestBody Map<String,String> req, @RequestParam(required = false,defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size ){
+    public CommonDto<List<HistogramList>> valuation(@RequestBody Map<String,String> body, @RequestParam(required = false,defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size ){
 
         CommonDto<List<HistogramList>> result = null;
         try {
-//            result = evaluateService.valuation(req.get("roundName"),null,null,null,null,from,size);
+            result = evaluateService.valuation(body.get("investment"), body.get("roundName"),body.get("industryName"),body.get("cityName"),body.get("educationName"),body.get("workName"),from,size);
         } catch (Exception e) {
-            result = new CommonDto<List<HistogramList>>();
+            result = new CommonDto<>();
             result.setStatus(510);
             result.setMessage("数据检索异常，请稍后再试");
             log.error(e.getMessage(),e.fillInStackTrace());

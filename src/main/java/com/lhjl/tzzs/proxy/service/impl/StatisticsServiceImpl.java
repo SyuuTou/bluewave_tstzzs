@@ -61,10 +61,14 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
         Integer type = null;
+        String flag = null;
         if (institutionType.equals("50")){
             type = 1;
+            flag = "amount";
+        }else{
+            flag = "amount";
         }
-        List<HistogramList>  histogramLists = statisticsMapper.financingAmountDistributed(type,beginTime,endTime,froma,sizea);
+        List<HistogramList>  histogramLists = statisticsMapper.financingAmountDistributed(type,beginTime,endTime, flag,froma,sizea);
         result.setData(histogramLists);
         result.setMessage("success");
         result.setStatus(200);

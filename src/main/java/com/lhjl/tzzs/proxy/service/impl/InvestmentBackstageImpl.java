@@ -177,12 +177,12 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService {
         Integer beginNum = (pageNum - 1) * pageSize;
 
         //最多返回160条记录
-        if (beginNum > 160) {
+        if (beginNum > 150) {
             result.setStatus(201);
             result.setMessage("查询记录数超出限制（100条）");
             return result;
         } else {
-            pageSize = (160 - beginNum) >= pageSize ? pageSize : (160 - beginNum);
+            pageSize = (150 - beginNum) >= pageSize ? pageSize : (150 - beginNum);
         }
 
 //        PageHelper.startPage(pageNum, pageSize, false);

@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -91,32 +92,40 @@ public class PayServiceImpl implements PayService {
                     .outTradeNo(tradeNo)
                     .totalFee(WxPayBaseRequest.yuanToFee(userMoneyRecord.getMoney().toString()))
                     .body(scene.getDesc())
-                    .spbillCreateIp(payRequestBody.getLocalIp())
+                    .spbillCreateIp("39.106.44.53")
                     .build();
             Map<String, String> payInfo =payService.getPayInfo(prepayInfo);
 
 
             result.setData(payInfo);
+            result.setMessage("success");
+            result.setStatus(200);
         } catch (WxPayException e) {
             e.printStackTrace();
+            result.setMessage("Failed");
+            result.setStatus(500);
         }
 
         return result;
     }
 
+    @Transactional
     @Override
     public void payNotifyHandler(WxPayOrderNotifyResult result) {
 
-
+        LOGGER.info("Beginning notify handler........");
         UsersPay query = new UsersPay();
         query.setTradeNo(result.getOutTradeNo());
 
         UsersPay usersPay = usersPayMapper.selectOne(query);
         usersPay.setWxOrderNum(result.getTransactionId());
         usersPay.setPayStatus(1);
+        usersPay.setPayTime(DateTime.now().toDate());
         usersPay.setReceived(new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())));
+        usersPayMapper.updateByPrimaryKey(usersPay);
 
         userIntegralsService.payAfter(usersPay.getUserId(),usersPay.getSceneKey(),new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())),1);
+        LOGGER.info("Ending notify handler........");
     }
 
     private String generateTradeNo(Integer id) {

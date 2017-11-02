@@ -193,20 +193,21 @@ public class WxMaUserController {
      * @param iv
      * @return
      */
-    @GetMapping("phonenumber")
-    public CommonDto<PhonenumberInfo> phonenumber(String token,String encryptedData, String iv) {
+    @PostMapping("phonenumber")
+    public CommonDto<PhonenumberInfo> phonenumber(@RequestBody Map<String,String> body) {
         CommonDto<PhonenumberInfo> result = new CommonDto<>();
         //先获取到用户的id
         try {
-            int yhxinxi = userExistJudgmentService.getUserId(token);
+            int yhxinxi = userExistJudgmentService.getUserId(body.get("token"));
             String userid = String.valueOf(yhxinxi);
             String sessionKey = sessionKeyService.getSessionKey(userid);
-            String info = WxMaCryptUtils.decrypt(sessionKey, encryptedData, iv);
+            String info = WxMaCryptUtils.decrypt(sessionKey, body.get("encryptedData"), body.get("iv"));
             PhonenumberInfo phonenumberInfo = WxMaGsonBuilder.create().fromJson(info, PhonenumberInfo.class);
             result.setData(phonenumberInfo);
             result.setMessage("success");
             result.setStatus(200);
         } catch (Exception e) {
+            e.printStackTrace();
             result.setStatus(500);
             result.setMessage("failed");
         }
