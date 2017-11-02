@@ -22,4 +22,6 @@ public interface InvestorsDemandService {
      * @return
      */
     CommonDto<Map<String, Object>> newttouzilyrz(String token);
+
+    CommonDto<Map<String,Object>> investorsDemandYn(String token);
 }

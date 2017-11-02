@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -57,6 +58,32 @@ public class InvestorsDemandController {
             result.setStatus(501);
             result.setMessage("投资偏好回显数据回去异常");
             logger.error(e.getMessage(), e.fillInStackTrace());
+        }
+        return result;
+    }
+
+    /**
+     * 判断投资偏好是否填写完成
+     * @param body
+     * @return
+     */
+    @PostMapping("/investorsDemandYn")
+    public CommonDto<Map<String,Object>> investorsDemandYn(@RequestBody Map<String,String> body){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        String token = body.get("token");
+
+        try {
+            result = investorsDemandService.investorsDemandYn(token);
+
+        }catch (Exception e){
+            Map<String,Object> obj = new HashMap<>();
+            obj.put("message","服务器发生错误");
+            obj.put("success",false);
+
+            result.setData(obj);
+            result.setMessage("服务器发生错误");
+            result.setStatus(502);
+            logger.error(e.getMessage(),e.fillInStackTrace());
         }
         return result;
     }

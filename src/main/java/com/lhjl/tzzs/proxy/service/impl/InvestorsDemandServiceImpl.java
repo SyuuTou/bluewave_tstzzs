@@ -194,4 +194,75 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         result.setData(data);
         return result;
     }
+
+    @Override
+    public CommonDto<Map<String,Object>> investorsDemandYn(String token){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> obj = new HashMap<>();
+
+        Integer userId = commonUserService.getLocalUserId(token);
+
+        InvestorDemand investorDemand = new InvestorDemand();
+        investorDemand.setUserid(userId);
+
+        List<InvestorDemand> investorDemands = new ArrayList<>();
+        if (investorDemands.size() > 0){
+            InvestorDemand investorDemandForJudgment  = investorDemands.get(0);
+
+            String   finacingStage = investorDemandForJudgment.getFinancingStage();
+            String  industry = investorDemandForJudgment.getIndustry();
+            String  demand = investorDemandForJudgment.getDemand();
+
+            if (finacingStage == null || "".equals(finacingStage) ){
+                obj.put("message","投资偏好没有填写完成");
+                obj.put("success",false);
+
+                result.setMessage("投资偏好没有填写完成");
+                result.setStatus(50001);
+                result.setData(obj);
+
+                return result;
+            }
+
+            if (industry == null || "".equals(industry) ){
+                obj.put("message","投资偏好没有填写完成");
+                obj.put("success",false);
+
+                result.setMessage("投资偏好没有填写完成");
+                result.setStatus(50001);
+                result.setData(obj);
+
+                return result;
+            }
+
+            if (demand == null || "".equals(demand) ){
+                obj.put("message","投资偏好没有填写完成");
+                obj.put("success",false);
+
+                result.setMessage("投资偏好没有填写完成");
+                result.setStatus(50001);
+                result.setData(obj);
+
+                return result;
+            }
+
+            obj.put("message","投资偏好填写完成");
+            obj.put("success",true);
+
+            result.setData(obj);
+            result.setStatus(200);
+            result.setMessage("投资偏好填写完成");
+
+            return result;
+        }
+
+        obj.put("message","投资偏好没有填写完成");
+        obj.put("success",false);
+
+        result.setMessage("投资偏好没有填写完成");
+        result.setStatus(50001);
+        result.setData(obj);
+
+        return result;
+    }
 }
