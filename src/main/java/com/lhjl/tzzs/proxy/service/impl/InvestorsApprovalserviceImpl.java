@@ -41,7 +41,57 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	@Override
 	public CommonDto<String> saveTouZi(TouZiDto params) {
 		CommonDto<String> result =new CommonDto<String>();
-		 InvestorsApproval  investorsApproval =new  InvestorsApproval();
+		//先取出参数进行验证
+		String token = params.getToken();
+		String compellation = params.getCompellation();
+		String dataName = params.getDateName();
+		String company = params.getOrganization();
+		String companyDuties = params.getFillOffice();
+
+		if ("".equals(token) || token == null || "undefined".equals(token)){
+			result.setData(null);
+			result.setMessage("用户token不能为空");
+			result.setStatus(50001);
+
+			return result;
+		}
+
+		if ("".equals(compellation) || compellation == null || "undefined".equals(compellation)){
+			result.setData(null);
+			result.setMessage("请填写姓名");
+			result.setStatus(50001);
+
+			return result;
+		}
+
+		if ("".equals(dataName) || dataName == null || "undefined".equals(dataName)){
+			result.setData(null);
+			result.setMessage("请选择投资人类型");
+			result.setStatus(50001);
+
+			return result;
+		}
+
+
+
+		if ("".equals(company) || company == null || "undefined".equals(company)){
+			result.setData(null);
+			result.setMessage("请填写所在公司");
+			result.setStatus(50001);
+
+			return result;
+		}
+
+		if ("".equals(companyDuties) || companyDuties == null || "undefined".equals(companyDuties)){
+			result.setData(null);
+			result.setMessage("请填写所在公司职务");
+			result.setStatus(50001);
+
+			return result;
+		}
+
+
+		InvestorsApproval  investorsApproval =new  InvestorsApproval();
 		 UserToken userToken =new UserToken();
 		 userToken.setToken(params.getToken());
 	     userToken =userTokenMapper.selectOne(userToken);
@@ -63,6 +113,8 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		 investorsApproval.setApprovalResult(0);
 		 investorsApproval.setReviewTime(new Date());
 		 investorsApproval.setCreateTime(new Date());
+		 investorsApproval.setInvestorsApprovalcolCase(params.getInvestorsApprovalcolCase());
+
 		 investorsApprovalMapper.insert(investorsApproval);
 		 Users users =new Users();
 		 users.setUuid(params.getToken());
@@ -84,8 +136,12 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		UserToken userToken =new UserToken();
 		 userToken.setToken(token);
 		 userToken = userTokenMapper.selectOne(userToken);
+
 		 Integer userId = userToken.getUserId();
 		 map=investorsApprovalMapper.findInvestorsApproval(userId);
+
+		 String anli = String.valueOf(map.get("investors_approvalcol_case"));
+		 String[] anliArray = anli.split(",");
 		 if(map !=null){
 
 			map.put("id", token);
@@ -95,6 +151,8 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			map.put("renzhengtouzirenshenhebiao7certificat",String.valueOf(map.get("company")));
 			map.put("renzhengtouzirenshenhebiao7frontofbus",String.valueOf(map.get("work_card")));
 			map.put("renzhengtouzirenshenhebiao7wherecompa",String.valueOf(map.get("description")));
+			map.put("investorsApprovalcolCase",anliArray);
+
 			Map<String,Object> renzhenleixin =new HashMap<>();
 			if(Integer.valueOf(String.valueOf(map.get("investors_type"))) == 0){
 				renzhenleixin.put("0",true);
@@ -141,11 +199,38 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	@Override
 	public CommonDto<Map<String, Object>> findInvestorsExamine(String token) {
 		CommonDto<Map<String, Object>> result =new CommonDto<Map<String, Object>> ();
+
+		if (token == null || "".equals(token) || "undefined".equals(token)){
+			Map<String,Object> obj = new HashMap<>();
+			obj.put("success",false);
+			obj.put("tips","用户token不能为空");
+
+			result.setStatus(50001);
+			result.setMessage("用户token不能为空");
+			result.setData(obj);
+
+			return result;
+
+		}
+
 		Map<String,Object> map =new HashMap<>();
 		UserToken userToken =new UserToken();
 		 userToken.setToken(token);
 		 userToken = userTokenMapper.selectOne(userToken);
 		 Integer userId = userToken.getUserId();
+		 //判断用户token是否有效
+		if(userId == null ){
+			Map<String,Object> obj = new HashMap<>();
+			obj.put("success",false);
+			obj.put("tips","用户token无效请检查");
+
+			result.setData(obj);
+			result.setMessage("用户token无效请检查");
+			result.setStatus(50001);
+
+			return result;
+		}
+
 		 map=investorsApprovalMapper.findInvestorsApproval(userId);
 		 if(map != null){
 			 if(Integer.valueOf(String.valueOf(map.get("approval_result")))==0){
