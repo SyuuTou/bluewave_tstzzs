@@ -6,6 +6,15 @@ public class UserSetPasswordInputDto {
     private String user7realname_cn;
     private String password;
     private String token;
+    private String isWeixin;
+
+    public String getIsWeixin() {
+        return isWeixin;
+    }
+
+    public void setIsWeixin(String isWeixin) {
+        this.isWeixin = isWeixin;
+    }
 
     public String getToken() {
         return token;
