@@ -21,6 +21,7 @@
     <result column="yn" jdbcType="INTEGER" property="yn" />
     <result column="audit_yn" jdbcType="INTEGER" property="auditYn" />
     <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
+    <result column="zhiwu" jdbcType="VARCHAR" property="zhiwu" />
   </resultMap>
   <select id="saveInformation" parameterType="INTEGER" resultType="java.util.HashMap">
     SELECT c.* FROM investment_data_log c WHERE c.user_id =#{userId} ORDER BY c.create_time DESC  LIMIT #{beginNum},#{ pageSize}

@@ -100,6 +100,11 @@ public class InvestmentDataLog {
     private Date auditTime;
 
     /**
+     * 公司员工职务
+     */
+    private String zhiwu;
+
+    /**
      * 获取记录表id
      *
      * @return id - 记录表id
@@ -385,5 +390,23 @@ public class InvestmentDataLog {
      */
     public void setAuditTime(Date auditTime) {
         this.auditTime = auditTime;
+    }
+
+    /**
+     * 获取公司员工职务
+     *
+     * @return zhiwu - 公司员工职务
+     */
+    public String getZhiwu() {
+        return zhiwu;
+    }
+
+    /**
+     * 设置公司员工职务
+     *
+     * @param zhiwu 公司员工职务
+     */
+    public void setZhiwu(String zhiwu) {
+        this.zhiwu = zhiwu;
     }
 }
