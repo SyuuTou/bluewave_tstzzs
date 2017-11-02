@@ -38,12 +38,13 @@ public class SmsCommonService {
 
 
             String code = "";
-            if (jedis.exists(cacheKey.toString())) {
-                code = jedis.get(cacheKey.toString());
-            } else {
+//            if (jedis.exists(cacheKey.toString())) {
+//                code = jedis.get(cacheKey.toString());
+//            } else {
                 code = generateRandomArray(6);
-                jedis.set(cacheKey.toString(), code, "NX", "EX", 10000);
-            }
+                jedis.set(cacheKey.toString(), code);
+                jedis.expire(cacheKey.toString(), 60);
+//            }
             SendSmsResponse response = SmsUtils.sendSms(phoneNum, code);
             if (response.getCode() != null && response.getCode().equals("OK")) {
                 result.setStatus(200);

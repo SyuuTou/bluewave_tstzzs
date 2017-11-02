@@ -124,6 +124,7 @@ public class PaymentController extends GenericController {
       String totalFee = WxPayBaseResult.feeToYuan(result.getTotalFee());
       //自己处理订单的业务逻辑，需要判断订单是否已经支付过，否则可能会重复调用
       idataVCPayService.payNotifyHandler(result);
+      this.logger.info("支付通知：{}", result.toString());
       return WxPayNotifyResponse.success("处理成功!");
     } catch (Exception e) {
       this.logger.error("微信回调结果异常,异常原因{}", e.getMessage());

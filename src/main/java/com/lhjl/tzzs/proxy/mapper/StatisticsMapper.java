@@ -8,7 +8,7 @@ import java.util.List;
 public interface StatisticsMapper  {
     List<HistogramList> financingCountDistributed(@Param("jgtype") Integer type, @Param("beginTime") String beginTime, @Param("endTime") String endTime,@Param("froma") Integer froma,@Param("sizea") Integer sizea);
 
-    List<HistogramList> financingAmountDistributed(@Param("jgtype") Integer type, @Param("beginTime") String beginTime, @Param("endTime") String endTime,@Param("froma") Integer froma,@Param("sizea") Integer sizea);
+    List<HistogramList> financingAmountDistributed(@Param("jgtype") Integer type, @Param("beginTime") String beginTime, @Param("endTime") String endTime,@Param("flag") String flag, @Param("froma") Integer froma, @Param("sizea") Integer sizea);
 
     List<HistogramList> financingSegmentationDistributed(@Param("jgtype") Integer type, @Param("beginTime") String beginTime, @Param("endTime") String endTime,@Param("froma") Integer froma,@Param("sizea") Integer sizea);
 

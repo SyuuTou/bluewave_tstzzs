@@ -67,7 +67,7 @@ public class EvaluateServiceImpl implements EvaluateService {
     }
 
 
-    @Cacheable(value = "valuation",keyGenerator = "wiselyKeyGenerator")
+//    @Cacheable(value = "valuation",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<HistogramList>> valuation(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
 
@@ -149,9 +149,15 @@ public class EvaluateServiceImpl implements EvaluateService {
             granularity = 100;
         }
 
+        String flag = "total_amount";
+//        if (investment.equals("1")){
+//            flag = "amount";
+//        }else{
+//            flag = "total_amount";
+//        }
 
         Map<String, Object> collect = null;
-        collect = financingMapper.queryFinancingCount(investment,roundName,industryName,cityName,educationName,workName,granularity, beginTime, endTime);
+        collect = financingMapper.queryFinancingCount(investment,roundName,industryName,cityName,educationName,workName,granularity,flag, beginTime, endTime);
 
         Integer total = Integer.valueOf(collect.get("total").toString());
         if (total < 5){
@@ -161,7 +167,7 @@ public class EvaluateServiceImpl implements EvaluateService {
             return result;
 
         }else{
-            dataList = financingMapper.queryFinancingAmount(investment,roundName,industryName,cityName,educationName,workName,granularity,beginTime,endTime,index,size);
+            dataList = financingMapper.queryFinancingAmount(investment,roundName,industryName,cityName,educationName,workName,granularity,flag,beginTime,endTime,index,size);
         }
 
         if (dataList.size()>10){

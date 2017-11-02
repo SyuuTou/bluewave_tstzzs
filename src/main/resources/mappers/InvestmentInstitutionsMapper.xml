@@ -54,9 +54,9 @@
   </select>
 
   <select id="findInvestment50" resultMap="BaseResultMapNew">
-    select ii.id, ii.short_name, ii.commet, ii.create_time, ii.type, ii.logo, ii.case_url, ii.kenel_case,
-    ii.comment, ii.city, ii.stage, ii.representative, a.cc
-    from investment_institutions ii left join
+    select ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case,
+     a.cc
+    from investment_institutions ii INNER join
     (
       select count(*) cc,ps.investment_institutions_id from projects ps left join project_financing_log pfl on ps.id = pfl.project_id
       where pfl.financing_time between #{beginTime} and #{endTime} and ps.investment_institutions_id is not null
@@ -71,9 +71,9 @@
   </select>
 
   <select id="findInvestmentall" resultMap="BaseResultMapNew">
-    select ii.id, ii.short_name, ii.commet, ii.create_time, ii.type, ii.logo, ii.case_url, ii.kenel_case,
-    ii.comment, ii.city, ii.stage, ii.representative, a.cc
-    from investment_institutions ii left join
+    select ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case,
+    a.cc
+    from investment_institutions ii INNER join
     (
       select count(*) cc,ps.investment_institutions_id from (select * from projects where serial_number &lt; 500000
       union all
