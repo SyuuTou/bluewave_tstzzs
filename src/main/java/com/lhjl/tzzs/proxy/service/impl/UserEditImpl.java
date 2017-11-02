@@ -56,7 +56,7 @@ public class UserEditImpl implements UserEditService {
 
         String verify = body.getVerify();
         String user7realname_cn = body.getUser7realname_cn();
-        String password = body.getPassword();
+       // String password = body.getPassword();
 
 
 
@@ -64,8 +64,8 @@ public class UserEditImpl implements UserEditService {
         Users users = new Users();
         users.setActualName(user7realname_cn);
         users.setPhonenumber(verify);
-        String passwordForSet = encodePassword(password);
-        users.setPassword(passwordForSet);
+       // String passwordForSet = encodePassword(password);
+        //users.setPassword(passwordForSet);
         users.setId(userId);
 
         usersMapper.updateByPrimaryKeySelective(users);

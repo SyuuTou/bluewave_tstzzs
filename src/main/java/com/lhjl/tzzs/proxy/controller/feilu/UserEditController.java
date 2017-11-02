@@ -44,18 +44,20 @@ public class UserEditController {
         String token = body.getToken();
         String verify = body.getVerify();
         String user7realname_cn = body.getUser7realname_cn();
-        String password =body.getPassword();
+        String isWeixin = body.getIsWeixin();
+        if ("0".equals(isWeixin)){
+            if (securitycode == null || "".equals(securitycode) || "undefined".equals(securitycode)){
+                userSetPasswordOutputDto.setMessage("验证码不能为空");
+                userSetPasswordOutputDto.setSuccess(false);
 
-        if (securitycode == null || "".equals(securitycode) || "undefined".equals(securitycode)){
-            userSetPasswordOutputDto.setMessage("验证码不能为空");
-            userSetPasswordOutputDto.setSuccess(false);
+                result.setMessage("验证码不能为空");
+                result.setStatus(50001);
+                result.setData(userSetPasswordOutputDto);
 
-            result.setMessage("验证码不能为空");
-            result.setStatus(50001);
-            result.setData(userSetPasswordOutputDto);
-
-            return result;
+                return result;
+            }
         }
+
 
         if (token == null || "".equals(token) || "undefined".equals(token) ){
             userSetPasswordOutputDto.setMessage("token信息不能为空");
@@ -92,17 +94,6 @@ public class UserEditController {
             return result;
         }
 
-        if (password == null || "".equals(password) || "undefined".equals(password)){
-            userSetPasswordOutputDto.setMessage("密码不能为空");
-            userSetPasswordOutputDto.setSuccess(false);
-
-            result.setMessage("密码不能为空");
-            result.setStatus(50001);
-            result.setData(userSetPasswordOutputDto);
-
-            return result;
-        }
-
 
         try {
 
@@ -122,22 +113,33 @@ public class UserEditController {
             String userid = String.valueOf(userida);
             int userId =userida;
 
-            //验证验证码是否通过
-            CommonDto<String> verifyResult =  smsCommonService.verifySMS(userid,verify,securitycode);
-            int verifyStatus = verifyResult.getStatus();
-            if (verifyStatus ==200){
-                //验证通过后的处理,账号密码，真实姓名的保存
+            //获取到的如果是微信的手机号，就不再验证验证码了，否则验证验证码
+            if ("0".equals(isWeixin)) {
+                //验证验证码是否通过
+                CommonDto<String> verifyResult = smsCommonService.verifySMS(userid, verify, securitycode);
+                int verifyStatus = verifyResult.getStatus();
+                if (verifyStatus == 200) {
+                    //验证通过后的处理,账号密码，真实姓名的保存
+                    result = userEditService.editUserPassword(body, userId, token);
+
+                } else {
+                    userSetPasswordOutputDto.setMessage(verifyResult.getMessage());
+                    userSetPasswordOutputDto.setSuccess(false);
+
+                    result.setMessage(verifyResult.getMessage());
+                    result.setStatus(verifyResult.getStatus());
+                    result.setData(userSetPasswordOutputDto);
+                }
+            }else if("1".equals(isWeixin)){
                 result = userEditService.editUserPassword(body,userId,token);
+            }else{
+                result.setStatus(50001);
+                result.setMessage("isWeixin参数错误");
+                result.setData(null);
 
-            }else {
-                userSetPasswordOutputDto.setMessage(verifyResult.getMessage());
-                userSetPasswordOutputDto.setSuccess(false);
+                return result;
 
-                result.setMessage(verifyResult.getMessage());
-                result.setStatus(verifyResult.getStatus());
-                result.setData(userSetPasswordOutputDto);
             }
-
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());
             userSetPasswordOutputDto.setMessage("服务器端发生错误");
