@@ -11,6 +11,17 @@ public class TouZiDto {
 	private String evaContent;  //说明
 	private String tempFilePaths; //图片
 	private String token;  //认证id
+	private String investorsApprovalcolCase;//投资人投资案例
+
+
+	public String getInvestorsApprovalcolCase() {
+		return investorsApprovalcolCase;
+	}
+
+	public void setInvestorsApprovalcolCase(String investorsApprovalcolCase) {
+		this.investorsApprovalcolCase = investorsApprovalcolCase;
+	}
+
 	public String getDateName() {
 		return dateName;
 	}
