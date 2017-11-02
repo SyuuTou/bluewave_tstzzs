@@ -3,6 +3,8 @@ package com.lhjl.tzzs.proxy.mapper;
 import com.lhjl.tzzs.proxy.dto.SereachDto;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
@@ -37,6 +39,18 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
     );
 
     Integer findIvestmentTypeById(@Param("projectsId") Integer projectsId);
+
+    List<Map<String,Object>> findProjectAmountOfZ();
+
+    BigDecimal findProjectByRoundAndE(@Param("segmentation") String segmentation, @Param("stage") String stage);
+
+    BigDecimal findProjectByRoundAndC(@Param("stage") String stage, @Param("city") String city);
+
+    List<Map<String,Object>> findProjectAllAmountOfZ();
+
+    BigDecimal findProjectAllByRoundAndE(@Param("segmentation") String segmentation, @Param("stage") String stage);
+
+    BigDecimal findProjectAllByRoundAndC(@Param("stage") String stage, @Param("city") String city);
 }
 
 

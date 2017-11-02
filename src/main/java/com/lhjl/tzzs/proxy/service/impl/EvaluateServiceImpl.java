@@ -126,7 +126,7 @@ public class EvaluateServiceImpl implements EvaluateService {
 
     @Cacheable(value = "financingAmount",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public CommonDto<List<HistogramList>> financingAmount(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
+    public DistributedCommonDto<List<HistogramList>> financingAmount(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
 //        roundName= "Pre-A轮";
 //        industryName="游戏";

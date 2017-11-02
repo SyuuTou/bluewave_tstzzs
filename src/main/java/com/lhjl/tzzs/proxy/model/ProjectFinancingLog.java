@@ -101,6 +101,17 @@ public class ProjectFinancingLog {
      */
     @Column(name = "approval_time")
     private Date approvalTime;
+    @Column(name = "calculation_amount_status")
+    private Integer calculationAmountStatus;
+
+    public Integer getCalculationAmountStatus() {
+        return calculationAmountStatus;
+    }
+
+    public void setCalculationAmountStatus(Integer calculationAmountStatus) {
+        this.calculationAmountStatus = calculationAmountStatus;
+    }
+
     //
     public Integer getApprovalStatus() {
         return approvalStatus;

@@ -66,7 +66,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             type = 1;
             flag = "amount";
         }else{
-            flag = "amount";
+            flag = "total_amount";
         }
         List<HistogramList>  histogramLists = statisticsMapper.financingAmountDistributed(type,beginTime,endTime, flag,froma,sizea);
         result.setData(histogramLists);
