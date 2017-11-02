@@ -12,6 +12,7 @@ import com.lhjl.tzzs.proxy.mapper.InterviewMapper;
 import com.lhjl.tzzs.proxy.model.Follow;
 import com.lhjl.tzzs.proxy.model.Interview;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,11 @@ import com.lhjl.tzzs.proxy.service.ProjectsService;
  */
 @Service
 public class ProjectsServiceImpl implements ProjectsService {
+    @Value("${statistics.beginTime}")
+    private String beginTime ;
+
+    @Value("${statistics.endTime}")
+    private String endTime;
 
     @Resource
     private ProjectsMapper projectsMapper;
@@ -325,7 +331,7 @@ public class ProjectsServiceImpl implements ProjectsService {
 
         //查询项目基础数据
         List<Map<String, Object>> list= projectsServiceImplUtil.getBaseProjectInfoA(userId, type, segmentation, stage,
-                city, working_background_desc, educational_background_desc, sizea, froma);
+                city, working_background_desc,educational_background_desc, sizea, froma,endTime,beginTime);
 
         //查询项目实时统计数据
         Follow follow = new Follow();

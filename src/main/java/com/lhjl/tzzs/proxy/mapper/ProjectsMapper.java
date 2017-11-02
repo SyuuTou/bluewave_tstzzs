@@ -31,7 +31,8 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
     List<Map<String, Object>> findProjectBySviewA(@Param("userId")String userId,@Param("types")int[] types,@Param("segmentations")String [] segmentations,
                                                  @Param("stages")String [] stages,@Param("cities")String [] cities,
                                                  @Param("working_background_descs")String [] working_background_descs,@Param("educational_background_descs")String [] educational_background_descs,
-                                                 @Param("sizea") Integer sizea,@Param("froma") Integer froma
+                                                 @Param("sizea") Integer sizea,@Param("froma") Integer froma,
+                                                 @Param("beginTime") String beginTime ,@Param("endTime") String endTime
 
     );
 
