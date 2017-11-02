@@ -215,4 +215,64 @@ public class WxMaUserController {
     }
 
 
+    @PostMapping("wx/login")
+    public CommonDto<UserExsitJudgmentDto> getWxPhonenumber(@RequestBody Map<String,String> body){
+        String code = body.get("code");
+        String token =body.get("token");
+
+        CommonDto<UserExsitJudgmentDto> result = new CommonDto<>();
+        UserExsitJudgmentDto userExsitJudgmentDto =new UserExsitJudgmentDto();
+        logger.info("请求进来了");
+        if (StringUtils.isBlank(code)) {
+            userExsitJudgmentDto.setToken(null);
+            userExsitJudgmentDto.setSuccess(false);
+
+            result.setMessage("empty jscode");
+            result.setStatus(401);
+            result.setData(userExsitJudgmentDto);
+            return result;
+        }
+
+        try {
+            WxMaJscode2SessionResult session = this.wxService.getUserService().getSessionInfo(code);
+            this.logger.info(session.getSessionKey());
+            this.logger.info(session.getOpenid());
+            this.logger.info(session.getExpiresin().toString());
+
+            int yhxinxi = userExistJudgmentService.getUserId(token);
+            String userid = String.valueOf(yhxinxi);
+
+            String sessionKey = session.getSessionKey();
+
+            boolean jieguo = sessionKeyService.setSessionKey(sessionKey,userid);
+
+            if (!jieguo){
+                userExsitJudgmentDto.setSuccess(false);
+                userExsitJudgmentDto.setToken(null);
+
+                result.setData(userExsitJudgmentDto);
+                result.setStatus(501);
+                result.setMessage("缓存sessionkey出错");
+                return result;
+            }
+
+            result.setData(null);
+            result.setMessage("success");
+            result.setStatus(200);
+
+
+        } catch (WxErrorException e) {
+            this.logger.error(e.getMessage(), e);
+            userExsitJudgmentDto.setToken(null);
+            userExsitJudgmentDto.setSuccess(false);
+
+            result.setMessage("服务器发生错误！");
+            result.setStatus(501);
+            result.setData(userExsitJudgmentDto);
+
+        }
+
+        return result;
+    }
+
 }
