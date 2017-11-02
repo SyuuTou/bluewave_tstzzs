@@ -205,7 +205,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         InvestorDemand investorDemand = new InvestorDemand();
         investorDemand.setUserid(userId);
 
-        List<InvestorDemand> investorDemands = new ArrayList<>();
+        List<InvestorDemand> investorDemands = investorDemandMapper.select(investorDemand);
         if (investorDemands.size() > 0){
             InvestorDemand investorDemandForJudgment  = investorDemands.get(0);
 
