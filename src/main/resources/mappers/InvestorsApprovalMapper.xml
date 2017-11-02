@@ -18,6 +18,7 @@
     <result column="review_time" jdbcType="TIMESTAMP" property="reviewTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="leadership" jdbcType="INTEGER" property="leadership" />
+    <result column="investors_approvalcol_case" jdbcType="VARCHAR" property="investorsApprovalcolCase" />
   </resultMap>
 
    <select id="findInvestorsApproval" parameterType="INTEGER" resultType="java.util.HashMap">

@@ -21,7 +21,7 @@ public class InvestorsApproval {
     private String approvalUsername;
 
     /**
-     * 认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     * 认证类型，0代表个人投资，1代表机构投资，2代表vip投资人；
      */
     @Column(name = "investors_type")
     private Integer investorsType;
@@ -78,6 +78,12 @@ public class InvestorsApproval {
     private Integer leadership;
 
     /**
+     * 投资人投资案例的字段，先存成字符串
+     */
+    @Column(name = "investors_approvalcol_case")
+    private String investorsApprovalcolCase;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -128,18 +134,18 @@ public class InvestorsApproval {
     }
 
     /**
-     * 获取认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     * 获取认证类型，0代表个人投资，1代表机构投资，2代表vip投资人；
      *
-     * @return investors_type - 认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     * @return investors_type - 认证类型，0代表个人投资，1代表机构投资，2代表vip投资人；
      */
     public Integer getInvestorsType() {
         return investorsType;
     }
 
     /**
-     * 设置认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     * 设置认证类型，0代表个人投资，1代表机构投资，2代表vip投资人；
      *
-     * @param investorsType 认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     * @param investorsType 认证类型，0代表个人投资，1代表机构投资，2代表vip投资人；
      */
     public void setInvestorsType(Integer investorsType) {
         this.investorsType = investorsType;
@@ -305,5 +311,23 @@ public class InvestorsApproval {
      */
     public void setLeadership(Integer leadership) {
         this.leadership = leadership;
+    }
+
+    /**
+     * 获取投资人投资案例的字段，先存成字符串
+     *
+     * @return investors_approvalcol_case - 投资人投资案例的字段，先存成字符串
+     */
+    public String getInvestorsApprovalcolCase() {
+        return investorsApprovalcolCase;
+    }
+
+    /**
+     * 设置投资人投资案例的字段，先存成字符串
+     *
+     * @param investorsApprovalcolCase 投资人投资案例的字段，先存成字符串
+     */
+    public void setInvestorsApprovalcolCase(String investorsApprovalcolCase) {
+        this.investorsApprovalcolCase = investorsApprovalcolCase;
     }
 }

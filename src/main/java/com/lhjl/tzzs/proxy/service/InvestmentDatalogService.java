@@ -7,7 +7,7 @@ import java.util.Map;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 
 public interface InvestmentDatalogService {
-	CommonDto<String> saveInvestmentData(String investment_institution_name , String project_name, String project_full_name, String summary, String field,  String city, String rounds, String amount,  String currency,  String stock_right,  Date date,  String founder_name, String founder_work, String founder_education,String userId);
+	CommonDto<String> saveInvestmentData(String investment_institution_name , String project_name, String project_full_name, String summary, String field,  String city, String rounds, String amount,  String currency,  String stock_right,  Date date,  String founder_name, String founder_work, String founder_education,String userId,String zhiwu);
 	/**
 	 * 查询数据提交
 	 * @param uuids
