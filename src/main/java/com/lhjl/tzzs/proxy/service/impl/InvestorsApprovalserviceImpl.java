@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 
 import com.lhjl.tzzs.proxy.dto.InvestorsApprovalActionDto;
 import com.lhjl.tzzs.proxy.dto.InvestorsApprovalDto;
-import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
+import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserLevelService;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.TouZiDto;
-import com.lhjl.tzzs.proxy.mapper.InvestorsApprovalMapper;
-import com.lhjl.tzzs.proxy.mapper.UserTokenMapper;
-import com.lhjl.tzzs.proxy.mapper.UsersMapper;
 import com.lhjl.tzzs.proxy.service.InvestorsApprovalService;
 
 @Service
@@ -33,6 +30,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	private InvestorsMapper investorsMapper;
 	@Resource
 	private UserLevelService userLevelService;
+
+	@Resource
+    private InvestorInvestmentCaseMapper investorInvestmentCaseMapper;
     
 	/**
 	 * 认证投资人信息记录
@@ -139,8 +139,18 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 		 Integer userId = userToken.getUserId();
 		 map=investorsApprovalMapper.findInvestorsApproval(userId);
+          String anli = "";
+          if (map == null){
+              anli = "";
+          }else{
+              if (map.get("investors_approvalcol_case") == null){
+                  anli = "";
+              }else{
+                  anli = String.valueOf(map.get("investors_approvalcol_case"));
+              }
+          }
 
-		 String anli = String.valueOf(map.get("investors_approvalcol_case"));
+
 		 String[] anliArray = anli.split(",");
 		 if(map !=null){
 
@@ -183,6 +193,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				map.put("renzhengtouzirenshenhebiao7certificat",null);
 				map.put("renzhengtouzirenshenhebiao7frontofbus",null);
 				map.put("renzhengtouzirenshenhebiao7wherecompa",null);
+				map.put("investorsApprovalcolCase",anliArray);
 				Map<String,Object> renzhenleixin =new HashMap<>();
 				renzhenleixin.put("0",false);
 				renzhenleixin.put("1",false);
@@ -361,8 +372,10 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		Investors investors = new Investors();
 		investors.setUserId(userId);
 		investors = investorsMapper.selectOne(investors);
+
 		if(investors != null){
 			investors.setApprovalStatus(Integer.parseInt(approvalStatus));
+
 			switch(Integer.parseInt(approveResult)){
 				case 3:
 					investors.setInvestorsType(0);
@@ -376,6 +389,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				default:
 					investors.setInvestorsType(null);
 			}
+
 			//升级为VIP投资人
 			if(investors.getInvestorsType() == 2){
 				UserToken userToken = new UserToken();
@@ -383,7 +397,22 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				userToken = userTokenMapper.selectOne(userToken);
 				userLevelService.upLevel(userToken.getToken(), 4);
 			}
+
+
 			investorsMapper.updateByPrimaryKey(investors);
+
+			//获取到申请人的投资人id
+			int investorsId = investors.getId();
+
+			//先删除已经存在的投资案例
+            InvestorInvestmentCase investorInvestmentCaseForBefore = new InvestorInvestmentCase();
+            investorInvestmentCaseForBefore.setInvestorId(investorsId);
+
+            investorInvestmentCaseMapper.delete(investorInvestmentCaseForBefore);
+
+
+
+
 
 		}else{
 			Investors newInvestors = new Investors();
@@ -415,7 +444,24 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			newInvestors.setYn(1);
 			newInvestors.setApprovalTime(new Date());
 			investorsMapper.insert(newInvestors);
+
+			Integer investorId = newInvestors.getId();
+			String anli = approval.getInvestorsApprovalcolCase();
+			String[] anliArray = anli.split(anli);
+
+
+			//新建投资人的投资案例
+			for (int i=0;i<anliArray.length;i++){
+			    InvestorInvestmentCase investorInvestmentCase = new InvestorInvestmentCase();
+			    investorInvestmentCase.setInvestorId(investorId);
+			    investorInvestmentCase.setInvestmentCase(anliArray[i]);
+
+			    investorInvestmentCaseMapper.insert(investorInvestmentCase);
+            }
+
 		}
+
+
 
 		result.setStatus(200);
 		result.setMessage("审核操作成功");
