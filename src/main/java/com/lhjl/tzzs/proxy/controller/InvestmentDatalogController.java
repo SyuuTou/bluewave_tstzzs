@@ -52,6 +52,7 @@ public class InvestmentDatalogController {
 		String founder_work = body.getFounder_work();
 		String founder_education = body.getFounder_education();
 		String userId = body.getUserId();
+		String zhiwu=body.getZhiwu();
 
 
 
@@ -61,7 +62,7 @@ public class InvestmentDatalogController {
 			if (!StringUtil.isEmpty(date)) {
 				dateDate = simpleDateFormat.parse(date);
 			}
-			result = investmentDatalogService.saveInvestmentData(investment_institution_name,project_name,project_full_name,summary,field,city,rounds,amount,currency,stock_right,dateDate,founder_name,founder_work,founder_education,userId);
+			result = investmentDatalogService.saveInvestmentData(investment_institution_name,project_name,project_full_name,summary,field,city,rounds,amount,currency,stock_right,dateDate,founder_name,founder_work,founder_education,userId,zhiwu);
 			result.setStatus(200);
 			result.setMessage("success");
 		}catch (Exception e){

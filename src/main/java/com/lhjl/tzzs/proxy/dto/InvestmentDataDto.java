@@ -16,8 +16,17 @@ public class InvestmentDataDto {
    private String founder_work;
    private String founder_education;
    private String userId;
+   private String zhiwu;
 
-    public String getUserId() {
+    public String getZhiwu() {
+	return zhiwu;
+}
+
+public void setZhiwu(String zhiwu) {
+	this.zhiwu = zhiwu;
+}
+
+	public String getUserId() {
         return userId;
     }
 

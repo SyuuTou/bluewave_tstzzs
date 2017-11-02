@@ -93,7 +93,7 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
 
     @Transactional
     @Override
-    public CommonDto<String> saveInvestmentData(String investment_institution_name , String project_name, String project_full_name, String summary, String field,  String city, String rounds, String amount,  String currency,  String stock_right,  Date dateDate,  String founder_name, String founder_work, String founder_education,String userId){
+    public CommonDto<String> saveInvestmentData(String investment_institution_name , String project_name, String project_full_name, String summary, String field,  String city, String rounds, String amount,  String currency,  String stock_right,  Date dateDate,  String founder_name, String founder_work, String founder_education,String userId,String zhiwu){
         CommonDto<String> result = new CommonDto<String>();
 
 
@@ -226,6 +226,7 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
         i.setUserId(userID);
         i.setWordIntroduction(summary);
         i.setYn(currency1);
+        i.setZhiwu(zhiwu);
         //
         i.setAuditYn(0);
         investmentDataLogMapper.insert(i);
@@ -325,6 +326,7 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
         map.put("stock_right",pi.getStockRight());
         map.put("create_name",pi.getCreateName());
         map.put("currency",pi.getYn());
+        map.put("zhiwu",pi.getZhiwu());
        
         if("".equals(pi.getCity())){
             List<LabelList> cities = data.getData().get("cityKey");
