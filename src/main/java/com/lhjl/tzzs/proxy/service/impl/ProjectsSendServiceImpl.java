@@ -77,8 +77,11 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         if("媒体".equals(params.getTuisongxiangmubiao7identityty())){
             users.setIdentityType(3);
         }
-        if("研究机构".equals(params.getTuisongxiangmubiao7identityty())){
+        if("服务机构".equals(params.getTuisongxiangmubiao7identityty())){
             users.setIdentityType(4);
+        }
+        if("政府机构".equals(params.getTuisongxiangmubiao7identityty())){
+            users.setIdentityType(5);
         }
         usersMapper.updateByPrimaryKey(users);
 
@@ -292,15 +295,19 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         identify4.setValue("媒体");
         identify4.setChecked(false);
         LabelList identify5 = new LabelList();
-        identify5.setName("研究机构");
-        identify5.setValue("研究机构");
+        identify5.setName("服务机构");
+        identify5.setValue("服务机构");
         identify5.setChecked(false);
+        LabelList identify6 = new LabelList();
+        identify6.setName("政府机构");
+        identify6.setValue("政府机构");
+        identify6.setChecked(false);
         identities.add(identify1);
         identities.add(identify2);
         identities.add(identify3);
         identities.add(identify4);
         identities.add(identify5);
-
+        identities.add(identify6);
         if(users != null && users.getIdentityType() != null){
             int identity = users.getIdentityType();
             String identityStr = "";
@@ -318,7 +325,10 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                     identityStr = "媒体";
                     break;
                 case 4:
-                    identityStr = "研究机构";
+                    identityStr = "服务机构";
+                    break;
+                case 5:
+                    identityStr = "政府机构";
                     break;
             }
             for(LabelList list : identities){
