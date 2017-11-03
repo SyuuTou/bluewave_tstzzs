@@ -186,11 +186,12 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			    users.setUuid(token);
 			    users = usersMapper.selectOne(users);
 			    String username =users.getActualName();
+
 			    map.put("id", token);
 			    map.put("renzhengtouzirenshenhebiao7applicantn",username);
 				map.put("renzhengtouzirenshenhebiao7additional",null);//其他说明
-				map.put("renzhengtouzirenshenhebiao7assumeoffi",null);
-				map.put("renzhengtouzirenshenhebiao7certificat",null);
+				map.put("renzhengtouzirenshenhebiao7assumeoffi",users.getCompanyDuties());
+				map.put("renzhengtouzirenshenhebiao7certificat",users.getCompanyName());
 				map.put("renzhengtouzirenshenhebiao7frontofbus",null);
 				map.put("renzhengtouzirenshenhebiao7wherecompa",null);
 				map.put("investorsApprovalcolCase",anliArray);
