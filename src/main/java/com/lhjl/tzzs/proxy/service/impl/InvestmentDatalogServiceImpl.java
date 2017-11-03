@@ -299,7 +299,7 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
             list=investmentDataLogMapper.saveInformation(userId, beginNum, pageSize);
             for (Map<String, Object> obj : list){
                 obj.put("finan_time",String.valueOf(obj.get("finan_time")).substring(0,10));
-                obj.put("create_time",String.valueOf(obj.get("create_time")).substring(0,10));
+                obj.put("create_time",String.valueOf(obj.get("create_time")).substring(0,16));
             }
             InvestmentDataLog investmentDataLog =new InvestmentDataLog();
             investmentDataLog.setUserId(userId);

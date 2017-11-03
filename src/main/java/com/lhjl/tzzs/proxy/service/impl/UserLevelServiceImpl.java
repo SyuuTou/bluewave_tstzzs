@@ -165,7 +165,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 condition = metaObtainIntegralMapper.selectOne(condition);
                 userLevelDto.setConditionNum(condition.getDeliverNum());
 
-                int coinsNum = (int)(originalCost * metaObtainIntegral.getRatio());
+                int coinsNum = (int)(userLevel.getAmount().intValue() * metaObtainIntegral.getRatio());
                 userLevelDto.setRatio(ratio);
                 userLevelDto.setCoinNum(coinsNum);
 
@@ -1486,8 +1486,11 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(new Date());
-                calendar.add(Calendar.YEAR, 1);
-                Date end = calendar.getTime();
+                MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
+                metaObtainIntegral.setSceneKey(sKey);
+                metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
+                calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral.getPeriod());
+                Date end= calendar.getTime();
                 userIntegrals.setEndTime(end);
                 userIntegrals.setBeginTime((new Date()));
                 userIntegrals.setConsumeNum(0);
@@ -1528,8 +1531,11 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(new Date());
-                calendar.add(Calendar.YEAR, 1);
-                Date end = calendar.getTime();
+                MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
+                metaObtainIntegral.setSceneKey(sKey);
+                metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
+                calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral.getPeriod());
+                Date end= calendar.getTime();
                 userIntegrals.setEndTime(end);
                 userIntegrals.setBeginTime((new Date()));
                 userIntegrals.setConsumeNum(0);
@@ -1595,8 +1601,11 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(new Date());
-                calendar.add(Calendar.YEAR, 1);
-                Date end = calendar.getTime();
+                MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
+                metaObtainIntegral.setSceneKey(sKey);
+                metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
+                calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral.getPeriod());
+                Date end= calendar.getTime();
                 userIntegrals.setEndTime(end);
                 userIntegrals.setBeginTime((new Date()));
                 userIntegralsMapper.insert(userIntegrals);
@@ -1638,8 +1647,12 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(new Date());
-                calendar.add(Calendar.YEAR, 1);
-                Date end = calendar.getTime();
+                MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
+                metaObtainIntegral.setSceneKey(sKey);
+                metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
+                calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral.getPeriod());
+                Date end= calendar.getTime();
+                userIntegrals.setEndTime(end);
                 userIntegrals.setEndTime(end);
                 userIntegrals.setBeginTime((new Date()));
                 userIntegralsMapper.insert(userIntegrals);
