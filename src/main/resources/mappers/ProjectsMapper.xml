@@ -209,4 +209,70 @@
       WHERE p.ID = #{projectsId};
     </select>
 
+    <!--处理amount的xml-->
+    <select id="findProjectAmountOfZ" resultType="java.util.HashMap">
+        SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.calculation_amount_status,m.city FROM projects m left join project_financing_log n on m.ID = n.project_id right join project_segmentation f on m.ID = f.project_id where n.amount = 0 and n.financing_time &gt;= '2017-01-01';
+    </select>
+
+    <select id="findProjectByRoundAndE" parameterType="String" resultType="java.math.BigDecimal">
+        SELECT avg(n.amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join project_segmentation f on m.ID = f.project_id where n.amount > 0 and n.financing_time >= '2017-01-01'
+        <if test="segmentation!='null' and segmentation != null">
+            and f.segmentation_name = #{segmentation}
+        </if>
+        <if test="stage !='null' and stage !=null">
+            and n.stage = #{stage};
+        </if>
+    </select>
+
+    <select id="findProjectByRoundAndC" parameterType="String" resultType="java.math.BigDecimal">
+        SELECT avg(n.amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join project_segmentation f on m.ID = f.project_id where n.amount > 0 and n.financing_time >= '2017-01-01'
+        <if test="stage!='null' and stage != null">
+            and n.stage = #{stage}
+        </if>
+        <if test="city !='null' and city !=null">
+            and m.city = #{city};
+        </if>
+    </select>
+
+    <!--处理allmount的xml-->
+    <select id="findProjectAllAmountOfZ" resultType="java.util.HashMap">
+        SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.total_amount,n.calculation_amount_status,m.city FROM projects m left join project_financing_log n on m.ID = n.project_id right join project_segmentation f on m.ID = f.project_id where n.total_amount = 0 and n.financing_time &gt;= '2017-01-01';
+    </select>
+
+    <select id="findProjectAllByRoundAndE" parameterType="String" resultType="java.math.BigDecimal">
+        SELECT avg(n.total_amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join project_segmentation f on m.ID = f.project_id where n.total_amount > 0 and n.financing_time &gt;= '2017-01-01'
+        <if test="segmentation!='null' and segmentation != null">
+            and f.segmentation_name = #{segmentation}
+        </if>
+        <if test="stage !='null' and stage !=null">
+            and n.stage = #{stage};
+        </if>
+    </select>
+
+    <select id="findProjectAllByRoundAndC" parameterType="String" resultType="java.math.BigDecimal">
+        SELECT avg(n.total_amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join project_segmentation f on m.ID = f.project_id where n.total_amount > 0 and n.financing_time >= '2017-01-01'
+        <if test="stage!='null' and stage != null">
+            and n.stage = #{stage}
+        </if>
+        <if test="city !='null' and city != null">
+            and m.city = #{city};
+        </if>
+    </select>
+
+
+    <resultMap id="projectMap" type="com.lhjl.tzzs.proxy.dto.ProjectValuation">
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="type" jdbcType="BIGINT" property="type"/>
+        <result column="segmentation" jdbcType="VARCHAR" property="segmentation"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="edu" jdbcType="VARCHAR" property="edu"/>
+        <result column="work" jdbcType="VARCHAR" property="work"/>
+    </resultMap>
+
+
+    <select id="queryProjectValuation" resultMap="projectMap" parameterType="map">
+
+    </select>
+
+
 </mapper>

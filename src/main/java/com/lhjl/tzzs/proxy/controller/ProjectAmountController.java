@@ -53,4 +53,22 @@ public class ProjectAmountController {
 
     }
 
+    @RequestMapping(value = "admin/project/recommend")
+    @ResponseBody
+    public CommonDto<String> valuationRecommend(){
+        CommonDto<String> result =null;
+
+        try{
+            result = projectAmountService.valuaionRecommend();
+        }catch (Exception e){
+
+            result.setMessage(e.getMessage());
+            result.setStatus(501);
+            result.setData(null);
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
+
+        return result;
+    }
+
 }

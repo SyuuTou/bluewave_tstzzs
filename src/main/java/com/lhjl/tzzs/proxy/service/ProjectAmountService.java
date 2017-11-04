@@ -7,4 +7,7 @@ import org.springframework.stereotype.Service;
 public interface ProjectAmountService {
     CommonDto<String> projectAmoutAdd();
     CommonDto<String> projetcAllAmountAdd();
+
+    CommonDto<String> valuaionRecommend();
+
 }

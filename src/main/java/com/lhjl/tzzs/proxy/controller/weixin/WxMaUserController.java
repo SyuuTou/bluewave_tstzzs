@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.controller.weixin;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
+import cn.binarywang.wx.miniapp.bean.WxMaKefuMessage;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import cn.binarywang.wx.miniapp.util.crypt.WxMaCryptUtils;
 import cn.binarywang.wx.miniapp.util.json.WxMaGsonBuilder;
