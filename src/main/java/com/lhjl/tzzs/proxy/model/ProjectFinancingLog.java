@@ -104,6 +104,26 @@ public class ProjectFinancingLog {
     @Column(name = "calculation_amount_status")
     private Integer calculationAmountStatus;
 
+    private Integer totalAmountStatus;
+
+    private Integer amountStatus;
+
+    public Integer getTotalAmountStatus() {
+        return totalAmountStatus;
+    }
+
+    public void setTotalAmountStatus(Integer totalAmountStatus) {
+        this.totalAmountStatus = totalAmountStatus;
+    }
+
+    public Integer getAmountStatus() {
+        return amountStatus;
+    }
+
+    public void setAmountStatus(Integer amountStatus) {
+        this.amountStatus = amountStatus;
+    }
+
     public Integer getCalculationAmountStatus() {
         return calculationAmountStatus;
     }

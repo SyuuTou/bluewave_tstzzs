@@ -556,7 +556,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		switch (status){
 			case 1:
 
-				name = "您的投资人认证未通过审核，请您重新填写";
+				name = "您的投资人认证未通过审核";
 				break;
 			case 2:name = "您已被取消投资人资格";
 				break;
@@ -592,16 +592,17 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 		try {
 			List<WxMaTemplateMessage.Data> datas = new ArrayList<>();
-			DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-			datas.add(new WxMaTemplateMessage.Data("keyword1",type));
-			datas.add(new WxMaTemplateMessage.Data("keyword2",xiaoxi,"EA4343"));
-			datas.add(new WxMaTemplateMessage.Data("keyword3",desc));
 			try {
 				if (status == 1 || status == 2) {//认证失败
+					datas.add(new WxMaTemplateMessage.Data("keyword1",name));
+//					datas.add(new WxMaTemplateMessage.Data("keyword2",xiaoxi,"#EA4343"));
 					this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("RcjdkVcWR9K3Jmfz2HVbMKKLoVHhXEJkpz42Lgr6t6E").formId(formId).toUser(openId).data(datas).build());
 				}
 
 				if (status == 3 || status == 4 || status == 5) { //认证成功
+					datas.add(new WxMaTemplateMessage.Data("keyword1",name));
+					datas.add(new WxMaTemplateMessage.Data("keyword2",xiaoxi,"#EA4343"));
+					datas.add(new WxMaTemplateMessage.Data("keyword3",desc));
 					this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("IQL59_p78hezrN9Oz6UAStwSyFk8ZbLgVPaPqEi1KyA").formId(formId).toUser(openId).data(datas).page("pages/boot/boot").build());
 				}
 			} catch (WxErrorException e) {

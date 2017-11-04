@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -212,6 +213,32 @@ public class EvaluateServiceImpl implements EvaluateService {
         result.setMessage("success");
         result.setStatus(200);
 
+        return result;
+    }
+
+    @Override
+    public DistributedCommonDto<BigDecimal> financingAmountAvg(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
+
+        DistributedCommonDto<BigDecimal> result = new DistributedCommonDto<>();
+        Integer granularity = null;
+
+        if (roundName.equals("天使轮")){
+            granularity = 50;
+        }else{
+            granularity = 100;
+        }
+
+        String flag = "total_amount";
+        if (investment.equals("1")){
+            flag = "amount";
+        }else{
+            flag = "total_amount";
+        }
+
+        BigDecimal avgAmount = financingMapper.queryFinancingAvgAmount( investment,  roundName,  industryName,  cityName,  educationName,  workName, granularity, flag,beginTime,endTime);
+        result.setData(avgAmount);
+        result.setMessage("success");
+        result.setStatus(200);
         return result;
     }
 }

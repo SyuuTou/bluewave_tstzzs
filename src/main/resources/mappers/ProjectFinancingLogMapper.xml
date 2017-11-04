@@ -11,9 +11,12 @@
     <result column="stage" property="stage" jdbcType="VARCHAR" />
     <result column="amount" property="amount" jdbcType="DECIMAL" />
     <result column="currency" property="currency" jdbcType="INTEGER" />
+    <result column="amount_status" property="amountStatus" jdbcType="INTEGER" />
+    <result column="calculation_amount_status" property="calculationAmountStatus" jdbcType="INTEGER" />
     <result column="stock_right" property="stockRight" jdbcType="DECIMAL" />
     <result column="pr_amount" property="prAmount" jdbcType="DECIMAL" />
     <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="total_amount_status" property="totalAmountStatus" jdbcType="INTEGER" />
     <result column="share_divest" property="shareDivest" jdbcType="VARCHAR" />
     <result column="valuation" property="valuation" jdbcType="DECIMAL" />
     <result column="Investment_institutions_list" property="investmentInstitutionsList" jdbcType="VARCHAR" />

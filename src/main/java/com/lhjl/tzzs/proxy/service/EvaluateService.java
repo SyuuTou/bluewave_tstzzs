@@ -6,6 +6,7 @@ import com.lhjl.tzzs.proxy.dto.DistributedCommonDto;
 import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.dto.LabelList;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -18,4 +19,5 @@ public interface EvaluateService {
 
     CommonDto<List<LabelList>> queryHotIndustry();
 
+    DistributedCommonDto<BigDecimal> financingAmountAvg(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size);
 }

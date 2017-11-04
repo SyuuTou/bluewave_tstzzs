@@ -7,6 +7,7 @@ import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -34,4 +35,5 @@ public interface MetaFinancingMapper  extends OwnerMapper<MetaFinancing> {
     List<HistogramList> queryFinancingAmount(Map<String, String> queryAmount);
 
 
+    BigDecimal queryFinancingAvgAmount(@Param("investment") String investment, @Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName,@Param("granularity") Integer granularity, @Param("flag") String flag,@Param("beginTime") String beginTime, @Param("endTime") String endTime);
 }
