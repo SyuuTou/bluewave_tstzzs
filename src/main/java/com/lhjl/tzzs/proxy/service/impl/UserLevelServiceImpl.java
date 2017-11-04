@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
+import com.jayway.jsonpath.Criteria;
 import com.lhjl.tzzs.proxy.dto.ActionDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.UserLevelDto;
@@ -556,6 +557,26 @@ public class UserLevelServiceImpl implements UserLevelService {
 
         String sceneKey = action.getSceneKey();
 
+        //添加体验用户权益判断Z
+
+        Example userLevelRelationForTime = new Example(UserLevelRelation.class);
+        userLevelRelationForTime.and().andEqualTo("userId", localUserId).andEqualTo("levelId",userLevel);
+        userLevelRelationForTime.setOrderByClause("end_time asc");
+        List<UserLevelRelation> userLevelRelationList = userLevelRelationMapper.selectByExample(userLevelRelationForTime);
+
+        if (userLevelRelationList.size() > 0){
+            Date userLevelEndTime = userLevelRelationList.get(0).getEndTime();
+            Date now = new Date();
+            if (now.getTime() < userLevelEndTime.getTime()){
+                result.setStatus(200);
+                result.setMessage("可以查看图表");
+                result.setData(data);
+                return result;
+            }
+        }
+
+
+
         //首页消费与项目
         if(INDEX.equals(sceneKey) || PROJECT.equals(sceneKey)){
             if(userLevel < 4){
@@ -1022,7 +1043,6 @@ public class UserLevelServiceImpl implements UserLevelService {
         }
 
         String sceneKey = action.getSceneKey();
-
         //首页消费与项目
         if(PROJECT.equals(sceneKey)){
 
