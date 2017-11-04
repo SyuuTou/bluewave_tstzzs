@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
@@ -11,6 +12,7 @@ import com.lhjl.tzzs.proxy.utils.MD5Util;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.util.StringUtil;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -782,4 +784,33 @@ public class UserEditImpl implements UserEditService {
 
         return result;
     }
+
+    @Override
+    public CommonDto<Map<String,Object>> userInfoYn(String token){
+        CommonDto<Map<String,Object>> result =new CommonDto<>();
+        Map<String,Object> obj = new HashMap<>();
+
+        Integer userId = userExistJudgmentService.getUserId(token);
+        if (userId == -1){
+            result.setData(null);
+            result.setMessage("用户token无效，请检查");
+            result.setStatus(50001);
+
+            return result;
+        }
+
+        Users users = usersMapper.selectByPrimaryKey(userId);
+        if (org.apache.commons.lang3.StringUtils.isAnyBlank(users.getActualName(),users.getCompanyName(),users.getCompanyDuties(),users.getDesc(),users.getEmail(),users.getWechat())){
+            obj.put("success",true);
+            result.setStatus(208);
+            result.setMessage("完善用户信息，即可获得3天查看天使投资指数统计数据和项目列表权限");
+            result.setData(obj);
+        }else {
+            result.setStatus(207);
+            result.setMessage("用户信息已经完善");
+            result.setData(null);
+        }
+
+        return result;
+    };
 }

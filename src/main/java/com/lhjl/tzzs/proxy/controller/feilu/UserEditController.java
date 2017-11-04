@@ -275,4 +275,19 @@ public class UserEditController {
         return result;
     }
 
+    @GetMapping("user/infoyn")
+    public CommonDto<Map<String,Object>> userInfoYn(String token){
+        CommonDto<Map<String,Object>> result =new CommonDto<>();
+        try {
+            result = userEditService.userInfoYn(token);
+        }catch (Exception e){
+            log.info(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+        }
+
+        return result;
+    }
+
 }
