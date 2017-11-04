@@ -50,22 +50,20 @@
         (SELECT MAX(f.status)s FROM follow f WHERE f.user_id = #{userId,jdbcType=VARCHAR}) AND f.projects_id = b.`ID` GROUP BY f.projects_id ) zz
         FROM projects b
         WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')  -->
-       SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,stage.stage
-        FROM projects mf 
-        LEFT JOIN (SELECT s.project_id,s.stage,s.financing_time FROM project_financing_log s GROUP BY s.`project_id` ORDER BY financing_time DESC)stage ON mf.`id` = stage.project_id
-        WHERE 
-          mf.short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
-          OR mf.kernel_desc LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
-          OR mf.id IN (SELECT project_id FROM project_segmentation WHERE segmentation_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
-          OR mf.id IN
-          (SELECT project_id FROM project_financing_log WHERE stage  LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
-          OR mf.city LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
-          OR mf.id IN (SELECT f.project_id FROM founders_work fw LEFT JOIN founders f ON fw.founder_id = f.id WHERE fw.work_experience LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
-          OR mf.id IN (SELECT f.project_id FROM founders_education fe LEFT JOIN founders f ON fe.founder_id = f.id WHERE fe.education_experience LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
-        GROUP BY mf.id LIMIT #{sizea},#{froma}
+        SELECT ID, short_name, kernel_desc,city,segementation, stage FROM (
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage, 1 AS  sor FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE mf.short_name like CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+        UNION  ALL
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage, 2 AS  sor FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE ps.segmentation_name  like CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+        UNION ALL
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage, 3 AS  sor FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE mf.kernel_desc LIKE  CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+        UNION ALL
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage, 4 AS  sor FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE mf.item_label LIKE  CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+        ) a
+        GROUP BY a.ID
+        ORDER BY a.sor LIMIT #{sizea},#{froma}
     </select>
     <select id="findProjectByShortName"  parameterType="String" resultType="java.util.HashMap">
-          SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,stage.stage
+         <!-- SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,stage.stage
           FROM projects mf
           LEFT JOIN (SELECT s.project_id,s.stage,s.financing_time FROM project_financing_log s GROUP BY s.`project_id` ORDER BY financing_time DESC)stage ON mf.`id` = stage.project_id
           WHERE
@@ -77,7 +75,19 @@
           OR mf.city LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
           OR mf.id IN (SELECT f.project_id FROM founders_work fw LEFT JOIN founders f ON fw.founder_id = f.id WHERE fw.work_experience LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
           OR mf.id IN (SELECT f.project_id FROM founders_education fe LEFT JOIN founders f ON fe.founder_id = f.id WHERE fe.education_experience LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')) 
-          GROUP BY mf.id LIMIT 3
+          GROUP BY mf.id LIMIT 3-->
+
+          SELECT ID, short_name, kernel_desc,city,segementation, stage FROM (
+          SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage, 1 AS  sor FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE mf.short_name like CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+          UNION  ALL
+          SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage, 2 AS  sor FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE ps.segmentation_name like  CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+          UNION ALL
+          SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage, 3 AS  sor FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE mf.kernel_desc LIKE  CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+          UNION ALL
+          SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage, 4 AS  sor FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE mf.item_label LIKE  CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+           ) a
+           GROUP BY a.ID
+           ORDER BY a.sor LIMIT 3
     </select>
 
     <select id="findProjectBySegmentation" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
