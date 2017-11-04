@@ -548,6 +548,23 @@ public class UserLevelServiceImpl implements UserLevelService {
         int userLevel = 0;
         if(userLevelRelation != null){
             userLevel = userLevelRelation.getLevelId();
+
+            Example userLevelRelationForTime = new Example(UserLevelRelation.class);
+            userLevelRelationForTime.and().andEqualTo("userId",localUserId).andEqualTo("levelId",userLevel);
+            userLevelRelationForTime.setOrderByClause("end_time asc");
+            List<UserLevelRelation> userLevelRelationList = userLevelRelationMapper.selectByExample(userLevelRelationForTime);
+
+            if (userLevelRelationList.size() > 0){
+                Date userLevelEndTime = userLevelRelationList.get(0).getEndTime();
+                Date now = new Date();
+                if (now.getTime() > userLevelEndTime.getTime()){
+                    result.setStatus(202);
+                    result.setMessage("查看天使投资指数统计数据和项目列表，仅对VIP投资人开放");
+                    result.setData(data);
+
+                    return result;
+                }
+            }
         }
         data.put("levelId", userLevel);
         //查询当前用户金币余额
@@ -560,27 +577,8 @@ public class UserLevelServiceImpl implements UserLevelService {
         //首页消费与项目
         if(INDEX.equals(sceneKey) || PROJECT.equals(sceneKey)){
 
-            //添加普通体验用户权益判断Z
 
-            if (userLevel == 1) {
-                Example userLevelRelationForTime = new Example(UserLevelRelation.class);
-                userLevelRelationForTime.and().andEqualTo("userId", localUserId).andEqualTo("levelId", userLevel);
-                userLevelRelationForTime.setOrderByClause("end_time asc");
-                List<UserLevelRelation> userLevelRelationList = userLevelRelationMapper.selectByExample(userLevelRelationForTime);
-
-                if (userLevelRelationList.size() > 0) {
-                    Date userLevelEndTime = userLevelRelationList.get(0).getEndTime();
-                    Date now = new Date();
-                    if (now.getTime() < userLevelEndTime.getTime()) {
-                        result.setStatus(200);
-                        result.setMessage("可以查看图表");
-                        result.setData(data);
-                        return result;
-                    }
-                }
-            }
-
-            if(userLevel < 4){
+            if(userLevel != 4 && userLevel != 1){
                 result.setStatus(202);
                 result.setMessage("查看天使投资指数统计数据和项目列表，仅对VIP投资人开放");
                 result.setData(data);
