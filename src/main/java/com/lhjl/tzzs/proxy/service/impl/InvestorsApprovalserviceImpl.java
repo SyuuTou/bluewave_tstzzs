@@ -550,7 +550,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		if (status == 1 || status == 2){
 			kaitou = "抱歉！";
 		}else {
-			kaitou = "恭喜成为: ";
+			kaitou = "恭喜成为";
 		}
 
 		switch (status){
