@@ -47,6 +47,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		String dataName = params.getDateName();
 		String company = params.getOrganization();
 		String companyDuties = params.getFillOffice();
+		String formId = params.getFormId();
 
 		if ("".equals(token) || token == null || "undefined".equals(token)){
 			result.setData(null);
@@ -89,6 +90,14 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 			return result;
 		}
+		
+		if ("".equals(formId) || formId == null || "undefined".equals(formId)){
+			result.setData(null);
+			result.setMessage("formId不存在");
+			result.setStatus(50001);
+
+			return result;
+		}
 
 
 		InvestorsApproval  investorsApproval =new  InvestorsApproval();
@@ -113,6 +122,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		 investorsApproval.setApprovalResult(0);
 		 investorsApproval.setReviewTime(new Date());
 		 investorsApproval.setCreateTime(new Date());
+		 investorsApproval.setFormId(formId);
 		 investorsApproval.setInvestorsApprovalcolCase(params.getInvestorsApprovalcolCase());
 
 		 investorsApprovalMapper.insert(investorsApproval);
