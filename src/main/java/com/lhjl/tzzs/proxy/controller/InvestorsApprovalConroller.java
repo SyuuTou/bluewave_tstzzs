@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,8 +42,7 @@ public class InvestorsApprovalConroller {
 	@Autowired
 	private WxMaService wxService;
 
-	@Resource
-	private UsersWeixinMapper usersWeixinMapper;
+
 
 	/**
 	 * 投资人记录信息
@@ -182,77 +182,13 @@ public class InvestorsApprovalConroller {
 
 
 	@GetMapping("/send/approvallog")
-	public CommonDto<String> sendApprovalLog(Integer id,Integer status){
+	public CommonDto<String> sendApprovalLog(Integer userId,Integer status,String formId){
 		CommonDto<String> result = new CommonDto<>();
 
-		UsersWeixin userswx = new UsersWeixin();
-		userswx.setUserId(id);
 
-		String kaitou = "";
-		String leixing = "";
-		String xiaoxi = "";
-		if (status == 0 ){
-			result.setData(null);
-			result.setMessage("传入类型错误");
-			result.setStatus(50001);
-
-			return result;
-		}
-
-		if (status == 1 || status == 2){
-			kaitou = "抱歉！";
-		}else {
-			kaitou = "恭喜您";
-		}
-
-		switch (status){
-			case 1:leixing = "您的投资人认证未通过审核，请您重新填写";
-			break;
-			case 2:leixing = "您已被取消投资人资格";
-			break;
-			case 3:leixing = "您已被认证为个人投资人";
-			break;
-			case 4:leixing = "您已被认证为机构投资人";
-			break;
-			case 5:leixing = "您已被认证为vip投资人！";
-			break;
-		}
-
-		xiaoxi = kaitou + leixing;
-
-		String openId = "";
-		List<UsersWeixin> usersWeixins = usersWeixinMapper.select(userswx);
-		if (usersWeixins.size() > 0){
-			openId = usersWeixins.get(0).getOpenid();
-		}else {
-			result.setData(null);
-			result.setMessage("没有找到用户的openId信息");
-			result.setStatus(50001);
-
-			return result;
-		}
+		result = investorsApprovalService.sendTemplate(userId,status,formId);
 
 
-		WxMaKefuMessage message = new WxMaKefuMessage();
-		 message.setDescription("恭喜");
-		 message.setMsgType("text");
-		 message.setContent(xiaoxi);
-		 message.setToUser(openId);
-
-		 try {
-		 	//wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().toUser(openId).data().build());
-			 wxService.getMsgService().sendKefuMsg(message);
-			 result.setStatus(200);
-			 result.setMessage("发送成功");
-			 result.setData(null);
-
-		 }catch (WxErrorException e){
-		 	log.info(e.getLocalizedMessage());
-		 	result.setData(null);
-		 	result.setMessage("服务器端发生错误");
-		 	result.setStatus(502);
-
-		 }
 
 
 		return result;

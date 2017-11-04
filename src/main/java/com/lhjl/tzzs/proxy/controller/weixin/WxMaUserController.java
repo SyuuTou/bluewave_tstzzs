@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.util.StringUtil;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -275,6 +277,22 @@ public class WxMaUserController {
         }
 
         return result;
+    }
+
+
+    @GetMapping("wx/test")
+    public String textWx(){
+
+        List<WxMaTemplateMessage.Data> datas = new ArrayList<>();
+        datas.add(new WxMaTemplateMessage.Data("keyword1.DATA","用户"));
+        datas.add(new WxMaTemplateMessage.Data("keyword2.DATA","说明"));
+        datas.add(new WxMaTemplateMessage.Data("keyword3.DATA","认证时间"));
+        try {
+            this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("db8W77rbYLinzuEXFWFtiv2WFRke9LS_nqGblGDh3A8").formId("dsdsd").toUser("oA0AB0ajgNg7_Z2C100wZ1JbL760").data(datas).build());
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+        }
+        return "Ok";
     }
 
 }

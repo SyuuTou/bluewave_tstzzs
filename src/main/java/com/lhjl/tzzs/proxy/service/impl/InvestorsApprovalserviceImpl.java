@@ -5,11 +5,18 @@ import java.util.*;
 
 import javax.annotation.Resource;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.bean.WxMaTemplateMessage;
 import com.lhjl.tzzs.proxy.dto.InvestorsApprovalActionDto;
 import com.lhjl.tzzs.proxy.dto.InvestorsApprovalDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserLevelService;
+import me.chanjar.weixin.common.exception.WxErrorException;
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +26,9 @@ import com.lhjl.tzzs.proxy.service.InvestorsApprovalService;
 
 @Service
 public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
+
+	private static final Logger log = LoggerFactory.getLogger(InvestorsApprovalService.class);
+
 	@Resource
 	private InvestorsApprovalMapper investorsApprovalMapper;
 	
@@ -30,9 +40,13 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	private InvestorsMapper investorsMapper;
 	@Resource
 	private UserLevelService userLevelService;
-
+	@Resource
+	private UsersWeixinMapper usersWeixinMapper;
 	@Resource
     private InvestorInvestmentCaseMapper investorInvestmentCaseMapper;
+
+	@Autowired
+	private WxMaService wxService;
     
 	/**
 	 * 认证投资人信息记录
@@ -499,5 +513,93 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		result.setMessage("查询工作名片成功");
 		result.setData(workcard);
 		return result;
+	}
+
+	@Override
+	public CommonDto<String> sendTemplate(Integer userId, Integer status, String formId) {
+		CommonDto<String> result = new CommonDto<>();
+		UsersWeixin userswx = new UsersWeixin();
+		userswx.setUserId(userId);
+
+		String kaitou = "";
+		String name = "";
+		String xiaoxi = "";
+		if (status == 0 ){
+			result.setData(null);
+			result.setMessage("传入类型错误");
+			result.setStatus(50001);
+
+			return result;
+		}
+
+		if (status == 1 || status == 2){
+			kaitou = "抱歉！";
+		}else {
+			kaitou = "恭喜您";
+		}
+
+		switch (status){
+			case 1:
+
+				name = "您的投资人认证未通过审核，请您重新填写";
+				break;
+			case 2:name = "您已被取消投资人资格";
+				break;
+			case 3:name = "您已被认证为个人投资人";
+				break;
+			case 4:name = "您已被认证为机构投资人";
+				break;
+			case 5:name = "您已被认证为vip投资人！";
+				break;
+		}
+
+		xiaoxi = kaitou + name;
+
+		String openId = "";
+		List<UsersWeixin> usersWeixins = usersWeixinMapper.select(userswx);
+		if (usersWeixins.size() > 0){
+			openId = usersWeixins.get(0).getOpenid();
+		}else {
+			result.setData(null);
+			result.setMessage("没有找到用户的openId信息");
+			result.setStatus(50001);
+
+			return result;
+		}
+
+
+		Users users = usersMapper.selectByPrimaryKey(userId);
+
+
+
+		try {
+			List<WxMaTemplateMessage.Data> datas = new ArrayList<>();
+			datas.add(new WxMaTemplateMessage.Data("keyword1.DATA",name));
+			datas.add(new WxMaTemplateMessage.Data("keyword2.DATA", DateTime.parse("yyyy-MM-dd HH:mm:ss").toString()));
+			try {
+				if (status == 1 || status == 2) {//认证失败
+					this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("RcjdkVcWR9K3Jmfz2HVbMKKLoVHhXEJkpz42Lgr6t6E").formId(formId).toUser(openId).data(datas).build());
+				}
+
+				if (status == 3 || status == 4 || status == 5) { //认证成功
+					this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("IQL59_p78hezrN9Oz6UASjmCeN6ltxk6XNb8FAuezI8").formId(formId).toUser(openId).data(datas).build());
+				}
+			} catch (WxErrorException e) {
+				e.printStackTrace();
+			}
+			//wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().toUser(openId).data().build());
+//			wxService.getMsgService().sendKefuMsg(message);
+			result.setStatus(200);
+			result.setMessage("发送成功");
+			result.setData(null);
+
+		}catch (Exception e){
+			log.error(e.getMessage(),e);
+			result.setData(null);
+			result.setMessage("服务器端发生错误");
+			result.setStatus(502);
+
+		}
+		return null;
 	}
 }

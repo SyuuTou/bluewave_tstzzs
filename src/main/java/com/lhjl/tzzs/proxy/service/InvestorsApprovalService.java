@@ -52,4 +52,13 @@ public interface InvestorsApprovalService {
 	 * @return
 	 */
 	CommonDto<String> getWorkcard(String approvalId);
+
+	/**
+	 * 发送认证成功和失败的模版消息
+	 * @param userId
+	 * @param status
+	 * @param formId
+	 * @return
+	 */
+	CommonDto<String> sendTemplate(Integer userId, Integer status, String formId);
 }
