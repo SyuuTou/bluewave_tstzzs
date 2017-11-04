@@ -128,4 +128,12 @@ public class ProjectAmountImpl implements ProjectAmountService {
         }
         return null;
     }
+
+    @Override
+    public CommonDto<String> valuaionRecommend() {
+
+
+
+        return null;
+    }
 }
