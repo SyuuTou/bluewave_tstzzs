@@ -663,9 +663,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             //查询项目信息(是否属于50机构)
             Integer type = projectsMapper.findIvestmentTypeById(action.getProjectsId());
             if(type == null){
-                result.setStatus(301);
-                result.setMessage("该项目无效");
-                return result;
+               type = 0;
             }
 
             data.put("type", type);
