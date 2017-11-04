@@ -6,6 +6,7 @@ import com.lhjl.tzzs.proxy.service.InvestmentBackstageService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -90,8 +91,8 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService {
     @Override
     public CommonDto<List<Map<String, Object>>> findAllInvestment() {
         CommonDto<List<Map<String, Object>>> list = new CommonDto<List<Map<String, Object>>>();
-        List<InvestmentInstitutions> listForfive = new ArrayList<InvestmentInstitutions>();
-        List<InvestmentInstitutions> listNotfive = new ArrayList<InvestmentInstitutions>();
+        List<Map<String, Object>> listForfive = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> listNotfive = new ArrayList<Map<String, Object>>();
         List<InvestmentInstitutions> listAll = new ArrayList<InvestmentInstitutions>();
 
 //        PageHelper.startPage(1, 80, false);
@@ -131,22 +132,15 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService {
      * @param pageSize 每页记录数
      * @return
      */
-    @Cacheable(value = "findFiveInvestment", keyGenerator = "wiselyKeyGenerator")
-//    @CacheEvict(value = "findFiveInvestment", allEntries = true)
+  @Cacheable(value = "findFiveInvestment", keyGenerator = "wiselyKeyGenerator")
+   //@CacheEvict(value = "findFiveInvestment", allEntries = true)
     @Override
-    public CommonDto<List<InvestmentInstitutions>> findFiveInvestment(Integer pageNum, Integer pageSize) {
-        CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
+    public CommonDto<List<Map<String, Object>>> findFiveInvestment(Integer pageNum, Integer pageSize) {
+        CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
 
         //计算查询起始记录
         Integer beginNum = (pageNum - 1) * pageSize;
-//        PageHelper.startPage(pageNum, pageSize, false);
-//        Example example = new Example(InvestmentInstitutions.class);
-//        example.and().andEqualTo("type", 1).andNotEqualTo("shortName", null).andNotEqualTo("shortName", "");
-//        example.setOrderByClause("ID");
-//
-//        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.selectByExample(example);
-
-        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.findInvestment50("1", beginNum, pageSize,beginTime,endTime);
+        List<Map<String,Object>> investmentInstitutions = investmentInstitutionsMapper.findInvestment50("1", beginNum, pageSize,beginTime,endTime);
         //判断是否还有查询结果
 //        if(investmentInstitutions.size() <= 0){
 //            result.setStatus(202);
@@ -168,10 +162,10 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService {
      * @return
      */
     @Cacheable(value = "findNotFiveInvestment", keyGenerator = "wiselyKeyGenerator")
-//    @CacheEvict(value = "findNotFiveInvestment", allEntries = true)
+   //@CacheEvict(value = "findNotFiveInvestment", allEntries = true)
     @Override
-    public CommonDto<List<InvestmentInstitutions>> findNotFiveInvestment(Integer pageNum, Integer pageSize) {
-        CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
+    public CommonDto<List<Map<String, Object>>> findNotFiveInvestment(Integer pageNum, Integer pageSize) {
+        CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
 
         //计算查询起始记录
         Integer beginNum = (pageNum - 1) * pageSize;
@@ -190,7 +184,7 @@ public class InvestmentBackstageImpl implements InvestmentBackstageService {
 //        example.and().andEqualTo("type", 0).andNotEqualTo("shortName", null).andNotEqualTo("shortName", "");
 //        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.selectByExample(example);
 
-        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.findInvestmentall("-1", beginNum, pageSize,beginTime,endTime);
+        List<Map<String, Object>> investmentInstitutions = investmentInstitutionsMapper.findInvestmentall("-1", beginNum, pageSize,beginTime,endTime);
         //判断是否还有查询结果
 //        if(investmentInstitutions.size() <= 0){
 //            result.setStatus(202);
