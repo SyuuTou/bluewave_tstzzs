@@ -538,6 +538,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		String kaitou = "";
 		String name = "";
 		String xiaoxi = "";
+		String type = null;
 		if (status == 0 ){
 			result.setData(null);
 			result.setMessage("传入类型错误");
@@ -549,7 +550,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		if (status == 1 || status == 2){
 			kaitou = "抱歉！";
 		}else {
-			kaitou = "恭喜您";
+			kaitou = "恭喜成为: ";
 		}
 
 		switch (status){
@@ -559,11 +560,14 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				break;
 			case 2:name = "您已被取消投资人资格";
 				break;
-			case 3:name = "您已被认证为个人投资人";
+			case 3:name = "个人投资人";
+				type = "";
 				break;
-			case 4:name = "您已被认证为机构投资人";
+			case 4:name = "机构投资人";
+				type = "";
 				break;
-			case 5:name = "您已被认证为vip投资人！";
+			case 5:name = "VIP投资人";
+				type = "";
 				break;
 		}
 
@@ -583,21 +587,22 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 
 		Users users = usersMapper.selectByPrimaryKey(userId);
-
+		String desc = users.getActualName() +" " + users.getCompanyName() + " " + users.getCompanyDuties();
 
 
 		try {
 			List<WxMaTemplateMessage.Data> datas = new ArrayList<>();
 			DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-			datas.add(new WxMaTemplateMessage.Data("keyword1.DATA",xiaoxi));
-			datas.add(new WxMaTemplateMessage.Data("keyword2.DATA",dtf.print(DateTime.now())));
+			datas.add(new WxMaTemplateMessage.Data("keyword1",type));
+			datas.add(new WxMaTemplateMessage.Data("keyword2",xiaoxi,"EA4343"));
+			datas.add(new WxMaTemplateMessage.Data("keyword3",desc));
 			try {
 				if (status == 1 || status == 2) {//认证失败
 					this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("RcjdkVcWR9K3Jmfz2HVbMKKLoVHhXEJkpz42Lgr6t6E").formId(formId).toUser(openId).data(datas).build());
 				}
 
 				if (status == 3 || status == 4 || status == 5) { //认证成功
-					this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("IQL59_p78hezrN9Oz6UASjmCeN6ltxk6XNb8FAuezI8").formId(formId).toUser(openId).data(datas).page("boot").build());
+					this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("IQL59_p78hezrN9Oz6UAStwSyFk8ZbLgVPaPqEi1KyA").formId(formId).toUser(openId).data(datas).page("pages/boot/boot").build());
 				}
 			} catch (WxErrorException e) {
 				e.printStackTrace();
