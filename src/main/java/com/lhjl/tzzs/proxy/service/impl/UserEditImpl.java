@@ -803,7 +803,7 @@ public class UserEditImpl implements UserEditService {
         if (org.apache.commons.lang3.StringUtils.isAnyBlank(users.getActualName(),users.getCompanyName(),users.getCompanyDuties(),users.getDesc(),users.getEmail(),users.getWechat())){
             obj.put("success",true);
             result.setStatus(208);
-            result.setMessage("完善用户信息，即可获得3天查看天使投资指数统计数据和项目列表权限");
+            result.setMessage("完善个人资料，赠送普通会员，即可获得3天查看天使投资指数统计数据和项目列表权限");
             result.setData(obj);
         }else {
             result.setStatus(207);
