@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaKefuMessage;
+import cn.binarywang.wx.miniapp.bean.WxMaTemplateMessage;
 import com.lhjl.tzzs.proxy.dto.*;
 
 import com.lhjl.tzzs.proxy.mapper.UsersWeixinMapper;
@@ -239,6 +240,7 @@ public class InvestorsApprovalConroller {
 		 message.setToUser(openId);
 
 		 try {
+		 	//wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().toUser(openId).data().build());
 			 wxService.getMsgService().sendKefuMsg(message);
 			 result.setStatus(200);
 			 result.setMessage("发送成功");
