@@ -5,10 +5,19 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.bean.WxMaKefuMessage;
 import com.lhjl.tzzs.proxy.dto.*;
+
+import com.lhjl.tzzs.proxy.mapper.UsersWeixinMapper;
 import com.lhjl.tzzs.proxy.model.InvestorsApprovalNew;
+
+import com.lhjl.tzzs.proxy.model.UsersWeixin;
+
+import me.chanjar.weixin.common.exception.WxErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +36,12 @@ public class InvestorsApprovalConroller {
 
 	@Value("${pageSize}")
 	private String defaultPageSize;
+
+	@Autowired
+	private WxMaService wxService;
+
+	@Resource
+	private UsersWeixinMapper usersWeixinMapper;
 
 	/**
 	 * 投资人记录信息
@@ -164,4 +179,80 @@ public class InvestorsApprovalConroller {
 		return result;
 	}
 
+
+	@GetMapping("/send/approvallog")
+	public CommonDto<String> sendApprovalLog(Integer id,Integer status){
+		CommonDto<String> result = new CommonDto<>();
+
+		UsersWeixin userswx = new UsersWeixin();
+		userswx.setUserId(id);
+
+		String kaitou = "";
+		String leixing = "";
+		String xiaoxi = "";
+		if (status == 0 ){
+			result.setData(null);
+			result.setMessage("传入类型错误");
+			result.setStatus(50001);
+
+			return result;
+		}
+
+		if (status == 1 || status == 2){
+			kaitou = "抱歉！";
+		}else {
+			kaitou = "恭喜您";
+		}
+
+		switch (status){
+			case 1:leixing = "您的投资人认证未通过审核，请您重新填写";
+			break;
+			case 2:leixing = "您已被取消投资人资格";
+			break;
+			case 3:leixing = "您已被认证为个人投资人";
+			break;
+			case 4:leixing = "您已被认证为机构投资人";
+			break;
+			case 5:leixing = "您已被认证为vip投资人！";
+			break;
+		}
+
+		xiaoxi = kaitou + leixing;
+
+		String openId = "";
+		List<UsersWeixin> usersWeixins = usersWeixinMapper.select(userswx);
+		if (usersWeixins.size() > 0){
+			openId = usersWeixins.get(0).getOpenid();
+		}else {
+			result.setData(null);
+			result.setMessage("没有找到用户的openId信息");
+			result.setStatus(50001);
+
+			return result;
+		}
+
+
+		WxMaKefuMessage message = new WxMaKefuMessage();
+		 message.setDescription("恭喜");
+		 message.setMsgType("text");
+		 message.setContent(xiaoxi);
+		 message.setToUser(openId);
+
+		 try {
+			 wxService.getMsgService().sendKefuMsg(message);
+			 result.setStatus(200);
+			 result.setMessage("发送成功");
+			 result.setData(null);
+
+		 }catch (WxErrorException e){
+		 	log.info(e.getLocalizedMessage());
+		 	result.setData(null);
+		 	result.setMessage("服务器端发生错误");
+		 	result.setStatus(502);
+
+		 }
+
+
+		return result;
+	}
 }
