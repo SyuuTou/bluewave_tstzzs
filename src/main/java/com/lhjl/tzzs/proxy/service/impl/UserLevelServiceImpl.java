@@ -696,9 +696,9 @@ public class UserLevelServiceImpl implements UserLevelService {
 
                 result.setStatus(204);
                 if(type == 1){
-                    result.setMessage("约谈50项目，共消费"+(-consumeNum)+"金币，一次性收费后不再计费");
+                    result.setMessage("约谈50指数机构所投资项目，共消费"+(-consumeNum)+"金币，一次性收费后不再计费");
                 }else{
-                    result.setMessage("约谈非50项目，共消费"+(-consumeNum)+"金币，一次性收费后不再计费");
+                    result.setMessage("约谈非50指数机构所投资项目，共消费"+(-consumeNum)+"金币，一次性收费后不再计费");
                 }
 
                 data.put("consumeNum", -consumeNum);
@@ -718,9 +718,9 @@ public class UserLevelServiceImpl implements UserLevelService {
             }else{
                 result.setStatus(203);
                 if(type == 1){
-                    result.setMessage("约谈50项目需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
+                    result.setMessage("约谈50指数机构所投资项目需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
                 }else{
-                    result.setMessage("约谈非50项目需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
+                    result.setMessage("约谈非50指数机构所投资项目需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
                 }
                 data.put("consumeNum", -consumeNum);
                 result.setData(data);
