@@ -77,6 +77,20 @@ public class InvestorsApprovalNew {
     private Integer leadership;
 
     /**
+     * 发微信消息的formId
+     */
+    @Column(name = "form_id")
+    private String formId;
+
+    public String getFormId() {
+        return formId;
+    }
+
+    public void setFormId(String formId) {
+        this.formId = formId;
+    }
+
+    /**
      * @return id
      */
     public Integer getId() {

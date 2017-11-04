@@ -359,6 +359,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			investorsApprovalNew.setSupplementaryExplanation(approval.getSupplementaryExplanation());
 			investorsApprovalNew.setUserid(approval.getUserid());
 			investorsApprovalNew.setWorkCard(approval.getWorkCard());
+			investorsApprovalNew.setFormId(approval.getFormId());
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String createTime = simpleDateFormat.format(approval.getCreateTime());
 			String reviewTime = simpleDateFormat.format(approval.getReviewTime());
