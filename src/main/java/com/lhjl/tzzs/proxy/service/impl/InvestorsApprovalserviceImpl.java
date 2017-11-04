@@ -14,6 +14,8 @@ import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserLevelService;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	@Resource
 	private UsersMapper usersMapper;
 	@Resource
+
 	private InvestorsMapper investorsMapper;
 	@Resource
 	private UserLevelService userLevelService;
@@ -584,15 +587,16 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 		try {
 			List<WxMaTemplateMessage.Data> datas = new ArrayList<>();
-			datas.add(new WxMaTemplateMessage.Data("keyword1.DATA",name));
-			datas.add(new WxMaTemplateMessage.Data("keyword2.DATA", DateTime.parse("yyyy-MM-dd HH:mm:ss").toString()));
+			DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+			datas.add(new WxMaTemplateMessage.Data("keyword1.DATA",xiaoxi));
+			datas.add(new WxMaTemplateMessage.Data("keyword2.DATA",dtf.print(DateTime.now())));
 			try {
 				if (status == 1 || status == 2) {//认证失败
 					this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("RcjdkVcWR9K3Jmfz2HVbMKKLoVHhXEJkpz42Lgr6t6E").formId(formId).toUser(openId).data(datas).build());
 				}
 
 				if (status == 3 || status == 4 || status == 5) { //认证成功
-					this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("IQL59_p78hezrN9Oz6UASjmCeN6ltxk6XNb8FAuezI8").formId(formId).toUser(openId).data(datas).build());
+					this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("IQL59_p78hezrN9Oz6UASjmCeN6ltxk6XNb8FAuezI8").formId(formId).toUser(openId).data(datas).page("boot").build());
 				}
 			} catch (WxErrorException e) {
 				e.printStackTrace();
