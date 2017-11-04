@@ -53,24 +53,24 @@
     WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
   </select>
 
-  <select id="findInvestment50" resultMap="BaseResultMapNew">
-    select ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case,
-     a.cc
-    from investment_institutions ii INNER join
+  <select id="findInvestment50" resultType="java.util.HashMap">
+    SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case,
+    a.cc
+    FROM investment_institutions ii INNER JOIN
     (
-      select count(*) cc,ps.investment_institutions_id from projects ps left join project_financing_log pfl on ps.id = pfl.project_id
-      where pfl.financing_time between #{beginTime} and #{endTime} and ps.investment_institutions_id is not null
-      group by ps.investment_institutions_id
-      order by cc desc
-    )a on ii.id = a.investment_institutions_id and ii.logo is not null and ii.logo != ''
-    where ii.type = 1
-    order by a.cc desc
+    SELECT COUNT(*) cc,ps.investment_institutions_id FROM projects ps LEFT JOIN project_financing_log pfl ON ps.id = pfl.project_id
+    WHERE pfl.financing_time BETWEEN #{beginTime} and #{endTime} AND ps.investment_institutions_id IS NOT NULL
+    GROUP BY ps.investment_institutions_id
+    ORDER BY cc DESC
+    )a ON ii.id = a.investment_institutions_id AND ii.logo IS NOT NULL AND ii.logo != ''
+    WHERE ii.type = 1
+    ORDER BY a.cc DESC
     <if test="beginNum != null and pageSize != null">
       LIMIT #{beginNum},#{pageSize}
     </if>
   </select>
 
-  <select id="findInvestmentall" resultMap="BaseResultMapNew">
+  <select id="findInvestmentall" resultType="java.util.HashMap">
     select ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case,
     a.cc
     from investment_institutions ii INNER join

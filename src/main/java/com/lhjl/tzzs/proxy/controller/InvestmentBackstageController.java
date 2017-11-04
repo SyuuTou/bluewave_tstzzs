@@ -68,8 +68,8 @@ public class InvestmentBackstageController {
      * @return
      */
     @PostMapping("find/investment/five")
-    public CommonDto<List<InvestmentInstitutions>> findFiveInvestment(@RequestBody PageInfoDto body){
-        CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
+    public CommonDto<List<Map<String, Object>>> findFiveInvestment(@RequestBody PageInfoDto body){
+        CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
         Integer pageNum = body.getPageNum();
         Integer pageSize = body.getPageSize();
         try {
@@ -94,8 +94,8 @@ public class InvestmentBackstageController {
      * @return
      */
     @PostMapping("find/investment/notfive")
-    public CommonDto<List<InvestmentInstitutions>> findNotFiveInvestment(@RequestBody PageInfoDto body){
-        CommonDto<List<InvestmentInstitutions>> result = new CommonDto<List<InvestmentInstitutions>>();
+    public CommonDto<List<Map<String, Object>>> findNotFiveInvestment(@RequestBody PageInfoDto body){
+        CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
         Integer pageNum = body.getPageNum();
         Integer pageSize = body.getPageSize();
         try {
