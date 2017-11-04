@@ -19,7 +19,9 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="leadership" jdbcType="INTEGER" property="leadership" />
     <result column="investors_approvalcol_case" jdbcType="VARCHAR" property="investorsApprovalcolCase" />
+    <result column="form_id" jdbcType="VARCHAR" property="formId" />
   </resultMap>
+
 
    <select id="findInvestorsApproval" parameterType="INTEGER" resultType="java.util.HashMap">
    SELECT i.* FROM investors_approval i  WHERE i.userid=#{userId} ORDER BY i.review_time DESC LIMIT 1

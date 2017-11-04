@@ -84,6 +84,12 @@ public class InvestorsApproval {
     private String investorsApprovalcolCase;
 
     /**
+     * 发微信消息的formId
+     */
+    @Column(name = "form_id")
+    private String formId;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -329,5 +335,23 @@ public class InvestorsApproval {
      */
     public void setInvestorsApprovalcolCase(String investorsApprovalcolCase) {
         this.investorsApprovalcolCase = investorsApprovalcolCase;
+    }
+
+    /**
+     * 获取发微信消息的formId
+     *
+     * @return form_id - 发微信消息的formId
+     */
+    public String getFormId() {
+        return formId;
+    }
+
+    /**
+     * 设置发微信消息的formId
+     *
+     * @param formId 发微信消息的formId
+     */
+    public void setFormId(String formId) {
+        this.formId = formId;
     }
 }
