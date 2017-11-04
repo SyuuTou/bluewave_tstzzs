@@ -12,7 +12,17 @@ public class TouZiDto {
 	private String tempFilePaths; //图片
 	private String token;  //认证id
 	private String investorsApprovalcolCase;//投资人投资案例
+	private String formId;
+	
 
+
+	public String getFormId() {
+		return formId;
+	}
+
+	public void setFormId(String formId) {
+		this.formId = formId;
+	}
 
 	public String getInvestorsApprovalcolCase() {
 		return investorsApprovalcolCase;
