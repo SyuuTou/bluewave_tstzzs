@@ -724,7 +724,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				UserIntegrals userIntegrals2 =new UserIntegrals();
 				userIntegrals2.setUserId(userId);
 				userIntegrals2.setConsumeNum(0);
-				String sKey = userIntegralsMapper.findBySkey(leId+1);
+				String sKey = userIntegralsMapper.findBySkey(leId);
 				userIntegrals2.setSceneKey(sKey);
 				jb=qj.intValue();
 				Integer snum =(int)(jb*bei);
