@@ -782,7 +782,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					result.setMessage("充值金额不能小于365元");
 				}
 			}else {
-					leId = 0;
+					leId = 1;
 					Float bei = usersMapper.findByBei(leId + 1);
 					UserIntegrals userIntegrals = new UserIntegrals();
 					userIntegrals.setUserId(userId);
