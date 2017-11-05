@@ -724,7 +724,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				UserIntegrals userIntegrals2 =new UserIntegrals();
 				userIntegrals2.setUserId(userId);
 				userIntegrals2.setConsumeNum(0);
-				String sKey = userIntegralsMapper.findBySkey(leId);
+				String sKey = userIntegralsMapper.findBySkey(leId+1);
 				userIntegrals2.setSceneKey(sKey);
 				jb=qj.intValue();
 				Integer snum =(int)(jb*bei);
@@ -782,7 +782,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					result.setMessage("充值金额不能小于365元");
 				}
 			}else {
-					leId = 1;
+					leId = 0;
 					Float bei = usersMapper.findByBei(leId + 1);
 					UserIntegrals userIntegrals = new UserIntegrals();
 					userIntegrals.setUserId(userId);
@@ -844,7 +844,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					//购买金币赠送的记录
 					UserIntegralConsume userIntegrals4 =new UserIntegralConsume();
 					userIntegrals4.setUserId(userId);
-					String sKey4 = userIntegralsMapper.findBySkey(leId);
+					String sKey4 = userIntegralsMapper.findBySkey(leId+1);
 					userIntegrals4.setSceneKey(sKey4);
 					jb=qj.intValue();
 					Integer snum4 =(int)(jb*bei);
