@@ -1486,12 +1486,22 @@ public class UserLevelServiceImpl implements UserLevelService {
             Integer leId1 =usersMapper.findByUserid(userId);
             if(leId1 != null){
 
-                Integer dnum1 = userIntegralsMapper.findByQnum(leId1);
+                //Integer dnum1 = userIntegralsMapper.findByQnum(leId1);
+            	MetaUserLevel userLevel11 =new MetaUserLevel();
+            	userLevel11.setId(leId1);
+            	MetaUserLevel m2 = metaUserLevelMapper.selectByPrimaryKey(userLevel11);
+                BigDecimal qj2=m2.getAmount();
+                Integer dnum1=qj2.intValue();
                 Float bei1 =usersMapper.findByBei(leId1);
                 Integer hnum1 =(int)(dnum1*(1+bei1));
                 //购买或升级买的金币
                 Float bei2 =usersMapper.findByBei(leId);
-                Integer qj = userIntegralsMapper.findByQnum(leId);
+                //Integer qj = userIntegralsMapper.findByQnum(leId);
+                MetaUserLevel userLevel1 =new MetaUserLevel();
+                userLevel1.setId(leId);
+            	MetaUserLevel m1 = metaUserLevelMapper.selectByPrimaryKey(userLevel1);
+                BigDecimal qj1=m1.getAmount();
+                Integer qj=qj1.intValue();
                 Integer hnum2 =(int)(qj*(1+bei2));
                 Integer hnum =hnum2-hnum1;
                 //userIntegrals2.setSceneKey(sKey);
@@ -1536,7 +1546,12 @@ public class UserLevelServiceImpl implements UserLevelService {
                 Integer hnum1 = 0;
                 //购买或升级买的金币
                 Float bei2 =usersMapper.findByBei(leId);
-                Integer qj = userIntegralsMapper.findByQnum(leId);
+                //Integer qj = userIntegralsMapper.findByQnum(leId);
+                MetaUserLevel userLevel1 =new MetaUserLevel();
+                userLevel1.setId(leId);
+            	MetaUserLevel m1 = metaUserLevelMapper.selectByPrimaryKey(userLevel1);
+                BigDecimal qj1=m1.getAmount();
+                Integer qj=qj1.intValue();
                 Integer hnum2 =(int)(qj*(1+bei2));
                 Integer hnum =hnum2-hnum1;
                 //userIntegrals2.setSceneKey(sKey);
@@ -1592,7 +1607,12 @@ public class UserLevelServiceImpl implements UserLevelService {
             Integer leId1 =usersMapper.findByUserid(userId);
             if(leId1 != null){
                 //购买或购买升级的
-                Integer dnum1 = userIntegralsMapper.findByQnum(leId1);
+                //Integer dnum1 = userIntegralsMapper.findByQnum(leId1);
+            	MetaUserLevel userLevel1 =new MetaUserLevel();
+                userLevel1.setId(leId1);
+            	MetaUserLevel m1 = metaUserLevelMapper.selectByPrimaryKey(userLevel1);
+                BigDecimal qj1=m1.getAmount();
+                Integer dnum1=qj1.intValue();
                 Float bei1 =usersMapper.findByBei(leId1);
                 Integer hnum1 =(int)(dnum1*(1+bei1));
                 //购买或升级前买的金币
@@ -1601,7 +1621,12 @@ public class UserLevelServiceImpl implements UserLevelService {
                 Integer hnum = null;
                 if(leId != null){
                     Float bei2 =usersMapper.findByBei(leId);
-                    Integer qj = userIntegralsMapper.findByQnum(leId);
+                    //Integer qj = userIntegralsMapper.findByQnum(leId);
+                    MetaUserLevel userLevel =new MetaUserLevel();
+                    userLevel.setId(leId);
+                	MetaUserLevel m = metaUserLevelMapper.selectByPrimaryKey(userLevel);
+                    BigDecimal qj2=m.getAmount();
+                    Integer qj=qj2.intValue();
                     Integer hnum2 =(int)(qj*(1+bei2));
                     hnum =hnum1-hnum2;
                 }else{
@@ -1651,7 +1676,12 @@ public class UserLevelServiceImpl implements UserLevelService {
                 Integer hnum1 = 0;
                 //购买或升级买的金币
                 Float bei2 =usersMapper.findByBei(leId1);
-                Integer qj = userIntegralsMapper.findByQnum(leId1);
+                //Integer qj = userIntegralsMapper.findByQnum(leId1);
+                MetaUserLevel userLevel =new MetaUserLevel();
+                userLevel.setId(leId1);
+            	MetaUserLevel m = metaUserLevelMapper.selectByPrimaryKey(userLevel);
+                BigDecimal qj2=m.getAmount();
+                Integer qj=qj2.intValue();
                 Integer hnum2 =(int)(qj*(1+bei2));
                 Integer hnum =hnum2-hnum1;
                 //userIntegrals2.setSceneKey(sKey);
