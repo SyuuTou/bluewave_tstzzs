@@ -667,7 +667,7 @@ public class UserLevelServiceImpl implements UserLevelService {
 
             if(userLevel < 4){
                 result.setStatus(202);
-                result.setMessage("约谈项目，仅对VIP投资人开放");
+                result.setMessage(tishi);
                 result.setData(data);
                 return result;
             }
