@@ -51,14 +51,14 @@ public class ProjectAmountImpl implements ProjectAmountService {
                 if (avgamount == null){
                     avgamount = projectsMapper.findProjectByRoundAndC(stage,city);
                     if(avgamount == null){
-                        avgamount = projectsMapper.findProjectByRoundAndC(segmentation,null);
+                        avgamount = projectsMapper.findProjectByRoundAndE(null,stage);
                     }
 
                 }
 
                 ProjectFinancingLog projectFinancingLog = new ProjectFinancingLog();
                 projectFinancingLog.setAmount(avgamount);
-                projectFinancingLog.setCalculationAmountStatus(1);
+                projectFinancingLog.setAmountStatus(1);
                 projectFinancingLog.setId(id);
 
                 projectFinancingLogMapper.updateByPrimaryKeySelective(projectFinancingLog);
@@ -115,7 +115,7 @@ public class ProjectAmountImpl implements ProjectAmountService {
                     ProjectFinancingLog projectFinancingLog = new ProjectFinancingLog();
 
                     projectFinancingLog.setTotalAmount(avgallamount);
-                    projectFinancingLog.setCalculationAmountStatus(1);
+                    projectFinancingLog.setTotalAmountStatus(1);
                     projectFinancingLog.setId(id);
 
                     projectFinancingLogMapper.updateByPrimaryKeySelective(projectFinancingLog);
