@@ -147,6 +147,12 @@ public class UserWeixinImpl implements UserWeixinService {
                 result.setData("");
                 return result;
             }
+            if (nickName.length()<=3){
+                result.setStatus(200);
+                result.setMessage("类真实姓名");
+                result.setData(nickName);
+                return result;
+            }
             String name = null;
             if (startIndex+3<=nickName.length()) {
                 name = nickName.substring(startIndex, startIndex + 3);

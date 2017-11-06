@@ -148,12 +148,11 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         ) b
     </select>
 
-    <select id="queryValuation" resultMap="histogramResultMap">
+    <select id="queryAmountAvg" resultType="decimal">
 
 
-        select money,dcount from (
-        SELECT dis money, count(1) dcount from (
-        select CEILING(pfl.valuation/500) * 500 as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        SELECT avg(amount) from (
+        select pfl.${flag} amount  from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
         right JOIN project_segmentation ps on ps.project_id = mf.id
         LEFT JOIN founders f on mf.id = f.project_id
         right join founders_education  fe on fe.founder_ID = f.id
@@ -162,7 +161,82 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
             LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
         </if>
 
-        where pfl.valuation > 0 and  pfl.financing_time between #{beginTime} and #{endTime} AND pfl.${flag}_status = 0
+        where pfl.${flag} > 0 and  pfl.financing_time between #{beginTime} and #{endTime} AND pfl.${flag}_status = 0
+        <if test="roundName != '' and roundName != null">
+            and pfl.stage = #{roundName}
+        </if>
+        <if test="industryName != '' and industryName != null">
+            and ps.segmentation_name = #{industryName}
+        </if>
+        <if test="cityName != '' and cityName != null">
+            and mf.city =#{cityName}
+        </if>
+        <if test="educationName != '' and educationName != null">
+            and fe.education_experience =#{educationName}
+        </if>
+        <if test="workName != '' and workName != null">
+            and fw.work_experience =#{workName}
+        </if>
+        <if test="investment != '' and investment != null and investment != -1">
+            AND ii.type = #{investment}
+        </if>
+        ORDER BY pfl.${flag}
+        limit ${startIndex},${limit}
+        ) a
+
+
+    </select>
+
+    <select id="queryValuationAvg" resultType="decimal">
+        SELECT avg(a.valuation) from (
+        select pfl.valuation from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        right JOIN project_segmentation ps on ps.project_id = mf.id
+        LEFT JOIN founders f on mf.id = f.project_id
+        right join founders_education  fe on fe.founder_ID = f.id
+        right join founders_work fw on fw.founder_id = f.id
+        <if test="investment != '' and investment != null and investment != -1">
+            LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
+        </if>
+
+        where pfl.valuation > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
+        <if test="roundName != '' and roundName != null">
+            and pfl.stage = #{roundName}
+        </if>
+        <if test="industryName != '' and industryName != null">
+            and ps.segmentation_name = #{industryName}
+        </if>
+        <if test="cityName != '' and cityName != null">
+            and mf.city =#{cityName}
+        </if>
+        <if test="educationName != '' and educationName != null">
+            and fe.education_experience =#{educationName}
+        </if>
+        <if test="workName != '' and workName != null">
+            and fw.work_experience =#{workName}
+        </if>
+        <if test="investment != '' and investment != null and investment != -1">
+            AND ii.type = #{investment}
+        </if>
+        ORDER BY pfl.valuation
+        limit ${startIndex},${limit}
+        ) a
+    </select>
+
+    <select id="queryValuation" resultMap="histogramResultMap">
+
+
+        select money,dcount from (
+        SELECT dis money, count(1) dcount from (
+        select round(pfl.valuation/${granularity}) * ${granularity} as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        right JOIN project_segmentation ps on ps.project_id = mf.id
+        LEFT JOIN founders f on mf.id = f.project_id
+        right join founders_education  fe on fe.founder_ID = f.id
+        right join founders_work fw on fw.founder_id = f.id
+        <if test="investment != '' and investment != null and investment != -1">
+            LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
+        </if>
+
+        where pfl.valuation > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
         <if test="roundName != '' and roundName != null">
             and pfl.stage = #{roundName}
         </if>
@@ -190,7 +264,7 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
     <select id="queryFinancingAmount" resultMap="histogramResultMap">
         select money,dcount from (
         SELECT dis money, count(1) dcount from (
-        select CEILING(pfl.${flag}/${granularity}) * ${granularity} as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        select round(pfl.${flag}/${granularity}) * ${granularity} as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
         right JOIN project_segmentation ps on ps.project_id = mf.id
         LEFT JOIN founders f on mf.id = f.project_id
         right join founders_education  fe on fe.founder_ID = f.id
@@ -226,8 +300,8 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
 
     <select id="queryFinancingAvgAmount" resultType="decimal">
 
-        SELECT avg(amount) money from (
-        select pfl.${flag} amount, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        SELECT avg(amount) from (
+        select pfl.${flag} amount  from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
         right JOIN project_segmentation ps on ps.project_id = mf.id
         LEFT JOIN founders f on mf.id = f.project_id
         right join founders_education  fe on fe.founder_ID = f.id
@@ -255,9 +329,9 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         <if test="investment != '' and investment != null and investment != -1">
             AND ii.type = #{investment}
         </if>
-        group by pfl.stage,mf.full_name
-
-        ) b
+        ORDER BY pfl.${flag}
+        limit ${startIndex},${limit}
+        ) a
     </select>
 
 </mapper>
