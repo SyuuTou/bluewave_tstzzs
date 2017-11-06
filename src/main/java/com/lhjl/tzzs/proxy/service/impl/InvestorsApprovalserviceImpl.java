@@ -219,7 +219,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				map.put("renzhengtouzirenshenhebiao7additional",null);//其他说明
 				map.put("renzhengtouzirenshenhebiao7assumeoffi",users.getCompanyDuties());
 				map.put("renzhengtouzirenshenhebiao7certificat",users.getCompanyName());
-				map.put("renzhengtouzirenshenhebiao7frontofbus",null);
+				map.put("renzhengtouzirenshenhebiao7frontofbus",users.getWorkCard());
 				map.put("renzhengtouzirenshenhebiao7wherecompa",null);
 				map.put("investorsApprovalcolCase",anliArray);
 				Map<String,Object> renzhenleixin =new HashMap<>();
