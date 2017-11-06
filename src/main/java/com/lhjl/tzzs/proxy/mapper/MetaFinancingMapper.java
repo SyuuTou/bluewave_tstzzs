@@ -22,9 +22,9 @@ public interface MetaFinancingMapper  extends OwnerMapper<MetaFinancing> {
 
     List<LabelList> queryHotIndustry();
 
-    List<HistogramList> queryValuation(@Param("investment") String investment, @Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("index") Integer index, @Param("size") Integer size);
+    List<HistogramList> queryValuation(@Param("investment") String investment, @Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("granularity") Integer granularity, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("index") Integer index, @Param("size") Integer size);
 
-    List<HistogramList> queryFinancingAmount(@Param("investment") String investment, @Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName,@Param("granularity") Integer granularity, @Param("flag") String flag,@Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("index") Integer index, @Param("size") Integer size);
+    List<HistogramList> queryFinancingAmount(@Param("investment") String investment, @Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("granularity") Integer granularity, @Param("flag") String flag, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("index") Integer index, @Param("size") Integer size, @Param("startIndex") Integer startIndex, @Param("limit") Integer limit);
 
     Map<String,Object> queryFinancingCount(@Param("investment") String investment, @Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("granularity") Integer granularity, @Param("flag") String flag, @Param("beginTime") String beginTime, @Param("endTime") String endTime);
 
@@ -35,5 +35,7 @@ public interface MetaFinancingMapper  extends OwnerMapper<MetaFinancing> {
     List<HistogramList> queryFinancingAmount(Map<String, String> queryAmount);
 
 
-    BigDecimal queryFinancingAvgAmount(@Param("investment") String investment, @Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName,@Param("granularity") Integer granularity, @Param("flag") String flag,@Param("beginTime") String beginTime, @Param("endTime") String endTime);
+    BigDecimal queryFinancingAvgAmount(@Param("investment") String investment, @Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("granularity") Integer granularity, @Param("flag") String flag, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("startIndex") Integer startIndex, @Param("limit") Integer limit);
+
+    BigDecimal queryValuationAvg(@Param("investment") String investment, @Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("startIndex") Integer startIndex, @Param("limit") Integer limit);
 }

@@ -295,4 +295,21 @@ public class WxMaUserController {
         return "Ok";
     }
 
+    @PostMapping("check/{token}")
+    public CommonDto<String> checkName(@PathVariable String token){
+        CommonDto<String> result = null;
+
+        try {
+            result = userWeixinService.checkName(token);
+        } catch (Exception e) {
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result = new CommonDto<>();
+            result.setData("");
+            result.setMessage("error");
+            result.setStatus(500);
+        }
+
+        return result;
+    }
+
 }

@@ -35,6 +35,12 @@ public class EvaluateServiceImpl implements EvaluateService {
     @Value("${statistics.endTime}")
     private String endTime;
 
+    @Value("${statistics.avg.beginTime}")
+    private String avgBeginTime ;
+
+    @Value("${statistics.avg.endTime}")
+    private String avgEndTime;
+
     @Cacheable(value = "queryHotData",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<Map<String, List<LabelList>>> queryHotData() {
@@ -68,7 +74,7 @@ public class EvaluateServiceImpl implements EvaluateService {
     }
 
 
-//    @Cacheable(value = "valuation",keyGenerator = "wiselyKeyGenerator")
+    @Cacheable(value = "valuation",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<HistogramList>> valuation(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
 
@@ -80,6 +86,15 @@ public class EvaluateServiceImpl implements EvaluateService {
             result.setMessage("融资阶段必须选择。");
             return result;
         }
+
+        Integer granularity = null;
+
+        if (roundName.equals("天使轮")){
+            granularity = 500;
+        }else{
+            granularity = 500;
+        }
+
         List<HistogramList> dataList = null;
         Integer index = from * size;
         Map<String, Object> collect = financingMapper.queryValuationCount(investment,roundName,industryName,cityName,educationName,workName,beginTime,endTime);
@@ -90,7 +105,7 @@ public class EvaluateServiceImpl implements EvaluateService {
             result.setData(new ArrayList<HistogramList>(0));
             return result;
         }else{
-            dataList = financingMapper.queryValuation(investment,roundName,industryName,cityName,educationName,workName,beginTime,endTime,index,size);
+            dataList = financingMapper.queryValuation(investment,roundName,industryName,cityName,educationName,workName,granularity,beginTime,endTime,index,size);
         }
 
         if (dataList.size()>10){
@@ -113,11 +128,13 @@ public class EvaluateServiceImpl implements EvaluateService {
                 totalMoney += histogramList.getMoney() * histogramList.getDcount();
             }
 
-            if (totalMoney > 0) {
-                result.setAvgMoney(totalMoney / num);
-            }
+
         }
 
+        collect = financingMapper.queryValuationCount(investment,roundName,industryName,cityName,educationName,workName,avgBeginTime,avgEndTime);
+        total = Integer.valueOf(collect.get("total").toString());
+        BigDecimal avg = financingMapper.queryValuationAvg(investment,roundName,industryName,cityName,educationName,workName,avgBeginTime,avgEndTime,20, total);
+        result.setAvgMoney(avg.intValue());
         result.setMessage("success");
         result.setStatus(200);
         result.setData(dataList);
@@ -125,7 +142,7 @@ public class EvaluateServiceImpl implements EvaluateService {
         return result;
     }
 
-    @Cacheable(value = "financingAmount",keyGenerator = "wiselyKeyGenerator")
+//    @Cacheable(value = "financingAmount",keyGenerator = "wiselyKeyGenerator")
     @Override
     public DistributedCommonDto<List<HistogramList>> financingAmount(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
@@ -160,15 +177,17 @@ public class EvaluateServiceImpl implements EvaluateService {
         Map<String, Object> collect = null;
         collect = financingMapper.queryFinancingCount(investment,roundName,industryName,cityName,educationName,workName,granularity,flag, beginTime, endTime);
 
+
+
         Integer total = Integer.valueOf(collect.get("total").toString());
-        if (total < 5){
+        if (total < 10){
             result.setStatus(200);
             result.setMessage("no message");
             result.setData(new ArrayList<HistogramList>(0));
             return result;
 
         }else{
-            dataList = financingMapper.queryFinancingAmount(investment,roundName,industryName,cityName,educationName,workName,granularity,flag,beginTime,endTime,index,size);
+            dataList = financingMapper.queryFinancingAmount(investment,roundName,industryName,cityName,educationName,workName,granularity,flag,beginTime,endTime,index,size,20, total );
         }
 
         if (dataList.size()>10){
@@ -193,10 +212,15 @@ public class EvaluateServiceImpl implements EvaluateService {
                 totalMoney += histogramList.getMoney() * histogramList.getDcount();
             }
 
-            if (totalMoney > 0) {
-                result.setAvgMoney(totalMoney / num);
-            }
+
         }
+        collect = financingMapper.queryFinancingCount(investment,roundName,industryName,cityName,educationName,workName,granularity,flag, avgBeginTime,avgEndTime);
+
+
+
+        total = Integer.valueOf(collect.get("total").toString());
+        BigDecimal avg = financingMapper.queryFinancingAvgAmount(investment,roundName,industryName,cityName,educationName,workName,granularity,flag,avgBeginTime,avgEndTime,20, total );
+        result.setAvgMoney(avg.intValue());
         result.setMessage("success");
         result.setStatus(200);
         result.setData(dataList);
@@ -234,9 +258,15 @@ public class EvaluateServiceImpl implements EvaluateService {
         }else{
             flag = "total_amount";
         }
+        Map<String, Object> collect = null;
+        collect = financingMapper.queryFinancingCount(investment,roundName,industryName,cityName,educationName,workName,granularity,flag, avgBeginTime, avgEndTime);
 
-        BigDecimal avgAmount = financingMapper.queryFinancingAvgAmount( investment,  roundName,  industryName,  cityName,  educationName,  workName, granularity, flag,beginTime,endTime);
-        result.setData(avgAmount);
+
+
+        Integer total = Integer.valueOf(collect.get("total").toString());
+
+        BigDecimal avgAmount = financingMapper.queryFinancingAvgAmount( investment,  roundName,  industryName,  cityName,  educationName,  workName, granularity, flag,avgBeginTime,avgEndTime, 20, total );
+        result.setAvgMoney(avgAmount.intValue());
         result.setMessage("success");
         result.setStatus(200);
         return result;
