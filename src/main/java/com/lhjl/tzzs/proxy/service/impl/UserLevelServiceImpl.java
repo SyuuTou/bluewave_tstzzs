@@ -653,18 +653,26 @@ public class UserLevelServiceImpl implements UserLevelService {
         }
         //约谈消费
         if(INTERVIEW.equals(sceneKey)){
+            //查询项目信息(是否属于50机构)
+            Integer type = projectsMapper.findIvestmentTypeById(action.getProjectsId());
+            if(type == null){
+                type = 0;
+            }
+            String tishi = "";
+            if (type == 1){
+                tishi = "约谈50指数机构所投资项目，仅对VIP投资人开放";
+            }else{
+                tishi = "约谈行业指数机构所投资项目，仅对VIP投资人开放";
+            }
+
             if(userLevel < 4){
                 result.setStatus(202);
-                result.setMessage("约谈项目，仅对VIP投资人开放");
+                result.setMessage(tishi);
                 result.setData(data);
                 return result;
             }
 
-            //查询项目信息(是否属于50机构)
-            Integer type = projectsMapper.findIvestmentTypeById(action.getProjectsId());
-            if(type == null){
-               type = 0;
-            }
+
 
             data.put("type", type);
 
