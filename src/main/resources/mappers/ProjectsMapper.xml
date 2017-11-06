@@ -59,7 +59,7 @@
         UNION ALL
         SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE   mf.item_label LIKE  CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
         ) a
-        GROUP BY a.ID
+        GROUP BY a.short_name , a.stage
         ORDER BY a.evaluation_recommend DESC LIMIT #{sizea},#{froma}
     </select>
     <select id="findProjectByShortName"  parameterType="String" resultType="java.util.HashMap">
@@ -148,7 +148,9 @@
             <foreach item="item" index="index" collection="educational_background_descs" open="(" separator="," close=")">#{item}</foreach>
             )
         </if>
-        GROUP BY mf.id LIMIT #{sizea},#{froma}
+        GROUP BY mf.short_name, stage
+        ORDER BY mf.evaluation_recommend
+        LIMIT #{sizea},#{froma}
     </select>
 
     <select id="findByTodayProjects" resultMap="BaseResultMap" parameterType="com.lhjl.tzzs.proxy.model.Projects">
@@ -163,7 +165,7 @@
 
     <select id="findProjectBySviewA" resultType="java.util.HashMap">
        SELECT mf.id ID ,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation` segementation,
-        (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1)stage
+        (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1) stage
         FROM projects mf
         WHERE 1=1
         AND mf.id IN(SELECT a.project_id FROM project_financing_log a WHERE a.financing_time BETWEEN #{beginTime} AND #{endTime})
@@ -201,7 +203,9 @@
             <foreach item="item" index="index" collection="educational_background_descs" open="(" separator="," close=")">#{item}</foreach>
             )
         </if>
-        GROUP BY mf.id LIMIT #{sizea},#{froma}
+        GROUP BY mf.short_name, stage
+        ORDER BY mf.evaluation_recommend
+        LIMIT #{sizea},#{froma}
     </select>
 
     <!--查询机构类型-->

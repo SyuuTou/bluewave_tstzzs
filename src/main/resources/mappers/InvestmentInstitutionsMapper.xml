@@ -59,12 +59,12 @@
     FROM investment_institutions ii INNER JOIN
     (
     SELECT COUNT(*) cc,ps.investment_institutions_id FROM projects ps LEFT JOIN project_financing_log pfl ON ps.id = pfl.project_id
-    WHERE pfl.financing_time BETWEEN #{beginTime} and #{endTime} AND ps.investment_institutions_id IS NOT NULL
+    WHERE pfl.financing_time BETWEEN #{beginTime} and #{endTime} AND ps.investment_institutions_id IS NOT NULL AND ps.project_type = 0
     GROUP BY ps.investment_institutions_id
     ORDER BY cc DESC
     )a ON ii.id = a.investment_institutions_id AND ii.logo IS NOT NULL AND ii.logo != ''
     WHERE ii.type = 1
-    ORDER BY a.cc DESC
+    ORDER BY a.cc,ii.short_name DESC
     <if test="beginNum != null and pageSize != null">
       LIMIT #{beginNum},#{pageSize}
     </if>
@@ -75,14 +75,12 @@
     a.cc
     from investment_institutions ii INNER join
     (
-      select count(*) cc,ps.investment_institutions_id from (select * from projects where serial_number &lt; 500000
-      union all
-      select * from projects where serial_number &gt; 500000 and continent != '国外')  ps left join project_financing_log pfl on ps.id = pfl.project_id
-      where pfl.financing_time between #{beginTime} and #{endTime} and ps.investment_institutions_id is not null
-      group by ps.investment_institutions_id
-      order by cc desc
+    SELECT COUNT(*) cc,ps.investment_institutions_id FROM projects ps LEFT JOIN project_financing_log pfl ON ps.id = pfl.project_id
+    WHERE pfl.financing_time BETWEEN #{beginTime} and #{endTime} AND ps.investment_institutions_id IS NOT NULL AND ps.project_type = 0
+    GROUP BY ps.investment_institutions_id
+    ORDER BY cc DESC
     )a on ii.id = a.investment_institutions_id and ii.logo is not null and ii.logo != ''
-    order by a.cc desc
+    order by a.cc,ii.short_name desc
     <if test="beginNum != null and pageSize != null">
       LIMIT #{beginNum},#{pageSize}
     </if>
