@@ -147,7 +147,7 @@ public class UserWeixinImpl implements UserWeixinService {
                 result.setData("");
                 return result;
             }
-            if (nickName.length()<=3){
+            if (nickName.length()<=3&&nickName.length()>1){
                 result.setStatus(200);
                 result.setMessage("类真实姓名");
                 result.setData(nickName);
@@ -173,8 +173,10 @@ public class UserWeixinImpl implements UserWeixinService {
                 return result;
             }
         } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
             log.error(e.getMessage(),e.fillInStackTrace());
         } catch (Exception ex){
+            ex.printStackTrace();
             log.error(ex.getLocalizedMessage(), ex.fillInStackTrace());
             throw ex;
         }
