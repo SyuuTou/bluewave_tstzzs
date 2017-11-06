@@ -167,6 +167,7 @@
         FROM projects mf
         WHERE 1=1
         AND mf.id IN(SELECT a.project_id FROM project_financing_log a WHERE a.financing_time BETWEEN #{beginTime} AND #{endTime})
+        AND mf.id IN (SELECT project_id FROM project_financing_log WHERE stage IN('天使轮','种子轮','Pre-A轮'))
         <if test=" types !='' and types != null">
             AND mf.`investment_institutions_id` IN (SELECT id FROM investment_institutions WHERE `type` IN
             <foreach item="item" index="index" collection="types" open="(" separator="," close=")">#{item}</foreach>
@@ -178,11 +179,11 @@
             )
         </if>
 
-        <if test=" stages !='' and stages != null">
+       <!-- <if test=" stages !='' and stages != null">
             AND mf.id IN (SELECT project_id FROM project_financing_log WHERE stage IN
             <foreach item="item" index="index" collection="stages" open="(" separator="," close=")">#{item}</foreach>
             )
-        </if>
+        </if>-->
 
         <if test=" cities !='' and cities != null ">
             AND mf.city IN
