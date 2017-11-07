@@ -1,17 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectFinancingApprovalMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectFinancingApproval" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectFinancingApprovalMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectFinancingApproval">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="project_send_log_id" property="projectSendLogId" jdbcType="INTEGER" />
-    <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="financing_rounds" property="financingRounds" jdbcType="VARCHAR" />
-    <result column="financing_amount" property="financingAmount" jdbcType="DECIMAL" />
-    <result column="financing_currency" property="financingCurrency" jdbcType="INTEGER" />
-    <result column="transfer_shares" property="transferShares" jdbcType="DECIMAL" />
-    <result column="current_demand" property="currentDemand" jdbcType="VARCHAR" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="project_send_log_id" jdbcType="INTEGER" property="projectSendLogId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="financing_rounds" jdbcType="VARCHAR" property="financingRounds" />
+    <result column="financing_amount" jdbcType="DECIMAL" property="financingAmount" />
+    <result column="financing_currency" jdbcType="INTEGER" property="financingCurrency" />
+    <result column="transfer_shares" jdbcType="DECIMAL" property="transferShares" />
+    <result column="current_demand" jdbcType="VARCHAR" property="currentDemand" />
+    <result column="financing_useful" jdbcType="VARCHAR" property="financingUseful" />
   </resultMap>
 </mapper>

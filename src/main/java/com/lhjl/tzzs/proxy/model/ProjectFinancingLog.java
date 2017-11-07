@@ -34,7 +34,13 @@ public class ProjectFinancingLog {
     private BigDecimal amount;
 
     /**
-     * 投资币种（人民币/美元）
+     * 投资金额是否是计算值，1:为计算值，0:为原始值
+     */
+    @Column(name = "calculation_amount_status")
+    private Integer calculationAmountStatus;
+
+    /**
+     * 投资币种（0人民币/1美元）
      */
     private Integer currency;
 
@@ -55,6 +61,8 @@ public class ProjectFinancingLog {
      */
     @Column(name = "total_amount")
     private BigDecimal totalAmount;
+
+    private BigDecimal rate;
 
     /**
      * 本轮总出让股份
@@ -91,63 +99,22 @@ public class ProjectFinancingLog {
     private Integer status;
 
     /**
-     * 审核状态
+     * 审核状态，0表示审核未通过，1表示审核通过，默认0
      */
     @Column(name = "approval_status")
     private Integer approvalStatus;
 
     /**
-     * 审核时间
+     * 审核时间，审核时存，其他时候为空
      */
     @Column(name = "approval_time")
     private Date approvalTime;
-    @Column(name = "calculation_amount_status")
-    private Integer calculationAmountStatus;
 
-    private Integer totalAmountStatus;
-
+    @Column(name = "amount_status")
     private Integer amountStatus;
 
-    public Integer getTotalAmountStatus() {
-        return totalAmountStatus;
-    }
-
-    public void setTotalAmountStatus(Integer totalAmountStatus) {
-        this.totalAmountStatus = totalAmountStatus;
-    }
-
-    public Integer getAmountStatus() {
-        return amountStatus;
-    }
-
-    public void setAmountStatus(Integer amountStatus) {
-        this.amountStatus = amountStatus;
-    }
-
-    public Integer getCalculationAmountStatus() {
-        return calculationAmountStatus;
-    }
-
-    public void setCalculationAmountStatus(Integer calculationAmountStatus) {
-        this.calculationAmountStatus = calculationAmountStatus;
-    }
-
-    //
-    public Integer getApprovalStatus() {
-        return approvalStatus;
-    }
-
-    public void setApprovalStatus(Integer approvalStatus) {
-        this.approvalStatus = approvalStatus;
-    }
-
-    public Date getApprovalTime() {
-        return approvalTime;
-    }
-
-    public void setApprovalTime(Date approvalTime) {
-        this.approvalTime = approvalTime;
-    }
+    @Column(name = "total_amount_status")
+    private Integer totalAmountStatus;
 
     /**
      * @return ID
@@ -236,18 +203,36 @@ public class ProjectFinancingLog {
     }
 
     /**
-     * 获取投资币种（人民币/美元）
+     * 获取投资金额是否是计算值，1:为计算值，0:为原始值
      *
-     * @return currency - 投资币种（人民币/美元）
+     * @return calculation_amount_status - 投资金额是否是计算值，1:为计算值，0:为原始值
+     */
+    public Integer getCalculationAmountStatus() {
+        return calculationAmountStatus;
+    }
+
+    /**
+     * 设置投资金额是否是计算值，1:为计算值，0:为原始值
+     *
+     * @param calculationAmountStatus 投资金额是否是计算值，1:为计算值，0:为原始值
+     */
+    public void setCalculationAmountStatus(Integer calculationAmountStatus) {
+        this.calculationAmountStatus = calculationAmountStatus;
+    }
+
+    /**
+     * 获取投资币种（0人民币/1美元）
+     *
+     * @return currency - 投资币种（0人民币/1美元）
      */
     public Integer getCurrency() {
         return currency;
     }
 
     /**
-     * 设置投资币种（人民币/美元）
+     * 设置投资币种（0人民币/1美元）
      *
-     * @param currency 投资币种（人民币/美元）
+     * @param currency 投资币种（0人民币/1美元）
      */
     public void setCurrency(Integer currency) {
         this.currency = currency;
@@ -305,6 +290,20 @@ public class ProjectFinancingLog {
      */
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    /**
+     * @return rate
+     */
+    public BigDecimal getRate() {
+        return rate;
+    }
+
+    /**
+     * @param rate
+     */
+    public void setRate(BigDecimal rate) {
+        this.rate = rate;
     }
 
     /**
@@ -413,5 +412,69 @@ public class ProjectFinancingLog {
      */
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    /**
+     * 获取审核状态，0表示审核未通过，1表示审核通过，默认0
+     *
+     * @return approval_status - 审核状态，0表示审核未通过，1表示审核通过，默认0
+     */
+    public Integer getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    /**
+     * 设置审核状态，0表示审核未通过，1表示审核通过，默认0
+     *
+     * @param approvalStatus 审核状态，0表示审核未通过，1表示审核通过，默认0
+     */
+    public void setApprovalStatus(Integer approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+
+    /**
+     * 获取审核时间，审核时存，其他时候为空
+     *
+     * @return approval_time - 审核时间，审核时存，其他时候为空
+     */
+    public Date getApprovalTime() {
+        return approvalTime;
+    }
+
+    /**
+     * 设置审核时间，审核时存，其他时候为空
+     *
+     * @param approvalTime 审核时间，审核时存，其他时候为空
+     */
+    public void setApprovalTime(Date approvalTime) {
+        this.approvalTime = approvalTime;
+    }
+
+    /**
+     * @return amount_status
+     */
+    public Integer getAmountStatus() {
+        return amountStatus;
+    }
+
+    /**
+     * @param amountStatus
+     */
+    public void setAmountStatus(Integer amountStatus) {
+        this.amountStatus = amountStatus;
+    }
+
+    /**
+     * @return total_amount_status
+     */
+    public Integer getTotalAmountStatus() {
+        return totalAmountStatus;
+    }
+
+    /**
+     * @param totalAmountStatus
+     */
+    public void setTotalAmountStatus(Integer totalAmountStatus) {
+        this.totalAmountStatus = totalAmountStatus;
     }
 }

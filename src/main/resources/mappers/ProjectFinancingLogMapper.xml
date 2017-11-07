@@ -1,29 +1,30 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectFinancingLogMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectFinancingLog" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectFinancingLogMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectFinancingLog">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="ID" property="id" jdbcType="INTEGER" />
-    <result column="project_id" property="projectId" jdbcType="INTEGER" />
-    <result column="financing_time" property="financingTime" jdbcType="DATE" />
-    <result column="stage" property="stage" jdbcType="VARCHAR" />
-    <result column="amount" property="amount" jdbcType="DECIMAL" />
-    <result column="currency" property="currency" jdbcType="INTEGER" />
-    <result column="amount_status" property="amountStatus" jdbcType="INTEGER" />
-    <result column="calculation_amount_status" property="calculationAmountStatus" jdbcType="INTEGER" />
-    <result column="stock_right" property="stockRight" jdbcType="DECIMAL" />
-    <result column="pr_amount" property="prAmount" jdbcType="DECIMAL" />
-    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
-    <result column="total_amount_status" property="totalAmountStatus" jdbcType="INTEGER" />
-    <result column="share_divest" property="shareDivest" jdbcType="VARCHAR" />
-    <result column="valuation" property="valuation" jdbcType="DECIMAL" />
-    <result column="Investment_institutions_list" property="investmentInstitutionsList" jdbcType="VARCHAR" />
-    <result column="proportion_list" property="proportionList" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="status" property="status" jdbcType="INTEGER" />
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="financing_time" jdbcType="DATE" property="financingTime" />
+    <result column="stage" jdbcType="VARCHAR" property="stage" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="calculation_amount_status" jdbcType="INTEGER" property="calculationAmountStatus" />
+    <result column="currency" jdbcType="INTEGER" property="currency" />
+    <result column="stock_right" jdbcType="DECIMAL" property="stockRight" />
+    <result column="pr_amount" jdbcType="DECIMAL" property="prAmount" />
+    <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="rate" jdbcType="DECIMAL" property="rate" />
+    <result column="share_divest" jdbcType="VARCHAR" property="shareDivest" />
+    <result column="valuation" jdbcType="DECIMAL" property="valuation" />
+    <result column="Investment_institutions_list" jdbcType="VARCHAR" property="investmentInstitutionsList" />
+    <result column="proportion_list" jdbcType="VARCHAR" property="proportionList" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
-    <result column="approval_time" jdbcType="TIMESTAMP" property="approval_time" />
+    <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
+    <result column="amount_status" jdbcType="INTEGER" property="amountStatus" />
+    <result column="total_amount_status" jdbcType="INTEGER" property="totalAmountStatus" />
   </resultMap>
 </mapper>

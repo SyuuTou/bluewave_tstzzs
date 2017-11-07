@@ -106,32 +106,38 @@ public class Projects {
     private Integer investmentInstitutionsId;
 
     /**
-     * 审核状态
+     * 审核状态，0表示审核未通过，1表示审核通过，默认0
      */
     @Column(name = "approval_status")
     private Integer approvalStatus;
 
     /**
-     * 审核时间
+     * 审核时间，审核时存，其他时候为空
      */
     @Column(name = "approval_time")
     private Date approvalTime;
 
-    public Integer getApprovalStatus() {
-        return approvalStatus;
-    }
+    private Integer yn;
 
-    public void setApprovalStatus(Integer approvalStatus) {
-        this.approvalStatus = approvalStatus;
-    }
+    /**
+     * 用户id
+     */
+    private Integer userid;
 
-    public Date getApprovalTime() {
-        return approvalTime;
-    }
+    @Column(name = "kernel_desc_status")
+    private Integer kernelDescStatus;
 
-    public void setApprovalTime(Date approvalTime) {
-        this.approvalTime = approvalTime;
-    }
+    @Column(name = "city_count")
+    private Integer cityCount;
+
+    @Column(name = "evaluation_recommend")
+    private Integer evaluationRecommend;
+
+    /**
+     * 用来排除，国外机构投资的国外项目
+     */
+    @Column(name = "project_type")
+    private Integer projectType;
 
     /**
      * @return ID
@@ -469,5 +475,133 @@ public class Projects {
      */
     public void setInvestmentInstitutionsId(Integer investmentInstitutionsId) {
         this.investmentInstitutionsId = investmentInstitutionsId;
+    }
+
+    /**
+     * 获取审核状态，0表示审核未通过，1表示审核通过，默认0
+     *
+     * @return approval_status - 审核状态，0表示审核未通过，1表示审核通过，默认0
+     */
+    public Integer getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    /**
+     * 设置审核状态，0表示审核未通过，1表示审核通过，默认0
+     *
+     * @param approvalStatus 审核状态，0表示审核未通过，1表示审核通过，默认0
+     */
+    public void setApprovalStatus(Integer approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+
+    /**
+     * 获取审核时间，审核时存，其他时候为空
+     *
+     * @return approval_time - 审核时间，审核时存，其他时候为空
+     */
+    public Date getApprovalTime() {
+        return approvalTime;
+    }
+
+    /**
+     * 设置审核时间，审核时存，其他时候为空
+     *
+     * @param approvalTime 审核时间，审核时存，其他时候为空
+     */
+    public void setApprovalTime(Date approvalTime) {
+        this.approvalTime = approvalTime;
+    }
+
+    /**
+     * @return yn
+     */
+    public Integer getYn() {
+        return yn;
+    }
+
+    /**
+     * @param yn
+     */
+    public void setYn(Integer yn) {
+        this.yn = yn;
+    }
+
+    /**
+     * 获取用户id
+     *
+     * @return userid - 用户id
+     */
+    public Integer getUserid() {
+        return userid;
+    }
+
+    /**
+     * 设置用户id
+     *
+     * @param userid 用户id
+     */
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
+    /**
+     * @return kernel_desc_status
+     */
+    public Integer getKernelDescStatus() {
+        return kernelDescStatus;
+    }
+
+    /**
+     * @param kernelDescStatus
+     */
+    public void setKernelDescStatus(Integer kernelDescStatus) {
+        this.kernelDescStatus = kernelDescStatus;
+    }
+
+    /**
+     * @return city_count
+     */
+    public Integer getCityCount() {
+        return cityCount;
+    }
+
+    /**
+     * @param cityCount
+     */
+    public void setCityCount(Integer cityCount) {
+        this.cityCount = cityCount;
+    }
+
+    /**
+     * @return evaluation_recommend
+     */
+    public Integer getEvaluationRecommend() {
+        return evaluationRecommend;
+    }
+
+    /**
+     * @param evaluationRecommend
+     */
+    public void setEvaluationRecommend(Integer evaluationRecommend) {
+        this.evaluationRecommend = evaluationRecommend;
+    }
+
+    /**
+     * 获取用来排除，国外机构投资的国外项目
+     *
+     * @return project_type - 用来排除，国外机构投资的国外项目
+     */
+    public Integer getProjectType() {
+        return projectType;
+    }
+
+    /**
+     * 设置用来排除，国外机构投资的国外项目
+     *
+     * @param projectType 用来排除，国外机构投资的国外项目
+     */
+    public void setProjectType(Integer projectType) {
+        this.projectType = projectType;
     }
 }
