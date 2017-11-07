@@ -129,7 +129,7 @@ public class WxMaUserController {
         String encryptedData = body.get("encryptedData");
         String iv = body.get("iv");
 
-        //先获取到用户的id
+        //先获取到用户的id  f
         Integer yhxinxi = userExistJudgmentService.getUserId(token);
         String userid = String.valueOf(yhxinxi);
         if (userid == null || "".equals(userid)){
