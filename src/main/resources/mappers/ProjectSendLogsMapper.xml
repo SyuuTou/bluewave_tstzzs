@@ -15,7 +15,9 @@
     <result column="creat_time" jdbcType="TIMESTAMP" property="creatTime" />
     <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
     <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
+    <result column="company_logo" jdbcType="VARCHAR" property="companyLogo" />
+    <result column="company_one_sentence_introduct" jdbcType="VARCHAR" property="companyOneSentenceIntroduct" />
+    <result column="company_investment_highlights" jdbcType="VARCHAR" property="companyInvestmentHighlights" />
+    <result column="company_official_website" jdbcType="VARCHAR" property="companyOfficialWebsite" />
   </resultMap>
-
-
 </mapper>

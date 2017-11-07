@@ -1,9 +1,7 @@
 package com.lhjl.tzzs.proxy.mapper;
 
-import com.lhjl.tzzs.proxy.dto.SereachDto;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -31,10 +29,10 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
 
 
     List<Map<String, Object>> findProjectBySviewA(@Param("userId")String userId,@Param("types")int[] types,@Param("segmentations")String [] segmentations,
-                                                 @Param("stages")String [] stages,@Param("cities")String [] cities,
-                                                 @Param("working_background_descs")String [] working_background_descs,@Param("educational_background_descs")String [] educational_background_descs,
-                                                 @Param("sizea") Integer sizea,@Param("froma") Integer froma,
-                                                 @Param("beginTime") String beginTime ,@Param("endTime") String endTime
+                                                  @Param("stages")String [] stages,@Param("cities")String [] cities,
+                                                  @Param("working_background_descs")String [] working_background_descs,@Param("educational_background_descs")String [] educational_background_descs,
+                                                  @Param("sizea") Integer sizea,@Param("froma") Integer froma,
+                                                  @Param("beginTime") String beginTime ,@Param("endTime") String endTime
 
     );
 

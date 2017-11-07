@@ -61,6 +61,30 @@ public class ProjectSendLogs {
     private Date checkTime;
 
     /**
+     * 公司logo
+     */
+    @Column(name = "company_logo")
+    private String companyLogo;
+
+    /**
+     * 项目一句话介绍
+     */
+    @Column(name = "company_one_sentence_introduct")
+    private String companyOneSentenceIntroduct;
+
+    /**
+     * 公司投资亮点
+     */
+    @Column(name = "company_investment_highlights")
+    private String companyInvestmentHighlights;
+
+    /**
+     * 公司官网
+     */
+    @Column(name = "company_official_website")
+    private String companyOfficialWebsite;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -234,5 +258,77 @@ public class ProjectSendLogs {
      */
     public void setCheckTime(Date checkTime) {
         this.checkTime = checkTime;
+    }
+
+    /**
+     * 获取公司logo
+     *
+     * @return company_logo - 公司logo
+     */
+    public String getCompanyLogo() {
+        return companyLogo;
+    }
+
+    /**
+     * 设置公司logo
+     *
+     * @param companyLogo 公司logo
+     */
+    public void setCompanyLogo(String companyLogo) {
+        this.companyLogo = companyLogo;
+    }
+
+    /**
+     * 获取项目一句话介绍
+     *
+     * @return company_one_sentence_introduct - 项目一句话介绍
+     */
+    public String getCompanyOneSentenceIntroduct() {
+        return companyOneSentenceIntroduct;
+    }
+
+    /**
+     * 设置项目一句话介绍
+     *
+     * @param companyOneSentenceIntroduct 项目一句话介绍
+     */
+    public void setCompanyOneSentenceIntroduct(String companyOneSentenceIntroduct) {
+        this.companyOneSentenceIntroduct = companyOneSentenceIntroduct;
+    }
+
+    /**
+     * 获取公司投资亮点
+     *
+     * @return company_investment_highlights - 公司投资亮点
+     */
+    public String getCompanyInvestmentHighlights() {
+        return companyInvestmentHighlights;
+    }
+
+    /**
+     * 设置公司投资亮点
+     *
+     * @param companyInvestmentHighlights 公司投资亮点
+     */
+    public void setCompanyInvestmentHighlights(String companyInvestmentHighlights) {
+        this.companyInvestmentHighlights = companyInvestmentHighlights;
+    }
+
+    /**
+     * 获取公司官网
+     *
+     * @return company_official_website - 公司官网
+     */
+    public String getCompanyOfficialWebsite() {
+        return companyOfficialWebsite;
+    }
+
+    /**
+     * 设置公司官网
+     *
+     * @param companyOfficialWebsite 公司官网
+     */
+    public void setCompanyOfficialWebsite(String companyOfficialWebsite) {
+        this.companyOfficialWebsite = companyOfficialWebsite;
     }
 }

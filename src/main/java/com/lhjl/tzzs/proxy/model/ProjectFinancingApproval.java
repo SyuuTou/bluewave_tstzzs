@@ -52,6 +52,12 @@ public class ProjectFinancingApproval {
     private String currentDemand;
 
     /**
+     * 融资用途
+     */
+    @Column(name = "financing_useful")
+    private String financingUseful;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -189,5 +195,23 @@ public class ProjectFinancingApproval {
      */
     public void setCurrentDemand(String currentDemand) {
         this.currentDemand = currentDemand;
+    }
+
+    /**
+     * 获取融资用途
+     *
+     * @return financing_useful - 融资用途
+     */
+    public String getFinancingUseful() {
+        return financingUseful;
+    }
+
+    /**
+     * 设置融资用途
+     *
+     * @param financingUseful 融资用途
+     */
+    public void setFinancingUseful(String financingUseful) {
+        this.financingUseful = financingUseful;
     }
 }
