@@ -32,6 +32,9 @@
     <result column="city_count" jdbcType="INTEGER" property="cityCount" />
     <result column="evaluation_recommend" jdbcType="INTEGER" property="evaluationRecommend" />
     <result column="project_type" jdbcType="INTEGER" property="projectType" />
+    <result column="project_source" jdbcType="INTEGER" property="projectSource" />
+    <result column="project_logo" jdbcType="VARCHAR" property="projectLogo" />
+    <result column="project_investment_highlights" jdbcType="VARCHAR" property="projectInvestmentHighlights" />
   </resultMap>
     <!-- 用户关注的项目 -->
 

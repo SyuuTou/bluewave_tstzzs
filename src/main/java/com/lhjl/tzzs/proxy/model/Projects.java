@@ -140,6 +140,24 @@ public class Projects {
     private Integer projectType;
 
     /**
+     * 项目来源，0表示创始人提交，1表示投资人提交
+     */
+    @Column(name = "project_source")
+    private Integer projectSource;
+
+    /**
+     * 项目logo
+     */
+    @Column(name = "project_logo")
+    private String projectLogo;
+
+    /**
+     * 项目投资亮点
+     */
+    @Column(name = "project_investment_highlights")
+    private String projectInvestmentHighlights;
+
+    /**
      * @return ID
      */
     public Integer getId() {
@@ -603,5 +621,59 @@ public class Projects {
      */
     public void setProjectType(Integer projectType) {
         this.projectType = projectType;
+    }
+
+    /**
+     * 获取项目来源，0表示创始人提交，1表示投资人提交
+     *
+     * @return project_source - 项目来源，0表示创始人提交，1表示投资人提交
+     */
+    public Integer getProjectSource() {
+        return projectSource;
+    }
+
+    /**
+     * 设置项目来源，0表示创始人提交，1表示投资人提交
+     *
+     * @param projectSource 项目来源，0表示创始人提交，1表示投资人提交
+     */
+    public void setProjectSource(Integer projectSource) {
+        this.projectSource = projectSource;
+    }
+
+    /**
+     * 获取项目logo
+     *
+     * @return project_logo - 项目logo
+     */
+    public String getProjectLogo() {
+        return projectLogo;
+    }
+
+    /**
+     * 设置项目logo
+     *
+     * @param projectLogo 项目logo
+     */
+    public void setProjectLogo(String projectLogo) {
+        this.projectLogo = projectLogo;
+    }
+
+    /**
+     * 获取项目投资亮点
+     *
+     * @return project_investment_highlights - 项目投资亮点
+     */
+    public String getProjectInvestmentHighlights() {
+        return projectInvestmentHighlights;
+    }
+
+    /**
+     * 设置项目投资亮点
+     *
+     * @param projectInvestmentHighlights 项目投资亮点
+     */
+    public void setProjectInvestmentHighlights(String projectInvestmentHighlights) {
+        this.projectInvestmentHighlights = projectInvestmentHighlights;
     }
 }
