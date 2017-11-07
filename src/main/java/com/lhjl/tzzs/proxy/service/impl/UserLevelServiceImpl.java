@@ -1511,7 +1511,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 BigDecimal qj1=m1.getAmount();
                 Integer qj=qj1.intValue();
                 Integer hnum2 =(int)(qj*(1+bei2));
-                Integer hnum =hnum2-hnum1;
+                Integer hnum =hnum1;
                 //userIntegrals2.setSceneKey(sKey);
                 //Integer snum =(int)(body.getQj()*bei);
                 UserIntegrals userIntegrals =new UserIntegrals();
@@ -1561,7 +1561,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 BigDecimal qj1=m1.getAmount();
                 Integer qj=qj1.intValue();
                 Integer hnum2 =(int)(qj*(1+bei2));
-                Integer hnum =hnum2-hnum1;
+                Integer hnum =hnum2;
                 //userIntegrals2.setSceneKey(sKey);
                 //Integer snum =(int)(body.getQj()*bei);
                 UserIntegrals userIntegrals =new UserIntegrals();
@@ -1636,7 +1636,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                     BigDecimal qj2=m.getAmount();
                     Integer qj=qj2.intValue();
                     Integer hnum2 =(int)(qj*(1+bei2));
-                    hnum =hnum1-hnum2;
+                    hnum =hnum1;
                 }else{
                     hnum = hnum1;
                 }
@@ -1691,7 +1691,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 BigDecimal qj2=m.getAmount();
                 Integer qj=qj2.intValue();
                 Integer hnum2 =(int)(qj*(1+bei2));
-                Integer hnum =hnum2-hnum1;
+                Integer hnum =hnum2;
                 //userIntegrals2.setSceneKey(sKey);
                 //Integer snum =(int)(body.getQj()*bei);
                 UserIntegrals userIntegrals =new UserIntegrals();
