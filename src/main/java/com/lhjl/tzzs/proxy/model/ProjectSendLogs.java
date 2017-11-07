@@ -85,6 +85,12 @@ public class ProjectSendLogs {
     private String companyOfficialWebsite;
 
     /**
+     * 公司简称
+     */
+    @Column(name = "company_short_name")
+    private String companyShortName;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -330,5 +336,23 @@ public class ProjectSendLogs {
      */
     public void setCompanyOfficialWebsite(String companyOfficialWebsite) {
         this.companyOfficialWebsite = companyOfficialWebsite;
+    }
+
+    /**
+     * 获取公司简称
+     *
+     * @return company_short_name - 公司简称
+     */
+    public String getCompanyShortName() {
+        return companyShortName;
+    }
+
+    /**
+     * 设置公司简称
+     *
+     * @param companyShortName 公司简称
+     */
+    public void setCompanyShortName(String companyShortName) {
+        this.companyShortName = companyShortName;
     }
 }

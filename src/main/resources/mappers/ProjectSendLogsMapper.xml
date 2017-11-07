@@ -19,5 +19,6 @@
     <result column="company_one_sentence_introduct" jdbcType="VARCHAR" property="companyOneSentenceIntroduct" />
     <result column="company_investment_highlights" jdbcType="VARCHAR" property="companyInvestmentHighlights" />
     <result column="company_official_website" jdbcType="VARCHAR" property="companyOfficialWebsite" />
+    <result column="company_short_name" jdbcType="VARCHAR" property="companyShortName" />
   </resultMap>
 </mapper>
