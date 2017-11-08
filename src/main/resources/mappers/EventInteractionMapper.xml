@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.EventInteractionMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.EventInteraction" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="event_id" property="eventId" jdbcType="INTEGER" />
+    <result column="users_id" property="usersId" jdbcType="INTEGER" />
+    <result column="interaction_type" property="interactionType" jdbcType="INTEGER" />
+    <result column="interaction_content" property="interactionContent" jdbcType="VARCHAR" />
+    <result column="interaction_time" property="interactionTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>
