@@ -26,5 +26,6 @@
     <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
     <result column="amount_status" jdbcType="INTEGER" property="amountStatus" />
     <result column="total_amount_status" jdbcType="INTEGER" property="totalAmountStatus" />
+    <result column="project_financing_useful" jdbcType="VARCHAR" property="projectFinancingUseful" />
   </resultMap>
 </mapper>
