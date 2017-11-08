@@ -195,6 +195,11 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         return result;
     }
 
+    /**
+     * 判断投资偏好是否填完
+     * @param token
+     * @return
+     */
     @Override
     public CommonDto<Map<String,Object>> investorsDemandYn(String token){
         CommonDto<Map<String,Object>> result = new CommonDto<>();
