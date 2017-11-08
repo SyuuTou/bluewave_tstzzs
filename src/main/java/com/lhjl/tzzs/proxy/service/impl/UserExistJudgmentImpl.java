@@ -237,7 +237,6 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
         if (userTokens.size() > 0){
             UserToken userTokenForId = userTokens.get(0);
             result = userTokenForId.getUserId();
-
         }
 
         return result;
