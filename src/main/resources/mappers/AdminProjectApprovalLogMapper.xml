@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.AdminProjectApprovalLogMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.AdminProjectApprovalLog" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="project_source_id" property="projectSourceId" jdbcType="INTEGER" />
+    <result column="project_source_type" property="projectSourceType" jdbcType="INTEGER" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="approvaled_status" property="approvaledStatus" jdbcType="INTEGER" />
+    <result column="approvaled_time" property="approvaledTime" jdbcType="TIMESTAMP" />
+    <result column="approvaled_description" property="approvaledDescription" jdbcType="VARCHAR" />
+    <result column="approvaled_admin_name" property="approvaledAdminName" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>
