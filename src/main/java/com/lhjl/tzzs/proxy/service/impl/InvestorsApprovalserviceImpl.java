@@ -420,7 +420,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			}
 
 			//升级为VIP投资人
-			if(investors.getInvestorsType() == 2){
+			if(investors.getInvestorsType() == 2 || investors.getInvestorsType() == 1){
 				UserToken userToken = new UserToken();
 				userToken.setUserId(userId);
 				userToken = userTokenMapper.selectOne(userToken);
@@ -461,7 +461,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 					newInvestors.setInvestorsType(null);
 			}
 			//升级为VIP投资人
-			if(newInvestors.getInvestorsType() == 2){
+			if(newInvestors.getInvestorsType() == 2 || newInvestors.getInvestorsType() == 1){
 				UserToken userToken = new UserToken();
 				userToken.setUserId(userId);
 				userToken = userTokenMapper.selectOne(userToken);
