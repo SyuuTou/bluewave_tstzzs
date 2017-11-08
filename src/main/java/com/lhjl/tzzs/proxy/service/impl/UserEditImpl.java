@@ -49,6 +49,9 @@ public class UserEditImpl implements UserEditService {
     @Resource
     private EvaluateService evaluateService;
 
+    @Resource
+    private InvestorsApprovalMapper investorsApprovalMapper;
+
     @Transactional
     @Override
     public CommonDto<UserSetPasswordOutputDto> editUserPassword(UserSetPasswordInputDto body,int userId,String token){
@@ -799,17 +802,37 @@ public class UserEditImpl implements UserEditService {
             return result;
         }
 
-        Users users = usersMapper.selectByPrimaryKey(userId);
-        if (org.apache.commons.lang3.StringUtils.isAnyBlank(users.getActualName(),users.getCompanyName(),users.getCompanyDuties(),users.getDesc(),users.getEmail(),users.getWechat())){
-            obj.put("success",true);
-            result.setStatus(208);
-            result.setMessage("完善个人资料，赠送普通会员，即可获得3天查看天使投资指数统计数据和项目列表权限");
-            result.setData(obj);
-        }else {
+
+        InvestorsApproval investorsApprovalForId = new InvestorsApproval();
+        investorsApprovalForId.setUserid(userId);
+
+        List<InvestorsApproval> investorsApprovalList = investorsApprovalMapper.select(investorsApprovalForId);
+
+        if (investorsApprovalList.size() > 0){
+            obj.put("success",false);
+
+            result.setMessage("用户已认证投资人");
             result.setStatus(207);
-            result.setMessage("用户信息已经完善");
-            result.setData(null);
+            result.setData(obj);
+        }else{
+            obj.put("success",false);
+
+            result.setMessage("提交投资人认证，即可赠送普通会员，获得天使投资指数统计数据和项目列表的3天查看权限");
+            result.setData(obj);
+            result.setStatus(208);
         }
+
+//        Users users = usersMapper.selectByPrimaryKey(userId);
+//        if (org.apache.commons.lang3.StringUtils.isAnyBlank(users.getActualName(),users.getCompanyName(),users.getCompanyDuties(),users.getDesc(),users.getEmail(),users.getWechat())){
+//            obj.put("success",true);
+//            result.setStatus(208);
+//            result.setMessage("完善个人资料，赠送普通会员，即可获得3天查看天使投资指数统计数据和项目列表权限");
+//            result.setData(obj);
+//        }else {
+//            result.setStatus(207);
+//            result.setMessage("用户信息已经完善");
+//            result.setData(null);
+//        }
 
         return result;
     };
