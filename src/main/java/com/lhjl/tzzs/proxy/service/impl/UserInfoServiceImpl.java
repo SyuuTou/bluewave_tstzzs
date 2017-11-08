@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.UserListOutputDto;
 import com.lhjl.tzzs.proxy.mapper.FoundersEducationMapper;
 import com.lhjl.tzzs.proxy.mapper.FoundersMapper;
 import com.lhjl.tzzs.proxy.mapper.FoundersWorkMapper;
@@ -11,12 +12,11 @@ import com.lhjl.tzzs.proxy.model.FoundersWork;
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by 蓝海巨浪 on 2017/10/25.
@@ -145,6 +145,47 @@ public class UserInfoServiceImpl implements UserInfoService{
             result.setStatus(301);
             return result;
         }
+
+        return result;
+    }
+
+    /**
+     * 获取用户列表
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public CommonDto<List<Users>> getUserList(Integer pageNum,Integer pageSize){
+        CommonDto<List<Users>> result = new CommonDto<>();
+        List<Users> list= new ArrayList<>();
+
+
+        if (pageNum == null || pageNum < 0){
+            pageNum = 0;
+        }
+
+        if (pageSize == null || pageSize < 0){
+            pageSize = 10;
+        }
+
+        Integer startPage = pageNum*pageSize;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        list = usersMapper.findUserList(startPage,pageSize);
+        for (Users users:list){
+            Date createTime= users.getCreateTime();
+            String stringDate = sdf.format(createTime);
+            users.setPassword(stringDate);
+        }
+
+
+
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(list);
+
 
         return result;
     }
