@@ -149,7 +149,7 @@
             )
         </if>
         GROUP BY mf.short_name, stage
-        ORDER BY mf.evaluation_recommend
+        ORDER BY mf.evaluation_recommend DESC
         LIMIT #{sizea},#{froma}
     </select>
 
@@ -204,7 +204,7 @@
             )
         </if>
         GROUP BY mf.short_name, stage
-        ORDER BY mf.evaluation_recommend
+        ORDER BY mf.evaluation_recommend DESC
         LIMIT #{sizea},#{froma}
     </select>
 

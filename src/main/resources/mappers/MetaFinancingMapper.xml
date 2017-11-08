@@ -227,7 +227,7 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
 
         select money,dcount from (
         SELECT dis money, count(1) dcount from (
-        select round(pfl.valuation/${granularity}) * ${granularity} as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        select ROUND(pfl.valuation/${granularity}) * ${granularity} as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
         right JOIN project_segmentation ps on ps.project_id = mf.id
         LEFT JOIN founders f on mf.id = f.project_id
         right join founders_education  fe on fe.founder_ID = f.id
@@ -257,14 +257,14 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         </if>
         group by pfl.stage,mf.full_name
 
-        ) b GROUP by b.dis order by dcount DESC  limit 0, 15 ) c ORDER BY money
+        ) b where dis > 0 GROUP by b.dis order by dcount DESC  limit 0, 15 ) c ORDER BY money
 
     </select>
 
     <select id="queryFinancingAmount" resultMap="histogramResultMap">
         select money,dcount from (
         SELECT dis money, count(1) dcount from (
-        select round(pfl.${flag}/${granularity}) * ${granularity} as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        select ROUND(pfl.${flag}/${granularity}) * ${granularity} as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
         right JOIN project_segmentation ps on ps.project_id = mf.id
         LEFT JOIN founders f on mf.id = f.project_id
         right join founders_education  fe on fe.founder_ID = f.id
@@ -294,7 +294,7 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         </if>
         group by pfl.stage,mf.full_name
 
-        ) b GROUP by b.dis order by dcount DESC  limit 0, 15 ) c ORDER BY money
+        ) b where dis > 0 GROUP by b.dis order by dcount DESC  limit 0, 15 ) c ORDER BY money
     </select>
 
 

@@ -118,6 +118,11 @@ public class EvaluateServiceImpl implements EvaluateService {
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
         if (dataList != null&& dataList.size()>0) {
+            if (dataList.get(0).getMoney() == 0 ){
+                HistogramList temp = dataList.get(0);
+                dataList.get(1).setDcount(temp.getDcount() + dataList.get(1).getDcount());
+                dataList = dataList.subList(1,dataList.size()-1);
+            }
             for (HistogramList histogramList : dataList) {
                 num += histogramList.getDcount();
             }
@@ -142,7 +147,7 @@ public class EvaluateServiceImpl implements EvaluateService {
         return result;
     }
 
-//    @Cacheable(value = "financingAmount",keyGenerator = "wiselyKeyGenerator")
+    @Cacheable(value = "financingAmount",keyGenerator = "wiselyKeyGenerator")
     @Override
     public DistributedCommonDto<List<HistogramList>> financingAmount(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
@@ -201,11 +206,19 @@ public class EvaluateServiceImpl implements EvaluateService {
         Integer num = 0;
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
+
+
         if (dataList != null&&dataList.size()>0) {
+            if (dataList.get(0).getMoney() == 0 ){
+                HistogramList temp = dataList.get(0);
+                dataList.get(1).setDcount(temp.getDcount() + dataList.get(1).getDcount());
+                dataList = dataList.subList(1,dataList.size()-1);
+            }
             for (HistogramList histogramList : dataList) {
                 num += histogramList.getDcount();
             }
             for (HistogramList histogramList : dataList) {
+
                 histogramList.setX(String.valueOf(histogramList.getMoney()));
                 histogramList.setY(numberFormat.format((float) histogramList.getDcount() / Float.valueOf(num) * 100));
 

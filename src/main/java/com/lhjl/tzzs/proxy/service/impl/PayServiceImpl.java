@@ -12,6 +12,7 @@ import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.PayService;
 import com.lhjl.tzzs.proxy.service.UserIntegralsService;
+import com.lhjl.tzzs.proxy.utils.MD5Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,6 +136,16 @@ public class PayServiceImpl implements PayService {
         String zero = "0000000000000000000000000000000";
         StringBuilder stringBuilder = new StringBuilder("Idatavc");
         stringBuilder.append("_").append(zero.substring(0,length-idStr.length())).append(idStr);
-        return stringBuilder.toString();
+        return MD5Util.md5Encode(stringBuilder.toString(),null).substring(0,10)+DateTime.now().getMillis();
     }
+
+//    public static void main(String[] args) {
+//        String idStr =  String.valueOf(12);
+//
+//        Integer length = 20;
+//        String zero = "0000000000000000000000000000000";
+//        StringBuilder stringBuilder = new StringBuilder("Idatavc");
+//        stringBuilder.append("_").append(zero.substring(0,length-idStr.length())).append(idStr);
+//        System.out.println(MD5Util.md5Encode(stringBuilder.toString(),null).substring(0,10)+DateTime.now().getMillis());
+//    }
 }

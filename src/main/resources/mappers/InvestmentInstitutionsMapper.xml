@@ -54,33 +54,20 @@
   </select>
 
   <select id="findInvestment50" resultType="java.util.HashMap">
-    SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case,
-    a.cc
-    FROM investment_institutions ii INNER JOIN
-    (
-    SELECT COUNT(*) cc,ps.investment_institutions_id FROM projects ps LEFT JOIN project_financing_log pfl ON ps.id = pfl.project_id
-    WHERE pfl.financing_time BETWEEN #{beginTime} and #{endTime} AND ps.investment_institutions_id IS NOT NULL AND ps.project_type = 0
-    GROUP BY ps.investment_institutions_id
-    ORDER BY cc DESC
-    )a ON ii.id = a.investment_institutions_id AND ii.logo IS NOT NULL AND ii.logo != ''
-    WHERE ii.type = 1
-    ORDER BY a.cc,ii.short_name DESC
+    SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case, ii.count cc
+    FROM investment_institutions ii
+    WHERE ii.type = 1 AND  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null
+    ORDER BY ii.sort
     <if test="beginNum != null and pageSize != null">
       LIMIT #{beginNum},#{pageSize}
     </if>
   </select>
 
   <select id="findInvestmentall" resultType="java.util.HashMap">
-    select ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case,
-    a.cc
-    from investment_institutions ii INNER join
-    (
-    SELECT COUNT(*) cc,ps.investment_institutions_id FROM projects ps LEFT JOIN project_financing_log pfl ON ps.id = pfl.project_id
-    WHERE pfl.financing_time BETWEEN #{beginTime} and #{endTime} AND ps.investment_institutions_id IS NOT NULL AND ps.project_type = 0
-    GROUP BY ps.investment_institutions_id
-    ORDER BY cc DESC
-    )a on ii.id = a.investment_institutions_id and ii.logo is not null and ii.logo != ''
-    order by a.cc,ii.short_name desc
+      SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case, ii.count cc
+      FROM investment_institutions ii
+      WHERE  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null
+      ORDER BY ii.sort
     <if test="beginNum != null and pageSize != null">
       LIMIT #{beginNum},#{pageSize}
     </if>

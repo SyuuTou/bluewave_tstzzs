@@ -240,6 +240,7 @@ public class UserEditController {
 
         try {
             result = userEditService.updateUserInfo(body);
+
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());
             obj.put("success",false);
