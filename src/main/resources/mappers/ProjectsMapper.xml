@@ -129,11 +129,11 @@
 
         </if>
 
-        <!-- <if test=" stages !='' and stages != null">
+         <if test=" stages !='' and stages != null">
              AND mf.id IN (SELECT project_id FROM project_financing_log WHERE stage IN
              <foreach item="item" index="index" collection="stages" open="(" separator="," close=")">#{item}</foreach>
              )
-         </if>-->
+         </if>
 
         <if test=" cities !='' and cities != null ">
             AND mf.city IN
