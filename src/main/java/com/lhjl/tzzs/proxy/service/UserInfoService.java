@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.model.Users;
 
 import java.util.List;
 import java.util.Map;
@@ -16,4 +17,12 @@ public interface UserInfoService {
      * @return
      */
     CommonDto<Map<String, Object>> newrxsdqyh(int userId);
+
+    /**
+     * 获取用户列表
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    CommonDto<List<Map<String,Object>>> getUserList(Integer pageNum, Integer pageSize);
 }

@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
 import org.slf4j.Logger;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,6 +43,23 @@ public class UserInfoController {
             result.setMessage("查询个人资料异常");
             logger.error(e.getMessage(), e.fillInStackTrace());
         }
+        return result;
+    }
+
+    @GetMapping("get/user/list")
+    public CommonDto<List<Map<String,Object>>> geyUserList(Integer pageNum,Integer pageSize){
+        CommonDto<List<Map<String,Object>>> result = new CommonDto<>();
+
+        try {
+            result = userInfoService.getUserList(pageNum,pageSize);
+        }catch (Exception e){
+            logger.info(e.getMessage(),e.fillInStackTrace());
+            List<Map<String,Object>> list = new ArrayList<>();
+            result.setData(list);
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+        }
+
         return result;
     }
 }
