@@ -665,12 +665,12 @@ public class UserLevelServiceImpl implements UserLevelService {
                 tishi = "约谈行业指数机构所投资项目，仅对VIP投资人开放";
             }
 
-            if(userLevel < 4){
-                result.setStatus(202);
-                result.setMessage(tishi);
-                result.setData(data);
-                return result;
-            }
+//            if(userLevel < 4){
+//                result.setStatus(202);
+//                result.setMessage(tishi);
+//                result.setData(data);
+//                return result;
+//            }
 
 
 
@@ -697,6 +697,12 @@ public class UserLevelServiceImpl implements UserLevelService {
             metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
             int consumeNum = metaObtainIntegral.getIntegral();
 
+            if (consumeNum == 0){
+                result.setStatus(200);
+                result.setMessage("VIP投资人无需消费，可直接进入");
+                result.setData(data);
+                return result;
+            }
             //金币足够
             if(totalCoins + consumeNum >= 0){
 
