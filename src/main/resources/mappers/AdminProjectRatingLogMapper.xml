@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.AdminProjectRatingLogMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.AdminProjectRatingLog" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="rating_stage" property="ratingStage" jdbcType="INTEGER" />
+    <result column="rating_time" property="ratingTime" jdbcType="TIMESTAMP" />
+    <result column="rating_description" property="ratingDescription" jdbcType="VARCHAR" />
+    <result column="rating_admin_name" property="ratingAdminName" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>
