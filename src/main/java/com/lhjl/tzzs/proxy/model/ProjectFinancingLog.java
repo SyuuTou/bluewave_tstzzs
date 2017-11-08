@@ -117,6 +117,12 @@ public class ProjectFinancingLog {
     private Integer totalAmountStatus;
 
     /**
+     * 融资用途
+     */
+    @Column(name = "project_financing_useful")
+    private String projectFinancingUseful;
+
+    /**
      * @return ID
      */
     public Integer getId() {
@@ -476,5 +482,23 @@ public class ProjectFinancingLog {
      */
     public void setTotalAmountStatus(Integer totalAmountStatus) {
         this.totalAmountStatus = totalAmountStatus;
+    }
+
+    /**
+     * 获取融资用途
+     *
+     * @return project_financing_useful - 融资用途
+     */
+    public String getProjectFinancingUseful() {
+        return projectFinancingUseful;
+    }
+
+    /**
+     * 设置融资用途
+     *
+     * @param projectFinancingUseful 融资用途
+     */
+    public void setProjectFinancingUseful(String projectFinancingUseful) {
+        this.projectFinancingUseful = projectFinancingUseful;
     }
 }
