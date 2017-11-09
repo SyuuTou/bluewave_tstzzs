@@ -466,7 +466,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
                 Float bei = usersMapper.findByBei(leId);
                 BigDecimal dnum = body.getQj();
                 Integer dnum1 = dnum.intValue();
-                if (dnum1 >= 365) {
+                if (dnum1 >= 188) {
                     map.put("dnum", dnum);
 
                     map.put("snum", (int) (bei * dnum1));
@@ -492,14 +492,14 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
                     map.put("Money_ID", userMoneyRecord.getId());
                 } else {
                     result.setStatus(5019);
-                    result.setMessage("充值金额不能小于365元");
+                    result.setMessage("充值金额不能小于188元");
                 }
 			}else{
 				leId=0;
 				Float bei =usersMapper.findByBei(leId+1);
 				BigDecimal dnum = body.getQj();
                 Integer dnum1=dnum.intValue();
-				if(dnum1>=365){
+				if(dnum1>=188){
 					map.put("dnum",dnum);
 
 					map.put("snum",(int)(bei*dnum1));
@@ -519,7 +519,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				}
 				else{
 					result.setStatus(5019);
-					result.setMessage("充值金额不能小于365元");
+					result.setMessage("充值金额不能小于188元");
 				}
 			}
 		}else{
@@ -704,7 +704,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals.setUserId(userId);
 				userIntegrals.setSceneKey("xHwofbNs");
 				Integer jb=qj.intValue();
-				if(jb>=365){
+				if(jb>=188){
 				userIntegrals.setConsumeNum(0);
 				userIntegrals.setIntegralNum(jb);
 				userIntegrals.setCreateTime(new Date());
@@ -779,7 +779,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegralConsumeMapper.insert(userIntegrals4);
 			}else{
 					result.setStatus(5019);
-					result.setMessage("充值金额不能小于365元");
+					result.setMessage("充值金额不能小于188元");
 				}
 			}else {
 					leId = 0;
@@ -788,7 +788,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userIntegrals.setUserId(userId);
 					userIntegrals.setSceneKey("xHwofbNs");
 					Integer jb = qj.intValue();
-					if(jb>=365){
+					if(jb>=188){
 					userIntegrals.setConsumeNum(0);
 					userIntegrals.setIntegralNum(jb);
 					userIntegrals.setCreateTime(new Date());
@@ -861,7 +861,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userIntegralConsumeMapper.insert(userIntegrals4);
 				}else{
 						result.setStatus(5019);
-						result.setMessage("充值金额不能小于365元");
+						result.setMessage("充值金额不能小于188元");
 					}
 			}
 		}
