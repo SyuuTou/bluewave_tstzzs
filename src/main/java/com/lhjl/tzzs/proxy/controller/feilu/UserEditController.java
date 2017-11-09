@@ -291,4 +291,18 @@ public class UserEditController {
         return result;
     }
 
+    @GetMapping("user/info/prefectyn")
+    public CommonDto<Map<String,Object>> userInfoPerfectYn(String token){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        try {
+          result = userEditService.userInfoPerfectYn(token);
+        }catch (Exception e){
+            log.info(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+        }
+        return result;
+    }
+
 }

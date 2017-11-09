@@ -835,5 +835,36 @@ public class UserEditImpl implements UserEditService {
 //        }
 
         return result;
-    };
+    }
+
+    @Override
+    public CommonDto<Map<String,Object>> userInfoPerfectYn(String token){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        Map<String,Object> obj = new HashMap<>();
+
+        Integer userId = userExistJudgmentService.getUserId(token);
+        if (userId == -1){
+            result.setData(null);
+            result.setMessage("用户token无效，请检查");
+            result.setStatus(50001);
+
+            return result;
+        }
+
+
+        Users users = usersMapper.selectByPrimaryKey(userId);
+        if (org.apache.commons.lang3.StringUtils.isAnyBlank(users.getActualName(),users.getCompanyName(),users.getCompanyDuties(),users.getCity())){
+            obj.put("success",true);
+            result.setStatus(210);
+            result.setMessage("完善个人资料，赠送普通会员，即可获得3天查看天使投资指数统计数据和项目列表权限");
+            result.setData(obj);
+        }else {
+            result.setStatus(209);
+            result.setMessage("用户信息已经完善");
+            result.setData(null);
+        }
+
+        return result;
+    }
 }
