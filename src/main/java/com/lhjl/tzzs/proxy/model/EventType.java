@@ -12,7 +12,7 @@ public class EventType {
      * 事件的key
      */
     @Column(name = "event_key")
-    private Integer eventKey;
+    private String eventKey;
 
     /**
      * 事件的描述
@@ -39,7 +39,7 @@ public class EventType {
      *
      * @return event_key - 事件的key
      */
-    public Integer getEventKey() {
+    public String getEventKey() {
         return eventKey;
     }
 
@@ -48,7 +48,7 @@ public class EventType {
      *
      * @param eventKey 事件的key
      */
-    public void setEventKey(Integer eventKey) {
+    public void setEventKey(String eventKey) {
         this.eventKey = eventKey;
     }
 
