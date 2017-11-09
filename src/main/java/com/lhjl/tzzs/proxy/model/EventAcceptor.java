@@ -24,7 +24,7 @@ public class EventAcceptor {
      * 消息接受者类型：0表示接受者是个人，接收对应acceptor_id对应用户表id；1表示接受者是投资机构，接收对应acceptor_id对应用户表id；2表示接受者是平台内用户，接收对应acceptor_id对应指定的管理员id;
      */
     @Column(name = "acceptor_type")
-    private String acceptorType;
+    private Integer acceptorType;
 
     /**
      * @return id
@@ -81,7 +81,7 @@ public class EventAcceptor {
      *
      * @return acceptor_type - 消息接受者类型：0表示接受者是个人，接收对应acceptor_id对应用户表id；1表示接受者是投资机构，接收对应acceptor_id对应用户表id；2表示接受者是平台内用户，接收对应acceptor_id对应指定的管理员id;
      */
-    public String getAcceptorType() {
+    public Integer getAcceptorType() {
         return acceptorType;
     }
 
@@ -90,7 +90,7 @@ public class EventAcceptor {
      *
      * @param acceptorType 消息接受者类型：0表示接受者是个人，接收对应acceptor_id对应用户表id；1表示接受者是投资机构，接收对应acceptor_id对应用户表id；2表示接受者是平台内用户，接收对应acceptor_id对应指定的管理员id;
      */
-    public void setAcceptorType(String acceptorType) {
+    public void setAcceptorType(Integer acceptorType) {
         this.acceptorType = acceptorType;
     }
 }
