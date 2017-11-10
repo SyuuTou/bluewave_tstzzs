@@ -1,7 +1,9 @@
 package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ProjectSendDto;
 import com.lhjl.tzzs.proxy.dto.ProjectsSendDto;
+import com.lhjl.tzzs.proxy.dto.TeamDto;
 import com.lhjl.tzzs.proxy.service.ProjectsSendService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
 import org.slf4j.Logger;
@@ -40,6 +42,10 @@ public class ProjectsSendController {
             int userId = commonUserService.getLocalUserId(params.getToken());
 
             result = projectsSendService.ctuisongsecond(params, userId);
+            if(result.getStatus() == null){
+                result.setStatus(200);
+                result.setMessage("success");
+            }
 
         }catch(Exception e){
             result.setStatus(501);
@@ -53,9 +59,11 @@ public class ProjectsSendController {
     /**
      * 项目投递回显
      */
-    @GetMapping("/rest/zyy/rtuisonghuixian")
-    public CommonDto<Map<String, Object>> rtuisonghuixian(String token, String tsid){
+    @PostMapping("/rest/zyy/rtuisonghuixian")
+    public CommonDto<Map<String, Object>> rtuisonghuixian(@RequestBody ProjectSendDto body){
         CommonDto<Map<String, Object>> result = new CommonDto<>();
+        String token = body.getToken();
+        String tsid = body.getTsid();
         try{
             //获取userId
             int userId = commonUserService.getLocalUserId(token);
@@ -103,6 +111,57 @@ public class ProjectsSendController {
         }
         return result;
     }
+    /**
+     * 团队成员
+     * @param body
+     * @return
+     */
+    @PostMapping("save/team")
+    public CommonDto<String> saveTeam(@RequestBody TeamDto body){
+        CommonDto<String> result = new CommonDto<>();
+        try{
+            result = projectsSendService.saveTeam(body);
+        }catch(Exception e){
+            result.setStatus(501);
+            result.setMessage("保存团队成员记录异常");
+            logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
+    /**
+     * 删除团队成员
+     * @param id
+     * @return
+     */
+    @GetMapping("delete/team")
+    public CommonDto<String> deleteTeam(Integer id ){
+        CommonDto<String> result = new CommonDto<>();
+        try{
+            result = projectsSendService.deleteTeam(id);
+        }catch(Exception e){
+            result.setStatus(501);
+            result.setMessage("融资历史记录异常");
+            logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
 
-
+    /**
+     * 根据id进行回显
+     * @param id
+     * @return
+     */
+    
+    @GetMapping("rest/teamrecord")
+    public CommonDto<Map<String, Object>> teamRecord(Integer id){
+        CommonDto<Map<String, Object>> result = new CommonDto<>();
+        try{
+        	 result = projectsSendService.teamRecord(id);
+        }catch(Exception e){
+            result.setStatus(501);
+            result.setMessage("投递项目回显异常");
+            logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
 }

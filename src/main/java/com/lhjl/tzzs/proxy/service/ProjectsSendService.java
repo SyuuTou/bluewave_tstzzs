@@ -2,8 +2,11 @@ package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectsSendDto;
+import com.lhjl.tzzs.proxy.dto.TeamDto;
 
 import java.util.Map;
+
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * Created by 蓝海巨浪 on 2017/10/23.
@@ -40,4 +43,10 @@ public interface ProjectsSendService {
      * @return
      */
     CommonDto<Map<String, Object>> rtuisongthird(String tsid, int userId);
+    
+    
+    CommonDto<String> saveTeam(TeamDto body);
+
+    CommonDto<String> deleteTeam(Integer id );
+    CommonDto<Map<String, Object>> teamRecord(Integer id);
 }

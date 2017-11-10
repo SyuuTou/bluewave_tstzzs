@@ -9,4 +9,7 @@
     <result column="project_send_log_id" property="projectSendLogId" jdbcType="VARCHAR" />
     <result column="history" property="history" jdbcType="VARCHAR" />
   </resultMap>
+  <update id="updateHistory" parameterType="int">
+    UPDATE project_financing_history c SET c.project_send_log_id=#{projectId} WHERE c.project_send_log_id=-1
+  </update>
 </mapper>

@@ -110,7 +110,72 @@ public class ProjectsSendDto {
      */
     private String xmid;
 
-    public String getToken() {
+    private String logo;
+
+    private String companyshortname;
+
+
+    private String oneintroduct;
+
+    private String highlights;
+
+    private String website;
+
+    private String competing;
+
+
+
+
+
+    public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+
+	public String getCompanyshortname() {
+		return companyshortname;
+	}
+
+	public void setCompanyshortname(String companyshortname) {
+		this.companyshortname = companyshortname;
+	}
+
+	public String getOneintroduct() {
+		return oneintroduct;
+	}
+
+	public void setOneintroduct(String oneintroduct) {
+		this.oneintroduct = oneintroduct;
+	}
+
+	public String getHighlights() {
+		return highlights;
+	}
+
+	public void setHighlights(String highlights) {
+		this.highlights = highlights;
+	}
+
+	public String getWebsite() {
+		return website;
+	}
+
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+
+	public String getCompeting() {
+		return competing;
+	}
+
+	public void setCompeting(String competing) {
+		this.competing = competing;
+	}
+
+	public String getToken() {
         return token;
     }
 
