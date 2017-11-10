@@ -28,4 +28,8 @@
     <result column="total_amount_status" jdbcType="INTEGER" property="totalAmountStatus" />
     <result column="project_financing_useful" jdbcType="VARCHAR" property="projectFinancingUseful" />
   </resultMap>
+
+  <select id="selectProjectFinancingLogList" parameterType="Integer" resultMap="BaseResultMap">
+    select * from project_financing_log where project_id = #{projectId} and `status`= #{projectStatus} order by create_time desc
+  </select>
 </mapper>

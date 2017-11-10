@@ -27,5 +27,26 @@ public interface ProjectsService {
     CommonDto< List<Map<String, Object>>>findProjectBySview(SereachDto sereachDto);
     CommonDto< List<Map<String, Object>>>findProjectBySviewA(SereachDto sereachDto);
 
+    /**
+     * 获取项目详细信息接口
+     * @param body
+     * @return
+     */
+    CommonDto<Projects> getProjectDetails(Map<String,Object> body);
+
+    /**
+     * 获取项目当前融资信息接口
+     * @param body
+     * @return
+     */
+    CommonDto<Map<String,Object>> getProjectFinancingNow(Map<String,Object> body);
+
+    /**
+     * 获取项目历史融资信息接口
+     * @param body
+     * @return
+     */
+    CommonDto<List<Map<String,Object>>> getProjectFinancingHistory(Map<String,Object> body);
+
 
 }

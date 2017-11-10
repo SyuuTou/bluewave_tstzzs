@@ -1,16 +1,13 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import javax.annotation.Resource;
 
-import com.lhjl.tzzs.proxy.mapper.FollowMapper;
-import com.lhjl.tzzs.proxy.mapper.InterviewMapper;
-import com.lhjl.tzzs.proxy.model.Follow;
-import com.lhjl.tzzs.proxy.model.Interview;
+import com.lhjl.tzzs.proxy.mapper.*;
+import com.lhjl.tzzs.proxy.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,9 +17,8 @@ import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 
 import com.lhjl.tzzs.proxy.dto.SereachDto;
-import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
-import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
+import tk.mybatis.mapper.entity.Example;
 
 /**
  * 项目
@@ -51,6 +47,13 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Resource
     private ProjectsServiceImplUtil projectsServiceImplUtil;
+
+    @Autowired
+    private ProjectFinancingLogMapper projectFinancingLogMapper;
+
+    @Autowired
+    private ProjectFinancingHistoryInvestorsMapper projectFinancingHistoryInvestorsMapper;
+
 
     /**
      * 查询我关注的项目
@@ -366,6 +369,196 @@ public class ProjectsServiceImpl implements ProjectsService {
         result.setData(list2);
         result.setStatus(200);
         result.setMessage("success");
+        return result;
+    }
+
+    /**
+     * 获取项目详情
+     * @param body
+     * @return
+     */
+    @Override
+    public CommonDto<Projects> getProjectDetails(Map<String,Object> body){
+        CommonDto<Projects> result =new CommonDto<>();
+
+        if (body.get("projectId") == null || "".equals(body.get("projectId"))){
+            result.setStatus(50001);
+            result.setMessage("项目id不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        if (body.get("token") == null || "".equals(body.get("token"))){
+            result.setMessage("用户token不能为空");
+            result.setData(null);
+            result.setStatus(50001);
+
+            return result;
+        }
+
+        Integer xmid = (Integer) body.get("projectId");
+
+        Projects projects = projectsMapper.selectByPrimaryKey(xmid);
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(projects);
+
+        return result;
+    }
+
+    /**
+     * 获取项目当前融资信息
+     * @param body
+     * @return
+     */
+    @Override
+    public CommonDto<Map<String,Object>> getProjectFinancingNow(Map<String,Object> body){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> obj = new HashMap<>();
+
+        if (body.get("projectId") == null || "".equals(body.get("projectId"))){
+            result.setStatus(50001);
+            result.setMessage("项目id不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        if (body.get("token") == null || "".equals(body.get("token"))){
+            result.setMessage("用户token不能为空");
+            result.setData(null);
+            result.setStatus(50001);
+
+            return result;
+        }
+
+        Integer xmid = (Integer) body.get("projectId");
+
+        ProjectFinancingLog projectFinancingLogForSearch = new ProjectFinancingLog();
+        projectFinancingLogForSearch.setProjectId(xmid);
+        projectFinancingLogForSearch.setStatus(1);
+
+        List<ProjectFinancingLog> projectFinancingLogList = projectFinancingLogMapper.select(projectFinancingLogForSearch);
+        if (projectFinancingLogList.size() > 0){
+            ProjectFinancingLog projectFinancingLog = projectFinancingLogList.get(0);
+            obj.put("hasData",true);
+            String stage = "";
+            if (projectFinancingLog.getStage() != null){
+                stage = projectFinancingLog.getStage();
+            }
+            obj.put("stage",stage);
+
+            obj.put("amount",projectFinancingLog.getAmount());
+            String stockRight ="未知";
+            if (projectFinancingLog.getStockRight() != null){
+                stockRight = String.valueOf(projectFinancingLog.getStockRight());
+            }
+            obj.put("stockRight",stockRight);
+            String projectFinancingUseful = "";
+            if (projectFinancingLog.getProjectFinancingUseful() != null){
+                projectFinancingUseful = projectFinancingLog.getProjectFinancingUseful();
+            }
+            obj.put("projectFinancingUseful",projectFinancingUseful);
+
+            result.setData(obj);
+            result.setMessage("success");
+            result.setStatus(200);
+        } else {
+            obj.put("hasData",false);
+            obj.put("stage","");
+            obj.put("amount","");
+            obj.put("stockRight","");
+            obj.put("projectFinancingUseful","");
+
+            result.setData(obj);
+            result.setMessage("success");
+            result.setStatus(200);
+        }
+
+        return result;
+    }
+
+    /**
+     * 获取项目历史融资信息
+     * @param body
+     * @return
+     */
+    @Override
+    public CommonDto<List<Map<String,Object>>> getProjectFinancingHistory(Map<String,Object> body){
+        CommonDto<List<Map<String,Object>>> result = new CommonDto<>();
+        List<Map<String,Object>> list = new ArrayList<>();
+
+
+
+        if (body.get("projectId") == null || "".equals(body.get("projectId"))){
+            result.setStatus(50001);
+            result.setMessage("项目id不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        if (body.get("token") == null || "".equals(body.get("token"))){
+            result.setMessage("用户token不能为空");
+            result.setData(null);
+            result.setStatus(50001);
+
+            return result;
+        }
+
+        Integer xmid = (Integer) body.get("projectId");
+
+
+
+        List<ProjectFinancingLog> projectFinancingLogList = projectFinancingLogMapper.selectProjectFinancingLogList(xmid,2);
+        //如果融资历史有就返回
+        if (projectFinancingLogList.size() > 0){
+            for (ProjectFinancingLog pfl:projectFinancingLogList){
+                Map<String,Object> obj = new HashMap<>();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
+                String dateString ="";
+                if (pfl.getFinancingTime() != null){
+                    dateString = simpleDateFormat.format(pfl.getFinancingTime());
+                }
+
+                //获取投资方姓名
+                Integer pflid = pfl.getId();
+                ProjectFinancingHistoryInvestors projectFinancingHistoryInvestors = new ProjectFinancingHistoryInvestors();
+                projectFinancingHistoryInvestors.setProjectFinancingHistoryId(pflid);
+
+                List<ProjectFinancingHistoryInvestors> projectFinancingHistoryInvestorsList = projectFinancingHistoryInvestorsMapper.select(projectFinancingHistoryInvestors);
+                StringBuffer touzifang= new StringBuffer();
+                if (projectFinancingHistoryInvestorsList.size() > 0){
+                    if (projectFinancingHistoryInvestorsList.size() > 2){
+                        for (Integer i = 0;i < 1 ;i++){
+                            touzifang.append(projectFinancingHistoryInvestorsList.get(i).getInvestorName());
+                        }
+                    }else {
+                        for (ProjectFinancingHistoryInvestors pfhi:projectFinancingHistoryInvestorsList){
+                            touzifang.append(pfhi.getInvestorName());
+                        }
+                    }
+                }
+
+                obj.put("financingTime",dateString);
+                obj.put("stage",pfl.getStage());
+                obj.put("touzifang",touzifang);
+
+                list.add(obj);
+            }
+
+            result.setData(list);
+            result.setMessage("success");
+            result.setStatus(200);
+        }else {
+            result.setStatus(200);
+            result.setMessage("success");
+            result.setData(list);
+        }
+
+
         return result;
     }
 }

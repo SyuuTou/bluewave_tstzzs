@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,6 +191,67 @@ public class ProjectsController {
             result.setMessage("页面显示异常，请稍后再试");
             log.error(e.getMessage(),e.fillInStackTrace());
         }
+        return result;
+    }
+
+
+    /**
+     * 获取项目详情接口
+     * @param body
+     * @return
+     */
+    @PostMapping("get/project/details")
+    public CommonDto<Projects> getProjectDetails(@RequestBody Map<String,Object> body){
+        CommonDto<Projects> result  =new CommonDto<>();
+        try {
+            result = projectsService.getProjectDetails(body);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+        }
+        return result;
+    }
+
+    /**
+     * 获取项目当前融资信息
+     * @param body
+     * @return
+     */
+
+    @PostMapping("get/project/financing/now")
+    public CommonDto<Map<String,Object>> getProgectFinancingNow(@RequestBody Map<String,Object> body){
+        CommonDto<Map<String,Object>> result  = new CommonDto<>();
+        try {
+            result = projectsService.getProjectFinancingNow(body);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+        }
+
+        return result;
+    }
+
+    /**
+     * 获取项目的历史融资信息
+     * @param body
+     * @return
+     */
+    @PostMapping("get/project/financing/history")
+    public CommonDto<List<Map<String,Object>>> getProgectFinancingHistory(@RequestBody Map<String,Object> body){
+        CommonDto<List<Map<String,Object>>> result  = new CommonDto<>();
+        try {
+            result = projectsService.getProjectFinancingHistory(body);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+        }
+
         return result;
     }
 }
