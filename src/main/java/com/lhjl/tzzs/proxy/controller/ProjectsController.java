@@ -276,4 +276,24 @@ public class ProjectsController {
     }
 
 
+    /**
+     * 获取项目竞品列表接口
+     * @param body
+     * @return
+     */
+    @PostMapping("get/project/competing")
+    public CommonDto<List<Map<String,Object>>> getProgectCompeting(@RequestBody Map<String,Object> body){
+        CommonDto<List<Map<String,Object>>> result  = new CommonDto<>();
+        try {
+
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+        }
+
+        return result;
+    }
+
 }

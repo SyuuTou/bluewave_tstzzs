@@ -573,6 +573,11 @@ public class ProjectsServiceImpl implements ProjectsService {
         return result;
     }
 
+    /**
+     * 获取团队成员接口
+     * @param body
+     * @return
+     */
     @Override
     public CommonDto<List<Map<String,Object>>> getProjectFinancingTeam(Map<String,Object> body){
         CommonDto<List<Map<String,Object>>> result = new CommonDto<>();
@@ -669,6 +674,35 @@ public class ProjectsServiceImpl implements ProjectsService {
             result.setMessage("success");
         }
 
+        return result;
+    }
+
+    @Override
+    public CommonDto<List<Map<String,Object>>> getProjectCompeting(Map<String,Object> body){
+        CommonDto<List<Map<String,Object>>> result = new CommonDto<>();
+        List<Map<String,Object>> list = new ArrayList<>();
+
+        if (body.get("projectId") == null || "".equals(body.get("projectId"))){
+            result.setStatus(50001);
+            result.setMessage("项目id不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        if (body.get("token") == null || "".equals(body.get("token"))){
+            result.setMessage("用户token不能为空");
+            result.setData(null);
+            result.setStatus(50001);
+
+            return result;
+        }
+
+        Integer xmid = (Integer) body.get("projectId");
+
+        Projects projects = projectsMapper.selectByPrimaryKey(xmid);
+
+        //String lunci = projects
         return result;
     }
 }

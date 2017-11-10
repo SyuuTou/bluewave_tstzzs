@@ -55,5 +55,7 @@ public interface ProjectsService {
      */
     CommonDto<List<Map<String,Object>>> getProjectFinancingTeam(Map<String,Object> body);
 
+    CommonDto<List<Map<String,Object>>> getProjectCompeting(Map<String,Object> body);
+
 
 }
