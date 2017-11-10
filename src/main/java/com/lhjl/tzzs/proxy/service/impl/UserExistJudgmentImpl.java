@@ -67,6 +67,13 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
                 users.setId(userId);
 
                 Users getUser =usersMapper.selectByPrimaryKey(users.getId());
+                if (getUser == null){
+                    result.setData(null);
+                    result.setMessage("当前输入token非法，请检查");
+                    result.setStatus(401);
+
+                    return result;
+                }
                 String phonenumber = getUser.getPhonenumber();
                 String password = getUser.getPassword();
 
@@ -108,15 +115,12 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
             //创建用户
             Users users =new Users();
             users.setCreateTime(now);
-
-            usersMapper.insertSelective(users);
-
-            int userid = users.getId();
             String uuid = token;
             users.setUuid(uuid);
 
-            usersMapper.updateByPrimaryKeySelective(users);
+            usersMapper.insertSelective(users);
 
+            Integer userid = users.getId();
             //创建用户token
             UserToken userToken = new UserToken();
             userToken.setUserId(userid);
