@@ -83,6 +83,12 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
     @Resource
     private ProjectTeamMemberMapper projectTeamMemberMapper;
 
+    @Resource
+    private ProjectTeamMemberEducationMapper projectTeamMemberEducationMapper;
+
+
+    @Resource
+    private ProjectTeamMemberWorkMapper projectTeamMemberWorkMapper;
     /**
      * 项目投递
      * @param params 投递参数
@@ -167,11 +173,60 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 //团队成员
                                 ProjectSendTeamMember projectSendTeamMember = new ProjectSendTeamMember();
                                 projectSendTeamMember.setId(Integer.parseInt(params.getXmid()));
-                                List<ProjectSendTeamMember> ll = projectSendTeamMemberMapper.select(projectSendTeamMember);
-                                List<ProjectTeamMember> l2 = new ArrayList<>();
+                                List<ProjectSendTeamMember> projectSendTeamMemberList = projectSendTeamMemberMapper.select(projectSendTeamMember);
                                 ProjectTeamMember t = new ProjectTeamMember();
                                 t.setProjectId(projects.getId());
                                 projectTeamMemberMapper.delete(t);
+                                    if (projectSendTeamMemberList.size() > 0){
+                                        for (ProjectSendTeamMember pst:projectSendTeamMemberList){
+                                            ProjectTeamMember projectTeamMember = new ProjectTeamMember();
+                                            projectTeamMember.setCreateTime(pst.getCreateTime());
+                                            projectTeamMember.setMumberDesc(pst.getMemberDesc());
+                                            projectTeamMember.setMumberDuties(pst.getMemberDuties());
+                                            projectTeamMember.setMumberName(pst.getMemberName());
+                                            projectTeamMember.setProjectId(projects.getId());
+                                            projectTeamMember.setShareRatio(pst.getShareRatio());
+                                            projectTeamMember.setYn(0);
+
+                                            projectTeamMemberMapper.insertSelective(projectTeamMember);
+
+                                            //获取到刚创建的团队成员id
+                                            Integer ptmid = projectTeamMember.getId();
+
+                                            //获取提交审核中的团队成员教育经历，工作经历
+                                            ProjectSendTeamMemberEducation projectSendTeamMemberEducationForSearch = new ProjectSendTeamMemberEducation();
+                                            projectSendTeamMemberEducationForSearch.setProjectSendTeamMemberId(pst.getId());
+
+                                            ProjectSendTeamMemberWork projectSendTeamMemberWorkForSearch = new ProjectSendTeamMemberWork();
+                                            projectSendTeamMemberWorkForSearch.setProjectSendTeamMemberId(pst.getId());
+
+                                            List<ProjectSendTeamMemberEducation> projectSendTeamMemberEducationList = projectSendTeamMemberEducationMapper.select(projectSendTeamMemberEducationForSearch);
+                                            List<ProjectSendTeamMemberWork> projectSendTeamMemberWorkList = projectSendTeamMemberWorkMapper.select(projectSendTeamMemberWorkForSearch);
+
+                                            //创建教育经历
+                                            if (projectSendTeamMemberEducationList.size() > 0){
+                                                for (ProjectSendTeamMemberEducation pstme:projectSendTeamMemberEducationList){
+                                                    ProjectTeamMemberEducation projectTeamMemberEducation =new ProjectTeamMemberEducation();
+                                                    projectTeamMemberEducation.setProjectTeamMemberId(ptmid);
+                                                    projectTeamMemberEducation.setEducationExperience(pstme.getEducationExperience());
+
+                                                    projectTeamMemberEducationMapper.insertSelective(projectTeamMemberEducation);
+                                                }
+                                            }
+
+                                            //创建工作经历
+                                            if (projectSendTeamMemberWorkList.size() > 0){
+                                                for (ProjectSendTeamMemberWork pstmw:projectSendTeamMemberWorkList){
+                                                    ProjectTeamMemberWork projectTeamMemberWork = new ProjectTeamMemberWork();
+                                                    projectTeamMemberWork.setProjectTeamMemberId(ptmid);
+                                                    projectTeamMemberWork.setWorkExperience(pstmw.getWorkExperience());
+
+                                                    projectTeamMemberWorkMapper.insert(projectTeamMemberWork);
+                                                }
+                                            }
+
+                                        }
+                                    }
                             }
                                 //更新用户信息
                                 Users users = new Users();
