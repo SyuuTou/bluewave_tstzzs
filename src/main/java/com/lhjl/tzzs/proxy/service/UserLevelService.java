@@ -30,9 +30,10 @@ public interface UserLevelService {
      * 会员升级
      * @param userStr 用户ID（字符串）
      * @param levelId 要升级的会员等级
+     * @param presentedType
      * @return
      */
-    CommonDto<Map<String, Object>> upLevel(String userStr, int levelId);
+    CommonDto<Map<String, Object>> upLevel(String userStr, int levelId, String presentedType);
 
     /**
      * 消费金币提醒

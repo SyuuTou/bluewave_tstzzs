@@ -35,9 +35,11 @@
     FROM follow a LEFT JOIN view_projects_info b ON a.`projects_id` = b.`ID`
     WHERE a.user_id = #{userId}  AND a.`status` = 1-->
 
-     SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.segmentation segementation ,
-    (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1)stage
-    FROM follow a LEFT JOIN projects mf  ON a.`projects_id` = mf.`ID`
+      SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,ps.segmentation_name segementation ,
+      pfl.stage
+      FROM follow a LEFT JOIN projects mf  ON a.`projects_id` = mf.`ID`
+      RIGHT JOIN project_segmentation ps on ps.project_id = mf.id
+      left join project_financing_log pfl on pfl.project_id = mf.id
     WHERE a.user_id = #{userId}  AND a.`status` = 1
     GROUP BY mf.`id`  ORDER BY a.create_time DESC LIMIT #{beginNum},#{pageSize}
   </select>

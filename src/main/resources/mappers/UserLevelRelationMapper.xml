@@ -26,9 +26,15 @@
     WHERE b.scene_key NOT IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
     LIMIT #{beginNum},#{ pageSize}
   </select>
-  <select id="findByUserIdLeid" parameterType="INTEGER" resultType="INTEGER">
-    SELECT u.level_id  FROM user_level_relation u WHERE u.user_id=#{userId} 
-    AND u.yn=0 AND u.status =1 
-    ORDER BY u.create_time DESC LIMIT 1;
+  <select id="findByUserIdLeid"  resultType="string">
+    SELECT mo.scene_key  FROM user_level_relation u
+    left join meta_obtain_integral mo on u.level_id = mo.user_level
+    WHERE u.user_id=#{userId}
+    and Date(u.begin_time) &lt;= #{now}
+    and Date(u.end_time)  &gt;= #{now}
+  </select>
+
+  <select id="findByUserScene" parameterType="INTEGER" resultType="map">
+    SELECT
   </select>
 </mapper>

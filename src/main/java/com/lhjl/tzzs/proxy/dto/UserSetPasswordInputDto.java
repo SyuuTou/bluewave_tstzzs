@@ -7,6 +7,15 @@ public class UserSetPasswordInputDto {
     private String password;
     private String token;
     private String isWeixin;
+    private String idType;
+
+    public String getIdType() {
+        return idType;
+    }
+
+    public void setIdType(String idType) {
+        this.idType = idType;
+    }
 
     public String getIsWeixin() {
         return isWeixin;
