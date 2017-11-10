@@ -48,5 +48,12 @@ public interface ProjectsService {
      */
     CommonDto<List<Map<String,Object>>> getProjectFinancingHistory(Map<String,Object> body);
 
+    /**
+     * 获取项目团队成员接口
+     * @param body
+     * @return
+     */
+    CommonDto<List<Map<String,Object>>> getProjectFinancingTeam(Map<String,Object> body);
+
 
 }

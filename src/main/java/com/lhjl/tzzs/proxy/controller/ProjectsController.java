@@ -254,4 +254,26 @@ public class ProjectsController {
 
         return result;
     }
+
+    /**
+     * 获取项目团队成员接口
+     * @param body
+     * @return
+     */
+    @PostMapping("get/project/financing/team")
+    public CommonDto<List<Map<String,Object>>> getProgectFinancingTeam(@RequestBody Map<String,Object> body){
+        CommonDto<List<Map<String,Object>>> result  = new CommonDto<>();
+        try {
+            result = projectsService.getProjectFinancingTeam(body);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+        }
+
+        return result;
+    }
+
+
 }

@@ -54,6 +54,15 @@ public class ProjectsServiceImpl implements ProjectsService {
     @Autowired
     private ProjectFinancingHistoryInvestorsMapper projectFinancingHistoryInvestorsMapper;
 
+    @Autowired
+    private ProjectTeamMemberMapper projectTeamMemberMapper;
+
+    @Autowired
+    private ProjectTeamMemberEducationMapper projectTeamMemberEducationMapper;
+
+    @Autowired
+    private ProjectTeamMemberWorkMapper projectTeamMemberWorkMapper;
+
 
     /**
      * 查询我关注的项目
@@ -534,10 +543,12 @@ public class ProjectsServiceImpl implements ProjectsService {
                     if (projectFinancingHistoryInvestorsList.size() > 2){
                         for (Integer i = 0;i < 1 ;i++){
                             touzifang.append(projectFinancingHistoryInvestorsList.get(i).getInvestorName());
+                            touzifang.append(" ");
                         }
                     }else {
                         for (ProjectFinancingHistoryInvestors pfhi:projectFinancingHistoryInvestorsList){
                             touzifang.append(pfhi.getInvestorName());
+                            touzifang.append(" ");
                         }
                     }
                 }
@@ -558,6 +569,105 @@ public class ProjectsServiceImpl implements ProjectsService {
             result.setData(list);
         }
 
+
+        return result;
+    }
+
+    @Override
+    public CommonDto<List<Map<String,Object>>> getProjectFinancingTeam(Map<String,Object> body){
+        CommonDto<List<Map<String,Object>>> result = new CommonDto<>();
+        List<Map<String,Object>> obj = new ArrayList<>();
+
+        if (body.get("projectId") == null || "".equals(body.get("projectId"))){
+            result.setStatus(50001);
+            result.setMessage("项目id不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        if (body.get("token") == null || "".equals(body.get("token"))){
+            result.setMessage("用户token不能为空");
+            result.setData(null);
+            result.setStatus(50001);
+
+            return result;
+        }
+
+        Integer xmid = (Integer) body.get("projectId");
+
+        ProjectTeamMember projectTeamMember =new ProjectTeamMember();
+        projectTeamMember.setProjectId(xmid);
+        projectTeamMember.setYn(0);
+
+
+        List<ProjectTeamMember> projectTeamMemberList = projectTeamMemberMapper.select(projectTeamMember);
+        if (projectTeamMemberList.size() > 0){
+
+            for (ProjectTeamMember ptm:projectTeamMemberList){
+                Map<String,Object> map = new HashMap<>();
+
+                //获取教育经历
+                ProjectTeamMemberEducation projectTeamMemberEducation = new ProjectTeamMemberEducation();
+                projectTeamMemberEducation.setProjectTeamMemberId(ptm.getId());
+                StringBuffer jiaoyujingli = new StringBuffer();
+                StringBuffer gongzuojingli = new StringBuffer();
+
+                List<ProjectTeamMemberEducation> projectTeamMemberEducationList = projectTeamMemberEducationMapper.select(projectTeamMemberEducation);
+                if (projectTeamMemberEducationList.size() > 0){
+                    if (projectTeamMemberEducationList.size() > 3){
+                        for (int j = 0;j<2;j++){
+                            jiaoyujingli.append(projectTeamMemberEducationList.get(j).getEducationExperience());
+                            jiaoyujingli.append(" ");
+                        }
+                    }else {
+                        for (ProjectTeamMemberEducation ptme:projectTeamMemberEducationList){
+                            jiaoyujingli.append(ptme.getEducationExperience());
+                            jiaoyujingli.append(" ");
+                        }
+                    }
+                }
+
+
+                //获取工作经历
+                ProjectTeamMemberWork projectTeamMemberWork = new ProjectTeamMemberWork();
+                projectTeamMemberWork.setProjectTeamMemberId(ptm.getId());
+
+                List<ProjectTeamMemberWork> projectTeamMemberWorkList = projectTeamMemberWorkMapper.select(projectTeamMemberWork);
+                if (projectTeamMemberWorkList.size() > 0){
+                    if (projectTeamMemberWorkList.size() > 3){
+                        for (int k = 0;k<2;k++){
+                            gongzuojingli.append(projectTeamMemberWorkList.get(k).getWorkExperience());
+                            gongzuojingli.append(" ");
+                        }
+                    }else {
+                        for (ProjectTeamMemberWork ptmw:projectTeamMemberWorkList){
+                            gongzuojingli.append(ptmw.getWorkExperience());
+                            gongzuojingli.append(" ");
+                        }
+                    }
+                }
+
+                //组合数据返回前端
+                map.put("mumberName",ptm.getMumberName());
+                map.put("mumberDuties",ptm.getMumberDuties());
+                map.put("jiaoyujingli",jiaoyujingli);
+                map.put("gongzuojingli",gongzuojingli);
+                map.put("shareRato",ptm.getShareRatio());
+                map.put("mumberDesc",ptm.getMumberDesc());
+
+                obj.add(map);
+
+                result.setMessage("success");
+                result.setStatus(200);
+                result.setData(obj);
+
+            }
+        }else{
+            result.setData(obj);
+            result.setStatus(200);
+            result.setMessage("success");
+        }
 
         return result;
     }
