@@ -69,7 +69,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
                 Users getUser =usersMapper.selectByPrimaryKey(users.getId());
                 if (getUser == null){
                     result.setData(null);
-                    result.setMessage("当前输入token非法，请检查");
+                    result.setMessage("获取用户信息出现异常");
                     result.setStatus(401);
 
                     return result;
