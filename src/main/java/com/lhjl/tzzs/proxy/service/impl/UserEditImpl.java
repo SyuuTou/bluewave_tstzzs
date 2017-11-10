@@ -62,7 +62,24 @@ public class UserEditImpl implements UserEditService {
         String verify = body.getVerify();
         String user7realname_cn = body.getUser7realname_cn();
        // String password = body.getPassword();
-
+        String identityType = body.getIdType();
+        int shenfenleixing = -1;
+        switch (identityType){
+            case "投资人":shenfenleixing =0;
+                break;
+            case "创业者":shenfenleixing = 1;
+                break;
+            case "产业公司":shenfenleixing =2;
+                break;
+            case "媒体":shenfenleixing=3;
+                break;
+            case "政府机构":shenfenleixing =4;
+                break;
+            case "服务机构":shenfenleixing =5;
+                break;
+            default:
+                break;
+        }
 
 
 
@@ -71,6 +88,7 @@ public class UserEditImpl implements UserEditService {
         users.setPhonenumber(verify);
        // String passwordForSet = encodePassword(password);
         //users.setPassword(passwordForSet);
+        users.setIdentityType(shenfenleixing);
         users.setId(userId);
 
         usersMapper.updateByPrimaryKeySelective(users);
