@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendDto;
 import com.lhjl.tzzs.proxy.dto.ProjectsSendDto;
 import com.lhjl.tzzs.proxy.dto.TeamDto;
+import com.lhjl.tzzs.proxy.dto.TeamDto1;
 import com.lhjl.tzzs.proxy.service.ProjectsSendService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
 import org.slf4j.Logger;
@@ -160,6 +161,25 @@ public class ProjectsSendController {
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("投递项目回显异常");
+            logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
+
+
+    /**
+     * 修改页面
+     * @param body
+     * @return
+     */
+    @PostMapping("xiugai/team")
+    public CommonDto<String> saveTeam1(@RequestBody TeamDto1 body){
+        CommonDto<String> result = new CommonDto<>();
+        try{
+            result = projectsSendService.saveTeam1(body);
+        }catch(Exception e){
+            result.setStatus(501);
+            result.setMessage("保存团队成员记录异常");
             logger.error(e.getMessage(),e.fillInStackTrace());
         }
         return result;

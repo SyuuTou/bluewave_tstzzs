@@ -22,6 +22,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.LabelList;
 import com.lhjl.tzzs.proxy.dto.ProjectsSendDto;
 import com.lhjl.tzzs.proxy.dto.TeamDto;
+import com.lhjl.tzzs.proxy.dto.TeamDto1;
 import com.lhjl.tzzs.proxy.service.EvaluateService;
 import com.lhjl.tzzs.proxy.service.ProjectsSendService;
 
@@ -1726,7 +1727,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
          BigDecimal stockright = new BigDecimal(stock_right);
          projectSendTeamMember.setShareRatio(stockright);
          projectSendTeamMember.setMemberName(shortname);
-         projectSendTeamMember.setYn(1);
+         projectSendTeamMember.setYn(0);
          projectSendTeamMemberMapper.insert(projectSendTeamMember);
          //教育背景
          String[] educationArry =education.split(",");
@@ -1765,8 +1766,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 		ProjectSendTeamMember projectSendTeamMember =new ProjectSendTeamMember();
 		projectSendTeamMember.setId(id);
 		ProjectSendTeamMember body = projectSendTeamMemberMapper.selectByPrimaryKey(projectSendTeamMember);
-		if(body.getYn() == 1){
-			body.setYn(0);
+		if(body.getYn() == 0){
+			body.setYn(1);
 		}else{
 			result.setStatus(501);
 	        result.setMessage("已删除，请不要频繁点击");
@@ -1835,5 +1836,97 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 		return result;
 	}
 
+    /**
+     * 修改页面
+     * @param body
+     * @return
+     */
+	@Override
+	public CommonDto<String> saveTeam1(TeamDto1 body) {
+		 CommonDto<String> result = new CommonDto<>();
+	        String education = body.getEducation();
+	        String jianjie = body.getJianjie();
+	        String shortname = body.getShortname();
+	        String stock_right = body.getStock_right();
+	        String tsid = body.getTsid();
+	        String work = body.getWork();
+	        String zhiwu = body.getZhiwu();
+	        if(education ==null || "".equals(education)){
+	        	 result.setStatus(50021);
+	             result.setMessage("教育背景不能为空");
+	        	
+	        }
+	        
+	        if(jianjie ==null || "".equals(jianjie)){
+	       	 result.setStatus(50021);
+	            result.setMessage("简介不能为空");
+	       	
+	       }
+	        if(shortname ==null || "".equals(shortname)){
+	       	 result.setStatus(50021);
+	            result.setMessage("姓名不能为空");
+	       	
+	       }
+	        if(stock_right ==null || "".equals(stock_right)){
+	          	 result.setStatus(50021);
+	               result.setMessage("轮次不能为空");
+	          	
+	          }
+	        if(tsid ==null || "".equals(tsid)){
+	          	 result.setStatus(50021);
+	               result.setMessage("记录不能为空");
+	          	
+	          }
+	        if(work ==null || "".equals(work)){
+	          	 result.setStatus(50021);
+	               result.setMessage("工作不能为空");
+	          	
+	          }
+	        if(zhiwu ==null || "".equals(zhiwu)){
+	          	 result.setStatus(50021);
+	               result.setMessage("职务不能为空");
+	          	
+	          }
+	         ProjectSendTeamMember projectSendTeamMember =new ProjectSendTeamMember();
+	         projectSendTeamMember.setId(body.getId());
+	         projectSendTeamMember.setCreateTime(new Date());
+	         projectSendTeamMember.setMemberDesc(jianjie);
+	         projectSendTeamMember.setMemberDuties(zhiwu);
+	         projectSendTeamMember.setProjectSendLogsId(-1);
+	         BigDecimal stockright = new BigDecimal(stock_right);
+	         projectSendTeamMember.setShareRatio(stockright);
+	         projectSendTeamMember.setMemberName(shortname);
+	         projectSendTeamMember.setYn(0);
+	         projectSendTeamMemberMapper.updateByPrimaryKey(projectSendTeamMember);
+	         //教育背景
+	         ProjectSendTeamMemberEducation dataLogEducation1 =new ProjectSendTeamMemberEducation();
+	         dataLogEducation1.setProjectSendTeamMemberId(body.getId());
+	         projectSendTeamMemberEducationMapper.delete(dataLogEducation1);
+	         String[] educationArry =education.split(",");
+	         List<ProjectSendTeamMemberEducation> dataLogEducationlist =new Page< ProjectSendTeamMemberEducation>();
+	         for (int a=0; a < educationArry.length;a++){
+	        	  ProjectSendTeamMemberEducation dataLogEducation =new ProjectSendTeamMemberEducation();
+	             dataLogEducation.setEducationExperience(educationArry[a]);
+	             dataLogEducation.setProjectSendTeamMemberId(projectSendTeamMember.getId());
+	             dataLogEducationlist.add(dataLogEducation);
+	         }
+	         projectSendTeamMemberEducationMapper.insertList(dataLogEducationlist);
+	         //工作背景
+	         ProjectSendTeamMemberWork dataLogEducation3 =new ProjectSendTeamMemberWork();
+	         dataLogEducation3.setProjectSendTeamMemberId(body.getId());
+	         projectSendTeamMemberWorkMapper.delete(dataLogEducation3);
+	        String[] workArry =work.split(",");
+	        List<ProjectSendTeamMemberWork> dataLogworklist =new Page<ProjectSendTeamMemberWork>();
+	        for (int a=0; a < workArry.length;a++){
+	            ProjectSendTeamMemberWork dataLogEducation =new ProjectSendTeamMemberWork();
+	            dataLogEducation.setWorkExperience(workArry[a]);
+	            dataLogEducation.setProjectSendTeamMemberId(projectSendTeamMember.getId());
+	            dataLogworklist.add(dataLogEducation);
+	        }
+	        projectSendTeamMemberWorkMapper.insertList(dataLogworklist);
+	         result.setStatus(200);
+	         result.setMessage("保存成功");
+	         return result;
+	    }
 }
 

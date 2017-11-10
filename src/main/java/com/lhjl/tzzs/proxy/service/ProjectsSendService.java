@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectsSendDto;
 import com.lhjl.tzzs.proxy.dto.TeamDto;
+import com.lhjl.tzzs.proxy.dto.TeamDto1;
 
 import java.util.Map;
 
@@ -49,4 +50,5 @@ public interface ProjectsSendService {
 
     CommonDto<String> deleteTeam(Integer id );
     CommonDto<Map<String, Object>> teamRecord(Integer id);
+    CommonDto<String> saveTeam1( TeamDto1 body);
 }

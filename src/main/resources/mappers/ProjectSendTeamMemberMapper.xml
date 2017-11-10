@@ -18,7 +18,7 @@
     UPDATE project_send_team_member c SET c.project_send_logs_id=#{projectId} WHERE c.project_send_logs_id=-1
   </update>
   <select id="findTeam" parameterType="int" resultMap="BaseResultMap">
-   SELECT * FROM project_send_team_member c WHERE c.project_send_logs_id IN(#{projectId},-1) AND c.yn=1 ORDER BY c.create_time DESC
+   SELECT * FROM project_send_team_member c WHERE c.project_send_logs_id IN(#{projectId},-1) AND c.yn=0 ORDER BY c.create_time DESC
   </select>
 
 </mapper>
