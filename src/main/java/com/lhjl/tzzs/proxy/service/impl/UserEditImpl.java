@@ -89,6 +89,7 @@ public class UserEditImpl implements UserEditService {
        // String passwordForSet = encodePassword(password);
         //users.setPassword(passwordForSet);
         users.setIdentityType(shenfenleixing);
+        users.setIdType(identityType);
         users.setId(userId);
 
         usersMapper.updateByPrimaryKeySelective(users);
