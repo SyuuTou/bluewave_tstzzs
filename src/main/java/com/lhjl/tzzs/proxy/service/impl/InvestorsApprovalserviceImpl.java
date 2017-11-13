@@ -165,6 +165,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			UserToken userToken =new UserToken();
 			userToken.setToken(token);
 			userToken = userTokenMapper.selectOne(userToken);
+			Users users1 =new Users();
+            users1.setUuid(token);
+            users1 = usersMapper.selectOne(users1);
 
 			Integer userId = userToken.getUserId();
 			map=investorsApprovalMapper.findInvestorsApproval(userId);
@@ -188,7 +191,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                map.put("renzhengtouzirenshenhebiao7applicantn",String.valueOf(map.get("approval_username")));
                map.put("renzhengtouzirenshenhebiao7assumeoffi",String.valueOf(map.get("company_duties")));
                map.put("renzhengtouzirenshenhebiao7certificat",String.valueOf(map.get("company")));
-               map.put("renzhengtouzirenshenhebiao7frontofbus",String.valueOf(map.get("work_card")));
+               map.put("renzhengtouzirenshenhebiao7frontofbus",users1.getWorkCard());
                map.put("renzhengtouzirenshenhebiao7wherecompa",String.valueOf(map.get("description")));
                map.put("investorsApprovalcolCase",anliArray);
 
