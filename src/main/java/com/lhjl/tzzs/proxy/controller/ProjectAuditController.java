@@ -52,9 +52,13 @@ public class ProjectAuditController {
         try {
             //初始化分页信息
             result = projectAuditService.findProject(id);
+            if(result.getStatus() == null){
+                result.setStatus(200);
+                result.setMessage("success");
+            }
         } catch (Exception e) {
             result.setStatus(5101);
-            result.setMessage("项目显示页面异常，请稍后再试");
+            result.setMessage("项目id不存在");
             log.error(e.getMessage());
         }
         return result;
@@ -68,9 +72,13 @@ public class ProjectAuditController {
         try {
             //初始化分页信息
             result = projectAuditService.findProjectall(id);
+            if(result.getStatus() == null){
+                result.setStatus(200);
+                result.setMessage("success");
+            }
         } catch (Exception e) {
             result.setStatus(5101);
-            result.setMessage("项目显示页面异常，请稍后再试");
+            result.setMessage("项目id不存在");
             log.error(e.getMessage());
         }
         return result;
