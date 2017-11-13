@@ -120,7 +120,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                     }
                 }
                 //判断条件1
-                if (flag == split.length) {
+                if (flag == split.length && flag ==educationArray.length) {
                     ProjectSendLogs projectSendLogs1 = new ProjectSendLogs();
                     projectSendLogs1.setId(Integer.parseInt(params.getXmid()));
                     projectSendLogs1 = projectSendLogsMapper.selectOne(projectSendLogs1);
