@@ -35,8 +35,8 @@ public class ProjectsServiceImplUtil {
      * @param froma                       每页记录数
      * @return
      */
-    @Cacheable(value = "getBaseProjectInfo", keyGenerator = "wiselyKeyGenerator")
-   // @CacheEvict(value = "getBaseProjectInfo", allEntries=true)
+   @Cacheable(value = "getBaseProjectInfo", keyGenerator = "wiselyKeyGenerator")
+   //@CacheEvict(value = "getBaseProjectInfo", allEntries=true)
     public List<Map<String, Object>> getBaseProjectInfo(String userId, String type, String segmentation,
                                                         String stage, String city,
                                                         String working_background_desc, String educational_background_desc,
@@ -102,6 +102,7 @@ public class ProjectsServiceImplUtil {
      * @return
      */
     @Cacheable(value = "getSearchBaseProjectAll", keyGenerator = "wiselyKeyGenerator")
+    //@CacheEvict(value = "getSearchBaseProjectAll", allEntries=true)
     public List<Map<String, Object>> getSearchBaseProjectAll(String userId, String shortName, Integer sizea, Integer froma) {
         List<Map<String, Object>> list = projectsMapper.findProjectByShortNameAll(shortName, userId, sizea, froma);
         return  list;
@@ -113,7 +114,7 @@ public class ProjectsServiceImplUtil {
      * @param shortName
      * @return
      */
-    @Cacheable(value = "getSearchBaseProject", keyGenerator = "wiselyKeyGenerator")
+   // @Cacheable(value = "getSearchBaseProject", keyGenerator = "wiselyKeyGenerator")
     public List<Map<String, Object>> getSearchBaseProject(String userId, String shortName) {
         List<Map<String, Object>> list =projectsMapper.findProjectByShortName(userId,shortName);
         return  list;
