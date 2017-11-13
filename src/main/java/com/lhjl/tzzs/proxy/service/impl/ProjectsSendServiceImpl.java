@@ -1687,11 +1687,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         CommonDto<String> result = new CommonDto<>();
 
         //保存融资历史记录
-        if(tsid == null  || "".equals(tsid)){
-            tsid="-1";
-        }else{
-            tsid=tsid;
-        }
+        tsid="-1";
         ProjectFinancingHistory projectFinancingHistory = new ProjectFinancingHistory();
         projectFinancingHistory.setProjectSendLogId(tsid);
         projectFinancingHistory = projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
@@ -1799,11 +1795,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
          projectSendTeamMember.setCreateTime(new Date());
          projectSendTeamMember.setMemberDesc(jianjie);
          projectSendTeamMember.setMemberDuties(zhiwu);
-         if(body.getTsid() == null  || "".equals(body.getTsid())){
          projectSendTeamMember.setProjectSendLogsId(-1);
-         }else{
-             projectSendTeamMember.setProjectSendLogsId(Integer.parseInt(body.getTsid()));
-         }
          BigDecimal stockright = new BigDecimal(stock_right);
          projectSendTeamMember.setShareRatio(stockright);
          projectSendTeamMember.setMemberName(shortname);
@@ -1972,11 +1964,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 	         projectSendTeamMember.setCreateTime(new Date());
 	         projectSendTeamMember.setMemberDesc(jianjie);
 	         projectSendTeamMember.setMemberDuties(zhiwu);
-        if(body.getTsid() == null  || "".equals(body.getTsid())){
-            projectSendTeamMember.setProjectSendLogsId(-1);
-        }else{
-            projectSendTeamMember.setProjectSendLogsId(Integer.parseInt(body.getTsid()));
-        }
+             projectSendTeamMember.setProjectSendLogsId(-1);
 	         BigDecimal stockright = new BigDecimal(stock_right);
 	         projectSendTeamMember.setShareRatio(stockright);
 	         projectSendTeamMember.setMemberName(shortname);
