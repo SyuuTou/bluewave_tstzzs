@@ -12,6 +12,13 @@ public class TeamDto1 {
     private String work;
     private String education;
     private Integer id;
+    public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
+	private String token;
 	public String getTsid() {
 		return tsid;
 	}
