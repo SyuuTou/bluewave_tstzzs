@@ -32,4 +32,11 @@ public interface UserInfoService {
      * @return
      */
     CommonDto<String> getUserFormid(Integer userId);
+
+    /**
+     * 设置formid为失效的接口
+     * @param formid
+     * @return
+     */
+    CommonDto<String> setUserFormid(String formid);
 }

@@ -204,11 +204,51 @@ public class UserInfoServiceImpl implements UserInfoService{
         String formId = "";
         if (miniappFormidList.size() > 0){
             formId = miniappFormidList.get(0).getFormId();
+            //读出来以后锁定formid
+            MiniappFormid miniappFormidForUpdate = new MiniappFormid();
+            miniappFormidForUpdate.setId(miniappFormidList.get(0).getId());
+            miniappFormidForUpdate.setYn(2);
+
+            miniappFormidMapper.updateByPrimaryKeySelective(miniappFormidForUpdate);
         }
 
         result.setMessage("success");
         result.setData(formId);
         result.setStatus(200);
+
+
+        return result;
+    }
+
+    /**
+     * 设置formid为失效的接口
+     * @param formid
+     * @return
+     */
+    @Override
+    public CommonDto<String> setUserFormid(String formid){
+        CommonDto<String> result = new CommonDto<>();
+        MiniappFormid miniappFormidForSearch = new MiniappFormid();
+        miniappFormidForSearch.setFormId(formid);
+
+        //查到formid对应的记录。将该记录改为已使用
+        List<MiniappFormid> miniappFormidList = miniappFormidMapper.select(miniappFormidForSearch);
+        if (miniappFormidList.size() > 0){
+            MiniappFormid miniappFormidForUpdate = new MiniappFormid();
+            miniappFormidForUpdate.setId(miniappFormidList.get(0).getId());
+            miniappFormidForUpdate.setYn(1);
+
+            miniappFormidMapper.updateByPrimaryKeySelective(miniappFormidForUpdate);
+        }else {
+            result.setMessage("没有找到该formid对应的记录");
+            result.setData(null);
+            result.setStatus(50001);
+
+            return result;
+        }
+        result.setStatus(200);
+        result.setData(null);
+        result.setMessage("success");
 
 
         return result;

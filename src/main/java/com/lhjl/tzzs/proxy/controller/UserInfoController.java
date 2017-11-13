@@ -81,6 +81,28 @@ public class UserInfoController {
             result.setStatus(502);
             result.setData(null);
         }
+        
+        return result;
+    }
+
+
+    /**
+     * 设置formid为失效的接口
+     * @param formid
+     * @return
+     */
+    @GetMapping("set/user/formid")
+    public CommonDto<String> setUserFormid(String formid){
+        CommonDto<String> result = new CommonDto<>();
+
+        try {
+            result = userInfoService.setUserFormid(formid);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+        }
 
         return result;
     }
