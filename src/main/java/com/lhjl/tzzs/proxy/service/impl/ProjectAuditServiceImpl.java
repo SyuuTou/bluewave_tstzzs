@@ -17,6 +17,7 @@ import springfox.documentation.spring.web.json.Json;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -430,5 +431,96 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
         return result;
     }
+    /**
+     * 相似竞品
+     */
+	@Override
+	public CommonDto<List<Map<String, Object>>> findProject(Integer id) {
+		 CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
+        Projects projects =new Projects();
+        projects.setId(id);
+        projects  = projectsMapper.selectByPrimaryKey(id);
+        String city = projects.getCity();
+        String shortName = projects.getShortName();
+        ProjectSegmentation projectSegmentation =new ProjectSegmentation();
+        projectSegmentation.setProjectId(id);
+        List<ProjectSegmentation> ps = projectSegmentationMapper.select(projectSegmentation);
+        List<String> a=new LinkedList<String>();
+        String [] educationArray =null;
+        if(ps.size()>0){
+        for(ProjectSegmentation d:ps){
+            a.add(d.getSegmentationName());
+            educationArray= new String[a.size()];
+            educationArray=a.toArray(educationArray);
+        }
+        }
+        ProjectFinancingLog projectFinancingLog =new  ProjectFinancingLog();
+        projectFinancingLog.setProjectId(id);
+        List<ProjectFinancingLog> psl = projectFinancingLogMapper.select(projectFinancingLog);
+        List<String> a1=new LinkedList<String>();
+        String [] pslArray =null;
+        if(psl.size()>0){
+        for(ProjectFinancingLog d:psl){
+            a1.add(d.getStage());
+            pslArray= new String[a1.size()];
+            pslArray=a1.toArray(pslArray);
+        }
+        }
+        List<Map<String, Object>> likes = projectsMapper.findLikes(educationArray,city,pslArray,shortName );
+        List<Map<String, Object>> like2 =new ArrayList<>();
+       /* for(Map<String, Object> map :likes){
+       	 if(Integer.valueOf(String.valueOf(map.get("id"))) == id){
+       		 likes.remove(map);	  
+       	 }	  
+        }
+        like2.addAll(likes);*/	
+        result.setData(likes);
+		return result;
+	}
+	@Override
+	public CommonDto<List<Map<String, Object>>> findProjectall(Integer id) {
+		 CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
+        Projects projects =new Projects();
+        projects.setId(id);
+        projects  = projectsMapper.selectByPrimaryKey(id);
+        String city = projects.getCity();
+        String shortName = projects.getShortName();
+        ProjectSegmentation projectSegmentation =new ProjectSegmentation();
+        projectSegmentation.setProjectId(id);
+        List<ProjectSegmentation> ps = projectSegmentationMapper.select(projectSegmentation);
+        List<String> a=new LinkedList<String>();
+        String [] educationArray =null;
+        if(ps.size()>0){
+        for(ProjectSegmentation d:ps){
+            a.add(d.getSegmentationName());
+            educationArray= new String[a.size()];
+            educationArray=a.toArray(educationArray);
+        }
+        }
+        ProjectFinancingLog projectFinancingLog =new  ProjectFinancingLog();
+        projectFinancingLog.setProjectId(id);
+        List<ProjectFinancingLog> psl = projectFinancingLogMapper.select(projectFinancingLog);
+        List<String> a1=new LinkedList<String>();
+        String [] pslArray =null;
+        if(psl.size()>0){
+        for(ProjectFinancingLog d:psl){
+            a1.add(d.getStage());
+            pslArray= new String[a1.size()];
+            pslArray=a1.toArray(pslArray);
+        }
+        }
+        List<Map<String, Object>> likes = projectsMapper.findLikesall(educationArray,city,pslArray,shortName);
+        List<Map<String, Object>> like2 =new ArrayList<>();
+       /* for(Map<String, Object> map :likes){
+       	 if(Integer.valueOf(String.valueOf(map.get("id"))) == id){
+       		 likes.remove(map);	  
+       	 }	  
+        }
+        like2.addAll(likes);*/	
+        result.setData(likes);
+		return result;
+	}
 
 }
+
+

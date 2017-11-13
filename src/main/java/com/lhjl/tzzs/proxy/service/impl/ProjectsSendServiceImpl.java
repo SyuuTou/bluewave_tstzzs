@@ -203,6 +203,23 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                             List<ProjectSendTeamMemberEducation> projectSendTeamMemberEducationList = projectSendTeamMemberEducationMapper.select(projectSendTeamMemberEducationForSearch);
                                             List<ProjectSendTeamMemberWork> projectSendTeamMemberWorkList = projectSendTeamMemberWorkMapper.select(projectSendTeamMemberWorkForSearch);
 
+                                            ProjectTeamMemberEducation projectSendTeamMemberEducationForSearch1 = new ProjectTeamMemberEducation();
+                                            projectSendTeamMemberEducationForSearch1.setProjectTeamMemberId(pst.getId());
+                                            
+
+                                            ProjectTeamMemberWork projectSendTeamMemberWorkForSearch1 = new ProjectTeamMemberWork();
+                                            projectSendTeamMemberWorkForSearch1.setProjectTeamMemberId(pst.getId());
+                                            
+                                            List<ProjectTeamMemberEducation> projectSendTeamMemberEducationList1 = projectTeamMemberEducationMapper.select(projectSendTeamMemberEducationForSearch1);
+                                            List<ProjectTeamMemberWork> projectSendTeamMemberWorkList1 = projectTeamMemberWorkMapper.select(projectSendTeamMemberWorkForSearch1);
+                                            if(projectSendTeamMemberEducationList1.size()>0){
+                                            	projectTeamMemberEducationMapper.delete(projectSendTeamMemberEducationForSearch1);	
+                                            	
+                                            }
+                                            if(projectSendTeamMemberWorkList1.size()>0){
+                                            	projectTeamMemberWorkMapper.delete(projectSendTeamMemberWorkForSearch1);	
+                                            	
+                                            }
                                             //创建教育经历
                                             if (projectSendTeamMemberEducationList.size() > 0){
                                                 for (ProjectSendTeamMemberEducation pstme:projectSendTeamMemberEducationList){
@@ -213,7 +230,6 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                                     projectTeamMemberEducationMapper.insertSelective(projectTeamMemberEducation);
                                                 }
                                             }
-
                                             //创建工作经历
                                             if (projectSendTeamMemberWorkList.size() > 0){
                                                 for (ProjectSendTeamMemberWork pstmw:projectSendTeamMemberWorkList){
@@ -367,6 +383,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                     newFounders.setUserId(userId);
                                     foundersMapper.insert(newFounders);
                                     foundersId = newFounders.getId();
+
                                 }
 
                                 //更新教育经历
@@ -1978,10 +1995,9 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 	            dataLogEducation.setProjectSendTeamMemberId(projectSendTeamMember.getId());
 	            dataLogworklist.add(dataLogEducation);
 	        }
-	        projectSendTeamMemberWorkMapper.insertList(dataLogworklist);
+	         projectSendTeamMemberWorkMapper.insertList(dataLogworklist);
 	         result.setStatus(200);
 	         result.setMessage("保存成功");
 	         return result;
 	    }
 }
-

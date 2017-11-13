@@ -1,15 +1,19 @@
 package com.lhjl.tzzs.proxy.controller;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.ProjectAuditInputDto;
-import com.lhjl.tzzs.proxy.service.ProjectAuditService;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import java.util.Map;
+import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ProjectAuditInputDto;
+import com.lhjl.tzzs.proxy.service.ProjectAuditService;
 
 
 @RestController
@@ -39,4 +43,38 @@ public class ProjectAuditController {
 
         return result;
     }
+    @GetMapping("search/likes")
+    public CommonDto<List<Map<String, Object>>> findProject(Integer id){
+
+
+        CommonDto<List<Map<String, Object>>> result =new CommonDto<List<Map<String, Object>>>();
+
+        try {
+            //初始化分页信息
+            result = projectAuditService.findProject(id);
+        } catch (Exception e) {
+            result.setStatus(5101);
+            result.setMessage("项目显示页面异常，请稍后再试");
+            log.error(e.getMessage());
+        }
+        return result;
+    }
+    @GetMapping("search/likes/all")
+    public CommonDto<List<Map<String, Object>>> findProjectall(Integer id){
+
+
+        CommonDto<List<Map<String, Object>>> result =new CommonDto<List<Map<String, Object>>>();
+
+        try {
+            //初始化分页信息
+            result = projectAuditService.findProjectall(id);
+        } catch (Exception e) {
+            result.setStatus(5101);
+            result.setMessage("项目显示页面异常，请稍后再试");
+            log.error(e.getMessage());
+        }
+        return result;
+    }
+
 }
+

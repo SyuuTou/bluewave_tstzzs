@@ -49,6 +49,8 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
     BigDecimal findProjectAllByRoundAndE(@Param("segmentation") String segmentation, @Param("stage") String stage);
 
     BigDecimal findProjectAllByRoundAndC(@Param("stage") String stage, @Param("city") String city);
+    List<Map<String,Object>> findLikes(@Param("educationArray") String [] educationArray, @Param("city") String city,@Param("pslArray") String [] pslArray, @Param("shortName") String shortName);
+    List<Map<String,Object>> findLikesall(@Param("educationArray") String [] educationArray, @Param("city") String city,@Param("pslArray") String [] pslArray,@Param("shortName") String shortName);
 }
 
 
