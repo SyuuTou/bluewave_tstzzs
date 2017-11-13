@@ -685,7 +685,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				UserToken userToken = new UserToken();
 				userToken.setUserId(userId);
 				userToken = userTokenMapper.selectOne(userToken);
-				userLevelService.upLevel(userToken.getToken(), 4, null);
+				userLevelService.upLevel(userToken.getToken(), 4, "VIP_Investor");
 			}
 
 			//更新用户表的信息
@@ -718,7 +718,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				UserToken userToken = new UserToken();
 				userToken.setUserId(userId);
 				userToken = userTokenMapper.selectOne(userToken);
-				userLevelService.upLevel(userToken.getToken(), 4, null);
+				userLevelService.upLevel(userToken.getToken(), 4, "VIP_Investor");
 			}
 
 			//更新用户表的信息
