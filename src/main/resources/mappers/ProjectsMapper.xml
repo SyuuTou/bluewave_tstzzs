@@ -301,7 +301,7 @@
          AND pfl.stage IN 
             <foreach close=")" collection="pslArray" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
-        mf.short_name !=#{shortName}
+        and mf.short_name !=#{shortName}
         GROUP BY mf.short_name, pfl.stage
         ORDER BY mf.evaluation_recommend DESC
         LIMIT 3
