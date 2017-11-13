@@ -24,6 +24,17 @@ public class MiniappFormid {
     private String token;
 
     /**
+     * 使用状态，0表示未使用，1表示已使用；使用时用最老的那个formid;
+     */
+    private Integer yn;
+
+    /**
+     * 使用时间
+     */
+    @Column(name = "use_time")
+    private Date useTime;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -105,5 +116,41 @@ public class MiniappFormid {
      */
     public void setToken(String token) {
         this.token = token;
+    }
+
+    /**
+     * 获取使用状态，0表示未使用，1表示已使用；使用时用最老的那个formid;
+     *
+     * @return yn - 使用状态，0表示未使用，1表示已使用；使用时用最老的那个formid;
+     */
+    public Integer getYn() {
+        return yn;
+    }
+
+    /**
+     * 设置使用状态，0表示未使用，1表示已使用；使用时用最老的那个formid;
+     *
+     * @param yn 使用状态，0表示未使用，1表示已使用；使用时用最老的那个formid;
+     */
+    public void setYn(Integer yn) {
+        this.yn = yn;
+    }
+
+    /**
+     * 获取使用时间
+     *
+     * @return use_time - 使用时间
+     */
+    public Date getUseTime() {
+        return useTime;
+    }
+
+    /**
+     * 设置使用时间
+     *
+     * @param useTime 使用时间
+     */
+    public void setUseTime(Date useTime) {
+        this.useTime = useTime;
     }
 }
