@@ -235,7 +235,7 @@ public class ProjectsServiceImpl implements ProjectsService {
         String educational_background_desc = sereachDto.getEducational_background_desc();
 
         String size = "0";
-        String from = "10";
+        String from = "20";
         if (sereachDto.getPageNum() != null && !"".equals(sereachDto.getPageNum())) {
             size = sereachDto.getPageNum();
         }
@@ -320,7 +320,7 @@ public class ProjectsServiceImpl implements ProjectsService {
             String educational_background_desc = sereachDto.getEducational_background_desc();
 
             String size = "0";
-            String from = "10";
+            String from = "20";
             if (sereachDto.getPageNum() != null && !"".equals(sereachDto.getPageNum())) {
                 size = sereachDto.getPageNum();
             }
