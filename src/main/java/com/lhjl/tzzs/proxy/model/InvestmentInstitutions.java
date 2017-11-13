@@ -87,13 +87,13 @@ public class InvestmentInstitutions {
      * 审核时间
      */
     @Column(name = "approval_time")
-    private Integer approvalTime;
+    private Date approvalTime;
 
-    public Integer getApprovalTime() {
+    public Date getApprovalTime() {
         return approvalTime;
     }
 
-    public void setApprovalTime(Integer approvalTime) {
+    public void setApprovalTime(Date approvalTime) {
         this.approvalTime = approvalTime;
     }
 

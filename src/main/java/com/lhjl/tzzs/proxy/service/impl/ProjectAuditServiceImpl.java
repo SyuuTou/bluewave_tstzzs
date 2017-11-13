@@ -73,6 +73,27 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
     @Autowired
     private ProjectTeamMemberWorkMapper projectTeamMemberWorkMapper;
 
+    @Autowired
+    private InvestmentInstitutionsMapper investmentInstitutionsMapper;
+
+    @Autowired
+    private FoundersMapper foundersMapper;
+
+    @Autowired
+    private FoundersEducationMapper foundersEducationMapper;
+
+    @Autowired
+    private FoundersWorkMapper foundersWorkMapper;
+
+    @Autowired
+    private DataLogDomainMapper dataLogDomainMapper;
+
+    @Autowired
+    private DataLogEducationMapper dataLogEducationMapper;
+
+    @Autowired
+    private DataLogWorkMapper dataLogWorkMapper;
+
     /**
      * 管理员审核项目接口
      * @param body
@@ -422,12 +443,95 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
     }
 
     /**
-     * 审核投资人提交项目
+     * 审核投资人提交项目方法
      * @param body
      * @return
      */
     private CommonDto<String> projectAuditOfTypeTwo(ProjectAuditInputDto body){
         CommonDto<String> result =new CommonDto<>();
+        Date now = new Date();
+        //获取到源记录的信息
+        Integer xmtjid  = body.getProjectSourceId();
+
+        InvestmentDataLog investmentDataLog = investmentDataLogMapper.selectByPrimaryKey(xmtjid);
+
+        //先查询机构是否存在
+        String investmentName = investmentDataLog.getInstitutionalName();
+        InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
+        investmentInstitutions.setShortName(investmentName);
+
+        List<InvestmentInstitutions> investmentInstitutionsList = investmentInstitutionsMapper.select(investmentInstitutions);
+        Integer jgid = -1;
+        if (investmentInstitutionsList.size() > 0){
+            //存在拿到id
+            jgid = investmentInstitutionsList.get(0).getId();
+        }else {
+            //不存在创建机构
+            InvestmentInstitutions investmentInstitutionsForInsert = new InvestmentInstitutions();
+            investmentInstitutionsForInsert.setShortName(investmentName);
+            investmentInstitutionsForInsert.setApprovalStatus(1);
+            investmentInstitutionsForInsert.setApprovalTime(now);
+            investmentInstitutionsForInsert.setCreateTime(now);
+            investmentInstitutionsForInsert.setType(0);
+
+            investmentInstitutionsMapper.insert(investmentInstitutionsForInsert);
+
+            jgid = investmentInstitutionsForInsert.getId();
+        }
+
+        //创建项目
+        Projects projects = new Projects();
+
+        projects.setShortName(investmentDataLog.getShortName());
+        projects.setFullName(investmentDataLog.getCompanyName());
+        projects.setKernelDesc(investmentDataLog.getWordIntroduction());
+        projects.setCity(investmentDataLog.getCity());
+        projects.setCreateTime(now);
+        projects.setInvestmentInstitutionsId(jgid);
+        projects.setApprovalStatus(1);
+        projects.setApprovalTime(now);
+        projects.setProjectSource(1);
+
+        projectsMapper.insertSelective(projects);
+
+        Integer xmid = projects.getId();
+
+        //创建项目创始人信息
+        Founders founders = new Founders();
+        founders.setProjectId(xmid);
+        founders.setName(investmentDataLog.getCreateName());
+        founders.setApprovalStatus(1);
+        founders.setApprovalTime(now);
+        founders.setYn(0);
+
+        foundersMapper.insertSelective(founders);
+
+        //拿到创始人的id
+        Integer fdid = founders.getId();
+
+        //创建创始人的教育经历和工作经历
+        FoundersEducation foundersEducation = new FoundersEducation();
+        FoundersWork foundersWork = new FoundersWork();
+
+        DataLogEducation dataLogEducation = new DataLogEducation();
+        dataLogEducation.setLogId(investmentDataLog.getId());
+        //教育经历
+        List<DataLogEducation> dataLogEducationList = dataLogEducationMapper.select(dataLogEducation);
+        if (dataLogEducationList.size() > 0){
+            for (DataLogEducation de:dataLogEducationList) {
+                FoundersEducation foundersEducationForInsert = new FoundersEducation();
+                foundersEducationForInsert.setFounderId(fdid);
+                foundersEducationForInsert.setEducationExperience(de.getEducationName());
+
+                foundersEducationMapper.insertSelective(foundersEducationForInsert);
+            }
+        }
+
+        DataLogWork dataLogWork = new DataLogWork();
+        dataLogWork.setLogId(investmentDataLog.getId());
+        //工作经历
+
+
 
         return result;
     }
