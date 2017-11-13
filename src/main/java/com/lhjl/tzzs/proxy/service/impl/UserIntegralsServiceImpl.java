@@ -65,12 +65,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		String uuids = body.getUuids();
 		Integer userId= usersMapper.findByUuid(uuids);
 		if(userId !=null){
-			Integer z =userIntegralsMapper.findIntegralsZ(userId);
-			Integer x =userIntegralsMapper.findIntegralsX(userId);
+			/*Integer z =userIntegralsMapper.findIntegralsZ(userId);
+			Integer x =userIntegralsMapper.findIntegralsX(userId);*/
+			Map<String, Object> u = userIntegralsMapper.findIntegralsU(userId);
+			Integer z = Integer.valueOf(String.valueOf(u.get("xnum")));
+			Integer x = Integer.valueOf(String.valueOf(u.get("znum")));
 			int y=z+x;
-			if(y<0){
-				y=0;
-			}
 			map.put("ynum",y);
 		}else{
 			result.setStatus(5012);
