@@ -11,5 +11,7 @@
     <result column="scene_key" property="sceneKey" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="yn" property="yn" jdbcType="INTEGER" />
+    <result column="use_time" property="useTime" jdbcType="TIMESTAMP" />
   </resultMap>
 </mapper>
