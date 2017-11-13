@@ -25,4 +25,11 @@ public interface UserInfoService {
      * @return
      */
     CommonDto<List<Map<String,Object>>> getUserList(Integer pageNum, Integer pageSize);
+
+    /**
+     * 获取用户可用formid
+     * @param userId 用户id
+     * @return
+     */
+    CommonDto<String> getUserFormid(Integer userId);
 }

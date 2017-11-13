@@ -62,4 +62,26 @@ public class UserInfoController {
 
         return result;
     }
+
+
+    /**
+     * 获取用户可用formid
+     * @param userId 用户id
+     * @return
+     */
+    @GetMapping("get/user/formid")
+    public CommonDto<String> getUserFormid(int userId){
+        CommonDto<String> result = new CommonDto<>();
+
+        try {
+            result = userInfoService.getUserFormid(userId);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+
+        return result;
+    }
 }

@@ -14,4 +14,8 @@
     <result column="yn" property="yn" jdbcType="INTEGER" />
     <result column="use_time" property="useTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  
+  <select id="findFormiDesc" resultMap="BaseResultMap" parameterType="INTEGER">
+    SELECT * FROM zyy_test.miniapp_formid where user_id = #{userId} and (yn is null  or yn= 0  )order by create_time asc limit 0,5;
+  </select>
 </mapper>

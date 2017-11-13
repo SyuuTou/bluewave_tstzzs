@@ -625,4 +625,115 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		}
 		return null;
 	}
+
+	/**
+	 * 用户列表页审核用户成为投资人的接口
+	 * @param userId 用户id
+	 * @param status 审核状态
+	 * @param userName 用户名
+	 * @param companyName 公司名称
+	 * @param comanyDuties 公司职位
+	 * @return
+	 */
+	@Override
+	public CommonDto<String> specialApproval(Integer userId,Integer status,String userName,String companyName,String comanyDuties){
+		CommonDto<String> result = new CommonDto<>();
+		Date now = new Date();
+
+		//判断好状态
+		Integer approvalStatus = -1;
+
+		switch (status){
+			case 1:approvalStatus = 0;
+				break;
+			case 2:approvalStatus = 0;
+				break;
+			default:
+				approvalStatus = 1;
+		}
+
+		Integer approvalType = -1;
+		switch (status){
+			case 3:approvalType = 0;
+				break;
+			case 4:approvalType = 1;
+				break;
+			case 5:approvalType = 2;
+				break;
+			default:
+				approvalType = null;
+		}
+		//先查用户投资人信息是否存在
+		Investors investors = new Investors();
+		investors.setUserId(userId);
+
+		Investors investorsForSearch = investorsMapper.selectOne(investors);
+		if (investorsForSearch != null){
+			//存在的时候获取投资人id更新用户身份
+			Integer tzrid = investorsForSearch.getId();
+			investors.setYn(1);
+			investors.setPosition(comanyDuties);
+			investors.setName(userName);
+			investors.setApprovalTime(now);
+			investors.setApprovalStatus(approvalStatus);
+			investors.setInvestorsType(approvalType);
+
+			investorsMapper.updateByPrimaryKeySelective(investors);
+
+			//升级为VIP投资人
+			if(investors.getInvestorsType() == 2 || investors.getInvestorsType() == 1){
+				UserToken userToken = new UserToken();
+				userToken.setUserId(userId);
+				userToken = userTokenMapper.selectOne(userToken);
+				userLevelService.upLevel(userToken.getToken(), 4, null);
+			}
+
+			//更新用户表的信息
+			Users users =new Users();
+			users.setActualName(userName);
+			users.setCompanyName(companyName);
+			users.setCompanyDuties(comanyDuties);
+			users.setId(userId);
+
+			usersMapper.updateByPrimaryKeySelective(users);
+		}else {
+			//不存在的时候新建投资人信息
+			Investors investorsForInsert = new Investors();
+
+
+
+			investorsForInsert.setUserId(userId);
+			investorsForInsert.setApprovalStatus(approvalStatus);
+			investorsForInsert.setCreateTime(now);
+			investorsForInsert.setInvestorsType(approvalType);
+			investorsForInsert.setApprovalTime(now);
+			investorsForInsert.setName(userName);
+			investorsForInsert.setPosition(comanyDuties);
+			investorsForInsert.setYn(1);
+
+			investorsMapper.insert(investorsForInsert);
+
+			//升级为VIP投资人
+			if(investorsForInsert.getInvestorsType() == 2 || investorsForInsert.getInvestorsType() == 1){
+				UserToken userToken = new UserToken();
+				userToken.setUserId(userId);
+				userToken = userTokenMapper.selectOne(userToken);
+				userLevelService.upLevel(userToken.getToken(), 4, null);
+			}
+
+			//更新用户表的信息
+			Users users =new Users();
+			users.setActualName(userName);
+			users.setCompanyName(companyName);
+			users.setCompanyDuties(comanyDuties);
+			users.setId(userId);
+
+			usersMapper.updateByPrimaryKeySelective(users);
+		}
+
+		result.setData(null);
+		result.setStatus(200);
+		result.setMessage("success");
+		return result;
+	}
 }

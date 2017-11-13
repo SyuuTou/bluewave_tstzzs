@@ -1,15 +1,10 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.mapper.FoundersEducationMapper;
-import com.lhjl.tzzs.proxy.mapper.FoundersMapper;
-import com.lhjl.tzzs.proxy.mapper.FoundersWorkMapper;
-import com.lhjl.tzzs.proxy.mapper.UsersMapper;
-import com.lhjl.tzzs.proxy.model.Founders;
-import com.lhjl.tzzs.proxy.model.FoundersEducation;
-import com.lhjl.tzzs.proxy.model.FoundersWork;
-import com.lhjl.tzzs.proxy.model.Users;
+import com.lhjl.tzzs.proxy.mapper.*;
+import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -31,6 +26,8 @@ public class UserInfoServiceImpl implements UserInfoService{
     private FoundersEducationMapper foundersEducationMapper;
     @Resource
     private FoundersWorkMapper foundersWorkMapper;
+    @Autowired
+    private MiniappFormidMapper miniappFormidMapper;
 
     /**
      * 获取个人资料
@@ -189,6 +186,29 @@ public class UserInfoServiceImpl implements UserInfoService{
         result.setStatus(200);
         result.setMessage("success");
         result.setData(list);
+
+
+        return result;
+    }
+
+    /**
+     * 获取用户可用formid
+     * @param userId 用户id
+     * @return
+     */
+    @Override
+    public CommonDto<String> getUserFormid(Integer userId){
+        CommonDto<String> result =new CommonDto<>();
+
+        List<MiniappFormid> miniappFormidList = miniappFormidMapper.findFormiDesc(userId);
+        String formId = "";
+        if (miniappFormidList.size() > 0){
+            formId = miniappFormidList.get(0).getFormId();
+        }
+
+        result.setMessage("success");
+        result.setData(formId);
+        result.setStatus(200);
 
 
         return result;
