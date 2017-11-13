@@ -240,17 +240,6 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
                 return result;
             }
 
-            if (demand == null || "".equals(demand) ){
-                obj.put("message","投资偏好没有填写完成");
-                obj.put("success",false);
-
-                result.setMessage("投资偏好没有填写完成");
-                result.setStatus(50001);
-                result.setData(obj);
-
-                return result;
-            }
-
             obj.put("message","投资偏好填写完成");
             obj.put("success",true);
 
