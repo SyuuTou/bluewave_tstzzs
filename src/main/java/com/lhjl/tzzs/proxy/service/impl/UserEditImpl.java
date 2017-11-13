@@ -137,6 +137,23 @@ public class UserEditImpl implements UserEditService {
         String headpic ="";
         String username = "";
         String leixing = "";
+        Integer identityTypeInt = usersForHeadpic.getIdentityType();
+        String identityType = "";
+        switch (identityTypeInt){
+            case 0:identityType="投资人";
+            break;
+            case 1:identityType="创业者";
+            break;
+            case 2:identityType="产业公司";
+            break;
+            case 3:identityType="媒体";
+            break;
+            case 4:identityType="政府机构";
+            break;
+            case 5:identityType="服务机构";
+            default:
+                identityType="";
+        }
 
         //判断用户的头像，和用户名
         if (userHeadpic_real == null){
@@ -193,6 +210,7 @@ public class UserEditImpl implements UserEditService {
         obj.put("id",id);
         obj.put("leixing",leixing);
         obj.put("success",true);
+        obj.put("identityTpye",identityType);
 
         result.setStatus(200);
         result.setData(obj);
