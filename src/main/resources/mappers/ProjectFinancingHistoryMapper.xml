@@ -1,15 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectFinancingHistoryMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectFinancingHistory" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectFinancingHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectFinancingHistory">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="project_send_log_id" property="projectSendLogId" jdbcType="VARCHAR" />
-    <result column="history" property="history" jdbcType="VARCHAR" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="project_send_log_id" jdbcType="VARCHAR" property="projectSendLogId" />
+    <result column="history" jdbcType="VARCHAR" property="history" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
   </resultMap>
   <update id="updateHistory" parameterType="int">
-    UPDATE project_financing_history c SET c.project_send_log_id=#{projectId} WHERE c.project_send_log_id=-1
+    UPDATE project_financing_history c SET c.project_send_log_id=#{projectId} WHERE c.project_send_log_id=-1 AND  c.user_id=#{userId}
   </update>
 </mapper>

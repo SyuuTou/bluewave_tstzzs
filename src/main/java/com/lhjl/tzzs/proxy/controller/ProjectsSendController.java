@@ -84,9 +84,11 @@ public class ProjectsSendController {
     public CommonDto<String> ctuisongthird(@RequestBody Map<String, String> body){
         CommonDto<String> result = new CommonDto<>();
         String tsid = body.get("tsid");
+        String token = body.get("token");
         String rongzilishi = body.get("rongzilishi");
         try{
-            result = projectsSendService.ctuisongthird(tsid, rongzilishi);
+        	int userId = commonUserService.getLocalUserId(token);
+            result = projectsSendService.ctuisongthird(tsid, rongzilishi,userId);
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("融资历史记录异常");

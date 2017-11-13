@@ -321,7 +321,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 projectSendLogsMapper.updateByPrimaryKey(projectSendLogs);
                                 int projectId = projectSendLogs.getId();
                                 projectSendTeamMemberMapper.updateTeame(projectId,userId);
-                                projectFinancingHistoryMapper.updateHistory(projectId);
+                                projectFinancingHistoryMapper.updateHistory(projectId,userId);
                                 //相似竞品
                                 ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                                 List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -501,7 +501,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                     int projectId = projectSendLogs.getId();
 
                                     projectSendTeamMemberMapper.updateTeame(projectId,userId);
-                                    projectFinancingHistoryMapper.updateHistory(projectId);
+                                    projectFinancingHistoryMapper.updateHistory(projectId,userId);
                                     //相似竞品
                                     ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                                     List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -696,7 +696,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 int projectId = projectSendLogs.getId();
 
                                 projectSendTeamMemberMapper.updateTeame(projectId,userId);
-                                projectFinancingHistoryMapper.updateHistory(projectId);
+                                projectFinancingHistoryMapper.updateHistory(projectId,userId);
                                 //相似竞品
                                 ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                                 List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -892,7 +892,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                             int projectId = projectSendLogs.getId();
 
                             projectSendTeamMemberMapper.updateTeame(projectId,userId);
-                            projectFinancingHistoryMapper.updateHistory(projectId);
+                            projectFinancingHistoryMapper.updateHistory(projectId,userId);
                             //相似竞品
                             ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                             List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -1088,7 +1088,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                         int projectId = projectSendLogs.getId();
 
                         projectSendTeamMemberMapper.updateTeame(projectId,userId);
-                        projectFinancingHistoryMapper.updateHistory(projectId);
+                        projectFinancingHistoryMapper.updateHistory(projectId,userId);
                         //相似竞品
                         ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                         List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -1283,7 +1283,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                         int projectId = projectSendLogs.getId();
 
                         projectSendTeamMemberMapper.updateTeame(projectId,userId);
-                        projectFinancingHistoryMapper.updateHistory(projectId);
+                        projectFinancingHistoryMapper.updateHistory(projectId,userId);
                         //相似竞品
                         ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                         List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -1689,20 +1689,22 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
      * @return
      */
     @Override
-    public CommonDto<String> ctuisongthird(String tsid, String rongzilishi) {
+    public CommonDto<String> ctuisongthird(String tsid, String rongzilishi,int userId) {
         CommonDto<String> result = new CommonDto<>();
-
         //保存融资历史记录
         tsid="-1";
         ProjectFinancingHistory projectFinancingHistory = new ProjectFinancingHistory();
         projectFinancingHistory.setProjectSendLogId(tsid);
+        projectFinancingHistory.setUserId(userId);
         projectFinancingHistory = projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
         if(projectFinancingHistory != null){
             projectFinancingHistory.setHistory(rongzilishi);
+            projectFinancingHistory.setUserId(userId);
             projectFinancingHistoryMapper.updateByPrimaryKey(projectFinancingHistory);
         }else{
             ProjectFinancingHistory newProjectFinancingHistory = new ProjectFinancingHistory();
             newProjectFinancingHistory.setProjectSendLogId(tsid);
+            newProjectFinancingHistory.setUserId(userId);
             newProjectFinancingHistory.setHistory(rongzilishi);
             projectFinancingHistoryMapper.insert(newProjectFinancingHistory);
         }

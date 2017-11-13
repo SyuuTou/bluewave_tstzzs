@@ -5,7 +5,6 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAuditInputDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
-import com.lhjl.tzzs.proxy.service.InvestmentDatalogService;
 import com.lhjl.tzzs.proxy.service.ProjectAuditService;
 import com.lhjl.tzzs.proxy.utils.JsonUtils;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
@@ -132,53 +131,28 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
         Date now = new Date();
         if (body.getProjctSourceType() == 0){
-            ProjectSendLogs projectSendLogs = projectSendLogsMapper.selectByPrimaryKey(body.getProjectSourceId());
-            Projects projects = new Projects();
-            projects.setShortName(projectSendLogs.getCompanyShortName());
-            List<Projects> projectsListForC =projectsMapper.select(projects);
-            if (projectsListForC.size() > 0){
-                Integer checkStatusU = 0;
-                switch (body.getAuditStatus()){
-                    case 0:checkStatusU=5;
-                        break;
-                    case 1:checkStatusU=2;
-                }
-                //修改申请记录为已审核
-                ProjectSendLogs projectSendLogsForUpdateU = new ProjectSendLogs();
-                projectSendLogsForUpdateU.setId(body.getProjectSourceId());
-                projectSendLogsForUpdateU.setCheckStatus(checkStatusU);
-                projectSendLogsForUpdateU.setCheckTime(now);
-                projectSendLogsMapper.updateByPrimaryKeySelective(projectSendLogsForUpdateU);
-            }else{
-                result  = projectAuditOfTypeOne(body);
-            }
+            result  = projectAuditOfTypeOne(body);
+
 
         }else if(body.getProjctSourceType() == 1){
-            InvestmentDataLog projectSendLogs = investmentDataLogMapper.selectByPrimaryKey(body.getProjectSourceId());
-            Projects projects = new Projects();
-            projects.setShortName(projectSendLogs.getShortName());
-            List<Projects> projectsListForC =projectsMapper.select(projects);
-            if (projectsListForC.size() > 0){
-                Integer checkStatusU = 0;
-                switch (body.getAuditStatus()){
-                    case 0:checkStatusU=5;
-                        break;
-                    case 1:checkStatusU=2;
-                }
-                //修改申请记录为已审核
-                InvestmentDataLog projectSendLogsForUpdateU = new InvestmentDataLog();
-                projectSendLogsForUpdateU.setId(body.getProjectSourceId());
-                projectSendLogsForUpdateU.setAuditYn(checkStatusU);
-                projectSendLogsForUpdateU.setAuditTime(now);
-                investmentDataLogMapper.updateByPrimaryKeySelective(projectSendLogsForUpdateU);
-            }else{
             result = projectAuditOfTypeTwo(body);
-            }
         }else {
             result.setMessage("项目源类型不存在");
             result.setData(null);
             result.setStatus(50001);
         }
+        //获取项目是否在数据库已经存在
+        ProjectSendLogs projectSendLogs = projectSendLogsMapper.selectByPrimaryKey(body.getProjectSourceId());
+
+        Projects projects = new Projects();
+        projects.setShortName(projectSendLogs.getCompanyShortName());
+
+        List<Projects> projectsListForC =projectsMapper.select(projects);
+
+
+
+
+
         return result;
     }
 
@@ -553,7 +527,7 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         }
         //项目所属领域
         DataLogDomain dataLogDomain =new DataLogDomain();
-        dataLogDomain.setLogId(body.getProjectSourceId());
+        dataLogDomain.setLogId(xmid);
         List<DataLogDomain>dataLogDomainList=dataLogDomainMapper.select(dataLogDomain);
         if (dataLogDomainList.size() > 0){
             for (DataLogDomain de:dataLogDomainList) {
@@ -630,10 +604,10 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         List<Map<String, Object>> like2 =new ArrayList<>();
        /* for(Map<String, Object> map :likes){
        	 if(Integer.valueOf(String.valueOf(map.get("id"))) == id){
-       		 likes.remove(map);	  
-       	 }	  
+       		 likes.remove(map);
+       	 }
         }
-        like2.addAll(likes);*/	
+        like2.addAll(likes);*/
         result.setData(likes);
 		return result;
 	}
@@ -673,10 +647,10 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         List<Map<String, Object>> like2 =new ArrayList<>();
        /* for(Map<String, Object> map :likes){
        	 if(Integer.valueOf(String.valueOf(map.get("id"))) == id){
-       		 likes.remove(map);	  
+       		 likes.remove(map);
        	 }	  
         }
-        like2.addAll(likes);*/	
+        like2.addAll(likes);*/
         result.setData(likes);
 		return result;
 	}
