@@ -5,6 +5,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.UserGetInfoDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
+import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.service.UserWeixinService;
 import org.joda.time.DateTime;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,9 @@ public class UserWeixinImpl implements UserWeixinService {
 
     @Autowired
     private MetaFamilyNameMapper familyNameMapper;
+    @Resource
+    private UserExistJudgmentService userExistJudgmentService;
+
     @Transactional
     @Override
     public CommonDto<UserGetInfoDto> setUsersWeixin(WxMaUserInfo userInfo,String userid){
@@ -192,12 +196,22 @@ public class UserWeixinImpl implements UserWeixinService {
     public CommonDto<String> saveFormId(Map<String, String> body) {
 
         CommonDto<String> result = new CommonDto<>();
+        //获取用户id
+        Integer userId = userExistJudgmentService.getUserId(body.get("token"));
+        if (userId == -1){
+            result.setData(null);
+            result.setStatus(50001);
+            result.setMessage("用户token非法");
+
+            return result;
+        }
 
         MiniappFormid miniappFormid = new MiniappFormid();
         miniappFormid.setCreateTime(DateTime.now().toDate());
         miniappFormid.setFormId(body.get("formId"));
         miniappFormid.setSceneKey(body.get("sceneKey"));
         miniappFormid.setToken(body.get("token"));
+        miniappFormid.setUserId(userId);
 
         miniappFormidMapper.insert(miniappFormid);
 

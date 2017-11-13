@@ -81,6 +81,8 @@ public class WxMaUserController {
             String sessionKey = session.getSessionKey();
             result = userExistJudgmentService.userExistJudgment(openId);
             String userid =String.valueOf(result.getData().getYhid());
+            //给sessionKey加上前缀
+            userid = "sessionkey:" + userid;
 
             boolean jieguo = sessionKeyService.setSessionKey(sessionKey,userid);
 
@@ -142,7 +144,8 @@ public class WxMaUserController {
 
             return result;
         }
-
+        //sessionkey加前缀
+        userid = "sessionkey:" + userid;
         //取到sessionKey
         String sessionKey = sessionKeyService.getSessionKey(userid);
         if (sessionKey == "" || sessionKey == null){
@@ -192,9 +195,7 @@ public class WxMaUserController {
 
     /**
      *
-     * @param token
-     * @param encryptedData
-     * @param iv
+     * @param body
      * @return
      */
     @PostMapping("phonenumber")
