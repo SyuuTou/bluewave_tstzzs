@@ -92,6 +92,7 @@ public class FinancingController {
         try {
             result = evaluateService.financingAmount(body.get("investment"), body.get("roundName"),body.get("industryName"),body.get("cityName"),body.get("educationName"),body.get("workName"),from,size);
         } catch (Exception e) {
+            e.printStackTrace();
             result = new CommonDto<>();
             result.setStatus(510);
             result.setMessage("数据检索异常，请稍后再试");

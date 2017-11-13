@@ -38,4 +38,9 @@ public interface MetaFinancingMapper  extends OwnerMapper<MetaFinancing> {
     BigDecimal queryFinancingAvgAmount(@Param("investment") String investment, @Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("granularity") Integer granularity, @Param("flag") String flag, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("startIndex") Integer startIndex, @Param("limit") Integer limit);
 
     BigDecimal queryValuationAvg(@Param("investment") String investment, @Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("startIndex") Integer startIndex, @Param("limit") Integer limit);
+
+    BigDecimal queryValuationAvg(@Param("investment") String investment, @Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("beginTime") String avgBeginTime, @Param("endTime") String avgEndTime, @Param("granularity") Integer granularity, @Param("minAmount") String minAmount, @Param("maxAmount") String maxAmount);
+
+    BigDecimal queryFinancingAvgAmount(@Param("investment") String investment, @Param("roundName") String roundName, @Param("industryName") String industryName, @Param("cityName") String cityName, @Param("educationName") String educationName, @Param("workName") String workName, @Param("granularity") Integer granularity, @Param("flag") String flag, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("minAmount") String minAmount, @Param("maxAmount") String maxAmount);
+
 }

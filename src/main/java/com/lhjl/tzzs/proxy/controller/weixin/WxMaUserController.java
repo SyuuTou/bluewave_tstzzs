@@ -312,4 +312,13 @@ public class WxMaUserController {
         return result;
     }
 
+    @PostMapping("formId")
+    public CommonDto<String> saveFormId(@RequestBody Map<String,String> body){
+        CommonDto<String> result = null;
+
+        result = userWeixinService.saveFormId(body);
+
+        return result;
+    }
+
 }

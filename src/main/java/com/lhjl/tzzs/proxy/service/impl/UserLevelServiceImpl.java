@@ -613,7 +613,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             userLevelRelationForTime.setOrderByClause("end_time asc");
             List<UserLevelRelation> userLevelRelationList = userLevelRelationMapper.selectByExample(userLevelRelationForTime);
             if (userLevelRelationList.size() > 0){
-                userLevel = userLevelRelationList.get(0).getLevelId();
+//                userLevel = userLevelRelationList.get(0).getLevelId();
                 Date userLevelEndTime = userLevelRelationList.get(0).getEndTime();
                 Date now = new Date();
                 if (now.getTime() > userLevelEndTime.getTime()){

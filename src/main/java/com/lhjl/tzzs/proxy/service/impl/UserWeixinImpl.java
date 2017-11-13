@@ -3,15 +3,10 @@ package com.lhjl.tzzs.proxy.service.impl;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.UserGetInfoDto;
-import com.lhjl.tzzs.proxy.mapper.MetaFamilyNameMapper;
-import com.lhjl.tzzs.proxy.mapper.UserTokenMapper;
-import com.lhjl.tzzs.proxy.mapper.UsersMapper;
-import com.lhjl.tzzs.proxy.mapper.UsersWeixinMapper;
-import com.lhjl.tzzs.proxy.model.MetaFamilyName;
-import com.lhjl.tzzs.proxy.model.UserToken;
-import com.lhjl.tzzs.proxy.model.Users;
-import com.lhjl.tzzs.proxy.model.UsersWeixin;
+import com.lhjl.tzzs.proxy.mapper.*;
+import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserWeixinService;
+import org.joda.time.DateTime;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +16,7 @@ import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserWeixinImpl implements UserWeixinService {
@@ -33,6 +29,9 @@ public class UserWeixinImpl implements UserWeixinService {
     private UsersMapper usersMapper;
     @Autowired
     private UserTokenMapper userTokenMapper;
+
+    @Autowired
+    private MiniappFormidMapper miniappFormidMapper;
 
     @Autowired
     private MetaFamilyNameMapper familyNameMapper;
@@ -186,6 +185,26 @@ public class UserWeixinImpl implements UserWeixinService {
         result.setData("");
         return result;
 
+    }
+
+    @Transactional
+    @Override
+    public CommonDto<String> saveFormId(Map<String, String> body) {
+
+        CommonDto<String> result = new CommonDto<>();
+
+        MiniappFormid miniappFormid = new MiniappFormid();
+        miniappFormid.setCreateTime(DateTime.now().toDate());
+        miniappFormid.setFormId(body.get("formId"));
+        miniappFormid.setSceneKey(body.get("sceneKey"));
+        miniappFormid.setToken(body.get("token"));
+
+        miniappFormidMapper.insert(miniappFormid);
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData("ok");
+        return result;
     }
 
 
