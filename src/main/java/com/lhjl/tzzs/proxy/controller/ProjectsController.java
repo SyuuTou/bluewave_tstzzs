@@ -116,7 +116,7 @@ public class ProjectsController {
         String shortName =body.getShortName();
         String userId =body.getUserId();
         String size ="0";
-        String from ="10";
+        String from ="20";
         if(body.getPageNum() != null ){
             size=body.getPageNum();
 
