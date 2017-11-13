@@ -10,11 +10,18 @@ public class TeamDto {
 	private String stock_right;
 	private String work;
 	private String education;
+	private String token;
 	public String getTsid() {
 		return tsid;
 	}
 	public void setTsid(String tsid) {
 		this.tsid = tsid;
+	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
 	}
 	public String getShortname() {
 		return shortname;
@@ -52,8 +59,8 @@ public class TeamDto {
 	public void setEducation(String education) {
 		this.education = education;
 	}
-	
-	
-	
+
+
+
 
 }

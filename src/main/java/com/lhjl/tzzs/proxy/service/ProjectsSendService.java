@@ -35,7 +35,7 @@ public interface ProjectsSendService {
      * @param rongzilishi 融资历史信息
      * @return
      */
-    CommonDto<String> ctuisongthird(String tsid, String rongzilishi);
+    CommonDto<String> ctuisongthird(String tsid, String rongzilishi,int userId);
 
     /**
      * 融资历史回显

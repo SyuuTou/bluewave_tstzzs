@@ -93,6 +93,8 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
     @Autowired
     private DataLogWorkMapper dataLogWorkMapper;
+    @Autowired
+    private AdminProjectApprovalLogMapper adminProjectApprovalLogMapper;
 
     /**
      * 管理员审核项目接口
@@ -128,6 +130,17 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         }
 
         Date now = new Date();
+        if (body.getProjctSourceType() == 0){
+            result  = projectAuditOfTypeOne(body);
+
+
+        }else if(body.getProjctSourceType() == 1){
+            result = projectAuditOfTypeTwo(body);
+        }else {
+            result.setMessage("项目源类型不存在");
+            result.setData(null);
+            result.setStatus(50001);
+        }
         //获取项目是否在数据库已经存在
         ProjectSendLogs projectSendLogs = projectSendLogsMapper.selectByPrimaryKey(body.getProjectSourceId());
 
@@ -136,33 +149,6 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
         List<Projects> projectsListForC =projectsMapper.select(projects);
 
-        if (projectsListForC.size() > 0){
-            Integer checkStatusU = 0;
-            switch (body.getAuditStatus()){
-                case 0:checkStatusU=5;
-                    break;
-                case 1:checkStatusU=2;
-            }
-            //修改申请记录为已审核
-            ProjectSendLogs projectSendLogsForUpdateU = new ProjectSendLogs();
-            projectSendLogsForUpdateU.setId(body.getProjectSourceId());
-            projectSendLogsForUpdateU.setCheckStatus(checkStatusU);
-            projectSendLogsForUpdateU.setCheckTime(now);
-
-            projectSendLogsMapper.updateByPrimaryKeySelective(projectSendLogsForUpdateU);
-
-        }else {
-            //根据项目来源创建项目信息
-            if (body.getProjctSourceType() == 0){
-                result  = projectAuditOfTypeOne(body);
-            }else if(body.getProjctSourceType() == 1){
-                result = projectAuditOfTypeTwo(body);
-            }else {
-                result.setMessage("项目源类型不存在");
-                result.setData(null);
-                result.setStatus(50001);
-            }
-        }
 
 
 
@@ -522,7 +508,6 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
                 FoundersEducation foundersEducationForInsert = new FoundersEducation();
                 foundersEducationForInsert.setFounderId(fdid);
                 foundersEducationForInsert.setEducationExperience(de.getEducationName());
-
                 foundersEducationMapper.insertSelective(foundersEducationForInsert);
             }
         }
@@ -530,9 +515,54 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         DataLogWork dataLogWork = new DataLogWork();
         dataLogWork.setLogId(investmentDataLog.getId());
         //工作经历
+        List<DataLogWork> dataLogWorkList = dataLogWorkMapper.select(dataLogWork);
+        if (dataLogWorkList.size() > 0){
+            for (DataLogWork de:dataLogWorkList) {
+                FoundersWork foundersWorkForInsert = new FoundersWork();
+                foundersWorkForInsert.setFounderId(fdid);
+                foundersWorkForInsert.setWorkExperience(de.getWorkName());
 
+                foundersWorkMapper.insertSelective(foundersWorkForInsert);
+            }
+        }
+        //项目所属领域
+        DataLogDomain dataLogDomain =new DataLogDomain();
+        dataLogDomain.setLogId(xmid);
+        List<DataLogDomain>dataLogDomainList=dataLogDomainMapper.select(dataLogDomain);
+        if (dataLogDomainList.size() > 0){
+            for (DataLogDomain de:dataLogDomainList) {
+               ProjectSegmentation projectSegmentation =new ProjectSegmentation();
+                projectSegmentation.setProjectId(xmid);
+                projectSegmentation.setSegmentationName(de.getDomainName());
+                projectSegmentationMapper.insertSelective(projectSegmentation);
+            }
+        }
+        //融资需求
+        ProjectFinancingLog projectFinancingLog =new ProjectFinancingLog();
+        projectFinancingLog.setProjectId(xmid);
+        projectFinancingLog.setStage(investmentDataLog.getStage());
+        projectFinancingLog.setAmount(investmentDataLog.getAmont());
+        projectFinancingLog.setCurrency(investmentDataLog.getYn());
+        projectFinancingLog.setStockRight(investmentDataLog.getStockRight());
+        projectFinancingLog.setFinancingTime(investmentDataLog.getFinanTime());
+        projectFinancingLogMapper.insert(projectFinancingLog);
 
+        //审核表
+        AdminProjectApprovalLog adminProjectApprovalLog =new AdminProjectApprovalLog();
+        adminProjectApprovalLog.setProjectId(xmid);
+        adminProjectApprovalLog.setProjectSourceId(xmtjid);
+        adminProjectApprovalLog.setApprovaledStatus(body.getAuditStatus());
+        adminProjectApprovalLog.setProjectSourceType(1);
+        adminProjectApprovalLog.setApprovaledTime(new Date());
+        adminProjectApprovalLogMapper.insert(adminProjectApprovalLog);
 
+        investmentDataLog.setAuditYn(body.getAuditStatus());
+        investmentDataLog.setAuditTime(new Date());
+
+        investmentDataLogMapper.updateByPrimaryKey(investmentDataLog);
+        result.setStatus(200);
+        result.setData(null);
+        result.setMessage("success");
         return result;
     }
     /**
@@ -574,10 +604,10 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         List<Map<String, Object>> like2 =new ArrayList<>();
        /* for(Map<String, Object> map :likes){
        	 if(Integer.valueOf(String.valueOf(map.get("id"))) == id){
-       		 likes.remove(map);	  
-       	 }	  
+       		 likes.remove(map);
+       	 }
         }
-        like2.addAll(likes);*/	
+        like2.addAll(likes);*/
         result.setData(likes);
 		return result;
 	}
@@ -617,10 +647,10 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         List<Map<String, Object>> like2 =new ArrayList<>();
        /* for(Map<String, Object> map :likes){
        	 if(Integer.valueOf(String.valueOf(map.get("id"))) == id){
-       		 likes.remove(map);	  
+       		 likes.remove(map);
        	 }	  
         }
-        like2.addAll(likes);*/	
+        like2.addAll(likes);*/
         result.setData(likes);
 		return result;
 	}

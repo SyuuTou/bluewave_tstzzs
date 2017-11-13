@@ -1,24 +1,25 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectSendTeamMemberMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectSendTeamMember" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectSendTeamMemberMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectSendTeamMember">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="project_send_logs_id" property="projectSendLogsId" jdbcType="INTEGER" />
-    <result column="member_name" property="memberName" jdbcType="VARCHAR" />
-    <result column="member_duties" property="memberDuties" jdbcType="VARCHAR" />
-    <result column="share_ratio" property="shareRatio" jdbcType="DECIMAL" />
-    <result column="member_desc" property="memberDesc" jdbcType="VARCHAR" />
-    <result column="yn" property="yn" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="project_send_logs_id" jdbcType="INTEGER" property="projectSendLogsId" />
+    <result column="member_name" jdbcType="VARCHAR" property="memberName" />
+    <result column="member_duties" jdbcType="VARCHAR" property="memberDuties" />
+    <result column="share_ratio" jdbcType="DECIMAL" property="shareRatio" />
+    <result column="member_desc" jdbcType="VARCHAR" property="memberDesc" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
   </resultMap>
-  <update id="updateTeame" parameterType="int" >
-    UPDATE project_send_team_member c SET c.project_send_logs_id=#{projectId} WHERE c.project_send_logs_id=-1
+  <update id="updateTeame" parameterType="int">
+    UPDATE project_send_team_member c SET c.project_send_logs_id=#{projectId} WHERE c.project_send_logs_id=-1 AND c.user_id=#{userId}
   </update>
   <select id="findTeam" parameterType="int" resultMap="BaseResultMap">
-   SELECT * FROM project_send_team_member c WHERE c.project_send_logs_id IN(#{projectId},-1) AND c.yn=0 ORDER BY c.create_time DESC
+   SELECT * FROM project_send_team_member c WHERE c.project_send_logs_id IN(#{projectId},-1) AND c.yn=0 AND c.user_id=#{userId} ORDER BY c.create_time DESC
   </select>
 
 </mapper>

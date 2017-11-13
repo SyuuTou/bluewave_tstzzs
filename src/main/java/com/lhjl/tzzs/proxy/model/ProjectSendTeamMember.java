@@ -52,6 +52,12 @@ public class ProjectSendTeamMember {
     private Date createTime;
 
     /**
+     * 用户id
+     */
+    @Column(name = "user_id")
+    private Integer userId;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -189,5 +195,23 @@ public class ProjectSendTeamMember {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    /**
+     * 获取用户id
+     *
+     * @return user_id - 用户id
+     */
+    public Integer getUserId() {
+        return userId;
+    }
+
+    /**
+     * 设置用户id
+     *
+     * @param userId 用户id
+     */
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

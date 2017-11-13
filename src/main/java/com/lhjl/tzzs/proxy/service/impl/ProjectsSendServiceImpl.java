@@ -14,6 +14,8 @@ import javax.annotation.Resource;
 
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ import com.lhjl.tzzs.proxy.dto.TeamDto;
 import com.lhjl.tzzs.proxy.dto.TeamDto1;
 import com.lhjl.tzzs.proxy.service.EvaluateService;
 import com.lhjl.tzzs.proxy.service.ProjectsSendService;
+import com.lhjl.tzzs.proxy.service.common.CommonUserService;
 
 import tk.mybatis.mapper.entity.Example;
 
@@ -89,6 +92,9 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 
     @Resource
     private ProjectTeamMemberWorkMapper projectTeamMemberWorkMapper;
+    
+    @Autowired
+    private CommonUserService  commonUserService;
     /**
      * 项目投递
      * @param params 投递参数
@@ -314,8 +320,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 projectSendLogs.setCompanyOfficialWebsite(params.getWebsite());
                                 projectSendLogsMapper.updateByPrimaryKey(projectSendLogs);
                                 int projectId = projectSendLogs.getId();
-                                projectSendTeamMemberMapper.updateTeame(projectId);
-                                projectFinancingHistoryMapper.updateHistory(projectId);
+                                projectSendTeamMemberMapper.updateTeame(projectId,userId);
+                                projectFinancingHistoryMapper.updateHistory(projectId,userId);
                                 //相似竞品
                                 ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                                 List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -494,8 +500,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                     projectSendLogsMapper.insert(projectSendLogs);
                                     int projectId = projectSendLogs.getId();
 
-                                    projectSendTeamMemberMapper.updateTeame(projectId);
-                                    projectFinancingHistoryMapper.updateHistory(projectId);
+                                    projectSendTeamMemberMapper.updateTeame(projectId,userId);
+                                    projectFinancingHistoryMapper.updateHistory(projectId,userId);
                                     //相似竞品
                                     ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                                     List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -689,8 +695,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 projectSendLogsMapper.insert(projectSendLogs);
                                 int projectId = projectSendLogs.getId();
 
-                                projectSendTeamMemberMapper.updateTeame(projectId);
-                                projectFinancingHistoryMapper.updateHistory(projectId);
+                                projectSendTeamMemberMapper.updateTeame(projectId,userId);
+                                projectFinancingHistoryMapper.updateHistory(projectId,userId);
                                 //相似竞品
                                 ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                                 List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -885,8 +891,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                             projectSendLogsMapper.insert(projectSendLogs);
                             int projectId = projectSendLogs.getId();
 
-                            projectSendTeamMemberMapper.updateTeame(projectId);
-                            projectFinancingHistoryMapper.updateHistory(projectId);
+                            projectSendTeamMemberMapper.updateTeame(projectId,userId);
+                            projectFinancingHistoryMapper.updateHistory(projectId,userId);
                             //相似竞品
                             ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                             List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -1081,8 +1087,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                         projectSendLogsMapper.insert(projectSendLogs);
                         int projectId = projectSendLogs.getId();
 
-                        projectSendTeamMemberMapper.updateTeame(projectId);
-                        projectFinancingHistoryMapper.updateHistory(projectId);
+                        projectSendTeamMemberMapper.updateTeame(projectId,userId);
+                        projectFinancingHistoryMapper.updateHistory(projectId,userId);
                         //相似竞品
                         ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                         List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -1276,8 +1282,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                         projectSendLogsMapper.insert(projectSendLogs);
                         int projectId = projectSendLogs.getId();
 
-                        projectSendTeamMemberMapper.updateTeame(projectId);
-                        projectFinancingHistoryMapper.updateHistory(projectId);
+                        projectSendTeamMemberMapper.updateTeame(projectId,userId);
+                        projectFinancingHistoryMapper.updateHistory(projectId,userId);
                         //相似竞品
                         ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                         List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -1458,7 +1464,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         projectSendTeamMember.setProjectSendLogsId(projectId);
         projectSendTeamMember.setYn(1);
         List<ProjectSendTeamMember> list1 = projectSendTeamMemberMapper.select(projectSendTeamMember);*/
-        List<ProjectSendTeamMember> list1 =projectSendTeamMemberMapper.findTeam(projectId);
+        List<ProjectSendTeamMember> list1 =projectSendTeamMemberMapper.findTeam(projectId,userId);
         datas.put("teamMember",list1);
 
 
@@ -1683,20 +1689,22 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
      * @return
      */
     @Override
-    public CommonDto<String> ctuisongthird(String tsid, String rongzilishi) {
+    public CommonDto<String> ctuisongthird(String tsid, String rongzilishi,int userId) {
         CommonDto<String> result = new CommonDto<>();
-
         //保存融资历史记录
-         tsid="-1";
+        tsid="-1";
         ProjectFinancingHistory projectFinancingHistory = new ProjectFinancingHistory();
         projectFinancingHistory.setProjectSendLogId(tsid);
+        projectFinancingHistory.setUserId(userId);
         projectFinancingHistory = projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
         if(projectFinancingHistory != null){
             projectFinancingHistory.setHistory(rongzilishi);
+            projectFinancingHistory.setUserId(userId);
             projectFinancingHistoryMapper.updateByPrimaryKey(projectFinancingHistory);
         }else{
             ProjectFinancingHistory newProjectFinancingHistory = new ProjectFinancingHistory();
             newProjectFinancingHistory.setProjectSendLogId(tsid);
+            newProjectFinancingHistory.setUserId(userId);
             newProjectFinancingHistory.setHistory(rongzilishi);
             projectFinancingHistoryMapper.insert(newProjectFinancingHistory);
         }
@@ -1748,6 +1756,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
     @Override
     public CommonDto<String> saveTeam(TeamDto body) {
         CommonDto<String> result = new CommonDto<>();
+        String token = body.getToken();
+        int userId = commonUserService.getLocalUserId(token);
         String education = body.getEducation();
         String jianjie = body.getJianjie();
         String shortname = body.getShortname();
@@ -1800,6 +1810,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
          projectSendTeamMember.setShareRatio(stockright);
          projectSendTeamMember.setMemberName(shortname);
          projectSendTeamMember.setYn(0);
+         projectSendTeamMember.setUserId(userId);
          projectSendTeamMemberMapper.insert(projectSendTeamMember);
          //教育背景
          String[] educationArry =education.split(",");
@@ -1923,6 +1934,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 	        String tsid = body.getTsid();
 	        String work = body.getWork();
 	        String zhiwu = body.getZhiwu();
+	        String token = body.getToken();
+	        int userId = commonUserService.getLocalUserId(token);
 	        if(education ==null || "".equals(education)){
 	        	 result.setStatus(50021);
 	             result.setMessage("教育背景不能为空");
@@ -1964,11 +1977,12 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 	         projectSendTeamMember.setCreateTime(new Date());
 	         projectSendTeamMember.setMemberDesc(jianjie);
 	         projectSendTeamMember.setMemberDuties(zhiwu);
-	         projectSendTeamMember.setProjectSendLogsId(-1);
+             projectSendTeamMember.setProjectSendLogsId(-1);
 	         BigDecimal stockright = new BigDecimal(stock_right);
 	         projectSendTeamMember.setShareRatio(stockright);
 	         projectSendTeamMember.setMemberName(shortname);
 	         projectSendTeamMember.setYn(0);
+	         projectSendTeamMember.setUserId(userId);
 	         projectSendTeamMemberMapper.updateByPrimaryKey(projectSendTeamMember);
 	         //教育背景
 	         ProjectSendTeamMemberEducation dataLogEducation1 =new ProjectSendTeamMemberEducation();
