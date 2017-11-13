@@ -120,6 +120,7 @@
         right join founders_education fe on fe.founder_ID = f.id
         right join founders_work fw on fw.founder_id = f.id
         where  p.project_type = 0
+        AND pfl.financing_time > '2017-01-01'
         <if test=" types !='' and types != null">
             AND ii.type IN
             <foreach item="item" index="index" collection="types" open="(" separator="," close=")">#{item}</foreach>
