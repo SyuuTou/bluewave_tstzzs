@@ -68,6 +68,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 			Integer z =userIntegralsMapper.findIntegralsZ(userId);
 			Integer x =userIntegralsMapper.findIntegralsX(userId);
 			int y=z+x;
+			if(y<0){
+				y=0;
+			}
 			map.put("ynum",y);
 		}else{
 			result.setStatus(5012);
