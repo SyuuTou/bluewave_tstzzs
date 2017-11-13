@@ -82,9 +82,9 @@ public class WxMaUserController {
             result = userExistJudgmentService.userExistJudgment(openId);
             String userid =String.valueOf(result.getData().getYhid());
             //给sessionKey加上前缀
-            userid = "sessionkey:" + userid;
+            String cacheKeyId = "sessionkey:" + userid;
 
-            boolean jieguo = sessionKeyService.setSessionKey(sessionKey,userid);
+            boolean jieguo = sessionKeyService.setSessionKey(sessionKey,cacheKeyId);
 
             if (!jieguo){
                 userExsitJudgmentDto.setSuccess(false);
@@ -145,9 +145,9 @@ public class WxMaUserController {
             return result;
         }
         //sessionkey加前缀
-        userid = "sessionkey:" + userid;
+        String redisKeyId = "sessionkey:" + userid;
         //取到sessionKey
-        String sessionKey = sessionKeyService.getSessionKey(userid);
+        String sessionKey = sessionKeyService.getSessionKey(redisKeyId);
         if (sessionKey == "" || sessionKey == null){
             userGetInfoDto.setSuccess(false);
             userGetInfoDto.setTips("没有找到当前用户的sessionKey信息,无法完成解码");
