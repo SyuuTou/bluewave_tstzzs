@@ -205,7 +205,8 @@ public class WxMaUserController {
         try {
             int yhxinxi = userExistJudgmentService.getUserId(body.get("token"));
             String userid = String.valueOf(yhxinxi);
-            String sessionKey = sessionKeyService.getSessionKey(userid);
+            String redisKeyId = "sessionkey:" + userid;
+            String sessionKey = sessionKeyService.getSessionKey(redisKeyId);
             String info = WxMaCryptUtils.decrypt(sessionKey, body.get("encryptedData"), body.get("iv"));
             PhonenumberInfo phonenumberInfo = WxMaGsonBuilder.create().fromJson(info, PhonenumberInfo.class);
             result.setData(phonenumberInfo);
@@ -248,8 +249,8 @@ public class WxMaUserController {
             String userid = String.valueOf(yhxinxi);
 
             String sessionKey = session.getSessionKey();
-
-            boolean jieguo = sessionKeyService.setSessionKey(sessionKey,userid);
+            String redisKeyId = "sessionkey:" + userid;
+            boolean jieguo = sessionKeyService.setSessionKey(sessionKey,redisKeyId);
 
             if (!jieguo){
                 userExsitJudgmentDto.setSuccess(false);
