@@ -618,6 +618,11 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				}
 			} catch (WxErrorException e) {
 				e.printStackTrace();
+				result.setStatus(50001);
+				result.setMessage("该formid已经被使用，或者无效");
+				result.setData(null);
+
+				return result;
 			}
 			//wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().toUser(openId).data().build());
 //			wxService.getMsgService().sendKefuMsg(message);
