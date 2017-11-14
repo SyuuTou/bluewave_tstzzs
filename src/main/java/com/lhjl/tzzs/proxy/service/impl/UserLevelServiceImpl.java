@@ -492,6 +492,8 @@ public class UserLevelServiceImpl implements UserLevelService {
                     query.setIdType("Institutional_Investor");
                 }else if (2 == investorsApproval.getInvestorsType()) {
                     query.setIdType("VIP_Investor");
+                }else {
+                    query.setIdType("organizing_data");
                 }
             }else {
                 query.setIdType(presentedType);

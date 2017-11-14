@@ -283,14 +283,14 @@ public class WxMaUserController {
 
 
     @GetMapping("wx/test")
-    public String textWx(){
+    public String textWx(String formId){
 
         List<WxMaTemplateMessage.Data> datas = new ArrayList<>();
         datas.add(new WxMaTemplateMessage.Data("keyword1.DATA","用户"));
         datas.add(new WxMaTemplateMessage.Data("keyword2.DATA","说明"));
         datas.add(new WxMaTemplateMessage.Data("keyword3.DATA","认证时间"));
         try {
-            this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("db8W77rbYLinzuEXFWFtiv2WFRke9LS_nqGblGDh3A8").formId("dsdsd").toUser("oA0AB0ajgNg7_Z2C100wZ1JbL760").data(datas).build());
+            this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("IQL59_p78hezrN9Oz6UAStwSyFk8ZbLgVPaPqEi1KyA").formId(formId).toUser("oA0AB0eQ76iCm2ADN9i9kiL2XUgE").data(datas).build());
         } catch (WxErrorException e) {
             e.printStackTrace();
         }

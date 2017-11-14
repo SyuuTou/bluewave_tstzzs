@@ -140,7 +140,7 @@ public class UserWeixinImpl implements UserWeixinService {
             MetaFamilyName familyName = new MetaFamilyName();
             familyName.setFamily(nickName.substring(startIndex,startIndex+1));
             MetaFamilyName metaFamilyName = familyNameMapper.selectOne(familyName);
-            if (metaFamilyName==null){
+            if (metaFamilyName==null&&nickName.length()>=startIndex+2){
                 familyName.setFamily(nickName.substring(startIndex,startIndex+2));
                 metaFamilyName = familyNameMapper.selectOne(familyName);
             }

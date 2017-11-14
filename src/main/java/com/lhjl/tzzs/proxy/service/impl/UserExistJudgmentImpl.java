@@ -233,14 +233,18 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
     @Override
     public int getUserId(String token){
         int result = -1;
-        UserToken userToken = new UserToken();
-        userToken.setToken(token);
+        try {
+            UserToken userToken = new UserToken();
+            userToken.setToken(token);
 
-        List<UserToken> userTokens = userTokenMapper.select(userToken);
+            List<UserToken> userTokens = userTokenMapper.select(userToken);
 
-        if (userTokens.size() > 0){
-            UserToken userTokenForId = userTokens.get(0);
-            result = userTokenForId.getUserId();
+            if (userTokens.size() > 0){
+                UserToken userTokenForId = userTokens.get(0);
+                result = userTokenForId.getUserId();
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(),e.fillInStackTrace());
         }
 
         return result;

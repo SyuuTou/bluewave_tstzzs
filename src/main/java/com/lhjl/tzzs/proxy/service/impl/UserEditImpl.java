@@ -126,95 +126,110 @@ public class UserEditImpl implements UserEditService {
         CommonDto<Map<String,Object>> result = new CommonDto<>();
         Map<String,Object> obj = new HashMap<>();
 
-        Users users =new Users();
-        users.setId(userid);
+        try {
+            Users users =new Users();
+            users.setId(userid);
 
-        Users usersForHeadpic =usersMapper.selectByPrimaryKey(users.getId());
+            Users usersForHeadpic =usersMapper.selectByPrimaryKey(users.getId());
 
-        String userHeadpic = usersForHeadpic.getHeadpic();
-        String userHeadpic_real = usersForHeadpic.getHeadpicReal();
-        String userActualName = usersForHeadpic.getActualName();
-        String headpic ="";
-        String username = "";
-        String leixing = "";
-        Integer identityTypeInt = usersForHeadpic.getIdentityType();
-        String identityType = "";
-        switch (identityTypeInt){
-            case 0:identityType="投资人";
-            break;
-            case 1:identityType="创业者";
-            break;
-            case 2:identityType="产业公司";
-            break;
-            case 3:identityType="媒体";
-            break;
-            case 4:identityType="政府机构";
-            break;
-            case 5:identityType="服务机构";
-            default:
-                identityType="";
-        }
-
-        //判断用户的头像，和用户名
-        if (userHeadpic_real == null){
-          headpic = userHeadpic;
-        }else {
-          headpic = userHeadpic_real;
-        }
-
-        if (userActualName == null){
-            UsersWeixin usersWeixin =new UsersWeixin();
-            usersWeixin.setUserId(userid);
-
-            List<UsersWeixin> usersWeixins = usersWeixinMapper.select(usersWeixin);
-            if (usersWeixins.size() > 0){
-                UsersWeixin usersWeixinForUserName = new UsersWeixin();
-                usersWeixinForUserName = usersWeixins.get(0);
-                username = usersWeixinForUserName.getNickName();
+            String userHeadpic = usersForHeadpic.getHeadpic();
+            String userHeadpic_real = usersForHeadpic.getHeadpicReal();
+            String userActualName = usersForHeadpic.getActualName();
+            String headpic ="";
+            String username = "";
+            String leixing = "";
+            Integer identityTypeInt = usersForHeadpic.getIdentityType();
+            String identityType = "";
+            if (null == identityTypeInt){
+                identityType = "";
             }else {
-                username ="";
+                switch (identityTypeInt) {
+                    case 0:
+                        identityType = "投资人";
+                        break;
+                    case 1:
+                        identityType = "创业者";
+                        break;
+                    case 2:
+                        identityType = "产业公司";
+                        break;
+                    case 3:
+                        identityType = "媒体";
+                        break;
+                    case 4:
+                        identityType = "政府机构";
+                        break;
+                    case 5:
+                        identityType = "服务机构";
+                        break;
+                    default:
+                        identityType = "";
+                }
             }
 
-        }else {
-            username = userActualName;
-        }
-
-        //获取投资人类型
-        Investors investors =new Investors();
-        investors.setUserId(userid);
-
-        List<Investors> investorsList = investorsMapper.select(investors);
-        if (investorsList.size() > 0){
-            Investors investorsForLeixing = new Investors();
-            investorsForLeixing = investorsList.get(0);
-            int leixingResult = investorsForLeixing.getInvestorsType();
-            switch (leixingResult){
-                case 0: leixing = "个人投资人";
-                break;
-                case 1:leixing = "机构投资人";
-                break;
-                case 2:leixing = "VIP投资人";
-                break;
-                default:
-                    leixing ="";
+            //判断用户的头像，和用户名
+            if (userHeadpic_real == null){
+              headpic = userHeadpic;
+            }else {
+              headpic = userHeadpic_real;
             }
-        }else {
-            leixing="";
+
+            if (userActualName == null){
+                UsersWeixin usersWeixin =new UsersWeixin();
+                usersWeixin.setUserId(userid);
+
+                List<UsersWeixin> usersWeixins = usersWeixinMapper.select(usersWeixin);
+                if (usersWeixins.size() > 0){
+                    UsersWeixin usersWeixinForUserName = new UsersWeixin();
+                    usersWeixinForUserName = usersWeixins.get(0);
+                    username = usersWeixinForUserName.getNickName();
+                }else {
+                    username ="";
+                }
+
+            }else {
+                username = userActualName;
+            }
+
+            //获取投资人类型
+            Investors investors =new Investors();
+            investors.setUserId(userid);
+
+            List<Investors> investorsList = investorsMapper.select(investors);
+            if (investorsList.size() > 0){
+                Investors investorsForLeixing = new Investors();
+                investorsForLeixing = investorsList.get(0);
+                int leixingResult = investorsForLeixing.getInvestorsType();
+                switch (leixingResult){
+                    case 0: leixing = "个人投资人";
+                    break;
+                    case 1:leixing = "机构投资人";
+                    break;
+                    case 2:leixing = "VIP投资人";
+                    break;
+                    default:
+                        leixing ="";
+                }
+            }else {
+                leixing="";
+            }
+
+            String id = String.valueOf(userid);
+
+            //开始整理返回数据
+            obj.put("headpic",headpic);
+            obj.put("username",username);
+            obj.put("id",id);
+            obj.put("leixing",leixing);
+            obj.put("success",true);
+            obj.put("identityTpye",identityType);
+
+            result.setStatus(200);
+            result.setData(obj);
+            result.setMessage("success");
+        } catch (Exception e) {
+            log.error(e.getMessage(),e.fillInStackTrace());
         }
-
-        String id = String.valueOf(userid);
-
-        //开始整理返回数据
-        obj.put("headpic",headpic);
-        obj.put("username",username);
-        obj.put("id",id);
-        obj.put("leixing",leixing);
-        obj.put("success",true);
-        obj.put("identityTpye",identityType);
-
-        result.setStatus(200);
-        result.setData(obj);
-        result.setMessage("success");
 
 
         return result;

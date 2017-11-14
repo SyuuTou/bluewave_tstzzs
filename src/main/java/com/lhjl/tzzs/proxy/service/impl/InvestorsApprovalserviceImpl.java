@@ -196,21 +196,27 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                map.put("investorsApprovalcolCase",anliArray);
 
                Map<String,Object> renzhenleixin =new HashMap<>();
-               if(Integer.valueOf(String.valueOf(map.get("investors_type"))) == 0){
-                   renzhenleixin.put("0",true);
-                   renzhenleixin.put("1",false);
-                   renzhenleixin.put("2",false);
-               }
-               if(Integer.valueOf(String.valueOf(map.get("investors_type"))) == 1){
-                   renzhenleixin.put("0",false);
-                   renzhenleixin.put("1",true);
-                   renzhenleixin.put("2",false);
-               }
-               if(Integer.valueOf(String.valueOf(map.get("investors_type"))) == 2){
-                   renzhenleixin.put("0",false);
-                   renzhenleixin.put("1",false);
-                   renzhenleixin.put("2",true);
-               }
+               if (null != map.get("investors_type")) {
+				   if (Integer.valueOf(String.valueOf(map.get("investors_type"))) == 0) {
+					   renzhenleixin.put("0", true);
+					   renzhenleixin.put("1", false);
+					   renzhenleixin.put("2", false);
+				   }
+				   if (Integer.valueOf(String.valueOf(map.get("investors_type"))) == 1) {
+					   renzhenleixin.put("0", false);
+					   renzhenleixin.put("1", true);
+					   renzhenleixin.put("2", false);
+				   }
+				   if (Integer.valueOf(String.valueOf(map.get("investors_type"))) == 2) {
+					   renzhenleixin.put("0", false);
+					   renzhenleixin.put("1", false);
+					   renzhenleixin.put("2", true);
+				   }
+			   }else {
+				   renzhenleixin.put("0", false);
+				   renzhenleixin.put("1", false);
+				   renzhenleixin.put("2", false);
+			   }
                map.put("renzhenleixin",renzhenleixin);
             }else{
                    map=new HashMap<>();

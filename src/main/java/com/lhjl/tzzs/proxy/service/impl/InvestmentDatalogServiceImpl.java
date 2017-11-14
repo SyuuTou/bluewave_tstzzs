@@ -303,15 +303,15 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
             }
             InvestmentDataLog investmentDataLog =new InvestmentDataLog();
             investmentDataLog.setUserId(userId);
-            map.put("hnum", investmentDataLogMapper.selectCount(investmentDataLog));
+            int hnum = investmentDataLogMapper.selectCount(investmentDataLog);
+            map.put("hnum", hnum);
 
+            list.add(map);
+            result.setData(list);
         }else{
             result.setStatus(51001);
             result.setMessage("用户存在异常");
-
         }
-        list.add(map);
-        result.setData(list);
         return result;
     }
 
