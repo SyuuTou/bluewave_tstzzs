@@ -632,7 +632,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			result.setStatus(502);
 
 		}
-		return null;
+		return result;
 	}
 
 	/**
