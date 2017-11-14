@@ -201,8 +201,8 @@ public class ProjectsController {
      * @return
      */
     @PostMapping("get/project/details")
-    public CommonDto<Projects> getProjectDetails(@RequestBody Map<String,Object> body){
-        CommonDto<Projects> result  =new CommonDto<>();
+    public CommonDto<ProjectDetailOutputDto> getProjectDetails(@RequestBody Map<String,Object> body){
+        CommonDto<ProjectDetailOutputDto> result  =new CommonDto<>();
         try {
             result = projectsService.getProjectDetails(body);
         }catch (Exception e){
