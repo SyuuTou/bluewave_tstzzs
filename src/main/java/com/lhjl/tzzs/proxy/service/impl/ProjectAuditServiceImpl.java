@@ -131,28 +131,53 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
         Date now = new Date();
         if (body.getProjctSourceType() == 0){
-            result  = projectAuditOfTypeOne(body);
-
+            ProjectSendLogs projectSendLogs = projectSendLogsMapper.selectByPrimaryKey(body.getProjectSourceId());
+            Projects projects = new Projects();
+            projects.setShortName(projectSendLogs.getCompanyShortName());
+            List<Projects> projectsListForC =projectsMapper.select(projects);
+            if (projectsListForC.size() > 0){
+                Integer checkStatusU = 0;
+                switch (body.getAuditStatus()){
+                    case 0:checkStatusU=5;
+                        break;
+                    case 1:checkStatusU=2;
+                }
+                //修改申请记录为已审核
+                ProjectSendLogs projectSendLogsForUpdateU = new ProjectSendLogs();
+                projectSendLogsForUpdateU.setId(body.getProjectSourceId());
+                projectSendLogsForUpdateU.setCheckStatus(checkStatusU);
+                projectSendLogsForUpdateU.setCheckTime(now);
+                projectSendLogsMapper.updateByPrimaryKeySelective(projectSendLogsForUpdateU);
+            }else{
+                result  = projectAuditOfTypeOne(body);
+            }
 
         }else if(body.getProjctSourceType() == 1){
+            InvestmentDataLog projectSendLogs = investmentDataLogMapper.selectByPrimaryKey(body.getProjectSourceId());
+            Projects projects = new Projects();
+            projects.setShortName(projectSendLogs.getShortName());
+            List<Projects> projectsListForC =projectsMapper.select(projects);
+            if (projectsListForC.size() > 0){
+                Integer checkStatusU = 0;
+                switch (body.getAuditStatus()){
+                    case 0:checkStatusU=5;
+                        break;
+                    case 1:checkStatusU=2;
+                }
+                //修改申请记录为已审核
+                InvestmentDataLog projectSendLogsForUpdateU = new InvestmentDataLog();
+                projectSendLogsForUpdateU.setId(body.getProjectSourceId());
+                projectSendLogsForUpdateU.setAuditYn(checkStatusU);
+                projectSendLogsForUpdateU.setAuditTime(now);
+                investmentDataLogMapper.updateByPrimaryKeySelective(projectSendLogsForUpdateU);
+            }else{
             result = projectAuditOfTypeTwo(body);
+            }
         }else {
             result.setMessage("项目源类型不存在");
             result.setData(null);
             result.setStatus(50001);
         }
-        //获取项目是否在数据库已经存在
-        ProjectSendLogs projectSendLogs = projectSendLogsMapper.selectByPrimaryKey(body.getProjectSourceId());
-
-        Projects projects = new Projects();
-        projects.setShortName(projectSendLogs.getCompanyShortName());
-
-        List<Projects> projectsListForC =projectsMapper.select(projects);
-
-
-
-
-
         return result;
     }
 
