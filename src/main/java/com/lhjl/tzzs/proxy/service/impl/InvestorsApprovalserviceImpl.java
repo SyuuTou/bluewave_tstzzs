@@ -13,9 +13,6 @@ import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserLevelService;
 import me.chanjar.weixin.common.exception.WxErrorException;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,99 +55,103 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	@Override
 	public CommonDto<String> saveTouZi(TouZiDto params) {
 		CommonDto<String> result =new CommonDto<String>();
-		//先取出参数进行验证
-		String token = params.getToken();
-		String compellation = params.getCompellation();
-		String dataName = params.getDateName();
-		String company = params.getOrganization();
-		String companyDuties = params.getFillOffice();
-		String formId = params.getFormId();
+		try {
+			//先取出参数进行验证
+			String token = params.getToken();
+			String compellation = params.getCompellation();
+			String dataName = params.getDateName();
+			String company = params.getOrganization();
+			String companyDuties = params.getFillOffice();
+			String formId = params.getFormId();
 
-		if ("".equals(token) || token == null || "undefined".equals(token)){
-			result.setData(null);
-			result.setMessage("用户token不能为空");
-			result.setStatus(50001);
+			if ("".equals(token) || token == null || "undefined".equals(token)){
+                result.setData(null);
+                result.setMessage("用户token不能为空");
+                result.setStatus(50001);
 
-			return result;
+                return result;
+            }
+
+			if ("".equals(compellation) || compellation == null || "undefined".equals(compellation)){
+                result.setData(null);
+                result.setMessage("请填写姓名");
+                result.setStatus(50001);
+
+                return result;
+            }
+
+			if ("".equals(dataName) || dataName == null || "undefined".equals(dataName)){
+                result.setData(null);
+                result.setMessage("请选择投资人类型");
+                result.setStatus(50001);
+
+                return result;
+            }
+
+
+			if ("".equals(company) || company == null || "undefined".equals(company)){
+                result.setData(null);
+                result.setMessage("请填写所在公司");
+                result.setStatus(50001);
+
+                return result;
+            }
+
+			if ("".equals(companyDuties) || companyDuties == null || "undefined".equals(companyDuties)){
+                result.setData(null);
+                result.setMessage("请填写所在公司职务");
+                result.setStatus(50001);
+
+                return result;
+            }
+
+			if ("".equals(formId) || formId == null || "undefined".equals(formId)){
+                result.setData(null);
+                result.setMessage("formId不存在");
+                result.setStatus(50001);
+
+                return result;
+            }
+
+
+			InvestorsApproval  investorsApproval =new  InvestorsApproval();
+			UserToken userToken =new UserToken();
+			userToken.setToken(params.getToken());
+			userToken =userTokenMapper.selectOne(userToken);
+			investorsApproval.setUserid(userToken.getUserId());
+			investorsApproval.setApprovalUsername(params.getCompellation());
+//		 if("个人投资人".equals(params.getDateName())){
+
+			investorsApproval.setInvestorsType(Integer.valueOf(dataName));
+//		 }
+//		 if("机构投资人".equals(params.getDateName())){
+//			 investorsApproval.setInvestorsType(1);
+//			 }
+//		 if("VIP投资人".equals(params.getDateName())){
+//			 investorsApproval.setInvestorsType(2);
+//			 }
+			investorsApproval.setDescription(params.getEvaContent());
+			investorsApproval.setCompany(params.getOrganization());
+			investorsApproval.setCompanyDuties(params.getFillOffice());
+			investorsApproval.setWorkCard(params.getTempFilePaths());
+			investorsApproval.setApprovalResult(0);
+			investorsApproval.setReviewTime(new Date());
+			investorsApproval.setCreateTime(new Date());
+			investorsApproval.setFormId(formId);
+			investorsApproval.setInvestorsApprovalcolCase(params.getInvestorsApprovalcolCase());
+
+			investorsApprovalMapper.insert(investorsApproval);
+			Users users =new Users();
+			users.setUuid(params.getToken());
+			Users u =usersMapper.selectOne(users);
+			u.setCompanyName(params.getOrganization());
+			u.setCompanyDuties(params.getFillOffice());
+			u.setActualName(params.getCompellation());
+			u.setWorkCard(params.getTempFilePaths());
+			usersMapper.updateByPrimaryKey(u);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
 		}
-
-		if ("".equals(compellation) || compellation == null || "undefined".equals(compellation)){
-			result.setData(null);
-			result.setMessage("请填写姓名");
-			result.setStatus(50001);
-
-			return result;
-		}
-
-		if ("".equals(dataName) || dataName == null || "undefined".equals(dataName)){
-			result.setData(null);
-			result.setMessage("请选择投资人类型");
-			result.setStatus(50001);
-
-			return result;
-		}
-
-
-
-		if ("".equals(company) || company == null || "undefined".equals(company)){
-			result.setData(null);
-			result.setMessage("请填写所在公司");
-			result.setStatus(50001);
-
-			return result;
-		}
-
-		if ("".equals(companyDuties) || companyDuties == null || "undefined".equals(companyDuties)){
-			result.setData(null);
-			result.setMessage("请填写所在公司职务");
-			result.setStatus(50001);
-
-			return result;
-		}
-		
-		if ("".equals(formId) || formId == null || "undefined".equals(formId)){
-			result.setData(null);
-			result.setMessage("formId不存在");
-			result.setStatus(50001);
-
-			return result;
-		}
-
-
-		InvestorsApproval  investorsApproval =new  InvestorsApproval();
-		 UserToken userToken =new UserToken();
-		 userToken.setToken(params.getToken());
-	     userToken =userTokenMapper.selectOne(userToken);
-		 investorsApproval.setUserid(userToken.getUserId());
-		 investorsApproval.setApprovalUsername(params.getCompellation());
-		 if("个人投资人".equals(params.getDateName())){
-		 investorsApproval.setInvestorsType(0);
-		 }
-		 if("机构投资人".equals(params.getDateName())){
-			 investorsApproval.setInvestorsType(1);
-			 }
-		 if("VIP投资人".equals(params.getDateName())){
-			 investorsApproval.setInvestorsType(2);
-			 }
-		 investorsApproval.setDescription(params.getEvaContent());
-		 investorsApproval.setCompany(params.getOrganization());
-		 investorsApproval.setCompanyDuties(params.getFillOffice());
-		 investorsApproval.setWorkCard(params.getTempFilePaths());
-		 investorsApproval.setApprovalResult(0);
-		 investorsApproval.setReviewTime(new Date());
-		 investorsApproval.setCreateTime(new Date());
-		 investorsApproval.setFormId(formId);
-		 investorsApproval.setInvestorsApprovalcolCase(params.getInvestorsApprovalcolCase());
-
-		 investorsApprovalMapper.insert(investorsApproval);
-		 Users users =new Users();
-		 users.setUuid(params.getToken());
-		 Users u =usersMapper.selectOne(users);
-		 u.setCompanyName(params.getOrganization());
-		 u.setCompanyDuties(params.getFillOffice());
-		 u.setActualName(params.getCompellation());
-		 u.setWorkCard(params.getTempFilePaths());
-         usersMapper.updateByPrimaryKey(u);
 		return result;
 	}
   /**
@@ -159,76 +160,89 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	@Override
 	public CommonDto<Map<String,Object>> findInvestorsApproval(String token) {
 		CommonDto<Map<String, Object>> result =new CommonDto<Map<String, Object>> ();
-		Map<String,Object> map =new HashMap<>();
-		UserToken userToken =new UserToken();
-		 userToken.setToken(token);
-		 userToken = userTokenMapper.selectOne(userToken);
+		try {
+			Map<String,Object> map =new HashMap<>();
+			UserToken userToken =new UserToken();
+			userToken.setToken(token);
+			userToken = userTokenMapper.selectOne(userToken);
+			Users users1 =new Users();
+            users1.setUuid(token);
+            users1 = usersMapper.selectOne(users1);
 
-		 Integer userId = userToken.getUserId();
-		 map=investorsApprovalMapper.findInvestorsApproval(userId);
-          String anli = "";
-          if (map == null){
-              anli = "";
-          }else{
-              if (map.get("investors_approvalcol_case") == null){
-                  anli = "";
-              }else{
-                  anli = String.valueOf(map.get("investors_approvalcol_case"));
-              }
-          }
+			Integer userId = userToken.getUserId();
+			map=investorsApprovalMapper.findInvestorsApproval(userId);
+			String anli = "";
+			if (map == null){
+                anli = "";
+            }else{
+                if (map.get("investors_approvalcol_case") == null){
+                    anli = "";
+                }else{
+                    anli = String.valueOf(map.get("investors_approvalcol_case"));
+                }
+            }
 
 
-		 String[] anliArray = anli.split(",");
-		 if(map !=null){
+			String[] anliArray = anli.split(",");
+			if(map !=null){
 
-			map.put("id", token);
-			map.put("renzhengtouzirenshenhebiao7additional","");//其他说明
-			map.put("renzhengtouzirenshenhebiao7applicantn",String.valueOf(map.get("approval_username")));
-			map.put("renzhengtouzirenshenhebiao7assumeoffi",String.valueOf(map.get("company_duties")));
-			map.put("renzhengtouzirenshenhebiao7certificat",String.valueOf(map.get("company")));
-			map.put("renzhengtouzirenshenhebiao7frontofbus",String.valueOf(map.get("work_card")));
-			map.put("renzhengtouzirenshenhebiao7wherecompa",String.valueOf(map.get("description")));
-			map.put("investorsApprovalcolCase",anliArray);
+               map.put("id", token);
+               map.put("renzhengtouzirenshenhebiao7additional","");//其他说明
+               map.put("renzhengtouzirenshenhebiao7applicantn",String.valueOf(map.get("approval_username")));
+               map.put("renzhengtouzirenshenhebiao7assumeoffi",String.valueOf(map.get("company_duties")));
+               map.put("renzhengtouzirenshenhebiao7certificat",String.valueOf(map.get("company")));
+               map.put("renzhengtouzirenshenhebiao7frontofbus",users1.getWorkCard());
+               map.put("renzhengtouzirenshenhebiao7wherecompa",String.valueOf(map.get("description")));
+               map.put("investorsApprovalcolCase",anliArray);
 
-			Map<String,Object> renzhenleixin =new HashMap<>();
-			if(Integer.valueOf(String.valueOf(map.get("investors_type"))) == 0){
-				renzhenleixin.put("0",true);
-				renzhenleixin.put("1",false);
-				renzhenleixin.put("2",false);
-			}
-			if(Integer.valueOf(String.valueOf(map.get("investors_type"))) == 1){
-				renzhenleixin.put("0",false);
-				renzhenleixin.put("1",true);
-				renzhenleixin.put("2",false);
-			}
-			if(Integer.valueOf(String.valueOf(map.get("investors_type"))) == 2){
-				renzhenleixin.put("0",false);
-				renzhenleixin.put("1",false);
-				renzhenleixin.put("2",true);
-			}
-			map.put("renzhenleixin",renzhenleixin);
-		 }else{
-			    map=new HashMap<>();
-			    Users users =new Users();
-			    users.setUuid(token);
-			    users = usersMapper.selectOne(users);
-			    String username =users.getActualName();
+               Map<String,Object> renzhenleixin =new HashMap<>();
+               if (null != map.get("investors_type")) {
+				   if (Integer.valueOf(String.valueOf(map.get("investors_type"))) == 0) {
+					   renzhenleixin.put("0", true);
+					   renzhenleixin.put("1", false);
+					   renzhenleixin.put("2", false);
+				   }
+				   if (Integer.valueOf(String.valueOf(map.get("investors_type"))) == 1) {
+					   renzhenleixin.put("0", false);
+					   renzhenleixin.put("1", true);
+					   renzhenleixin.put("2", false);
+				   }
+				   if (Integer.valueOf(String.valueOf(map.get("investors_type"))) == 2) {
+					   renzhenleixin.put("0", false);
+					   renzhenleixin.put("1", false);
+					   renzhenleixin.put("2", true);
+				   }
+			   }else {
+				   renzhenleixin.put("0", false);
+				   renzhenleixin.put("1", false);
+				   renzhenleixin.put("2", false);
+			   }
+               map.put("renzhenleixin",renzhenleixin);
+            }else{
+                   map=new HashMap<>();
+                   Users users =new Users();
+                   users.setUuid(token);
+                   users = usersMapper.selectOne(users);
+                   String username =users.getActualName();
 
-			    map.put("id", token);
-			    map.put("renzhengtouzirenshenhebiao7applicantn",username);
-				map.put("renzhengtouzirenshenhebiao7additional",null);//其他说明
-				map.put("renzhengtouzirenshenhebiao7assumeoffi",users.getCompanyDuties());
-				map.put("renzhengtouzirenshenhebiao7certificat",users.getCompanyName());
-				map.put("renzhengtouzirenshenhebiao7frontofbus",users.getWorkCard());
-				map.put("renzhengtouzirenshenhebiao7wherecompa",null);
-				map.put("investorsApprovalcolCase",anliArray);
-				Map<String,Object> renzhenleixin =new HashMap<>();
-				renzhenleixin.put("0",false);
-				renzhenleixin.put("1",false);
-				renzhenleixin.put("2",false);
-				map.put("renzhenleixin",renzhenleixin);
-		 }
-		result.setData(map);
+                   map.put("id", token);
+                   map.put("renzhengtouzirenshenhebiao7applicantn",username);
+                   map.put("renzhengtouzirenshenhebiao7additional",null);//其他说明
+                   map.put("renzhengtouzirenshenhebiao7assumeoffi",users.getCompanyDuties());
+                   map.put("renzhengtouzirenshenhebiao7certificat",users.getCompanyName());
+                   map.put("renzhengtouzirenshenhebiao7frontofbus",users.getWorkCard());
+                   map.put("renzhengtouzirenshenhebiao7wherecompa",null);
+                   map.put("investorsApprovalcolCase",anliArray);
+                   Map<String,Object> renzhenleixin =new HashMap<>();
+                   renzhenleixin.put("0",false);
+                   renzhenleixin.put("1",false);
+                   renzhenleixin.put("2",false);
+                   map.put("renzhenleixin",renzhenleixin);
+            }
+			result.setData(map);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
 		return result;
 	}
 	/**
@@ -420,11 +434,11 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			}
 
 			//升级为VIP投资人
-			if(investors.getInvestorsType() == 2){
+			if(investors.getInvestorsType() == 2 || investors.getInvestorsType() == 1){
 				UserToken userToken = new UserToken();
 				userToken.setUserId(userId);
 				userToken = userTokenMapper.selectOne(userToken);
-				userLevelService.upLevel(userToken.getToken(), 4);
+				userLevelService.upLevel(userToken.getToken(), 4, null);
 			}
 
 
@@ -438,9 +452,6 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
             investorInvestmentCaseForBefore.setInvestorId(investorsId);
 
             investorInvestmentCaseMapper.delete(investorInvestmentCaseForBefore);
-
-
-
 
 
 		}else{
@@ -461,11 +472,11 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 					newInvestors.setInvestorsType(null);
 			}
 			//升级为VIP投资人
-			if(newInvestors.getInvestorsType() == 2){
+			if(newInvestors.getInvestorsType() == 2 || newInvestors.getInvestorsType() == 1){
 				UserToken userToken = new UserToken();
 				userToken.setUserId(userId);
 				userToken = userTokenMapper.selectOne(userToken);
-				userLevelService.upLevel(userToken.getToken(), 4);
+				userLevelService.upLevel(userToken.getToken(), 4, null);
 			}
 			newInvestors.setApprovalStatus(Integer.parseInt(approvalStatus));
 			newInvestors.setCreateTime(new Date());
@@ -621,6 +632,117 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			result.setStatus(502);
 
 		}
-		return null;
+		return result;
+	}
+
+	/**
+	 * 用户列表页审核用户成为投资人的接口
+	 * @param userId 用户id
+	 * @param status 审核状态
+	 * @param userName 用户名
+	 * @param companyName 公司名称
+	 * @param comanyDuties 公司职位
+	 * @return
+	 */
+	@Override
+	public CommonDto<String> specialApproval(Integer userId,Integer status,String userName,String companyName,String comanyDuties){
+		CommonDto<String> result = new CommonDto<>();
+		Date now = new Date();
+
+		//判断好状态
+		Integer approvalStatus = -1;
+
+		switch (status){
+			case 1:approvalStatus = 0;
+				break;
+			case 2:approvalStatus = 0;
+				break;
+			default:
+				approvalStatus = 1;
+		}
+
+		Integer approvalType = -1;
+		switch (status){
+			case 3:approvalType = 0;
+				break;
+			case 4:approvalType = 1;
+				break;
+			case 5:approvalType = 2;
+				break;
+			default:
+				approvalType = null;
+		}
+		//先查用户投资人信息是否存在
+		Investors investors = new Investors();
+		investors.setUserId(userId);
+
+		Investors investorsForSearch = investorsMapper.selectOne(investors);
+		if (investorsForSearch != null){
+			//存在的时候获取投资人id更新用户身份
+			Integer tzrid = investorsForSearch.getId();
+			investors.setYn(1);
+			investors.setPosition(comanyDuties);
+			investors.setName(userName);
+			investors.setApprovalTime(now);
+			investors.setApprovalStatus(approvalStatus);
+			investors.setInvestorsType(approvalType);
+
+			investorsMapper.updateByPrimaryKeySelective(investors);
+
+			//升级为VIP投资人
+			if(investors.getInvestorsType() == 2 || investors.getInvestorsType() == 1){
+				UserToken userToken = new UserToken();
+				userToken.setUserId(userId);
+				userToken = userTokenMapper.selectOne(userToken);
+				userLevelService.upLevel(userToken.getToken(), 4, "VIP_Investor");
+			}
+
+			//更新用户表的信息
+			Users users =new Users();
+			users.setActualName(userName);
+			users.setCompanyName(companyName);
+			users.setCompanyDuties(comanyDuties);
+			users.setId(userId);
+
+			usersMapper.updateByPrimaryKeySelective(users);
+		}else {
+			//不存在的时候新建投资人信息
+			Investors investorsForInsert = new Investors();
+
+
+
+			investorsForInsert.setUserId(userId);
+			investorsForInsert.setApprovalStatus(approvalStatus);
+			investorsForInsert.setCreateTime(now);
+			investorsForInsert.setInvestorsType(approvalType);
+			investorsForInsert.setApprovalTime(now);
+			investorsForInsert.setName(userName);
+			investorsForInsert.setPosition(comanyDuties);
+			investorsForInsert.setYn(1);
+
+			investorsMapper.insert(investorsForInsert);
+
+			//升级为VIP投资人
+			if(investorsForInsert.getInvestorsType() == 2 || investorsForInsert.getInvestorsType() == 1){
+				UserToken userToken = new UserToken();
+				userToken.setUserId(userId);
+				userToken = userTokenMapper.selectOne(userToken);
+				userLevelService.upLevel(userToken.getToken(), 4, "VIP_Investor");
+			}
+
+			//更新用户表的信息
+			Users users =new Users();
+			users.setActualName(userName);
+			users.setCompanyName(companyName);
+			users.setCompanyDuties(comanyDuties);
+			users.setId(userId);
+
+			usersMapper.updateByPrimaryKeySelective(users);
+		}
+
+		result.setData(null);
+		result.setStatus(200);
+		result.setMessage("success");
+		return result;
 	}
 }

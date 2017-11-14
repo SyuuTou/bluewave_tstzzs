@@ -1,6 +1,5 @@
 package com.lhjl.tzzs.proxy.mapper;
 
-import com.lhjl.tzzs.proxy.dto.UserListOutputDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,6 +16,6 @@ public interface UsersMapper extends OwnerMapper<Users> {
 	Float findByBei(@Param("leId") Integer leId);
 	Integer findByJinE(@Param("skey") String skey);
 	String findByUserLevel(@Param("leId") Integer leId);
-	List<Users> findUserList(@Param("startPage") Integer startPage, @Param("pageSize") Integer pageSize);
+	List<Map<String,Object>> findUserList(@Param("startPage") Integer startPage, @Param("pageSize") Integer pageSize);
 
 }

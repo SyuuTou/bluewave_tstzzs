@@ -49,6 +49,9 @@ public class UserEditImpl implements UserEditService {
     @Resource
     private EvaluateService evaluateService;
 
+    @Resource
+    private InvestorsApprovalMapper investorsApprovalMapper;
+
     @Transactional
     @Override
     public CommonDto<UserSetPasswordOutputDto> editUserPassword(UserSetPasswordInputDto body,int userId,String token){
@@ -59,7 +62,24 @@ public class UserEditImpl implements UserEditService {
         String verify = body.getVerify();
         String user7realname_cn = body.getUser7realname_cn();
        // String password = body.getPassword();
-
+        String identityType = body.getIdType();
+        int shenfenleixing = -1;
+        switch (identityType){
+            case "投资人":shenfenleixing =0;
+                break;
+            case "创业者":shenfenleixing = 1;
+                break;
+            case "产业公司":shenfenleixing =2;
+                break;
+            case "媒体":shenfenleixing=3;
+                break;
+            case "政府机构":shenfenleixing =4;
+                break;
+            case "服务机构":shenfenleixing =5;
+                break;
+            default:
+                break;
+        }
 
 
 
@@ -68,6 +88,8 @@ public class UserEditImpl implements UserEditService {
         users.setPhonenumber(verify);
        // String passwordForSet = encodePassword(password);
         //users.setPassword(passwordForSet);
+        users.setIdentityType(shenfenleixing);
+        users.setIdType(identityType);
         users.setId(userId);
 
         usersMapper.updateByPrimaryKeySelective(users);
@@ -104,77 +126,110 @@ public class UserEditImpl implements UserEditService {
         CommonDto<Map<String,Object>> result = new CommonDto<>();
         Map<String,Object> obj = new HashMap<>();
 
-        Users users =new Users();
-        users.setId(userid);
+        try {
+            Users users =new Users();
+            users.setId(userid);
 
-        Users usersForHeadpic =usersMapper.selectByPrimaryKey(users.getId());
+            Users usersForHeadpic =usersMapper.selectByPrimaryKey(users.getId());
 
-        String userHeadpic = usersForHeadpic.getHeadpic();
-        String userHeadpic_real = usersForHeadpic.getHeadpicReal();
-        String userActualName = usersForHeadpic.getActualName();
-        String headpic ="";
-        String username = "";
-        String leixing = "";
-
-        //判断用户的头像，和用户名
-        if (userHeadpic_real == null){
-          headpic = userHeadpic;
-        }else {
-          headpic = userHeadpic_real;
-        }
-
-        if (userActualName == null){
-            UsersWeixin usersWeixin =new UsersWeixin();
-            usersWeixin.setUserId(userid);
-
-            List<UsersWeixin> usersWeixins = usersWeixinMapper.select(usersWeixin);
-            if (usersWeixins.size() > 0){
-                UsersWeixin usersWeixinForUserName = new UsersWeixin();
-                usersWeixinForUserName = usersWeixins.get(0);
-                username = usersWeixinForUserName.getNickName();
+            String userHeadpic = usersForHeadpic.getHeadpic();
+            String userHeadpic_real = usersForHeadpic.getHeadpicReal();
+            String userActualName = usersForHeadpic.getActualName();
+            String headpic ="";
+            String username = "";
+            String leixing = "";
+            Integer identityTypeInt = usersForHeadpic.getIdentityType();
+            String identityType = "";
+            if (null == identityTypeInt){
+                identityType = "";
             }else {
-                username ="";
+                switch (identityTypeInt) {
+                    case 0:
+                        identityType = "投资人";
+                        break;
+                    case 1:
+                        identityType = "创业者";
+                        break;
+                    case 2:
+                        identityType = "产业公司";
+                        break;
+                    case 3:
+                        identityType = "媒体";
+                        break;
+                    case 4:
+                        identityType = "政府机构";
+                        break;
+                    case 5:
+                        identityType = "服务机构";
+                        break;
+                    default:
+                        identityType = "";
+                }
             }
 
-        }else {
-            username = userActualName;
-        }
-
-        //获取投资人类型
-        Investors investors =new Investors();
-        investors.setUserId(userid);
-
-        List<Investors> investorsList = investorsMapper.select(investors);
-        if (investorsList.size() > 0){
-            Investors investorsForLeixing = new Investors();
-            investorsForLeixing = investorsList.get(0);
-            int leixingResult = investorsForLeixing.getInvestorsType();
-            switch (leixingResult){
-                case 0: leixing = "个人投资人";
-                break;
-                case 1:leixing = "机构投资人";
-                break;
-                case 2:leixing = "VIP投资人";
-                break;
-                default:
-                    leixing ="";
+            //判断用户的头像，和用户名
+            if (userHeadpic_real == null){
+              headpic = userHeadpic;
+            }else {
+              headpic = userHeadpic_real;
             }
-        }else {
-            leixing="";
+
+            if (userActualName == null){
+                UsersWeixin usersWeixin =new UsersWeixin();
+                usersWeixin.setUserId(userid);
+
+                List<UsersWeixin> usersWeixins = usersWeixinMapper.select(usersWeixin);
+                if (usersWeixins.size() > 0){
+                    UsersWeixin usersWeixinForUserName = new UsersWeixin();
+                    usersWeixinForUserName = usersWeixins.get(0);
+                    username = usersWeixinForUserName.getNickName();
+                }else {
+                    username ="";
+                }
+
+            }else {
+                username = userActualName;
+            }
+
+            //获取投资人类型
+            Investors investors =new Investors();
+            investors.setUserId(userid);
+
+            List<Investors> investorsList = investorsMapper.select(investors);
+            if (investorsList.size() > 0){
+                Investors investorsForLeixing = new Investors();
+                investorsForLeixing = investorsList.get(0);
+                int leixingResult = investorsForLeixing.getInvestorsType();
+                switch (leixingResult){
+                    case 0: leixing = "个人投资人";
+                    break;
+                    case 1:leixing = "机构投资人";
+                    break;
+                    case 2:leixing = "VIP投资人";
+                    break;
+                    default:
+                        leixing ="";
+                }
+            }else {
+                leixing="";
+            }
+
+            String id = String.valueOf(userid);
+
+            //开始整理返回数据
+            obj.put("headpic",headpic);
+            obj.put("username",username);
+            obj.put("id",id);
+            obj.put("leixing",leixing);
+            obj.put("success",true);
+            obj.put("identityTpye",identityType);
+
+            result.setStatus(200);
+            result.setData(obj);
+            result.setMessage("success");
+        } catch (Exception e) {
+            log.error(e.getMessage(),e.fillInStackTrace());
         }
-
-        String id = String.valueOf(userid);
-
-        //开始整理返回数据
-        obj.put("headpic",headpic);
-        obj.put("username",username);
-        obj.put("id",id);
-        obj.put("leixing",leixing);
-        obj.put("success",true);
-
-        result.setStatus(200);
-        result.setData(obj);
-        result.setMessage("success");
 
 
         return result;
@@ -799,18 +854,69 @@ public class UserEditImpl implements UserEditService {
             return result;
         }
 
-        Users users = usersMapper.selectByPrimaryKey(userId);
-        if (org.apache.commons.lang3.StringUtils.isAnyBlank(users.getActualName(),users.getCompanyName(),users.getCompanyDuties(),users.getDesc(),users.getEmail(),users.getWechat())){
-            obj.put("success",true);
+
+        InvestorsApproval investorsApprovalForId = new InvestorsApproval();
+        investorsApprovalForId.setUserid(userId);
+
+        List<InvestorsApproval> investorsApprovalList = investorsApprovalMapper.select(investorsApprovalForId);
+
+        if (investorsApprovalList.size() > 0){
+            obj.put("success",false);
+
+            result.setMessage("用户已认证投资人");
+            result.setStatus(207);
+            result.setData(obj);
+        }else{
+            obj.put("success",false);
+
+            result.setMessage("提交投资人认证，即可赠送普通会员，获得天使投资指数统计数据和项目列表的3天查看权限");
+            result.setData(obj);
             result.setStatus(208);
+        }
+
+//        Users users = usersMapper.selectByPrimaryKey(userId);
+//        if (org.apache.commons.lang3.StringUtils.isAnyBlank(users.getActualName(),users.getCompanyName(),users.getCompanyDuties(),users.getDesc(),users.getEmail(),users.getWechat())){
+//            obj.put("success",true);
+//            result.setStatus(208);
+//            result.setMessage("完善个人资料，赠送普通会员，即可获得3天查看天使投资指数统计数据和项目列表权限");
+//            result.setData(obj);
+//        }else {
+//            result.setStatus(207);
+//            result.setMessage("用户信息已经完善");
+//            result.setData(null);
+//        }
+
+        return result;
+    }
+
+    @Override
+    public CommonDto<Map<String,Object>> userInfoPerfectYn(String token){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        Map<String,Object> obj = new HashMap<>();
+
+        Integer userId = userExistJudgmentService.getUserId(token);
+        if (userId == -1){
+            result.setData(null);
+            result.setMessage("用户token无效，请检查");
+            result.setStatus(50001);
+
+            return result;
+        }
+
+
+        Users users = usersMapper.selectByPrimaryKey(userId);
+        if (org.apache.commons.lang3.StringUtils.isAnyBlank(users.getActualName(),users.getCompanyName(),users.getCompanyDuties(),users.getCity())){
+            obj.put("success",true);
+            result.setStatus(210);
             result.setMessage("完善个人资料，赠送普通会员，即可获得3天查看天使投资指数统计数据和项目列表权限");
             result.setData(obj);
         }else {
-            result.setStatus(207);
+            result.setStatus(209);
             result.setMessage("用户信息已经完善");
             result.setData(null);
         }
 
         return result;
-    };
+    }
 }

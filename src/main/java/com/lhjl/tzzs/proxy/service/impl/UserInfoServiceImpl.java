@@ -1,16 +1,10 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.UserListOutputDto;
-import com.lhjl.tzzs.proxy.mapper.FoundersEducationMapper;
-import com.lhjl.tzzs.proxy.mapper.FoundersMapper;
-import com.lhjl.tzzs.proxy.mapper.FoundersWorkMapper;
-import com.lhjl.tzzs.proxy.mapper.UsersMapper;
-import com.lhjl.tzzs.proxy.model.Founders;
-import com.lhjl.tzzs.proxy.model.FoundersEducation;
-import com.lhjl.tzzs.proxy.model.FoundersWork;
-import com.lhjl.tzzs.proxy.model.Users;
+import com.lhjl.tzzs.proxy.mapper.*;
+import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -32,6 +26,8 @@ public class UserInfoServiceImpl implements UserInfoService{
     private FoundersEducationMapper foundersEducationMapper;
     @Resource
     private FoundersWorkMapper foundersWorkMapper;
+    @Autowired
+    private MiniappFormidMapper miniappFormidMapper;
 
     /**
      * 获取个人资料
@@ -156,9 +152,9 @@ public class UserInfoServiceImpl implements UserInfoService{
      * @return
      */
     @Override
-    public CommonDto<List<Users>> getUserList(Integer pageNum,Integer pageSize){
-        CommonDto<List<Users>> result = new CommonDto<>();
-        List<Users> list= new ArrayList<>();
+    public CommonDto<List<Map<String,Object>>> getUserList(Integer pageNum,Integer pageSize){
+        CommonDto<List<Map<String,Object>>> result = new CommonDto<>();
+        List<Map<String,Object>> list= new ArrayList<>();
 
 
         if (pageNum == null || pageNum < 0){
@@ -173,10 +169,15 @@ public class UserInfoServiceImpl implements UserInfoService{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         list = usersMapper.findUserList(startPage,pageSize);
-        for (Users users:list){
-            Date createTime= users.getCreateTime();
-            String stringDate = sdf.format(createTime);
-            users.setPassword(stringDate);
+ //       for (Map<String,Object> users:list){
+//            Date createTime= users.getCreateTime();
+//            String stringDate = sdf.format(createTime);
+//            users.setPassword(stringDate);
+  //      }
+        for(Map<String,Object> obj :list){
+
+            obj.put("create_time",String.valueOf(obj.get("create_time")));
+
         }
 
 
@@ -185,6 +186,69 @@ public class UserInfoServiceImpl implements UserInfoService{
         result.setStatus(200);
         result.setMessage("success");
         result.setData(list);
+
+
+        return result;
+    }
+
+    /**
+     * 获取用户可用formid
+     * @param userId 用户id
+     * @return
+     */
+    @Override
+    public CommonDto<String> getUserFormid(Integer userId){
+        CommonDto<String> result =new CommonDto<>();
+
+        List<MiniappFormid> miniappFormidList = miniappFormidMapper.findFormiDesc(userId);
+        String formId = "";
+        if (miniappFormidList.size() > 0){
+            formId = miniappFormidList.get(0).getFormId();
+            //读出来以后锁定formid
+            MiniappFormid miniappFormidForUpdate = new MiniappFormid();
+            miniappFormidForUpdate.setId(miniappFormidList.get(0).getId());
+            miniappFormidForUpdate.setYn(2);
+
+            miniappFormidMapper.updateByPrimaryKeySelective(miniappFormidForUpdate);
+        }
+
+        result.setMessage("success");
+        result.setData(formId);
+        result.setStatus(200);
+
+
+        return result;
+    }
+
+    /**
+     * 设置formid为失效的接口
+     * @param formid
+     * @return
+     */
+    @Override
+    public CommonDto<String> setUserFormid(String formid){
+        CommonDto<String> result = new CommonDto<>();
+        MiniappFormid miniappFormidForSearch = new MiniappFormid();
+        miniappFormidForSearch.setFormId(formid);
+
+        //查到formid对应的记录。将该记录改为已使用
+        List<MiniappFormid> miniappFormidList = miniappFormidMapper.select(miniappFormidForSearch);
+        if (miniappFormidList.size() > 0){
+            MiniappFormid miniappFormidForUpdate = new MiniappFormid();
+            miniappFormidForUpdate.setId(miniappFormidList.get(0).getId());
+            miniappFormidForUpdate.setYn(1);
+
+            miniappFormidMapper.updateByPrimaryKeySelective(miniappFormidForUpdate);
+        }else {
+            result.setMessage("没有找到该formid对应的记录");
+            result.setData(null);
+            result.setStatus(50001);
+
+            return result;
+        }
+        result.setStatus(200);
+        result.setData(null);
+        result.setMessage("success");
 
 
         return result;

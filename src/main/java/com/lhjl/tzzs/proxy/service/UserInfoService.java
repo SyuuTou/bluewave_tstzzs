@@ -24,5 +24,19 @@ public interface UserInfoService {
      * @param pageSize
      * @return
      */
-    CommonDto<List<Users>> getUserList(Integer pageNum, Integer pageSize);
+    CommonDto<List<Map<String,Object>>> getUserList(Integer pageNum, Integer pageSize);
+
+    /**
+     * 获取用户可用formid
+     * @param userId 用户id
+     * @return
+     */
+    CommonDto<String> getUserFormid(Integer userId);
+
+    /**
+     * 设置formid为失效的接口
+     * @param formid
+     * @return
+     */
+    CommonDto<String> setUserFormid(String formid);
 }

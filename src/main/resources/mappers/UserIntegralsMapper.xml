@@ -29,4 +29,8 @@
     <select id="findByQnum" parameterType="INTEGER" resultType="INTEGER" >
         SELECT integral FROM meta_obtain_integral WHERE scene_key='EWJkiU7Q' AND user_level =#{leId}
     </select>
+    <select id="findIntegralsU" parameterType="INTEGER" resultType="java.util.HashMap" >
+        SELECT  IFNULL(SUM(integral_num),0) znum ,IFNULL(SUM(consume_num),0) xnum  
+        FROM user_integrals c WHERE user_id=#{userId,jdbcType=INTEGER}  AND c.`end_time` >NOW()
+    </select>
 </mapper>

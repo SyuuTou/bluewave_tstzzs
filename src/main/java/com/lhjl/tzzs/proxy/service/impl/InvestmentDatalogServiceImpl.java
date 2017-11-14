@@ -114,13 +114,13 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
 
             return result;
         }
-        if (StringUtil.isEmpty(project_full_name)){
-            result.setStatus(50001);
-            result.setMessage("请填写投资项目的工商注册全称");
-            result.setData(null);
-
-            return result;
-        }
+//        if (StringUtil.isEmpty(project_full_name)){
+//            result.setStatus(50001);
+//            result.setMessage("请填写投资项目的工商注册全称");
+//            result.setData(null);
+//
+//            return result;
+//        }
         if (StringUtil.isEmpty(summary)){
             result.setStatus(50001);
             result.setMessage("请填写一句话介绍");
@@ -169,13 +169,13 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
 
             return result;
         }
-        if (StringUtil.isEmpty(stock_right)){
-            result.setStatus(50001);
-            result.setMessage("请填写股份占比");
-            result.setData(null);
-
-            return result;
-        }
+//        if (StringUtil.isEmpty(stock_right)){
+//            result.setStatus(50001);
+//            result.setMessage("请填写股份占比");
+//            result.setData(null);
+//
+//            return result;
+//        }
         if (dateDate  == null){
             result.setStatus(50001);
             result.setMessage("请填写投资时间");
@@ -190,20 +190,20 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
 
             return result;
         }
-        if (StringUtil.isEmpty(founder_work)){
-            result.setStatus(50001);
-            result.setMessage("请填写创始人工作背景");
-            result.setData(null);
-
-            return result;
-        }
-        if (StringUtil.isEmpty(founder_education)){
-            result.setStatus(50001);
-            result.setMessage("请填写创始人毕业院校");
-            result.setData(null);
-
-            return result;
-        }
+//        if (StringUtil.isEmpty(founder_work)){
+//            result.setStatus(50001);
+//            result.setMessage("请填写创始人工作背景");
+//            result.setData(null);
+//
+//            return result;
+//        }
+//        if (StringUtil.isEmpty(founder_education)){
+//            result.setStatus(50001);
+//            result.setMessage("请填写创始人毕业院校");
+//            result.setData(null);
+//
+//            return result;
+//        }
         if (StringUtil.isEmpty(userId)){
             result.setStatus(50001);
             result.setMessage("缺少用户id");
@@ -303,15 +303,15 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
             }
             InvestmentDataLog investmentDataLog =new InvestmentDataLog();
             investmentDataLog.setUserId(userId);
-            map.put("hnum", investmentDataLogMapper.selectCount(investmentDataLog));
+            int hnum = investmentDataLogMapper.selectCount(investmentDataLog);
+            map.put("hnum", hnum);
 
+            list.add(map);
+            result.setData(list);
         }else{
             result.setStatus(51001);
             result.setMessage("用户存在异常");
-
         }
-        list.add(map);
-        result.setData(list);
         return result;
     }
 
@@ -488,13 +488,13 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
 
             return result;
         }
-        if (StringUtil.isEmpty(project_full_name)){
-            result.setStatus(50001);
-            result.setMessage("请填写投资项目的工商注册全称");
-            result.setData(null);
-
-            return result;
-        }
+//        if (StringUtil.isEmpty(project_full_name)){
+//            result.setStatus(50001);
+//            result.setMessage("请填写投资项目的工商注册全称");
+//            result.setData(null);
+//
+//            return result;
+//        }
         if (StringUtil.isEmpty(summary)){
             result.setStatus(50001);
             result.setMessage("请填写一句话介绍");
@@ -543,13 +543,13 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
 
             return result;
         }
-        if (StringUtil.isEmpty(stock_right)){
-            result.setStatus(50001);
-            result.setMessage("请填写股份占比");
-            result.setData(null);
-
-            return result;
-        }
+//        if (StringUtil.isEmpty(stock_right)){
+//            result.setStatus(50001);
+//            result.setMessage("请填写股份占比");
+//            result.setData(null);
+//
+//            return result;
+//        }
         if (dateDate  == null){
             result.setStatus(50001);
             result.setMessage("请填写投资时间");
@@ -564,20 +564,20 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
 
             return result;
         }
-        if (StringUtil.isEmpty(founder_work)){
-            result.setStatus(50001);
-            result.setMessage("请填写创始人工作背景");
-            result.setData(null);
-
-            return result;
-        }
-        if (StringUtil.isEmpty(founder_education)){
-            result.setStatus(50001);
-            result.setMessage("请填写创始人毕业院校");
-            result.setData(null);
-
-            return result;
-        }
+//        if (StringUtil.isEmpty(founder_work)){
+//            result.setStatus(50001);
+//            result.setMessage("请填写创始人工作背景");
+//            result.setData(null);
+//
+//            return result;
+//        }
+//        if (StringUtil.isEmpty(founder_education)){
+//            result.setStatus(50001);
+//            result.setMessage("请填写创始人毕业院校");
+//            result.setData(null);
+//
+//            return result;
+//        }
         if (StringUtil.isEmpty(userId)){
             result.setStatus(50001);
             result.setMessage("缺少用户id");

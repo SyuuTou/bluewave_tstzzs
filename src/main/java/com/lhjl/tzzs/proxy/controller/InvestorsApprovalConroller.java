@@ -63,7 +63,7 @@ public class InvestorsApprovalConroller {
 	     } catch (Exception e) {
 	     result.setStatus(5101);
 	     result.setMessage("显示页面异常，请稍后再试");
-	     log.error(e.getMessage());
+	     log.error(e.getMessage(), e);
 	     }
 	     return result;
 	     }
@@ -109,9 +109,10 @@ public class InvestorsApprovalConroller {
 				result.setMessage("success");
 			}
 		} catch (Exception e) {
+
 			result.setStatus(5101);
 			result.setMessage("显示页面异常，请稍后再试");
-			log.error(e.getMessage());
+			log.error(e.getMessage(), e);
 		}
 		return result;
 	}
@@ -190,6 +191,32 @@ public class InvestorsApprovalConroller {
 
 
 
+
+		return result;
+	}
+
+
+	/**
+	 * 用户列表页审核用户成为投资人的接口
+	 * @param userId 用户id
+     * @param status 审核状态
+	 * @param userName 用户名
+	 * @param companyName 公司名称
+	 * @param comanyDuties 公司职位
+	 * @return
+	 */
+	@GetMapping("/special/approval")
+	public CommonDto<String> specialApproval(Integer userId,Integer status,String userName,String companyName,String comanyDuties){
+		CommonDto<String> result = new CommonDto<>();
+
+		try {
+			result = investorsApprovalService.specialApproval(userId,status,userName,companyName,comanyDuties);
+		}catch (Exception e){
+			log.error(e.getMessage(),e.fillInStackTrace());
+			result.setMessage("服务器端发生错误");
+			result.setStatus(502);
+			result.setData(null);
+		}
 
 		return result;
 	}

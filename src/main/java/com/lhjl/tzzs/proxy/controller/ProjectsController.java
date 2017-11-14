@@ -71,7 +71,7 @@ public class ProjectsController {
         } catch (Exception e) {
             result.setStatus(5101);
             result.setMessage("项目显示页面异常，请稍后再试");
-            log.error(e.getMessage());
+            log.error(e.getMessage(),e);
         }
         return result;
     }
@@ -117,7 +117,7 @@ public class ProjectsController {
         String shortName =body.getShortName();
         String userId =body.getUserId();
         String size ="0";
-        String from ="10";
+        String from ="20";
         if(body.getPageNum() != null ){
             size=body.getPageNum();
 

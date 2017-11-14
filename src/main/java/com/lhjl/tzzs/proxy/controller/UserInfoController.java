@@ -47,17 +47,61 @@ public class UserInfoController {
     }
 
     @GetMapping("get/user/list")
-    public CommonDto<List<Users>> geyUserList(Integer pageNum,Integer pageSize){
-        CommonDto<List<Users>> result = new CommonDto<>();
+    public CommonDto<List<Map<String,Object>>> geyUserList(Integer pageNum,Integer pageSize){
+        CommonDto<List<Map<String,Object>>> result = new CommonDto<>();
 
         try {
             result = userInfoService.getUserList(pageNum,pageSize);
         }catch (Exception e){
             logger.info(e.getMessage(),e.fillInStackTrace());
-            List<Users> list = new ArrayList<>();
+            List<Map<String,Object>> list = new ArrayList<>();
             result.setData(list);
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * 获取用户可用formid
+     * @param userId 用户id
+     * @return
+     */
+    @GetMapping("get/user/formid")
+    public CommonDto<String> getUserFormid(int userId){
+        CommonDto<String> result = new CommonDto<>();
+
+        try {
+            result = userInfoService.getUserFormid(userId);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+        
+        return result;
+    }
+
+
+    /**
+     * 设置formid为失效的接口
+     * @param formid
+     * @return
+     */
+    @GetMapping("set/user/formid")
+    public CommonDto<String> setUserFormid(String formid){
+        CommonDto<String> result = new CommonDto<>();
+
+        try {
+            result = userInfoService.setUserFormid(formid);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
         }
 
         return result;
