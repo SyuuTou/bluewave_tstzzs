@@ -94,7 +94,9 @@
 
     <select id="findProjectBySegmentation" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
         SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation` segementation,mf.stage
-        FROM view_segemention_info mf where 1=1
+        FROM view_segemention_info mf
+        where 1=1
+
         <if test=" types !='' and types != null">
             AND mf.investment_institutions_type IN
             <foreach item="item" index="index" collection="types" open="(" separator="," close=")">#{item}</foreach>
@@ -113,49 +115,46 @@
     </select>
 
     <select id="findProjectBySview" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
-        select p.id ID,p.short_name,p.kernel_desc,p.city,ps.segmentation_name segementation,pfl.stage,p.evaluation_recommend from projects p left join project_financing_log pfl on p.id = pfl.project_id
-        right join project_segmentation ps on ps.project_id = p.id
-        left join   investment_institutions ii on p.investment_institutions_id = ii.id
-        left join founders f on f.project_id = p.id
-        right join founders_education fe on fe.founder_ID = f.id
-        right join founders_work fw on fw.founder_id = f.id
-        where  p.project_type = 0
-        AND pfl.financing_time > '2017-01-01'
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation` segementation,mf.evaluation_recommend,
+        (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1)stage
+        FROM projects mf
+        WHERE 1=1
+        AND mf.id IN(SELECT a.project_id FROM project_financing_log a WHERE a.financing_time > '2017-01-01')
         <if test=" types !='' and types != null">
-            AND ii.type IN
-            <foreach item="item" index="index" collection="types" open="(" separator="," close=")">#{item}</foreach>
-
+            AND mf.`investment_institutions_id` IN (SELECT id FROM investment_institutions WHERE `type` IN
+            <foreach close=")" collection="types" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            )
         </if>
         <if test=" segmentations !='' and segmentations != null">
-            AND ps.segmentation_name IN
-            <foreach item="item" index="index" collection="segmentations" open="(" separator="," close=")">#{item}</foreach>
-
+            AND mf.id IN (SELECT project_id FROM project_segmentation WHERE segmentation_name IN
+            <foreach close=")" collection="segmentations" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            )
         </if>
 
-         <if test=" stages !='' and stages != null">
-             AND pfl.stage IN
-             <foreach item="item" index="index" collection="stages" open="(" separator="," close=")">#{item}</foreach>
-
-         </if>
+        <if test=" stages !='' and stages != null">
+            AND mf.id IN (SELECT project_id FROM project_financing_log WHERE stage IN
+            <foreach close=")" collection="stages" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            )
+        </if>
 
         <if test=" cities !='' and cities != null ">
-            AND p.city IN
-            <foreach item="item" index="index" collection="cities" open="(" separator="," close=")">#{item}</foreach>
+            AND mf.city IN
+            <foreach close=")" collection="cities" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
 
         <if test=" working_background_descs!='' and working_background_descs != null">
-            AND  fw.work_experience IN
-            <foreach item="item" index="index" collection="working_background_descs" open="(" separator="," close=")">#{item}</foreach>
-
+            AND mf.id IN (SELECT f.project_id FROM founders_work fw LEFT JOIN founders f ON fw.founder_id = f.id WHERE fw.work_experience IN
+            <foreach close=")" collection="working_background_descs" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            )
         </if>
 
         <if test="educational_background_descs!='' and educational_background_descs!= null">
-            AND fe.education_experience IN
-            <foreach item="item" index="index" collection="educational_background_descs" open="(" separator="," close=")">#{item}</foreach>
-
+            AND mf.id IN (SELECT f.project_id FROM founders_education fe LEFT JOIN founders f ON fe.founder_id = f.id WHERE fe.education_experience IN
+            <foreach close=")" collection="educational_background_descs" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            )
         </if>
-        GROUP BY short_name, stage
-        ORDER BY evaluation_recommend DESC
+        GROUP BY mf.short_name,stage
+        ORDER BY mf.evaluation_recommend DESC
         LIMIT #{sizea},#{froma}
     </select>
 
@@ -170,50 +169,47 @@
 
 
     <select id="findProjectBySviewA" resultType="java.util.HashMap">
-        select p.id ID,p.short_name,p.kernel_desc,p.city,ps.segmentation_name segementation,pfl.stage,p.evaluation_recommend from projects p left join project_financing_log pfl on p.id = pfl.project_id
-        right join project_segmentation ps on ps.project_id = p.id
-        left join   investment_institutions ii on p.investment_institutions_id = ii.id
-        left join founders f on f.project_id = p.id
-        right join founders_education fe on fe.founder_ID = f.id
-        right join founders_work fw on fw.founder_id = f.id
-        where pfl.financing_time BETWEEN '2017-01-01' and '2017-06-30'
-        and pfl.stage IN('天使轮','种子轮','Pre-A轮')
-        and p.project_type = 0
+        SELECT mf.id ID ,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation` segementation,mf.evaluation_recommend,
+        (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1) stage
+        FROM projects mf
+        WHERE 1=1
+        AND mf.id IN(SELECT a.project_id FROM project_financing_log a WHERE a.financing_time BETWEEN '2017-01-01' AND '2017-06-30')
+        AND mf.id IN (SELECT project_id FROM project_financing_log WHERE stage IN('天使轮','种子轮','Pre-A轮'))
         <if test=" types !='' and types != null">
-            AND ii.type IN
-            <foreach item="item" index="index" collection="types" open="(" separator="," close=")">#{item}</foreach>
-
+            AND mf.`investment_institutions_id` IN (SELECT id FROM investment_institutions WHERE `type` IN
+            <foreach close=")" collection="types" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            )
         </if>
         <if test=" segmentations !='' and segmentations != null">
-            AND ps.segmentation_name IN
-            <foreach item="item" index="index" collection="segmentations" open="(" separator="," close=")">#{item}</foreach>
-
+            AND mf.id IN (SELECT project_id FROM project_segmentation WHERE segmentation_name IN
+            <foreach close=")" collection="segmentations" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            )
         </if>
 
-       <!-- <if test=" stages !='' and stages != null">
-            AND mf.id IN (SELECT project_id FROM project_financing_log WHERE stage IN
-            <foreach item="item" index="index" collection="stages" open="(" separator="," close=")">#{item}</foreach>
-            )
-        </if>-->
+        <!-- <if test=" stages !='' and stages != null">
+             AND mf.id IN (SELECT project_id FROM project_financing_log WHERE stage IN
+             <foreach item="item" index="index" collection="stages" open="(" separator="," close=")">#{item}</foreach>
+             )
+         </if>-->
 
         <if test=" cities !='' and cities != null ">
-            AND p.city IN
-            <foreach item="item" index="index" collection="cities" open="(" separator="," close=")">#{item}</foreach>
+            AND mf.city IN
+            <foreach close=")" collection="cities" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
 
         <if test=" working_background_descs!='' and working_background_descs != null">
-            AND  fw.work_experience IN
-            <foreach item="item" index="index" collection="working_background_descs" open="(" separator="," close=")">#{item}</foreach>
-
+            AND mf.id IN (SELECT f.project_id FROM founders_work fw LEFT JOIN founders f ON fw.founder_id = f.id WHERE fw.work_experience IN
+            <foreach close=")" collection="working_background_descs" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            )
         </if>
 
         <if test="educational_background_descs!='' and educational_background_descs!= null">
-            AND fe.education_experience IN
-            <foreach item="item" index="index" collection="educational_background_descs" open="(" separator="," close=")">#{item}</foreach>
-
+            AND mf.id IN (SELECT f.project_id FROM founders_education fe LEFT JOIN founders f ON fe.founder_id = f.id WHERE fe.education_experience IN
+            <foreach close=")" collection="educational_background_descs" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            )
         </if>
-        GROUP BY short_name, stage
-        ORDER BY evaluation_recommend DESC
+        GROUP BY mf.short_name, stage
+        ORDER BY mf.evaluation_recommend DESC
         LIMIT #{sizea},#{froma}
     </select>
 
