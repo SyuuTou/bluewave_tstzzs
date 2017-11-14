@@ -1,10 +1,7 @@
 package com.lhjl.tzzs.proxy.controller;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.ProjectSendDto;
-import com.lhjl.tzzs.proxy.dto.ProjectsSendDto;
-import com.lhjl.tzzs.proxy.dto.TeamDto;
-import com.lhjl.tzzs.proxy.dto.TeamDto1;
+import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.model.ProjectSendTeamMember;
 import com.lhjl.tzzs.proxy.service.ProjectsSendService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
 import org.slf4j.Logger;
@@ -15,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -101,7 +99,7 @@ public class ProjectsSendController {
      * 融资历史回显
      */
     @GetMapping("/rest/zyy/rtuisongthird")
-    public CommonDto<Map<String, Object>> rtuisongthird(String tsid, String token){
+    public  CommonDto<Map<String, Object>> rtuisongthird(String tsid, String token){
         CommonDto<Map<String, Object>> result = new CommonDto<>();
         //获取userId
         int userId = commonUserService.getLocalUserId(token);
@@ -182,6 +180,28 @@ public class ProjectsSendController {
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("保存团队成员记录异常");
+            logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
+
+    /**
+     *
+     * @param body
+     * @return
+     */
+    @PostMapping("serach/team")
+    public CommonDto<List<ProjectSendTeamMember>> searchTeam(@RequestBody TeamDto2 body){
+    	CommonDto<List<ProjectSendTeamMember>>  result = new CommonDto<>();
+        //获取userId
+       String token =body.getToken();
+       String tsid = body.getTsid();
+        int userId = commonUserService.getLocalUserId(token);
+        try{
+            result = projectsSendService.serachTeam(tsid, userId);
+        }catch(Exception e){
+            result.setStatus(501);
+            result.setMessage("查询团队成员");
             logger.error(e.getMessage(),e.fillInStackTrace());
         }
         return result;

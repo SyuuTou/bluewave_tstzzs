@@ -10,5 +10,5 @@ import java.util.List;
 @Mapper
 public interface ProjectSendTeamMemberMapper extends OwnerMapper<ProjectSendTeamMember> {
     void updateTeame(@Param("projectId") int  projectId, @Param("userId") int userId);
-    List<ProjectSendTeamMember> findTeam(@Param("projectId")int  projectId,@Param("userId") int userId);
+    List<ProjectSendTeamMember> searchTeam(@Param("projectId")int  projectId,@Param("userId") int userId);
 }

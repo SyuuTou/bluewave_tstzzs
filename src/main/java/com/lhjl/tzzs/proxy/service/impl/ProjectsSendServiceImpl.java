@@ -1464,8 +1464,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         projectSendTeamMember.setProjectSendLogsId(projectId);
         projectSendTeamMember.setYn(1);
         List<ProjectSendTeamMember> list1 = projectSendTeamMemberMapper.select(projectSendTeamMember);*/
-        List<ProjectSendTeamMember> list1 =projectSendTeamMemberMapper.findTeam(projectId,userId);
-        datas.put("teamMember",list1);
+        //List<ProjectSendTeamMember> list1 =projectSendTeamMemberMapper.findTeam(projectId,userId);
+       // datas.put("teamMember",list1);
 
 
         Founders founders = new Founders();
@@ -2015,4 +2015,20 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 	         result.setMessage("保存成功");
 	         return result;
 	    }
+
+
+	@Override
+	public CommonDto<List<ProjectSendTeamMember>> serachTeam(String  tsid, Integer userId) {
+		CommonDto<List<ProjectSendTeamMember>> result = new CommonDto<List<ProjectSendTeamMember>>();
+		int projectId=0;
+		if(tsid==null || "".equals(tsid)){
+			projectId=0;
+			
+		}else{
+			projectId=Integer.parseInt(tsid);
+		}
+		List<ProjectSendTeamMember> list1 =projectSendTeamMemberMapper.searchTeam(projectId,userId);
+        result.setData(list1);
+		return result;
+	}
 }

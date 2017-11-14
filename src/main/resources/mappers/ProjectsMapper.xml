@@ -301,9 +301,9 @@
             <foreach close=")" collection="educationArray" index="index" item="item" open="(" separator=",">#{item}</foreach>
             
         </if>
-        AND mf.city =#{city}
+        OR mf.city =#{city}
         <if test=" pslArray !='' and pslArray != null">
-         AND pfl.stage IN 
+        OR pfl.stage IN
             <foreach close=")" collection="pslArray" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
         and mf.short_name !=#{shortName}
@@ -321,9 +321,9 @@
             <foreach close=")" collection="educationArray" index="index" item="item" open="(" separator=",">#{item}</foreach>
             
         </if>
-        AND mf.city =#{city}
+        OR mf.city =#{city}
         <if test=" pslArray !='' and pslArray != null">
-         AND pfl.stage IN 
+        OR  pfl.stage IN
             <foreach close=")" collection="pslArray" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
         AND mf.short_name !=#{shortName}
@@ -331,6 +331,4 @@
         ORDER BY mf.evaluation_recommend DESC
         
     </select>
-
-
 </mapper>

@@ -4,7 +4,9 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectsSendDto;
 import com.lhjl.tzzs.proxy.dto.TeamDto;
 import com.lhjl.tzzs.proxy.dto.TeamDto1;
+import com.lhjl.tzzs.proxy.model.ProjectSendTeamMember;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,7 +50,8 @@ public interface ProjectsSendService {
     
     CommonDto<String> saveTeam(TeamDto body);
 
-    CommonDto<String> deleteTeam(Integer id );
+    CommonDto<String> deleteTeam(Integer id );  
     CommonDto<Map<String, Object>> teamRecord(Integer id);
     CommonDto<String> saveTeam1( TeamDto1 body);
+    CommonDto<List<ProjectSendTeamMember>> serachTeam(String  tsid, Integer userId);
 }
