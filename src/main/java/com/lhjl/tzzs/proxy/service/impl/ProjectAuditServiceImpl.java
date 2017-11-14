@@ -128,56 +128,105 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
             return result;
         }
-
         Date now = new Date();
-        if (body.getProjctSourceType() == 0){
-            ProjectSendLogs projectSendLogs = projectSendLogsMapper.selectByPrimaryKey(body.getProjectSourceId());
-            Projects projects = new Projects();
-            projects.setShortName(projectSendLogs.getCompanyShortName());
-            List<Projects> projectsListForC =projectsMapper.select(projects);
-            if (projectsListForC.size() > 0){
-                Integer checkStatusU = 0;
-                switch (body.getAuditStatus()){
-                    case 0:checkStatusU=5;
-                        break;
-                    case 1:checkStatusU=2;
+
+        //先判断审核结果是否通过
+        if (body.getAuditStatus() == 0){
+            //未通过状态,直接改申请记录的状态
+            if(body.getProjctSourceType() == 0) {
+                //创始人提交的修改创始人的记录
+                ProjectSendLogs projectSendLogs = projectSendLogsMapper.selectByPrimaryKey(body.getProjectSourceId());
+                Projects projects = new Projects();
+                projects.setShortName(projectSendLogs.getCompanyShortName());
+                List<Projects> projectsListForC = projectsMapper.select(projects);
+                if (projectsListForC.size() > 0) {
+                    Integer checkStatusU = 0;
+                    switch (body.getAuditStatus()) {
+                        case 0:
+                            checkStatusU = 5;
+                            break;
+                        case 1:
+                            checkStatusU = 2;
+                    }
+                    //修改申请记录为已审核
+                    ProjectSendLogs projectSendLogsForUpdateU = new ProjectSendLogs();
+                    projectSendLogsForUpdateU.setId(body.getProjectSourceId());
+                    projectSendLogsForUpdateU.setCheckStatus(checkStatusU);
+                    projectSendLogsForUpdateU.setCheckTime(now);
+                    projectSendLogsMapper.updateByPrimaryKeySelective(projectSendLogsForUpdateU);
                 }
-                //修改申请记录为已审核
-                ProjectSendLogs projectSendLogsForUpdateU = new ProjectSendLogs();
-                projectSendLogsForUpdateU.setId(body.getProjectSourceId());
-                projectSendLogsForUpdateU.setCheckStatus(checkStatusU);
-                projectSendLogsForUpdateU.setCheckTime(now);
-                projectSendLogsMapper.updateByPrimaryKeySelective(projectSendLogsForUpdateU);
-            }else{
-                result  = projectAuditOfTypeOne(body);
+            }else if (body.getProjctSourceType() == 1){
+                //投资人提交修改投资人提交记录
+                InvestmentDataLog investmentDataLogForSearch = investmentDataLogMapper.selectByPrimaryKey(body.getProjectSourceId());
+                investmentDataLogForSearch.setAuditTime(now);
+                investmentDataLogForSearch.setAuditYn(2);
+
+                investmentDataLogMapper.updateByPrimaryKeySelective(investmentDataLogForSearch);
+            }else {
+                result.setMessage("项目源类型不存在");
+                result.setData(null);
+                result.setStatus(50001);
             }
 
-        }else if(body.getProjctSourceType() == 1){
-            InvestmentDataLog projectSendLogs = investmentDataLogMapper.selectByPrimaryKey(body.getProjectSourceId());
-            Projects projects = new Projects();
-            projects.setShortName(projectSendLogs.getShortName());
-            List<Projects> projectsListForC =projectsMapper.select(projects);
-            if (projectsListForC.size() > 0){
-                Integer checkStatusU = 0;
-                switch (body.getAuditStatus()){
-                    case 0:checkStatusU=5;
-                        break;
-                    case 1:checkStatusU=2;
+
+        }else if (body.getAuditStatus() == 1){
+            //通过的状态
+            if (body.getProjctSourceType() == 0){
+                ProjectSendLogs projectSendLogs = projectSendLogsMapper.selectByPrimaryKey(body.getProjectSourceId());
+                Projects projects = new Projects();
+                projects.setShortName(projectSendLogs.getCompanyShortName());
+                List<Projects> projectsListForC =projectsMapper.select(projects);
+                if (projectsListForC.size() > 0){
+                    Integer checkStatusU = 0;
+                    switch (body.getAuditStatus()){
+                        case 0:checkStatusU=5;
+                            break;
+                        case 1:checkStatusU=2;
+                    }
+                    //修改申请记录为已审核
+                    ProjectSendLogs projectSendLogsForUpdateU = new ProjectSendLogs();
+                    projectSendLogsForUpdateU.setId(body.getProjectSourceId());
+                    projectSendLogsForUpdateU.setCheckStatus(checkStatusU);
+                    projectSendLogsForUpdateU.setCheckTime(now);
+                    projectSendLogsMapper.updateByPrimaryKeySelective(projectSendLogsForUpdateU);
+                }else{
+                    result  = projectAuditOfTypeOne(body);
                 }
-                //修改申请记录为已审核
-                InvestmentDataLog projectSendLogsForUpdateU = new InvestmentDataLog();
-                projectSendLogsForUpdateU.setId(body.getProjectSourceId());
-                projectSendLogsForUpdateU.setAuditYn(checkStatusU);
-                projectSendLogsForUpdateU.setAuditTime(now);
-                investmentDataLogMapper.updateByPrimaryKeySelective(projectSendLogsForUpdateU);
-            }else{
-            result = projectAuditOfTypeTwo(body);
+
+            }else if(body.getProjctSourceType() == 1){
+                InvestmentDataLog projectSendLogs = investmentDataLogMapper.selectByPrimaryKey(body.getProjectSourceId());
+                Projects projects = new Projects();
+                projects.setShortName(projectSendLogs.getShortName());
+                List<Projects> projectsListForC =projectsMapper.select(projects);
+                if (projectsListForC.size() > 0){
+                    Integer checkStatusU = 0;
+                    switch (body.getAuditStatus()){
+                        case 0:checkStatusU=5;
+                            break;
+                        case 1:checkStatusU=2;
+                    }
+                    //修改申请记录为已审核
+                    InvestmentDataLog projectSendLogsForUpdateU = new InvestmentDataLog();
+                    projectSendLogsForUpdateU.setId(body.getProjectSourceId());
+                    projectSendLogsForUpdateU.setAuditYn(checkStatusU);
+                    projectSendLogsForUpdateU.setAuditTime(now);
+                    investmentDataLogMapper.updateByPrimaryKeySelective(projectSendLogsForUpdateU);
+                }else{
+                    result = projectAuditOfTypeTwo(body);
+                }
+            }else {
+                result.setMessage("项目源类型不存在");
+                result.setData(null);
+                result.setStatus(50001);
             }
         }else {
-            result.setMessage("项目源类型不存在");
+            //未知状态
+            result.setMessage("审核结果类型非法");
             result.setData(null);
             result.setStatus(50001);
         }
+
+
         return result;
     }
 
@@ -280,7 +329,7 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         projectFinancingHistoryForSearch.setProjectSendLogId(String.valueOf(body.getProjectSourceId()));
 
         List<ProjectFinancingHistory> projectFinancingHistoryList = projectFinancingHistoryMapper.select(projectFinancingHistoryForSearch);
-        if (projectFinancingApprovalList.size() > 0){
+        if (projectFinancingHistoryList.size() > 0){
             ProjectFinancingHistory projectFinancingHistory = projectFinancingHistoryList.get(0);
 
             //解析一下输入值
