@@ -52,10 +52,30 @@ public class ActionDto {
      */
     private String educationName;
 
+    /** 赠送周期 */
+    private Integer period;
     /**
      * 毕业院校
      */
     private String workName;
+
+    private String presentedType;
+
+    public String getPresentedType() {
+        return presentedType;
+    }
+
+    public void setPresentedType(String presentedType) {
+        this.presentedType = presentedType;
+    }
+
+    public Integer getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Integer period) {
+        this.period = period;
+    }
 
     public String getUserId() {
         return userId;

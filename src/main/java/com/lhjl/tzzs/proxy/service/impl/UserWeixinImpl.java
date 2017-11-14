@@ -3,15 +3,11 @@ package com.lhjl.tzzs.proxy.service.impl;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.UserGetInfoDto;
-import com.lhjl.tzzs.proxy.mapper.MetaFamilyNameMapper;
-import com.lhjl.tzzs.proxy.mapper.UserTokenMapper;
-import com.lhjl.tzzs.proxy.mapper.UsersMapper;
-import com.lhjl.tzzs.proxy.mapper.UsersWeixinMapper;
-import com.lhjl.tzzs.proxy.model.MetaFamilyName;
-import com.lhjl.tzzs.proxy.model.UserToken;
-import com.lhjl.tzzs.proxy.model.Users;
-import com.lhjl.tzzs.proxy.model.UsersWeixin;
+import com.lhjl.tzzs.proxy.mapper.*;
+import com.lhjl.tzzs.proxy.model.*;
+import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.service.UserWeixinService;
+import org.joda.time.DateTime;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +17,7 @@ import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserWeixinImpl implements UserWeixinService {
@@ -35,7 +32,13 @@ public class UserWeixinImpl implements UserWeixinService {
     private UserTokenMapper userTokenMapper;
 
     @Autowired
+    private MiniappFormidMapper miniappFormidMapper;
+
+    @Autowired
     private MetaFamilyNameMapper familyNameMapper;
+    @Resource
+    private UserExistJudgmentService userExistJudgmentService;
+
     @Transactional
     @Override
     public CommonDto<UserGetInfoDto> setUsersWeixin(WxMaUserInfo userInfo,String userid){
@@ -137,7 +140,7 @@ public class UserWeixinImpl implements UserWeixinService {
             MetaFamilyName familyName = new MetaFamilyName();
             familyName.setFamily(nickName.substring(startIndex,startIndex+1));
             MetaFamilyName metaFamilyName = familyNameMapper.selectOne(familyName);
-            if (metaFamilyName==null){
+            if (metaFamilyName==null&&nickName.length()>=startIndex+2){
                 familyName.setFamily(nickName.substring(startIndex,startIndex+2));
                 metaFamilyName = familyNameMapper.selectOne(familyName);
             }
@@ -186,6 +189,36 @@ public class UserWeixinImpl implements UserWeixinService {
         result.setData("");
         return result;
 
+    }
+
+    @Transactional
+    @Override
+    public CommonDto<String> saveFormId(Map<String, String> body) {
+
+        CommonDto<String> result = new CommonDto<>();
+        //获取用户id
+        Integer userId = userExistJudgmentService.getUserId(body.get("token"));
+        if (userId == -1){
+            result.setData(null);
+            result.setStatus(50001);
+            result.setMessage("用户token非法");
+
+            return result;
+        }
+
+        MiniappFormid miniappFormid = new MiniappFormid();
+        miniappFormid.setCreateTime(DateTime.now().toDate());
+        miniappFormid.setFormId(body.get("formId"));
+        miniappFormid.setSceneKey(body.get("sceneKey"));
+        miniappFormid.setToken(body.get("token"));
+        miniappFormid.setUserId(userId);
+
+        miniappFormidMapper.insert(miniappFormid);
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData("ok");
+        return result;
     }
 
 

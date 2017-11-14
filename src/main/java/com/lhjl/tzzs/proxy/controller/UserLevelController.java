@@ -77,7 +77,7 @@ public class UserLevelController {
         String userStr = body.getUserId();
         int levelId = body.getLevelId();
         try{
-            result = userLevelService.upLevel(userStr, levelId);
+            result = userLevelService.upLevel(userStr, levelId,body.getPresentedType());
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("升级会员异常");

@@ -45,6 +45,9 @@ public class UserEditController {
         String verify = body.getVerify();
         String user7realname_cn = body.getUser7realname_cn();
         String isWeixin = body.getIsWeixin();
+        String identityType = body.getIdType();
+
+
         if ("0".equals(isWeixin)){
             if (securitycode == null || "".equals(securitycode) || "undefined".equals(securitycode)){
                 userSetPasswordOutputDto.setMessage("验证码不能为空");
@@ -58,6 +61,16 @@ public class UserEditController {
             }
         }
 
+        if (identityType == null || "".equals(identityType) || "undefined".equals(identityType)){
+            userSetPasswordOutputDto.setMessage("身份类型不能为空");
+            userSetPasswordOutputDto.setSuccess(false);
+
+            result.setMessage("身份类型不能为空");
+            result.setStatus(50001);
+            result.setData(userSetPasswordOutputDto);
+
+            return result;
+        }
 
         if (token == null || "".equals(token) || "undefined".equals(token) ){
             userSetPasswordOutputDto.setMessage("token信息不能为空");
@@ -288,6 +301,20 @@ public class UserEditController {
             result.setStatus(502);
         }
 
+        return result;
+    }
+
+    @GetMapping("user/info/prefectyn")
+    public CommonDto<Map<String,Object>> userInfoPerfectYn(String token){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        try {
+          result = userEditService.userInfoPerfectYn(token);
+        }catch (Exception e){
+            log.info(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+        }
         return result;
     }
 

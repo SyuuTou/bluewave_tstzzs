@@ -67,6 +67,13 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
                 users.setId(userId);
 
                 Users getUser =usersMapper.selectByPrimaryKey(users.getId());
+                if (getUser == null){
+                    result.setData(null);
+                    result.setMessage("获取用户信息出现异常");
+                    result.setStatus(401);
+
+                    return result;
+                }
                 String phonenumber = getUser.getPhonenumber();
                 String password = getUser.getPassword();
 
@@ -108,15 +115,12 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
             //创建用户
             Users users =new Users();
             users.setCreateTime(now);
-
-            usersMapper.insertSelective(users);
-
-            int userid = users.getId();
             String uuid = token;
             users.setUuid(uuid);
 
-            usersMapper.updateByPrimaryKeySelective(users);
+            usersMapper.insertSelective(users);
 
+            Integer userid = users.getId();
             //创建用户token
             UserToken userToken = new UserToken();
             userToken.setUserId(userid);
@@ -229,15 +233,18 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
     @Override
     public int getUserId(String token){
         int result = -1;
-        UserToken userToken = new UserToken();
-        userToken.setToken(token);
+        try {
+            UserToken userToken = new UserToken();
+            userToken.setToken(token);
 
-        List<UserToken> userTokens = userTokenMapper.select(userToken);
+            List<UserToken> userTokens = userTokenMapper.select(userToken);
 
-        if (userTokens.size() > 0){
-            UserToken userTokenForId = userTokens.get(0);
-            result = userTokenForId.getUserId();
-
+            if (userTokens.size() > 0){
+                UserToken userTokenForId = userTokens.get(0);
+                result = userTokenForId.getUserId();
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(),e.fillInStackTrace());
         }
 
         return result;

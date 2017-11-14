@@ -15,5 +15,6 @@ public interface UserIntegralsMapper extends OwnerMapper<UserIntegrals> {
 	Integer findIntegralsX(@Param("userId") Integer userId);
 	String findBySkey(@Param("leId") Integer leId);
 	Integer findByQnum (@Param("leId") Integer leId);
+	Map<String,Object>findIntegralsU(@Param("userId") Integer userId);
 	
 }

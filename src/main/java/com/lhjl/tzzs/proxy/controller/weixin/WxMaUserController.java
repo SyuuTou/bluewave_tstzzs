@@ -81,8 +81,10 @@ public class WxMaUserController {
             String sessionKey = session.getSessionKey();
             result = userExistJudgmentService.userExistJudgment(openId);
             String userid =String.valueOf(result.getData().getYhid());
+            //给sessionKey加上前缀
+            String cacheKeyId = "sessionkey:" + userid;
 
-            boolean jieguo = sessionKeyService.setSessionKey(sessionKey,userid);
+            boolean jieguo = sessionKeyService.setSessionKey(sessionKey,cacheKeyId);
 
             if (!jieguo){
                 userExsitJudgmentDto.setSuccess(false);
@@ -142,9 +144,10 @@ public class WxMaUserController {
 
             return result;
         }
-
+        //sessionkey加前缀
+        String redisKeyId = "sessionkey:" + userid;
         //取到sessionKey
-        String sessionKey = sessionKeyService.getSessionKey(userid);
+        String sessionKey = sessionKeyService.getSessionKey(redisKeyId);
         if (sessionKey == "" || sessionKey == null){
             userGetInfoDto.setSuccess(false);
             userGetInfoDto.setTips("没有找到当前用户的sessionKey信息,无法完成解码");
@@ -192,9 +195,7 @@ public class WxMaUserController {
 
     /**
      *
-     * @param token
-     * @param encryptedData
-     * @param iv
+     * @param body
      * @return
      */
     @PostMapping("phonenumber")
@@ -204,7 +205,8 @@ public class WxMaUserController {
         try {
             int yhxinxi = userExistJudgmentService.getUserId(body.get("token"));
             String userid = String.valueOf(yhxinxi);
-            String sessionKey = sessionKeyService.getSessionKey(userid);
+            String redisKeyId = "sessionkey:" + userid;
+            String sessionKey = sessionKeyService.getSessionKey(redisKeyId);
             String info = WxMaCryptUtils.decrypt(sessionKey, body.get("encryptedData"), body.get("iv"));
             PhonenumberInfo phonenumberInfo = WxMaGsonBuilder.create().fromJson(info, PhonenumberInfo.class);
             result.setData(phonenumberInfo);
@@ -247,8 +249,8 @@ public class WxMaUserController {
             String userid = String.valueOf(yhxinxi);
 
             String sessionKey = session.getSessionKey();
-
-            boolean jieguo = sessionKeyService.setSessionKey(sessionKey,userid);
+            String redisKeyId = "sessionkey:" + userid;
+            boolean jieguo = sessionKeyService.setSessionKey(sessionKey,redisKeyId);
 
             if (!jieguo){
                 userExsitJudgmentDto.setSuccess(false);
@@ -281,14 +283,14 @@ public class WxMaUserController {
 
 
     @GetMapping("wx/test")
-    public String textWx(){
+    public String textWx(String formId){
 
         List<WxMaTemplateMessage.Data> datas = new ArrayList<>();
         datas.add(new WxMaTemplateMessage.Data("keyword1.DATA","用户"));
         datas.add(new WxMaTemplateMessage.Data("keyword2.DATA","说明"));
         datas.add(new WxMaTemplateMessage.Data("keyword3.DATA","认证时间"));
         try {
-            this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("db8W77rbYLinzuEXFWFtiv2WFRke9LS_nqGblGDh3A8").formId("dsdsd").toUser("oA0AB0ajgNg7_Z2C100wZ1JbL760").data(datas).build());
+            this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("IQL59_p78hezrN9Oz6UAStwSyFk8ZbLgVPaPqEi1KyA").formId(formId).toUser("oA0AB0eQ76iCm2ADN9i9kiL2XUgE").data(datas).build());
         } catch (WxErrorException e) {
             e.printStackTrace();
         }
@@ -308,6 +310,15 @@ public class WxMaUserController {
             result.setMessage("error");
             result.setStatus(500);
         }
+
+        return result;
+    }
+
+    @PostMapping("formId")
+    public CommonDto<String> saveFormId(@RequestBody Map<String,String> body){
+        CommonDto<String> result = null;
+
+        result = userWeixinService.saveFormId(body);
 
         return result;
     }

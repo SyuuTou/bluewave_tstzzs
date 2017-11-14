@@ -14,7 +14,7 @@ public class SessionKeyService {
     private JedisCommonService jedisCommonService;
 
     //缓存sessionkey
-    public boolean setSessionKey(String sessionKey,String userid){
+    public boolean setSessionKey(String sessionKey,String cacheKeyId){
         boolean result = false;
         if (StringUtil.isEmpty(sessionKey)){
             result = false;
@@ -22,7 +22,7 @@ public class SessionKeyService {
         Jedis jedis = null;
         try {
             jedis = jedisCommonService.getJedis();
-            jedis.set(userid,sessionKey);
+            jedis.set(cacheKeyId,sessionKey);
             result = true;
         } finally {
             if (jedis != null){
@@ -34,16 +34,16 @@ public class SessionKeyService {
     }
 
     //获取sessionkey
-    public String getSessionKey(String userid){
+    public String getSessionKey(String cacheKeyId){
         String result = "";
-        if (StringUtil.isEmpty(userid)){
+        if (StringUtil.isEmpty(cacheKeyId)){
             result="";
         }
 
         Jedis jedis = null;
         try {
             jedis = jedisCommonService.getJedis();
-            String sessionKey = jedis.get(userid);
+            String sessionKey = jedis.get(cacheKeyId);
             result = sessionKey;
         } finally {
             if (jedis != null){

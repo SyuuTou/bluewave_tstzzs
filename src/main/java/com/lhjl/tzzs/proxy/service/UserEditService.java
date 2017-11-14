@@ -17,4 +17,5 @@ public interface UserEditService {
     CommonDto<Map<String,Object>> updateUserInfo(UsersInfoInputDto body);
     CommonDto<Map<String,Object>> getUserInfo(String token);
     CommonDto<Map<String,Object>> userInfoYn(String token);
+    CommonDto<Map<String,Object>> userInfoPerfectYn(String token);
 }

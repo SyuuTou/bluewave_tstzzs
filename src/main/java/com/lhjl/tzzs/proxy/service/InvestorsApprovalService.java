@@ -61,4 +61,15 @@ public interface InvestorsApprovalService {
 	 * @return
 	 */
 	CommonDto<String> sendTemplate(Integer userId, Integer status, String formId);
+
+	/**
+	 * 用户列表页审核用户成为投资人的接口
+	 * @param userId 用户id
+	 * @param status 审核状态
+	 * @param userName 用户名
+	 * @param companyName 公司名称
+	 * @param comanyDuties 公司职位
+	 * @return
+	 */
+	CommonDto<String> specialApproval(Integer userId,Integer status,String userName,String companyName,String comanyDuties);
 }

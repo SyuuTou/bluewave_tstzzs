@@ -28,26 +28,27 @@
     <result column="headpic_real" jdbcType="VARCHAR" property="headpicReal" />
     <result column="industry" jdbcType="VARCHAR" property="industry" />
     <result column="work_card" jdbcType="VARCHAR" property="workCard" />
+    <result column="id_type" jdbcType="VARCHAR" property="idType" />
   </resultMap>
 
 
-    <select id="findByUuid" parameterType="String" resultType="INTEGER">
-     SELECT u.ID FROM users u WHERE u.uuid=#{uuids}
-    </select>
-    <select id="findByUserid" parameterType="INTEGER" resultType="INTEGER">
-     SELECT c.level_id FROM user_level_relation c WHERE c.user_id =#{userId} AND c.yn=1 AND c.status =1
-    </select>
-    <select id="findByBei" parameterType="INTEGER" resultType="Float">
-        SELECT m.ratio FROM meta_obtain_integral m WHERE m.user_level=#{leId} AND m.scene_key IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
-    </select>
-    <select id="findByJinE" parameterType="String" resultType="INTEGER">
-        SELECT integral FROM meta_obtain_integral WHERE scene_key=#{skey}
-    </select>
-    <select id="findByUserLevel" parameterType="INTEGER" resultType="String">
-      SELECT c.name FROM meta_user_level c WHERE c.ID=#{leId}
-    </select>
+  <select id="findByUuid" parameterType="String" resultType="INTEGER">
+    SELECT u.ID FROM users u WHERE u.uuid=#{uuids}
+  </select>
+  <select id="findByUserid" parameterType="INTEGER" resultType="INTEGER">
+    SELECT c.level_id FROM user_level_relation c WHERE c.user_id =#{userId} AND c.yn=1 AND c.status =1
+  </select>
+  <select id="findByBei" parameterType="INTEGER" resultType="Float">
+    SELECT m.ratio FROM meta_obtain_integral m WHERE m.user_level=#{leId} AND m.scene_key IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
+  </select>
+  <select id="findByJinE" parameterType="String" resultType="INTEGER">
+    SELECT integral FROM meta_obtain_integral WHERE scene_key=#{skey}
+  </select>
+  <select id="findByUserLevel" parameterType="INTEGER" resultType="String">
+    SELECT c.name FROM meta_user_level c WHERE c.ID=#{leId}
+  </select>
 
-  <select id="findUserList" parameterType="INTEGER" resultMap="BaseResultMap">
-    SELECT u.create_time,u.actual_name,u.company_name,u.company_duties,u.ID,u.phonenumber,u.`desc`,u.identity_type,u.create_time,w.nick_name FROM users u right join users_weixin w on w.user_id = u.ID order by u.create_time desc limit #{startPage},#{pageSize} ;
+  <select id="findUserList" parameterType="INTEGER" resultType="java.util.HashMap">
+    SELECT u.create_time,u.actual_name,u.company_name,u.company_duties,u.ID,u.phonenumber,u.`desc`,u.identity_type,u.create_time,w.nick_name FROM users u right join users_weixin w on w.user_id = u.ID where u.actual_name is not null or w.nick_name is not null order by u.create_time desc limit #{startPage},#{pageSize} ;
   </select>
 </mapper>

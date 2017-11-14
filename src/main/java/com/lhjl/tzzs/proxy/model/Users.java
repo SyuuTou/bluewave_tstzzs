@@ -130,6 +130,18 @@ public class Users {
     @Column(name = "work_card")
     private String workCard;
 
+    @Column(name = "id_type")
+    private String idType;
+
+
+    public String getIdType() {
+        return idType;
+    }
+
+    public void setIdType(String idType) {
+        this.idType = idType;
+    }
+
     /**
      * @return ID
      */

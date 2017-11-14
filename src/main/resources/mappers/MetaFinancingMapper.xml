@@ -89,7 +89,7 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
             LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
         </if>
 
-        where pfl.${flag} > 0 and  pfl.financing_time between #{beginTime} and #{endTime} AND pfl.${flag}_status = 0
+        where pfl.${flag} > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
         <if test="roundName != '' and roundName != null">
             and pfl.stage = #{roundName}
         </if>
@@ -161,7 +161,7 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
             LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
         </if>
 
-        where pfl.${flag} > 0 and  pfl.financing_time between #{beginTime} and #{endTime} AND pfl.${flag}_status = 0
+        where pfl.${flag} > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
         <if test="roundName != '' and roundName != null">
             and pfl.stage = #{roundName}
         </if>
@@ -188,8 +188,9 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
     </select>
 
     <select id="queryValuationAvg" resultType="decimal">
-        SELECT avg(a.valuation) from (
-        select pfl.valuation from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+
+
+        select avg(pfl.valuation) money from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
         right JOIN project_segmentation ps on ps.project_id = mf.id
         LEFT JOIN founders f on mf.id = f.project_id
         right join founders_education  fe on fe.founder_ID = f.id
@@ -199,6 +200,7 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         </if>
 
         where pfl.valuation > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
+        and ROUND(pfl.valuation/${granularity}) * ${granularity} BETWEEN ${minAmount} and ${maxAmount}
         <if test="roundName != '' and roundName != null">
             and pfl.stage = #{roundName}
         </if>
@@ -217,9 +219,7 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         <if test="investment != '' and investment != null and investment != -1">
             AND ii.type = #{investment}
         </if>
-        ORDER BY pfl.valuation
-        limit ${startIndex},${limit}
-        ) a
+
     </select>
 
     <select id="queryValuation" resultMap="histogramResultMap">
@@ -273,7 +273,7 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
             LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
         </if>
 
-        where pfl.${flag} > 0 and  pfl.financing_time between #{beginTime} and #{endTime} AND pfl.${flag}_status = 0
+        where pfl.${flag} > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
         <if test="roundName != '' and roundName != null">
             and pfl.stage = #{roundName}
         </if>
@@ -294,14 +294,17 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         </if>
         group by pfl.stage,mf.full_name
 
-        ) b where dis > 0 GROUP by b.dis order by dcount DESC  limit 0, 15 ) c ORDER BY money
+        ) b where dis > 0 GROUP by b.dis order by dcount DESC
+
+        limit 0, 10
+
+
+        ) c
     </select>
 
 
     <select id="queryFinancingAvgAmount" resultType="decimal">
-
-        SELECT avg(amount) from (
-        select pfl.${flag} amount  from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        select avg(pfl.${flag}) amount  from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
         right JOIN project_segmentation ps on ps.project_id = mf.id
         LEFT JOIN founders f on mf.id = f.project_id
         right join founders_education  fe on fe.founder_ID = f.id
@@ -310,7 +313,8 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
             LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
         </if>
 
-        where pfl.${flag} > 0 and  pfl.financing_time between #{beginTime} and #{endTime} AND pfl.${flag}_status = 0
+        where pfl.${flag} > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
+        AND ROUND(pfl.${flag}/${granularity}) * ${granularity} BETWEEN ${minAmount} and ${maxAmount}
         <if test="roundName != '' and roundName != null">
             and pfl.stage = #{roundName}
         </if>
@@ -329,9 +333,7 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         <if test="investment != '' and investment != null and investment != -1">
             AND ii.type = #{investment}
         </if>
-        ORDER BY pfl.${flag}
-        limit ${startIndex},${limit}
-        ) a
+
     </select>
 
 </mapper>
