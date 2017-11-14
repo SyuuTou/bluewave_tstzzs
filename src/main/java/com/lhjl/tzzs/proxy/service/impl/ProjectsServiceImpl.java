@@ -552,7 +552,8 @@ public class ProjectsServiceImpl implements ProjectsService {
             obj.put("amount",projectFinancingLog.getAmount());
             String stockRight ="未知";
             if (projectFinancingLog.getStockRight() != null){
-                stockRight = String.valueOf(projectFinancingLog.getStockRight());
+                BigDecimal bigDecimal =projectFinancingLog.getStockRight().setScale(2,BigDecimal.ROUND_DOWN);
+                stockRight = String.valueOf(bigDecimal) + "%";
             }
             obj.put("stockRight",stockRight);
             String projectFinancingUseful = "";
@@ -560,6 +561,14 @@ public class ProjectsServiceImpl implements ProjectsService {
                 projectFinancingUseful = projectFinancingLog.getProjectFinancingUseful();
             }
             obj.put("projectFinancingUseful",projectFinancingUseful);
+
+            String currency = "人民币";
+            if (projectFinancingLog.getCurrency() != null){
+                if (projectFinancingLog.getCurrency() == 1){
+                    currency = "美元";
+                }
+            }
+            obj.put("currency",currency);
 
             result.setData(obj);
             result.setMessage("success");
@@ -570,6 +579,7 @@ public class ProjectsServiceImpl implements ProjectsService {
             obj.put("amount","");
             obj.put("stockRight","");
             obj.put("projectFinancingUseful","");
+            obj.put("currency","");
 
             result.setData(obj);
             result.setMessage("success");
