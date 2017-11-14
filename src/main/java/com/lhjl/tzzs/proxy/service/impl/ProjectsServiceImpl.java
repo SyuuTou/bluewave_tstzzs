@@ -6,6 +6,8 @@ import java.util.*;
 
 import javax.annotation.Resource;
 
+import com.github.pagehelper.PageHelper;
+import com.lhjl.tzzs.proxy.dto.ProjectDetailOutputDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +64,9 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Autowired
     private ProjectTeamMemberWorkMapper projectTeamMemberWorkMapper;
+
+    @Autowired
+    private ProjectSegmentationMapper projectSegmentationMapper;
 
 
     /**
@@ -410,8 +415,9 @@ public class ProjectsServiceImpl implements ProjectsService {
      * @return
      */
     @Override
-    public CommonDto<Projects> getProjectDetails(Map<String,Object> body){
-        CommonDto<Projects> result =new CommonDto<>();
+    public CommonDto<ProjectDetailOutputDto> getProjectDetails(Map<String,Object> body){
+        CommonDto<ProjectDetailOutputDto> result =new CommonDto<>();
+        ProjectDetailOutputDto projectDetailOutputDto = new ProjectDetailOutputDto();
 
         if (body.get("projectId") == null || "".equals(body.get("projectId"))){
             result.setStatus(50001);
@@ -433,9 +439,70 @@ public class ProjectsServiceImpl implements ProjectsService {
 
         Projects projects = projectsMapper.selectByPrimaryKey(xmid);
 
+        //查不到项目报错就
+        if (projects == null ){
+            result.setMessage("没有找到项目信息，请检查项目id");
+            result.setData(null);
+            result.setStatus(50001);
+
+            return result;
+        }
+        //获取项目融资阶段
+        Example projectFinancingLogExample = new Example(ProjectFinancingLog.class);
+        projectFinancingLogExample.and().andEqualTo("projectId",xmid).andEqualTo("status",1);
+        projectFinancingLogExample.setOrderByClause("create_time DESC");
+
+        String financingStage = "";
+
+       List<ProjectFinancingLog> projectFinancingLogList = projectFinancingLogMapper.selectByExample(projectFinancingLogExample);
+       //看看现在的融资历史是否有，有的话拿到融资阶段
+       if (projectFinancingLogList.size()  >  0){
+        financingStage = projectFinancingLogList.get(0).getStage();
+       }else{
+           Example projectFinancingLogListOne = new Example(ProjectFinancingLog.class);
+           projectFinancingLogListOne.and().andEqualTo("projectId",xmid);
+           projectFinancingLogListOne.setOrderByClause("create_time DESC");
+
+            List<ProjectFinancingLog> projectFinancingLogList1 = projectFinancingLogMapper.selectByExample(projectFinancingLogListOne);
+            if (projectFinancingLogList1.size() > 0){
+                financingStage = projectFinancingLogList1.get(0).getStage();
+            }
+       }
+
+
+
+        //获取项目的领域
+        String field = "";
+        Example projectSegExample = new Example(ProjectSegmentation.class);
+        projectSegExample.and().andEqualTo("projectId",xmid);
+        PageHelper pageHelper = new PageHelper();
+        PageHelper.startPage(0,3);
+
+        List<ProjectSegmentation> projectSegmentationList = projectSegmentationMapper.selectByExample(projectSegExample);
+        if (projectSegmentationList.size() > 0){
+            for (ProjectSegmentation ps:projectSegmentationList){
+                field += ps.getSegmentationName();
+                field += " ";
+            }
+        }
+
+        //设置数据
+        projectDetailOutputDto.setField(field);
+        projectDetailOutputDto.setFinancingStage(financingStage);
+        projectDetailOutputDto.setShortName(projects.getShortName());
+        projectDetailOutputDto.setFullName(projects.getFullName());
+        projectDetailOutputDto.setKernelDesc(projects.getKernelDesc());
+        projectDetailOutputDto.setCommet(projects.getCommet());
+        projectDetailOutputDto.setUrl(projects.getUrl());
+        projectDetailOutputDto.setTerritory(projects.getTerritory());
+        projectDetailOutputDto.setProjectLogo(projects.getProjectLogo());
+        projectDetailOutputDto.setProjectInvestmentHighlights(projects.getProjectInvestmentHighlights());
+
+
+
         result.setStatus(200);
         result.setMessage("success");
-        result.setData(projects);
+        result.setData(projectDetailOutputDto);
 
         return result;
     }

@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service;
 import java.util.List;
 import java.util.Map;
 
+import com.lhjl.tzzs.proxy.dto.ProjectDetailOutputDto;
 import org.apache.ibatis.annotations.Param;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
@@ -32,7 +33,7 @@ public interface ProjectsService {
      * @param body
      * @return
      */
-    CommonDto<Projects> getProjectDetails(Map<String,Object> body);
+    CommonDto<ProjectDetailOutputDto> getProjectDetails(Map<String,Object> body);
 
     /**
      * 获取项目当前融资信息接口
