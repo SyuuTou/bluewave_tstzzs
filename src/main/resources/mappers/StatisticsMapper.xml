@@ -24,7 +24,7 @@
             and ii.type = #{jgtype}
         </if>
 
-        group by p.full_name ) b
+        group by p.short_name,pfl.stage ) b
 
         group by date_format(b.financing_time,'%Y-%m')
         ) a order by a.financing_time limit #{froma},#{sizea}
@@ -53,7 +53,7 @@
     <select id="financingSegmentationDistributed" resultMap="histogramResultMap">
 
         select segmentation y, count x from (
-        select ps.segmentation_name segmentation , count(distinct p.serial_number) count
+        select ps.segmentation_name segmentation , count(distinct p.short_name,pfl.stage) count
         from project_segmentation ps left join project_financing_log pfl on ps.project_id = pfl.project_id
         left join projects p on ps.project_id = p.id
         left join investment_institutions ii on p.investment_institutions_id = ii.id
@@ -72,7 +72,7 @@
     <select id="financingCityDistributed" resultMap="histogramResultMap">
 
         select city y, count x from (
-        select p.city, count(distinct p.serial_number) count
+        select p.city, count(distinct p.short_name,pfl.stage) count
         from project_financing_log pfl
         left join projects p on pfl.project_id = p.id
         left join investment_institutions ii on p.investment_institutions_id = ii.id
@@ -90,7 +90,7 @@
     <select id="financingEducationExperienceDistributed" resultMap="histogramResultMap">
 
         select education_experience y, count x from (
-        select fe.education_experience, count(distinct mf.serial_number) count from project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        select fe.education_experience, count(distinct mf.short_name,pfl.stage) count from project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
         left join investment_institutions ii on mf.`investment_institutions_id` = ii.id
         LEFT JOIN founders f on mf.id = f.project_id
         right join founders_education fe on fe.founder_id = f.id and fe.education_experience != ''
@@ -109,7 +109,7 @@
     <select id="financingWorkExperienceDistributed" resultMap="histogramResultMap">
 
         select work_experience y, count x from (
-        select fw.work_experience, count(distinct mf.serial_number) count from project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        select fw.work_experience, count(distinct mf.short_name,pfl.stage) count from project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
         left join investment_institutions ii on mf.`investment_institutions_id` = ii.id
         LEFT JOIN founders f on mf.id = f.project_id
 
@@ -128,7 +128,7 @@
     <select id="financingInvestmentDistributed" resultMap="histogramResultMap">
 
         select city y, count x from (
-        select p.city, count(distinct p.serial_number) count
+        select p.city, count(distinct p.short_name,pfl.stage) count
         from project_financing_log pfl
         left join projects p on pfl.project_id = p.id
         left join investment_institutions ii on p.investment_institutions_id = ii.id
