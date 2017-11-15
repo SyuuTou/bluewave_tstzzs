@@ -221,7 +221,7 @@ public class UserInfoServiceImpl implements UserInfoService{
             formId = miniappFormidList.get(0).getFormId();
             //获取当前时间5分钟之后的时间
             Date  now = new Date();
-            Date nowAfter5 = new Date(now.getTime()+300000);
+            Date nowAfter5 = new Date(now.getTime()+60000);
 
             //读出来以后锁定formid
             MiniappFormid miniappFormidForUpdate = new MiniappFormid();
