@@ -241,6 +241,13 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
         Date now = new Date();
         ProjectSendLogs projectSendLogs = projectSendLogsMapper.selectByPrimaryKey(body.getProjectSourceId());
+        if (projectSendLogs == null){
+            result.setData(null);
+            result.setStatus(50001);
+            result.setMessage("项目源id没有对应的提交记录，请检查");
+
+            return result;
+        }
 
         //先创建项目信息
         Projects projects = new Projects();
@@ -254,6 +261,7 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         projects.setTerritory(projectSendLogs.getCity());
         projects.setItemLabel(projectSendLogs.getProjectTags());
         projects.setProjectSource(0);
+        projects.setUserid(projectSendLogs.getUserid());
 
         projectsMapper.insertSelective(projects);
 

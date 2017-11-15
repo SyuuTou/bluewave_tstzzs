@@ -58,5 +58,11 @@ public interface ProjectsService {
 
     CommonDto<List<Map<String,Object>>> getProjectCompeting(Map<String,Object> body);
 
-
+    /**
+     * 判断项目是否是我的 的接口
+     * @param xmid 项目id
+     * @param token 用户token
+     * @return
+     */
+    CommonDto<Boolean> judgeProjectIsMine(Integer xmid,String token);
 }

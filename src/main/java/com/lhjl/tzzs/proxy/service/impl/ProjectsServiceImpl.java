@@ -10,6 +10,7 @@ import com.github.pagehelper.PageHelper;
 import com.lhjl.tzzs.proxy.dto.ProjectDetailOutputDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
+import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -67,6 +68,9 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Autowired
     private ProjectSegmentationMapper projectSegmentationMapper;
+
+    @Resource
+    private UserExistJudgmentService userExistJudgmentService;
 
 
     /**
@@ -804,5 +808,47 @@ public class ProjectsServiceImpl implements ProjectsService {
 
         //String lunci = projects
         return result;
+    }
+
+    /**
+     * 判断项目是否是我的 的接口
+     * @param xmid 项目id
+     * @param token 用户token
+     * @return
+     */
+    @Override
+    public CommonDto<Boolean> judgeProjectIsMine(Integer xmid,String token){
+    CommonDto<Boolean> result  = new CommonDto<>();
+    Integer userid = userExistJudgmentService.getUserId(token);
+    if (userid == -1){
+        result.setMessage("用户token非法，请检查");
+        result.setData(false);
+        result.setStatus(502);
+
+        return result;
+    }
+
+    Projects projects = projectsMapper.selectByPrimaryKey(xmid);
+    if (projects == null){
+        result.setMessage("没有找到当前项目id的项目，请检查");
+        result.setStatus(502);
+        result.setData(false);
+
+        return result;
+    }else{
+        Integer userIdForDuibi = projects.getUserid();
+        if (userid.equals(userIdForDuibi)){
+            result.setData(true);
+            result.setStatus(200);
+            result.setMessage("success");
+        }else {
+            result.setMessage("项目和用户不匹配");
+            result.setStatus(502);
+            result.setData(false);
+        }
+    }
+
+
+    return result;
     }
 }

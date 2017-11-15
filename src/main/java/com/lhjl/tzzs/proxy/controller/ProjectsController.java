@@ -296,4 +296,26 @@ public class ProjectsController {
         return result;
     }
 
+
+    /**
+     * 判断项目是否是我的 的接口
+     * @param xmid 项目id
+     * @param token 用户token
+     * @return
+     */
+    @GetMapping("get/project/ismine")
+    public CommonDto<Boolean> judgeProjectIsMine(Integer xmid,String token){
+        CommonDto<Boolean> result = new CommonDto<>();
+        try {
+            result = projectsService.judgeProjectIsMine(xmid,token);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(false);
+        }
+
+        return result;
+    }
+
 }
