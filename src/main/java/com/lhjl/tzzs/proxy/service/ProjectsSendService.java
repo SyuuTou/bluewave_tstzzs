@@ -46,7 +46,7 @@ public interface ProjectsSendService {
      * @param userId 用户ID
      * @return
      */
-    CommonDto<List<ProjectFinancingHistory>>  rtuisongthird(String tsid, int userId);
+    CommonDto<ProjectFinancingHistory>  rtuisongthird(String tsid, int userId);
     
     
     CommonDto<String> saveTeam(TeamDto body);

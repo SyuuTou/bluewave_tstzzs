@@ -321,6 +321,14 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 projectSendLogsMapper.updateByPrimaryKey(projectSendLogs);
                                 int projectId = projectSendLogs.getId();
                                 projectSendTeamMemberMapper.updateTeame(projectId,userId);
+                                ProjectFinancingHistory projectFinancingHistory =new ProjectFinancingHistory();
+                                projectFinancingHistory.setProjectSendLogId(params.getXmid());
+                                projectFinancingHistory.setUserId(userId);
+                                projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
+                                if(projectFinancingHistory != null){
+                                    projectFinancingHistoryMapper.delete(projectFinancingHistory);
+                                    projectFinancingHistoryMapper.updateHistory(projectId,userId);
+                                }
                                 projectFinancingHistoryMapper.updateHistory(projectId,userId);
                                 //相似竞品
                                 ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
@@ -1720,8 +1728,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
      * @return
      */
     @Override
-    public CommonDto<List<ProjectFinancingHistory>> rtuisongthird(String tsid, int userId) {
-        CommonDto<List<ProjectFinancingHistory>>  result = new CommonDto<>();
+    public CommonDto<ProjectFinancingHistory> rtuisongthird(String tsid, int userId) {
+        CommonDto<ProjectFinancingHistory>  result = new CommonDto<>();
         Map<String, Object> data = new HashMap<>();
         String history = "";
         //查出当前用户投递信息
@@ -1740,18 +1748,20 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                 }
             }
         }*/
-        int projectId=0;
-        if(tsid==null || "".equals(tsid)){
-            projectId=0;
-
-        }else{
-            projectId=Integer.parseInt(tsid);
+        ProjectFinancingHistory projectFinancingHistory =new ProjectFinancingHistory();
+        projectFinancingHistory.setUserId(userId);
+        projectFinancingHistory.setProjectSendLogId("-1");
+        projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
+        if(projectFinancingHistory == null){
+            ProjectFinancingHistory projectFinancingHistory1 =new ProjectFinancingHistory();
+            projectFinancingHistory1.setUserId(userId);
+            projectFinancingHistory1.setProjectSendLogId(tsid);
+            projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory1);
         }
-
-        List<ProjectFinancingHistory>list1 =projectFinancingHistoryMapper.searchTeam1(projectId,userId);
+        //List<ProjectFinancingHistory>list1 =projectFinancingHistoryMapper.searchTeam1(projectId,userId);
+        result.setData(projectFinancingHistory);
         result.setStatus(200);
         result.setMessage("融资历史回显数据获取成功");
-        result.setData(list1);
         return result;
     }
 

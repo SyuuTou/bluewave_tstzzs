@@ -100,8 +100,8 @@ public class ProjectsSendController {
      * 融资历史回显
      */
     @GetMapping("/rest/zyy/rtuisongthird")
-    public  CommonDto<List<ProjectFinancingHistory>>  rtuisongthird(String tsid, String token){
-        CommonDto<List<ProjectFinancingHistory>>  result = new CommonDto<>();
+    public  CommonDto<ProjectFinancingHistory>  rtuisongthird(String tsid, String token){
+        CommonDto<ProjectFinancingHistory>  result = new CommonDto<>();
         //获取userId
         int userId = commonUserService.getLocalUserId(token);
         try{
