@@ -738,12 +738,15 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
             pslArray=a1.toArray(pslArray);
         }
         }
-        List<XiangsiDto> likes = projectsMapper.findLikesall(educationArray,city,pslArray,shortName);
-        /*for(Map<String, Object> map :likes){
-       	 if(String.valueOf(map.get("project_logo")) == null || "".equals(String.valueOf(map.get("project_logo")))){
-       	     map.put("project_logo","");
-       	 }	  
-        }*/
+
+        //获取项目标签
+        String projectTags = projects.getItemLabel();
+        String[] projectTagArry = projectTags.split("、");
+
+
+
+        List<XiangsiDto> likes = projectsMapper.findLikesall(educationArray,projectTagArry,shortName);
+
         result.setData(likes);
 		return result;
 	}

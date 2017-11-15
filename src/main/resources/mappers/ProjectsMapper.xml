@@ -321,10 +321,9 @@
             <foreach close=")" collection="educationArray" index="index" item="item" open="(" separator=",">#{item}</foreach>
             
         </if>
-        AND mf.city =#{city}
-        <if test=" pslArray !='' and pslArray != null">
-        AND  pfl.stage IN
-            <foreach close=")" collection="pslArray" index="index" item="item" open="(" separator=",">#{item}</foreach>
+        <if test=" projectTagArry !='' and projectTagArry != null">
+            AND  mf.item_label LIKE
+            <foreach close="" collection="projectTagArry" index="index" item="item" open="" separator="OR"> CONCAT(CONCAT('%', #{item}), '%')</foreach>
         </if>
         AND mf.short_name !=#{shortName}
         GROUP BY mf.short_name, pfl.stage
