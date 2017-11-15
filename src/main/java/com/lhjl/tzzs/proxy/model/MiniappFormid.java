@@ -37,8 +37,8 @@ public class MiniappFormid {
     /**
      * formid解除锁定的时间
      */
-    @Column(name = "formid_relieve_time")
-    private Date formidRelieveTime;
+    @Column(name = "relieve_time")
+    private Date relieveTime;
 
     /**
      * @return id
@@ -163,18 +163,18 @@ public class MiniappFormid {
     /**
      * 获取formid解除锁定的时间
      *
-     * @return formid_relieve_time - formid解除锁定的时间
+     * @return relieve_time - formid解除锁定的时间
      */
-    public Date getFormidRelieveTime() {
-        return formidRelieveTime;
+    public Date getRelieveTime() {
+        return relieveTime;
     }
 
     /**
      * 设置formid解除锁定的时间
      *
-     * @param formidRelieveTime formid解除锁定的时间
+     * @param relieveTime formid解除锁定的时间
      */
-    public void setFormidRelieveTime(Date formidRelieveTime) {
-        this.formidRelieveTime = formidRelieveTime;
+    public void setRelieveTime(Date relieveTime) {
+        this.relieveTime = relieveTime;
     }
 }

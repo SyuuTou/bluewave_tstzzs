@@ -13,10 +13,10 @@
     <result column="token" jdbcType="VARCHAR" property="token" />
     <result column="yn" jdbcType="INTEGER" property="yn" />
     <result column="use_time" jdbcType="TIMESTAMP" property="useTime" />
-    <result column="formid_relieve_time" jdbcType="TIMESTAMP" property="formidRelieveTime" />
+    <result column="relieve_time" jdbcType="TIMESTAMP" property="relieveTime" />
   </resultMap>
   
   <select id="findFormiDesc" parameterType="INTEGER" resultMap="BaseResultMap">
-    SELECT * FROM miniapp_formid where user_id = #{userId} and (yn is null  or yn= 0  or (yn =2 and(formid_relieve_time &lt; now() or formid_relieve_time is null)))order by create_time asc limit 0,5;
+    SELECT * FROM miniapp_formid where user_id = #{userId} and (yn is null  or yn= 0  or (yn =2 and(relieve_time &lt; now() or relieve_time is null)))order by create_time asc limit 0,5;
   </select>
 </mapper>
