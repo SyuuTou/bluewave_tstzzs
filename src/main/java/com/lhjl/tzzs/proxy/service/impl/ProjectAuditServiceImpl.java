@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAuditInputDto;
+import com.lhjl.tzzs.proxy.dto.XiangsiDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.ProjectAuditService;
@@ -686,8 +687,8 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 		return result;
 	}
 	@Override
-	public CommonDto<List<Map<String, Object>>> findProjectall(Integer id) {
-		 CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
+	public CommonDto<List<XiangsiDto>> findProjectall(Integer id) {
+		 CommonDto<List<XiangsiDto>>  result = new  CommonDto<List<XiangsiDto>> ();
         Projects projects =new Projects();
         projects.setId(id);
         projects  = projectsMapper.selectByPrimaryKey(id);
@@ -717,14 +718,12 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
             pslArray=a1.toArray(pslArray);
         }
         }
-        List<Map<String, Object>> likes = projectsMapper.findLikesall(educationArray,city,pslArray,shortName);
-        List<Map<String, Object>> like2 =new ArrayList<>();
-       /* for(Map<String, Object> map :likes){
-       	 if(Integer.valueOf(String.valueOf(map.get("id"))) == id){
-       		 likes.remove(map);
+        List<XiangsiDto> likes = projectsMapper.findLikesall(educationArray,city,pslArray,shortName);
+        /*for(Map<String, Object> map :likes){
+       	 if(String.valueOf(map.get("project_logo")) == null || "".equals(String.valueOf(map.get("project_logo")))){
+       	     map.put("project_logo","");
        	 }	  
-        }
-        like2.addAll(likes);*/
+        }*/
         result.setData(likes);
 		return result;
 	}

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAuditInputDto;
+import com.lhjl.tzzs.proxy.dto.XiangsiDto;
 import com.lhjl.tzzs.proxy.service.ProjectAuditService;
 
 
@@ -64,10 +65,8 @@ public class ProjectAuditController {
         return result;
     }
     @GetMapping("search/likes/all")
-    public CommonDto<List<Map<String, Object>>> findProjectall(Integer id){
-
-
-        CommonDto<List<Map<String, Object>>> result =new CommonDto<List<Map<String, Object>>>();
+    public  CommonDto<List<XiangsiDto>> findProjectall(Integer id){
+    	 CommonDto<List<XiangsiDto>> result =new  CommonDto<List<XiangsiDto>>();
 
         try {
             //初始化分页信息

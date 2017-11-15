@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.mapper;
 
+import com.lhjl.tzzs.proxy.dto.XiangsiDto;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 import java.math.BigDecimal;
@@ -50,7 +51,7 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
 
     BigDecimal findProjectAllByRoundAndC(@Param("stage") String stage, @Param("city") String city);
     List<Map<String,Object>> findLikes(@Param("educationArray") String [] educationArray, @Param("city") String city,@Param("pslArray") String [] pslArray, @Param("shortName") String shortName);
-    List<Map<String,Object>> findLikesall(@Param("educationArray") String [] educationArray, @Param("city") String city,@Param("pslArray") String [] pslArray,@Param("shortName") String shortName);
+    List<XiangsiDto> findLikesall(@Param("educationArray") String [] educationArray, @Param("city") String city,@Param("pslArray") String [] pslArray,@Param("shortName") String shortName);
 }
 
 
