@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import springfox.documentation.spring.web.json.Json;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -393,6 +394,16 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
                 BigDecimal gzMoneyBigDecimal = new BigDecimal(gzMoney);
                 gzMoneyBigDecimal = gzMoneyBigDecimal.setScale(2,BigDecimal.ROUND_HALF_UP);
 
+                //融资时间处理
+                String dateTime = (String)map.get("financingDate");
+                //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date financyDte = null;
+                try {
+                    financyDte = new SimpleDateFormat("yyyy-MM-dd").parse(dateTime);
+                }catch (Exception e){
+                    log.error(e.getMessage(),e.fillInStackTrace());
+                }
+
 
                 //解析完毕开始创建数据
                 ProjectFinancingLog projectFinancingLog = new ProjectFinancingLog();
@@ -405,6 +416,7 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
                 projectFinancingLog.setStatus(2);
                 projectFinancingLog.setApprovalStatus(1);
                 projectFinancingLog.setApprovalTime(now);
+                projectFinancingLog.setFinancingTime(financyDte);
 
                 projectFinancingLogMapper.insertSelective(projectFinancingLog);
 
