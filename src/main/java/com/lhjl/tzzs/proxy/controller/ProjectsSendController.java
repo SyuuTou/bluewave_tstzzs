@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.model.ProjectFinancingHistory;
 import com.lhjl.tzzs.proxy.model.ProjectSendTeamMember;
 import com.lhjl.tzzs.proxy.service.ProjectsSendService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
@@ -99,8 +100,8 @@ public class ProjectsSendController {
      * 融资历史回显
      */
     @GetMapping("/rest/zyy/rtuisongthird")
-    public  CommonDto<Map<String, Object>> rtuisongthird(String tsid, String token){
-        CommonDto<Map<String, Object>> result = new CommonDto<>();
+    public  CommonDto<List<ProjectFinancingHistory>>  rtuisongthird(String tsid, String token){
+        CommonDto<List<ProjectFinancingHistory>>  result = new CommonDto<>();
         //获取userId
         int userId = commonUserService.getLocalUserId(token);
         try{

@@ -1720,12 +1720,12 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
      * @return
      */
     @Override
-    public CommonDto<Map<String, Object>> rtuisongthird(String tsid, int userId) {
-        CommonDto<Map<String, Object>> result = new CommonDto<>();
+    public CommonDto<List<ProjectFinancingHistory>> rtuisongthird(String tsid, int userId) {
+        CommonDto<List<ProjectFinancingHistory>>  result = new CommonDto<>();
         Map<String, Object> data = new HashMap<>();
         String history = "";
         //查出当前用户投递信息
-        Example example = new Example(ProjectSendLogs.class);
+        /*Example example = new Example(ProjectSendLogs.class);
         example.and().andEqualTo("userid", userId);
         example.setOrderByClause("creat_time desc");
         List<ProjectSendLogs> sendLogsList = projectSendLogsMapper.selectByExample(example);
@@ -1739,11 +1739,19 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                     break;
                 }
             }
+        }*/
+        int projectId=0;
+        if(tsid==null || "".equals(tsid)){
+            projectId=0;
+
+        }else{
+            projectId=Integer.parseInt(tsid);
         }
-        data.put("historyList", history);
+
+        List<ProjectFinancingHistory>list1 =projectFinancingHistoryMapper.searchTeam1(projectId,userId);
         result.setStatus(200);
         result.setMessage("融资历史回显数据获取成功");
-        result.setData(data);
+        result.setData(list1);
         return result;
     }
 

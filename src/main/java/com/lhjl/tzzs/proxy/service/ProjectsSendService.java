@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectsSendDto;
 import com.lhjl.tzzs.proxy.dto.TeamDto;
 import com.lhjl.tzzs.proxy.dto.TeamDto1;
+import com.lhjl.tzzs.proxy.model.ProjectFinancingHistory;
 import com.lhjl.tzzs.proxy.model.ProjectSendTeamMember;
 
 import java.util.List;
@@ -45,7 +46,7 @@ public interface ProjectsSendService {
      * @param userId 用户ID
      * @return
      */
-    CommonDto<Map<String, Object>> rtuisongthird(String tsid, int userId);
+    CommonDto<List<ProjectFinancingHistory>>  rtuisongthird(String tsid, int userId);
     
     
     CommonDto<String> saveTeam(TeamDto body);

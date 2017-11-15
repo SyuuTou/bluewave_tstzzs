@@ -10,4 +10,5 @@ import java.util.List;
 public interface ProjectFinancingHistoryMapper extends OwnerMapper<ProjectFinancingHistory> {
     List<ProjectFinancingLog> selectProjectFinancingLogList(@Param("projectId") Integer projectId, @Param("projectStatus") Integer projectStatus);
     void updateHistory (@Param("projectId") Integer projectId,@Param("userId") int userId);
+    List<ProjectFinancingHistory> searchTeam1(@Param("projectId")int  projectId,@Param("userId") int userId);
 }
