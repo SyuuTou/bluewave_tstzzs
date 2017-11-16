@@ -51,4 +51,11 @@
   <select id="findUserList" parameterType="INTEGER" resultType="java.util.HashMap">
     SELECT u.create_time,u.actual_name,u.company_name,u.company_duties,u.ID,u.phonenumber,u.`desc`,u.identity_type,u.create_time,w.nick_name FROM users u right join users_weixin w on w.user_id = u.ID where u.actual_name is not null or w.nick_name is not null order by u.create_time desc limit #{startPage},#{pageSize} ;
   </select>
+
+  <select id="findUserInfoAssemble" parameterType="INTEGER" resultType="java.util.HashMap">
+    select u.actual_name,u.headpic,u.headpic_real,w.nick_name,w.openId,t.token from users u
+    right join users_weixin w on u.ID = w.user_id
+    left join user_token t on w.user_id = t.user_id
+    where u.ID = #{userId}
+  </select>
 </mapper>

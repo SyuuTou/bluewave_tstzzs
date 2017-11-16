@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -318,4 +319,25 @@ public class ProjectsController {
         return result;
     }
 
+    /**
+     * 获取项目管理员列表接口
+     * @param body
+     * @return
+     */
+    @PostMapping("project/administrator/list")
+    public CommonDto<List<ProjectAdministratorOutputDto>> getProjectAdministratorList(@RequestBody Map<String,Integer> body){
+        CommonDto<List<ProjectAdministratorOutputDto>> result = new CommonDto<>();
+        List<ProjectAdministratorOutputDto> list = new ArrayList<>();
+
+        try {
+            result = projectsService.getProjectAdministractorList(body);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(list);
+        }
+
+        return result;
+    }
 }

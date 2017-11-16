@@ -17,5 +17,6 @@ public interface UsersMapper extends OwnerMapper<Users> {
 	Integer findByJinE(@Param("skey") String skey);
 	String findByUserLevel(@Param("leId") Integer leId);
 	List<Map<String,Object>> findUserList(@Param("startPage") Integer startPage, @Param("pageSize") Integer pageSize);
+	Map<String,String> findUserInfoAssemble(@Param("userId") Integer userId);
 
 }

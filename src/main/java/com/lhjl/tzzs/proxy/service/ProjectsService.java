@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service;
 import java.util.List;
 import java.util.Map;
 
+import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectDetailOutputDto;
 import org.apache.ibatis.annotations.Param;
 
@@ -65,4 +66,11 @@ public interface ProjectsService {
      * @return
      */
     CommonDto<Boolean> judgeProjectIsMine(Integer xmid,String token);
+
+    /**
+     * 获取项目管理员列表接口
+     * @param body
+     * @return
+     */
+    CommonDto<List<ProjectAdministratorOutputDto>> getProjectAdministractorList(Map<String,Integer> body);
 }

@@ -7,6 +7,7 @@ import java.util.*;
 import javax.annotation.Resource;
 
 import com.github.pagehelper.PageHelper;
+import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectDetailOutputDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
@@ -72,6 +73,11 @@ public class ProjectsServiceImpl implements ProjectsService {
     @Resource
     private UserExistJudgmentService userExistJudgmentService;
 
+    @Autowired
+    private ProjectAdministratorMapper projectAdministratorMapper;
+
+    @Resource
+    private UsersMapper usersMapper;
 
     /**
      * 查询我关注的项目
@@ -850,5 +856,90 @@ public class ProjectsServiceImpl implements ProjectsService {
 
 
     return result;
+    }
+
+    /**
+     * 获取项目管理员列表接口
+     * @param body
+     * @return
+     */
+    @Override
+    public CommonDto<List<ProjectAdministratorOutputDto>> getProjectAdministractorList(Map<String,Integer> body){
+        CommonDto<List<ProjectAdministratorOutputDto>> result = new CommonDto<>();
+        List<ProjectAdministratorOutputDto> list = new ArrayList<>();
+
+        if (body.get("projectId") == null){
+            result.setData(list);
+            result.setStatus(50001);
+            result.setMessage("项目id不能为空，请检查");
+
+            return result;
+        }
+
+
+        //先获取到项目信息中的简称
+        Projects projects = projectsMapper.selectByPrimaryKey(body.get("projectId"));
+
+        if (projects == null){
+            result.setMessage("没找到该项目id对应的项目，请检查");
+            result.setStatus(50001);
+            result.setData(list);
+
+            return result;
+        }
+
+        String projectName = projects.getShortName();
+
+        //拿项目id去查项目的管理员
+        ProjectAdministrator projectAdministrator = new ProjectAdministrator();
+        projectAdministrator.setProjectsId(body.get("projectId"));
+        projectAdministrator.setYn(0);
+
+        List<ProjectAdministrator> projectAdministratorList = projectAdministratorMapper.select(projectAdministrator);
+
+        if (projectAdministratorList.size() > 0){
+            //获取项目管理员的信息并加入到list中去
+            for (ProjectAdministrator pa:projectAdministratorList){
+                //获取管理员信息
+                Map<String,String> users = usersMapper.findUserInfoAssemble(pa.getUserId());
+                if (users != null){
+                    //获取到管理员的oppenid,token,真实姓名，昵称，头像
+
+                    String userOppenid =users.get("openId");
+                    String userToken = users.get("token");
+                    String userNickName = users.get("nick_name");
+                    String userRealName = users.get("actual_name");
+                    String userHeadpic = "";
+                    if (users.get("headpic_real") == null || "".equals(users.get("headpic_real"))){
+                        userHeadpic = users.get("headpic");
+                    }else {
+                        userHeadpic = users.get("headpic_real");
+                    }
+
+
+                    //放到返回值里
+                    ProjectAdministratorOutputDto projectAdministratorOutputDto= new  ProjectAdministratorOutputDto();
+                    projectAdministratorOutputDto.setCompanyName(projectName);
+                    projectAdministratorOutputDto.setHeadpic(userHeadpic);
+                    projectAdministratorOutputDto.setNickName(userNickName);
+                    projectAdministratorOutputDto.setRealName(userRealName);
+                    projectAdministratorOutputDto.setToken(userToken);
+
+                    list.add(projectAdministratorOutputDto);
+                }
+
+            }
+
+            result.setData(list);
+            result.setStatus(200);
+            result.setMessage("success");
+        }else {
+            result.setMessage("该项目没有管理员");
+            result.setStatus(502);
+            result.setData(list);
+        }
+
+
+        return result;
     }
 }
