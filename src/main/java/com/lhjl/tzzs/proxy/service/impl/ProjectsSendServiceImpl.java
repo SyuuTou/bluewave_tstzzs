@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -507,7 +508,56 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 
                                     projectSendLogsMapper.insert(projectSendLogs);
                                     int projectId = projectSendLogs.getId();
+                                    ProjectSendTeamMember projectSendTeamMember =new ProjectSendTeamMember();
+                                    projectSendTeamMember.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
+                                    projectSendTeamMember.setUserId(userId);
+                                    projectSendTeamMember.setYn(0);
+                                    List<ProjectSendTeamMember> list2 =projectSendTeamMemberMapper.select(projectSendTeamMember);
+                                    if(list2.size() > 0){
+                                        for (ProjectSendTeamMember pstme:list2){
+                                            ProjectSendTeamMember projectTeamMemberEducation =new ProjectSendTeamMember();
+                                            projectTeamMemberEducation.setYn(0);
+                                            projectTeamMemberEducation.setUserId(userId);
+                                            projectTeamMemberEducation.setMemberName(pstme.getMemberName());
+                                            projectTeamMemberEducation.setProjectSendLogsId(-1);
+                                            projectTeamMemberEducation.setCreateTime(new Date());
+                                            projectTeamMemberEducation.setMemberDuties(pstme.getMemberDuties());
+                                            projectTeamMemberEducation.setMemberDesc(pstme.getMemberDesc());
+                                            projectTeamMemberEducation.setShareRatio(pstme.getShareRatio());
+                                            projectSendTeamMemberMapper.insertSelective(projectTeamMemberEducation);
 
+                                            ProjectSendTeamMemberEducation projectSendTeamMemberEducationForSearch1 = new ProjectSendTeamMemberEducation ();
+                                            projectSendTeamMemberEducationForSearch1.setProjectSendTeamMemberId(pstme.getId());
+
+
+                                            ProjectSendTeamMemberWork projectSendTeamMemberWorkForSearch1 = new ProjectSendTeamMemberWork();
+                                            projectSendTeamMemberWorkForSearch1.setProjectSendTeamMemberId(pstme.getId());
+
+                                            List<ProjectSendTeamMemberEducation> projectSendTeamMemberEducationList1 = projectSendTeamMemberEducationMapper.select(projectSendTeamMemberEducationForSearch1);
+                                            List<ProjectSendTeamMemberWork> projectSendTeamMemberWorkList1 = projectSendTeamMemberWorkMapper.select(projectSendTeamMemberWorkForSearch1);
+                                            //创建教育经历
+                                            if (projectSendTeamMemberEducationList1.size() > 0){
+                                                for (ProjectSendTeamMemberEducation pe:projectSendTeamMemberEducationList1){
+                                                    ProjectSendTeamMemberEducation projectTeamMemberEducation1 =new ProjectSendTeamMemberEducation();
+                                                    projectTeamMemberEducation1.setProjectSendTeamMemberId(projectTeamMemberEducation.getId());
+                                                    projectTeamMemberEducation1.setEducationExperience(pe.getEducationExperience());
+
+                                                    projectSendTeamMemberEducationMapper.insertSelective(projectTeamMemberEducation1);
+                                                }
+                                            }
+                                            //创建工作经历
+                                            if (projectSendTeamMemberWorkList1.size() > 0){
+                                                for (ProjectSendTeamMemberWork pstmw:projectSendTeamMemberWorkList1){
+                                                    ProjectSendTeamMemberWork projectTeamMemberWork = new ProjectSendTeamMemberWork();
+                                                    projectTeamMemberWork.setProjectSendTeamMemberId(projectTeamMemberEducation.getId());
+                                                    projectTeamMemberWork.setWorkExperience(pstmw.getWorkExperience());
+
+                                                    projectSendTeamMemberWorkMapper.insert(projectTeamMemberWork);
+                                                }
+                                            }
+
+                                        }
+                                    }
                                     projectSendTeamMemberMapper.updateTeame(projectId,userId);
                                     projectFinancingHistoryMapper.updateHistory(projectId,userId);
                                     //相似竞品
@@ -702,7 +752,56 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 
                                 projectSendLogsMapper.insert(projectSendLogs);
                                 int projectId = projectSendLogs.getId();
+                                ProjectSendTeamMember projectSendTeamMember =new ProjectSendTeamMember();
+                                projectSendTeamMember.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
+                                projectSendTeamMember.setUserId(userId);
+                                projectSendTeamMember.setYn(0);
+                                List<ProjectSendTeamMember> list2 =projectSendTeamMemberMapper.select(projectSendTeamMember);
+                                if(list2.size() > 0){
+                                    for (ProjectSendTeamMember pstme:list2){
+                                        ProjectSendTeamMember projectTeamMemberEducation =new ProjectSendTeamMember();
+                                        projectTeamMemberEducation.setYn(0);
+                                        projectTeamMemberEducation.setUserId(userId);
+                                        projectTeamMemberEducation.setMemberName(pstme.getMemberName());
+                                        projectTeamMemberEducation.setProjectSendLogsId(-1);
+                                        projectTeamMemberEducation.setCreateTime(new Date());
+                                        projectTeamMemberEducation.setMemberDuties(pstme.getMemberDuties());
+                                        projectTeamMemberEducation.setMemberDesc(pstme.getMemberDesc());
+                                        projectTeamMemberEducation.setShareRatio(pstme.getShareRatio());
+                                        projectSendTeamMemberMapper.insertSelective(projectTeamMemberEducation);
 
+                                        ProjectSendTeamMemberEducation projectSendTeamMemberEducationForSearch1 = new ProjectSendTeamMemberEducation ();
+                                        projectSendTeamMemberEducationForSearch1.setProjectSendTeamMemberId(pstme.getId());
+
+
+                                        ProjectSendTeamMemberWork projectSendTeamMemberWorkForSearch1 = new ProjectSendTeamMemberWork();
+                                        projectSendTeamMemberWorkForSearch1.setProjectSendTeamMemberId(pstme.getId());
+
+                                        List<ProjectSendTeamMemberEducation> projectSendTeamMemberEducationList1 = projectSendTeamMemberEducationMapper.select(projectSendTeamMemberEducationForSearch1);
+                                        List<ProjectSendTeamMemberWork> projectSendTeamMemberWorkList1 = projectSendTeamMemberWorkMapper.select(projectSendTeamMemberWorkForSearch1);
+                                        //创建教育经历
+                                        if (projectSendTeamMemberEducationList1.size() > 0){
+                                            for (ProjectSendTeamMemberEducation pe:projectSendTeamMemberEducationList1){
+                                                ProjectSendTeamMemberEducation projectTeamMemberEducation1 =new ProjectSendTeamMemberEducation();
+                                                projectTeamMemberEducation1.setProjectSendTeamMemberId(projectTeamMemberEducation.getId());
+                                                projectTeamMemberEducation1.setEducationExperience(pe.getEducationExperience());
+
+                                                projectSendTeamMemberEducationMapper.insertSelective(projectTeamMemberEducation1);
+                                            }
+                                        }
+                                        //创建工作经历
+                                        if (projectSendTeamMemberWorkList1.size() > 0){
+                                            for (ProjectSendTeamMemberWork pstmw:projectSendTeamMemberWorkList1){
+                                                ProjectSendTeamMemberWork projectTeamMemberWork = new ProjectSendTeamMemberWork();
+                                                projectTeamMemberWork.setProjectSendTeamMemberId(projectTeamMemberEducation.getId());
+                                                projectTeamMemberWork.setWorkExperience(pstmw.getWorkExperience());
+
+                                                projectSendTeamMemberWorkMapper.insert(projectTeamMemberWork);
+                                            }
+                                        }
+
+                                    }
+                                }
                                 projectSendTeamMemberMapper.updateTeame(projectId,userId);
                                 projectFinancingHistoryMapper.updateHistory(projectId,userId);
                                 //相似竞品
@@ -898,7 +997,56 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 
                             projectSendLogsMapper.insert(projectSendLogs);
                             int projectId = projectSendLogs.getId();
+                            ProjectSendTeamMember projectSendTeamMember =new ProjectSendTeamMember();
+                            projectSendTeamMember.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
+                            projectSendTeamMember.setUserId(userId);
+                            projectSendTeamMember.setYn(0);
+                            List<ProjectSendTeamMember> list2 =projectSendTeamMemberMapper.select(projectSendTeamMember);
+                            if(list2.size() > 0){
+                                for (ProjectSendTeamMember pstme:list2){
+                                    ProjectSendTeamMember projectTeamMemberEducation =new ProjectSendTeamMember();
+                                    projectTeamMemberEducation.setYn(0);
+                                    projectTeamMemberEducation.setUserId(userId);
+                                    projectTeamMemberEducation.setMemberName(pstme.getMemberName());
+                                    projectTeamMemberEducation.setProjectSendLogsId(-1);
+                                    projectTeamMemberEducation.setCreateTime(new Date());
+                                    projectTeamMemberEducation.setMemberDuties(pstme.getMemberDuties());
+                                    projectTeamMemberEducation.setMemberDesc(pstme.getMemberDesc());
+                                    projectTeamMemberEducation.setShareRatio(pstme.getShareRatio());
+                                    projectSendTeamMemberMapper.insertSelective(projectTeamMemberEducation);
 
+                                    ProjectSendTeamMemberEducation projectSendTeamMemberEducationForSearch1 = new ProjectSendTeamMemberEducation ();
+                                    projectSendTeamMemberEducationForSearch1.setProjectSendTeamMemberId(pstme.getId());
+
+
+                                    ProjectSendTeamMemberWork projectSendTeamMemberWorkForSearch1 = new ProjectSendTeamMemberWork();
+                                    projectSendTeamMemberWorkForSearch1.setProjectSendTeamMemberId(pstme.getId());
+
+                                    List<ProjectSendTeamMemberEducation> projectSendTeamMemberEducationList1 = projectSendTeamMemberEducationMapper.select(projectSendTeamMemberEducationForSearch1);
+                                    List<ProjectSendTeamMemberWork> projectSendTeamMemberWorkList1 = projectSendTeamMemberWorkMapper.select(projectSendTeamMemberWorkForSearch1);
+                                    //创建教育经历
+                                    if (projectSendTeamMemberEducationList1.size() > 0){
+                                        for (ProjectSendTeamMemberEducation pe:projectSendTeamMemberEducationList1){
+                                            ProjectSendTeamMemberEducation projectTeamMemberEducation1 =new ProjectSendTeamMemberEducation();
+                                            projectTeamMemberEducation1.setProjectSendTeamMemberId(projectTeamMemberEducation.getId());
+                                            projectTeamMemberEducation1.setEducationExperience(pe.getEducationExperience());
+
+                                            projectSendTeamMemberEducationMapper.insertSelective(projectTeamMemberEducation1);
+                                        }
+                                    }
+                                    //创建工作经历
+                                    if (projectSendTeamMemberWorkList1.size() > 0){
+                                        for (ProjectSendTeamMemberWork pstmw:projectSendTeamMemberWorkList1){
+                                            ProjectSendTeamMemberWork projectTeamMemberWork = new ProjectSendTeamMemberWork();
+                                            projectTeamMemberWork.setProjectSendTeamMemberId(projectTeamMemberEducation.getId());
+                                            projectTeamMemberWork.setWorkExperience(pstmw.getWorkExperience());
+
+                                            projectSendTeamMemberWorkMapper.insert(projectTeamMemberWork);
+                                        }
+                                    }
+
+                                }
+                            }
                             projectSendTeamMemberMapper.updateTeame(projectId,userId);
                             projectFinancingHistoryMapper.updateHistory(projectId,userId);
                             //相似竞品
@@ -1094,7 +1242,56 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 
                         projectSendLogsMapper.insert(projectSendLogs);
                         int projectId = projectSendLogs.getId();
+                        ProjectSendTeamMember projectSendTeamMember =new ProjectSendTeamMember();
+                        projectSendTeamMember.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
+                        projectSendTeamMember.setUserId(userId);
+                        projectSendTeamMember.setYn(0);
+                        List<ProjectSendTeamMember> list2 =projectSendTeamMemberMapper.select(projectSendTeamMember);
+                        if(list2.size() > 0){
+                            for (ProjectSendTeamMember pstme:list2){
+                                ProjectSendTeamMember projectTeamMemberEducation =new ProjectSendTeamMember();
+                                projectTeamMemberEducation.setYn(0);
+                                projectTeamMemberEducation.setUserId(userId);
+                                projectTeamMemberEducation.setMemberName(pstme.getMemberName());
+                                projectTeamMemberEducation.setProjectSendLogsId(-1);
+                                projectTeamMemberEducation.setCreateTime(new Date());
+                                projectTeamMemberEducation.setMemberDuties(pstme.getMemberDuties());
+                                projectTeamMemberEducation.setMemberDesc(pstme.getMemberDesc());
+                                projectTeamMemberEducation.setShareRatio(pstme.getShareRatio());
+                                projectSendTeamMemberMapper.insertSelective(projectTeamMemberEducation);
 
+                                ProjectSendTeamMemberEducation projectSendTeamMemberEducationForSearch1 = new ProjectSendTeamMemberEducation ();
+                                projectSendTeamMemberEducationForSearch1.setProjectSendTeamMemberId(pstme.getId());
+
+
+                                ProjectSendTeamMemberWork projectSendTeamMemberWorkForSearch1 = new ProjectSendTeamMemberWork();
+                                projectSendTeamMemberWorkForSearch1.setProjectSendTeamMemberId(pstme.getId());
+
+                                List<ProjectSendTeamMemberEducation> projectSendTeamMemberEducationList1 = projectSendTeamMemberEducationMapper.select(projectSendTeamMemberEducationForSearch1);
+                                List<ProjectSendTeamMemberWork> projectSendTeamMemberWorkList1 = projectSendTeamMemberWorkMapper.select(projectSendTeamMemberWorkForSearch1);
+                                //创建教育经历
+                                if (projectSendTeamMemberEducationList1.size() > 0){
+                                    for (ProjectSendTeamMemberEducation pe:projectSendTeamMemberEducationList1){
+                                        ProjectSendTeamMemberEducation projectTeamMemberEducation1 =new ProjectSendTeamMemberEducation();
+                                        projectTeamMemberEducation1.setProjectSendTeamMemberId(projectTeamMemberEducation.getId());
+                                        projectTeamMemberEducation1.setEducationExperience(pe.getEducationExperience());
+
+                                        projectSendTeamMemberEducationMapper.insertSelective(projectTeamMemberEducation1);
+                                    }
+                                }
+                                //创建工作经历
+                                if (projectSendTeamMemberWorkList1.size() > 0){
+                                    for (ProjectSendTeamMemberWork pstmw:projectSendTeamMemberWorkList1){
+                                        ProjectSendTeamMemberWork projectTeamMemberWork = new ProjectSendTeamMemberWork();
+                                        projectTeamMemberWork.setProjectSendTeamMemberId(projectTeamMemberEducation.getId());
+                                        projectTeamMemberWork.setWorkExperience(pstmw.getWorkExperience());
+
+                                        projectSendTeamMemberWorkMapper.insert(projectTeamMemberWork);
+                                    }
+                                }
+
+                            }
+                        }
                         projectSendTeamMemberMapper.updateTeame(projectId,userId);
                         projectFinancingHistoryMapper.updateHistory(projectId,userId);
                         //相似竞品
