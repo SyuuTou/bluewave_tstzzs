@@ -1652,7 +1652,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         ProjectSendLogCompeting  projectSendLogCompeting =new ProjectSendLogCompeting();
         projectSendLogCompeting.setProjectSendLogsId(projectId);
         List<ProjectSendLogCompeting> work1 = projectSendLogCompetingMapper.select(projectSendLogCompeting);
-        if(work1 !=null){
+        if(work1.size()>0){
             List<String> a=new LinkedList<String>();
             String [] workArray =null;
             for(ProjectSendLogCompeting d:work1){
