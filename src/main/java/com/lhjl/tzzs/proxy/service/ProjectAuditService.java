@@ -11,4 +11,11 @@ public interface ProjectAuditService {
     CommonDto<String> adminAuditProject(ProjectAuditInputDto body);
     CommonDto<List<Map<String, Object>>> findProject(Integer id);
     CommonDto<List<XiangsiDto>> findProjectall(Integer id);
+
+    /**
+     * 查找我的关注状态
+     * @param id
+     * @return
+     */
+    CommonDto<Map<String,Object>> findFollow(Integer id,String token);
 }

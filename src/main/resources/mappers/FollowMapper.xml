@@ -15,4 +15,8 @@
   <update id="updateFollowStatus" parameterType="com.lhjl.tzzs.proxy.model.Follow">
     UPDATE follow SET STATUS=#{status},create_time=#{createTime} WHERE projects_id=#{projectsId} and user_id = #{userId}
   </update>
+
+  <select id="findfollowyn"  resultMap="BaseResultMap">
+  SELECT * FROM follow WHERE user_id =#{userId} AND projects_id=#{id} ORDER BY create_time DESC LIMIT 1
+  </select>
 </mapper>

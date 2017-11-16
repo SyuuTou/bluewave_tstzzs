@@ -83,5 +83,29 @@ public class ProjectAuditController {
         return result;
     }
 
+    /**
+     * 查找关注状态
+     * @param id
+     * @return
+     */
+    @GetMapping("search/followyn")
+    public  CommonDto<Map<String,Object>> findFollow(Integer id,String token){
+        CommonDto<Map<String,Object>>  result =new  CommonDto<Map<String,Object>>();
+
+        try {
+            //初始化分页信息
+            result = projectAuditService.findFollow(id,token);
+            if(result.getStatus() == null){
+                result.setStatus(200);
+                result.setMessage("success");
+            }
+        } catch (Exception e) {
+            result.setStatus(5101);
+            result.setMessage("项目id不存在");
+            log.error(e.getMessage());
+        }
+        return result;
+    }
+
 }
 
