@@ -64,10 +64,10 @@ public class CertificationServiceImpl implements CertificationService {
                         }
                         //查找用户名字
                         if (users.getActualName() != null) {
-                            obj.put("actualName()",users.getActualName());
+                            obj.put("actualName",users.getActualName());
 
                         } else {
-                            obj.put("actualName()","");
+                            obj.put("actualName","");
                         }
                     }else {
                         result.setStatus(51003);
