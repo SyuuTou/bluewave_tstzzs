@@ -24,7 +24,7 @@
             and ii.type = #{jgtype}
         </if>
 
-        group by p.short_name,pfl.stage ) b
+        group by p.full_name ) b
 
         group by date_format(b.financing_time,'%Y-%m')
         ) a order by a.financing_time limit #{froma},#{sizea}
