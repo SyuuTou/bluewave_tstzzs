@@ -13,4 +13,6 @@ public interface InvestorsApprovalMapper extends OwnerMapper<InvestorsApproval> 
 	Map<String,Object> findInvestorsApproval(@Param("userId") Integer userId);
 	List<InvestorsApproval> findApproval(@Param("checkName") String checkName,
 										 @Param("time")String time, @Param("beginNum")Integer beginNum, @Param("pageSize")Integer pageSize);
+	List<Map<String,Object>> findApprovalName(@Param("shortName") String shortName);
+
 }

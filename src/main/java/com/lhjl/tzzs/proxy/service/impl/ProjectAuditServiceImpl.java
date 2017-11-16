@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.ProjectAuditService;
 import com.lhjl.tzzs.proxy.utils.JsonUtils;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,6 +99,8 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
     @Autowired
     private AdminProjectApprovalLogMapper adminProjectApprovalLogMapper;
 
+     @Autowired
+     private FollowMapper followMapper;
     /**
      * 管理员审核项目接口
      * @param body
@@ -748,6 +751,40 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         List<XiangsiDto> likes = projectsMapper.findLikesall(educationArray,projectTagArry,shortName);
 
         result.setData(likes);
+		return result;
+	}
+
+    /**
+     * 查询项目关注状态
+     * @param id
+     * @param token
+     * @return
+     */
+
+	@Override
+	public CommonDto<Map<String, Object>> findFollow(Integer id,String token) {
+        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+        Map<String, Object> map =new HashedMap();
+        if(token != null){
+            String userId =token;
+
+           Follow follow = followMapper.findfollowyn(userId,id);
+           if(follow !=null){
+               if(follow.getStatus() == 1){
+                   map.put("followstatus",true);
+               }else{
+                   map.put("followstatus",false);
+               }
+
+           }else{
+           map.put("followstatus",false);
+           }
+        }else{
+            result.setStatus(50001);
+            result.setMessage("token不存在");
+        }
+
+       result.setData(map);
 		return result;
 	}
 
