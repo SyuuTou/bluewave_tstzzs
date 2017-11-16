@@ -18,4 +18,13 @@ public interface ProjectAuditService {
      * @return
      */
     CommonDto<Map<String,Object>> findFollow(Integer id,String token);
+
+    /**
+     * 管理员添加项目管理员接口
+     * @param projectId 项目id
+     * @param userId 用户id
+     * @return
+     */
+    CommonDto<String> adminAddAdministractor(Integer projectId,Integer userId);
+
 }

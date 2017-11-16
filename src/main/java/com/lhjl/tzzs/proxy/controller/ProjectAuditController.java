@@ -107,5 +107,18 @@ public class ProjectAuditController {
         return result;
     }
 
+    @GetMapping("set/project/administractor")
+    public CommonDto<String> setProjectAdministractor(Integer projetcId,Integer userId){
+        CommonDto<String> result = new CommonDto<>();
+        try {
+            result = projectAuditService.adminAddAdministractor(projetcId,userId);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+        return result;
+    }
 }
 

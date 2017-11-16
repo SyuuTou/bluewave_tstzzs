@@ -96,8 +96,15 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
     @Autowired
     private DataLogWorkMapper dataLogWorkMapper;
+
     @Autowired
     private AdminProjectApprovalLogMapper adminProjectApprovalLogMapper;
+
+    @Autowired
+    private ProjectAdministratorMapper projectAdministratorMapper;
+
+    @Autowired
+    private UsersMapper usersMapper;
 
      @Autowired
      private FollowMapper followMapper;
@@ -271,6 +278,38 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
         //拿到项目id
         Integer xmid = projects.getId();
+
+        //处理创始人的信息
+        Founders founderForUpdate = new Founders();
+        founderForUpdate.setUserId(projectSendLogs.getUserid());
+
+        List<Founders> foundersList = foundersMapper.select(founderForUpdate);
+        if (foundersList.size() > 0){
+            Integer fdid = foundersList.get(0).getId();
+            //获取用户信息
+            Users usersForInfo = usersMapper.selectByPrimaryKey(projectSendLogs.getId());
+            if (usersForInfo != null){
+                founderForUpdate.setName(usersForInfo.getActualName());
+                founderForUpdate.setIntroduction(usersForInfo.getDesc());
+            }
+        }
+        founderForUpdate.setApprovalTime(now);
+        founderForUpdate.setApprovalStatus(1);
+        founderForUpdate.setProjectId(xmid);
+
+        foundersMapper.updateByPrimaryKeySelective(founderForUpdate);
+
+
+        //创建项目的默认管理员
+        ProjectAdministrator projectAdministrator = new ProjectAdministrator();
+        projectAdministrator.setYn(0);
+        projectAdministrator.setProjectsId(xmid);
+        projectAdministrator.setCreateTime(now);
+        projectAdministrator.setTypes(0);
+        projectAdministrator.setUserId(projectSendLogs.getUserid());
+
+        projectAdministratorMapper.insert(projectAdministrator);
+
 
         //创建项目的行业领域
         String hangyelingyu  = projectSendLogs.getField();
@@ -788,6 +827,48 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 		return result;
 	}
 
+    /**
+     * 管理员添加项目管理员接口
+     * @param projectId 项目id
+     * @param userId 用户id
+     * @return
+     */
+    @Override
+    public CommonDto<String> adminAddAdministractor(Integer projectId,Integer userId){
+	    CommonDto<String> result = new CommonDto<>();
+
+	    if (projectId == null){
+	        result.setData(null);
+	        result.setStatus(50001);
+	        result.setMessage("项目id不能为空");
+
+	        return result;
+        }
+
+        if (userId == null){
+	        result.setMessage("用户id不能为空");
+	        result.setStatus(50001);
+	        result.setData(null);
+
+	        return result;
+        }
+
+	    Date now = new Date();
+	    ProjectAdministrator projectAdministratorForInsert = new ProjectAdministrator();
+	    projectAdministratorForInsert.setUserId(userId);
+	    projectAdministratorForInsert.setTypes(1);
+	    projectAdministratorForInsert.setCreateTime(now);
+	    projectAdministratorForInsert.setProjectsId(projectId);
+	    projectAdministratorForInsert.setYn(0);
+
+	    projectAdministratorMapper.insert(projectAdministratorForInsert);
+
+	    result.setData(null);
+	    result.setStatus(200);
+	    result.setMessage("success");
+
+	    return result;
+    }
 }
 
 
