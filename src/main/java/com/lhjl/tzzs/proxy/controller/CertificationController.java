@@ -31,7 +31,7 @@ public class CertificationController {
         CommonDto<List<Map<String, Object>>> result =new CommonDto<List<Map<String, Object>>>();
         try {
             String investorsName = body.getInvestorsName();
-            if(investorsName !=null ){
+            if(investorsName !=null || "".equals(investorsName) ){
             result = certificationService.findcertification(investorsName);
             }else{
                 result.setStatus(5102);
