@@ -121,19 +121,19 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
 //
 //            return result;
 //        }
-        if (StringUtil.isEmpty(summary)){
-            result.setStatus(50001);
-            result.setMessage("请填写一句话介绍");
-            result.setData(null);
-
-            return result;
-        }else if (summary.length()>50){
-            result.setStatus(50003);
-            result.setMessage("一句话介绍长度不能超过50个字符");
-            result.setData(null);
-
-            return result;
-        }
+//        if (StringUtil.isEmpty(summary)){
+//            result.setStatus(50001);
+//            result.setMessage("请填写一句话介绍");
+//            result.setData(null);
+//
+//            return result;
+//        }else if (summary.length()>50){
+//            result.setStatus(50003);
+//            result.setMessage("一句话介绍长度不能超过50个字符");
+//            result.setData(null);
+//
+//            return result;
+//        }
         if (StringUtil.isEmpty(field)){
             result.setStatus(50001);
             result.setMessage("请填写所属细分领域");
