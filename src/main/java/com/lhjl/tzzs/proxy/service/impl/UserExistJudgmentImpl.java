@@ -47,10 +47,15 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
         usersWeixin.setOpenid(oppenId);
         List<UsersWeixin> usersWeixins = usersWeixinMapper.select(usersWeixin);
 
+        log.info("进入用户登录注册实现方法中");
+
         if (usersWeixins.size() > 0){
             //token存在的情况，返回token,返回用户手机号是否存在
             UsersWeixin usersWeixinForId = usersWeixins.get(0);
             int userId = usersWeixinForId.getUserId();
+
+            log.info("用户微信号已存在，对应的用户id为：");
+            log.info("userId={}",userId);
 
             //去获取token
             UserToken userToken = new UserToken();
@@ -62,6 +67,9 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
                 UserToken userTokenForToken = userTokens.get(0);
                 String token = userTokenForToken.getToken();
 
+                log.info("获取到用户token,token为：");
+                log.info(token);
+
                 //检查用户的手机号，密码
                 Users users =new Users();
                 users.setId(userId);
@@ -69,8 +77,8 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
                 Users getUser =usersMapper.selectByPrimaryKey(users.getId());
                 if (getUser == null){
 
-                    log.info("获取用户信息出现异常");
-
+                    log.info("获取用户信息出现异常,此时的用户id为：");
+                    log.info("userId={}",userId);
 
                     result.setData(null);
                     result.setMessage("获取用户信息出现异常");
@@ -104,7 +112,8 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
                userExsitJudgmentDto.setSuccess(false);
                userExsitJudgmentDto.setToken(null);
 
-               log.info("当前输入token非法，请检查");
+               log.info("当前用户的token信息不存在，请检查,当前用户的oppenId为：");
+               log.info(oppenId);
 
                result.setMessage("当前输入token非法，请检查");
                result.setStatus(401);
@@ -117,6 +126,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
             String token = encode();
 
             Date now = new Date();
+            log.info("当前用户的微信号不存在，创建用户，及相关表");
 
             //创建用户
             Users users =new Users();
