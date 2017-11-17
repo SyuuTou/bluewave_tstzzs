@@ -507,7 +507,7 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
 //
 //            return result;
 //        }
-        if (StringUtil.isEmpty(summary)){
+     /*   if (StringUtil.isEmpty(summary)){
             result.setStatus(50001);
             result.setMessage("请填写一句话介绍");
             result.setData(null);
@@ -519,7 +519,7 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
             result.setData(null);
 
             return result;
-        }
+        }*/
         if (StringUtil.isEmpty(field)){
             result.setStatus(50001);
             result.setMessage("请填写所属细分领域");
@@ -614,7 +614,12 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
             i.setYn(currency1);
             i.setCity(city);
             BigDecimal bigDecimalAmount = new BigDecimal(amount);
-            BigDecimal bigDecimalStockRight = new BigDecimal(stock_right);
+            if(stock_right ==null || "".equals(stock_right)) {
+
+            }else{
+                BigDecimal bigDecimalStockRight = new BigDecimal(stock_right);
+                i.setStockRight(bigDecimalStockRight);
+            }
             i.setAmont(bigDecimalAmount);
             i.setCompanyName(project_full_name);
             i.setCreateName(founder_name);
@@ -623,7 +628,6 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
             i.setInstitutionalName(investment_institution_name);
             i.setShortName(project_name);
             i.setStage(rounds);
-            i.setStockRight(bigDecimalStockRight);
             i.setUserId(userID);
             i.setWordIntroduction(summary);
             i.setYn(currency1);
@@ -683,7 +687,12 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
                 i.setYn(currency1);
                 i.setCity(city);
                 BigDecimal bigDecimalAmount = new BigDecimal(amount);
-                BigDecimal bigDecimalStockRight = new BigDecimal(stock_right);
+                if(stock_right ==null || "".equals(stock_right)) {
+
+                }else{
+                    BigDecimal bigDecimalStockRight = new BigDecimal(stock_right);
+                    i.setStockRight(bigDecimalStockRight);
+                }
                 i.setAmont(bigDecimalAmount);
                 i.setCompanyName(project_full_name);
                 i.setCreateName(founder_name);
@@ -692,7 +701,6 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
                 i.setInstitutionalName(investment_institution_name);
                 i.setShortName(project_name);
                 i.setStage(rounds);
-                i.setStockRight(bigDecimalStockRight);
                 i.setUserId(userID);
                 i.setWordIntroduction(summary);
                 i.setYn(currency1);
