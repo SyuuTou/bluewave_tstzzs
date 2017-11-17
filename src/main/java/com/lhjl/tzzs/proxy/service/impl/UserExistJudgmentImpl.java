@@ -68,6 +68,10 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
 
                 Users getUser =usersMapper.selectByPrimaryKey(users.getId());
                 if (getUser == null){
+
+                    log.info("获取用户信息出现异常");
+
+
                     result.setData(null);
                     result.setMessage("获取用户信息出现异常");
                     result.setStatus(401);
@@ -99,6 +103,8 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
             }else{
                userExsitJudgmentDto.setSuccess(false);
                userExsitJudgmentDto.setToken(null);
+
+               log.info("当前输入token非法，请检查");
 
                result.setMessage("当前输入token非法，请检查");
                result.setStatus(401);
