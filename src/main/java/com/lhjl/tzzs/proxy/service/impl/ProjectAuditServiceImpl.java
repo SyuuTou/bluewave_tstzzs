@@ -273,6 +273,9 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         projects.setItemLabel(projectSendLogs.getProjectTags());
         projects.setProjectSource(0);
         projects.setUserid(projectSendLogs.getUserid());
+        projects.setCreateTime(now);
+        projects.setApprovalStatus(1);
+        projects.setApprovalTime(now);
 
         projectsMapper.insertSelective(projects);
 
