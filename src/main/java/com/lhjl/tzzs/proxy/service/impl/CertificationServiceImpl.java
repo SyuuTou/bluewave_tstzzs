@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.UserToken;
@@ -34,9 +35,9 @@ public class CertificationServiceImpl implements CertificationService {
 
 
 	@Override
-	public CommonDto<List<Map<String, Object>>> findcertification(String investorsName) {
-		CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
-        List<Map<String, Object>> list =new ArrayList<Map<String, Object>>();
+	public CommonDto<List<ProjectInvestmentDto>>findcertification(String investorsName) {
+        CommonDto<List<ProjectInvestmentDto>> result = new CommonDto<List<ProjectInvestmentDto>>();
+        List<ProjectInvestmentDto> list =new ArrayList<ProjectInvestmentDto>();
 		// 查询机构是否存在
 		InvestmentInstitutions investmentInstitutions =new InvestmentInstitutions();
 		investmentInstitutions.setShortName(investorsName);
@@ -44,30 +45,30 @@ public class CertificationServiceImpl implements CertificationService {
 		if(investmentInstitutions !=null){
 			//根据机构的名称查找机构投资人
 			String shortName =investmentInstitutions.getShortName();
-			List<Map<String, Object>> list1 =investorsApprovalMapper.findApprovalName(shortName);
+            List<ProjectInvestmentDto> list1 =investorsApprovalMapper.findApprovalName(shortName);
 			if(list1.size()>0){
-				for(Map<String, Object> obj :list1){
+				for(ProjectInvestmentDto obj :list1){
                    //查找用户头像
 					Users users =new Users();
-					users.setId(Integer.valueOf(String.valueOf(obj.get("userid"))));
+					users.setId(obj.getUserid());
 					users =usersMapper.selectOne(users);
 					if(users !=null) {
                         if (users.getHeadpicReal() == null) {
                             if (users.getHeadpic() != null) {
-                                obj.put("headpicReal", users.getHeadpic());
+                                obj.setHeadpic( users.getHeadpic());
 
                             } else {
-                                obj.put("headpicReal", "");
+                                obj.setHeadpic("");
                             }
                         } else {
-                            obj.put("headpicReal", users.getHeadpicReal());
+                            obj.setHeadpic(users.getHeadpicReal());
                         }
                         //查找用户名字
                         if (users.getActualName() != null) {
-                            obj.put("actualName",users.getActualName());
+                            obj.setActualName(users.getActualName());
 
                         } else {
-                            obj.put("actualName","");
+                            obj.setHeadpic("");
                         }
                     }else {
                         result.setStatus(51003);
@@ -75,31 +76,31 @@ public class CertificationServiceImpl implements CertificationService {
                     }
                     //查找token
                     UserToken userToken =new UserToken();
-					userToken.setUserId(Integer.valueOf(String.valueOf(obj.get("userid"))));
+					userToken.setUserId(obj.getUserid());
 					userToken =userTokenMapper.selectOne(userToken);
 					if(userToken.getToken() != null) {
-                        obj.put("token", userToken.getToken());
+                        obj.setToken( userToken.getToken());
                     }else{
                         result.setStatus(51004);
                         result.setMessage("token不存在");
                     }
                     //nickname查找
                     UsersWeixin usersWeixin =new UsersWeixin();
-					usersWeixin.setUserId(Integer.valueOf(String.valueOf(obj.get("userid"))));
+					usersWeixin.setUserId(obj.getUserid());
                     usersWeixin =usersWeixinMapper.selectOne(usersWeixin);
                     if( usersWeixin.getNickName() != null){
-                        obj.put("nickName", usersWeixin.getNickName());
+                        obj.setNickName( usersWeixin.getNickName());
                     }else{
-                        obj.put("nickName", "");
+                        obj.setNickName("");
                     }
                     //openid 查找
                     if( usersWeixin.getOpenid() != null){
-                        obj.put("openid", usersWeixin.getOpenid());
+                        obj.setOpenId(usersWeixin.getOpenid());
                     }else{
-                        obj.put("openid", "");
+                        obj.setOpenId("");
                     }
-                    obj.put("investmentInstitutionsName",investmentInstitutions.getShortName());
-                    obj.put("investmentInstitutionsid",investmentInstitutions.getId());
+                    obj.setInvestmentInstitutionsName(investmentInstitutions.getShortName());
+                    obj.setInvestmentInstitutionId(investmentInstitutions.getId());
 				}
 			}else {
                 result.setStatus(51002);
