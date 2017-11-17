@@ -27,7 +27,7 @@
         <javaClientGenerator targetPackage="com.lhjl.tzzs.proxy.mapper" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <table tableName="meta_family_name">
+        <table tableName="miniapp_formid">
             <!--mysql 配置-->
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
             <!--oracle 配置-->

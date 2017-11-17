@@ -1,21 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.MiniappFormidMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.MiniappFormid" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.MiniappFormidMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.MiniappFormid">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="form_id" property="formId" jdbcType="VARCHAR" />
-    <result column="scene_key" property="sceneKey" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="token" property="token" jdbcType="VARCHAR" />
-    <result column="yn" property="yn" jdbcType="INTEGER" />
-    <result column="use_time" property="useTime" jdbcType="TIMESTAMP" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="scene_key" jdbcType="VARCHAR" property="sceneKey" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="token" jdbcType="VARCHAR" property="token" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
+    <result column="use_time" jdbcType="TIMESTAMP" property="useTime" />
+    <result column="relieve_time" jdbcType="TIMESTAMP" property="relieveTime" />
   </resultMap>
-  
-  <select id="findFormiDesc" resultMap="BaseResultMap" parameterType="INTEGER">
-    SELECT * FROM miniapp_formid where user_id = #{userId} and (yn is null  or yn= 0  )order by create_time asc limit 0,5;
+
+  <select id="findFormiDesc" parameterType="INTEGER" resultMap="BaseResultMap">
+    SELECT * FROM miniapp_formid where user_id = #{userId} and (yn is null  or yn= 0  or (yn =2 and(relieve_time &lt; now() or relieve_time is null)))order by create_time asc limit 0,5;
   </select>
 </mapper>

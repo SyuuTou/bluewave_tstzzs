@@ -205,6 +205,14 @@ public class UserEditController {
         Map<String,Object>  obj =new HashMap<String,Object>();
         try {
             int userid =  userExistJudgmentService.getUserId(token);
+            if (userid == -1){
+                result.setData(null);
+                result.setStatus(502);
+                result.setMessage("用户token无效，请检查");
+                log.info("用户token无效，请检查");
+
+                return result;
+            }
             result = userEditService.getUserHeadpic(userid);
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());

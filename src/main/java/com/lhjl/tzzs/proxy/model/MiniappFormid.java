@@ -24,7 +24,7 @@ public class MiniappFormid {
     private String token;
 
     /**
-     * 使用状态，0表示未使用，1表示已使用；使用时用最老的那个formid;
+     * 使用状态，0表示未使用，1表示已使用，2表示正在用；使用时用最老的那个formid;
      */
     private Integer yn;
 
@@ -33,6 +33,12 @@ public class MiniappFormid {
      */
     @Column(name = "use_time")
     private Date useTime;
+
+    /**
+     * formid解除锁定的时间
+     */
+    @Column(name = "relieve_time")
+    private Date relieveTime;
 
     /**
      * @return id
@@ -119,18 +125,18 @@ public class MiniappFormid {
     }
 
     /**
-     * 获取使用状态，0表示未使用，1表示已使用；使用时用最老的那个formid;
+     * 获取使用状态，0表示未使用，1表示已使用，2表示正在用；使用时用最老的那个formid;
      *
-     * @return yn - 使用状态，0表示未使用，1表示已使用；使用时用最老的那个formid;
+     * @return yn - 使用状态，0表示未使用，1表示已使用，2表示正在用；使用时用最老的那个formid;
      */
     public Integer getYn() {
         return yn;
     }
 
     /**
-     * 设置使用状态，0表示未使用，1表示已使用；使用时用最老的那个formid;
+     * 设置使用状态，0表示未使用，1表示已使用，2表示正在用；使用时用最老的那个formid;
      *
-     * @param yn 使用状态，0表示未使用，1表示已使用；使用时用最老的那个formid;
+     * @param yn 使用状态，0表示未使用，1表示已使用，2表示正在用；使用时用最老的那个formid;
      */
     public void setYn(Integer yn) {
         this.yn = yn;
@@ -152,5 +158,23 @@ public class MiniappFormid {
      */
     public void setUseTime(Date useTime) {
         this.useTime = useTime;
+    }
+
+    /**
+     * 获取formid解除锁定的时间
+     *
+     * @return relieve_time - formid解除锁定的时间
+     */
+    public Date getRelieveTime() {
+        return relieveTime;
+    }
+
+    /**
+     * 设置formid解除锁定的时间
+     *
+     * @param relieveTime formid解除锁定的时间
+     */
+    public void setRelieveTime(Date relieveTime) {
+        this.relieveTime = relieveTime;
     }
 }

@@ -179,6 +179,19 @@ public class StatisticsServiceImpl implements StatisticsService {
             type = 1;
         }
         List<HistogramList>  histogramLists = statisticsMapper.financingInvestmentDistributed(type,beginTime,endTime,froma,sizea);
+        List<HistogramList>  projectList = statisticsMapper.financingCountDistributed(type,beginTime,endTime,froma,sizea);
+        Integer sum = 0;
+        Integer citySum = 0 ;
+        for (HistogramList histogramList : histogramLists){
+            sum += Integer.valueOf(histogramList.getX());
+        }
+
+        for (HistogramList histogramList : projectList){
+            citySum += Integer.valueOf(histogramList.getX());
+        }
+
+        histogramLists.get(histogramLists.size()-1).setY("其它");
+        histogramLists.get(histogramLists.size()-1).setX(String.valueOf(Integer.valueOf(histogramLists.get(histogramLists.size()-1).getX())+(citySum - sum)));
         result.setData(histogramLists);
         result.setMessage("success");
         result.setStatus(200);

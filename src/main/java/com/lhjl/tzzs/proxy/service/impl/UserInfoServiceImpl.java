@@ -177,7 +177,23 @@ public class UserInfoServiceImpl implements UserInfoService{
         for(Map<String,Object> obj :list){
 
             obj.put("create_time",String.valueOf(obj.get("create_time")));
-
+            String investorsType = "未认证或未审核投资人";
+            if (obj.get("investors_type") == null){
+                investorsType = "未认证或未审核投资人";
+            }else {
+                Integer investorsNum = (Integer)obj.get("investors_type");
+                switch (investorsNum){
+                    case 0:investorsType = "个人投资人";
+                    break;
+                    case 1:investorsType = "机构投资人";
+                    break;
+                    case 2:investorsType="VIP投资人";
+                    break;
+                    default:investorsType="未认证或未审核投资人";
+                }
+            }
+            obj.put("investors_type",investorsType);
+            obj.put("id_type",obj.get("id_type"));
         }
 
 
@@ -204,14 +220,25 @@ public class UserInfoServiceImpl implements UserInfoService{
         String formId = "";
         if (miniappFormidList.size() > 0){
             formId = miniappFormidList.get(0).getFormId();
+            //获取当前时间5分钟之后的时间
+            Date  now = new Date();
+            Date nowAfter5 = new Date(now.getTime()+180000);
+
             //读出来以后锁定formid
             MiniappFormid miniappFormidForUpdate = new MiniappFormid();
             miniappFormidForUpdate.setId(miniappFormidList.get(0).getId());
             miniappFormidForUpdate.setYn(2);
+            miniappFormidForUpdate.setRelieveTime(nowAfter5);
 
             miniappFormidMapper.updateByPrimaryKeySelective(miniappFormidForUpdate);
         }
+        if ("".equals(formId)){
+            result.setStatus(50001);
+            result.setData(formId);
+            result.setMessage("formid用完啦！");
 
+            return result;
+        }
         result.setMessage("success");
         result.setData(formId);
         result.setStatus(200);
@@ -253,4 +280,6 @@ public class UserInfoServiceImpl implements UserInfoService{
 
         return result;
     }
+
+
 }
