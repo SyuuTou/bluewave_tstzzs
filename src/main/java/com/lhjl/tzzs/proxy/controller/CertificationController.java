@@ -36,7 +36,7 @@ public class CertificationController {
             result = certificationService.findcertification(investorsName);
             }else{
                 result.setStatus(5102);
-                result.setMessage("机构出现异常");
+                result.setMessage("机构名称不能为空");
             }
             if(result.getStatus() == null){
                 result.setStatus(200);
@@ -44,7 +44,7 @@ public class CertificationController {
             }
         } catch (Exception e) {
             result.setStatus(5101);
-            result.setMessage("项目显示页面异常，请稍后再试");
+            result.setMessage("服务器出现错误");
             log.error(e.getMessage(),e);
         }
         return result;
