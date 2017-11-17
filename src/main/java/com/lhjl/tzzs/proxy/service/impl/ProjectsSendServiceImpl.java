@@ -179,7 +179,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                     projectSegmentationMapper.insertList(dataLogWorklist);
                                 //团队成员
                                 ProjectSendTeamMember projectSendTeamMember = new ProjectSendTeamMember();
-                                projectSendTeamMember.setId(Integer.parseInt(params.getXmid()));
+                                projectSendTeamMember.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
                                 List<ProjectSendTeamMember> projectSendTeamMemberList = projectSendTeamMemberMapper.select(projectSendTeamMember);
                                 ProjectTeamMember t = new ProjectTeamMember();
                                 t.setProjectId(projects.getId());
