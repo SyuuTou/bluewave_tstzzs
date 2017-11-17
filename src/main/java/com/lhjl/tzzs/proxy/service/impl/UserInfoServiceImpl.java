@@ -193,6 +193,7 @@ public class UserInfoServiceImpl implements UserInfoService{
                 }
             }
             obj.put("investors_type",investorsType);
+            obj.put("id_type",obj.get("id_type"));
         }
 
 
