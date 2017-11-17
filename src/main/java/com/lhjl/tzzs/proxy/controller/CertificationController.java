@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.InvestorsNameDto;
+import com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +28,15 @@ public class CertificationController {
      * @return
      */
 	@PostMapping ("search/certification")
-    public CommonDto<List<Map<String, Object>>> findcertification(@RequestBody  InvestorsNameDto body){
-        CommonDto<List<Map<String, Object>>> result =new CommonDto<List<Map<String, Object>>>();
+    public CommonDto<List<ProjectInvestmentDto>> findcertification(@RequestBody  InvestorsNameDto body){
+        CommonDto<List<ProjectInvestmentDto>> result =new CommonDto<List<ProjectInvestmentDto>>();
         try {
             String investorsName = body.getInvestorsName();
             if(investorsName !=null || "".equals(investorsName) ){
             result = certificationService.findcertification(investorsName);
             }else{
                 result.setStatus(5102);
-                result.setMessage("机构出现异常");
+                result.setMessage("机构名称不能为空");
             }
             if(result.getStatus() == null){
                 result.setStatus(200);
@@ -43,7 +44,7 @@ public class CertificationController {
             }
         } catch (Exception e) {
             result.setStatus(5101);
-            result.setMessage("项目显示页面异常，请稍后再试");
+            result.setMessage("服务器出现错误");
             log.error(e.getMessage(),e);
         }
         return result;

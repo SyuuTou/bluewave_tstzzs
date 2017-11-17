@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto;
 
 public interface CertificationService {
-	CommonDto<List<Map<String, Object>>> findcertification(String investorsName);
+	CommonDto<List<ProjectInvestmentDto>> findcertification(String investorsName);
 }

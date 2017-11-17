@@ -50,7 +50,7 @@
     ORDER BY create_time desc
     LIMIT #{beginNum},#{pageSize}
   </select>
-  <select id="findApprovalName" resultType="java.util.HashMap">
+  <select id="findApprovalName" resultType="com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto">
   SELECT * FROM investors_approval WHERE company=#{shortName}AND approval_result =4
   GROUP BY userid
   ORDER BY create_time DESC

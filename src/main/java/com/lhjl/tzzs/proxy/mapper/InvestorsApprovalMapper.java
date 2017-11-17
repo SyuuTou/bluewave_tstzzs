@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.mapper;
 import java.util.List;
 import java.util.Map;
 
+import com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto;
 import org.apache.ibatis.annotations.Param;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
@@ -13,6 +14,6 @@ public interface InvestorsApprovalMapper extends OwnerMapper<InvestorsApproval> 
 	Map<String,Object> findInvestorsApproval(@Param("userId") Integer userId);
 	List<InvestorsApproval> findApproval(@Param("checkName") String checkName,
 										 @Param("time")String time, @Param("beginNum")Integer beginNum, @Param("pageSize")Integer pageSize);
-	List<Map<String,Object>> findApprovalName(@Param("shortName") String shortName);
+	List<ProjectInvestmentDto> findApprovalName(@Param("shortName") String shortName);
 
 }
