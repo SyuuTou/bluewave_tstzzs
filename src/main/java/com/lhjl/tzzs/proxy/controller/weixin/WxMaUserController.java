@@ -64,6 +64,7 @@ public class WxMaUserController {
             userExsitJudgmentDto.setToken(null);
             userExsitJudgmentDto.setSuccess(false);
 
+            logger.info("empty jscode");
 
             result.setMessage("empty jscode");
             result.setStatus(401);
@@ -89,6 +90,8 @@ public class WxMaUserController {
             if (!jieguo){
                 userExsitJudgmentDto.setSuccess(false);
                 userExsitJudgmentDto.setToken(null);
+
+                logger.info("缓存sessionkey出错");
 
                 result.setData(userExsitJudgmentDto);
                 result.setStatus(501);
@@ -125,6 +128,12 @@ public class WxMaUserController {
         CommonDto<UserGetInfoDto> result = new CommonDto<>();
         UserGetInfoDto userGetInfoDto = new UserGetInfoDto();
 
+        logger.info(body.get("token"));
+        logger.info(body.get("signature"));
+        logger.info(body.get("rawData"));
+        logger.info(body.get("encryptedData"));
+        logger.info(body.get("iv"));
+
         String token = body.get("token");
         String signature = body.get("signature");
         String rawData = body.get("rawData");
@@ -137,6 +146,7 @@ public class WxMaUserController {
         if (userid == null || "".equals(userid)){
             userGetInfoDto.setSuccess(false);
             userGetInfoDto.setTips("token非法，请检查token");
+            logger.info(body.get("token非法，请检查token"));
 
             result.setMessage("token非法，请检查token");
             result.setStatus(501);
@@ -146,11 +156,14 @@ public class WxMaUserController {
         }
         //sessionkey加前缀
         String redisKeyId = "sessionkey:" + userid;
+        logger.info(redisKeyId);
         //取到sessionKey
         String sessionKey = sessionKeyService.getSessionKey(redisKeyId);
         if (sessionKey == "" || sessionKey == null){
             userGetInfoDto.setSuccess(false);
             userGetInfoDto.setTips("没有找到当前用户的sessionKey信息,无法完成解码");
+
+            logger.info(body.get("没有找到当前用户的sessionKey信息,无法完成解码"));
 
             result.setData(null);
             result.setStatus(501);
@@ -164,6 +177,8 @@ public class WxMaUserController {
         if (!this.wxService.getUserService().checkUserInfo(sessionKey, rawData, signature)) {
             userGetInfoDto.setSuccess(false);
             userGetInfoDto.setTips("user check failed");
+
+            logger.info(body.get("user check failed"));
 
             result.setMessage("user check failed");
             result.setStatus(501);
@@ -323,4 +338,68 @@ public class WxMaUserController {
         return result;
     }
 
+    /**
+     * 检查sessionkey是否存在接口
+     * @param body
+     * @return
+     */
+    @PostMapping("check/sessionkey")
+    public CommonDto<Boolean> checkSessionkey(@RequestBody Map<String,String> body){
+        CommonDto<Boolean> result = new CommonDto<>();
+
+        if (body.get("token") ==null || "".equals(body.get("token")) || "undedined".equals(body.get("token"))){
+            result.setData(false);
+            result.setStatus(502);
+            result.setMessage("用户token不能为空");
+
+            return result;
+        }
+
+        try {
+
+            //用token换取用户id
+            Integer userid = userExistJudgmentService.getUserId(body.get("token"));
+            if (userid == -1){
+
+                logger.info("验证sessionkey场景");
+                logger.info("用户token无效，请检查");
+
+                result.setMessage("用户token无效，请检查");
+                result.setStatus(502);
+                result.setData(false);
+
+                return result;
+            }
+
+            String redisKeyId = "sessionkey:" + userid;
+            logger.info(redisKeyId);
+            //取到sessionKey
+            String sessionKey = sessionKeyService.getSessionKey(redisKeyId);
+
+            if (sessionKey == null){
+
+                logger.info("验证sessionkey场景");
+                logger.info("没有获取到用户的session");
+
+                result.setData(false);
+                result.setStatus(502);
+                result.setMessage("没有获取到用户的session");
+
+                return result;
+            }
+
+            result.setMessage("success");
+            result.setStatus(200);
+            result.setData(true);
+
+
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("不存在sessionkey");
+            result.setStatus(502);
+            result.setData(false);
+        }
+
+        return result;
+    }
 }
