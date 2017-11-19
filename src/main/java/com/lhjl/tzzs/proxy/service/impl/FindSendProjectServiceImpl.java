@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.ProjectSendListDto;
 import com.lhjl.tzzs.proxy.service.FindSendProjectService;
 @Service
 public class FindSendProjectServiceImpl implements FindSendProjectService {

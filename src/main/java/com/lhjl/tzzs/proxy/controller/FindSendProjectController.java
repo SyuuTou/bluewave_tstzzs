@@ -1,9 +1,6 @@
 package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.FindSendProjectDto;
-import com.lhjl.tzzs.proxy.dto.MingDto;
-import com.lhjl.tzzs.proxy.dto.ProjectSendListDto;
 import com.lhjl.tzzs.proxy.service.FindSendProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,26 +25,27 @@ public class FindSendProjectController {
 
     /**
      * 查询提交项目列表
+     *
      * @param shortName
      * @param pageNum
      * @param pageSize
      * @return
      */
     @GetMapping("find/send/list")
-    public CommonDto<List<Map<String,Object>>> findIntegralsSend(String shortName,Integer pageNum,Integer pageSize){
-        CommonDto<List<Map<String,Object>>> result = new CommonDto<List<Map<String,Object>>>();
+    public CommonDto<List<Map<String, Object>>> findIntegralsSend(String shortName, Integer pageNum, Integer pageSize) {
+        CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
         try {
             //初始化分页信息
-            if(pageNum == null){
+            if (pageNum == null) {
                 pageNum = 1;
             }
-            if(pageSize == null){
+            if (pageSize == null) {
                 pageSize = 10;
             }
 
-            result = findSendProjectService.findIntegralsSend(shortName,pageNum,pageSize);
+            result = findSendProjectService.findIntegralsSend(shortName, pageNum, pageSize);
 
-            if(result.getStatus() == null){
+            if (result.getStatus() == null) {
                 result.setStatus(200);
                 result.setMessage("success");
             }
