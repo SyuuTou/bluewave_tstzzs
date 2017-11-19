@@ -1,12 +1,15 @@
 package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -104,6 +107,26 @@ public class UserInfoController {
             result.setMessage("服务器端发生错误");
         }
 
+        return result;
+    }
+
+
+    /**
+     * 用token换取用户真实姓名，头像，公司名称的接口
+     * @param body
+     * @return
+     */
+    @PostMapping("get/user/complexinfo")
+    public CommonDto<ProjectAdministratorOutputDto> getUserComplexInfo(@RequestBody Map<String,String> body){
+        CommonDto<ProjectAdministratorOutputDto> result = new CommonDto<>();
+        try {
+            result = userInfoService.getUserComplexInfo(body);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误，请检查");
+            result.setStatus(502);
+            result.setData(null);
+        }
         return result;
     }
 }

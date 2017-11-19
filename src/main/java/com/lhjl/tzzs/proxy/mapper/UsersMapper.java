@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.mapper;
 
+import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,5 +19,12 @@ public interface UsersMapper extends OwnerMapper<Users> {
 	String findByUserLevel(@Param("leId") Integer leId);
 	List<Map<String,Object>> findUserList(@Param("startPage") Integer startPage, @Param("pageSize") Integer pageSize);
 	Map<String,String> findUserInfoAssemble(@Param("userId") Integer userId);
+
+	/**
+	 * 查一个用户的复合信息的mapper
+	 * @param token
+	 * @return
+	 */
+	Map<String,String> findUserComplexInfoOne(@Param("token") String token);
 
 }
