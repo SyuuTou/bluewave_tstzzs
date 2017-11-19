@@ -508,17 +508,19 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 			Integer investorId = newInvestors.getId();
 			String anli = approval.getInvestorsApprovalcolCase();
-			String[] anliArray = anli.split(anli);
+			if (anli != null){
+				String[] anliArray = anli.split(anli);
 
 
-			//新建投资人的投资案例
-			for (int i=0;i<anliArray.length;i++){
-			    InvestorInvestmentCase investorInvestmentCase = new InvestorInvestmentCase();
-			    investorInvestmentCase.setInvestorId(investorId);
-			    investorInvestmentCase.setInvestmentCase(anliArray[i]);
+				//新建投资人的投资案例
+				for (int i=0;i<anliArray.length;i++){
+					InvestorInvestmentCase investorInvestmentCase = new InvestorInvestmentCase();
+					investorInvestmentCase.setInvestorId(investorId);
+					investorInvestmentCase.setInvestmentCase(anliArray[i]);
 
-			    investorInvestmentCaseMapper.insert(investorInvestmentCase);
-            }
+					investorInvestmentCaseMapper.insert(investorInvestmentCase);
+				}
+			}
 
 		}
 
