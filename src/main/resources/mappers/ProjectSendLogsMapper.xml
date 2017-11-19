@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectSendLogsMapper">
   <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectSendLogs">
     <!--
@@ -21,4 +22,17 @@
     <result column="company_official_website" jdbcType="VARCHAR" property="companyOfficialWebsite" />
     <result column="company_short_name" jdbcType="VARCHAR" property="companyShortName" />
   </resultMap>
+
+  <select id="findSendList"  resultType="java.util.HashMap">
+    SELECT c.id,c.company_short_name,c.userid,c.company_one_sentence_introduct ,IFNULL(check_status,0) as  check_status FROM project_send_logs c
+    WHERE c.company_short_name LIKE  CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+    ORDER BY c.creat_time DESC
+    LIMIT #{beginNum},#{ pageSize}
+  </select>
+
+  <select id="findSendListAll"  resultType="java.util.HashMap">
+    SELECT  c.id,c.company_short_name,c.userid,c.company_one_sentence_introduct ,IFNULL(check_status,0) as  check_status FROM project_send_logs c
+    ORDER BY c.creat_time DESC
+    LIMIT #{beginNum},#{ pageSize}
+  </select>
 </mapper>
