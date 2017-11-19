@@ -2341,8 +2341,27 @@ public class UserLevelServiceImpl implements UserLevelService {
 
         List<UserLevelRelation> userLevelRelationList = userLevelRelationMapper.selectByExample(userLevelExample);
         if (userLevelRelationList.size() > 0){
-            obj.put("userLevel",userLevelRelationList.get(0).getLevelId());
-            obj.put("isEffective",true);
+            if (userLevelRelationList.get(0).getLevelId() !=1 && userLevelRelationList.get(0).getLevelId() !=4){
+                Example userlevelExamplea = new Example(UserLevelRelation.class);
+                //处理一下普通会员还没到期，然后就买高级会员的情况
+                userlevelExamplea.and().andEqualTo("userId",userId).andEqualTo("levelId",1).andEqualTo("yn",1).andEqualTo("status",1).andGreaterThan("endTime",now);
+
+                List<UserLevelRelation> userLevelRelationList1 = userLevelRelationMapper.selectByExample(userlevelExamplea);
+                if (userLevelRelationList1.size() > 0){
+                    //有没过期的1级会员，先返回一级会员
+                    obj.put("userLevel",userLevelRelationList1.get(0).getLevelId());
+                    obj.put("isEffective",true);
+                }else {
+                    //没有没过期的1级会员，显示当前会员
+                    obj.put("userLevel",userLevelRelationList.get(0).getLevelId());
+                    obj.put("isEffective",true);
+                }
+            }else {
+                //显示一级或，四级会员
+                obj.put("userLevel",userLevelRelationList.get(0).getLevelId());
+                obj.put("isEffective",true);
+            }
+
         }else {
             obj.put("userLevel",null);
             obj.put("isEffective",false);
