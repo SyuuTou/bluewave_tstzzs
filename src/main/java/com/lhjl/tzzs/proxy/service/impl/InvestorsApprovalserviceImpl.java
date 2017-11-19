@@ -69,6 +69,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setMessage("用户token不能为空");
                 result.setStatus(50001);
 
+                log.info("投资人认证场景");
+                log.info("用户token不能为空");
+
                 return result;
             }
 
@@ -77,6 +80,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setMessage("请填写姓名");
                 result.setStatus(50001);
 
+				log.info("投资人认证场景");
+				log.info("请填写姓名");
+
                 return result;
             }
 
@@ -84,6 +90,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setData(null);
                 result.setMessage("请选择投资人类型");
                 result.setStatus(50001);
+
+				log.info("投资人认证场景");
+				log.info("请选择投资人类型");
 
                 return result;
             }
@@ -94,6 +103,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setMessage("请填写所在公司");
                 result.setStatus(50001);
 
+				log.info("投资人认证场景");
+				log.info("请填写所在公司");
+
                 return result;
             }
 
@@ -102,6 +114,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setMessage("请填写所在公司职务");
                 result.setStatus(50001);
 
+				log.info("投资人认证场景");
+				log.info("请填写所在公司职务");
+
                 return result;
             }
 
@@ -109,6 +124,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setData(null);
                 result.setMessage("formId不存在");
                 result.setStatus(50001);
+
+				log.info("投资人认证场景");
+				log.info("formId不存在");
 
                 return result;
             }
