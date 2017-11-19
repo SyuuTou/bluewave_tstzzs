@@ -121,19 +121,19 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
 //
 //            return result;
 //        }
-        if (StringUtil.isEmpty(summary)){
-            result.setStatus(50001);
-            result.setMessage("请填写一句话介绍");
-            result.setData(null);
-
-            return result;
-        }else if (summary.length()>50){
-            result.setStatus(50003);
-            result.setMessage("一句话介绍长度不能超过50个字符");
-            result.setData(null);
-
-            return result;
-        }
+//        if (StringUtil.isEmpty(summary)){
+//            result.setStatus(50001);
+//            result.setMessage("请填写一句话介绍");
+//            result.setData(null);
+//
+//            return result;
+//        }else if (summary.length()>50){
+//            result.setStatus(50003);
+//            result.setMessage("一句话介绍长度不能超过50个字符");
+//            result.setData(null);
+//
+//            return result;
+//        }
         if (StringUtil.isEmpty(field)){
             result.setStatus(50001);
             result.setMessage("请填写所属细分领域");
@@ -223,7 +223,12 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
         i.setYn(currency1);
         i.setCity(city);
         BigDecimal bigDecimalAmount = new BigDecimal(amount);
-        BigDecimal bigDecimalStockRight = new BigDecimal(stock_right);
+            if(stock_right ==null || "".equals(stock_right)) {
+
+            }else{
+                BigDecimal bigDecimalStockRight = new BigDecimal(stock_right);
+                i.setStockRight(bigDecimalStockRight);
+            }
         i.setAmont(bigDecimalAmount);
         i.setCompanyName(project_full_name);
         i.setCreateName(founder_name);
@@ -232,7 +237,6 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
         i.setInstitutionalName(investment_institution_name);
         i.setShortName(project_name);
         i.setStage(rounds);
-        i.setStockRight(bigDecimalStockRight);
         i.setUserId(userID);
         i.setWordIntroduction(summary);
         i.setYn(currency1);
@@ -253,27 +257,35 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
         }
         dataLogDomainMapper.insertList(projectSegmentationList);
         //教育背景
-        String[] educationArry = founder_education.split(",");
-        List<DataLogEducation> dataLogEducationlist =new Page<DataLogEducation>();
-        for (int a=0; a < educationArry.length;a++){
-            DataLogEducation dataLogEducation =new DataLogEducation();
-            dataLogEducation.setEducationName(educationArry[a]);
-            dataLogEducation.setLogId(i.getId());
-            dataLogEducation.setUserId(userID);
-            dataLogEducationlist.add(dataLogEducation);
-        }
-        dataLogEducationMapper.insertList(dataLogEducationlist);
+         if(founder_education ==null || "".equals(founder_education))  {
+
+         } else {
+             String[] educationArry = founder_education.split(",");
+             List<DataLogEducation> dataLogEducationlist = new Page<DataLogEducation>();
+             for (int a = 0; a < educationArry.length; a++) {
+                 DataLogEducation dataLogEducation = new DataLogEducation();
+                 dataLogEducation.setEducationName(educationArry[a]);
+                 dataLogEducation.setLogId(i.getId());
+                 dataLogEducation.setUserId(userID);
+                 dataLogEducationlist.add(dataLogEducation);
+             }
+             dataLogEducationMapper.insertList(dataLogEducationlist);
+         }
         //工作背景
-        String[] workArry = founder_work.split(",");
-        List<DataLogWork> dataLogWorklist =new Page<DataLogWork>();
-        for (int a=0; a <  workArry.length;a++){
-            DataLogWork dataLogEducation =new DataLogWork();
-            dataLogEducation.setWorkName(workArry[a]);
-            dataLogEducation.setLogId(i.getId());
-            dataLogEducation.setUserId(userID);
-            dataLogWorklist.add(dataLogEducation);
-        }
-        dataLogWorkMapper.insertList(dataLogWorklist);
+            if(founder_work ==null || "".equals(founder_work))  {
+
+            }else {
+                String[] workArry = founder_work.split(",");
+                List<DataLogWork> dataLogWorklist = new Page<DataLogWork>();
+                for (int a = 0; a < workArry.length; a++) {
+                    DataLogWork dataLogEducation = new DataLogWork();
+                    dataLogEducation.setWorkName(workArry[a]);
+                    dataLogEducation.setLogId(i.getId());
+                    dataLogEducation.setUserId(userID);
+                    dataLogWorklist.add(dataLogEducation);
+                }
+                dataLogWorkMapper.insertList(dataLogWorklist);
+            }
         }else{
         	result.setStatus(204);
             result.setMessage("不能提交重复项目");
@@ -495,7 +507,7 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
 //
 //            return result;
 //        }
-        if (StringUtil.isEmpty(summary)){
+     /*   if (StringUtil.isEmpty(summary)){
             result.setStatus(50001);
             result.setMessage("请填写一句话介绍");
             result.setData(null);
@@ -507,7 +519,7 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
             result.setData(null);
 
             return result;
-        }
+        }*/
         if (StringUtil.isEmpty(field)){
             result.setStatus(50001);
             result.setMessage("请填写所属细分领域");
@@ -602,7 +614,12 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
             i.setYn(currency1);
             i.setCity(city);
             BigDecimal bigDecimalAmount = new BigDecimal(amount);
-            BigDecimal bigDecimalStockRight = new BigDecimal(stock_right);
+            if(stock_right ==null || "".equals(stock_right)) {
+
+            }else{
+                BigDecimal bigDecimalStockRight = new BigDecimal(stock_right);
+                i.setStockRight(bigDecimalStockRight);
+            }
             i.setAmont(bigDecimalAmount);
             i.setCompanyName(project_full_name);
             i.setCreateName(founder_name);
@@ -611,7 +628,6 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
             i.setInstitutionalName(investment_institution_name);
             i.setShortName(project_name);
             i.setStage(rounds);
-            i.setStockRight(bigDecimalStockRight);
             i.setUserId(userID);
             i.setWordIntroduction(summary);
             i.setYn(currency1);
@@ -671,7 +687,12 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
                 i.setYn(currency1);
                 i.setCity(city);
                 BigDecimal bigDecimalAmount = new BigDecimal(amount);
-                BigDecimal bigDecimalStockRight = new BigDecimal(stock_right);
+                if(stock_right ==null || "".equals(stock_right)) {
+
+                }else{
+                    BigDecimal bigDecimalStockRight = new BigDecimal(stock_right);
+                    i.setStockRight(bigDecimalStockRight);
+                }
                 i.setAmont(bigDecimalAmount);
                 i.setCompanyName(project_full_name);
                 i.setCreateName(founder_name);
@@ -680,7 +701,6 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
                 i.setInstitutionalName(investment_institution_name);
                 i.setShortName(project_name);
                 i.setStage(rounds);
-                i.setStockRight(bigDecimalStockRight);
                 i.setUserId(userID);
                 i.setWordIntroduction(summary);
                 i.setYn(currency1);
