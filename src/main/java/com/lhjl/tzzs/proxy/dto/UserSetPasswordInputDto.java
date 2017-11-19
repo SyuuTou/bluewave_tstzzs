@@ -8,6 +8,33 @@ public class UserSetPasswordInputDto {
     private String token;
     private String isWeixin;
     private String idType;
+    private String companyShortName;
+    private String companyDuties;
+    private String formId;
+
+    public String getFormId() {
+        return formId;
+    }
+
+    public void setFormId(String formId) {
+        this.formId = formId;
+    }
+
+    public String getCompanyShortName() {
+        return companyShortName;
+    }
+
+    public void setCompanyShortName(String companyShortName) {
+        this.companyShortName = companyShortName;
+    }
+
+    public String getCompanyDuties() {
+        return companyDuties;
+    }
+
+    public void setCompanyDuties(String companyDuties) {
+        this.companyDuties = companyDuties;
+    }
 
     public String getIdType() {
         return idType;
