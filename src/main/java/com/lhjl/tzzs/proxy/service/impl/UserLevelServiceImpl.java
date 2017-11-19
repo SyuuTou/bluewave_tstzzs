@@ -492,6 +492,9 @@ public class UserLevelServiceImpl implements UserLevelService {
                 queryIA.setOrderByClause("create_time desc");
                 PageHelper.startPage(0,1);//分页
                 InvestorsApproval investorsApproval = investorsApprovalMapper.selectByExample(queryIA).get(0);
+                if (investorsApproval.getInvestorsType() == null){
+                    investorsApproval.setInvestorsType(2);
+                }
                 if (1 == investorsApproval.getInvestorsType()) {
                     query.setIdType("Institutional_Investor");
                 }else if (2 == investorsApproval.getInvestorsType()) {
