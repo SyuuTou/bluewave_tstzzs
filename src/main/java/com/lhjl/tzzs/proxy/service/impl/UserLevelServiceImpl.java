@@ -6,6 +6,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.UserLevelDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
+import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.service.UserIntegralsService;
 import com.lhjl.tzzs.proxy.service.UserLevelService;
 import org.joda.time.DateTime;
@@ -62,6 +63,9 @@ public class UserLevelServiceImpl implements UserLevelService {
     private MetaUserPresentedMapper userPresentedMapper;
     @Autowired
     private InvestorsApprovalMapper investorsApprovalMapper;
+
+    @Resource
+    private UserExistJudgmentService userExistJudgmentService;
 
     //消费场景
     private static final String INDEX = "Ys54fPbz";
@@ -2307,6 +2311,47 @@ public class UserLevelServiceImpl implements UserLevelService {
 
 //            }
         }
+        return result;
+    }
+
+    /**
+     * 获取当前获取当前用户有效等级，有多个显示等级最高的那个
+     * @param token
+     * @return
+     */
+    public CommonDto<Map<String,Object>> getUserLevel(String token){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> obj = new HashMap<>();
+
+        Date now = new Date();
+
+        //先获取到用户id
+        Integer userId = userExistJudgmentService.getUserId(token);
+        if (userId == -1){
+            result.setMessage("用户token无效");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+        Example userLevelExample = new Example(UserLevelRelation.class);
+        userLevelExample.and().andEqualTo("userId",userId).andEqualTo("yn",1).andEqualTo("status",1).andGreaterThan("endTime",now);
+        userLevelExample.setOrderByClause("level_id desc");
+
+        List<UserLevelRelation> userLevelRelationList = userLevelRelationMapper.selectByExample(userLevelExample);
+        if (userLevelRelationList.size() > 0){
+            obj.put("userLevel",userLevelRelationList.get(0).getLevelId());
+            obj.put("isEffective",true);
+        }else {
+            obj.put("userLevel",null);
+            obj.put("isEffective",false);
+        }
+
+        result.setData(obj);
+        result.setMessage("success");
+        result.setStatus(200);
+
         return result;
     }
 }
