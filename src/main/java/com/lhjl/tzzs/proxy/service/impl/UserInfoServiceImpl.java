@@ -1,9 +1,11 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -17,6 +19,7 @@ import java.util.*;
  */
 @Service
 public class UserInfoServiceImpl implements UserInfoService{
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(UserInfoServiceImpl.class);
 
     @Resource
     private UsersMapper usersMapper;
@@ -220,7 +223,7 @@ public class UserInfoServiceImpl implements UserInfoService{
         String formId = "";
         if (miniappFormidList.size() > 0){
             formId = miniappFormidList.get(0).getFormId();
-            //获取当前时间5分钟之后的时间
+            //获取当前时间3分钟之后的时间
             Date  now = new Date();
             Date nowAfter5 = new Date(now.getTime()+180000);
 
@@ -279,6 +282,64 @@ public class UserInfoServiceImpl implements UserInfoService{
 
 
         return result;
+    }
+
+    /**
+     * 用token换取用户真实姓名，头像，公司名称的接口
+     * @param body
+     * @return
+     */
+    @Override
+    public CommonDto<ProjectAdministratorOutputDto> getUserComplexInfo(Map<String,String> body){
+        CommonDto<ProjectAdministratorOutputDto> result = new CommonDto<>();
+
+        if (body.get("token") == null || "".equals(body.get("token")) || "undefined".equals("token")){
+            result.setData(null);
+            result.setStatus(50001);
+            result.setMessage("用户token不能为空");
+
+            log.info("获取用户复合信息场景");
+            log.info("用户token不能为空");
+
+            return result;
+        }
+
+        Map<String,String> userSearchResult = usersMapper.findUserComplexInfoOne(body.get("token"));
+
+        if (userSearchResult == null){
+            result.setMessage("没有找到：当前token对应的用户信息，请检查");
+            result.setStatus(50001);
+            result.setData(null);
+
+            log.info("获取用户复合信息场景");
+            log.info("没有找到：当前token对应的用户信息，请检查");
+
+            return result;
+        }else {
+            ProjectAdministratorOutputDto projectAdministratorOutputDto = new ProjectAdministratorOutputDto();
+            projectAdministratorOutputDto.setToken(body.get("token"));
+            projectAdministratorOutputDto.setRealName(userSearchResult.get("actual_name"));
+            projectAdministratorOutputDto.setNickName(userSearchResult.get("nick_name"));
+            String headpic = "";
+            if (userSearchResult.get("headpic_real") == null){
+                if (userSearchResult.get("headpic") == null){
+                    headpic ="";
+                }else {
+                    headpic = userSearchResult.get("headpic");
+                }
+            }else {
+                headpic = userSearchResult.get("headpic_real");
+            }
+            projectAdministratorOutputDto.setHeadpic(headpic);
+            projectAdministratorOutputDto.setCompanyName(userSearchResult.get("company_name"));
+
+            result.setData(projectAdministratorOutputDto);
+            result.setStatus(200);
+            result.setMessage("success");
+
+            return result;
+        }
+
     }
 
 

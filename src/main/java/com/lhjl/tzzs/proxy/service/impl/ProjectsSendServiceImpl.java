@@ -294,8 +294,11 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 projectSendLogs.setCompanyName(params.getTuisongxiangmubiao7companywhe());
                                 projectSendLogs.setCompanyDesc(params.getTuisongxiangmubiao7companypro());
                                 projectSendLogs.setField(params.getTuisongxiangmubiao7industryfi());
+                                String [] woel ={};
                                 if (params.getTuisongxiangmubiao7projecttag() != null && !"".equals(params.getTuisongxiangmubiao7projecttag())) {
                                     projectSendLogs.setProjectTags(params.getTuisongxiangmubiao7projecttag());
+                                }else{
+                                    projectSendLogs.setProjectTags("");
                                 }
                                 projectSendLogs.setCompanyLogo(params.getLogo());
                                 if (params.getCompanyshortname() != null || "".equals(params.getCompanyshortname())) {
@@ -490,6 +493,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                     projectSendLogs.setField(params.getTuisongxiangmubiao7industryfi());
                                     if (params.getTuisongxiangmubiao7projecttag() != null && !"".equals(params.getTuisongxiangmubiao7projecttag())) {
                                         projectSendLogs.setProjectTags(params.getTuisongxiangmubiao7projecttag());
+                                    }else{
+                                        projectSendLogs.setProjectTags("");
                                     }
                                     projectSendLogs.setCreatTime(new Date());
                                     //logo图
@@ -745,6 +750,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 projectSendLogs.setField(params.getTuisongxiangmubiao7industryfi());
                                 if (params.getTuisongxiangmubiao7projecttag() != null && !"".equals(params.getTuisongxiangmubiao7projecttag())) {
                                     projectSendLogs.setProjectTags(params.getTuisongxiangmubiao7projecttag());
+                                }else{
+                                    projectSendLogs.setProjectTags("");
                                 }
                                 projectSendLogs.setCreatTime(new Date());
                                 //logo图
@@ -1001,6 +1008,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                             projectSendLogs.setField(params.getTuisongxiangmubiao7industryfi());
                             if (params.getTuisongxiangmubiao7projecttag() != null && !"".equals(params.getTuisongxiangmubiao7projecttag())) {
                                 projectSendLogs.setProjectTags(params.getTuisongxiangmubiao7projecttag());
+                            }else{
+                                projectSendLogs.setProjectTags("");
                             }
                             projectSendLogs.setCreatTime(new Date());
                             //logo图
@@ -1257,6 +1266,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                         projectSendLogs.setField(params.getTuisongxiangmubiao7industryfi());
                         if (params.getTuisongxiangmubiao7projecttag() != null && !"".equals(params.getTuisongxiangmubiao7projecttag())) {
                             projectSendLogs.setProjectTags(params.getTuisongxiangmubiao7projecttag());
+                        }else{
+                            projectSendLogs.setProjectTags("");
                         }
                         projectSendLogs.setCreatTime(new Date());
                         //logo图
@@ -1513,6 +1524,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                         projectSendLogs.setField(params.getTuisongxiangmubiao7industryfi());
                         if (params.getTuisongxiangmubiao7projecttag() != null && !"".equals(params.getTuisongxiangmubiao7projecttag())) {
                             projectSendLogs.setProjectTags(params.getTuisongxiangmubiao7projecttag());
+                        }else{
+                            projectSendLogs.setProjectTags("");
                         }
                         projectSendLogs.setCreatTime(new Date());
                         //logo图

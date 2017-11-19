@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.model.Users;
 
 import java.util.List;
@@ -39,4 +40,11 @@ public interface UserInfoService {
      * @return
      */
     CommonDto<String> setUserFormid(String formid);
+
+    /**
+     * 用token换取用户真实姓名，头像，公司名称的接口
+     * @param body
+     * @return
+     */
+    CommonDto<ProjectAdministratorOutputDto> getUserComplexInfo(Map<String,String> body);
 }
