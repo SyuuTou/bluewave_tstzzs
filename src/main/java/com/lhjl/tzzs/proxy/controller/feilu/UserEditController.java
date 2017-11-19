@@ -48,6 +48,7 @@ public class UserEditController {
         String identityType = body.getIdType();
         String companyShortName = body.getCompanyShortName();
         String companyDuties = body.getCompanyDuties();
+        String formId = body.getFormId();
 
 
         if ("0".equals(isWeixin)){
@@ -146,6 +147,20 @@ public class UserEditController {
             log.info("职位不能为空");
 
             result.setMessage("职位不能为空");
+            result.setStatus(50001);
+            result.setData(userSetPasswordOutputDto);
+
+            return result;
+        }
+
+        if (formId == null || "".equals(formId) || "undefined".equals(formId)){
+            userSetPasswordOutputDto.setMessage("formid不能为空");
+            userSetPasswordOutputDto.setSuccess(false);
+
+            log.info("输入手机号、真实姓名、身份类型场景（注册）");
+            log.info("formid不能为空");
+
+            result.setMessage("formid不能为空");
             result.setStatus(50001);
             result.setData(userSetPasswordOutputDto);
 
