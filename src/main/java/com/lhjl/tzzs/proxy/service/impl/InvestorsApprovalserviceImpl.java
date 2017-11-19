@@ -86,7 +86,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 return result;
             }
 
-			if ("".equals(dataName) || dataName == null || "undefined".equals(dataName)){
+			/*if ("".equals(dataName) || dataName == null || "undefined".equals(dataName)){
                 result.setData(null);
                 result.setMessage("请选择投资人类型");
                 result.setStatus(50001);
@@ -95,7 +95,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				log.info("请选择投资人类型");
 
                 return result;
-            }
+            }*/
 
 
 			if ("".equals(company) || company == null || "undefined".equals(company)){
@@ -139,8 +139,11 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			investorsApproval.setUserid(userToken.getUserId());
 			investorsApproval.setApprovalUsername(params.getCompellation());
 //		 if("个人投资人".equals(params.getDateName())){
+            if(dataName == null  ||  "".equals(dataName)){
 
-			investorsApproval.setInvestorsType(Integer.valueOf(dataName));
+            }else{
+				investorsApproval.setInvestorsType(Integer.valueOf(dataName));
+			}
 //		 }
 //		 if("机构投资人".equals(params.getDateName())){
 //			 investorsApproval.setInvestorsType(1);
