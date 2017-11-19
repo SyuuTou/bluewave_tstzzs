@@ -163,4 +163,22 @@ public class UserLevelController {
 //        }
 //        return result;
 //    }
+
+    @GetMapping("user/level/judgment")
+    public CommonDto<Map<String,Object>> userLevelJudgment(String token){
+        CommonDto<Map<String,Object>> result  = new CommonDto<>();
+
+        try {
+            result = userLevelService.getUserLevel(token);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+
+        }
+
+        return result;
+    }
+
 }

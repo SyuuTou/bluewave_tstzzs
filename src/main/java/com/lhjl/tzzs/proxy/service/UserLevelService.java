@@ -63,4 +63,11 @@ public interface UserLevelService {
      * @return
      */
     CommonDto<String> changeLevel(Integer userId, int status);
+
+    /**
+     * 获取当前获取当前用户有效等级，有多个显示等级最高的那个
+     * @param token
+     * @return
+     */
+    CommonDto<Map<String,Object>> getUserLevel(String token);
 }
