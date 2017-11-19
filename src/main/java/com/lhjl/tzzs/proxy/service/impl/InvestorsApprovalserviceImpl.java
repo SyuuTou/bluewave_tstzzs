@@ -69,6 +69,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setMessage("用户token不能为空");
                 result.setStatus(50001);
 
+                log.info("投资人认证场景");
+                log.info("用户token不能为空");
+
                 return result;
             }
 
@@ -77,22 +80,31 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setMessage("请填写姓名");
                 result.setStatus(50001);
 
+				log.info("投资人认证场景");
+				log.info("请填写姓名");
+
                 return result;
             }
 
-			if ("".equals(dataName) || dataName == null || "undefined".equals(dataName)){
+			/*if ("".equals(dataName) || dataName == null || "undefined".equals(dataName)){
                 result.setData(null);
                 result.setMessage("请选择投资人类型");
                 result.setStatus(50001);
 
+				log.info("投资人认证场景");
+				log.info("请选择投资人类型");
+
                 return result;
-            }
+            }*/
 
 
 			if ("".equals(company) || company == null || "undefined".equals(company)){
                 result.setData(null);
                 result.setMessage("请填写所在公司");
                 result.setStatus(50001);
+
+				log.info("投资人认证场景");
+				log.info("请填写所在公司");
 
                 return result;
             }
@@ -102,6 +114,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setMessage("请填写所在公司职务");
                 result.setStatus(50001);
 
+				log.info("投资人认证场景");
+				log.info("请填写所在公司职务");
+
                 return result;
             }
 
@@ -109,6 +124,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setData(null);
                 result.setMessage("formId不存在");
                 result.setStatus(50001);
+
+				log.info("投资人认证场景");
+				log.info("formId不存在");
 
                 return result;
             }
@@ -121,8 +139,11 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			investorsApproval.setUserid(userToken.getUserId());
 			investorsApproval.setApprovalUsername(params.getCompellation());
 //		 if("个人投资人".equals(params.getDateName())){
+            if(dataName == null  ||  "".equals(dataName)){
 
-			investorsApproval.setInvestorsType(Integer.valueOf(dataName));
+            }else{
+				investorsApproval.setInvestorsType(Integer.valueOf(dataName));
+			}
 //		 }
 //		 if("机构投资人".equals(params.getDateName())){
 //			 investorsApproval.setInvestorsType(1);

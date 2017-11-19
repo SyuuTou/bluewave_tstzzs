@@ -5,6 +5,7 @@ import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.EvaluateService;
+import com.lhjl.tzzs.proxy.service.InvestorsApprovalService;
 import com.lhjl.tzzs.proxy.service.UserEditService;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.service.common.SmsCommonService;
@@ -52,6 +53,9 @@ public class UserEditImpl implements UserEditService {
     @Resource
     private InvestorsApprovalMapper investorsApprovalMapper;
 
+    @Resource
+    private InvestorsApprovalService investorsApprovalService;
+
     @Transactional
     @Override
     public CommonDto<UserSetPasswordOutputDto> editUserPassword(UserSetPasswordInputDto body,int userId,String token){
@@ -61,9 +65,14 @@ public class UserEditImpl implements UserEditService {
 
         String verify = body.getVerify();
         String user7realname_cn = body.getUser7realname_cn();
-       // String password = body.getPassword();
         String identityType = body.getIdType();
+        String companyShortName = body.getCompanyShortName();
+        String companyDuties = body.getCompanyDuties();
+        String formId =body.getFormId();
+
         int shenfenleixing = -1;
+
+        //个人投资人，机构投资人，现在都是投资人
         switch (identityType){
             case "投资人":shenfenleixing =0;
                 break;
@@ -86,13 +95,30 @@ public class UserEditImpl implements UserEditService {
         Users users = new Users();
         users.setActualName(user7realname_cn);
         users.setPhonenumber(verify);
-       // String passwordForSet = encodePassword(password);
-        //users.setPassword(passwordForSet);
         users.setIdentityType(shenfenleixing);
         users.setIdType(identityType);
         users.setId(userId);
+        users.setCompanyDuties(companyDuties);
+        users.setCompanyName(companyShortName);
 
         usersMapper.updateByPrimaryKeySelective(users);
+
+        //如果用户选择的是投资人，则添加一条投资人认证记录
+        if ("投资人".equals(identityType)){
+
+            TouZiDto touZiDto = new TouZiDto();
+
+            log.info("用户选择了投资人，发投资人认证了");
+
+            touZiDto.setCompellation(user7realname_cn);
+            touZiDto.setFillOffice(companyDuties);
+            touZiDto.setOrganization(companyShortName);
+            touZiDto.setToken(token);
+            touZiDto.setFormId(formId);
+
+            investorsApprovalService.saveTouZi(touZiDto);
+        }
+
 
         userSetPasswordOutputDto.setSuccess(true);
         userSetPasswordOutputDto.setMessage(null);

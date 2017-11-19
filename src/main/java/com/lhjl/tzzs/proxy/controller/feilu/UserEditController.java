@@ -46,12 +46,17 @@ public class UserEditController {
         String user7realname_cn = body.getUser7realname_cn();
         String isWeixin = body.getIsWeixin();
         String identityType = body.getIdType();
+        String companyShortName = body.getCompanyShortName();
+        String companyDuties = body.getCompanyDuties();
 
 
         if ("0".equals(isWeixin)){
             if (securitycode == null || "".equals(securitycode) || "undefined".equals(securitycode)){
                 userSetPasswordOutputDto.setMessage("验证码不能为空");
                 userSetPasswordOutputDto.setSuccess(false);
+
+                log.info("输入手机号、真实姓名、身份类型场景（注册）");
+                log.info("验证码不能为空");
 
                 result.setMessage("验证码不能为空");
                 result.setStatus(50001);
@@ -65,6 +70,9 @@ public class UserEditController {
             userSetPasswordOutputDto.setMessage("身份类型不能为空");
             userSetPasswordOutputDto.setSuccess(false);
 
+            log.info("输入手机号、真实姓名、身份类型场景（注册）");
+            log.info("身份类型不能为空");
+
             result.setMessage("身份类型不能为空");
             result.setStatus(50001);
             result.setData(userSetPasswordOutputDto);
@@ -75,6 +83,9 @@ public class UserEditController {
         if (token == null || "".equals(token) || "undefined".equals(token) ){
             userSetPasswordOutputDto.setMessage("token信息不能为空");
             userSetPasswordOutputDto.setSuccess(false);
+
+            log.info("输入手机号、真实姓名、身份类型场景（注册）");
+            log.info("token信息不能为空");
 
             result.setMessage("token信息不能为空");
             result.setStatus(50001);
@@ -88,6 +99,9 @@ public class UserEditController {
             userSetPasswordOutputDto.setMessage("手机号不能为空");
             userSetPasswordOutputDto.setSuccess(false);
 
+            log.info("输入手机号、真实姓名、身份类型场景（注册）");
+            log.info("手机号不能为空");
+
             result.setMessage("手机号不能为空");
             result.setStatus(50001);
             result.setData(userSetPasswordOutputDto);
@@ -100,6 +114,9 @@ public class UserEditController {
             userSetPasswordOutputDto.setMessage("真实姓名不能为空");
             userSetPasswordOutputDto.setSuccess(false);
 
+            log.info("输入手机号、真实姓名、身份类型场景（注册）");
+            log.info("真实姓名不能为空");
+
             result.setMessage("真实姓名不能为空");
             result.setStatus(50001);
             result.setData(userSetPasswordOutputDto);
@@ -107,6 +124,33 @@ public class UserEditController {
             return result;
         }
 
+        if (companyShortName == null || "".equals(companyShortName) || "undefined".equals(companyShortName)){
+            userSetPasswordOutputDto.setMessage("公司简称不能为空");
+            userSetPasswordOutputDto.setSuccess(false);
+
+            log.info("输入手机号、真实姓名、身份类型场景（注册）");
+            log.info("公司简称不能为空");
+
+            result.setMessage("公司简称不能为空");
+            result.setStatus(50001);
+            result.setData(userSetPasswordOutputDto);
+
+            return result;
+        }
+
+        if (companyDuties == null || "".equals(companyDuties) || "undefined".equals(companyDuties)){
+            userSetPasswordOutputDto.setMessage("公司简称不能为空");
+            userSetPasswordOutputDto.setSuccess(false);
+
+            log.info("输入手机号、真实姓名、身份类型场景（注册）");
+            log.info("职位不能为空");
+
+            result.setMessage("职位不能为空");
+            result.setStatus(50001);
+            result.setData(userSetPasswordOutputDto);
+
+            return result;
+        }
 
         try {
 
@@ -116,6 +160,9 @@ public class UserEditController {
             if (userida == -1){
                 userSetPasswordOutputDto.setMessage("token非法，没有找到用户");
                 userSetPasswordOutputDto.setSuccess(false);
+
+                log.info("输入手机号、真实姓名、身份类型场景（注册）");
+                log.info("token非法，没有找到用户");
 
                 result.setMessage("token非法，没有找到用户");
                 result.setStatus(502);
@@ -128,16 +175,21 @@ public class UserEditController {
 
             //获取到的如果是微信的手机号，就不再验证验证码了，否则验证验证码
             if ("0".equals(isWeixin)) {
+
+                log.info("需要验证验证码");
                 //验证验证码是否通过
                 CommonDto<String> verifyResult = smsCommonService.verifySMS(userid, verify, securitycode);
                 int verifyStatus = verifyResult.getStatus();
                 if (verifyStatus == 200) {
+                    log.info("验证码验证通过");
                     //验证通过后的处理,账号密码，真实姓名的保存
                     result = userEditService.editUserPassword(body, userId, token);
 
                 } else {
                     userSetPasswordOutputDto.setMessage(verifyResult.getMessage());
                     userSetPasswordOutputDto.setSuccess(false);
+
+                    log.info("验证验证码没有通过");
 
                     result.setMessage(verifyResult.getMessage());
                     result.setStatus(verifyResult.getStatus());
@@ -149,6 +201,8 @@ public class UserEditController {
                 result.setStatus(50001);
                 result.setMessage("isWeixin参数错误");
                 result.setData(null);
+
+                log.info("isWeixin参数错误");
 
                 return result;
 
