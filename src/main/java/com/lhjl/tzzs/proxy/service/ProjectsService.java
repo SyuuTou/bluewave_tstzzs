@@ -3,12 +3,9 @@ package com.lhjl.tzzs.proxy.service;
 import java.util.List;
 import java.util.Map;
 
-import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
-import com.lhjl.tzzs.proxy.dto.ProjectDetailOutputDto;
+import com.lhjl.tzzs.proxy.dto.*;
 import org.apache.ibatis.annotations.Param;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.SereachDto;
 import com.lhjl.tzzs.proxy.model.Projects;
 
 /**
@@ -73,4 +70,11 @@ public interface ProjectsService {
      * @return
      */
     CommonDto<List<ProjectAdministratorOutputDto>> getProjectAdministractorList(Map<String,Integer> body);
+
+    /**
+     * 通过项目id获取项目信息接口
+     * @param body
+     * @return
+     */
+    CommonDto<ProjectComplexOutputDto> getProjectComplexInfo(Map<String,Integer> body);
 }

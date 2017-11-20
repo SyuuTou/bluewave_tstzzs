@@ -7,20 +7,17 @@ import java.util.*;
 import javax.annotation.Resource;
 
 import com.github.pagehelper.PageHelper;
-import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
-import com.lhjl.tzzs.proxy.dto.ProjectDetailOutputDto;
+import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-
-import com.lhjl.tzzs.proxy.dto.SereachDto;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
 import tk.mybatis.mapper.entity.Example;
 
@@ -31,6 +28,9 @@ import tk.mybatis.mapper.entity.Example;
  */
 @Service
 public class ProjectsServiceImpl implements ProjectsService {
+
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(ProjectsServiceImpl.class);
+
     @Value("${statistics.beginTime}")
     private String beginTime;
 
@@ -939,6 +939,51 @@ public class ProjectsServiceImpl implements ProjectsService {
             result.setData(list);
         }
 
+
+        return result;
+    }
+
+    /**
+     * 通过项目id获取项目信息接口
+     * @param body
+     * @return
+     */
+    @Override
+    public CommonDto<ProjectComplexOutputDto> getProjectComplexInfo(Map<String,Integer> body){
+        CommonDto<ProjectComplexOutputDto> result = new CommonDto<>();
+
+        if (body.get("projectId") == null){
+            result.setData(null);
+            result.setMessage("项目id不能为空");
+            result.setStatus(50001);
+
+            log.info("通过项目id获取项目信息接口场景");
+            log.info("项目id不能为空");
+
+            return result;
+        }
+
+        Projects projects = projectsMapper.selectByPrimaryKey(body.get("projectId"));
+        if (projects == null){
+            result.setStatus(50001);
+            result.setMessage("当前项目id没有找到项目信息，请检查项目id");
+            result.setData(null);
+
+            log.info("通过项目id获取项目信息接口场景");
+            log.info("当前项目id没有找到项目信息，请检查项目id");
+
+            return result;
+        }
+
+        ProjectComplexOutputDto projectComplexOutputDto =new ProjectComplexOutputDto();
+        projectComplexOutputDto.setProjectDesc(projects.getKernelDesc());
+        projectComplexOutputDto.setProjectId(body.get("projectId"));
+        projectComplexOutputDto.setProjectLogo(projects.getProjectLogo());
+        projectComplexOutputDto.setProjectShortName(projects.getShortName());
+
+        result.setData(projectComplexOutputDto);
+        result.setMessage("success");
+        result.setStatus(200);
 
         return result;
     }

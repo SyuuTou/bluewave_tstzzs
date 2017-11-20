@@ -340,4 +340,25 @@ public class ProjectsController {
 
         return result;
     }
+
+    /**
+     * 通过项目id获取项目信息接口
+     * @param body
+     * @return
+     */
+    @PostMapping("project/complexinfo")
+    public CommonDto<ProjectComplexOutputDto> getProjectComplexInfo(@RequestBody Map<String,Integer> body){
+        CommonDto<ProjectComplexOutputDto> result =new CommonDto<>();
+
+        try {
+            result = projectsService.getProjectComplexInfo(body);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+        }
+
+        return result;
+    }
 }
