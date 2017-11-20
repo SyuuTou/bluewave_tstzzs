@@ -561,6 +561,19 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
          projectSendLogsMapper.updateByPrimaryKeySelective(projectSendLogsForUpdate);
 
+         //创建审核记录表
+        AdminProjectApprovalLog adminProjectApprovalLog = new AdminProjectApprovalLog();
+        adminProjectApprovalLog.setApprovaledStatus(1);
+        adminProjectApprovalLog.setApprovaledTime(now);
+        adminProjectApprovalLog.setProjectSourceId(body.getProjectSourceId());
+        adminProjectApprovalLog.setProjectId(xmid);
+        adminProjectApprovalLog.setApprovaledAdminName(body.getAuditAdminName());
+        adminProjectApprovalLog.setProjectSourceType(body.getProjctSourceType());
+        adminProjectApprovalLog.setApprovaledDescription(body.getAuditDescription());
+
+        adminProjectApprovalLogMapper.insert(adminProjectApprovalLog);
+
+
          result.setStatus(200);
          result.setData(null);
          result.setMessage("success");
