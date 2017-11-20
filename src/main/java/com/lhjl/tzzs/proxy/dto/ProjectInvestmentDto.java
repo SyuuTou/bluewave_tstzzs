@@ -8,15 +8,18 @@ public class ProjectInvestmentDto {
 	private Integer investmentInstitutionId;
 	private String actualName;
 	private String openId;
-	private Integer userid;
+	private Integer userId;
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
 	public String getToken() {
 		return token;
-	}
-	public Integer getUserid() {
-		return userid;
-	}
-	public void setUserid(Integer userid) {
-		this.userid = userid;
 	}
 	public void setToken(String token) {
 		this.token = token;

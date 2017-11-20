@@ -31,12 +31,12 @@ public class CertificationController {
     public CommonDto<List<ProjectInvestmentDto>> findcertification(@RequestBody  InvestorsNameDto body){
         CommonDto<List<ProjectInvestmentDto>> result =new CommonDto<List<ProjectInvestmentDto>>();
         try {
-            String investorsName = body.getInvestorsName();
-            if(investorsName !=null || "".equals(investorsName) ){
-            result = certificationService.findcertification(investorsName);
+            Integer investorInstitutionId = body.getInvestorInstitutionId();
+            if(investorInstitutionId != null){
+            result = certificationService.findcertification(investorInstitutionId);
             }else{
                 result.setStatus(5102);
-                result.setMessage("机构名称不能为空");
+                result.setMessage("机构id不能为空");
             }
             if(result.getStatus() == null){
                 result.setStatus(200);

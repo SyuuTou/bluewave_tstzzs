@@ -7,5 +7,5 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto;
 
 public interface CertificationService {
-	CommonDto<List<ProjectInvestmentDto>> findcertification(String investorsName);
+	CommonDto<List<ProjectInvestmentDto>> findcertification(Integer investorInstitutionId);
 }
