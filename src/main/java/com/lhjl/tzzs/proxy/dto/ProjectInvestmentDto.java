@@ -57,7 +57,5 @@ public class ProjectInvestmentDto {
 	public void setOpenId(String openId) {
 		this.openId = openId;
 	}
-	
-	
-	
+
 }

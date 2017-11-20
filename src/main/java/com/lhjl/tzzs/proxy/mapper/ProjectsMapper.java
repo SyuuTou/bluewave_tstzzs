@@ -52,6 +52,26 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
     BigDecimal findProjectAllByRoundAndC(@Param("stage") String stage, @Param("city") String city);
     List<Map<String,Object>> findLikes(@Param("educationArray") String [] educationArray, @Param("city") String city,@Param("pslArray") String [] pslArray, @Param("shortName") String shortName);
     List<XiangsiDto> findLikesall(@Param("educationArray") String [] educationArray,@Param("projectTagArry") String [] projectTagArry,@Param("shortName") String shortName);
+
+    /**
+     * 后台获取项目列表接口mapper,数据导入项目
+     * @param startNum
+     * @param pageSize
+     * @param shortName
+     * @param projectType
+     * @return
+     */
+    List<Map<String,Object>> adminGetProjectListOne(@Param("startNum") Integer startNum,@Param("pageSize") Integer pageSize,@Param("shortName") String shortName,@Param("projectType") Integer projectType);
+
+    /**
+     * 后台获取项目列表接口mapper,用户提交项目
+     * @param startNum
+     * @param pageSize
+     * @param shortName
+     * @param projectType
+     * @return
+     */
+    List<Map<String,Object>> adminGetProjectListTwo(@Param("startNum") Integer startNum,@Param("pageSize") Integer pageSize,@Param("shortName") String shortName,@Param("projectType") Integer projectType);
 }
 
 
