@@ -19,6 +19,10 @@
     <result column="representative" jdbcType="VARCHAR" property="representative" />
     <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
     <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
+    <result column="home_url" jdbcType="VARCHAR" property="homeUrl" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="count" jdbcType="INTEGER" property="count" />
   </resultMap>
 
   <resultMap id="BaseResultMapNew" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsNew">
@@ -73,4 +77,12 @@
     </if>
   </select>
 
+  <select id="findeInvestmentByShortName" parameterType="String" resultMap="BaseResultMap">
+    select * from investment_institutions where 1=1
+    <if test="shortName != null and shortName !=''">
+      and short_name like concat(concat("%",#{shortName}),"%")
+    </if>
+    order by sort desc
+    limit #{startPage},#{pageSize}
+  </select>
 </mapper>

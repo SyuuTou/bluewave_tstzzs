@@ -13,4 +13,6 @@ public interface InvestmentInstitutionsMapper extends OwnerMapper<InvestmentInst
     List<Map<String, Object>>findByInvestmentShortNameAll(@Param("shortName") String shortName,@Param("userId") String userId);
     List<Map<String,Object>> findInvestment50(@Param("type") String type, @Param("beginNum") Integer beginNum, @Param("pageSize") Integer pageSize,@Param("beginTime") String beginTime,@Param("endTime") String endTime);
     List<Map<String,Object>> findInvestmentall(@Param("type") String type, @Param("beginNum") Integer beginNum, @Param("pageSize") Integer pageSize,@Param("beginTime") String beginTime,@Param("endTime") String endTime);
+
+    List<InvestmentInstitutions> findeInvestmentByShortName(@Param("shortName") String shortName,@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
 }

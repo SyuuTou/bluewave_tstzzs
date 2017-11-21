@@ -68,7 +68,7 @@ public class CertificationServiceImpl implements CertificationService {
                         }
                         //查找用户名字
                         if (users.getActualName() != null) {
-                            obj.setActualName(users.getActualName());
+                            obj.setRealName(users.getActualName());
 
                         } else {
                             obj.setHeadpic("");
@@ -126,8 +126,6 @@ public class CertificationServiceImpl implements CertificationService {
                         obj.setNickName("");
                         obj.setOpenId("");
                     }
-                    obj.setInvestmentInstitutionsName(investmentInstitutions.getShortName());
-                    obj.setInvestmentInstitutionId(investmentInstitutions.getId());
 
                     if (usersWeixin != null){
                         list.add(obj);

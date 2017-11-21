@@ -69,34 +69,29 @@ public class InvestmentInstitutions {
      */
     private String representative;
 
-    public Integer getApprovalStatus() {
-        return approvalStatus;
-    }
-
-    public void setApprovalStatus(Integer approvalStatus) {
-        this.approvalStatus = approvalStatus;
-    }
-
     /**
-     * 审核状态
+     * 审核状态，0表示审核未通过，1表示审核通过，默认0
      */
     @Column(name = "approval_status")
     private Integer approvalStatus;
 
     /**
-     * 审核时间
+     * 审核时间，审核时存，其他时候为空
      */
     @Column(name = "approval_time")
     private Date approvalTime;
 
-    public Date getApprovalTime() {
-        return approvalTime;
-    }
+    /**
+     * 官网地址
+     */
+    @Column(name = "home_url")
+    private String homeUrl;
 
-    public void setApprovalTime(Date approvalTime) {
-        this.approvalTime = approvalTime;
-    }
+    private Integer yn;
 
+    private Integer sort;
+
+    private Integer count;
 
     /**
      * @return ID
@@ -308,5 +303,101 @@ public class InvestmentInstitutions {
      */
     public void setRepresentative(String representative) {
         this.representative = representative;
+    }
+
+    /**
+     * 获取审核状态，0表示审核未通过，1表示审核通过，默认0
+     *
+     * @return approval_status - 审核状态，0表示审核未通过，1表示审核通过，默认0
+     */
+    public Integer getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    /**
+     * 设置审核状态，0表示审核未通过，1表示审核通过，默认0
+     *
+     * @param approvalStatus 审核状态，0表示审核未通过，1表示审核通过，默认0
+     */
+    public void setApprovalStatus(Integer approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+
+    /**
+     * 获取审核时间，审核时存，其他时候为空
+     *
+     * @return approval_time - 审核时间，审核时存，其他时候为空
+     */
+    public Date getApprovalTime() {
+        return approvalTime;
+    }
+
+    /**
+     * 设置审核时间，审核时存，其他时候为空
+     *
+     * @param approvalTime 审核时间，审核时存，其他时候为空
+     */
+    public void setApprovalTime(Date approvalTime) {
+        this.approvalTime = approvalTime;
+    }
+
+    /**
+     * 获取官网地址
+     *
+     * @return home_url - 官网地址
+     */
+    public String getHomeUrl() {
+        return homeUrl;
+    }
+
+    /**
+     * 设置官网地址
+     *
+     * @param homeUrl 官网地址
+     */
+    public void setHomeUrl(String homeUrl) {
+        this.homeUrl = homeUrl;
+    }
+
+    /**
+     * @return yn
+     */
+    public Integer getYn() {
+        return yn;
+    }
+
+    /**
+     * @param yn
+     */
+    public void setYn(Integer yn) {
+        this.yn = yn;
+    }
+
+    /**
+     * @return sort
+     */
+    public Integer getSort() {
+        return sort;
+    }
+
+    /**
+     * @param sort
+     */
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    /**
+     * @return count
+     */
+    public Integer getCount() {
+        return count;
+    }
+
+    /**
+     * @param count
+     */
+    public void setCount(Integer count) {
+        this.count = count;
     }
 }
