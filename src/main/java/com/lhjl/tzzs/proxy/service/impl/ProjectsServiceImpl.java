@@ -975,11 +975,56 @@ public class ProjectsServiceImpl implements ProjectsService {
             return result;
         }
 
+        Integer xmid = body.get("projectId");
+        //获取项目融资阶段
+        Example projectFinancingLogExample = new Example(ProjectFinancingLog.class);
+        projectFinancingLogExample.and().andEqualTo("projectId",xmid).andEqualTo("status",1);
+        projectFinancingLogExample.setOrderByClause("create_time DESC");
+
+        String financingStage = "";
+
+        List<ProjectFinancingLog> projectFinancingLogList = projectFinancingLogMapper.selectByExample(projectFinancingLogExample);
+        //看看现在的融资历史是否有，有的话拿到融资阶段
+        if (projectFinancingLogList.size()  >  0){
+            financingStage = projectFinancingLogList.get(0).getStage();
+        }else{
+            Example projectFinancingLogListOne = new Example(ProjectFinancingLog.class);
+            projectFinancingLogListOne.and().andEqualTo("projectId",xmid);
+            projectFinancingLogListOne.setOrderByClause("create_time DESC");
+
+            List<ProjectFinancingLog> projectFinancingLogList1 = projectFinancingLogMapper.selectByExample(projectFinancingLogListOne);
+            if (projectFinancingLogList1.size() > 0){
+                financingStage = projectFinancingLogList1.get(0).getStage();
+            }
+        }
+
+
+
+        //获取项目的领域
+        String field = "";
+        Example projectSegExample = new Example(ProjectSegmentation.class);
+        projectSegExample.and().andEqualTo("projectId",xmid);
+        PageHelper pageHelper = new PageHelper();
+        PageHelper.startPage(0,3);
+
+        List<ProjectSegmentation> projectSegmentationList = projectSegmentationMapper.selectByExample(projectSegExample);
+        if (projectSegmentationList.size() > 0){
+            for (ProjectSegmentation ps:projectSegmentationList){
+                field += ps.getSegmentationName();
+                field += " ";
+            }
+        }
+        String fieldEdit = field.substring(0,field.length()-1);
+
         ProjectComplexOutputDto projectComplexOutputDto =new ProjectComplexOutputDto();
         projectComplexOutputDto.setProjectDesc(projects.getKernelDesc());
         projectComplexOutputDto.setProjectId(body.get("projectId"));
         projectComplexOutputDto.setProjectLogo(projects.getProjectLogo());
         projectComplexOutputDto.setProjectShortName(projects.getShortName());
+        projectComplexOutputDto.setSegmentation(fieldEdit);
+        projectComplexOutputDto.setCity(projects.getCity());
+        projectComplexOutputDto.setRound(financingStage);
+
 
         result.setData(projectComplexOutputDto);
         result.setMessage("success");
