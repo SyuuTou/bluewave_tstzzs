@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectRatingDto;
 import com.lhjl.tzzs.proxy.service.ProjectRatingService;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,9 +19,18 @@ public class ProjectRatingController {
     @Resource
     private ProjectRatingService projectRatingService;
 
-    @PostMapping("admin/project/rating")
-    public CommonDto<String> projectRatingLevel(@RequestBody ProjectRatingDto body){
+    //@PostMapping("admin/project/rating")
+    @GetMapping("admin/project/rating")
+    public CommonDto<String> projectRatingLevel(Integer projectId,Integer ratingStage,String ratingDiscription,String ratingAdminName){
         CommonDto<String> result = new CommonDto<>();
+
+        //POST请求改GET请求时将参数转化一下
+        ProjectRatingDto body = new ProjectRatingDto();
+        body.setProjectId(projectId);
+        body.setRatingAdminName(ratingAdminName);
+        body.setRatingDiscription(ratingDiscription);
+        body.setRatingStage(ratingStage);
+
 
         try {
         result = projectRatingService.projectRating(body);
