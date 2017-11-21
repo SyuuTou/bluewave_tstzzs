@@ -49,6 +49,7 @@ public class AdminProjectServiceImpl implements AdminProjectService{
 
         //查询项目
         if (projectType == 0){
+            //查数据导入的项目
             List<Map<String,Object>> projectList = projectsMapper.adminGetProjectListOne(startNum,pageSize,shortName,projectType);
             if (projectList.size() > 0){
                 for (Map<String,Object> map:projectList){
@@ -106,6 +107,7 @@ public class AdminProjectServiceImpl implements AdminProjectService{
             result.setStatus(200);
 
         }else if (projectType == 1){
+            //查用户提交的项目
             List<Map<String,Object>> projectList =projectsMapper.adminGetProjectListTwo(startNum,pageSize,shortName,projectType);
             if (projectList.size() > 0){
                 for (Map<String,Object> map:projectList){
