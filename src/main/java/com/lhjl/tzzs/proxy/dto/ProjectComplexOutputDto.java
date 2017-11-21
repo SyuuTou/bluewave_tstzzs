@@ -18,6 +18,45 @@ public class ProjectComplexOutputDto {
      */
     private String projectLogo;
 
+    /**
+     * 细分领域
+     */
+    private String segmentation;
+
+    /**
+     * 地域
+     */
+    private String city;
+
+    /**
+     * 轮次
+     */
+    private String round;
+
+    public String getSegmentation() {
+        return segmentation;
+    }
+
+    public void setSegmentation(String segmentation) {
+        this.segmentation = segmentation;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getRound() {
+        return round;
+    }
+
+    public void setRound(String round) {
+        this.round = round;
+    }
+
     public String getProjectShortName() {
         return projectShortName;
     }
