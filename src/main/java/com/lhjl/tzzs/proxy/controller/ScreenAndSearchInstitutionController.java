@@ -58,7 +58,7 @@ public class ScreenAndSearchInstitutionController {
                 pageNum = 1;
             }
             if (pageSize == null) {
-                pageSize = 10;
+                pageSize = 20;
             }
 
             result = screenAndSearchInstitutionService.searchInstitution(shortName, pageNum, pageSize, token);
