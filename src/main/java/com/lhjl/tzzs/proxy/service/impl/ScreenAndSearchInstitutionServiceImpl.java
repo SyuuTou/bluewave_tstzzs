@@ -94,8 +94,6 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                         workArray2 = b.toArray(workArray2);
                     }
                     d.setSendyn(false);
-                    //查询是否投递过项目
-
                     for (int e : workArray2) {
                         if (e == d.getId()) {
                             d.setSendyn(true);
