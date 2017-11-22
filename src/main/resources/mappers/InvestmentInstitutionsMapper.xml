@@ -77,7 +77,7 @@
     </if>
   </select>
 
-  <select id="findeInvestmentByShortName" parameterType="String" resultMap="BaseResultMap">
+  <select id="findeInvestmentByShortName" resultMap="BaseResultMap">
     select * from investment_institutions where 1=1
     <if test="shortName != null and shortName !=''">
       and short_name like concat(concat("%",#{shortName}),"%")
