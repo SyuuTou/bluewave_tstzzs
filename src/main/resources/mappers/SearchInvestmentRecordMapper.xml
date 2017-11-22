@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.SearchInvestmentRecordMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.SearchInvestmentRecord">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="amout" jdbcType="INTEGER" property="amout" />
+  </resultMap>
+
+  <select id="serachInstitutionRecord" resultMap="BaseResultMap">
+  SELECT * FROM search_investment_record WHERE   user_id=#{userId}
+  ORDER BY create_time DESC
+  LIMIT 8
+  </select>
+
+  <select id="serachInstitutionHot" resultMap="BaseResultMap">
+         SELECT short_name ,IFNULL(SUM(amout),0) amout FROM search_investment_record
+         GROUP BY short_name
+         ORDER BY amout DESC
+         LIMIT 8
+  </select>
+
+</mapper>
