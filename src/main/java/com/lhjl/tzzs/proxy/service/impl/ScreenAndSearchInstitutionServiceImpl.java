@@ -41,7 +41,6 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
     @Autowired
     private ProjectSendLogsMapper projectSendLogsMapper;
 
-    @Autowired
 
     /**
      * 搜索机构列表
@@ -102,7 +101,6 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                 } else {
                     d.setSendyn(false);
                 }
-
             }
             //判断用户的token
             if (userToken != null) {
