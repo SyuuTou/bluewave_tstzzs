@@ -41,6 +41,9 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
     @Autowired
     private ProjectSendLogsMapper projectSendLogsMapper;
 
+  /*  @Autowired
+    private InvestmentInstitutionInformationMapper investmentInstitutionInformationMapper;*/
+
 
     /**
      * 搜索机构列表
@@ -98,8 +101,42 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                             d.setSendyn(true);
                         }
                     }
+                    /*InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
+                    List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
+                    if(list1.size()>0){
+                        List<String> e = new LinkedList<String>();
+                        String[] workArray3 = null;
+                        for (InvestmentInstitutionInformation c : list1) {
+                            e.add(c.getShortName());
+                            workArray3 = new String[e.size()];
+                            workArray3 = e.toArray(workArray3);
+                        }
+                        for (String f : workArray3) {
+                            if (f.equals(d.getShortName())) {
+                                d.setSendyn(true);
+                            }
+                        }
+                    }*/
                 } else {
                     d.setSendyn(false);
+                    //判断投资人
+                    /*InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
+                    List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
+                    if(list1.size()>0){
+                        List<String> e = new LinkedList<String>();
+                        String[] workArray3 = null;
+                        for (InvestmentInstitutionInformation c : list1) {
+                            e.add(c.getShortName());
+                            workArray3 = new String[e.size()];
+                            workArray3 = e.toArray(workArray3);
+                        }
+                        for (String f : workArray3) {
+                            if (f.equals(d.getShortName())) {
+                                d.setSendyn(true);
+                            }
+                        }
+                    }*/
+
                 }
             }
             //判断用户的token
@@ -487,8 +524,40 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                             d.setSendyn(true);
                         }
                     }
+                     /*InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
+                    List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
+                    if(list1.size()>0){
+                        List<String> e = new LinkedList<String>();
+                        String[] workArray3 = null;
+                        for (InvestmentInstitutionInformation c : list1) {
+                            e.add(c.getShortName());
+                            workArray3 = new String[e.size()];
+                            workArray3 = e.toArray(workArray3);
+                        }
+                        for (String f : workArray3) {
+                            if (f.equals(d.getShortName())) {
+                                d.setSendyn(true);
+                            }
+                        }
+                    }*/
                 }else{
                     d.setSendyn(false);
+                     /*InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
+                    List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
+                    if(list1.size()>0){
+                        List<String> e = new LinkedList<String>();
+                        String[] workArray3 = null;
+                        for (InvestmentInstitutionInformation c : list1) {
+                            e.add(c.getShortName());
+                            workArray3 = new String[e.size()];
+                            workArray3 = e.toArray(workArray3);
+                        }
+                        for (String f : workArray3) {
+                            if (f.equals(d.getShortName())) {
+                                d.setSendyn(true);
+                            }
+                        }
+                    }*/
                 }
 
             }
