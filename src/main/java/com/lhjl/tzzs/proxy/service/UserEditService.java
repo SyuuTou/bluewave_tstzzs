@@ -18,4 +18,5 @@ public interface UserEditService {
     CommonDto<Map<String,Object>> getUserInfo(String token);
     CommonDto<Map<String,Object>> userInfoYn(String token);
     CommonDto<Map<String,Object>> userInfoPerfectYn(String token);
+    CommonDto<UserSetPasswordOutputDto> editUserMessage(UserSetPasswordInputDto body);
 }
