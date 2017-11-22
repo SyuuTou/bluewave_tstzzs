@@ -946,6 +946,7 @@ public class UserEditImpl implements UserEditService {
         return result;
     }
 
+    @Transactional
     @Override
     public CommonDto<UserSetPasswordOutputDto> editUserMessage(UserSetPasswordInputDto body){
         CommonDto<UserSetPasswordOutputDto> result = new CommonDto<>();
