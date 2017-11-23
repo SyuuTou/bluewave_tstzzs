@@ -122,7 +122,7 @@ public class InvesmentInformationController {
      * 查询 已投递/推荐的机构 投资人
      * @return
      */
-    @PostMapping("find/recommend/investor")
+   /* @PostMapping("find/recommend/investor")
     public CommonDto<List<InvestmentInstitutionsDto>> findRecommendInvestor(@RequestBody SaveInformationDto body){
         CommonDto<List<InvestmentInstitutionsDto>> result = new CommonDto<List<InvestmentInstitutionsDto>>();
         String token =body.getToken();
@@ -140,6 +140,6 @@ public class InvesmentInformationController {
             log.error(e.getMessage(),e.fillInStackTrace());
         }
         return result;
-    }
+    }*/
 
 }
