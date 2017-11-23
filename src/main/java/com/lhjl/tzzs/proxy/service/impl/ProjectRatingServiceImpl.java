@@ -3,14 +3,8 @@ package com.lhjl.tzzs.proxy.service.impl;
 import com.lhjl.tzzs.proxy.dto.AdminCreatProjectDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectRatingDto;
-import com.lhjl.tzzs.proxy.mapper.AdminProjectApprovalLogMapper;
-import com.lhjl.tzzs.proxy.mapper.AdminProjectRatingLogMapper;
-import com.lhjl.tzzs.proxy.mapper.ProjectFinancingInvestmentInstitutionRelationshipMapper;
-import com.lhjl.tzzs.proxy.mapper.ProjectSendLogsMapper;
-import com.lhjl.tzzs.proxy.model.AdminProjectApprovalLog;
-import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
-import com.lhjl.tzzs.proxy.model.ProjectFinancingInvestmentInstitutionRelationship;
-import com.lhjl.tzzs.proxy.model.ProjectSendLogs;
+import com.lhjl.tzzs.proxy.mapper.*;
+import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.ProjectRatingService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +31,9 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
 
     @Autowired
     private AdminProjectApprovalLogMapper adminProjectApprovalLogMapper;
+
+    @Autowired
+    private UserTokenMapper userTokenMapper;
 
     @Override
     public CommonDto<String> projectRating(ProjectRatingDto body){
@@ -162,6 +159,23 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
         }else {
             AdminCreatProjectDto adminCreatProjectDto = new AdminCreatProjectDto();
 
+            //获取到用户token;
+            Example userTokenExample = new Example(UserToken.class);
+            userTokenExample.and().andEqualTo("userId",projectSendLogs.getUserid());
+
+            List<UserToken> userTokenList = userTokenMapper.selectByExample(userTokenExample);
+
+            String userToken = "";
+            if (userTokenList.size() > 0){
+                userToken = userTokenList.get(0).getToken();
+            }else {
+                result.setStatus(502);
+                result.setMessage("没有找到用户id对应的token");
+                result.setData(null);
+
+                return result;
+            }
+
             //找到推荐的机构信息，然后放到返回数据里面去
             Example pfiirExample = new Example(ProjectFinancingInvestmentInstitutionRelationship.class);
             pfiirExample.and().andEqualTo("projectSendLogId",soruceId);
@@ -173,7 +187,7 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
                    list.add(pfii.getInvestmentInstitutionId());
                 }
                 adminCreatProjectDto.setInvestmentInstitutionIds(list);
-                adminCreatProjectDto.setProjectCreaterId(projectSendLogs.getUserid());
+                adminCreatProjectDto.setProjectCreaterId(userToken);
 
                 result.setStatus(200);
                 result.setData(adminCreatProjectDto);
@@ -181,7 +195,7 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
             }else {
                 //没有机构的时候返回空数组
                 List<Integer> list = new ArrayList<>();
-                adminCreatProjectDto.setProjectCreaterId(projectSendLogs.getUserid());
+                adminCreatProjectDto.setProjectCreaterId(userToken);
                 adminCreatProjectDto.setInvestmentInstitutionIds(list);
 
                 result.setMessage("success");
@@ -219,7 +233,7 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
                     //没找到提交记录信息
                     List<Integer> list =new ArrayList<>();
                     adminCreatProjectDto.setInvestmentInstitutionIds(list);
-                    adminCreatProjectDto.setProjectCreaterId(-1);
+                    adminCreatProjectDto.setProjectCreaterId("");
 
                     result.setData(adminCreatProjectDto);
                     result.setMessage("没有找到该项目的提交记录");
@@ -231,6 +245,23 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
                     //找到后根据项目提交记录找到，提交的机构记录
                     List<Integer> list =new ArrayList<>();
 
+                    //获取到用户token;
+                    Example userTokenExample = new Example(UserToken.class);
+                    userTokenExample.and().andEqualTo("userId",projectSendLogs.getUserid());
+
+                    List<UserToken> userTokenList = userTokenMapper.selectByExample(userTokenExample);
+
+                    String userToken = "";
+                    if (userTokenList.size() > 0){
+                        userToken = userTokenList.get(0).getToken();
+                    }else {
+                        result.setStatus(502);
+                        result.setMessage("没有找到用户id对应的token");
+                        result.setData(null);
+
+                        return result;
+                    }
+
                     //查询机构信息
                     Example pfiirExample = new Example(ProjectFinancingInvestmentInstitutionRelationship.class);
                     pfiirExample.and().andEqualTo("projectSendLogId",projectSendLogs.getId());
@@ -240,14 +271,14 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
                             list.add(pfi.getInvestmentInstitutionId());
                         }
                         adminCreatProjectDto.setInvestmentInstitutionIds(list);
-                        adminCreatProjectDto.setProjectCreaterId(projectSendLogs.getUserid());
+                        adminCreatProjectDto.setProjectCreaterId(userToken);
 
                         result.setStatus(200);
                         result.setMessage("success");
                         result.setData(adminCreatProjectDto);
 
                     }else {
-                        adminCreatProjectDto.setProjectCreaterId(projectSendLogs.getUserid());
+                        adminCreatProjectDto.setProjectCreaterId(userToken);
                         adminCreatProjectDto.setInvestmentInstitutionIds(list);
 
                         result.setData(adminCreatProjectDto);

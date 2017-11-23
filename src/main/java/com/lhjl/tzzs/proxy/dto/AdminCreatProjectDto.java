@@ -6,18 +6,18 @@ public class AdminCreatProjectDto {
     /**
      * 项目提交人id
      */
-    private Integer projectCreaterId;
+    private String projectCreaterId;
 
     /**
      * 项目提交机构列表
      */
     private List<Integer> investmentInstitutionIds;
 
-    public Integer getProjectCreaterId() {
+    public String getProjectCreaterId() {
         return projectCreaterId;
     }
 
-    public void setProjectCreaterId(Integer projectCreaterId) {
+    public void setProjectCreaterId(String projectCreaterId) {
         this.projectCreaterId = projectCreaterId;
     }
 
