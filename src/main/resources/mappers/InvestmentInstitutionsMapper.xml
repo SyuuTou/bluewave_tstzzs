@@ -1,88 +1,219 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper">
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutions">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="ID" jdbcType="INTEGER" property="id" />
-    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
-    <result column="commet" jdbcType="VARCHAR" property="commet" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="logo" jdbcType="VARCHAR" property="logo" />
-    <result column="case_url" jdbcType="VARCHAR" property="caseUrl" />
-    <result column="kenel_case" jdbcType="VARCHAR" property="kenelCase" />
-    <result column="comment" jdbcType="VARCHAR" property="comment" />
-    <result column="city" jdbcType="VARCHAR" property="city" />
-    <result column="stage" jdbcType="VARCHAR" property="stage" />
-    <result column="representative" jdbcType="VARCHAR" property="representative" />
-    <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
-    <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
-    <result column="home_url" jdbcType="VARCHAR" property="homeUrl" />
-    <result column="yn" jdbcType="INTEGER" property="yn" />
-    <result column="sort" jdbcType="INTEGER" property="sort" />
-    <result column="count" jdbcType="INTEGER" property="count" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutions">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="ID" jdbcType="INTEGER" property="id" />
+        <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+        <result column="commet" jdbcType="VARCHAR" property="commet" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="type" jdbcType="INTEGER" property="type" />
+        <result column="logo" jdbcType="VARCHAR" property="logo" />
+        <result column="case_url" jdbcType="VARCHAR" property="caseUrl" />
+        <result column="kenel_case" jdbcType="VARCHAR" property="kenelCase" />
+        <result column="comment" jdbcType="VARCHAR" property="comment" />
+        <result column="city" jdbcType="VARCHAR" property="city" />
+        <result column="stage" jdbcType="VARCHAR" property="stage" />
+        <result column="representative" jdbcType="VARCHAR" property="representative" />
+        <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
+        <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
+        <result column="home_url" jdbcType="VARCHAR" property="homeUrl" />
+        <result column="yn" jdbcType="INTEGER" property="yn" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="count" jdbcType="INTEGER" property="count" />
+        <result column="home_url" jdbcType="VARCHAR" property="homeUrl" />
+        <result column="yn" jdbcType="INTEGER" property="yn" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="count" jdbcType="INTEGER" property="count" />
 
-  <resultMap id="BaseResultMapNew" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsNew">
+    </resultMap>
 
-    <id column="ID" jdbcType="INTEGER" property="id" />
-    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
-    <result column="commet" jdbcType="VARCHAR" property="commet" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="logo" jdbcType="VARCHAR" property="logo" />
-    <result column="case_url" jdbcType="VARCHAR" property="caseUrl" />
-    <result column="kenel_case" jdbcType="VARCHAR" property="kenelCase" />
-    <result column="comment" jdbcType="VARCHAR" property="comment" />
-    <result column="city" jdbcType="VARCHAR" property="city" />
-    <result column="stage" jdbcType="VARCHAR" property="stage" />
-    <result column="representative" jdbcType="VARCHAR" property="representative" />
-    <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
-    <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
-    <!--自定义字段，数据库中不存在，表示投资项目数量-->
-    <result column="projects_num" jdbcType="INTEGER" property="projectsNum" />
-  </resultMap>
+    <resultMap id="BaseResultMapNew" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsNew">
 
-  <insert id="add" keyProperty="id" parameterType="com.lhjl.tzzs.proxy.model.InvestmentInstitutions" useGeneratedKeys="true">
-    insert into investment_institutions(short_name, commet,create_time) values(#{shortName}, #{commet}, #{createTime} )
-  </insert>
+        <id column="ID" jdbcType="INTEGER" property="id" />
+        <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+        <result column="commet" jdbcType="VARCHAR" property="commet" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="type" jdbcType="INTEGER" property="type" />
+        <result column="logo" jdbcType="VARCHAR" property="logo" />
+        <result column="case_url" jdbcType="VARCHAR" property="caseUrl" />
+        <result column="kenel_case" jdbcType="VARCHAR" property="kenelCase" />
+        <result column="comment" jdbcType="VARCHAR" property="comment" />
+        <result column="city" jdbcType="VARCHAR" property="city" />
+        <result column="stage" jdbcType="VARCHAR" property="stage" />
+        <result column="representative" jdbcType="VARCHAR" property="representative" />
+        <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
+        <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
+        <!--自定义字段，数据库中不存在，表示投资项目数量-->
+        <result column="projects_num" jdbcType="INTEGER" property="projectsNum" />
+    </resultMap>
 
-  <select id="findByInvestmentShortNameAll" parameterType="String" resultType="java.util.HashMap">
-    SELECT b.*,
-    (SELECT COUNT(*) FROM follow_investment a WHERE a.investment_id = b.`ID` AND a.yn = 1)num,
-    (SELECT MAX(f.yn)s FROM follow_investment f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.investment_id = b.`ID` GROUP BY f.investment_id )yn
-    FROM investment_institutions b
-    WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
-  </select>
 
-  <select id="findInvestment50" resultType="java.util.HashMap">
-    SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case, ii.count cc
-    FROM investment_institutions ii
-    WHERE ii.type = 1 AND  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null
-    ORDER BY ii.sort
-    <if test="beginNum != null and pageSize != null">
-      LIMIT #{beginNum},#{pageSize}
-    </if>
-  </select>
+    <resultMap id="newDtoMap" type="com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="ID" jdbcType="INTEGER" property="id" />
+        <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+        <result column="commet" jdbcType="VARCHAR" property="commet" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="type" jdbcType="INTEGER" property="type" />
+        <result column="logo" jdbcType="VARCHAR" property="logo" />
+        <result column="case_url" jdbcType="VARCHAR" property="caseUrl" />
+        <result column="kenel_case" jdbcType="VARCHAR" property="kenelCase" />
+        <result column="comment" jdbcType="VARCHAR" property="comment" />
+        <result column="city" jdbcType="VARCHAR" property="city" />
+        <result column="stage" jdbcType="VARCHAR" property="stage" />
+        <result column="representative" jdbcType="VARCHAR" property="representative" />
+        <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
+        <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
+        <result column="home_url" jdbcType="VARCHAR" property="homeUrl" />
+        <result column="yn" jdbcType="INTEGER" property="yn" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="count" jdbcType="INTEGER" property="count" />
+        <result column="home_url" jdbcType="VARCHAR" property="homeUrl" />
+        <result column="yn" jdbcType="INTEGER" property="yn" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="count" jdbcType="INTEGER" property="count" />
 
-  <select id="findInvestmentall" resultType="java.util.HashMap">
-      SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case, ii.count cc
-      FROM investment_institutions ii
-      WHERE  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null
-      ORDER BY ii.sort
-    <if test="beginNum != null and pageSize != null">
-      LIMIT #{beginNum},#{pageSize}
-    </if>
-  </select>
+    </resultMap>
+    <insert id="add" keyProperty="id" parameterType="com.lhjl.tzzs.proxy.model.InvestmentInstitutions" useGeneratedKeys="true">
+        insert into investment_institutions(short_name, commet,create_time) values(#{shortName}, #{commet}, #{createTime} )
+    </insert>
 
-  <select id="findeInvestmentByShortName" resultMap="BaseResultMap">
-    select * from investment_institutions where 1=1
-    <if test="shortName != null and shortName !=''">
-      and short_name like concat(concat("%",#{shortName}),"%")
-    </if>
-    order by sort desc
-    limit #{startPage},#{pageSize}
-  </select>
+    <select id="findByInvestmentShortNameAll" parameterType="String" resultType="java.util.HashMap">
+        SELECT b.*,
+        (SELECT COUNT(*) FROM follow_investment a WHERE a.investment_id = b.`ID` AND a.yn = 1)num,
+        (SELECT MAX(f.yn)s FROM follow_investment f WHERE f.user_id = #{userId, jdbcType=VARCHAR} AND f.investment_id = b.`ID` GROUP BY f.investment_id )yn
+        FROM investment_institutions b
+        WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+    </select>
+
+    <select id="findInvestment50" resultType="java.util.HashMap">
+        SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case, ii.count cc
+        FROM investment_institutions ii
+        WHERE ii.type = 1 AND  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null
+        ORDER BY ii.sort
+        <if test="beginNum != null and pageSize != null">
+            LIMIT #{beginNum},#{pageSize}
+        </if>
+    </select>
+
+    <select id="findInvestmentall" resultType="java.util.HashMap">
+        SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case, ii.count cc
+        FROM investment_institutions ii
+        WHERE  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null
+        ORDER BY ii.sort
+        <if test="beginNum != null and pageSize != null">
+            LIMIT #{beginNum},#{pageSize}
+        </if>
+    </select>
+
+    <select id="findeInvestmentByShortName" parameterType="String" resultMap="BaseResultMap">
+        select * from investment_institutions where 1=1
+        <if test="shortName != null and shortName !=''">
+            and short_name like concat(concat("%",#{shortName}),"%")
+        </if>
+        order by sort desc
+        limit #{startPage},#{pageSize}
+    </select>
+    <select id="serachInstitution" resultMap="newDtoMap">
+        SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.count,ii.sort FROM
+        (SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case, ii.count,ii.sort
+        FROM investment_institutions ii
+        WHERE  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count IS NOT NULL
+        AND ii.short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+        UNION ALL
+        SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case, ii.count,ii.sort
+        FROM investment_institutions ii
+        WHERE  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count IS NOT NULL
+        AND ii.kenel_case LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')) ii
+        GROUP BY ii.short_name
+        ORDER BY ii.sort
+        LIMIT #{beginNum},#{pageSize}
+    </select>
+
+    <select id="screenInstitutionAll" resultMap="newDtoMap">
+        SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.count,ii.sort FROM
+        investment_institutions ii
+        WHERE  1=1
+        <if test=" types !='' and types != null">
+            AND ii.type IN
+            <foreach close=")" collection="types" index="index" item="item" open="(" separator=",">#{item}</foreach>
+        </if>
+        <if test=" workArray !='' and workArray != null">
+            AND ii.id IN
+            <foreach close=")" collection="workArray" index="index" item="item" open="(" separator=",">#{item}</foreach>
+        </if>
+        AND ii.logo IS NOT NULL AND ii.logo != '' AND ii.count IS NOT NULL
+        GROUP BY ii.short_name
+        ORDER BY ii.sort
+        LIMIT #{beginNum},#{pageSize}
+    </select>
+
+    <select id="serachSendProjectId"  resultType="int">
+        SELECT investment_institution_id FROM  project_financing_investment_institution_relationship WHERE
+        project_send_log_id IN
+        <foreach close=")" collection="workArray1" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </select>
+
+    <select id="findInvestment50New" resultMap="newDtoMap">
+        SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case, ii.count cc
+        FROM investment_institutions ii
+        WHERE ii.type = 1 AND  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null
+        ORDER BY ii.sort
+        <if test="beginNum != null and pageSize != null">
+            LIMIT #{beginNum},#{pageSize}
+        </if>
+    </select>
+
+    <select id="findInvestmentallNew" resultMap="newDtoMap">
+        SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case, ii.count cc
+        FROM investment_institutions ii
+        WHERE  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null
+        ORDER BY ii.sort
+        <if test="beginNum != null and pageSize != null">
+            LIMIT #{beginNum},#{pageSize}
+        </if>
+    </select>
+    <select id="deliverySendProjectId"  resultType="int">
+       SELECT investment_institution_id FROM  project_financing_investment_institution_relationship WHERE
+        project_send_log_id IN
+        <foreach close=")" collection="workArray1" index="index" item="item" open="(" separator=",">#{item}</foreach>
+         ORDER BY  associated_time DESC
+    </select>
+    <select id="findRecommendAll"   resultMap="newDtoMap">
+        SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.count,ii.sort FROM
+        investment_institutions ii
+        WHERE  1=1
+        <!--<if test=" types !='' and types != null">
+            AND ii.type IN
+            <foreach close=")" collection="types" index="index" item="item" open="(" separator=",">#{item}</foreach>
+        </if>-->
+        <if test=" workArray2 !='' and workArray2 != null">
+            AND ii.id IN
+            <foreach close=")" collection="workArray2" index="index" item="item" open="(" separator=",">#{item}</foreach>
+        </if>
+        AND ii.logo IS NOT NULL AND ii.logo != '' AND ii.count IS NOT NULL
+        GROUP BY ii.short_name
+        ORDER BY ii.sort
+    </select>
+    <select id="findRecommendInvestor"   resultMap="newDtoMap">
+        SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.count,ii.sort FROM
+        investment_institutions ii
+        WHERE  1=1
+        <!--<if test=" types !='' and types != null">
+            AND ii.type IN
+            <foreach close=")" collection="types" index="index" item="item" open="(" separator=",">#{item}</foreach>
+        </if>-->
+        <if test=" workArray3 !='' and workArray3 != null">
+            AND ii.short_name IN
+            <foreach close=")" collection="workArray3" index="index" item="item" open="(" separator=",">#{item}</foreach>
+        </if>
+        AND ii.logo IS NOT NULL AND ii.logo != '' AND ii.count IS NOT NULL
+        GROUP BY ii.short_name
+        ORDER BY ii.sort
+    </select>
 </mapper>

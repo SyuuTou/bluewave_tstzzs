@@ -72,6 +72,14 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
      * @return
      */
     List<Map<String,Object>> adminGetProjectListTwo(@Param("startNum") Integer startNum,@Param("pageSize") Integer pageSize,@Param("shortName") String shortName,@Param("projectType") Integer projectType);
+
+    /**
+     * 获得机构的id
+     * @param domains
+     * @param stages
+     * @return
+     */
+    List<Integer>screenInvestmentAll(@Param("domains")String [] domains,@Param("stages")String [] stages);
 }
 
 

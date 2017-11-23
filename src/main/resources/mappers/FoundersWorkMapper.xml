@@ -8,4 +8,14 @@
     <result column="founder_id" property="founderId" jdbcType="INTEGER" />
     <result column="work_experience" property="workExperience" jdbcType="VARCHAR" />
   </resultMap>
+
+  <select id="findFounderWorkIntelligent" resultType="java.util.HashMap">
+    select *,count(work_experience) as cnt from founders_work
+    where work_experience != ""
+    <if test="inputsWords !=null and inputsWords !=''">
+      and work_experience like concat(concat("%",#{inputsWords}),"%")
+    </if>
+    group by work_experience
+    order by cnt desc
+  </select>
 </mapper>
