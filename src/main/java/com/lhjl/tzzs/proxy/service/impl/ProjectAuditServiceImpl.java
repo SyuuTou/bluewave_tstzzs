@@ -189,6 +189,7 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
                 projects.setShortName(projectSendLogs.getCompanyShortName());
                 List<Projects> projectsListForC =projectsMapper.select(projects);
                 if (projectsListForC.size() > 0){
+                    //如果项目已经存在直接修改记录为已审核
                     Integer checkStatusU = 0;
                     switch (body.getAuditStatus()){
                         case 0:checkStatusU=5;
@@ -201,6 +202,10 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
                     projectSendLogsForUpdateU.setCheckStatus(checkStatusU);
                     projectSendLogsForUpdateU.setCheckTime(now);
                     projectSendLogsMapper.updateByPrimaryKeySelective(projectSendLogsForUpdateU);
+
+                    result.setStatus(200);
+                    result.setMessage("hasproject");
+                    result.setData(null);
                 }else{
                     result  = projectAuditOfTypeOne(body);
                 }
@@ -211,6 +216,7 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
                 projects.setShortName(projectSendLogs.getShortName());
                 List<Projects> projectsListForC =projectsMapper.select(projects);
                 if (projectsListForC.size() > 0){
+                    //如果项目已存在直接修改审核记录
                     Integer checkStatusU = 0;
                     switch (body.getAuditStatus()){
                         case 0:checkStatusU=5;
@@ -223,6 +229,11 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
                     projectSendLogsForUpdateU.setAuditYn(checkStatusU);
                     projectSendLogsForUpdateU.setAuditTime(now);
                     investmentDataLogMapper.updateByPrimaryKeySelective(projectSendLogsForUpdateU);
+
+                    result.setStatus(200);
+                    result.setMessage("success");
+                    result.setData(null);
+
                 }else{
                     result = projectAuditOfTypeTwo(body);
                 }
@@ -232,7 +243,7 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
                 result.setStatus(50001);
             }
         }else {
-            //未知状态
+            //未知审核结果状态
             result.setMessage("审核结果类型非法");
             result.setData(null);
             result.setStatus(50001);
