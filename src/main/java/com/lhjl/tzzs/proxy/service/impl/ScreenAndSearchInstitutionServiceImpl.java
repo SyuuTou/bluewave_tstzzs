@@ -26,8 +26,8 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
 
     @Autowired
     private SearchInvestmentRecordMapper searchInvestmentRecordMapper;
-    
-    
+
+
     @Autowired
     private ScreenInvestmentRecordMapper  screenInvestmentRecordMapper;
 
@@ -41,8 +41,8 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
     @Autowired
     private ProjectSendLogsMapper projectSendLogsMapper;
 
-  /*  @Autowired
-    private InvestmentInstitutionInformationMapper investmentInstitutionInformationMapper;*/
+    @Autowired
+    private InvestmentInstitutionInformationMapper investmentInstitutionInformationMapper;
 
 
     /**
@@ -50,7 +50,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
      */
     @Override
     public CommonDto<List<InvestmentInstitutionsDto>> searchInstitution(String shortName, Integer pageNum,
-                                                                     Integer pageSize, String token) {
+                                                                        Integer pageSize, String token) {
         CommonDto<List<InvestmentInstitutionsDto>>  result = new CommonDto<List<InvestmentInstitutionsDto>>  ();
         Map<String,Object> map =new HashedMap();
         List<InvestmentInstitutionsDto> list = new ArrayList<>();
@@ -101,7 +101,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                             d.setSendyn(true);
                         }
                     }
-                    /*InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
+                    InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
                     List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
                     if(list1.size()>0){
                         List<String> e = new LinkedList<String>();
@@ -116,11 +116,11 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                                 d.setSendyn(true);
                             }
                         }
-                    }*/
+                    }
                 } else {
                     d.setSendyn(false);
                     //判断投资人
-                    /*InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
+                    InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
                     List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
                     if(list1.size()>0){
                         List<String> e = new LinkedList<String>();
@@ -135,7 +135,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                                 d.setSendyn(true);
                             }
                         }
-                    }*/
+                    }
 
                 }
             }
@@ -175,8 +175,8 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
      * @param token
      * @return
      */
-	@Override
-	public CommonDto<List<SearchInvestmentRecord>> searchInstitutionRecord(String token) {
+    @Override
+    public CommonDto<List<SearchInvestmentRecord>> searchInstitutionRecord(String token) {
         CommonDto<List<SearchInvestmentRecord>> result = new CommonDto<List<SearchInvestmentRecord>>();
         List<SearchInvestmentRecord> list = new ArrayList<>();
         //插入记录表信息
@@ -192,156 +192,41 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
             result.setMessage("token不存在");
         }
         result.setData(list);
-		return result;
-	}
-     /***
-      * 查询热门的搜索8条
-      */
-	@Override
-	public CommonDto<List<SearchInvestmentRecord>> searchInstitutionHot() {
-		CommonDto<List<SearchInvestmentRecord>> result = new CommonDto<List<SearchInvestmentRecord>>();
+        return result;
+    }
+    /***
+     * 查询热门的搜索8条
+     */
+    @Override
+    public CommonDto<List<SearchInvestmentRecord>> searchInstitutionHot() {
+        CommonDto<List<SearchInvestmentRecord>> result = new CommonDto<List<SearchInvestmentRecord>>();
         List<SearchInvestmentRecord> list = new ArrayList<>();
         list=searchInvestmentRecordMapper.serachInstitutionHot();
         result.setData(list);
-		return result;
-	}
-	/**
-	 * 筛选页面回显
-	 */
+        return result;
+    }
+    /**
+     * 筛选页面回显
+     */
 
-	@Override
-	public CommonDto<Map<String, Object>> screenInstitution(String token) {
-		CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
-		Map<String,Object> map = new HashMap<String,Object>();
+    @Override
+    public CommonDto<Map<String, Object>> screenInstitution(String token) {
+        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+        Map<String,Object> map = new HashMap<String,Object>();
         CommonDto<Map<String,List<LabelList>>> data = evaluateService.queryHotData();
-		    UserToken userToken = new UserToken();
-	        userToken.setToken(token);
-	        userToken = userTokenMapper.selectOne(userToken);
-	        if(userToken !=null){
-	            Integer userId=userToken.getUserId();
-	            ScreenInvestmentRecord  screenInvestmentRecord =new ScreenInvestmentRecord();
-	            screenInvestmentRecord.setUserId(userId);
-	            List<ScreenInvestmentRecord> list2 = screenInvestmentRecordMapper.select(screenInvestmentRecord);
-	            //判断是否有数据
-	            if(list2.size()>0){
-                    ScreenInvestmentRecord screenInvestmentRecord1=screenInvestmentRecordMapper.serachScreenRecord(screenInvestmentRecord.getUserId());
-                    //选择的为50机构
-                    if(screenInvestmentRecord1.getInvestmentType() !=null){
-                        List<LabelList> list1 =new LinkedList<>();
-                        LabelList labelList =new LabelList();
-                        labelList.setName("50指数机构");
-                        labelList.setValue("50指数机构");
-                        labelList.setChecked(true);
-                        LabelList labelList1 =new LabelList();
-                        labelList1.setName("行业指数机构");
-                        labelList1.setValue("行业指数机构");
-                        labelList1.setChecked(false);
-                        list1.add(labelList);
-                        list1.add(labelList1);
-                        map.put("investment_type",list1);
-                    }else{
-                        List<LabelList> list1 =new LinkedList<>();
-                        LabelList labelList =new LabelList();
-                        labelList.setName("50指数机构");
-                        labelList.setValue("50指数机构");
-                        labelList.setChecked(false);
-                        LabelList labelList1 =new LabelList();
-                        labelList1.setName("行业指数机构");
-                        labelList1.setValue("行业指数机构");
-                        labelList1.setChecked(true);
-                        list1.add(labelList);
-                        list1.add(labelList1);
-                        map.put("investment_type",list1);
-                    }
-                    //轮次的回显
-                    if(screenInvestmentRecord1.getStage() ==null || "".equals(screenInvestmentRecord1.getStage())) {
-                        List<LabelList> list3 = new LinkedList<>();
-                        LabelList labelList3 = new LabelList();
-                        labelList3.setName("全部");
-                        labelList3.setValue("全部");
-                        labelList3.setChecked(true);
-                        LabelList labelList4 = new LabelList();
-                        labelList4.setName("天使轮");
-                        labelList4.setValue("天使轮");
-                        labelList4.setChecked(false);
-                        LabelList labelList5 = new LabelList();
-                        labelList5.setName("Pre-A轮");
-                        labelList5.setValue("Pre-A轮");
-                        labelList5.setChecked(false);
-                        LabelList labelList6 = new LabelList();
-                        labelList6.setName("A轮");
-                        labelList6.setValue("A轮");
-                        labelList6.setChecked(false);
-                        list3.add(labelList3);
-                        list3.add(labelList4);
-                        list3.add(labelList5);
-                        list3.add(labelList6);
-                        map.put("stage", list3);
-                    }else{
-                        List<LabelList> list3 = new LinkedList<>();
-                        LabelList labelList3 = new LabelList();
-                        labelList3.setName("全部");
-                        labelList3.setValue("全部");
-                        labelList3.setChecked(false);
-                        LabelList labelList4 = new LabelList();
-                        labelList4.setName("天使轮");
-                        labelList4.setValue("天使轮");
-                        labelList4.setChecked(false);
-                        LabelList labelList5 = new LabelList();
-                        labelList5.setName("Pre-A轮");
-                        labelList5.setValue("Pre-A轮");
-                        labelList5.setChecked(false);
-                        LabelList labelList6 = new LabelList();
-                        labelList6.setName("A轮");
-                        labelList6.setValue("A轮");
-                        labelList6.setChecked(false);
-                        list3.add(labelList3);
-                        list3.add(labelList4);
-                        list3.add(labelList5);
-                        list3.add(labelList6);
-                        for (LabelList label :list3) {
-                                String[] industryArray = screenInvestmentRecord1.getStage().split(",");
-                                for (String string : industryArray) {
-                                    if (string.equals(label.getName())){
-                                        label.setChecked(true);
-                                    }
-                                }
-                            }
-                        map.put("stage", list3);
-                        }
-                        //领域回显
-                    if(null == screenInvestmentRecord1.getDomain() || "".equals(screenInvestmentRecord1.getDomain())){
-                        //选择全部时
-                        List<LabelList> industryKeies = data.getData().get("industryKey");
-                        LabelList list =new LabelList();
-                        List<LabelList>  listb =new ArrayList();
-                        list.setName("全部");
-                        list.setValue("全部");
-                        list.setChecked(true);
-                        listb.add(list);
-                        listb.addAll(industryKeies);
-                        map.put("industryKey",listb);
-                    }else {
-                        List<LabelList> industryKeies = data.getData().get("industryKey");
-                        LabelList list =new LabelList();
-                        List<LabelList>  listb =new ArrayList();
-                        list.setName("全部");
-                        list.setValue("全部");
-                        list.setChecked(false);
-                        listb.add(list);
-                        listb.addAll(industryKeies);
-                        for(LabelList labelList : listb){
-                            String [] induAry =screenInvestmentRecord1.getDomain().split(",");
-                            for(String string :induAry){
-                                if(string.equals(labelList.getName())){
-                                    labelList.setChecked(true);
-                                }
-                            }
-                        }
-                        map.put("industryKey",listb);
-                    }
-	            }else{
-	            	//机构类型
+        UserToken userToken = new UserToken();
+        userToken.setToken(token);
+        userToken = userTokenMapper.selectOne(userToken);
+        if(userToken !=null){
+            Integer userId=userToken.getUserId();
+            ScreenInvestmentRecord  screenInvestmentRecord =new ScreenInvestmentRecord();
+            screenInvestmentRecord.setUserId(userId);
+            List<ScreenInvestmentRecord> list2 = screenInvestmentRecordMapper.select(screenInvestmentRecord);
+            //判断是否有数据
+            if(list2.size()>0){
+                ScreenInvestmentRecord screenInvestmentRecord1=screenInvestmentRecordMapper.serachScreenRecord(screenInvestmentRecord.getUserId());
+                //选择的为50机构
+                if(screenInvestmentRecord1.getInvestmentType() !=null){
                     List<LabelList> list1 =new LinkedList<>();
                     LabelList labelList =new LabelList();
                     labelList.setName("50指数机构");
@@ -354,21 +239,36 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     list1.add(labelList);
                     list1.add(labelList1);
                     map.put("investment_type",list1);
-	            	//轮次
-                    List<LabelList> list3 =new LinkedList<>();
-                    LabelList labelList3 =new LabelList();
+                }else{
+                    List<LabelList> list1 =new LinkedList<>();
+                    LabelList labelList =new LabelList();
+                    labelList.setName("50指数机构");
+                    labelList.setValue("50指数机构");
+                    labelList.setChecked(false);
+                    LabelList labelList1 =new LabelList();
+                    labelList1.setName("行业指数机构");
+                    labelList1.setValue("行业指数机构");
+                    labelList1.setChecked(true);
+                    list1.add(labelList);
+                    list1.add(labelList1);
+                    map.put("investment_type",list1);
+                }
+                //轮次的回显
+                if(screenInvestmentRecord1.getStage() ==null || "".equals(screenInvestmentRecord1.getStage())) {
+                    List<LabelList> list3 = new LinkedList<>();
+                    LabelList labelList3 = new LabelList();
                     labelList3.setName("全部");
                     labelList3.setValue("全部");
                     labelList3.setChecked(true);
-                    LabelList labelList4 =new LabelList();
+                    LabelList labelList4 = new LabelList();
                     labelList4.setName("天使轮");
                     labelList4.setValue("天使轮");
                     labelList4.setChecked(false);
-                    LabelList labelList5=new LabelList();
+                    LabelList labelList5 = new LabelList();
                     labelList5.setName("Pre-A轮");
                     labelList5.setValue("Pre-A轮");
                     labelList5.setChecked(false);
-                    LabelList labelList6=new LabelList();
+                    LabelList labelList6 = new LabelList();
                     labelList6.setName("A轮");
                     labelList6.setValue("A轮");
                     labelList6.setChecked(false);
@@ -376,27 +276,127 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     list3.add(labelList4);
                     list3.add(labelList5);
                     list3.add(labelList6);
-                    map.put("stage",list3);
-	            	//领域
-	            	 List<LabelList> industryKeies = data.getData().get("industryKey");
-			    	 LabelList list =new LabelList();
-			    	 List<LabelList>  listb =new ArrayList();
-					 list.setName("全部");
-					 list.setValue("全部");
-					 list.setChecked(true);
-					 listb.add(list);
-					 listb.addAll(industryKeies);
-					 map.put("industryKey",listb);
-	            }
+                    map.put("stage", list3);
+                }else{
+                    List<LabelList> list3 = new LinkedList<>();
+                    LabelList labelList3 = new LabelList();
+                    labelList3.setName("全部");
+                    labelList3.setValue("全部");
+                    labelList3.setChecked(false);
+                    LabelList labelList4 = new LabelList();
+                    labelList4.setName("天使轮");
+                    labelList4.setValue("天使轮");
+                    labelList4.setChecked(false);
+                    LabelList labelList5 = new LabelList();
+                    labelList5.setName("Pre-A轮");
+                    labelList5.setValue("Pre-A轮");
+                    labelList5.setChecked(false);
+                    LabelList labelList6 = new LabelList();
+                    labelList6.setName("A轮");
+                    labelList6.setValue("A轮");
+                    labelList6.setChecked(false);
+                    list3.add(labelList3);
+                    list3.add(labelList4);
+                    list3.add(labelList5);
+                    list3.add(labelList6);
+                    for (LabelList label :list3) {
+                        String[] industryArray = screenInvestmentRecord1.getStage().split(",");
+                        for (String string : industryArray) {
+                            if (string.equals(label.getName())){
+                                label.setChecked(true);
+                            }
+                        }
+                    }
+                    map.put("stage", list3);
+                }
+                //领域回显
+                if(null == screenInvestmentRecord1.getDomain() || "".equals(screenInvestmentRecord1.getDomain())){
+                    //选择全部时
+                    List<LabelList> industryKeies = data.getData().get("industryKey");
+                    LabelList list =new LabelList();
+                    List<LabelList>  listb =new ArrayList();
+                    list.setName("全部");
+                    list.setValue("全部");
+                    list.setChecked(true);
+                    listb.add(list);
+                    listb.addAll(industryKeies);
+                    map.put("industryKey",listb);
+                }else {
+                    List<LabelList> industryKeies = data.getData().get("industryKey");
+                    LabelList list =new LabelList();
+                    List<LabelList>  listb =new ArrayList();
+                    list.setName("全部");
+                    list.setValue("全部");
+                    list.setChecked(false);
+                    listb.add(list);
+                    listb.addAll(industryKeies);
+                    for(LabelList labelList : listb){
+                        String [] induAry =screenInvestmentRecord1.getDomain().split(",");
+                        for(String string :induAry){
+                            if(string.equals(labelList.getName())){
+                                labelList.setChecked(true);
+                            }
+                        }
+                    }
+                    map.put("industryKey",listb);
+                }
+            }else{
+                //机构类型
+                List<LabelList> list1 =new LinkedList<>();
+                LabelList labelList =new LabelList();
+                labelList.setName("50指数机构");
+                labelList.setValue("50指数机构");
+                labelList.setChecked(true);
+                LabelList labelList1 =new LabelList();
+                labelList1.setName("行业指数机构");
+                labelList1.setValue("行业指数机构");
+                labelList1.setChecked(false);
+                list1.add(labelList);
+                list1.add(labelList1);
+                map.put("investment_type",list1);
+                //轮次
+                List<LabelList> list3 =new LinkedList<>();
+                LabelList labelList3 =new LabelList();
+                labelList3.setName("全部");
+                labelList3.setValue("全部");
+                labelList3.setChecked(true);
+                LabelList labelList4 =new LabelList();
+                labelList4.setName("天使轮");
+                labelList4.setValue("天使轮");
+                labelList4.setChecked(false);
+                LabelList labelList5=new LabelList();
+                labelList5.setName("Pre-A轮");
+                labelList5.setValue("Pre-A轮");
+                labelList5.setChecked(false);
+                LabelList labelList6=new LabelList();
+                labelList6.setName("A轮");
+                labelList6.setValue("A轮");
+                labelList6.setChecked(false);
+                list3.add(labelList3);
+                list3.add(labelList4);
+                list3.add(labelList5);
+                list3.add(labelList6);
+                map.put("stage",list3);
+                //领域
+                List<LabelList> industryKeies = data.getData().get("industryKey");
+                LabelList list =new LabelList();
+                List<LabelList>  listb =new ArrayList();
+                list.setName("全部");
+                list.setValue("全部");
+                list.setChecked(true);
+                listb.add(list);
+                listb.addAll(industryKeies);
+                map.put("industryKey",listb);
+            }
 
-	        }else{
-	            result.setStatus(5001);
-	            result.setMessage("token不存在");
-	        }
-		
-		result.setData(map);
-		return result;
-	}
+        }else{
+            result.setStatus(5001);
+            result.setMessage("token不存在");
+        }
+
+        result.setData(map);
+        return result;
+    }
 
     /**
      * 存储筛选的记录
@@ -404,8 +404,8 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
      * @return
      */
     @Transactional
-	@Override
-	public CommonDto<String> savescreenInstitution(SaveScreenDto body) {
+    @Override
+    public CommonDto<String> savescreenInstitution(SaveScreenDto body) {
         CommonDto<String> result=new CommonDto<String>();
         String token =body.getToken();
         UserToken userToken = new UserToken();
@@ -432,16 +432,16 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
             result.setStatus(5001);
             result.setMessage("token不存在");
         }
-		return result;
-	}
+        return result;
+    }
 
     /**
      * 筛选结果页面
      * @param body
      * @return
      */
-	@Override
-	public CommonDto<List<InvestmentInstitutionsDto>> screenInstitutionAll(SaveScreenDto body) {
+    @Override
+    public CommonDto<List<InvestmentInstitutionsDto>> screenInstitutionAll(SaveScreenDto body) {
         CommonDto<List<InvestmentInstitutionsDto>> result = new CommonDto<List<InvestmentInstitutionsDto>>();
         List<InvestmentInstitutionsDto> list = new ArrayList<>();
         String domain = body.getDomain();//领域
@@ -481,21 +481,21 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     types[i] = Integer.parseInt(type2[i]);
                 }
             }
-             List<Integer> integerList =projectsMapper.screenInvestmentAll(domains,stages);
-                //判断是否有符合条件的机构
-                Integer[] workArray = null;
-                if(integerList.size()>0) {
-                    List<Integer> a = new LinkedList<Integer>();
-                    for (Integer d : integerList) {
-                        a.add(d);
-                        workArray = new Integer[a.size()];
-                        workArray = a.toArray(workArray);
-                    }
-                }else{
-                    result.setStatus(5108);
-                    result.setMessage("无查询数据");
+            List<Integer> integerList =projectsMapper.screenInvestmentAll(domains,stages);
+            //判断是否有符合条件的机构
+            Integer[] workArray = null;
+            if(integerList.size()>0) {
+                List<Integer> a = new LinkedList<Integer>();
+                for (Integer d : integerList) {
+                    a.add(d);
+                    workArray = new Integer[a.size()];
+                    workArray = a.toArray(workArray);
                 }
-              //循环插入项目的id
+            }else{
+                result.setStatus(5108);
+                result.setMessage("无查询数据");
+            }
+            //循环插入项目的id
             list=investmentInstitutionsMapper.screenInstitutionAll(workArray,types,beginNum,pageSize);
             for(InvestmentInstitutionsDto d : list){
                 //带回是否投递的状态
@@ -524,7 +524,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                             d.setSendyn(true);
                         }
                     }
-                     /*InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
+                     InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
                     List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
                     if(list1.size()>0){
                         List<String> e = new LinkedList<String>();
@@ -539,10 +539,10 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                                 d.setSendyn(true);
                             }
                         }
-                    }*/
+                    }
                 }else{
                     d.setSendyn(false);
-                     /*InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
+                     InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
                     List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
                     if(list1.size()>0){
                         List<String> e = new LinkedList<String>();
@@ -557,15 +557,15 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                                 d.setSendyn(true);
                             }
                         }
-                    }*/
+                    }
                 }
 
             }
-            } else {
-                result.setStatus(5101);
-                result.setMessage("用户token为空");
-            }
-            result.setData(list);
-            return result;
+        } else {
+            result.setStatus(5101);
+            result.setMessage("用户token为空");
         }
+        result.setData(list);
+        return result;
     }
+}

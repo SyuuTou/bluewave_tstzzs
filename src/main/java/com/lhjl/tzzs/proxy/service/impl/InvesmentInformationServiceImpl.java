@@ -2,9 +2,11 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto;
+import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionInformationMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendLogsMapper;
 import com.lhjl.tzzs.proxy.mapper.UserTokenMapper;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionInformation;
 import com.lhjl.tzzs.proxy.model.ProjectSendLogs;
 import com.lhjl.tzzs.proxy.model.UserToken;
 import com.lhjl.tzzs.proxy.service.InvesmentInformationService;
@@ -37,8 +39,8 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
     @Value("${statistics.endTime}")
     private String endTime;
     
-   /* @Autowired
-    private InvestmentInstitutionInformationMapper investmentInstitutionInformationMapper; */
+    @Autowired
+    private InvestmentInstitutionInformationMapper investmentInstitutionInformationMapper;
     /**
      * 获取50机构信息（分页）
      *
@@ -91,7 +93,7 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
                         d.setSendyn(true);
                     }
                 }
-                 /*InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
+                 InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
                     List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
                     if(list1.size()>0){
                         List<String> e = new LinkedList<String>();
@@ -106,10 +108,10 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
                                 d.setSendyn(true);
                             }
                         }
-                    }*/
+                    }
             } else {
                 d.setSendyn(false);
-                 /*InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
+                 InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
                     List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
                     if(list1.size()>0){
                         List<String> e = new LinkedList<String>();
@@ -124,7 +126,7 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
                                 d.setSendyn(true);
                             }
                         }
-                    }*/
+                    }
             }
         }
         result.setData(list);
@@ -188,7 +190,7 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
                         d.setSendyn(true);
                     }
                 }
-                 /*InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
+                 InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
                     List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
                     if(list1.size()>0){
                         List<String> e = new LinkedList<String>();
@@ -203,10 +205,10 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
                                 d.setSendyn(true);
                             }
                         }
-                    }*/
+                    }
             } else {
                 d.setSendyn(false);
-                 /*InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
+                 InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
                     List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
                     if(list1.size()>0){
                         List<String> e = new LinkedList<String>();
@@ -221,7 +223,7 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
                                 d.setSendyn(true);
                             }
                         }
-                    }*/
+                    }
                 
             }
         }
@@ -288,7 +290,7 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
      * @param token
      * @return
      */
-	/*@Override
+	//**@Override
 	public CommonDto<List<InvestmentInstitutionsDto>> findRecommendInvestor(String token) {
 		 CommonDto<List<InvestmentInstitutionsDto>> result = new CommonDto<List<InvestmentInstitutionsDto>>();
 	        List<InvestmentInstitutionsDto> list =new ArrayList<>();
@@ -323,5 +325,5 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
 		        }
 		        result.setData(list);
 			return result;
-		}*/
+		}
 }

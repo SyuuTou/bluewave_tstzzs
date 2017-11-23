@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Created by zyy on 2017/11/22.
+ * Created by lmy on 2017/11/22.
  */
 @RestController
 public class InvesmentInformationController {
@@ -122,7 +121,7 @@ public class InvesmentInformationController {
      * 查询 已投递/推荐的机构 投资人
      * @return
      */
-   /* @PostMapping("find/recommend/investor")
+    @PostMapping("find/recommend/investor")
     public CommonDto<List<InvestmentInstitutionsDto>> findRecommendInvestor(@RequestBody SaveInformationDto body){
         CommonDto<List<InvestmentInstitutionsDto>> result = new CommonDto<List<InvestmentInstitutionsDto>>();
         String token =body.getToken();
@@ -140,6 +139,6 @@ public class InvesmentInformationController {
             log.error(e.getMessage(),e.fillInStackTrace());
         }
         return result;
-    }*/
+    }
 
 }
