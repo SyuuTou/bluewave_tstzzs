@@ -2,11 +2,9 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto;
-import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionInformationMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendLogsMapper;
 import com.lhjl.tzzs.proxy.mapper.UserTokenMapper;
-import com.lhjl.tzzs.proxy.model.InvestmentInstitutionInformation;
 import com.lhjl.tzzs.proxy.model.ProjectSendLogs;
 import com.lhjl.tzzs.proxy.model.UserToken;
 import com.lhjl.tzzs.proxy.service.InvesmentInformationService;
