@@ -4,7 +4,6 @@ import com.github.pagehelper.Page;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.InvestmentDataService;
-import org.apache.catalina.User;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
