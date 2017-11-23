@@ -18,4 +18,9 @@ public interface InvestmentInstitutionsMapper extends OwnerMapper<InvestmentInst
     List<InvestmentInstitutionsDto> screenInstitutionAll (@Param("workArray") Integer [] workArray,@Param("types") Integer [] types ,@Param("beginNum") Integer beginNum, @Param("pageSize") Integer pageSize);
      List<Integer>serachSendProjectId(@Param("workArray1")Integer [] workArray1);
     List<InvestmentInstitutions> findeInvestmentByShortName(@Param("shortName") String shortName,@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
+    List<InvestmentInstitutionsDto> findInvestment50New(@Param("type") String type, @Param("beginNum") Integer beginNum, @Param("pageSize") Integer pageSize,@Param("beginTime") String beginTime,@Param("endTime") String endTime);
+    List<InvestmentInstitutionsDto> findInvestmentallNew(@Param("type") String type, @Param("beginNum") Integer beginNum, @Param("pageSize") Integer pageSize,@Param("beginTime") String beginTime,@Param("endTime") String endTime);
+    List<Integer>deliverySendProjectId(@Param("workArray1")Integer [] workArray1);
+    List<InvestmentInstitutionsDto>findRecommendAll(@Param("workArray2")Integer [] workArray2);
+    List<InvestmentInstitutionsDto>findRecommendInvestor(@Param("workArray3")String [] workArray3);
 }
