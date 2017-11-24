@@ -160,7 +160,7 @@
     </select>
 
     <select id="findInvestment50New" resultMap="newDtoMap">
-        SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case, ii.count cc
+        SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.count,ii.sort
         FROM investment_institutions ii
         WHERE ii.type = 1 AND  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null
         ORDER BY ii.sort
@@ -170,7 +170,7 @@
     </select>
 
     <select id="findInvestmentallNew" resultMap="newDtoMap">
-        SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case, ii.count cc
+        SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.count,ii.sort
         FROM investment_institutions ii
         WHERE  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null
         ORDER BY ii.sort
