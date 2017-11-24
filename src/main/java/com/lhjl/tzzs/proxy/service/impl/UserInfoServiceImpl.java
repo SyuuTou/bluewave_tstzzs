@@ -31,7 +31,8 @@ public class UserInfoServiceImpl implements UserInfoService{
     private FoundersWorkMapper foundersWorkMapper;
     @Autowired
     private MiniappFormidMapper miniappFormidMapper;
-
+    @Autowired
+    private UserChooseRecordMapper userChooseRecordMapper;
     /**
      * 获取个人资料
      * @param userId 用户ID
@@ -173,9 +174,25 @@ public class UserInfoServiceImpl implements UserInfoService{
 
         list = usersMapper.findUserList(startPage,pageSize);
         for(Map<String,Object> obj :list){
+            //查找用户的最近登录记录
+            if (obj.get("ID") != null){
+                Example userExample = new Example(UserChooseRecord.class);
+                userExample.and().andEqualTo("userId",obj.get("ID"));
+                userExample.setOrderByClause("create_time desc");
+
+                List<UserChooseRecord> userChooseRecordList = userChooseRecordMapper.selectByExample(userExample);
+                if (userChooseRecordList.size() > 0){
+                    String cctime = sdf.format(userChooseRecordList.get(0).getCreateTime());
+                    obj.put("cctime",cctime);
+                }else {
+                    obj.put("cctime","");
+                }
+            }else {
+                obj.put("cctime","");
+            }
+
 
             obj.put("create_time",String.valueOf(obj.get("create_time")));
-            obj.put("cctime",String.valueOf(obj.get("cctime")));
             String investorsType = "未认证或未审核投资人";
             if (obj.get("investors_type") == null){
                 investorsType = "未认证或未审核投资人";
