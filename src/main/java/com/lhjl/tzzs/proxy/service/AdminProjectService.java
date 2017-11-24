@@ -15,4 +15,11 @@ public interface AdminProjectService {
      * @return
      */
     CommonDto<List<Map<String,Object>>> getProjectList(Integer pageNum,Integer pageSize,String shortName,Integer projectType);
+
+    /**
+     * 一键设置没有管理员项目的管理员
+     * @param administractorId 管理员id
+     * @return
+     */
+    CommonDto<String> setProjectAdminOnestep(Integer administractorId);
 }

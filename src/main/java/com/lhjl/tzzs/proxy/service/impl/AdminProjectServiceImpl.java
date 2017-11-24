@@ -1,14 +1,23 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.mapper.ProjectAdministratorMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
+import com.lhjl.tzzs.proxy.mapper.UserTokenMapper;
+import com.lhjl.tzzs.proxy.mapper.UsersMapper;
+import com.lhjl.tzzs.proxy.model.ProjectAdministrator;
+import com.lhjl.tzzs.proxy.model.Projects;
+import com.lhjl.tzzs.proxy.model.UserToken;
+import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.AdminProjectService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +27,15 @@ public class AdminProjectServiceImpl implements AdminProjectService{
 
     @Autowired
     private ProjectsMapper projectsMapper;
+
+    @Autowired
+    private ProjectAdministratorMapper projectAdministratorMapper;
+
+    @Autowired
+    private UsersMapper usersMapper;
+
+    @Autowired
+    private UserTokenMapper userTokenMapper;
 
     @Override
     public CommonDto<List<Map<String,Object>>> getProjectList(Integer pageNum, Integer pageSize, String shortName, Integer projectType){
@@ -171,6 +189,81 @@ public class AdminProjectServiceImpl implements AdminProjectService{
 
             return result;
         }
+
+
+        return result;
+    }
+
+    /**
+     * 一键设置没有管理员项目的管理员
+     * @param administractorId 管理员id
+     * @return
+     */
+    @Override
+    public CommonDto<String> setProjectAdminOnestep(Integer administractorId){
+        CommonDto<String> result = new CommonDto<>();
+
+        if (administractorId == null){
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("管理员id不能为空");
+
+            return result;
+        }
+
+        //先去看看用户是否是有效的
+        Users users = usersMapper.selectByPrimaryKey(administractorId);
+        if (users == null){
+            result.setMessage("该编号对应的管理员不存在");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+        //再判断用户是否被删除了
+        Example userTokenExample = new Example(UserToken.class);
+        userTokenExample.and().andEqualTo("userId",administractorId);
+        List<UserToken> userToken = userTokenMapper.selectByExample(userTokenExample);
+        if (userToken.size() < 1){
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("用户的信息已经被清除了，请检查后重输入");
+
+            return result;
+        }
+
+
+        Date now =new Date();
+        //先获取到项目列表
+        Example projectExample = new Example(Projects.class);
+        projectExample.and().andIsNull("projectSource");
+        List<Projects> projectIdList = projectsMapper.selectByExample(projectExample);
+        if (projectIdList.size() > 0){
+            for (Projects p:projectIdList){
+                //先将该项目的其他管理员删除
+                Example deleteProjectExample = new Example(ProjectAdministrator.class);
+                deleteProjectExample.and().andEqualTo("projectsId",p.getId());
+
+                projectAdministratorMapper.deleteByExample(deleteProjectExample);
+
+                //创建项目的管理员
+                ProjectAdministrator projectAdministrator = new ProjectAdministrator();
+                projectAdministrator.setYn(1);
+                projectAdministrator.setProjectsId(p.getId());
+                projectAdministrator.setCreateTime(now);
+                projectAdministrator.setUserId(administractorId);
+                projectAdministrator.setTypes(1);
+
+                projectAdministratorMapper.insertSelective(projectAdministrator);
+            }
+        }
+
+        log.info("执行完毕");
+
+        result.setMessage("success");
+        result.setStatus(200);
+        result.setData(null);
 
 
         return result;
