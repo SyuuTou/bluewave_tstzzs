@@ -711,7 +711,7 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 		DataLogWork dataLogWork =new DataLogWork();
 		dataLogWork.setLogId(id);
 		List<DataLogWork> work = dataLogWorkMapper.select(dataLogWork);
-		if(work !=null){
+		if(work.size()>0){
 			List<String> a=new LinkedList<String>();
 			String [] workArray =null;
 			for(DataLogWork d:work){
@@ -728,7 +728,7 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 		DataLogEducation  dataLogEducation  =new  DataLogEducation ();
 		dataLogEducation.setLogId(id);
 		List<DataLogEducation> education  = dataLogEducationMapper.select(dataLogEducation );
-		if(work !=null){
+		if(education.size()>0){
 			List<String> a=new LinkedList<String>();
 			String [] educationArray =null;
 			for(DataLogEducation d:education){
