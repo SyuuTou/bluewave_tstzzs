@@ -322,10 +322,11 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 				data.put("meiAmount",investmentInstitutionInformation.getMeiAmount());
 				data.put("renAmountMax",investmentInstitutionInformation.getRenAmountMax());
 				data.put("renAmount",investmentInstitutionInformation.getRenAmount());
+				data.put("renAmountMin",investmentInstitutionInformation.getRenAmountMix());
+				data.put("representative",investmentInstitutionInformation.getRepresentative());
 				data.put("meiAmountMax",investmentInstitutionInformation.getMeiAmountMax());
 				data.put("meiAmountMin",investmentInstitutionInformation.getMeiAmountMix());
 				data.put("oneintroduction",investmentInstitutionInformation.getOneintroduction());
-				data.put("meiAmountMin",investmentInstitutionInformation.getRenAmountMix());
 				data.put("jianjie",investmentInstitutionInformation.getSummary());
 				data.put("shortName",investmentInstitutionInformation.getShortName());
 				//地域
@@ -408,12 +409,13 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 				data.put("meiAmount","");
 				data.put("renAmountMax","");
 				data.put("renAmount","");
+				data.put("renAmountMin","");
 				data.put("meiAmountMax","");
 				data.put("meiAmountMin","");
 				data.put("oneintroduction","");
-				data.put("meiAmountMin","");
 				data.put("jianjie","");
 				data.put("shortName","");
+				data.put("representative","");
 				//地域
 				List<LabelList> cities = hotsdatas.getData().get("cityKey");
 				data.put("cityKey",cities);//城市
