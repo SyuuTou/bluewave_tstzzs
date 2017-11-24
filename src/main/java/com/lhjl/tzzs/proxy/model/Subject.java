@@ -30,6 +30,12 @@ public class Subject {
     private String summary;
 
     /**
+     * 源数据id
+     */
+    @Column(name = "sourceId")
+    private Integer sourceid;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -113,5 +119,23 @@ public class Subject {
      */
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    /**
+     * 获取源数据id
+     *
+     * @return sourceId - 源数据id
+     */
+    public Integer getSourceid() {
+        return sourceid;
+    }
+
+    /**
+     * 设置源数据id
+     *
+     * @param sourceid 源数据id
+     */
+    public void setSourceid(Integer sourceid) {
+        this.sourceid = sourceid;
     }
 }
