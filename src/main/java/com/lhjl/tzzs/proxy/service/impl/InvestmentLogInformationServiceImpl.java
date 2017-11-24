@@ -313,6 +313,7 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 					}
 				}
 				data.put("stage", list3);
+				data.put("stageName", investmentInstitutionInformation.getStage());
 				//公司的logo
 				data.put("logo",investmentInstitutionInformation.getLogo());
 				data.put("city",investmentInstitutionInformation.getCity());
@@ -351,7 +352,7 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 					}
 				}
 				data.put("domain", industrys);
-
+				data.put("domainName",investmentInstitutionInformation.getDomain());
 			}else{
 				List<LabelList> list3 = new LinkedList<>();
 				LabelList labelList3 = new LabelList();
@@ -400,6 +401,7 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 				list3.add(labelList10);
 				list3.add(labelList11);
 				data.put("stage", list3);
+				data.put("stage", "");
 				//公司的logo
 				data.put("logo","");
 				data.put("city","");
@@ -422,6 +424,7 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 				//行业领域
 				List<LabelList> industrys = hotsdatas.getData().get("industryKey");
 				data.put("domain", industrys);
+				data.put("domainName","");
 
 			}
 		}else{
@@ -711,7 +714,7 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 		DataLogWork dataLogWork =new DataLogWork();
 		dataLogWork.setLogId(id);
 		List<DataLogWork> work = dataLogWorkMapper.select(dataLogWork);
-		if(work !=null){
+		if(work.size()>0){
 			List<String> a=new LinkedList<String>();
 			String [] workArray =null;
 			for(DataLogWork d:work){
@@ -728,7 +731,7 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 		DataLogEducation  dataLogEducation  =new  DataLogEducation ();
 		dataLogEducation.setLogId(id);
 		List<DataLogEducation> education  = dataLogEducationMapper.select(dataLogEducation );
-		if(work !=null){
+		if(education.size()>0){
 			List<String> a=new LinkedList<String>();
 			String [] educationArray =null;
 			for(DataLogEducation d:education){
