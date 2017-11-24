@@ -17,4 +17,13 @@
     <result column="investors_type" jdbcType="INTEGER" property="investorsType" />
   </resultMap>
 
+  <resultMap id="newInvestortMap" type="com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto">
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+  </resultMap>
+
+  <select id="findinvestorId" resultMap ="newInvestortMap">
+    SELECT * FROM investors WHERE investment_institutions_id=#{invesId}
+    ORDER BY create_time DESC
+  </select>
+
 </mapper>

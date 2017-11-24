@@ -719,8 +719,8 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 				map.put("work",workArray);
 			}
 		}else{
-			result.setStatus(51002);
-			result.setMessage("工作必填的");
+			String [] workArray =null;
+			map.put("work",workArray);
 		}
 		//教育背景框回填
 		DataLogEducation  dataLogEducation  =new  DataLogEducation ();
@@ -737,8 +737,8 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 			}
 
 		}else{
-			result.setStatus(51003);
-			result.setMessage("工作必填的");
+			String [] educationArray =null;
+			map.put("education",educationArray);
 		}
 		//轮次
 		List<LabelList> label =new LinkedList<>();
