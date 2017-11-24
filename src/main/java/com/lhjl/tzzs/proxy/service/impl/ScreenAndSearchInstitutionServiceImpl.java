@@ -239,6 +239,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     list1.add(labelList);
                     list1.add(labelList1);
                     map.put("investment_type",list1);
+                    map.put("investTypeName","50指数机构");
                 }else{
                     List<LabelList> list1 =new LinkedList<>();
                     LabelList labelList =new LabelList();
@@ -252,6 +253,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     list1.add(labelList);
                     list1.add(labelList1);
                     map.put("investment_type",list1);
+                    map.put("investTypeName","行业指数机构");
                 }
                 //轮次的回显
                 if(screenInvestmentRecord1.getStage() ==null || "".equals(screenInvestmentRecord1.getStage())) {
@@ -277,6 +279,8 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     list3.add(labelList5);
                     list3.add(labelList6);
                     map.put("stage", list3);
+                    map.put("stageName","");
+
                 }else{
                     List<LabelList> list3 = new LinkedList<>();
                     LabelList labelList3 = new LabelList();
@@ -308,6 +312,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                         }
                     }
                     map.put("stage", list3);
+                    map.put("stageName",screenInvestmentRecord1.getStage());
                 }
                 //领域回显
                 if(null == screenInvestmentRecord1.getDomain() || "".equals(screenInvestmentRecord1.getDomain())){
@@ -321,6 +326,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     listb.add(list);
                     listb.addAll(industryKeies);
                     map.put("industryKey",listb);
+                    map.put("industryName","");
                 }else {
                     List<LabelList> industryKeies = data.getData().get("industryKey");
                     LabelList list =new LabelList();
@@ -339,6 +345,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                         }
                     }
                     map.put("industryKey",listb);
+                    map.put("industryName",screenInvestmentRecord1.getDomain());
                 }
             }else{
                 //机构类型
@@ -354,6 +361,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                 list1.add(labelList);
                 list1.add(labelList1);
                 map.put("investment_type",list1);
+                map.put("investTypeName","50指数机构");
                 //轮次
                 List<LabelList> list3 =new LinkedList<>();
                 LabelList labelList3 =new LabelList();
@@ -377,6 +385,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                 list3.add(labelList5);
                 list3.add(labelList6);
                 map.put("stage",list3);
+                map.put("stageName","");
                 //领域
                 List<LabelList> industryKeies = data.getData().get("industryKey");
                 LabelList list =new LabelList();
@@ -387,6 +396,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                 listb.add(list);
                 listb.addAll(industryKeies);
                 map.put("industryKey",listb);
+                map.put("industryName","");
             }
 
         }else{
