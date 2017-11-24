@@ -90,6 +90,12 @@ public class InvestorsApproval {
     private String formId;
 
     /**
+     * 机构id
+     */
+    @Column(name = "institution_id")
+    private Integer institutionId;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -353,5 +359,23 @@ public class InvestorsApproval {
      */
     public void setFormId(String formId) {
         this.formId = formId;
+    }
+
+    /**
+     * 获取机构id
+     *
+     * @return institution_id - 机构id
+     */
+    public Integer getInstitutionId() {
+        return institutionId;
+    }
+
+    /**
+     * 设置机构id
+     *
+     * @param institutionId 机构id
+     */
+    public void setInstitutionId(Integer institutionId) {
+        this.institutionId = institutionId;
     }
 }
