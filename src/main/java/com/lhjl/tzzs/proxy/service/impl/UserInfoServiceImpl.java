@@ -172,14 +172,10 @@ public class UserInfoServiceImpl implements UserInfoService{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         list = usersMapper.findUserList(startPage,pageSize);
- //       for (Map<String,Object> users:list){
-//            Date createTime= users.getCreateTime();
-//            String stringDate = sdf.format(createTime);
-//            users.setPassword(stringDate);
-  //      }
         for(Map<String,Object> obj :list){
 
             obj.put("create_time",String.valueOf(obj.get("create_time")));
+            obj.put("cctime",String.valueOf(obj.get("cctime")));
             String investorsType = "未认证或未审核投资人";
             if (obj.get("investors_type") == null){
                 investorsType = "未认证或未审核投资人";
