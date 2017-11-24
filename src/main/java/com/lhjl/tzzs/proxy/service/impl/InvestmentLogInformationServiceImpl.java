@@ -400,8 +400,8 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 				list3.add(labelList9);
 				list3.add(labelList10);
 				list3.add(labelList11);
-				data.put("stage", list3);
-				data.put("stage", "");
+				data.put("stage",list3);
+				data.put("stageName", "");
 				//公司的logo
 				data.put("logo","");
 				data.put("city","");
