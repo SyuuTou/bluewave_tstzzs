@@ -11,4 +11,13 @@
     <result column="picture" jdbcType="VARCHAR" property="picture" />
     <result column="summary" jdbcType="VARCHAR" property="summary" />
   </resultMap>
+  <select id="getIntelligentSearchInfo" resultMap="BaseResultMap">
+    SELECT * FROM subject where short_name like CONCAT(CONCAT("%",#{inputsWords}),"%")
+    LIMIT #{startPage},#{pageSize}
+  </select>
+
+  <select id="getIntelligentSearchInfoFullName" resultMap="BaseResultMap">
+    SELECT * FROM subject where full_name like CONCAT(CONCAT("%",#{inputsWords}),"%")
+    LIMIT #{startPage},#{pageSize}
+  </select>
 </mapper>
