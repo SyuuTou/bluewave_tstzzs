@@ -93,7 +93,7 @@ public class UserInfoServiceImpl implements UserInfoService{
                         identiStr = "投资人";
                         break;
                     case 1:
-                        identiStr = "创业者";
+                        identiStr = "企业家";
                         break;
                     case 2:
                         identiStr = "产业公司";

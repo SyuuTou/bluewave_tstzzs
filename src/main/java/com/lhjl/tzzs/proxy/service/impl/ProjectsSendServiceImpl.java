@@ -270,7 +270,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 if ("投资人".equals(params.getTuisongxiangmubiao7identityty())) {
                                     users.setIdentityType(0);
                                 }
-                                if ("创业者".equals(params.getTuisongxiangmubiao7identityty())) {
+                                if ("企业家".equals(params.getTuisongxiangmubiao7identityty())) {
                                     users.setIdentityType(1);
                                 }
                                 if ("产业公司".equals(params.getTuisongxiangmubiao7identityty())) {
@@ -468,7 +468,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                     if ("投资人".equals(params.getTuisongxiangmubiao7identityty())) {
                                         users.setIdentityType(0);
                                     }
-                                    if ("创业者".equals(params.getTuisongxiangmubiao7identityty())) {
+                                    if ("企业家".equals(params.getTuisongxiangmubiao7identityty())) {
                                         users.setIdentityType(1);
                                     }
                                     if ("产业公司".equals(params.getTuisongxiangmubiao7identityty())) {
@@ -725,7 +725,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 if ("投资人".equals(params.getTuisongxiangmubiao7identityty())) {
                                     users.setIdentityType(0);
                                 }
-                                if ("创业者".equals(params.getTuisongxiangmubiao7identityty())) {
+                                if ("企业家".equals(params.getTuisongxiangmubiao7identityty())) {
                                     users.setIdentityType(1);
                                 }
                                 if ("产业公司".equals(params.getTuisongxiangmubiao7identityty())) {
@@ -983,7 +983,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                             if ("投资人".equals(params.getTuisongxiangmubiao7identityty())) {
                                 users.setIdentityType(0);
                             }
-                            if ("创业者".equals(params.getTuisongxiangmubiao7identityty())) {
+                            if ("企业家".equals(params.getTuisongxiangmubiao7identityty())) {
                                 users.setIdentityType(1);
                             }
                             if ("产业公司".equals(params.getTuisongxiangmubiao7identityty())) {
@@ -1241,7 +1241,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                         if ("投资人".equals(params.getTuisongxiangmubiao7identityty())) {
                             users.setIdentityType(0);
                         }
-                        if ("创业者".equals(params.getTuisongxiangmubiao7identityty())) {
+                        if ("企业家".equals(params.getTuisongxiangmubiao7identityty())) {
                             users.setIdentityType(1);
                         }
                         if ("产业公司".equals(params.getTuisongxiangmubiao7identityty())) {
@@ -1499,7 +1499,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                         if ("投资人".equals(params.getTuisongxiangmubiao7identityty())) {
                             users.setIdentityType(0);
                         }
-                        if ("创业者".equals(params.getTuisongxiangmubiao7identityty())) {
+                        if ("企业家".equals(params.getTuisongxiangmubiao7identityty())) {
                             users.setIdentityType(1);
                         }
                         if ("产业公司".equals(params.getTuisongxiangmubiao7identityty())) {
@@ -1821,8 +1821,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         identify1.setValue("投资人");
         identify1.setChecked(false);
         LabelList identify2 = new LabelList();
-        identify2.setName("创业者");
-        identify2.setValue("创业者");
+        identify2.setName("企业家");
+        identify2.setValue("企业家");
         identify2.setChecked(false);
         LabelList identify3 = new LabelList();
         identify3.setName("产业公司");
@@ -1854,7 +1854,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                     identityStr = "投资人";
                     break;
                 case 1:
-                    identityStr = "创业者";
+                    identityStr = "企业家";
                     break;
                 case 2:
                     identityStr = "产业公司";
