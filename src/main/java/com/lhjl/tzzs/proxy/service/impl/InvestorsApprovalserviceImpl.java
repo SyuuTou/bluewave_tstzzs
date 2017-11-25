@@ -400,6 +400,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			String reviewTime = simpleDateFormat.format(approval.getReviewTime());
 			investorsApprovalNew.setCreateTime(createTime);
 			investorsApprovalNew.setReviewTime(reviewTime);
+			investorsApprovalNew.setInstitutionId(approval.getInstitutionId());
 			dataNew.add(investorsApprovalNew);
 		}
 		result.setStatus(200);

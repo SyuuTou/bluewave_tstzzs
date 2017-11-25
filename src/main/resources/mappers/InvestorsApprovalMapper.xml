@@ -29,7 +29,7 @@
 
   <select id="findApproval" resultMap="BaseResultMap">
     SELECT id,userid,approval_username,investors_type,description,company,company_duties,work_card,approval_result,
-    supplementary_explanation,review_time,create_time,leadership,form_id FROM investors_approval WHERE 1=1
+    supplementary_explanation,review_time,create_time,leadership,form_id,institution_id FROM investors_approval WHERE 1=1
     <if test="checkName !='' and checkName != null">
       AND
       (approval_username LIKE CONCAT('%',#{checkName},'%')
