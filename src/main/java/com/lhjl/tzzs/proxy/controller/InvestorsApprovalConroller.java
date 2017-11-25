@@ -158,7 +158,7 @@ public class InvestorsApprovalConroller {
 		} catch (Exception e) {
 			result.setStatus(5101);
 			result.setMessage("投资审核操作异常");
-			log.error(e.getMessage());
+			log.error(e.getMessage(),e.fillInStackTrace());
 		}
 		return result;
 	}
