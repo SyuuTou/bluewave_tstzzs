@@ -133,7 +133,7 @@ public class InvestorsApprovalNewServiceImpl implements InvestorsApprovalNewServ
 					return result;
 				}
 
-				if ("".equals(ivesId) || ivesId == null || "undefined".equals(ivesId)){
+				/*if ("".equals(ivesId) || ivesId == null || "undefined".equals(ivesId)){
 					result.setData(null);
 					result.setMessage("ivesId不存在");
 					result.setStatus(50001);
@@ -141,7 +141,7 @@ public class InvestorsApprovalNewServiceImpl implements InvestorsApprovalNewServ
 					log.info("ivesId不存在");
 
 					return result;
-				}
+				}*/
 
 
 				InvestorsApproval investorsApproval =new  InvestorsApproval();
@@ -172,8 +172,10 @@ public class InvestorsApprovalNewServiceImpl implements InvestorsApprovalNewServ
 				investorsApproval.setCreateTime(new Date());
 				investorsApproval.setFormId(formId);
 				investorsApproval.setInvestorsApprovalcolCase(params.getInvestorsApprovalcolCase());
-                investorsApproval.setInstitutionId(ivesId);
-				investorsApprovalMapper.insert(investorsApproval);
+				if(ivesId != null  &&  !"".equals(ivesId)) {
+					investorsApproval.setInstitutionId(ivesId);
+				}
+				investorsApprovalMapper.insertSelective(investorsApproval);
 				Users users =new Users();
 				users.setUuid(params.getToken());
 				Users u =usersMapper.selectOne(users);
