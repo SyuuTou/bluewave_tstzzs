@@ -76,7 +76,7 @@ public class UserEditImpl implements UserEditService {
         switch (identityType){
             case "投资人":shenfenleixing =0;
                 break;
-            case "企业家":shenfenleixing = 1;
+            case "创业者":shenfenleixing = 1;
                 break;
             case "产业公司":shenfenleixing =2;
                 break;
@@ -174,7 +174,7 @@ public class UserEditImpl implements UserEditService {
                         identityType = "投资人";
                         break;
                     case 1:
-                        identityType = "企业家";
+                        identityType = "创业者";
                         break;
                     case 2:
                         identityType = "产业公司";
@@ -475,7 +475,7 @@ public class UserEditImpl implements UserEditService {
         switch (user7excessfield){
             case "投资人":shenfenleixing =0;
             break;
-            case "企业家":shenfenleixing = 1;
+            case "创业者":shenfenleixing = 1;
             break;
             case "产业公司":shenfenleixing =2;
             break;
