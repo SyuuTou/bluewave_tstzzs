@@ -38,9 +38,12 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
 
     @Value("${statistics.endTime}")
     private String endTime;
-    
+
     @Autowired
     private InvestmentInstitutionInformationMapper investmentInstitutionInformationMapper;
+
+    @Resource
+    private InvesmentInformationServiceImplUtil invesmentInformationServiceImplUtil;
     /**
      * 获取50机构信息（分页）
      *
@@ -57,7 +60,7 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
         UserToken userToken = new UserToken();
         userToken.setToken(token);
         userToken = userTokenMapper.selectOne(userToken);
-        List<InvestmentInstitutionsDto> list = investmentInstitutionsMapper.findInvestment50New("1", beginNum, pageSize,beginTime,endTime);
+        List<InvestmentInstitutionsDto> list = invesmentInformationServiceImplUtil.getSearchBase50All(pageNum, pageSize);
         //判断是否还有查询结果
 //        if(investmentInstitutions.size() <= 0){
 //            result.setStatus(202);
