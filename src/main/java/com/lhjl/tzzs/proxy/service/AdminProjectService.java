@@ -22,4 +22,12 @@ public interface AdminProjectService {
      * @return
      */
     CommonDto<String> setProjectAdminOnestep(Integer administractorId);
+
+    /**
+     * 给项目添加管理员
+     * @param projectId 项目id
+     * @param administractorsId 管理员组
+     * @return
+     */
+    CommonDto<String> creatProjectAdministractors(Integer projectId,String administractorsId);
 }

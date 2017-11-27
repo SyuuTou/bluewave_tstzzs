@@ -63,4 +63,25 @@ public class AdminProjectController {
         return result;
     }
 
+    /**
+     * 给项目添加管理员
+     * @param projectId 项目id
+     * @param administractorsId 管理员组
+     * @return
+     */
+    @GetMapping("set/project/administractors")
+    public  CommonDto<String> setProjectAdministractors(Integer projectId,String administractorsId){
+        CommonDto<String> result = new CommonDto<>();
+        try {
+            result=adminProjectService.creatProjectAdministractors(projectId,administractorsId);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+        }
+
+        return result;
+    }
+
 }

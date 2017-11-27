@@ -269,4 +269,65 @@ public class AdminProjectServiceImpl implements AdminProjectService{
 
         return result;
     }
+
+    @Override
+    public CommonDto<String> creatProjectAdministractors(Integer projectId,String administractorsId){
+        CommonDto<String> result = new CommonDto<>();
+        Date now =new Date();
+
+        if (projectId == null){
+            result.setMessage("项目id不能为空");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+        if (administractorsId == null || "".equals(administractorsId) || "undefined".equals(administractorsId)){
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("管理员不能为空");
+        }
+
+        //解析项目管理员数组
+        String[] adminIds = administractorsId.split(",");
+
+        List<Integer> adminIdsInt = new ArrayList<>();
+        for (int i=0;i<adminIds.length;i++){
+            if (!("".equals(adminIds[i]))){
+                Integer aa = Integer.valueOf(adminIds[i]);
+                adminIdsInt.add(aa);
+            }
+        }
+        //添加管理员
+        for (int j = 0;j<adminIdsInt.size();j++){
+            //先判断当前项目是否有当前管理员，有的话啥也不做，没有的话创建
+            Example paExample = new Example(ProjectAdministrator.class);
+            paExample.and().andEqualTo("userId",adminIdsInt.get(j)).andEqualTo("projectsId",projectId);
+
+            List<ProjectAdministrator> projectAdministratorList =projectAdministratorMapper.selectByExample(paExample);
+
+            if (projectAdministratorList.size() > 0){
+                //有的话啥也不做
+            }else {
+                //没有的话创建
+                ProjectAdministrator projectAdministrator = new ProjectAdministrator();
+
+                projectAdministrator.setTypes(1);
+                projectAdministrator.setUserId(adminIdsInt.get(j));
+                projectAdministrator.setCreateTime(now);
+                projectAdministrator.setProjectsId(projectId);
+                projectAdministrator.setYn(0);
+
+                projectAdministratorMapper.insertSelective(projectAdministrator);
+            }
+
+        }
+
+        result.setMessage("success");
+        result.setStatus(200);
+        result.setData(null);
+
+        return result;
+    }
 }
