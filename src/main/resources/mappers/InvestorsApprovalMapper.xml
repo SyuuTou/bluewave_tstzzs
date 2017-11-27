@@ -20,8 +20,8 @@
     <result column="leadership" jdbcType="INTEGER" property="leadership" />
     <result column="investors_approvalcol_case" jdbcType="VARCHAR" property="investorsApprovalcolCase" />
     <result column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="institution_id" jdbcType="INTEGER" property="institutionId" />
   </resultMap>
-
 
    <select id="findInvestorsApproval" parameterType="INTEGER" resultType="java.util.HashMap">
    SELECT i.* FROM investors_approval i  WHERE i.userid=#{userId} ORDER BY i.review_time DESC LIMIT 1
@@ -29,7 +29,7 @@
 
   <select id="findApproval" resultMap="BaseResultMap">
     SELECT id,userid,approval_username,investors_type,description,company,company_duties,work_card,approval_result,
-    supplementary_explanation,review_time,create_time,leadership,form_id FROM investors_approval WHERE 1=1
+    supplementary_explanation,review_time,create_time,leadership,form_id,institution_id FROM investors_approval WHERE 1=1
     <if test="checkName !='' and checkName != null">
       AND
       (approval_username LIKE CONCAT('%',#{checkName},'%')

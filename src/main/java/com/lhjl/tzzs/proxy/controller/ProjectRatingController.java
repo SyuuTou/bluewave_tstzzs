@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.controller;
 
+import com.lhjl.tzzs.proxy.dto.AdminCreatProjectDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectRatingDto;
 import com.lhjl.tzzs.proxy.service.ProjectRatingService;
@@ -39,6 +40,28 @@ public class ProjectRatingController {
             result.setData(null);
             result.setStatus(502);
         }
+        return result;
+    }
+
+    /**
+     * 后台管理员审核后，获取事件接受的机构id信息接口
+     * @param sourceId 源数据id
+     * @param idType id类型，0表示项目提交记录表，1表示项目表信息
+     * @return
+     */
+    @GetMapping("admin/creat/event")
+    public CommonDto<AdminCreatProjectDto> adminCreateEvent(Integer sourceId,Integer idType){
+        CommonDto<AdminCreatProjectDto> result = new CommonDto<>();
+
+        try {
+            result = projectRatingService.adminCreateEvent(sourceId,idType);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+        }
+
         return result;
     }
 }

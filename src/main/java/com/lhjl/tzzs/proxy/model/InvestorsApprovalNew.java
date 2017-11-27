@@ -36,6 +36,19 @@ public class InvestorsApprovalNew {
     private String company;
 
     /**
+     * 机构id
+     */
+    private Integer institutionId;
+
+    public Integer getInstitutionId() {
+        return institutionId;
+    }
+
+    public void setInstitutionId(Integer institutionId) {
+        this.institutionId = institutionId;
+    }
+
+    /**
      * 公司职位
      */
     @Column(name = "company_duties")

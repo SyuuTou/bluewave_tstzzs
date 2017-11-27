@@ -59,25 +59,31 @@ public class FindSendProjectServiceImpl implements FindSendProjectService {
 				users.setId(Integer.valueOf(String.valueOf(obj.get("userid"))));
 				users = usersMapper.selectOne(users);
 				//查找姓名
-				if (users.getActualName() == null) {
-					UsersWeixin usersWeixin = new UsersWeixin();
-					usersWeixin.setUserId(Integer.valueOf(String.valueOf(obj.get("userid"))));
-					usersWeixin = usersWeixinMapper.selectOne(usersWeixin);
-					if (usersWeixin.getNickName() != null) {
-						obj.put("relName",usersWeixin.getNickName());
-					} else {
-						obj.put("relName","");
-					}
-				} else {
-					obj.put("relName",users.getActualName());
-				}
-				//查找职务
-				if (users.getCompanyDuties() != null) {
-					obj.put("zhiwu",users.getCompanyDuties());
-
-				} else {
+				if (users == null){
+					obj.put("relName","");
 					obj.put("zhiwu","");
+				}else {
+					if (users.getActualName() == null) {
+						UsersWeixin usersWeixin = new UsersWeixin();
+						usersWeixin.setUserId(Integer.valueOf(String.valueOf(obj.get("userid"))));
+						usersWeixin = usersWeixinMapper.selectOne(usersWeixin);
+						if (usersWeixin.getNickName() != null) {
+							obj.put("relName",usersWeixin.getNickName());
+						} else {
+							obj.put("relName","");
+						}
+					} else {
+						obj.put("relName",users.getActualName());
+					}
+					//查找职务
+					if (users.getCompanyDuties() != null) {
+						obj.put("zhiwu",users.getCompanyDuties());
+
+					} else {
+						obj.put("zhiwu","");
+					}
 				}
+
 				//查找机构名称
 				ProjectFinancingInvestmentInstitutionRelationship projectFinancingInvestmentInstitutionRelationship = new ProjectFinancingInvestmentInstitutionRelationship();
 				projectFinancingInvestmentInstitutionRelationship.setProjectSendLogId(Integer.valueOf(String.valueOf(obj.get("id"))));

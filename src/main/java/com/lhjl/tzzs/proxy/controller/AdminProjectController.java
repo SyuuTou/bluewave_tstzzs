@@ -43,4 +43,24 @@ public class AdminProjectController {
             return result;
     }
 
+    /**
+     * 一键设置没有管理员项目的管理员
+     * @param administractorId
+     * @return
+     */
+    @GetMapping("set/project/admin/onestep")
+    public CommonDto<String> setProjectAdminOnestep(Integer administractorId){
+        CommonDto<String> result = new CommonDto<>();
+
+        try {
+            result = adminProjectService.setProjectAdminOnestep(administractorId);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+        }
+        return result;
+    }
+
 }

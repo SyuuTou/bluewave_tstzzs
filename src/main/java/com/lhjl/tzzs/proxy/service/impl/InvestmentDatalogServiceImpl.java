@@ -654,31 +654,45 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
             //教育背景
             DataLogEducation dataLogEducation1 =new DataLogEducation();
             dataLogEducation1.setLogId(id);
-            dataLogEducationMapper.delete(dataLogEducation1);
-            String[] educationArry = founder_education.split(",");
-            List<DataLogEducation> dataLogEducationlist =new Page<DataLogEducation>();
-            for (int a=0; a < educationArry.length;a++){
-                DataLogEducation dataLogEducation =new DataLogEducation();
-                dataLogEducation.setEducationName(educationArry[a]);
-                dataLogEducation.setLogId(id);
-                dataLogEducation.setUserId(userID);
-                dataLogEducationlist.add(dataLogEducation);
+            List<DataLogEducation> list =dataLogEducationMapper.select(dataLogEducation1);
+            if(list.size()>0) {
+                dataLogEducationMapper.delete(dataLogEducation1);
             }
-            dataLogEducationMapper.insertList(dataLogEducationlist);
+            if(founder_education ==null || "".equals(founder_education))  {
+
+            } else {
+                String[] educationArry = founder_education.split(",");
+                List<DataLogEducation> dataLogEducationlist = new Page<DataLogEducation>();
+                for (int a = 0; a < educationArry.length; a++) {
+                    DataLogEducation dataLogEducation = new DataLogEducation();
+                    dataLogEducation.setEducationName(educationArry[a]);
+                    dataLogEducation.setLogId(i.getId());
+                    dataLogEducation.setUserId(userID);
+                    dataLogEducationlist.add(dataLogEducation);
+                }
+                dataLogEducationMapper.insertList(dataLogEducationlist);
+            }
             //工作背景
             DataLogWork dataLogEducation2 =new DataLogWork();
             dataLogEducation2.setLogId(id);
-            dataLogWorkMapper.delete(dataLogEducation2);
-            String[] workArry = founder_work.split(",");
-            List<DataLogWork> dataLogWorklist =new Page<DataLogWork>();
-            for (int a=0; a <  workArry.length;a++){
-                DataLogWork dataLogEducation =new DataLogWork();
-                dataLogEducation.setWorkName(workArry[a]);
-                dataLogEducation.setLogId(id);
-                dataLogEducation.setUserId(userID);
-                dataLogWorklist.add(dataLogEducation);
+            List<DataLogWork> list2 =dataLogWorkMapper.select(dataLogEducation2);
+            if(list2.size()>0) {
+                dataLogWorkMapper.delete(dataLogEducation2);
             }
-            dataLogWorkMapper.insertList(dataLogWorklist);
+            if(founder_work ==null || "".equals(founder_work))  {
+
+            }else {
+                String[] workArry = founder_work.split(",");
+                List<DataLogWork> dataLogWorklist = new Page<DataLogWork>();
+                for (int a = 0; a < workArry.length; a++) {
+                    DataLogWork dataLogEducation = new DataLogWork();
+                    dataLogEducation.setWorkName(workArry[a]);
+                    dataLogEducation.setLogId(i.getId());
+                    dataLogEducation.setUserId(userID);
+                    dataLogWorklist.add(dataLogEducation);
+                }
+                dataLogWorkMapper.insertList(dataLogWorklist);
+            }
 
         }else{
         	if(id == one.getId()){
@@ -727,33 +741,47 @@ public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {
                 //教育背景
                 DataLogEducation dataLogEducation1 =new DataLogEducation();
                 dataLogEducation1.setLogId(id);
-                dataLogEducationMapper.delete(dataLogEducation1);
-                String[] educationArry = founder_education.split(",");
-                List<DataLogEducation> dataLogEducationlist =new Page<DataLogEducation>();
-                for (int a=0; a < educationArry.length;a++){
-                    DataLogEducation dataLogEducation =new DataLogEducation();
-                    dataLogEducation.setEducationName(educationArry[a]);
-                    dataLogEducation.setLogId(id);
-                    dataLogEducation.setUserId(userID);
-                    dataLogEducationlist.add(dataLogEducation);
+                List<DataLogEducation> list =dataLogEducationMapper.select(dataLogEducation1);
+                if(list.size()>0) {
+                    dataLogEducationMapper.delete(dataLogEducation1);
                 }
-                dataLogEducationMapper.insertList(dataLogEducationlist);
+                if(founder_education ==null || "".equals(founder_education))  {
+
+                } else {
+                    String[] educationArry = founder_education.split(",");
+                    List<DataLogEducation> dataLogEducationlist = new Page<DataLogEducation>();
+                    for (int a = 0; a < educationArry.length; a++) {
+                        DataLogEducation dataLogEducation = new DataLogEducation();
+                        dataLogEducation.setEducationName(educationArry[a]);
+                        dataLogEducation.setLogId(i.getId());
+                        dataLogEducation.setUserId(userID);
+                        dataLogEducationlist.add(dataLogEducation);
+                    }
+                    dataLogEducationMapper.insertList(dataLogEducationlist);
+                }
                 //工作背景
                 DataLogWork dataLogEducation2 =new DataLogWork();
                 dataLogEducation2.setLogId(id);
-                dataLogWorkMapper.delete(dataLogEducation2);
-                String[] workArry = founder_work.split(",");
-                List<DataLogWork> dataLogWorklist =new Page<DataLogWork>();
-                for (int a=0; a <  workArry.length;a++){
-                    DataLogWork dataLogEducation =new DataLogWork();
-                    dataLogEducation.setWorkName(workArry[a]);
-                    dataLogEducation.setLogId(id);
-                    dataLogEducation.setUserId(userID);
-                    dataLogWorklist.add(dataLogEducation);
+                List<DataLogWork> list2 =dataLogWorkMapper.select(dataLogEducation2);
+                if(list2.size()>0) {
+                    dataLogWorkMapper.delete(dataLogEducation2);
                 }
-                dataLogWorkMapper.insertList(dataLogWorklist);
-        		
-        	}else{
+                if(founder_work ==null || "".equals(founder_work))  {
+
+                }else {
+                    String[] workArry = founder_work.split(",");
+                    List<DataLogWork> dataLogWorklist = new Page<DataLogWork>();
+                    for (int a = 0; a < workArry.length; a++) {
+                        DataLogWork dataLogEducation = new DataLogWork();
+                        dataLogEducation.setWorkName(workArry[a]);
+                        dataLogEducation.setLogId(i.getId());
+                        dataLogEducation.setUserId(userID);
+                        dataLogWorklist.add(dataLogEducation);
+                    }
+                    dataLogWorkMapper.insertList(dataLogWorklist);
+                }
+
+            }else{
         		result.setStatus(204);
                 result.setMessage("不能提交重复项目");	
         	}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionInformationMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionInformation">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+    <result column="oneintroduction" jdbcType="VARCHAR" property="oneintroduction" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="investment_idea" jdbcType="VARCHAR" property="investmentIdea" />
+    <result column="website" jdbcType="VARCHAR" property="website" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="stage" jdbcType="VARCHAR" property="stage" />
+    <result column="domain" jdbcType="VARCHAR" property="domain" />
+    <result column="ren_amount" jdbcType="DECIMAL" property="renAmount" />
+    <result column="mei_amount" jdbcType="DECIMAL" property="meiAmount" />
+    <result column="ren_amount_mix" jdbcType="DECIMAL" property="renAmountMix" />
+    <result column="ren_amount_max" jdbcType="DECIMAL" property="renAmountMax" />
+    <result column="mei_amount_mix" jdbcType="DECIMAL" property="meiAmountMix" />
+    <result column="mei_amount_max" jdbcType="DECIMAL" property="meiAmountMax" />
+    <result column="representative" jdbcType="VARCHAR" property="representative" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="log_id" jdbcType="INTEGER" property="logId" />
+  </resultMap>
+  <select id="findInformation" resultMap="BaseResultMap">
+     SELECT * FROM investment_institution_information  WHERE user_id =#{userId} AND log_id !=-1
+  </select>
+</mapper>
