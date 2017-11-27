@@ -776,8 +776,13 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         result.setData(likes);
 		return result;
 	}
-	@Override
-	public CommonDto<List<XiangsiDto>> findProjectall(Integer id) {
+    /**
+     * 相似竞品新接口
+     * @param id
+     * @return
+     */
+    @Override
+    public CommonDto<List<XiangsiDto>> findProjectall(int id) {
 		 CommonDto<List<XiangsiDto>>  result = new  CommonDto<List<XiangsiDto>> ();
         Projects projects =new Projects();
         projects.setId(id);
@@ -815,7 +820,7 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
 
 
-        List<XiangsiDto> likes = projectsMapper.findLikesall(educationArray,projectTagArry,shortName);
+        List<XiangsiDto> likes = projectsMapper.findLikesall(educationArray,projectTagArry,shortName,id);
 
         result.setData(likes);
 		return result;

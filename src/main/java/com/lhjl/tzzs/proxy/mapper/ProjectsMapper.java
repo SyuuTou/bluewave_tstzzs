@@ -51,7 +51,7 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
 
     BigDecimal findProjectAllByRoundAndC(@Param("stage") String stage, @Param("city") String city);
     List<Map<String,Object>> findLikes(@Param("educationArray") String [] educationArray, @Param("city") String city,@Param("pslArray") String [] pslArray, @Param("shortName") String shortName);
-    List<XiangsiDto> findLikesall(@Param("educationArray") String [] educationArray,@Param("projectTagArry") String [] projectTagArry,@Param("shortName") String shortName);
+    List<XiangsiDto> findLikesall(@Param("educationArray") String [] educationArray,@Param("projectTagArry") String [] projectTagArry,@Param("shortName") String shortName,@Param("id") int  id);
 
     /**
      * 后台获取项目列表接口mapper,数据导入项目
