@@ -159,6 +159,13 @@
         <foreach close=")" collection="workArray1" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </select>
 
+    <select id="serachSendProjectIdZ"  resultType="int">
+        SELECT investment_institution_id FROM  project_financing_investment_institution_relationship WHERE
+        project_send_log_id IN
+        <foreach close=")" collection="workArray1" index="index" item="item" open="(" separator=",">#{item}</foreach>
+        group by investment_institution_id
+    </select>
+
     <select id="findInvestment50New" resultMap="newDtoMap">
         SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.count,ii.sort
         FROM investment_institutions ii

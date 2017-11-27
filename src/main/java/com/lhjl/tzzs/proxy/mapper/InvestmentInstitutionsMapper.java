@@ -23,4 +23,11 @@ public interface InvestmentInstitutionsMapper extends OwnerMapper<InvestmentInst
     List<Integer>deliverySendProjectId(@Param("workArray1")Integer [] workArray1);
     List<InvestmentInstitutionsDto>findRecommendAll(@Param("workArray2")Integer [] workArray2);
     List<InvestmentInstitutionsDto>findRecommendInvestor(@Param("workArray3")String [] workArray3);
+
+    /**
+     * 根据投递记录id获取机构id数组
+     * @param workArray1
+     * @return
+     */
+    List<Integer>serachSendProjectIdZ(@Param("workArray1")List<Integer> workArray1);
 }
