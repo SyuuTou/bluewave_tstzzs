@@ -28,7 +28,7 @@ public class CertificationNewController {
      * @param body
      * @return
      */
-    @PostMapping ("1_2_4/search/certification")
+    @PostMapping ("search/certification")
     public CommonDto<List<ProjectInvestmentDto>> findcertificationNew(@RequestBody  InvestorsNameDto body){
         CommonDto<List<ProjectInvestmentDto>> result =new CommonDto<List<ProjectInvestmentDto>>();
         try {
