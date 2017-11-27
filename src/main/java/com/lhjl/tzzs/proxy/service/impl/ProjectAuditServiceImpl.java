@@ -203,8 +203,9 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
                     projectSendLogsForUpdateU.setCheckTime(now);
                     projectSendLogsMapper.updateByPrimaryKeySelective(projectSendLogsForUpdateU);
 
+                    String xmidS = String.valueOf(projectsListForC.get(0).getId());
                     result.setStatus(200);
-                    result.setMessage("hasproject");
+                    result.setMessage(xmidS);
                     result.setData(null);
                 }else{
                     result  = projectAuditOfTypeOne(body);
@@ -230,8 +231,10 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
                     projectSendLogsForUpdateU.setAuditTime(now);
                     investmentDataLogMapper.updateByPrimaryKeySelective(projectSendLogsForUpdateU);
 
+                    String xmidS = String.valueOf(projectsListForC.get(0).getId());
+
                     result.setStatus(200);
-                    result.setMessage("success");
+                    result.setMessage(xmidS);
                     result.setData(null);
 
                 }else{
@@ -585,7 +588,7 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
         adminProjectApprovalLogMapper.insert(adminProjectApprovalLog);
 
-
+        String xmids =String.valueOf(xmid);
          result.setStatus(200);
          result.setData(null);
          result.setMessage("success");
