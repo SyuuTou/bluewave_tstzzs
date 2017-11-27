@@ -383,6 +383,7 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
               projectFinancingLog.setProjectFinancingUseful(projectFinancingApproval.getFinancingUseful());
               projectFinancingLog.setCreateTime(projectSendLogs.getCreatTime());
               projectFinancingLog.setStatus(1);
+              projectFinancingLog.setStockRight(projectFinancingApproval.getTransferShares());
               projectFinancingLog.setApprovalTime(now);
 
               projectFinancingLogMapper.insertSelective(projectFinancingLog);
