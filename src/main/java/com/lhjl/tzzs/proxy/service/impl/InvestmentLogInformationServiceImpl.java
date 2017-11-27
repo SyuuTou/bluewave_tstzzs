@@ -120,7 +120,7 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 
 				return result;
 			}
-			if (StringUtil.isEmpty(fullName)){
+			/*if (StringUtil.isEmpty(fullName)){
 				result.setStatus(50001);
 				result.setMessage("请填写投资全称");
 				result.setData(null);
@@ -155,17 +155,17 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 				result.setData(null);
 
 				return result;
-			}
+			}*/
 
 			if (StringUtil.isEmpty(token)){
 				result.setStatus(50001);
 				result.setMessage("缺少用户id");
 			}
 			
-			if (StringUtil.isEmpty(jianjie)){
+			/*if (StringUtil.isEmpty(jianjie)){
 				result.setStatus(50001);
 				result.setMessage("请填写简介");
-			}
+			}*/
 
 				UserToken userToken = new UserToken();
 		        userToken.setToken(token);

@@ -166,6 +166,10 @@ public class UserEditImpl implements UserEditService {
             String leixing = "";
             Integer identityTypeInt = usersForHeadpic.getIdentityType();
             String identityType = "";
+            String getCompanyName = "";
+            if (usersForHeadpic.getCompanyName() != null){
+                getCompanyName=usersForHeadpic.getCompanyName();
+            }
             if (null == identityTypeInt){
                 identityType = "";
             }else {
@@ -249,6 +253,7 @@ public class UserEditImpl implements UserEditService {
             obj.put("leixing",leixing);
             obj.put("success",true);
             obj.put("identityTpye",identityType);
+            obj.put("getCompanyName",getCompanyName);
 
             result.setStatus(200);
             result.setData(obj);

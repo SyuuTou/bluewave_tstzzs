@@ -10,7 +10,7 @@ import com.lhjl.tzzs.proxy.dto.XiangsiDto;
 public interface ProjectAuditService {
     CommonDto<String> adminAuditProject(ProjectAuditInputDto body);
     CommonDto<List<Map<String, Object>>> findProject(Integer id);
-    CommonDto<List<XiangsiDto>> findProjectall(Integer id);
+    CommonDto<List<XiangsiDto>> findProjectall(int id);
 
     /**
      * 查找我的关注状态

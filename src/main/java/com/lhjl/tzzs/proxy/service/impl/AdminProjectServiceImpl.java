@@ -243,7 +243,8 @@ public class AdminProjectServiceImpl implements AdminProjectService{
             for (Projects p:projectIdList){
                 //先将该项目的其他管理员删除
                 Example deleteProjectExample = new Example(ProjectAdministrator.class);
-                deleteProjectExample.and().andEqualTo("projectsId",p.getId());
+                deleteProjectExample.and().andEqualTo("projectsId",p.getId()).andEqualTo("userId",administractorId);
+
 
                 projectAdministratorMapper.deleteByExample(deleteProjectExample);
 

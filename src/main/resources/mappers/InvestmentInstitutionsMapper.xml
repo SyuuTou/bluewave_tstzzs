@@ -92,7 +92,7 @@
     </select>
 
     <select id="findInvestment50" resultType="java.util.HashMap">
-        SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case, ii.count cc
+        SELECT ii.id, ii.short_name shortName,  ii.create_time, ii.type, ii.logo, ii.kenel_case kenelCase, ii.count
         FROM investment_institutions ii
         WHERE ii.type = 1 AND  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null
         ORDER BY ii.sort
@@ -102,7 +102,7 @@
     </select>
 
     <select id="findInvestmentall" resultType="java.util.HashMap">
-        SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, ii.kenel_case, ii.count cc
+        SELECT ii.id, ii.short_name shortName,  ii.create_time, ii.type, ii.logo, ii.kenel_case kenelCase, ii.count
         FROM investment_institutions ii
         WHERE  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null
         ORDER BY ii.sort
@@ -157,6 +157,13 @@
         SELECT investment_institution_id FROM  project_financing_investment_institution_relationship WHERE
         project_send_log_id IN
         <foreach close=")" collection="workArray1" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </select>
+
+    <select id="serachSendProjectIdZ"  resultType="int">
+        SELECT investment_institution_id FROM  project_financing_investment_institution_relationship WHERE
+        project_send_log_id IN
+        <foreach close=")" collection="workArray1" index="index" item="item" open="(" separator=",">#{item}</foreach>
+        group by investment_institution_id
     </select>
 
     <select id="findInvestment50New" resultMap="newDtoMap">

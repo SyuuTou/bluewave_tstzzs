@@ -110,7 +110,7 @@ public class ProjectAuditController {
         return result;
     }
     @GetMapping("search/likes/all")
-    public  CommonDto<List<XiangsiDto>> findProjectall(Integer id){
+    public  CommonDto<List<XiangsiDto>> findProjectall(int id){
     	 CommonDto<List<XiangsiDto>> result =new  CommonDto<List<XiangsiDto>>();
 
         try {
