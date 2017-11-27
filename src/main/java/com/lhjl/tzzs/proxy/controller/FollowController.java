@@ -67,17 +67,7 @@ public class FollowController {
 
             followService.updateFollowStatus(status,projectId,userId);
 
-            EventDto  eventDto = new EventDto();
-            eventDto.setFromUser(userId);
-            List<Integer> projectIds = new ArrayList<>();
-            projectIds.add(projectId);
-            eventDto.setProjectIds(projectIds);
-            eventDto.setEventType("CONCERN");
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
 
-            HttpEntity<EventDto> entity = new HttpEntity<>(eventDto, headers);
-            HttpEntity<CommonDto<String>> investors =  restTemplate.exchange(eventUrl+"/trigger/event", HttpMethod.POST,entity,new ParameterizedTypeReference<CommonDto<String>>(){} );
 
             result.setMessage("操作成功");
         } catch (Exception e) {

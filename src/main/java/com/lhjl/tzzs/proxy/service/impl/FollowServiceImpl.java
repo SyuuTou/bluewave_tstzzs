@@ -1,12 +1,21 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.EventDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import com.lhjl.tzzs.proxy.mapper.FollowMapper;
@@ -28,6 +37,11 @@ public class FollowServiceImpl implements FollowService {
     @Resource
     private FollowMapper followMapper;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Value("${event.trigger.url}")
+    private String eventUrl;
 
     @Transactional
     @Override
@@ -42,6 +56,18 @@ public class FollowServiceImpl implements FollowService {
             follow.setStatus(status);
             follow.setUserId(userId);
             followMapper.insert(follow);
+
+            EventDto eventDto = new EventDto();
+            eventDto.setFromUser(userId);
+            List<Integer> projectIds = new ArrayList<>();
+            projectIds.add(projectId);
+            eventDto.setProjectIds(projectIds);
+            eventDto.setEventType("CONCERN");
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            HttpEntity<EventDto> entity = new HttpEntity<>(eventDto, headers);
+            HttpEntity<CommonDto<String>> investors =  restTemplate.exchange(eventUrl+"/trigger/event", HttpMethod.POST,entity,new ParameterizedTypeReference<CommonDto<String>>(){} );
         }else{
             if(status == 0){
                 status = 1;
