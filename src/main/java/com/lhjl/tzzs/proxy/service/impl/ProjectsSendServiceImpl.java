@@ -96,6 +96,9 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
     
     @Autowired
     private CommonUserService  commonUserService;
+
+    @Resource
+    private ProjectCompetitiveProductsMapper projectCompetitiveProductsMapper;
     /**
      * 项目投递
      * @param params 投递参数
@@ -177,15 +180,15 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                         dataLogWorklist.add(ps1);
                                     }
                                     projectSegmentationMapper.insertList(dataLogWorklist);
-                                //团队成员
-                                ProjectSendTeamMember projectSendTeamMember = new ProjectSendTeamMember();
-                                projectSendTeamMember.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
-                                List<ProjectSendTeamMember> projectSendTeamMemberList = projectSendTeamMemberMapper.select(projectSendTeamMember);
-                                ProjectTeamMember t = new ProjectTeamMember();
-                                t.setProjectId(projects.getId());
-                                projectTeamMemberMapper.delete(t);
-                                    if (projectSendTeamMemberList.size() > 0){
-                                        for (ProjectSendTeamMember pst:projectSendTeamMemberList){
+                                    //团队成员
+                                    ProjectSendTeamMember projectSendTeamMember = new ProjectSendTeamMember();
+                                    projectSendTeamMember.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
+                                    List<ProjectSendTeamMember> projectSendTeamMemberList = projectSendTeamMemberMapper.select(projectSendTeamMember);
+                                    ProjectTeamMember t = new ProjectTeamMember();
+                                    t.setProjectId(projects.getId());
+                                    projectTeamMemberMapper.delete(t);
+                                    if (projectSendTeamMemberList.size() > 0) {
+                                        for (ProjectSendTeamMember pst : projectSendTeamMemberList) {
                                             ProjectTeamMember projectTeamMember = new ProjectTeamMember();
                                             projectTeamMember.setCreateTime(pst.getCreateTime());
                                             projectTeamMember.setMumberDesc(pst.getMemberDesc());
@@ -212,25 +215,25 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 
                                             ProjectTeamMemberEducation projectSendTeamMemberEducationForSearch1 = new ProjectTeamMemberEducation();
                                             projectSendTeamMemberEducationForSearch1.setProjectTeamMemberId(pst.getId());
-                                            
+
 
                                             ProjectTeamMemberWork projectSendTeamMemberWorkForSearch1 = new ProjectTeamMemberWork();
                                             projectSendTeamMemberWorkForSearch1.setProjectTeamMemberId(pst.getId());
-                                            
+
                                             List<ProjectTeamMemberEducation> projectSendTeamMemberEducationList1 = projectTeamMemberEducationMapper.select(projectSendTeamMemberEducationForSearch1);
                                             List<ProjectTeamMemberWork> projectSendTeamMemberWorkList1 = projectTeamMemberWorkMapper.select(projectSendTeamMemberWorkForSearch1);
-                                            if(projectSendTeamMemberEducationList1.size()>0){
-                                            	projectTeamMemberEducationMapper.delete(projectSendTeamMemberEducationForSearch1);	
-                                            	
+                                            if (projectSendTeamMemberEducationList1.size() > 0) {
+                                                projectTeamMemberEducationMapper.delete(projectSendTeamMemberEducationForSearch1);
+
                                             }
-                                            if(projectSendTeamMemberWorkList1.size()>0){
-                                            	projectTeamMemberWorkMapper.delete(projectSendTeamMemberWorkForSearch1);	
-                                            	
+                                            if (projectSendTeamMemberWorkList1.size() > 0) {
+                                                projectTeamMemberWorkMapper.delete(projectSendTeamMemberWorkForSearch1);
+
                                             }
                                             //创建教育经历
-                                            if (projectSendTeamMemberEducationList.size() > 0){
-                                                for (ProjectSendTeamMemberEducation pstme:projectSendTeamMemberEducationList){
-                                                    ProjectTeamMemberEducation projectTeamMemberEducation =new ProjectTeamMemberEducation();
+                                            if (projectSendTeamMemberEducationList.size() > 0) {
+                                                for (ProjectSendTeamMemberEducation pstme : projectSendTeamMemberEducationList) {
+                                                    ProjectTeamMemberEducation projectTeamMemberEducation = new ProjectTeamMemberEducation();
                                                     projectTeamMemberEducation.setProjectTeamMemberId(ptmid);
                                                     projectTeamMemberEducation.setEducationExperience(pstme.getEducationExperience());
 
@@ -238,8 +241,8 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                                 }
                                             }
                                             //创建工作经历
-                                            if (projectSendTeamMemberWorkList.size() > 0){
-                                                for (ProjectSendTeamMemberWork pstmw:projectSendTeamMemberWorkList){
+                                            if (projectSendTeamMemberWorkList.size() > 0) {
+                                                for (ProjectSendTeamMemberWork pstmw : projectSendTeamMemberWorkList) {
                                                     ProjectTeamMemberWork projectTeamMemberWork = new ProjectTeamMemberWork();
                                                     projectTeamMemberWork.setProjectTeamMemberId(ptmid);
                                                     projectTeamMemberWork.setWorkExperience(pstmw.getWorkExperience());
@@ -250,7 +253,55 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 
                                         }
                                     }
-                            }
+                                    //相似竞品
+                                    ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
+                                    List<ProjectSendLogCompeting> dataLogWorklist1 = new Page<ProjectSendLogCompeting>();
+                                    String competing = params.getCompeting();
+                                    projectSendLogCompeting.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
+                                    List<ProjectSendLogCompeting> one = projectSendLogCompetingMapper.select(projectSendLogCompeting);
+                                    if(competing !=null && !"".equals(competing)){
+
+                                    }
+                                    if (one.size()>0) {
+                                        projectSendLogCompetingMapper.delete(projectSendLogCompeting);
+                                        ProjectSendLogCompeting dataLogEducation2 = new ProjectSendLogCompeting();
+                                        dataLogEducation2.setProjectSendLogsId(projects.getId());
+                                        projectSendLogCompetingMapper.delete(dataLogEducation2);
+                                        String[] fieldArry1 = competing.split(",");
+                                        for (int b = 0; b < fieldArry1.length; b++) {
+                                            ProjectSendLogCompeting projectSendLogCompeting1 = new ProjectSendLogCompeting();
+                                            projectSendLogCompeting1.setCompetingProductName(fieldArry1[b]);
+                                            projectSendLogCompeting1.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
+                                            dataLogWorklist1.add(projectSendLogCompeting1);
+                                        }
+                                        projectSendLogCompetingMapper.insertList(dataLogWorklist1);
+                                    } else {
+                                        String[] fieldArry1= competing.split(",");
+                                        for (int b = 0; b < fieldArry1.length; b++) {
+                                            ProjectSendLogCompeting projectSendLogCompeting1 = new ProjectSendLogCompeting();
+                                            projectSendLogCompeting1.setCompetingProductName(fieldArry1[b]);
+                                            projectSendLogCompeting1.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
+                                            dataLogWorklist1.add(projectSendLogCompeting1);
+                                        }
+                                        projectSendLogCompetingMapper.insertList(dataLogWorklist1);
+                                    }
+
+                                    ProjectCompetitiveProducts projectCompetitiveProducts =new ProjectCompetitiveProducts();
+                                    projectCompetitiveProducts.setProjectId(projects.getId());
+                                    List<ProjectCompetitiveProducts> list1 =projectCompetitiveProductsMapper.select(projectCompetitiveProducts);
+                                    if(list1.size()>0) {
+                                        projectCompetitiveProductsMapper.delete(projectCompetitiveProducts);
+                                    }
+                                    List<ProjectCompetitiveProducts> dataLogWorklist2 = new Page<ProjectCompetitiveProducts>();
+                                    for(ProjectSendLogCompeting ee :dataLogWorklist1){
+                                        ProjectCompetitiveProducts projectCompetitiveProducts1 =new ProjectCompetitiveProducts();
+                                        projectCompetitiveProducts1.setProjectId(projects.getId());
+                                        projectCompetitiveProducts1.setCompetitiveProductsName(ee.getCompetingProductName());
+                                        dataLogWorklist2.add(projectCompetitiveProducts1);
+
+                                    }
+                                    projectCompetitiveProductsMapper.insertList(dataLogWorklist2);
+                                }
                                 //更新用户信息
                                 Users users = new Users();
                                 users.setId(userId);
@@ -334,37 +385,6 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                     projectFinancingHistoryMapper.updateHistory(projectId,userId);
                                 }
                                 projectFinancingHistoryMapper.updateHistory(projectId,userId);
-                                //相似竞品
-                                ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
-                                List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
-                                String competing = params.getCompeting();
-                                projectSendLogCompeting.setProjectSendLogsId(projectId);
-                                List<ProjectSendLogCompeting> one = projectSendLogCompetingMapper.select(projectSendLogCompeting);
-                                if(competing ==null || "".equals(competing)){
-                                    projectSendLogCompetingMapper.delete(projectSendLogCompeting);
-                                }else{
-                                if (one.size()>0) {
-                                    ProjectSendLogCompeting dataLogEducation2 = new ProjectSendLogCompeting();
-                                    dataLogEducation2.setProjectSendLogsId(projectId);
-                                    projectSendLogCompetingMapper.delete(dataLogEducation2);
-                                    String[] fieldArry = competing.split(",");
-                                    for (int b = 0; b < fieldArry.length; b++) {
-                                        ProjectSendLogCompeting projectSendLogCompeting1 = new ProjectSendLogCompeting();
-                                        projectSendLogCompeting1.setCompetingProductName(fieldArry[b]);
-                                        projectSendLogCompeting1.setProjectSendLogsId(projectId);
-                                        dataLogWorklist.add(projectSendLogCompeting1);
-                                    }
-                                    projectSendLogCompetingMapper.insertList(dataLogWorklist);
-                                } else {
-                                    String[] fieldArry = competing.split(",");
-                                    for (int b = 0; b < fieldArry.length; b++) {
-                                        ProjectSendLogCompeting projectSendLogCompeting1 = new ProjectSendLogCompeting();
-                                        projectSendLogCompeting1.setCompetingProductName(fieldArry[b]);
-                                        projectSendLogCompeting1.setProjectSendLogsId(projectId);
-                                        dataLogWorklist.add(projectSendLogCompeting1);
-                                    }
-                                    projectSendLogCompetingMapper.insertList(dataLogWorklist);
-                                }}
                                 //更新融资历史
                                 ProjectFinancingApproval oldProjectFinancingApproval = new ProjectFinancingApproval();
                                 oldProjectFinancingApproval.setProjectSendLogId(projectId);
