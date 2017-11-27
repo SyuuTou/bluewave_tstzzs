@@ -506,6 +506,9 @@ public class ProjectsServiceImpl implements ProjectsService {
         projectDetailOutputDto.setUrl(projects.getUrl());
         projectDetailOutputDto.setTerritory(projects.getTerritory());
         projectDetailOutputDto.setProjectLogo(projects.getProjectLogo());
+        if (projects.getProjectInvestmentHighlights() == null){
+            projects.setProjectInvestmentHighlights("");
+        }
         projectDetailOutputDto.setProjectInvestmentHighlights(projects.getProjectInvestmentHighlights());
 
 
