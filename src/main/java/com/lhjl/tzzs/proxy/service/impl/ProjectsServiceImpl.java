@@ -1022,7 +1022,11 @@ public class ProjectsServiceImpl implements ProjectsService {
         ProjectComplexOutputDto projectComplexOutputDto =new ProjectComplexOutputDto();
         projectComplexOutputDto.setProjectDesc(projects.getKernelDesc());
         projectComplexOutputDto.setProjectId(body.get("projectId"));
-        projectComplexOutputDto.setProjectLogo(projects.getProjectLogo());
+        String logo = "";
+        if (projects.getProjectLogo() != null){
+            logo = projects.getProjectLogo();
+        }
+        projectComplexOutputDto.setProjectLogo(logo);
         projectComplexOutputDto.setProjectShortName(projects.getShortName());
         projectComplexOutputDto.setSegmentation(fieldEdit);
         projectComplexOutputDto.setCity(projects.getCity());
