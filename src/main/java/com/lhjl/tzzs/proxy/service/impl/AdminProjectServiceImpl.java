@@ -249,7 +249,7 @@ public class AdminProjectServiceImpl implements AdminProjectService{
 
                 //创建项目的管理员
                 ProjectAdministrator projectAdministrator = new ProjectAdministrator();
-                projectAdministrator.setYn(1);
+                projectAdministrator.setYn(0);
                 projectAdministrator.setProjectsId(p.getId());
                 projectAdministrator.setCreateTime(now);
                 projectAdministrator.setUserId(administractorId);
