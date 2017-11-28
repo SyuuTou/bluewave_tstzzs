@@ -919,6 +919,10 @@ public class ProjectsServiceImpl implements ProjectsService {
                         userHeadpic = users.get("headpic_real");
                     }
 
+                    String companyDuties = "";
+                    if (users.get("company_duties") != null){
+                        companyDuties=users.get("company_duties");
+                    }
 
                     //放到返回值里
                     ProjectAdministratorOutputDto projectAdministratorOutputDto= new  ProjectAdministratorOutputDto();
@@ -927,6 +931,7 @@ public class ProjectsServiceImpl implements ProjectsService {
                     projectAdministratorOutputDto.setNickName(userNickName);
                     projectAdministratorOutputDto.setRealName(userRealName);
                     projectAdministratorOutputDto.setToken(userToken);
+                    projectAdministratorOutputDto.setCompanyDuties(companyDuties);
 
                     list.add(projectAdministratorOutputDto);
                 }
