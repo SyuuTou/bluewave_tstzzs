@@ -235,10 +235,10 @@ public class AdminProjectServiceImpl implements AdminProjectService{
 
 
         Date now =new Date();
-        //先获取到项目列表
-        Example projectExample = new Example(Projects.class);
-        projectExample.and().andIsNull("projectSource");
-        List<Projects> projectIdList = projectsMapper.selectByExample(projectExample);
+        //先获取到项目列表,给所有项目添加管理员
+//        Example projectExample = new Example(Projects.class);
+//        projectExample.and().andIsNull("projectSource");
+        List<Projects> projectIdList = projectsMapper.selectAll();
         if (projectIdList.size() > 0){
             for (Projects p:projectIdList){
                 //先将该项目的其他管理员删除
