@@ -9,6 +9,15 @@ public class ProjectAdministratorOutputDto {
     private String realName;
     private String headpic;
     private String companyName;
+    private String companyDuties;
+
+    public String getCompanyDuties() {
+        return companyDuties;
+    }
+
+    public void setCompanyDuties(String companyDuties) {
+        this.companyDuties = companyDuties;
+    }
 
     public String getToken() {
         return token;

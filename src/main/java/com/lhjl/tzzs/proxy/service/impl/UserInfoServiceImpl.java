@@ -344,7 +344,17 @@ public class UserInfoServiceImpl implements UserInfoService{
                 headpic = userSearchResult.get("headpic_real");
             }
             projectAdministratorOutputDto.setHeadpic(headpic);
-            projectAdministratorOutputDto.setCompanyName(userSearchResult.get("company_name"));
+            String comanyName = "";
+            if (userSearchResult.get("company_name") != null){
+                comanyName = userSearchResult.get("company_name");
+            }
+            projectAdministratorOutputDto.setCompanyName(comanyName);
+
+            String companyDuties = "";
+            if (userSearchResult.get("company_duties") != null){
+                companyDuties = userSearchResult.get("company_duties");
+            }
+            projectAdministratorOutputDto.setCompanyDuties(companyDuties);
 
             result.setData(projectAdministratorOutputDto);
             result.setStatus(200);
