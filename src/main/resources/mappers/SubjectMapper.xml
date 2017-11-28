@@ -13,11 +13,13 @@
   </resultMap>
   <select id="getIntelligentSearchInfo" resultMap="BaseResultMap">
     SELECT * FROM subject where short_name like CONCAT(CONCAT("%",#{inputsWords}),"%")
+    and short_name != ""
     LIMIT #{startPage},#{pageSize}
   </select>
 
   <select id="getIntelligentSearchInfoFullName" resultMap="BaseResultMap">
     SELECT * FROM subject where full_name like CONCAT(CONCAT("%",#{inputsWords}),"%")
+    and full_name != ""
     LIMIT #{startPage},#{pageSize}
   </select>
 </mapper>
