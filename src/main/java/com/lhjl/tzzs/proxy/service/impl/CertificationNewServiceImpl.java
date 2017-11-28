@@ -86,8 +86,6 @@ public class CertificationNewServiceImpl implements CertificationNewService {
 		                        log.info("获取机构投资人场景");
 		                        log.info("当前用户已失效,对应的用户id为：{}",userid);
 
-
-		                        return result;
 		                    }
 		                    //查找token
 		                    UserToken userToken =new UserToken();
@@ -105,7 +103,6 @@ public class CertificationNewServiceImpl implements CertificationNewService {
 		                            log.info("获取机构投资人场景");
 		                            log.info("当前用户token已失效,可能被人工清理数据库了,对应的用户id为：{}",userid);
 
-		                            return result;
 		                        }
 		                    }else {
                                 obj.setToken("");
@@ -155,6 +152,9 @@ public class CertificationNewServiceImpl implements CertificationNewService {
 
 					return result;
 				}
+
+				result.setMessage("success");
+				result.setStatus(200);
 		        result.setData(list);
 				return result;
 			}
