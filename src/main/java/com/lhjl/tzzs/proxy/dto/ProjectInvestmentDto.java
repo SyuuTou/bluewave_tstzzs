@@ -7,6 +7,15 @@ public class ProjectInvestmentDto {
 	private String realName;
 	private String openId;
 	private Integer userId;
+	private String companyDuties;
+
+	public String getCompanyDuties() {
+		return companyDuties;
+	}
+
+	public void setCompanyDuties(String companyDuties) {
+		this.companyDuties = companyDuties;
+	}
 
 	public String getRealName() {
 		return realName;

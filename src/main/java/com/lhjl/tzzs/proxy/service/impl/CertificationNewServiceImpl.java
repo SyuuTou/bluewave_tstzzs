@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -78,6 +79,14 @@ public class CertificationNewServiceImpl implements CertificationNewService {
 		                        } else {
                                     obj.setHeadpic("");
 		                        }
+
+		                        //获取用户职务
+								String companyDuties = "";
+								if (users.getCompanyDuties() !=null){
+									companyDuties = users.getCompanyDuties();
+								}
+
+								obj.setCompanyDuties(companyDuties);
 		                    }else {
 		                        result.setStatus(51003);
 		                        result.setMessage("当前用户已失效");
