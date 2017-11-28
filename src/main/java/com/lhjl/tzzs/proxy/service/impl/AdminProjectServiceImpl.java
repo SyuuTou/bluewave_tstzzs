@@ -150,8 +150,10 @@ public class AdminProjectServiceImpl implements AdminProjectService{
                     }else {
                         map.put("create_time",sdf.format(map.get("create_time")));
                     }
-                    if (map.get("name") == null){
+                    if (map.get("actual_name") == null){
                         map.put("name","");
+                    }else {
+                        map.put("name",map.get("actual_name"));
                     }
                     if (map.get("rating_stage") == null){
                         map.put("rating_stage","未评级");
