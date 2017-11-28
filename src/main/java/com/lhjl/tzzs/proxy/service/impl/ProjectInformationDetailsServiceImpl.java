@@ -297,15 +297,28 @@ public class ProjectInformationDetailsServiceImpl implements ProjectInformationD
                     projectSendLogsMapper.updateByPrimaryKey(projectSendLogs);
                     int projectId = projectSendLogs.getId();
                     projectSendTeamMemberMapper.updateTeame(projectId,userId);
-                    ProjectFinancingHistory projectFinancingHistory =new ProjectFinancingHistory();
-                    projectFinancingHistory.setProjectSendLogId(params.getXmid());
-                    projectFinancingHistory.setUserId(userId);
-                    projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
-                    if(projectFinancingHistory != null){
+                ProjectFinancingHistory projectFinancingHistory =new ProjectFinancingHistory();
+                projectFinancingHistory.setProjectSendLogId(params.getXmid());
+                projectFinancingHistory.setUserId(userId);
+                projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
+                if(projectFinancingHistory != null){
+                    ProjectFinancingHistory projectFinancingHistory3 =new ProjectFinancingHistory();
+                    projectFinancingHistory3.setProjectSendLogId("-1");
+                    projectFinancingHistory3.setUserId(userId);
+                    projectFinancingHistory3=projectFinancingHistoryMapper.selectOne(projectFinancingHistory3);
+                    if( projectFinancingHistory3 !=null) {
                         projectFinancingHistoryMapper.delete(projectFinancingHistory);
-                        projectFinancingHistoryMapper.updateHistory(projectId,userId);
+                        projectFinancingHistoryMapper.updateHistory(projectId, userId);
                     }
-                    projectFinancingHistoryMapper.updateHistory(projectId,userId);
+                }else {
+                    ProjectFinancingHistory projectFinancingHistory3 =new ProjectFinancingHistory();
+                    projectFinancingHistory3.setProjectSendLogId("-1");
+                    projectFinancingHistory3.setUserId(userId);
+                    projectFinancingHistory3=projectFinancingHistoryMapper.selectOne(projectFinancingHistory3);
+                    if( projectFinancingHistory3 !=null) {
+                        projectFinancingHistoryMapper.updateHistory(projectId, userId);
+                    }
+                }
 
                     //更新融资历史
                     ProjectFinancingApproval oldProjectFinancingApproval = new ProjectFinancingApproval();
