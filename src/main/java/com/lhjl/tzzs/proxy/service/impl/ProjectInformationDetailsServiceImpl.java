@@ -257,24 +257,6 @@ public class ProjectInformationDetailsServiceImpl implements ProjectInformationD
                     if (params.getTuisongxiangmubiao7wechatnumb() != null && !"".equals(params.getTuisongxiangmubiao7wechatnumb())) {
                         users.setWechat(params.getTuisongxiangmubiao7wechatnumb());
                     }
-                    if ("投资人".equals(params.getTuisongxiangmubiao7identityty())) {
-                        users.setIdentityType(0);
-                    }
-                    if ("创业者".equals(params.getTuisongxiangmubiao7identityty())) {
-                        users.setIdentityType(1);
-                    }
-                    if ("产业公司".equals(params.getTuisongxiangmubiao7identityty())) {
-                        users.setIdentityType(2);
-                    }
-                    if ("媒体".equals(params.getTuisongxiangmubiao7identityty())) {
-                        users.setIdentityType(3);
-                    }
-                    if ("服务机构".equals(params.getTuisongxiangmubiao7identityty())) {
-                        users.setIdentityType(4);
-                    }
-                    if ("政府机构".equals(params.getTuisongxiangmubiao7identityty())) {
-                        users.setIdentityType(5);
-                    }
                     usersMapper.updateByPrimaryKey(users);
                     ProjectSendLogs projectSendLogs = new ProjectSendLogs();
                     projectSendLogs.setId(Integer.parseInt(params.getXmid()));
