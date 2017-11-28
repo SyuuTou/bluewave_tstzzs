@@ -363,10 +363,23 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 projectFinancingHistory.setUserId(userId);
                                 projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
                                 if(projectFinancingHistory != null){
-                                    projectFinancingHistoryMapper.delete(projectFinancingHistory);
-                                    projectFinancingHistoryMapper.updateHistory(projectId,userId);
+                                    ProjectFinancingHistory projectFinancingHistory3 =new ProjectFinancingHistory();
+                                    projectFinancingHistory3.setProjectSendLogId("-1");
+                                    projectFinancingHistory3.setUserId(userId);
+                                    projectFinancingHistory3=projectFinancingHistoryMapper.selectOne(projectFinancingHistory3);
+                                    if( projectFinancingHistory3 !=null) {
+                                        projectFinancingHistoryMapper.delete(projectFinancingHistory);
+                                        projectFinancingHistoryMapper.updateHistory(projectId, userId);
+                                    }
+                                }else {
+                                    ProjectFinancingHistory projectFinancingHistory3 =new ProjectFinancingHistory();
+                                    projectFinancingHistory3.setProjectSendLogId("-1");
+                                    projectFinancingHistory3.setUserId(userId);
+                                    projectFinancingHistory3=projectFinancingHistoryMapper.selectOne(projectFinancingHistory3);
+                                    if( projectFinancingHistory3 !=null) {
+                                        projectFinancingHistoryMapper.updateHistory(projectId, userId);
+                                    }
                                 }
-                                projectFinancingHistoryMapper.updateHistory(projectId,userId);
                                 //更新融资历史
                                 ProjectFinancingApproval oldProjectFinancingApproval = new ProjectFinancingApproval();
                                 oldProjectFinancingApproval.setProjectSendLogId(projectId);
