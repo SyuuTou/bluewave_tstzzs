@@ -1771,14 +1771,21 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
         List<ProjectSendLogCompeting> work1 = projectSendLogCompetingMapper.select(projectSendLogCompeting);
         String [] workArray1 ={};
         if(work1.size()>0){
-            String [] workArray =null;
-            List<String> a=new LinkedList<String>();
-            for(ProjectSendLogCompeting d:work1){
-                a.add(d.getCompetingProductName());
-                workArray= new String[a.size()];
-                workArray=a.toArray(workArray);
-                datas.put("competing",workArray);
+            for(ProjectSendLogCompeting pp :work1){
+                if(pp.getCompetingProductName() == null || "".equals(pp.getCompetingProductName())){
+                    datas.put("competing", workArray1);
+                }else{
+                    String [] workArray =null;
+                    List<String> a=new LinkedList<String>();
+                    for(ProjectSendLogCompeting d:work1){
+                        a.add(d.getCompetingProductName());
+                        workArray= new String[a.size()];
+                        workArray=a.toArray(workArray);
+                        datas.put("competing",workArray);
+                    }
+                }
             }
+
         }else{
             datas.put("competing", workArray1);
         }
