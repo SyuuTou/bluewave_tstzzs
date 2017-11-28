@@ -559,7 +559,25 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                         }
                                     }
                                     projectSendTeamMemberMapper.updateTeame(projectId,userId);
-                                    projectFinancingHistoryMapper.updateHistory(projectId,userId);
+                                    ProjectFinancingHistory projectFinancingHistory =new ProjectFinancingHistory();
+                                    projectFinancingHistory.setUserId(userId);
+                                    projectFinancingHistory.setProjectSendLogId("-1");
+                                    projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
+                                    if(projectFinancingHistory != null) {
+                                        projectFinancingHistoryMapper.updateHistory(projectId, userId);
+                                    }else{
+                                        ProjectFinancingHistory projectFinancingHistory2 =new ProjectFinancingHistory();
+                                        projectFinancingHistory2.setUserId(userId);
+                                        projectFinancingHistory2.setProjectSendLogId(params.getXmid());
+                                        projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory2);
+                                        if( projectFinancingHistory !=null) {
+                                            ProjectFinancingHistory projectFinancingHistory1 = new ProjectFinancingHistory();
+                                            projectFinancingHistory1.setProjectSendLogId(String.valueOf(projectId));
+                                            projectFinancingHistory1.setUserId(userId);
+                                            projectFinancingHistory1.setHistory(projectFinancingHistory.getHistory());
+                                            projectFinancingHistoryMapper.insert(projectFinancingHistory1);
+                                        }
+                                    }
                                     //相似竞品
                                     ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                                     List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -798,7 +816,26 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                     }
                                 }
                                 projectSendTeamMemberMapper.updateTeame(projectId,userId);
-                                projectFinancingHistoryMapper.updateHistory(projectId,userId);
+                                //融资历史
+                                ProjectFinancingHistory projectFinancingHistory =new ProjectFinancingHistory();
+                                projectFinancingHistory.setUserId(userId);
+                                projectFinancingHistory.setProjectSendLogId("-1");
+                                projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
+                                if(projectFinancingHistory != null) {
+                                    projectFinancingHistoryMapper.updateHistory(projectId, userId);
+                                }else{
+                                    ProjectFinancingHistory projectFinancingHistory2 =new ProjectFinancingHistory();
+                                    projectFinancingHistory2.setUserId(userId);
+                                    projectFinancingHistory2.setProjectSendLogId(params.getXmid());
+                                    projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory2);
+                                    if( projectFinancingHistory !=null) {
+                                        ProjectFinancingHistory projectFinancingHistory1 = new ProjectFinancingHistory();
+                                        projectFinancingHistory1.setProjectSendLogId(String.valueOf(projectId));
+                                        projectFinancingHistory1.setUserId(userId);
+                                        projectFinancingHistory1.setHistory(projectFinancingHistory.getHistory());
+                                        projectFinancingHistoryMapper.insert(projectFinancingHistory1);
+                                    }
+                                }
                                 //相似竞品
                                 ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                                 List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -1056,7 +1093,26 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 }
                             }
                             projectSendTeamMemberMapper.updateTeame(projectId,userId);
-                            projectFinancingHistoryMapper.updateHistory(projectId,userId);
+                            //更新历史融资历史
+                            ProjectFinancingHistory projectFinancingHistory =new ProjectFinancingHistory();
+                            projectFinancingHistory.setUserId(userId);
+                            projectFinancingHistory.setProjectSendLogId("-1");
+                            projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
+                            if(projectFinancingHistory != null) {
+                                projectFinancingHistoryMapper.updateHistory(projectId, userId);
+                            }else{
+                                ProjectFinancingHistory projectFinancingHistory2 =new ProjectFinancingHistory();
+                                projectFinancingHistory2.setUserId(userId);
+                                projectFinancingHistory2.setProjectSendLogId(params.getXmid());
+                                projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory2);
+                                if( projectFinancingHistory !=null) {
+                                    ProjectFinancingHistory projectFinancingHistory1 = new ProjectFinancingHistory();
+                                    projectFinancingHistory1.setProjectSendLogId(String.valueOf(projectId));
+                                    projectFinancingHistory1.setUserId(userId);
+                                    projectFinancingHistory1.setHistory(projectFinancingHistory.getHistory());
+                                    projectFinancingHistoryMapper.insert(projectFinancingHistory1);
+                                }
+                            }
                             //相似竞品
                             ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                             List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
@@ -1296,7 +1352,26 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                             }
                         }
                         projectSendTeamMemberMapper.updateTeame(projectId,userId);
-                        projectFinancingHistoryMapper.updateHistory(projectId,userId);
+                        //更新历史融资历史
+                        ProjectFinancingHistory projectFinancingHistory =new ProjectFinancingHistory();
+                        projectFinancingHistory.setUserId(userId);
+                        projectFinancingHistory.setProjectSendLogId("-1");
+                        projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
+                        if(projectFinancingHistory != null) {
+                            projectFinancingHistoryMapper.updateHistory(projectId, userId);
+                        }else{
+                            ProjectFinancingHistory projectFinancingHistory2 =new ProjectFinancingHistory();
+                            projectFinancingHistory2.setUserId(userId);
+                            projectFinancingHistory2.setProjectSendLogId(params.getXmid());
+                            projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory2);
+                            if( projectFinancingHistory !=null) {
+                                ProjectFinancingHistory projectFinancingHistory1 = new ProjectFinancingHistory();
+                                projectFinancingHistory1.setProjectSendLogId(String.valueOf(projectId));
+                                projectFinancingHistory1.setUserId(userId);
+                                projectFinancingHistory1.setHistory(projectFinancingHistory.getHistory());
+                                projectFinancingHistoryMapper.insert(projectFinancingHistory1);
+                            }
+                        }
                         //相似竞品
                         //相似竞品
                         ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
@@ -1487,8 +1562,26 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                         int projectId = projectSendLogs.getId();
 
                         projectSendTeamMemberMapper.updateTeame(projectId,userId);
-                        projectFinancingHistoryMapper.updateHistory(projectId,userId);
-                        //相似竞品
+                        //更新的融资历史
+                        ProjectFinancingHistory projectFinancingHistory =new ProjectFinancingHistory();
+                        projectFinancingHistory.setUserId(userId);
+                        projectFinancingHistory.setProjectSendLogId("-1");
+                        projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory);
+                        if(projectFinancingHistory != null) {
+                            projectFinancingHistoryMapper.updateHistory(projectId, userId);
+                        }else{
+                            ProjectFinancingHistory projectFinancingHistory2 =new ProjectFinancingHistory();
+                            projectFinancingHistory2.setUserId(userId);
+                            projectFinancingHistory2.setProjectSendLogId(params.getXmid());
+                            projectFinancingHistory=projectFinancingHistoryMapper.selectOne(projectFinancingHistory2);
+                            if( projectFinancingHistory !=null) {
+                                ProjectFinancingHistory projectFinancingHistory1 = new ProjectFinancingHistory();
+                                projectFinancingHistory1.setProjectSendLogId(String.valueOf(projectId));
+                                projectFinancingHistory1.setUserId(userId);
+                                projectFinancingHistory1.setHistory(projectFinancingHistory.getHistory());
+                                projectFinancingHistoryMapper.insert(projectFinancingHistory1);
+                            }
+                        }
                         //相似竞品
                         ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
                         List<ProjectSendLogCompeting> dataLogWorklist = new Page<ProjectSendLogCompeting>();
