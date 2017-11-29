@@ -729,11 +729,22 @@ public class UserLevelServiceImpl implements UserLevelService {
                 type = 0;
             }
             String tishi = "";
-            if (type == 1){
-                tishi = "约谈50指数机构所投资项目，仅对VIP投资人开放";
-            }else{
-                tishi = "约谈行业指数机构所投资项目，仅对VIP投资人开放";
+            Integer reserveField = 0;
+            if (action.getReserveField() == null){
+                reserveField=0;
+            }else {
+                reserveField = action.getReserveField();
             }
+            if (reserveField == 1){
+                tishi = "约谈指数机构投资项目，仅对VIP投资人开放";
+            }else {
+                if (type == 1){
+                    tishi = "约谈50指数机构所投资项目，仅对VIP投资人开放";
+                }else{
+                    tishi = "约谈行业指数机构所投资项目，仅对VIP投资人开放";
+                }
+            }
+
 
             if(!sceneKeys.contains(sceneKey)){
                 result.setStatus(202);

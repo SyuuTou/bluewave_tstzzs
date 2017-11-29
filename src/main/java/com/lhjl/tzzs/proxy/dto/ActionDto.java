@@ -61,6 +61,19 @@ public class ActionDto {
 
     private String presentedType;
 
+    /**
+     * 备用字段，辅助场景使用
+     */
+    private Integer reserveField;
+
+    public Integer getReserveField() {
+        return reserveField;
+    }
+
+    public void setReserveField(Integer reserveField) {
+        this.reserveField = reserveField;
+    }
+
     public String getPresentedType() {
         return presentedType;
     }
