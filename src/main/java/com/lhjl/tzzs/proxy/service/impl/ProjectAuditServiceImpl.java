@@ -591,7 +591,7 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         String xmids =String.valueOf(xmid);
          result.setStatus(200);
          result.setData(null);
-         result.setMessage("success");
+         result.setMessage(xmids);
 
         return result;
     }
