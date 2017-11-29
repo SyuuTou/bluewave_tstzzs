@@ -729,7 +729,13 @@ public class UserLevelServiceImpl implements UserLevelService {
                 type = 0;
             }
             String tishi = "";
-            if (action.getReserveField() == 1){
+            Integer reserveField = 0;
+            if (action.getReserveField() == null){
+                reserveField=0;
+            }else {
+                reserveField = action.getReserveField();
+            }
+            if (reserveField == 1){
                 tishi = "约谈指数机构投资项目，仅对VIP投资人开放";
             }else {
                 if (type == 1){
