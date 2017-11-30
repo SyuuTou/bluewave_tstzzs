@@ -260,32 +260,32 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                     projectSendLogCompeting.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
                                     List<ProjectSendLogCompeting> one = projectSendLogCompetingMapper.select(projectSendLogCompeting);
                                     if(competing !=null && !"".equals(competing)){
-
-                                    }
-                                    if (one.size()>0) {
                                         projectSendLogCompetingMapper.delete(projectSendLogCompeting);
-                                        ProjectSendLogCompeting dataLogEducation2 = new ProjectSendLogCompeting();
-                                        dataLogEducation2.setProjectSendLogsId(projects.getId());
-                                        projectSendLogCompetingMapper.delete(dataLogEducation2);
-                                        String[] fieldArry1 = competing.split(",");
-                                        for (int b = 0; b < fieldArry1.length; b++) {
-                                            ProjectSendLogCompeting projectSendLogCompeting1 = new ProjectSendLogCompeting();
-                                            projectSendLogCompeting1.setCompetingProductName(fieldArry1[b]);
-                                            projectSendLogCompeting1.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
-                                            dataLogWorklist1.add(projectSendLogCompeting1);
+                                    }else {
+                                        if (one.size() > 0) {
+                                            projectSendLogCompetingMapper.delete(projectSendLogCompeting);
+                                            ProjectSendLogCompeting dataLogEducation2 = new ProjectSendLogCompeting();
+                                            dataLogEducation2.setProjectSendLogsId(projects.getId());
+                                            projectSendLogCompetingMapper.delete(dataLogEducation2);
+                                            String[] fieldArry1 = competing.split(",");
+                                            for (int b = 0; b < fieldArry1.length; b++) {
+                                                ProjectSendLogCompeting projectSendLogCompeting1 = new ProjectSendLogCompeting();
+                                                projectSendLogCompeting1.setCompetingProductName(fieldArry1[b]);
+                                                projectSendLogCompeting1.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
+                                                dataLogWorklist1.add(projectSendLogCompeting1);
+                                            }
+                                            projectSendLogCompetingMapper.insertList(dataLogWorklist1);
+                                        } else {
+                                            String[] fieldArry1 = competing.split(",");
+                                            for (int b = 0; b < fieldArry1.length; b++) {
+                                                ProjectSendLogCompeting projectSendLogCompeting1 = new ProjectSendLogCompeting();
+                                                projectSendLogCompeting1.setCompetingProductName(fieldArry1[b]);
+                                                projectSendLogCompeting1.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
+                                                dataLogWorklist1.add(projectSendLogCompeting1);
+                                            }
+                                            projectSendLogCompetingMapper.insertList(dataLogWorklist1);
                                         }
-                                        projectSendLogCompetingMapper.insertList(dataLogWorklist1);
-                                    } else {
-                                        String[] fieldArry1= competing.split(",");
-                                        for (int b = 0; b < fieldArry1.length; b++) {
-                                            ProjectSendLogCompeting projectSendLogCompeting1 = new ProjectSendLogCompeting();
-                                            projectSendLogCompeting1.setCompetingProductName(fieldArry1[b]);
-                                            projectSendLogCompeting1.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
-                                            dataLogWorklist1.add(projectSendLogCompeting1);
-                                        }
-                                        projectSendLogCompetingMapper.insertList(dataLogWorklist1);
                                     }
-
                                     ProjectCompetitiveProducts projectCompetitiveProducts =new ProjectCompetitiveProducts();
                                     projectCompetitiveProducts.setProjectId(projects.getId());
                                     List<ProjectCompetitiveProducts> list1 =projectCompetitiveProductsMapper.select(projectCompetitiveProducts);
