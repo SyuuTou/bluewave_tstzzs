@@ -1,8 +1,6 @@
 package com.lhjl.tzzs.proxy.controller;
 
-import com.lhjl.tzzs.proxy.dto.ActionDto;
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.UserLevelDto;
+import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.service.UserIntegralsService;
 import com.lhjl.tzzs.proxy.service.UserLevelService;
 import org.slf4j.Logger;
@@ -144,7 +142,7 @@ public class UserLevelController {
 
     /**
      * 测试支付完成之后的流程
-     * @param body
+     * @param
      * @return
      */
 //    @PostMapping("/payafter")
@@ -181,4 +179,39 @@ public class UserLevelController {
         return result;
     }
 
+    /**
+     * 事件流点击查看约谈内容接口
+     * @param body
+     * @return
+     */
+    @PostMapping("/interviewTips")
+    public CommonDto<Map<String,Object>> getInterviewTips(@RequestBody InterviewInputDto body){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        try {
+            result = userLevelService.interviewTips(body);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+        return result;
+    }
+
+    @PostMapping("/interviewCost")
+    public CommonDto<Map<String,Object>> setInterviewCost(@RequestBody InterviewInputDto body){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        try {
+            result =userLevelService.interviewCost(body);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+        }
+
+        return result;
+    }
 }

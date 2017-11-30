@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.lhjl.tzzs.proxy.dto.ActionDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.InterviewInputDto;
 import com.lhjl.tzzs.proxy.dto.UserLevelDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
@@ -1609,6 +1610,263 @@ public class UserLevelServiceImpl implements UserLevelService {
 //        return result;
 //    }
 
+    /**
+     * 信息流里查看约谈的提示接口
+     * @param body
+     * @return
+     */
+    @Override
+    public CommonDto<Map<String,Object>> interviewTips(InterviewInputDto body){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Date now = new Date();
+        String token = "";
+        if (body.getToken() != null){
+            token = body.getToken();
+        }
+
+        if ("".equals(token) || "undefined".equals(token)){
+            result.setStatus(502);
+            result.setMessage("用户token不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        String eventName = "";
+        if (body.getEventName() != null){
+            eventName = body.getEventName();
+        }
+
+        if ("".equals(eventName) || "undefined".equals(eventName)){
+            result.setStatus(502);
+            result.setMessage("事件流类型不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        String scence = "";
+        if (body.getScence() != null){
+            scence = body.getScence();
+        }
+
+        if ("".equals(scence) || "undefined".equals(scence)){
+            result.setStatus(502);
+            result.setMessage("场景key不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        //获取用户的id
+        Integer userId = userExistJudgmentService.getUserId(token);
+        if (userId == -1){
+            result.setStatus(502);
+            result.setMessage("用户token不存在，请检查");
+            result.setData(null);
+
+            return result;
+        }
+
+        //获取当前场景的消费金额
+        Integer costNum = getSenceCost(scence,1);
+
+        //先查一下用户是否已经消费过
+        Example uicExample = new Example(UserIntegralConsume.class);
+        uicExample.and().andEqualTo("sceneKey",eventName).andEqualTo("userId",userId);
+        uicExample.setOrderByClause("end_time desc");
+
+        List<UserIntegralConsume> userIntegralConsume = userIntegralConsumeMapper.selectByExample(uicExample);
+        if (userIntegralConsume.size() > 0 ){
+            if (userIntegralConsume.get(0).getEndTime().getTime() > now.getTime()){
+                result.setMessage("用户已经购买查看当前约谈内容权限，可直接查看");
+                result.setStatus(200);
+                result.setData(null);
+            }else {
+
+                //判断用户账户余额是否充足
+                if (jugeCoinsIsEnough(userId,costNum)){
+                    result.setStatus(204);
+                    result.setMessage("查看约谈内容，共消费"+(-costNum)+"金币，一次性收费后不再计费");
+                    result.setData(null);
+                }else {
+                    result.setStatus(203);
+                    result.setMessage("查看约谈内容，需要"+(-costNum)+"金币，您的金币已不足，快去充值吧");
+                }
+            }
+        }else {
+            //判断用户账户余额是否充足
+            if (jugeCoinsIsEnough(userId,costNum)){
+                result.setStatus(204);
+                result.setMessage("查看约谈内容，共消费"+(-costNum)+"金币，一次性收费后不再计费");
+                result.setData(null);
+            }else {
+                result.setStatus(203);
+                result.setMessage("查看约谈内容，需要"+(-costNum)+"金币，您的金币已不足，快去充值吧");
+            }
+        }
+
+
+        return result;
+    }
+
+    /**
+     * 判断金币是否充足接口
+     * @param userId 用户id
+     * @param costNum 花费数量
+     * @return
+     */
+    private boolean jugeCoinsIsEnough(Integer userId,Integer costNum){
+        boolean jieguo = false;
+        //查询当前用户金币余额
+        Map<String, Object> u = userIntegralsMapper.findIntegralsU(userId);
+        Integer z = Integer.valueOf(String.valueOf(u.get("xnum")));
+        Integer x = Integer.valueOf(String.valueOf(u.get("znum")));
+        int totalCoins = z+x;
+
+        if ((-costNum) < totalCoins){
+            jieguo = true;
+        }
+
+        return jieguo;
+    }
+
+    /**
+     * 获取场景价格的接口
+     * @param sence 场景key
+     * @param userlevel 用户等级
+     * @return
+     */
+    private Integer getSenceCost(String sence,Integer userlevel){
+        Integer result = 0;
+
+        Example moiExample = new Example(MetaObtainIntegral.class);
+        moiExample.and().andEqualTo("sceneKey",sence).andEqualTo("userLevel");
+
+       List<MetaObtainIntegral> metaObtainIntegralList = metaObtainIntegralMapper.selectByExample(moiExample);
+       if (metaObtainIntegralList.size() > 0){
+           result = metaObtainIntegralList.get(0).getIntegral();
+       }
+
+
+        return result;
+    }
+
+    /**
+     * 信息流里查看约谈的消费接口
+     * @param body
+     * @return
+     */
+    @Transactional
+    @Override
+    public CommonDto<Map<String,Object>> interviewCost(InterviewInputDto body){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        String token = "";
+        if (body.getToken() != null){
+            token = body.getToken();
+        }
+
+        if ("".equals(token) || "undefined".equals(token)){
+            result.setStatus(502);
+            result.setMessage("用户token不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        String eventName = "";
+        if (body.getEventName() != null){
+            eventName = body.getEventName();
+        }
+
+        if ("".equals(eventName) || "undefined".equals(eventName)){
+            result.setStatus(502);
+            result.setMessage("事件流类型不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        String scence = "";
+        if (body.getScence() != null){
+            scence = body.getScence();
+        }
+
+        if ("".equals(scence) || "undefined".equals(scence)){
+            result.setStatus(502);
+            result.setMessage("场景key不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        //获取用id
+        Integer userId = userExistJudgmentService.getUserId(token);
+        if (userId == -1){
+            result.setStatus(502);
+            result.setMessage("用户token已经不存在，请检查");
+            result.setData(null);
+
+            return result;
+        }
+
+        Example moiExample = new Example(MetaObtainIntegral.class);
+        moiExample.and().andEqualTo("sceneKey",scence).andEqualTo("userLevel",1);
+        List<MetaObtainIntegral> metaObtainIntegralList = metaObtainIntegralMapper.selectByExample(moiExample);
+
+        //获取需要消费金币
+        Integer costNum = 0;
+        //获取周期
+        Integer period = 0;
+        if (metaObtainIntegralList.size() > 0){
+            costNum = metaObtainIntegralList.get(0).getIntegral();
+            period = metaObtainIntegralList.get(0).getPeriod();
+        }else {
+            result.setData(null);
+            result.setMessage("场景类型有误，没有找到对应场景定价信息");
+            result.setStatus(502);
+
+            return result;
+        }
+
+        Date now = new Date();
+
+        //计算失效时间
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(now);
+        calendar.add(Calendar.DAY_OF_YEAR, period);
+        Date end = calendar.getTime();
+
+        //插入消费表
+        UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
+        userIntegralConsume.setUserId(userId);
+        userIntegralConsume.setSceneKey(scence);
+        userIntegralConsume.setCostNum(costNum);
+        userIntegralConsume.setBeginTime(now);
+        userIntegralConsume.setCreateTime(now);
+        userIntegralConsume.setEndTime(end);
+        userIntegralConsumeMapper.insert(userIntegralConsume);
+
+        //更新金币记录表
+        changeIntegrals(userId, -costNum);
+
+        Integer consumeId = userIntegralConsume.getId();
+        //插入交易记录明细表
+        UserIntegralConsumeDatas newUserIntegralConsumeDatas = new UserIntegralConsumeDatas();
+        newUserIntegralConsumeDatas.setUserId(userId);
+        newUserIntegralConsumeDatas.setSceneKey(scence);
+        newUserIntegralConsumeDatas.setDatasId(body.getEventName());
+        newUserIntegralConsumeDatas.setConsumeDate(new Date());
+        newUserIntegralConsumeDatas.setUserIntegralConsumeId(consumeId);
+        userIntegralConsumeDatasMapper.insert(newUserIntegralConsumeDatas);
+
+        result.setData(null);
+        result.setMessage("success");
+        result.setStatus(200);
+
+        return result;
+    }
     /**
      * 消费金币
      * @param action 请求对象
