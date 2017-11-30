@@ -1037,6 +1037,12 @@ public class ProjectsServiceImpl implements ProjectsService {
         projectComplexOutputDto.setCity(projects.getCity());
         projectComplexOutputDto.setRound(financingStage);
 
+        String projectInvestmentHighlights = "";
+        if (projects.getProjectInvestmentHighlights() != null){
+            projectInvestmentHighlights = projects.getProjectInvestmentHighlights();
+        }
+        projectComplexOutputDto.setProjectInvestmentHighlights(projectInvestmentHighlights);
+
 
         result.setData(projectComplexOutputDto);
         result.setMessage("success");

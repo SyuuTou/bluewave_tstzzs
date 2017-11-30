@@ -33,6 +33,19 @@ public class ProjectComplexOutputDto {
      */
     private String round;
 
+    /**
+     * 项目投资亮点
+     */
+    private String projectInvestmentHighlights;
+
+    public String getProjectInvestmentHighlights() {
+        return projectInvestmentHighlights;
+    }
+
+    public void setProjectInvestmentHighlights(String projectInvestmentHighlights) {
+        this.projectInvestmentHighlights = projectInvestmentHighlights;
+    }
+
     public String getSegmentation() {
         return segmentation;
     }
