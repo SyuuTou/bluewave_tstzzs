@@ -1676,6 +1676,19 @@ public class UserLevelServiceImpl implements UserLevelService {
         uicExample.and().andEqualTo("sceneKey",eventName).andEqualTo("userId",userId);
         uicExample.setOrderByClause("end_time desc");
 
+        //获取用户是否设置不再提示
+        Map<String,Object> data = new HashMap<>();
+        UserScene userScene = new UserScene();
+        userScene.setUserId(userId);
+        userScene.setSceneKey(scence);
+        userScene.setYn(0);
+        userScene = userSceneMapper.selectOne(userScene);
+        if(userScene == null || userScene.getFlag() == 0){
+            data.put("flag", "0");//提示
+        }else{
+            data.put("flag", "1");//不提示
+        }
+
         List<UserIntegralConsume> userIntegralConsume = userIntegralConsumeMapper.selectByExample(uicExample);
         if (userIntegralConsume.size() > 0 ){
             if (userIntegralConsume.get(0).getEndTime().getTime() > now.getTime()){
@@ -1688,7 +1701,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 if (jugeCoinsIsEnough(userId,costNum)){
                     result.setStatus(204);
                     result.setMessage("查看约谈内容，共消费"+(-costNum)+"金币，一次性收费后不再计费");
-                    result.setData(null);
+                    result.setData(data);
                 }else {
                     result.setStatus(203);
                     result.setMessage("查看约谈内容，需要"+(-costNum)+"金币，您的金币已不足，快去充值吧");
@@ -1699,7 +1712,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             if (jugeCoinsIsEnough(userId,costNum)){
                 result.setStatus(204);
                 result.setMessage("查看约谈内容，共消费"+(-costNum)+"金币，一次性收费后不再计费");
-                result.setData(null);
+                result.setData(data);
             }else {
                 result.setStatus(203);
                 result.setMessage("查看约谈内容，需要"+(-costNum)+"金币，您的金币已不足，快去充值吧");
