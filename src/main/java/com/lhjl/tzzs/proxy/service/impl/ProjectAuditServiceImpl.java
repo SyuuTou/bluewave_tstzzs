@@ -284,6 +284,7 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         projects.setCommet(projectSendLogs.getCompanyDesc());
         projects.setUrl(projectSendLogs.getCompanyOfficialWebsite());
         projects.setTerritory(projectSendLogs.getCity());
+        projects.setCity(projectSendLogs.getCity());
         projects.setItemLabel(projectSendLogs.getProjectTags());
         projects.setProjectSource(0);
         projects.setUserid(projectSendLogs.getUserid());
