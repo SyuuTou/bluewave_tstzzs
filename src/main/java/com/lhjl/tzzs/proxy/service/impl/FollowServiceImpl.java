@@ -50,32 +50,10 @@ public class FollowServiceImpl implements FollowService {
         follow.setProjectsId(projectId);
         List<Follow> list = followMapper.select(follow);
         if(list.size() == 0|| list.get(0) == null ){
-            status = 1;
-            follow.setCreateTime(new Date());
-            follow.setProjectsId(projectId);
-            follow.setStatus(status);
-            follow.setUserId(userId);
-            followMapper.insert(follow);
-
-            EventDto eventDto = new EventDto();
-            eventDto.setFromUser(userId);
-            List<Integer> projectIds = new ArrayList<>();
-            projectIds.add(projectId);
-            eventDto.setProjectIds(projectIds);
-            eventDto.setEventType("CONCERN");
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
-            HttpEntity<EventDto> entity = new HttpEntity<>(eventDto, headers);
-            HttpEntity<CommonDto<String>> investors =  restTemplate.exchange(eventUrl+"/trigger/event", HttpMethod.POST,entity,new ParameterizedTypeReference<CommonDto<String>>(){} );
+            addConcernEvent(projectId, userId, follow);
         }else{
             if(status == 0){
-                status = 1;
-                follow.setCreateTime(new Date());
-                follow.setProjectsId(projectId);
-                follow.setStatus(status);
-                follow.setUserId(userId);
-                followMapper.insert(follow);
+                addConcernEvent(projectId, userId, follow);
             }else{
                 follow.setStatus(0);
                 follow.setProjectsId(projectId);
@@ -86,5 +64,31 @@ public class FollowServiceImpl implements FollowService {
             }
 
         }
+    }
+
+    private void addConcernEvent(Integer projectId, String userId, Follow follow) {
+        Integer status;
+        status = 1;
+        follow.setCreateTime(new Date());
+        follow.setProjectsId(projectId);
+        follow.setStatus(status);
+        follow.setUserId(userId);
+        followMapper.insert(follow);
+
+        sendConcernEvent(projectId, userId);
+    }
+
+    private void sendConcernEvent(Integer projectId, String userId) {
+        EventDto eventDto = new EventDto();
+        eventDto.setFromUser(userId);
+        List<Integer> projectIds = new ArrayList<>();
+        projectIds.add(projectId);
+        eventDto.setProjectIds(projectIds);
+        eventDto.setEventType("CONCERN");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<EventDto> entity = new HttpEntity<>(eventDto, headers);
+        HttpEntity<CommonDto<String>> investors =  restTemplate.exchange(eventUrl+"/trigger/event", HttpMethod.POST,entity,new ParameterizedTypeReference<CommonDto<String>>(){} );
     }
 }
