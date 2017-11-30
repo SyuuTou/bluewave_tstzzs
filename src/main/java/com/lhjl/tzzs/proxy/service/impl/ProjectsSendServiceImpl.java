@@ -301,6 +301,39 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
 
                                     }
                                     projectCompetitiveProductsMapper.insertList(dataLogWorklist2);
+                                }else{
+                                    ProjectSendLogCompeting projectSendLogCompeting = new ProjectSendLogCompeting();
+                                    List<ProjectSendLogCompeting> dataLogWorklist1 = new Page<ProjectSendLogCompeting>();
+                                    String competing = params.getCompeting();
+                                    projectSendLogCompeting.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
+                                    List<ProjectSendLogCompeting> one = projectSendLogCompetingMapper.select(projectSendLogCompeting);
+                                    if(competing ==null && "".equals(competing)){
+                                        projectSendLogCompetingMapper.delete(projectSendLogCompeting);
+                                    }else {
+                                        if (one.size() > 0) {
+                                            projectSendLogCompetingMapper.delete(projectSendLogCompeting);
+                                            ProjectSendLogCompeting dataLogEducation2 = new ProjectSendLogCompeting();
+                                            dataLogEducation2.setProjectSendLogsId(projects.getId());
+                                            projectSendLogCompetingMapper.delete(dataLogEducation2);
+                                            String[] fieldArry1 = competing.split(",");
+                                            for (int b = 0; b < fieldArry1.length; b++) {
+                                                ProjectSendLogCompeting projectSendLogCompeting1 = new ProjectSendLogCompeting();
+                                                projectSendLogCompeting1.setCompetingProductName(fieldArry1[b]);
+                                                projectSendLogCompeting1.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
+                                                dataLogWorklist1.add(projectSendLogCompeting1);
+                                            }
+                                            projectSendLogCompetingMapper.insertList(dataLogWorklist1);
+                                        } else {
+                                            String[] fieldArry1 = competing.split(",");
+                                            for (int b = 0; b < fieldArry1.length; b++) {
+                                                ProjectSendLogCompeting projectSendLogCompeting1 = new ProjectSendLogCompeting();
+                                                projectSendLogCompeting1.setCompetingProductName(fieldArry1[b]);
+                                                projectSendLogCompeting1.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
+                                                dataLogWorklist1.add(projectSendLogCompeting1);
+                                            }
+                                            projectSendLogCompetingMapper.insertList(dataLogWorklist1);
+                                        }
+                                    }
                                 }
                                 //更新用户信息
                                 Users users = new Users();
