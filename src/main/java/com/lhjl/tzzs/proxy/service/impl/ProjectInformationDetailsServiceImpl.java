@@ -125,7 +125,7 @@ public class ProjectInformationDetailsServiceImpl implements ProjectInformationD
                         String competing = params.getCompeting();
                         projectSendLogCompeting.setProjectSendLogsId(Integer.parseInt(params.getXmid()));
                         List<ProjectSendLogCompeting> one = projectSendLogCompetingMapper.select(projectSendLogCompeting);
-                        if(competing !=null && !"".equals(competing)){
+                        if(competing ==null && "".equals(competing)){
                             projectSendLogCompetingMapper.delete(projectSendLogCompeting);
                         }else {
                             if (one.size() > 0) {
