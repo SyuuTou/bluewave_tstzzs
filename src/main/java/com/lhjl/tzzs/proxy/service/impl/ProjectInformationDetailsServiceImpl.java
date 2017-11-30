@@ -251,9 +251,6 @@ public class ProjectInformationDetailsServiceImpl implements ProjectInformationD
                         }else {
                             if (one.size() > 0) {
                                 projectSendLogCompetingMapper.delete(projectSendLogCompeting);
-                                ProjectSendLogCompeting dataLogEducation2 = new ProjectSendLogCompeting();
-                                dataLogEducation2.setProjectSendLogsId(projects.getId());
-                                projectSendLogCompetingMapper.delete(dataLogEducation2);
                                 String[] fieldArry1 = competing.split(",");
                                 for (int b = 0; b < fieldArry1.length; b++) {
                                     ProjectSendLogCompeting projectSendLogCompeting1 = new ProjectSendLogCompeting();
