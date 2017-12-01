@@ -29,7 +29,7 @@ import java.util.*;
  * 会员等级
  * Created by 蓝海巨浪 on 2017/10/16.
  */
-@Service
+@Service("userLevelService")
 public class UserLevelServiceImpl implements UserLevelService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserLevelService.class);
