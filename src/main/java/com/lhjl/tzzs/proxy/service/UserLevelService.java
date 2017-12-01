@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.ActionDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.InterviewInputDto;
 import com.lhjl.tzzs.proxy.dto.UserLevelDto;
 
 import java.util.List;
@@ -70,4 +71,18 @@ public interface UserLevelService {
      * @return
      */
     CommonDto<Map<String,Object>> getUserLevel(String token);
+
+    /**
+     * 信息流里查看约谈的提示接口
+     * @param body
+     * @return
+     */
+    CommonDto<Map<String,Object>> interviewTips(InterviewInputDto body);
+
+    /**
+     * 信息流里查看约谈的消费接口
+     * @param body
+     * @return
+     */
+    CommonDto<Map<String,Object>> interviewCost(InterviewInputDto body);
 }

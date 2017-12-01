@@ -47,4 +47,11 @@ public interface UserInfoService {
      * @return
      */
     CommonDto<ProjectAdministratorOutputDto> getUserComplexInfo(Map<String,String> body);
+
+    /**
+     * 获取用户是否报名的接口
+     * @param token
+     * @return
+     */
+    CommonDto<String> getUserActivity(String token);
 }

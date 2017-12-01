@@ -983,6 +983,11 @@ public class ProjectsServiceImpl implements ProjectsService {
             return result;
         }
 
+        Integer projectType = 0;
+        if( projects.getProjectSource() != null ){
+            projectType = 1;
+        }
+
         Integer xmid = body.get("projectId");
         //获取项目融资阶段
         Example projectFinancingLogExample = new Example(ProjectFinancingLog.class);
@@ -1036,6 +1041,7 @@ public class ProjectsServiceImpl implements ProjectsService {
         projectComplexOutputDto.setSegmentation(fieldEdit);
         projectComplexOutputDto.setCity(projects.getCity());
         projectComplexOutputDto.setRound(financingStage);
+        projectComplexOutputDto.setProjectType(projectType);
 
         String projectInvestmentHighlights = "";
         if (projects.getProjectInvestmentHighlights() != null){

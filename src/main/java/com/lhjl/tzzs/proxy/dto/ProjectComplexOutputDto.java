@@ -38,6 +38,19 @@ public class ProjectComplexOutputDto {
      */
     private String projectInvestmentHighlights;
 
+    /**
+     * 项目类型：1代表创始人提交项目，0表示数据导入项目
+     */
+    private Integer projectType;
+
+    public Integer getProjectType() {
+        return projectType;
+    }
+
+    public void setProjectType(Integer projectType) {
+        this.projectType = projectType;
+    }
+
     public String getProjectInvestmentHighlights() {
         return projectInvestmentHighlights;
     }
