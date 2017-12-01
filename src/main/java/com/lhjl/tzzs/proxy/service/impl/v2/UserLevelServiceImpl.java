@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.service.impl.v2;
 
 import com.lhjl.tzzs.proxy.dto.ActionDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.InterviewInputDto;
 import com.lhjl.tzzs.proxy.dto.UserLevelDto;
 import com.lhjl.tzzs.proxy.service.UserLevelService;
 import org.slf4j.Logger;
@@ -54,6 +55,16 @@ public class UserLevelServiceImpl  implements UserLevelService {
 
     @Override
     public CommonDto<Map<String, Object>> getUserLevel(String token) {
+        return null;
+    }
+
+    @Override
+    public CommonDto<Map<String, Object>> interviewTips(InterviewInputDto body) {
+        return null;
+    }
+
+    @Override
+    public CommonDto<Map<String, Object>> interviewCost(InterviewInputDto body) {
         return null;
     }
 }
