@@ -224,7 +224,7 @@ public class UserEditController {
         CommonDto<String> result  =new CommonDto<>();
 
         try {
-
+            result=userEditService.editSomeinfo(body);
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
