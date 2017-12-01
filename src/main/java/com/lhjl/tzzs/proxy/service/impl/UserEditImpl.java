@@ -1,6 +1,6 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import com.alibaba.druid.util.StringUtils;
+
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
@@ -10,10 +10,10 @@ import com.lhjl.tzzs.proxy.service.UserEditService;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.service.common.SmsCommonService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tk.mybatis.mapper.util.StringUtil;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -1145,6 +1145,66 @@ public class UserEditImpl implements UserEditService {
             return result;
 
         }
+
+        return result;
+    }
+
+    /**
+     * 编辑用户真实姓名，公司名称，公司职务，手机号，身份类型的接口
+     * @param body
+     * @return
+     */
+    @Transactional
+    @Override
+    public CommonDto<String> editSomeinfo(UserEditInputDto body){
+        CommonDto<String> result = new CommonDto<>();
+
+        if (StringUtils.isAnyBlank(body.getToken(),body.getActualName(),body.getCompanyDuties(),body.getCompanyName(),body.getIdentityType(),body.getPhonenumber())){
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("有必填项没有填写完成");
+        }
+
+        Integer userId = userExistJudgmentService.getUserId(body.getToken());
+        if (userId == -1){
+            result.setMessage("用户token无效");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+        Integer it = null;
+        switch (body.getIdentityType()){
+            case "投资人":it = 0;
+            break;
+            case "创业者":it = 1;
+                break;
+            case "产业公司":it = 2;
+                break;
+            case "媒体":it = 3;
+                break;
+            case "政府机构":it = 4;
+                break;
+            case "服务机构":it = 5;
+                break;
+           default:
+               it = null;
+        }
+
+        Users users = new Users();
+        users.setActualName(body.getActualName());
+        users.setCompanyName(body.getCompanyName());
+        users.setCompanyDuties(body.getCompanyDuties());
+        users.setPhonenumber(body.getPhonenumber());
+        users.setIdentityType(it);
+        users.setId(userId);
+
+        usersMapper.updateByPrimaryKeySelective(users);
+
+        result.setData(null);
+        result.setStatus(200);
+        result.setMessage("success");
 
         return result;
     }

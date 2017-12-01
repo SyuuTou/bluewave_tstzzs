@@ -54,4 +54,11 @@ public interface UserInfoService {
      * @return
      */
     CommonDto<String> getUserActivity(String token);
+
+    /**
+     * 活动申请页面信息回显接口
+     * @param token
+     * @return
+     */
+    CommonDto<Map<String,Object>> getUserActivityInfo(String token);
 }

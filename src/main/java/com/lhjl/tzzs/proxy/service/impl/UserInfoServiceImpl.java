@@ -455,5 +455,95 @@ public class UserInfoServiceImpl implements UserInfoService{
         return result;
     }
 
+    /**
+     * 活动申请页面信息回显接口
+     * @param token
+     * @return
+     */
+    @Override
+    public CommonDto<Map<String,Object>> getUserActivityInfo(String token){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> obj = new HashMap<>();
+
+        if (token == null || "".equals(token) || "undefined".equals(token)){
+            result.setMessage("用户token不能为空");
+            result.setData(null);
+            result.setStatus(502);
+
+            return result;
+        }
+
+        Integer userId= userExistJudgmentService.getUserId(token);
+        if (userId == -1){
+            result.setMessage("用户token不存在");
+            result.setData(null);
+            result.setStatus(502);
+
+            return result;
+        }
+
+        Users users = usersMapper.selectByPrimaryKey(userId);
+
+        if (users == null ){
+            result.setMessage("没有找到用户的信息");
+            result.setData(null);
+            result.setStatus(502);
+
+            return result;
+        }
+
+        String realName = "";
+        String companyName = "";
+        String companyDuties = "";
+        String phoneNumber = "";
+        String identityType = "";
+
+        if (users.getActualName() != null ){
+            realName = users.getActualName();
+        }
+
+        if (users.getCompanyDuties() != null ){
+            companyDuties = users.getCompanyDuties();
+        }
+
+        if (users.getCompanyName() != null ){
+            companyName = users.getCompanyName();
+        }
+
+        if (users.getIdentityType() != null ){
+            Integer it = users.getIdentityType();
+            switch (it){
+                case 0:identityType= "投资人";
+                    break;
+                case 1:identityType= "创业者";
+                    break;
+                case 2:identityType= "产业公司";
+                    break;
+                case 3:identityType= "媒体";
+                    break;
+                case 4:identityType= "政府机构";
+                    break;
+                case 5:identityType= "服务机构";
+                    break;
+                    default:identityType="";
+            }
+        }
+
+        if (users.getPhonenumber() != null ){
+            phoneNumber = users.getPhonenumber();
+        }
+
+        obj.put("realName",realName);
+        obj.put("companyName",companyName);
+        obj.put("companyDuties",companyDuties);
+        obj.put("phoneNumber",phoneNumber);
+        obj.put("identityType",identityType);
+
+        result.setStatus(200);
+        result.setData(obj);
+        result.setMessage("success");
+
+        return result;
+    }
 
 }
