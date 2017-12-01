@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @RestController
 public class UserYnController {
@@ -56,5 +57,24 @@ public class UserYnController {
         return result;
     }
 
-   // @GetMapping("user")
+    /**
+     * 活动申请页面信息回显接口
+     * @param token
+     * @return
+     */
+    @GetMapping("user/activity/info")
+    public CommonDto<Map<String,Object>> userActicityInfo(String token){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        try {
+            result = userInfoService.getUserActivityInfo(token);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+        }
+
+        return result;
+    }
 }
