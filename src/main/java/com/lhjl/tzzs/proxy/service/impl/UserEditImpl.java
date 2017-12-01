@@ -1202,6 +1202,9 @@ public class UserEditImpl implements UserEditService {
 
         usersMapper.updateByPrimaryKeySelective(users);
 
+        result.setData(null);
+        result.setStatus(200);
+        result.setMessage("success");
 
         return result;
     }
