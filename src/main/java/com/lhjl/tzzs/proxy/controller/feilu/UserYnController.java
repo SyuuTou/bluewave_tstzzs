@@ -36,7 +36,12 @@ public class UserYnController {
         return result;
     }
 
-    @GetMapping("userActivityYn")
+    /**
+     * 判断用户是否报名活动的接口
+     * @param token
+     * @return
+     */
+    @GetMapping("usera/activity/yn")
     public CommonDto<String> getUserActivityYn(String token){
         CommonDto<String> result  = new CommonDto<>();
 
@@ -51,4 +56,5 @@ public class UserYnController {
         return result;
     }
 
+   // @GetMapping("user")
 }
