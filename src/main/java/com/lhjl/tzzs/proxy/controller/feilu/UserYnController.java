@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.controller.feilu;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.UserYnDto;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
+import com.lhjl.tzzs.proxy.service.UserInfoService;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,9 @@ public class UserYnController {
 
     @Resource
     private UserExistJudgmentService userExistJudgmentService;
+
+    @Resource
+    private UserInfoService userInfoService;
 
     @GetMapping("useryn")
     public CommonDto<UserYnDto> userYn(String token){
@@ -29,6 +33,21 @@ public class UserYnController {
             result.setMessage("服务器发生错误");
         }
 
+        return result;
+    }
+
+    @GetMapping("userActivityYn")
+    public CommonDto<String> getUserActivityYn(String token){
+        CommonDto<String> result  = new CommonDto<>();
+
+        try {
+            result = userInfoService.getUserActivity(token);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器发生错误");
+            result.setData(null);
+            result.setStatus(502);
+        }
         return result;
     }
 

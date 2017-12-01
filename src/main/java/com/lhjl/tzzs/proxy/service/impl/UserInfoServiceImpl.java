@@ -4,7 +4,9 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
+import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,12 @@ public class UserInfoServiceImpl implements UserInfoService{
     private MiniappFormidMapper miniappFormidMapper;
     @Autowired
     private UserChooseRecordMapper userChooseRecordMapper;
+
+    @Resource
+    private UserExistJudgmentService userExistJudgmentService;
+
+    @Autowired
+    private ActivityApprovalLogMapper activityApprovalLogMapper;
     /**
      * 获取个人资料
      * @param userId 用户ID
@@ -363,6 +371,88 @@ public class UserInfoServiceImpl implements UserInfoService{
             return result;
         }
 
+    }
+
+    /**
+     * 获取用户是否已经报名接口
+     * @param token
+     * @return
+     */
+    @Override
+    public CommonDto<String> getUserActivity(String token){
+        CommonDto<String> result  = new CommonDto<>();
+
+        if (token == null || "".equals(token) || "undefined".equals(token)){
+            result.setData(null);
+            result.setMessage("用户token不能为空");
+            result.setStatus(502);
+
+            return result;
+        }
+
+        //获取用户id
+        Integer userId = userExistJudgmentService.getUserId(token);
+        if (userId == -1){
+            result.setStatus(502);
+            result.setMessage("用户token不存在，请检查");
+            result.setData(null);
+
+            return result;
+        }
+
+        Example aalExample = new Example(ActivityApprovalLog.class);
+        aalExample.and().andEqualTo("userId",userId);
+
+        List<ActivityApprovalLog> activityApprovalLogList = activityApprovalLogMapper.selectByExample(aalExample);
+
+        if (activityApprovalLogList.size() > 0){
+            result.setStatus(201);
+            result.setData("用户已报名");
+            result.setMessage("success");
+        }else {
+            boolean isComplete = judgeUserMessage(userId);
+            if (isComplete){
+                result.setMessage("success");
+                result.setData("用户资料已经完善，可直接去支付");
+                result.setStatus(202);
+
+            }else {
+                result.setStatus(203);
+                result.setData("用户资料未完善需要去完善资料");
+                result.setMessage("success");
+            }
+        }
+
+
+        return result;
+    }
+
+    /**
+     * 判断用户的真实名称，公司职位，公司名称，手机号，身份类型是否填写完毕，只要有一个没有填写完毕就返回false
+     * @param userId
+     * @return
+     */
+    private boolean judgeUserMessage(Integer userId){
+        boolean result = false;
+
+        if (userId == null){
+            return result;
+        }
+
+        Users users = usersMapper.selectByPrimaryKey(userId);
+        if (users != null){
+            if (StringUtils.isAnyBlank(users.getActualName(),users.getCompanyName(),users.getCompanyDuties(),users.getPhonenumber())){
+                return result;
+            }else {
+                if (users.getIdentityType() == null){
+                    return result;
+                }else {
+                    result = true;
+                }
+            }
+        }
+
+        return result;
     }
 
 
