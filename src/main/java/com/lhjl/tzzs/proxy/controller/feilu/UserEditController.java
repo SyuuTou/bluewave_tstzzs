@@ -214,4 +214,23 @@ public class UserEditController {
         return result;
     }
 
+    /**
+     * 编辑用户真实姓名，公司名称，公司职务，手机号，身份类型的接口
+     * @param body
+     * @return
+     */
+    @PostMapping("user/edit/someinfo")
+    public CommonDto<String> userEditSomeinfo(@RequestBody UserEditInputDto body){
+        CommonDto<String> result  =new CommonDto<>();
+
+        try {
+
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+            result.setStatus(502);
+        }
+        return result;
+    }
 }
