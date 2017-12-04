@@ -80,6 +80,8 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
      * @return
      */
     List<Integer>screenInvestmentAll(@Param("domains")String [] domains,@Param("stages")String [] stages);
+
+    List<Projects> projectLastSerialNumber();
 }
 
 

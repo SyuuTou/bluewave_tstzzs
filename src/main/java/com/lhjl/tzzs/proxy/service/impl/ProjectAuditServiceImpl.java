@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springfox.documentation.spring.web.json.Json;
+import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -291,6 +292,14 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         projects.setCreateTime(now);
         projects.setApprovalStatus(1);
         projects.setApprovalTime(now);
+
+        Integer projectNumber = 1000000;
+        List<Projects> projectsListForSerialNumber = projectsMapper.maxSerialNumber();
+        if (projectsListForSerialNumber.size() > 0){
+            projectNumber = projectsListForSerialNumber.get(0).getSerialNumber() + 1;
+        }
+
+        projects.setSerialNumber(projectNumber);
 
         projectsMapper.insertSelective(projects);
 
