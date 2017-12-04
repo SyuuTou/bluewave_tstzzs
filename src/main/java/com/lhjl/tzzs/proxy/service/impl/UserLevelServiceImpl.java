@@ -68,6 +68,9 @@ public class UserLevelServiceImpl implements UserLevelService {
     @Resource
     private UserExistJudgmentService userExistJudgmentService;
 
+    @Autowired
+    private InvestorsMapper investorsMapper;
+
     //消费场景
     private static final String INDEX = "Ys54fPbz";
     private static final String ASSESS = "cIQwmmX7";
@@ -746,13 +749,28 @@ public class UserLevelServiceImpl implements UserLevelService {
                 }
             }
 
+            //增加对投资人类型的判断
+            Example invetorExample = new Example(Investors.class);
+            invetorExample.and().andEqualTo("userId",localUserId);
 
-            if(!sceneKeys.contains(sceneKey)){
+            List<Investors> investorsList = investorsMapper.selectByExample(invetorExample);
+
+            if (investorsList.size()>0){
+                if(!sceneKeys.contains(sceneKey)){
+                    result.setStatus(202);
+                    result.setMessage(tishi);
+                    result.setData(data);
+                    return result;
+                }
+            }else {
                 result.setStatus(202);
                 result.setMessage(tishi);
                 result.setData(data);
+
                 return result;
             }
+
+
 
 
 

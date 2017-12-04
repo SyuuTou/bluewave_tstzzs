@@ -373,4 +373,10 @@
         ORDER BY mf.evaluation_recommend DESC
     </select>
 
+    <select id="projectLastSerialNumber" resultMap="BaseResultMap">
+        select * from zyy_test.projects where serial_number &gt;= 1000000 and serial_number &lt; 2000000
+        order by serial_number desc
+        limit 0,10;
+    </select>
+
 </mapper>
