@@ -293,6 +293,7 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         projects.setApprovalStatus(1);
         projects.setApprovalTime(now);
 
+        //给项目编号，目前是1000000-2000000之间
         Integer projectNumber = 1000000;
         List<Projects> projectsListForSerialNumber = projectsMapper.maxSerialNumber();
         if (projectsListForSerialNumber.size() > 0){
