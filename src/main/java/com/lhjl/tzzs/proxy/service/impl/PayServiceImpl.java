@@ -10,6 +10,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.PayRequestBody;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
+import com.lhjl.tzzs.proxy.service.ActivityApprovalLogService;
 import com.lhjl.tzzs.proxy.service.PayService;
 import com.lhjl.tzzs.proxy.service.UserIntegralsService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
@@ -21,7 +22,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service("idataVCPayService")
@@ -42,12 +45,17 @@ public class PayServiceImpl implements PayService {
     private MetaSceneMapper sceneMapper;
     @Autowired
     private UsersPayMapper usersPayMapper;
+    @Autowired
+    private UserTokenMapper userTokenMapper;
 
     @Autowired
     private WxPayService payService;
 
     @Autowired
     private UserIntegralsService userIntegralsService;
+
+    @Resource
+    private ActivityApprovalLogService activityApprovalLogService;
 
     @Value("notifyURL")
     private String notifyURL;
@@ -93,6 +101,7 @@ public class PayServiceImpl implements PayService {
                     .outTradeNo(tradeNo)
                     .totalFee(WxPayBaseRequest.yuanToFee(userMoneyRecord.getMoney().toString()))
                     .body(scene.getDesc())
+                    .attach(payRequestBody.getSceneKey())
                     .spbillCreateIp("39.106.44.53")
                     .build();
             Map<String, String> payInfo =payService.getPayInfo(prepayInfo);
@@ -124,8 +133,19 @@ public class PayServiceImpl implements PayService {
         usersPay.setPayTime(DateTime.now().toDate());
         usersPay.setReceived(new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())));
         usersPayMapper.updateByPrimaryKey(usersPay);
+        if (result.getAttach().equals("Rxq0KR1l")){
 
-        userIntegralsService.payAfter(usersPay.getUserId(),usersPay.getSceneKey(),new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())),1);
+            UserToken queryToken = new UserToken();
+            queryToken.setUserId(usersPay.getUserId());
+
+            UserToken users = userTokenMapper.selectOne(queryToken);
+
+            Map<String,Object> parms = new HashMap<>();
+            parms.put("token",users.getToken());
+            activityApprovalLogService.createActicityApprovalLog(parms);
+        }else {
+            userIntegralsService.payAfter(usersPay.getUserId(), usersPay.getSceneKey(), new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())), 1);
+        }
         LOGGER.info("Ending notify handler........");
     }
 
