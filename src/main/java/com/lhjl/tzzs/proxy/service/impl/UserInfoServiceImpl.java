@@ -185,7 +185,7 @@ public class UserInfoServiceImpl implements UserInfoService{
             //查找用户的最近登录记录
             if (obj.get("ID") != null){
                 Example userExample = new Example(UserChooseRecord.class);
-                userExample.and().andEqualTo("userId",obj.get("ID"));
+                userExample.and().andEqualTo("userId",obj.get("ID")).andEqualTo("sceneKey","shouye");
                 userExample.setOrderByClause("create_time desc");
 
                 List<UserChooseRecord> userChooseRecordList = userChooseRecordMapper.selectByExample(userExample);
