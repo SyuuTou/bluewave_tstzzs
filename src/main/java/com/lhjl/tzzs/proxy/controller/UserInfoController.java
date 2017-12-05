@@ -2,7 +2,6 @@ package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
-import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
 import org.slf4j.Logger;
@@ -126,6 +125,26 @@ public class UserInfoController {
             result.setMessage("服务器端发生错误，请检查");
             result.setStatus(502);
             result.setData(null);
+        }
+        return result;
+    }
+
+    /**
+     * 获取用户当前机构id
+     * @param token
+     * @return
+     */
+    @GetMapping("get/user/investmentInstitutionId")
+    public CommonDto<Integer> getUserInvestmentInstitutionId(String token){
+        CommonDto<Integer> result  = new CommonDto<>();
+
+        try {
+            result = userInfoService.getUserInvestmentInstitution(token);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
         }
         return result;
     }

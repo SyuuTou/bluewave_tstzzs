@@ -41,6 +41,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 
     @Autowired
     private ActivityApprovalLogMapper activityApprovalLogMapper;
+
+    @Autowired
+    private InvestorsMapper investorsMapper;
     /**
      * 获取个人资料
      * @param userId 用户ID
@@ -542,6 +545,56 @@ public class UserInfoServiceImpl implements UserInfoService{
         result.setStatus(200);
         result.setData(obj);
         result.setMessage("success");
+
+        return result;
+    }
+
+    /**
+     * 获取用户的机构id的接口
+     * @param token
+     * @return
+     */
+    @Override
+    public CommonDto<Integer> getUserInvestmentInstitution(String token){
+        CommonDto<Integer> result = new CommonDto<>();
+
+        if (token == null){
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("success");
+
+            return result;
+        }
+
+        Integer userId = userExistJudgmentService.getUserId(token);
+        if (userId == -1){
+            result.setMessage("用户token无效，请检查");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+        Investors investors = new Investors();
+        investors.setUserId(userId);
+
+        List<Investors> investorsList = investorsMapper.select(investors);
+        if (investorsList.size() > 0){
+            Integer institutionId = investorsList.get(0).getId();
+            if (institutionId == null){
+                result.setMessage("投资人信息中不包含机构id,请检查");
+                result.setStatus(203);
+                result.setData(null);
+            }else {
+                result.setData(institutionId);
+                result.setStatus(200);
+                result.setMessage("success");
+            }
+        }else {
+            result.setMessage("用户还不是投资人");
+            result.setStatus(202);
+            result.setData(null);
+        }
 
         return result;
     }

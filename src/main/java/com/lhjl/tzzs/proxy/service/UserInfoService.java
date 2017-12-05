@@ -2,7 +2,6 @@ package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
-import com.lhjl.tzzs.proxy.model.Users;
 
 import java.util.List;
 import java.util.Map;
@@ -61,4 +60,11 @@ public interface UserInfoService {
      * @return
      */
     CommonDto<Map<String,Object>> getUserActivityInfo(String token);
+
+    /**
+     *  获取用户投资机构id
+     * @param token
+     * @return
+     */
+    CommonDto<Integer> getUserInvestmentInstitution(String token);
 }
