@@ -202,10 +202,10 @@ public class UserInfoServiceImpl implements UserInfoService{
 
             obj.put("create_time",String.valueOf(obj.get("create_time")));
             String investorsType = "未认证或未审核投资人";
-            if (obj.get("investors_type") == null){
+            if (obj.get("identity_type") == null){
                 investorsType = "未认证或未审核投资人";
             }else {
-                Integer investorsNum = (Integer)obj.get("investors_type");
+                Integer investorsNum = (Integer)obj.get("identity_type");
                 switch (investorsNum){
                     case 0:investorsType = "个人投资人";
                     break;
