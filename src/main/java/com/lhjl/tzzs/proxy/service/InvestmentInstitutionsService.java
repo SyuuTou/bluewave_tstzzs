@@ -21,4 +21,11 @@ public interface InvestmentInstitutionsService {
      * @return
      */
     CommonDto<List<InvestmentInstitutionSearchOutputDto>> getInstitutionIntelligentSearch(String inputsWords,Integer pageSize);
+
+    /**
+     *  读取机构详情的接口
+     * @param institutionId
+     * @return
+     */
+    CommonDto<Map<String,Object>> findInstitutionDetails(Integer institutionId);
 }

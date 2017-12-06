@@ -8,4 +8,9 @@
     <id column="meta_segmentation_id" property="metaSegmentationId" jdbcType="INTEGER" />
     <id column="investment_institutions_id" property="investmentInstitutionsId" jdbcType="INTEGER" />
   </resultMap>
+  <select id="findSegment" resultType="java.util.Map">
+    select ms.`name`,ms.segmentation_logo from investment_institutions_segmentation iis
+    left join meta_segmentation ms on iis.meta_segmentation_id = ms.id
+    where iis.investment_institutions_id = #{institutionId};
+  </select>
 </mapper>

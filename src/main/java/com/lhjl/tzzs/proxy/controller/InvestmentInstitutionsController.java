@@ -66,4 +66,20 @@ public class InvestmentInstitutionsController {
 
         return result;
     }
+
+    @GetMapping("institutions/details")
+    public CommonDto<Map<String,Object>> findInstitutionDetails(Integer institutionId){
+        CommonDto<Map<String,Object>> result  = new CommonDto<>();
+
+        try {
+            result = investmentInstitutionsService.findInstitutionDetails(institutionId);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+            result.setStatus(502);
+        }
+
+        return result;
+    }
 }
