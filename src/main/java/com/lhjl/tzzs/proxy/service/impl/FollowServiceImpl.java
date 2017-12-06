@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.EventDto;
+import com.lhjl.tzzs.proxy.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
@@ -39,6 +40,9 @@ public class FollowServiceImpl implements FollowService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Resource
+    private UserInfoService userInfoService;
 
     @Value("${event.trigger.url}")
     private String eventUrl;
@@ -87,6 +91,11 @@ public class FollowServiceImpl implements FollowService {
         eventDto.setEventType("CONCERN");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+
+        CommonDto<Integer> result  = userInfoService.getUserInvestmentInstitution(userId);
+        List<Integer> investmentInstitusionIds = new ArrayList<>(1);
+        investmentInstitusionIds.add(result.getData());
+        eventDto.setInvestmentInstitutionsIds(investmentInstitusionIds);
 
         HttpEntity<EventDto> entity = new HttpEntity<>(eventDto, headers);
         HttpEntity<CommonDto<String>> investors =  restTemplate.exchange(eventUrl+"/trigger/event", HttpMethod.POST,entity,new ParameterizedTypeReference<CommonDto<String>>(){} );
