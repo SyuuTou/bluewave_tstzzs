@@ -7,9 +7,9 @@ public class InstitutionsProjectInputDto {
     private Integer institutionId;
 
     /**
-     * 搜索内容
+     * 轮次
      */
-    private String searchWords;
+    private String stage;
 
     /**
      * 行业领域
@@ -21,6 +21,21 @@ public class InstitutionsProjectInputDto {
      */
     private String financingTime;
 
+    /**
+     * 用户token
+     */
+    private String token;
+
+    /**
+     * 页码
+     */
+    private Integer startPage;
+
+    /**
+     * 每页显示数量
+     */
+    private Integer pageSize;
+
     public Integer getInstitutionId() {
         return institutionId;
     }
@@ -29,12 +44,12 @@ public class InstitutionsProjectInputDto {
         this.institutionId = institutionId;
     }
 
-    public String getSearchWords() {
-        return searchWords;
+    public String getStage() {
+        return stage;
     }
 
-    public void setSearchWords(String searchWords) {
-        this.searchWords = searchWords;
+    public void setStage(String stage) {
+        this.stage = stage;
     }
 
     public String getFields() {
@@ -51,5 +66,29 @@ public class InstitutionsProjectInputDto {
 
     public void setFinancingTime(String financingTime) {
         this.financingTime = financingTime;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Integer getStartPage() {
+        return startPage;
+    }
+
+    public void setStartPage(Integer startPage) {
+        this.startPage = startPage;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 }
