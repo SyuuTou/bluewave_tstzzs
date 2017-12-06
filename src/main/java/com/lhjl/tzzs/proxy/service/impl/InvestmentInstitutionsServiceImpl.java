@@ -216,6 +216,7 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
         map.put("institutionStage",stageList);
         map.put("address",listiia);
         map.put("institutionLogo",investmentInstitutions.getLogo());
+        map.put("institutionName",investmentInstitutions.getShortName());
 
         result.setStatus(200);
         result.setData(map);
