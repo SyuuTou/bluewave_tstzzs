@@ -8,4 +8,9 @@
     <id column="meta_project_stage_id" property="metaProjectStageId" jdbcType="INTEGER" />
     <id column="investment_institution_id" property="investmentInstitutionId" jdbcType="INTEGER" />
   </resultMap>
+  <select id="findInstitutionStage" resultType="java.util.Map">
+    select mps.`name` from investment_institutions_stage iis
+    left join meta_project_stage mps on iis.meta_project_stage_id = mps.id
+    where iis.investment_institution_id =#{institutionId};
+  </select>
 </mapper>

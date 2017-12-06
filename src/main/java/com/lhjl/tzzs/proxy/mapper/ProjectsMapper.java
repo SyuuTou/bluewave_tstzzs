@@ -81,7 +81,24 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
      */
     List<Integer>screenInvestmentAll(@Param("domains")String [] domains,@Param("stages")String [] stages);
 
+    /**
+     * 获取用户创建项目编号最大值的接口
+     * @return
+     */
     List<Projects> projectLastSerialNumber();
+
+    /**
+     * 获取机构投资项目
+     * @param institutionId 机构id
+     * @param stage 轮次
+     * @param segmentationName 领域
+     * @param financingTime 融资时间
+     * @param startNum 起始页码
+     * @param pageSize 每页显示数量
+     * @return
+     */
+    List<Map<String,Object>> findInstitutionProject(@Param("institutionId") Integer institutionId,@Param("stage") String stage,@Param("segmentationName") String segmentationName,@Param("financingTime") String financingTime,@Param("startNum") Integer startNum,@Param("pageSize") Integer pageSize);
+
 }
 
 
