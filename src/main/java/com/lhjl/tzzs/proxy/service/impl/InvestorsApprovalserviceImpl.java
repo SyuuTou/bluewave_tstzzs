@@ -799,6 +799,45 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		CommonDto<String> result = new CommonDto<>();
 		Date now = new Date();
 
+		if (userId == null){
+			result.setData(null);
+			result.setStatus(502);
+			result.setMessage("用户id不能为空");
+
+			return result;
+		}
+
+		if (status == null){
+			result.setData(null);
+			result.setStatus(502);
+			result.setMessage("审核状态不能为空");
+
+			return result;
+		}
+
+		if (userName == null){
+			result.setData(null);
+			result.setStatus(502);
+			result.setMessage("用户真实姓名不能为空");
+
+			return result;
+		}
+
+		if (companyName == null){
+			result.setData(null);
+			result.setStatus(502);
+			result.setMessage("用户所在公司不能为空");
+
+			return result;
+		}
+
+		if (comanyDuties == null){
+			result.setData(null);
+			result.setStatus(502);
+			result.setMessage("用户公司职位不能为空");
+
+			return result;
+		}
 		//判断好状态
 		Integer approvalStatus = -1;
 
@@ -828,6 +867,16 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 		Investors investorsForSearch = investorsMapper.selectOne(investors);
 		if (investorsForSearch != null){
+			//获取机构id
+			Integer jgid = getInstitutionIdByCompanyName(companyName);
+			if (jgid == -1){
+				result.setMessage("获取机构id时出错");
+				result.setStatus(502);
+				result.setData(null);
+
+				return result;
+			}
+
 			//存在的时候获取投资人id更新用户身份
 			Integer tzrid = investorsForSearch.getId();
 			investors.setYn(1);
@@ -836,6 +885,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			investors.setApprovalTime(now);
 			investors.setApprovalStatus(approvalStatus);
 			investors.setInvestorsType(approvalType);
+			investors.setInvestmentInstitutionsId(jgid);
 
 			investorsMapper.updateByPrimaryKeySelective(investors);
 
@@ -856,10 +906,12 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 			usersMapper.updateByPrimaryKeySelective(users);
 		}else {
+
+			//获取用户机构id
+			Integer jgid = getInstitutionIdByCompanyName(companyName);
+
 			//不存在的时候新建投资人信息
 			Investors investorsForInsert = new Investors();
-
-
 
 			investorsForInsert.setUserId(userId);
 			investorsForInsert.setApprovalStatus(approvalStatus);
@@ -869,6 +921,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			investorsForInsert.setName(userName);
 			investorsForInsert.setPosition(comanyDuties);
 			investorsForInsert.setYn(1);
+			investorsForInsert.setInvestmentInstitutionsId(jgid);
 
 			investorsMapper.insert(investorsForInsert);
 
@@ -890,9 +943,127 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			usersMapper.updateByPrimaryKeySelective(users);
 		}
 
+		//设置投资人认证为已审核
+		setInvestmentApprovalStatus(userId,status);
+
 		result.setData(null);
 		result.setStatus(200);
 		result.setMessage("success");
 		return result;
+	}
+
+	/**
+	 * 设置最新一条投资记录为已审核的私有方法
+	 * @param userId 用户id
+	 * @param status 审核状态
+	 * @return
+	 */
+	private CommonDto<String> setInvestmentApprovalStatus(Integer userId,Integer status){
+		CommonDto<String> result = new CommonDto<>();
+		Date now = new Date();
+
+		//先找到最近的一条投资人认证记录
+		Example iaExample = new Example(InvestorsApproval.class);
+		iaExample.and().andEqualTo("userid",userId);
+		iaExample.setOrderByClause("create_time desc");
+
+		List<InvestorsApproval> investorsApprovalList = investorsApprovalMapper.selectByExample(iaExample);
+		if (investorsApprovalList.size() > 0){
+			InvestorsApproval investorsApprovalForUpdate = new InvestorsApproval();
+			investorsApprovalForUpdate.setId(investorsApprovalList.get(0).getId());
+			investorsApprovalForUpdate.setApprovalResult(status);
+			investorsApprovalForUpdate.setReviewTime(now);
+
+			investorsApprovalMapper.updateByPrimaryKeySelective(investorsApprovalForUpdate);
+		}
+
+		result.setData(null);
+		result.setStatus(200);
+		result.setMessage("success");
+
+		return result;
+	}
+
+	/**
+	 * 根据公司名称获取机构id的私有方法
+	 * @param companyName 公司名称
+	 * @return
+	 */
+	private Integer getInstitutionIdByCompanyName(String companyName){
+		Integer result = -1;
+
+		Date now = new Date();
+		//拿到主体表的信息
+		Example sExample = new Example(Subject.class);
+		sExample.and().andEqualTo("shortName",companyName);
+		List<Subject> subjectList = subjectMapper.selectByExample(sExample);
+		if (subjectList.size() < 1) {
+			//没有主体表信息的时候创建
+			//先创建机构信息
+			InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
+			investmentInstitutions.setType(0);
+			investmentInstitutions.setCreateTime(now);
+			investmentInstitutions.setShortName(companyName);
+
+			investmentInstitutionsMapper.insertSelective(investmentInstitutions);
+
+			Integer jgid = investmentInstitutions.getId();
+
+			//创建主体表
+			Subject subjectForInsert = new Subject();
+			subjectForInsert.setSourceid(jgid);
+			subjectForInsert.setFullName(companyName);
+			subjectForInsert.setShortName(companyName);
+
+			subjectMapper.insertSelective(subjectForInsert);
+
+			Integer ztbid = subjectForInsert.getId();
+			//创建主体关系表
+			SubjectTypeRelational subjectTypeRelational = new SubjectTypeRelational();
+			subjectTypeRelational.setSubjectId(ztbid);
+			subjectTypeRelational.setSubjectTypeId(2);
+
+			subjectTypeRelationalMapper.insertSelective(subjectTypeRelational);
+
+			return jgid;
+
+		} else {
+
+			Subject subject = subjectList.get(0);
+			//如果主体表的信息存在，判断主体类型
+			Example subjectExample = new Example(SubjectTypeRelational.class);
+			subjectExample.and().andEqualTo("subjectId", subject.getId()).andEqualTo("subjectTypeId", 2);
+			List<SubjectTypeRelational> subjectTypeRelationalList = subjectTypeRelationalMapper.selectByExample(subjectExample);
+			if (subjectTypeRelationalList.size() > 0) {
+				//如果主体的类型是机构，则拿到机构id返回
+				return subject.getSourceid();
+			} else {
+				//如果主体类型不是机构，或者没有那么创建机构信息表，并创建一个关系表；
+				//创建主体类型关系表
+				SubjectTypeRelational subjectTypeRelational = new SubjectTypeRelational();
+				subjectTypeRelational.setSubjectTypeId(2);
+				subjectTypeRelational.setSubjectId(subject.getId());
+
+				subjectTypeRelationalMapper.insertSelective(subjectTypeRelational);
+
+				//创建机构表信息
+				InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
+				investmentInstitutions.setShortName(subject.getShortName());
+				investmentInstitutions.setCreateTime(now);
+				investmentInstitutions.setType(0);
+				investmentInstitutions.setApprovalStatus(1);
+				investmentInstitutions.setApprovalTime(now);
+				investmentInstitutions.setYn(1);
+				investmentInstitutions.setKenelCase(subject.getSummary());
+				investmentInstitutions.setLogo(subject.getPicture());
+
+				investmentInstitutionsMapper.insertSelective(investmentInstitutions);
+
+				Integer jgid = investmentInstitutions.getId();
+
+				return jgid;
+
+			}
+		}
 	}
 }

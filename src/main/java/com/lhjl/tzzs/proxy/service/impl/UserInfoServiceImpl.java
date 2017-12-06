@@ -188,7 +188,7 @@ public class UserInfoServiceImpl implements UserInfoService{
             //查找用户的最近登录记录
             if (obj.get("ID") != null){
                 Example userExample = new Example(UserChooseRecord.class);
-                userExample.and().andEqualTo("userId",obj.get("ID"));
+                userExample.and().andEqualTo("userId",obj.get("ID")).andEqualTo("sceneKey","shouye");
                 userExample.setOrderByClause("create_time desc");
 
                 List<UserChooseRecord> userChooseRecordList = userChooseRecordMapper.selectByExample(userExample);
@@ -205,10 +205,10 @@ public class UserInfoServiceImpl implements UserInfoService{
 
             obj.put("create_time",String.valueOf(obj.get("create_time")));
             String investorsType = "未认证或未审核投资人";
-            if (obj.get("investors_type") == null){
+            if (obj.get("identity_type") == null){
                 investorsType = "未认证或未审核投资人";
             }else {
-                Integer investorsNum = (Integer)obj.get("investors_type");
+                Integer investorsNum = (Integer)obj.get("identity_type");
                 switch (investorsNum){
                     case 0:investorsType = "个人投资人";
                     break;
