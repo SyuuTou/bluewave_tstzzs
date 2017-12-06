@@ -15,4 +15,12 @@ public interface InvestmentInstitutionsSegmentationMapper extends OwnerMapper<In
      * @return
      */
     List<Map<String,Object>> findSegment(@Param("institutionId") Integer institutionId);
+
+
+    /**
+     * 获取机构投资年份
+     * @param institutionId
+     * @return
+     */
+    List<Map<String,Object>> findYear(@Param("institutionId") Integer institutionId);
 }
