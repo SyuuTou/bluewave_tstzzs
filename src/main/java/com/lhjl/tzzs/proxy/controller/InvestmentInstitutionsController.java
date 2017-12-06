@@ -67,6 +67,11 @@ public class InvestmentInstitutionsController {
         return result;
     }
 
+    /**
+     * 获取机构详情的接口
+     * @param institutionId
+     * @return
+     */
     @GetMapping("institutions/details")
     public CommonDto<Map<String,Object>> findInstitutionDetails(Integer institutionId){
         CommonDto<Map<String,Object>> result  = new CommonDto<>();
@@ -78,6 +83,21 @@ public class InvestmentInstitutionsController {
             result.setMessage("服务器端发生错误");
             result.setData(null);
             result.setStatus(502);
+        }
+
+        return result;
+    }
+
+    @GetMapping("institutions/flliters")
+    public CommonDto<Map<String,Object>> findInstitutionFlliters(Integer institutionId){
+        CommonDto<Map<String,Object>> result  = new CommonDto<>();
+        try {
+            result = investmentInstitutionsService.findFliterInfo(institutionId);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
         }
 
         return result;

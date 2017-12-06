@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsSegmentationMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsStageMapper;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddress;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsSegmentation;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -220,6 +221,37 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
 
         result.setStatus(200);
         result.setData(map);
+        result.setMessage("success");
+
+        return result;
+    }
+
+    @Override
+    public CommonDto<Map<String,Object>> findFliterInfo(Integer institutionId){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        Map<String,Object> map = new HashMap<>();
+        //获取机构的关注领域
+        List<Map<String,Object>> segmentList = new ArrayList<>();
+        segmentList = investmentInstitutionsSegmentationMapper.findSegment(institutionId);
+        for (Map<String,Object> m:segmentList){
+            if (m.get("name") == null ){
+                m.put("name","");
+            }
+
+            if (m.get("segmentation_logo") == null){
+                m.put("segmentation_logo","http://img.idatavc.com/static/seg/jiaoyu.png");
+            }
+        }
+
+        List<Map<String,Object>> yearList = new ArrayList<>();
+        yearList = investmentInstitutionsSegmentationMapper.findYear(institutionId);
+
+        map.put("segmentation",segmentList);
+        map.put("years",yearList);
+
+        result.setData(map);
+        result.setStatus(200);
         result.setMessage("success");
 
         return result;

@@ -13,4 +13,11 @@
     left join meta_segmentation ms on iis.meta_segmentation_id = ms.id
     where iis.investment_institutions_id = #{institutionId};
   </select>
+
+  <select id="findYear" resultType="java.util.HashMap">
+    select substring(pfl.financing_time,1,4) as ydate from projects p
+    right join project_financing_log pfl on p.ID = pfl.project_id
+    where investment_institutions_id =#{institutionId}
+    group by ydate
+  </select>
 </mapper>

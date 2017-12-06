@@ -28,4 +28,11 @@ public interface InvestmentInstitutionsService {
      * @return
      */
     CommonDto<Map<String,Object>> findInstitutionDetails(Integer institutionId);
+
+    /**
+     * 读取机构的筛选条件的接口
+     * @param institutionId
+     * @return
+     */
+    CommonDto<Map<String,Object>> findFliterInfo(Integer institutionId);
 }
