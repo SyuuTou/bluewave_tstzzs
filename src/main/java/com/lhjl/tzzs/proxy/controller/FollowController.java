@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.controller;
 import javax.annotation.Resource;
 
 import com.lhjl.tzzs.proxy.dto.EventDto;
+import com.lhjl.tzzs.proxy.service.UserInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,7 @@ public class FollowController {
     @Resource
     private FollowService followService;
 
-    @Autowired
-    private RestTemplate restTemplate;
+
 
     @Value("${event.trigger.url}")
     private String eventUrl;

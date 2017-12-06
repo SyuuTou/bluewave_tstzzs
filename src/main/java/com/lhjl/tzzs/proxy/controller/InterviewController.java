@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import com.lhjl.tzzs.proxy.dto.EventDto;
+import com.lhjl.tzzs.proxy.service.UserInfoService;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +54,9 @@ public class InterviewController {
     
     @Resource
     private FollowService followService;
+
+    @Resource
+    private UserInfoService userInfoService;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -103,7 +107,10 @@ public class InterviewController {
             eventDto.setMessage(desc);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-
+            CommonDto<Integer> resultJG  = userInfoService.getUserInvestmentInstitution(userId);
+            List<Integer> investmentInstitusionIds = new ArrayList<>(1);
+            investmentInstitusionIds.add(resultJG.getData());
+            eventDto.setInvestmentInstitutionsIds(investmentInstitusionIds);
             HttpEntity<EventDto> entity = new HttpEntity<>(eventDto, headers);
             HttpEntity<CommonDto<String>> investors =  restTemplate.exchange(eventUrl+"/trigger/event", HttpMethod.POST,entity,new ParameterizedTypeReference<CommonDto<String>>(){} );
 
