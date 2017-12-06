@@ -580,7 +580,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 
         List<Investors> investorsList = investorsMapper.select(investors);
         if (investorsList.size() > 0){
-            Integer institutionId = investorsList.get(0).getId();
+            Integer institutionId = investorsList.get(0).getInvestmentInstitutionsId();
             if (institutionId == null){
                 result.setMessage("投资人信息中不包含机构id,请检查");
                 result.setStatus(203);
