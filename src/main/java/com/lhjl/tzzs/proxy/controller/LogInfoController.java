@@ -22,21 +22,29 @@ public class LogInfoController {
     public CommonDto<String> userSetLog(@RequestBody Map<String,Object> body){
         CommonDto<String> result =  new CommonDto<>();
         if (body.get("token") == null){
-            log.info("进入记录log方法场景");
-            log.info("没有传用户token");
+            log.info("进入记录log方法场景,没有传用户token");
         }
 
         if(body.get("behavior") ==null){
-            log.info("进入记录log方法场景");
-            log.info("没有传用户行为类型");
+            log.info("进入记录log方法场景,没有传用户行为类型");
         }
 
-        log.info("进入记录log方法场景，用户token为：{}",body.get("token"));
-        log.info("用户进行了：{}",body.get("behavior"));
+        log.info("进入记录log方法场景，用户token为：{}, 场景：{}",body.get("token"),body.get("behavior"));
 
-        result.setData(null);
-        result.setMessage("success");
-        result.setStatus(200);
+        try {
+            //记录log
+
+            String token = (String)body.get("token");
+            String behavior = (String)body.get("behavior");
+
+           result = logInfoService.saveUserInfo(token,behavior,"oldscene");
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+
 
         return result;
     }
@@ -51,6 +59,26 @@ public class LogInfoController {
     @GetMapping("user/save/log")
     public CommonDto<String> userSaveLog(String token,String data,String sceneKey){
         CommonDto<String> result = new CommonDto<>();
+
+        if (token == null){
+            log.info("进入记录log方法场景,没有传用户token");
+        }else {
+            log.info("进入记录log方法场景,用户的token为：{}",token);
+        }
+
+        if (data == null){
+            log.info("进入记录log方法场景,当前操作没有输入数据");
+        }else {
+            log.info("进入记录log方法场景,用户输入的数据为：{}",data);
+        }
+
+        if (sceneKey == null){
+            log.info("前端没有传入操作类型");
+        }else {
+            log.info("用户进行了：{}操作",sceneKey);
+        }
+
+
         try {
             result = logInfoService.saveUserInfo(token,data,sceneKey);
         }catch (Exception e){
