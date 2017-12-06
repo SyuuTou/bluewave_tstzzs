@@ -22,17 +22,14 @@ public class LogInfoController {
     public CommonDto<String> userSetLog(@RequestBody Map<String,Object> body){
         CommonDto<String> result =  new CommonDto<>();
         if (body.get("token") == null){
-            log.info("进入记录log方法场景");
-            log.info("没有传用户token");
+            log.info("进入记录log方法场景,没有传用户token");
         }
 
         if(body.get("behavior") ==null){
-            log.info("进入记录log方法场景");
-            log.info("没有传用户行为类型");
+            log.info("进入记录log方法场景,没有传用户行为类型");
         }
 
-        log.info("进入记录log方法场景，用户token为：{}",body.get("token"));
-        log.info("用户进行了：{}",body.get("behavior"));
+        log.info("进入记录log方法场景，用户token为：{}, 场景：{}",body.get("token"),body.get("behavior"));
 
         result.setData(null);
         result.setMessage("success");
