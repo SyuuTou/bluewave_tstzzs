@@ -380,7 +380,7 @@
     </select>
 
     <select id="findInstitutionProject" resultType="java.util.HashMap">
-        select p.id,p.project_logo,p.kernel_desc,p.short_name,p.full_name,ps.segmentation_name,pfl.stage,pfl.financing_time from projects p
+        select p.id,p.city,p.project_logo,p.kernel_desc,p.short_name,p.full_name,ps.segmentation_name,pfl.stage,pfl.financing_time,pfl.financing_time_year from projects p
         right join project_segmentation ps on p.id = ps.project_id
         right join project_financing_log pfl on p.id = pfl.project_id
         where investment_institutions_id = #{institutionId}
@@ -388,10 +388,12 @@
             and pfl.stage=#{stage}
         </if>
         <if test="segmentationName != null and segmentationName!=''">
-            and ps.segmentation_name = #{segmentationName}
+            and ps.segmentation_name in
+            <foreach close=")" collection="segmentationName" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
         <if test="financingTime != null and financingTime != ''">
-            and pfl.financing_time like CONCAT(CONCAT('%', #{financingTime}), '%')
+            and pfl.financing_time_year in
+            <foreach close=")" collection="financingTime" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
         group by p.short_name
         order by pfl.financing_time desc

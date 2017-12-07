@@ -27,6 +27,7 @@
     <result column="amount_status" jdbcType="INTEGER" property="amountStatus" />
     <result column="total_amount_status" jdbcType="INTEGER" property="totalAmountStatus" />
     <result column="project_financing_useful" jdbcType="VARCHAR" property="projectFinancingUseful" />
+    <result column="financing_time_year" jdbcType="VARCHAR" property="financingTimeYear" />
   </resultMap>
 
   <select id="selectProjectFinancingLogList" parameterType="Integer" resultMap="BaseResultMap">

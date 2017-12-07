@@ -123,6 +123,12 @@ public class ProjectFinancingLog {
     private String projectFinancingUseful;
 
     /**
+     * 保存年份的冗余字段
+     */
+    @Column(name = "financing_time_year")
+    private String financingTimeYear;
+
+    /**
      * @return ID
      */
     public Integer getId() {
@@ -500,5 +506,23 @@ public class ProjectFinancingLog {
      */
     public void setProjectFinancingUseful(String projectFinancingUseful) {
         this.projectFinancingUseful = projectFinancingUseful;
+    }
+
+    /**
+     * 获取保存年份的冗余字段
+     *
+     * @return financing_time_year - 保存年份的冗余字段
+     */
+    public String getFinancingTimeYear() {
+        return financingTimeYear;
+    }
+
+    /**
+     * 设置保存年份的冗余字段
+     *
+     * @param financingTimeYear 保存年份的冗余字段
+     */
+    public void setFinancingTimeYear(String financingTimeYear) {
+        this.financingTimeYear = financingTimeYear;
     }
 }
