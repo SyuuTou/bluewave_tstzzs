@@ -12,4 +12,12 @@ public interface ElegantServiceService {
      * @return
      */
     CommonDto<List<Map<String,Object>>> findElegantServiceList();
+
+    /**
+     * 根据服务id获取服务详情的接口
+     * @param elegantServiceId 服务id
+     * @return
+     */
+    CommonDto<Map<String,Object>> findElegantServiceById(Integer elegantServiceId);
+
 }

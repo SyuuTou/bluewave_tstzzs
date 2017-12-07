@@ -22,6 +22,12 @@ public class ActivityApprovalLog {
     private Date createTime;
 
     /**
+     * 支付场景
+     */
+    @Column(name = "scence_key")
+    private String scenceKey;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -69,5 +75,23 @@ public class ActivityApprovalLog {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    /**
+     * 获取支付场景
+     *
+     * @return scence_key - 支付场景
+     */
+    public String getScenceKey() {
+        return scenceKey;
+    }
+
+    /**
+     * 设置支付场景
+     *
+     * @param scenceKey 支付场景
+     */
+    public void setScenceKey(String scenceKey) {
+        this.scenceKey = scenceKey;
     }
 }
