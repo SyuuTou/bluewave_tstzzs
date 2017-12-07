@@ -9,6 +9,7 @@
     <result column="service_name" jdbcType="VARCHAR" property="serviceName" />
     <result column="original_price" jdbcType="DECIMAL" property="originalPrice" />
     <result column="vip_price" jdbcType="DECIMAL" property="vipPrice" />
+    <result column="pre_vip_price_descript" jdbcType="VARCHAR" property="preVipPriceDescript" />
     <result column="price_unit" jdbcType="INTEGER" property="priceUnit" />
     <result column="unit" jdbcType="VARCHAR" property="unit" />
     <result column="background_picture" jdbcType="VARCHAR" property="backgroundPicture" />
@@ -20,4 +21,7 @@
     <result column="scence_key" jdbcType="VARCHAR" property="scenceKey" />
     <result column="yn" jdbcType="INTEGER" property="yn" />
   </resultMap>
+
+
+
 </mapper>

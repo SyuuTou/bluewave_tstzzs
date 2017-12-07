@@ -29,6 +29,12 @@ public class ElegantService {
     private BigDecimal vipPrice;
 
     /**
+     * 会员价前坠描述，例如：限时、特价、vip会员
+     */
+    @Column(name = "pre_vip_price_descript")
+    private String preVipPriceDescript;
+
+    /**
      * 价格单位，0表示人民币，1表示美元
      */
     @Column(name = "price_unit")
@@ -151,6 +157,24 @@ public class ElegantService {
      */
     public void setVipPrice(BigDecimal vipPrice) {
         this.vipPrice = vipPrice;
+    }
+
+    /**
+     * 获取会员价前坠描述，例如：限时、特价、vip会员
+     *
+     * @return pre_vip_price_descript - 会员价前坠描述，例如：限时、特价、vip会员
+     */
+    public String getPreVipPriceDescript() {
+        return preVipPriceDescript;
+    }
+
+    /**
+     * 设置会员价前坠描述，例如：限时、特价、vip会员
+     *
+     * @param preVipPriceDescript 会员价前坠描述，例如：限时、特价、vip会员
+     */
+    public void setPreVipPriceDescript(String preVipPriceDescript) {
+        this.preVipPriceDescript = preVipPriceDescript;
     }
 
     /**
