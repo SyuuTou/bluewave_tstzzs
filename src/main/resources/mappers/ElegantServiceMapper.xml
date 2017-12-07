@@ -22,6 +22,14 @@
     <result column="yn" jdbcType="INTEGER" property="yn" />
   </resultMap>
 
+  <select id="findElegantServiceList" resultType="java.util.HashMap">
+    select es.service_name,es.pre_vip_price_descript,es.original_price,es.vip_price,esd.description,es.unit,es.background_picture,es.id,es.scence_key,es.begin_time,es.end_time
+    from elegant_service es
+    left join elegant_service_description esd on es.id = esd.elegant_service_id
+    where es.on_off = 1
+    and es.yn = 1
+    order by es.sort
+  </select>
 
 
 </mapper>
