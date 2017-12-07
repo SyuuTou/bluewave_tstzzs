@@ -97,7 +97,18 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
 
         //获取到项目列表
         List<Map<String,Object>> projectList = new ArrayList<>();
-        projectList = getInstitutionProject(body.getInstitutionId(),body.getStage(),body.getFields(),body.getFinancingTime(),startPage,body.getPageSize());
+
+        String[] segmentationName = null;
+        if (body.getFields() != "" && body.getFields() != null){
+            segmentationName = body.getFields().split(",");
+        }
+
+        String[] financingTime = null;
+        if (body.getFinancingTime() != "" && body.getFinancingTime() != null){
+            financingTime = body.getFinancingTime().split(",");
+        }
+
+        projectList = getInstitutionProject(body.getInstitutionId(),body.getStage(),segmentationName,financingTime,startPage,body.getPageSize());
 
         if(projectList.size() > 0){
             for (Map<String,Object> m:projectList){
@@ -134,6 +145,8 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
                 }
 
                 m.put("segmentations",psegment);
+
+                m.putIfAbsent("city","");
             }
         }
 
@@ -182,7 +195,7 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
      * @return
      */
     //@Cacheable(value = "getInstitutionProject", keyGenerator = "wiselyKeyGenerator")
-    private List<Map<String,Object>> getInstitutionProject(Integer institutionId,String stage,String segmentationName,String financingTime,Integer startNum,Integer pageSize){
+    private List<Map<String,Object>> getInstitutionProject(Integer institutionId,String stage,String[] segmentationName,String[] financingTime,Integer startNum,Integer pageSize){
         List<Map<String,Object>> result = new ArrayList<>();
 
         result = projectsMapper.findInstitutionProject(institutionId,stage,segmentationName,financingTime,startNum,pageSize);
