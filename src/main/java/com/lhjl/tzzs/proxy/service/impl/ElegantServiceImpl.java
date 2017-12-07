@@ -57,4 +57,32 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         return result;
     }
+
+    /**
+     * 根据服务id获取服务详情的接口
+     * @param elegantServiceId 服务id
+     * @return
+     */
+    @Override
+    public CommonDto<Map<String, Object>> findElegantServiceById(Integer elegantServiceId) {
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        if (elegantServiceId == null){
+            result.setData(null);
+            result.setMessage("服务id不能为空");
+            result.setStatus(502);
+
+            return result;
+        }
+
+        Map<String,Object> map = elegantServiceMapper.findElegantServiceById(elegantServiceId);
+        map.putIfAbsent("background_picture","http://img.idatavc.com/static/img/serverwu.png");
+        map.putIfAbsent("original_price","");
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(map);
+
+        return result;
+    }
 }

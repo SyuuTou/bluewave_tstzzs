@@ -37,4 +37,25 @@ public class ElegantServiceController {
 
         return result;
     }
+
+    /**
+     * 根据服务id获取服务详情的接口
+     * @param elegantServiceId 服务id
+     * @return
+     */
+    @GetMapping("elegantservice/one")
+    public CommonDto<Map<String,Object>> getElegantServiceById(Integer elegantServiceId){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        try {
+            result = elegantServiceService.findElegantServiceById(elegantServiceId);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+        }
+
+        return result;
+    }
 }
