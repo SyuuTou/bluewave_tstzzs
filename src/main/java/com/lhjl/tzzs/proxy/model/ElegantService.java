@@ -29,6 +29,12 @@ public class ElegantService {
     private BigDecimal vipPrice;
 
     /**
+     * 价格单位，0表示人民币，1表示美元
+     */
+    @Column(name = "price_unit")
+    private Integer priceUnit;
+
+    /**
      * 单位，这里的单位指的是，5800/次，3800/人 中的“次”和“人”；
      */
     private String unit;
@@ -75,7 +81,7 @@ public class ElegantService {
     private String scenceKey;
 
     /**
-     * 是否删除，0表示删除，1表示未删除
+     * 是否有效，0表示已被删除，1表示未被删除
      */
     private Integer yn;
 
@@ -145,6 +151,24 @@ public class ElegantService {
      */
     public void setVipPrice(BigDecimal vipPrice) {
         this.vipPrice = vipPrice;
+    }
+
+    /**
+     * 获取价格单位，0表示人民币，1表示美元
+     *
+     * @return price_unit - 价格单位，0表示人民币，1表示美元
+     */
+    public Integer getPriceUnit() {
+        return priceUnit;
+    }
+
+    /**
+     * 设置价格单位，0表示人民币，1表示美元
+     *
+     * @param priceUnit 价格单位，0表示人民币，1表示美元
+     */
+    public void setPriceUnit(Integer priceUnit) {
+        this.priceUnit = priceUnit;
     }
 
     /**
@@ -292,18 +316,18 @@ public class ElegantService {
     }
 
     /**
-     * 获取是否删除，0表示删除，1表示未删除
+     * 获取是否有效，0表示已被删除，1表示未被删除
      *
-     * @return yn - 是否删除，0表示删除，1表示未删除
+     * @return yn - 是否有效，0表示已被删除，1表示未被删除
      */
     public Integer getYn() {
         return yn;
     }
 
     /**
-     * 设置是否删除，0表示删除，1表示未删除
+     * 设置是否有效，0表示已被删除，1表示未被删除
      *
-     * @param yn 是否删除，0表示删除，1表示未删除
+     * @param yn 是否有效，0表示已被删除，1表示未被删除
      */
     public void setYn(Integer yn) {
         this.yn = yn;
