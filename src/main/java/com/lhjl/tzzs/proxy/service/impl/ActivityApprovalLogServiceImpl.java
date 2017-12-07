@@ -42,7 +42,7 @@ public class ActivityApprovalLogServiceImpl implements ActivityApprovalLogServic
             return result;
         }
 
-        if (body.get("scence_key") == null){
+        if (body.get("sceneKey") == null){
             result.setData(null);
             result.setMessage("用户的支付场景不能为空");
             result.setStatus(502);
@@ -51,7 +51,7 @@ public class ActivityApprovalLogServiceImpl implements ActivityApprovalLogServic
         }
 
         String token = (String) body.get("token");
-        String scenceKey = (String) body.get("scence_key");
+        String scenceKey = (String) body.get("sceneKey");
 
         Integer userId = userExistJudgmentService.getUserId(token);
         if (userId == -1){
