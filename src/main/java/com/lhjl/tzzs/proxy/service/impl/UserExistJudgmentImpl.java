@@ -109,15 +109,60 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
                 result.setMessage("success");
 
             }else{
-               userExsitJudgmentDto.setSuccess(false);
-               userExsitJudgmentDto.setToken(null);
 
-               log.info("当前用户的token信息不存在，请检查,当前用户的oppenId为：");
-               log.info(oppenId);
+                log.info("当前用户的token信息不存在，请检查,当前用户的oppenId为：");
+                log.info(oppenId);
+                log.info("token不存在的话，删掉微信信息，重新创建用户");
 
-               result.setMessage("当前输入token非法，请检查");
-               result.setStatus(401);
-               result.setData(userExsitJudgmentDto);
+                Integer userweixinId = usersWeixinForId.getId();
+
+                //删掉微信表的信息
+                usersWeixinMapper.deleteByPrimaryKey(userweixinId);
+
+                //创建用户返回手机号信息
+                String token = encode();
+
+                Date now = new Date();
+                log.info("创建用户，及相关表");
+
+                //创建用户
+                Users users =new Users();
+                users.setCreateTime(now);
+                String uuid = token;
+                users.setUuid(uuid);
+
+                usersMapper.insertSelective(users);
+
+                Integer userid = users.getId();
+                //创建用户token
+                UserToken userToken1 = new UserToken();
+                userToken1.setUserId(userid);
+                userToken1.setToken(token);
+                userToken1.setRegisterTime(now);
+
+                userTokenMapper.insert(userToken1);
+
+                //创建用户微信信息表
+                UsersWeixin usersWeixinForInsert1 = new UsersWeixin();
+                usersWeixinForInsert1.setOpenid(oppenId);
+                usersWeixinForInsert1.setUserId(userid);
+                usersWeixinForInsert1.setCreateTime(now);
+
+                usersWeixinMapper.insertSelective(usersWeixinForInsert1);
+
+
+                //数据插入成功，返回结果
+
+                userExsitJudgmentDto.setHaspassword(0);
+                userExsitJudgmentDto.setHasphonenumber(0);
+                userExsitJudgmentDto.setSuccess(true);
+                userExsitJudgmentDto.setToken(token);
+                userExsitJudgmentDto.setYhid(userid);
+
+                result.setMessage("success");
+                result.setStatus(200);
+                result.setData(userExsitJudgmentDto);
+
             }
 
 
