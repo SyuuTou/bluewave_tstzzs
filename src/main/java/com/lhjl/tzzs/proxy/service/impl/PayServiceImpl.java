@@ -142,6 +142,7 @@ public class PayServiceImpl implements PayService {
 
             Map<String,Object> parms = new HashMap<>();
             parms.put("token",users.getToken());
+            parms.put("sceneKey",result.getAttach());
             activityApprovalLogService.createActicityApprovalLog(parms);
         }else {
             userIntegralsService.payAfter(usersPay.getUserId(), usersPay.getSceneKey(), new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())), 1);
