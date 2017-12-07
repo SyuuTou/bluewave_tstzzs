@@ -48,20 +48,20 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
         List<UsersWeixin> usersWeixins = usersWeixinMapper.select(usersWeixin);
 
         log.info("进入用户登录注册实现方法中");
-        UsersWeixin usersWeixinForId = usersWeixins.get(0);
-        int userId = usersWeixinForId.getUserId();
 
-        log.info("用户微信号已存在，对应的用户id为：");
-        log.info("userId={}",userId);
-
-        //去获取token
-        UserToken userToken = new UserToken();
-        userToken.setUserId(userId);
-
-        List<UserToken> userTokens = userTokenMapper.select(userToken);
-        if (usersWeixins.size() > 0 && userTokens.size() > 0){
+        if (usersWeixins.size() > 0){
             //token存在的情况，返回token,返回用户手机号是否存在
+            UsersWeixin usersWeixinForId = usersWeixins.get(0);
+            int userId = usersWeixinForId.getUserId();
 
+            log.info("用户微信号已存在，对应的用户id为：");
+            log.info("userId={}",userId);
+
+            //去获取token
+            UserToken userToken = new UserToken();
+            userToken.setUserId(userId);
+
+            List<UserToken> userTokens = userTokenMapper.select(userToken);
             if (userTokens.size() > 0){
                 //获取到token
                 UserToken userTokenForToken = userTokens.get(0);
@@ -138,7 +138,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
 
             Integer userid = users.getId();
             //创建用户token
-            userToken = new UserToken();
+            UserToken userToken = new UserToken();
             userToken.setUserId(userid);
             userToken.setToken(token);
             userToken.setRegisterTime(now);
