@@ -4,9 +4,11 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InstitutionsProjectDto.InstitutionsProjectInputDto;
 import com.lhjl.tzzs.proxy.dto.InstitutionsProjectDto.InstitutionsProjectOutputDto;
 import com.lhjl.tzzs.proxy.mapper.FollowMapper;
+import com.lhjl.tzzs.proxy.mapper.InterviewMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSegmentationMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
 import com.lhjl.tzzs.proxy.model.Follow;
+import com.lhjl.tzzs.proxy.model.Interview;
 import com.lhjl.tzzs.proxy.model.ProjectSegmentation;
 import com.lhjl.tzzs.proxy.service.InstitutionsProjectService;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
@@ -37,6 +39,9 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
 
     @Autowired
     private ProjectSegmentationMapper projectSegmentationMapper;
+
+    @Autowired
+    private InterviewMapper interviewMapper;
     /**
      * 获取机构投资项目列表接口
      * @param body
@@ -120,8 +125,17 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
                 follow.setStatus(1);
                 Integer followNum = followMapper.selectCount(follow);
 
-                //当图片没有的时候返回空
+
                 m.put("num",followNum);
+
+                //计算约谈数量
+                Interview interview = new Interview();
+                interview.setProjectsId(projectId);
+                Integer inum = interviewMapper.selectCount(interview);
+
+                m.put("inum",inum);
+
+                //当图片没有的时候返回空
                 if (m.get("project_logo") == null){
                     m.put("project_logo","");
                 }
