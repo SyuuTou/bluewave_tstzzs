@@ -121,7 +121,7 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
                 Integer followNum = followMapper.selectCount(follow);
 
                 //当图片没有的时候返回空
-                m.put("followNum",followNum);
+                m.put("num",followNum);
                 if (m.get("project_logo") == null){
                     m.put("project_logo","");
                 }
@@ -163,15 +163,15 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
                 for (Map<String,Object> mm:projectList){
                     Integer xmid = (Integer) mm.get("id");
                     if (String.valueOf(f.getProjectsId()).equals(String.valueOf(xmid))){
-                        mm.put("follow",true);
+                        mm.put("yn",1);
                     }else {
-                        mm.put("follow",false);
+                        mm.put("yn",0);
                     }
                 }
             }
         }else {
             for (Map<String,Object> mma:projectList){
-                    mma.put("follow",false);
+                    mma.put("yn",0);
             }
         }
 
