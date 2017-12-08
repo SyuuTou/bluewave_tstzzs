@@ -212,10 +212,10 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
         }
 
         //组装返回数据
-        if (investmentInstitutions.getComment() == null){
-            investmentInstitutions.setCommet("");
+        if (investmentInstitutions.getKenelCase() == null){
+            investmentInstitutions.setKenelCase("");
         }
-        map.put("institutionDesc",investmentInstitutions.getComment());
+        map.put("institutionDesc",investmentInstitutions.getKenelCase());
         map.put("institutionSegmentation",segmentList);
         map.put("institutionStage",stageList);
         map.put("address",listiia);
