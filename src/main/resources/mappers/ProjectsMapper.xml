@@ -398,7 +398,7 @@
         and p.short_name is not null
         and p.short_name != ""
         group by p.short_name
-        order by pfl.financing_time desc
+        order by pfl.financing_time desc,p.id asc
         limit #{startNum},#{pageSize}
     </select>
 </mapper>
