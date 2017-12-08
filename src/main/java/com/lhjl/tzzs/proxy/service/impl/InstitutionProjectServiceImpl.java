@@ -173,14 +173,19 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
         //判断当前用户是否关注了列表里面的项目
         List<Follow> followList = followMapper.select(userFollow);
         if (followList.size() > 0){
-            for (Follow f:followList){
-                for (Map<String,Object> mm:projectList){
-                    Integer xmid = (Integer) mm.get("id");
+            for (Map<String,Object> mm :projectList){
+                Integer xmid = (Integer)mm.get("id");
+                int i=0;
+                for (Follow f:followList){
                     if (String.valueOf(f.getProjectsId()).equals(String.valueOf(xmid))){
-                        mm.put("yn",1);
-                    }else {
-                        mm.put("yn",0);
+                        i++;
                     }
+                }
+
+                if (i >0){
+                    mm.put("yn",1);
+                }else {
+                    mm.put("yn",0);
                 }
             }
         }else {
