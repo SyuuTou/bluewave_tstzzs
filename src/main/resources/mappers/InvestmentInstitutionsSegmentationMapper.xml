@@ -18,6 +18,7 @@
     select substring(pfl.financing_time,1,4) as ydate from projects p
     right join project_financing_log pfl on p.ID = pfl.project_id
     where investment_institutions_id =#{institutionId}
+    and pfl.financing_time is not null
     group by ydate
   </select>
 </mapper>
