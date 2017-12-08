@@ -212,6 +212,9 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
         }
 
         //组装返回数据
+        if (investmentInstitutions.getComment() == null){
+            investmentInstitutions.setCommet("");
+        }
         map.put("institutionDesc",investmentInstitutions.getComment());
         map.put("institutionSegmentation",segmentList);
         map.put("institutionStage",stageList);
