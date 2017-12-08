@@ -395,6 +395,8 @@
             and pfl.financing_time_year in
             <foreach close=")" collection="financingTime" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
+        and p.short_name is not null
+        and p.short_name != ""
         group by p.short_name
         order by pfl.financing_time desc
         limit #{startNum},#{pageSize}
