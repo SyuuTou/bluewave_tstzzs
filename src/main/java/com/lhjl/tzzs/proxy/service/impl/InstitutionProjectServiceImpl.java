@@ -158,7 +158,17 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
                     }
                 }
 
-                m.put("segmentations",psegment);
+                //将领域解析成字符串
+                String psegmentString = "";
+                for (String s:psegment){
+                    psegmentString += s+"、";
+                }
+
+                if (psegmentString.length() > 0){
+                    psegmentString = psegmentString.substring(0,psegmentString.length()-1);
+                }
+
+                m.put("segmentations",psegmentString);
 
                 m.putIfAbsent("city","");
             }
