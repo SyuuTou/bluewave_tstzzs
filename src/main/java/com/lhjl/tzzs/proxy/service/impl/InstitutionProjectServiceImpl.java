@@ -143,9 +143,9 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
 
                 if (followList.size()>0){
                     int x = 0;
-                    Integer num = 0;
+                    Long num = null;
                     for (Map<String,Object> fl:followList){
-                        Integer numget = (Integer) fl.get("ct");
+                        Long numget = (Long) fl.get("ct");
                         Integer pid = (Integer) fl.get("projects_id");
 
                         if (String.valueOf(projectId).equals(String.valueOf(pid))){
@@ -167,9 +167,9 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
                 //设置约谈数
                 if (interviewList.size()>0){
                     int y = 0;
-                    Integer numy = 0;
+                    Long numy = null;
                     for (Map<String,Object> il:interviewList){
-                        Integer numget = (Integer) il.get("ct");
+                        Long numget = (Long) il.get("ct");
                         Integer pid = (Integer) il.get("projects_id");
 
                         if (String.valueOf(projectId).equals(String.valueOf(pid))){
