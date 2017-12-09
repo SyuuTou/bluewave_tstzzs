@@ -249,6 +249,11 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
 
         List<Map<String,Object>> yearList = new ArrayList<>();
         yearList = investmentInstitutionsSegmentationMapper.findYear(institutionId);
+        for (int i = 0;i < yearList.size();i++){
+
+            yearList.get(i).put("financing_time",yearList.get(i).get("financing_time_year"));
+
+        }
 
         map.put("segmentation",segmentList);
         map.put("years",yearList);
