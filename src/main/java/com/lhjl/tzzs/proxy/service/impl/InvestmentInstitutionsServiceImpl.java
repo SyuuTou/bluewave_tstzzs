@@ -251,7 +251,7 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
         yearList = investmentInstitutionsSegmentationMapper.findYear(institutionId);
         for (int i = 0;i < yearList.size();i++){
 
-            yearList.get(i).put("financing_time",yearList.get(i).get("financing_time_year"));
+            yearList.get(i).put("ydate",yearList.get(i).get("financing_time_year"));
 
         }
 
