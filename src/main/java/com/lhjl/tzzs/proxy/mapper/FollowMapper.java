@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.mapper;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -9,7 +10,6 @@ import org.apache.ibatis.annotations.Param;
 import com.lhjl.tzzs.proxy.model.Follow;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
-import com.sun.tools.javac.util.List;
 
 /**
  * 关注
@@ -25,5 +25,7 @@ public interface FollowMapper extends OwnerMapper<Follow> {
      */
     void updateFollowStatus(Follow follow);
    Follow findfollowyn(@Param("userId") String userId,@Param("id") Integer id);
+
+   List<Map<String,Object>> getProjectsFollowByIds(@Param("projectsIds") Integer[] projectsIds);
 
 }
