@@ -223,8 +223,9 @@
 
     <!--查询机构类型-->
     <select id="findIvestmentTypeById" resultType="Integer">
-      SELECT ii.type FROM projects p LEFT JOIN investment_institutions ii ON p.`investment_institutions_id` = ii.`ID`
-      WHERE p.ID = #{projectsId};
+        SELECT ii.type FROM projects p LEFT JOIN investment_institutions_project iip ON  iip.project_id = p.ID
+        left join investment_institutions ii on iip.investment_institutions_id = ii.ID
+        WHERE p.ID = #{projectsId};
     </select>
 
     <!--处理amount的xml-->
