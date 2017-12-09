@@ -132,8 +132,13 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
         }
 
         //取当前项目列表中的关注和约谈数量
-        List<Map<String,Object>> followList = followMapper.getProjectsFollowByIds(projectIdArr);
-        List<Map<String,Object>> interviewList = interviewMapper.findProjectInterviewByIds(projectIdArr);
+        List<Map<String,Object>> followList = null;
+        List<Map<String,Object>> interviewList = null;
+        if (projectIdArr.length > 0){
+             followList = followMapper.getProjectsFollowByIds(projectIdArr);
+             interviewList = interviewMapper.findProjectInterviewByIds(projectIdArr);
+        }
+
 
         if(projectList.size() > 0){
             for (Map<String,Object> m:projectList){
@@ -224,37 +229,39 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
 
                 m.putIfAbsent("city","");
             }
-        }
 
-        //获取当前用户关注项目
-        Follow userFollow = new Follow();
-        userFollow.setUserId(body.getToken());
-        userFollow.setStatus(1);
+            //获取当前用户关注项目
+            Follow userFollow = new Follow();
+            userFollow.setUserId(body.getToken());
+            userFollow.setStatus(1);
 
 
-        //判断当前用户是否关注了列表里面的项目
-        List<Follow> followGetList = followMapper.select(userFollow);
-        if (followList.size() > 0){
-            for (Map<String,Object> mm :projectList){
-                Integer xmid = (Integer)mm.get("id");
-                int i=0;
-                for (Follow f:followGetList){
-                    if (String.valueOf(f.getProjectsId()).equals(String.valueOf(xmid))){
-                        i++;
+            //判断当前用户是否关注了列表里面的项目
+            List<Follow> followGetList = followMapper.select(userFollow);
+            if (followList.size() > 0){
+                for (Map<String,Object> mm :projectList){
+                    Integer xmid = (Integer)mm.get("id");
+                    int i=0;
+                    for (Follow f:followGetList){
+                        if (String.valueOf(f.getProjectsId()).equals(String.valueOf(xmid))){
+                            i++;
+                        }
+                    }
+
+                    if (i >0){
+                        mm.put("yn",1);
+                    }else {
+                        mm.put("yn",0);
                     }
                 }
-
-                if (i >0){
-                    mm.put("yn",1);
-                }else {
-                    mm.put("yn",0);
+            }else {
+                for (Map<String,Object> mma:projectList){
+                    mma.put("yn",0);
                 }
             }
-        }else {
-            for (Map<String,Object> mma:projectList){
-                    mma.put("yn",0);
-            }
         }
+
+
 
 
 
