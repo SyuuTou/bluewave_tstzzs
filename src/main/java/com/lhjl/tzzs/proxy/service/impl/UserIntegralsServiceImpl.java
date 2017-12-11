@@ -469,7 +469,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
                 Float bei = usersMapper.findByBei(leId);
                 BigDecimal dnum = body.getQj();
                 Integer dnum1 = dnum.intValue();
-                if (dnum1 >= 188) {
+                if (dnum1 >= 0.01) {
                     map.put("dnum", dnum);
 
                     map.put("snum", (int) (bei * dnum1));
@@ -502,7 +502,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				Float bei =usersMapper.findByBei(leId+1);
 				BigDecimal dnum = body.getQj();
                 Integer dnum1=dnum.intValue();
-				if(dnum1>=188){
+				if(dnum1>=0.01){
 					map.put("dnum",dnum);
 
 					map.put("snum",(int)(bei*dnum1));
