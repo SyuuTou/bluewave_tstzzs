@@ -332,7 +332,7 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
 
         ) b where dis > 0 GROUP by b.dis order by dcount DESC
 
-        limit 0, 10
+        limit 0, 10) c
     </select>
 
 
