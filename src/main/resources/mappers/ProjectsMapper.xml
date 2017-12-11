@@ -223,8 +223,10 @@
 
     <!--查询机构类型-->
     <select id="findIvestmentTypeById" resultType="Integer">
-      SELECT ii.type FROM projects p LEFT JOIN investment_institutions ii ON p.`investment_institutions_id` = ii.`ID`
-      WHERE p.ID = #{projectsId};
+        SELECT ii.type FROM projects p LEFT JOIN investment_institutions_project iip ON  iip.project_id = p.ID
+        left join investment_institutions ii on iip.investment_institutions_id = ii.ID
+        WHERE p.ID = #{projectsId}
+        group by project_id
     </select>
 
     <!--处理amount的xml-->
@@ -380,21 +382,26 @@
     </select>
 
     <select id="findInstitutionProject" resultType="java.util.HashMap">
-        select p.id,p.project_logo,p.kernel_desc,p.short_name,p.full_name,ps.segmentation_name,pfl.stage,pfl.financing_time from idatavc.projects p
-        right join project_segmentation ps on p.id = ps.project_id
-        right join project_financing_log pfl on p.id = pfl.project_id
-        where investment_institutions_id = #{institutionId}
-        <if test="stage != null and stage!=''">
-            and pfl.stage=#{stage}
-        </if>
+        select p.id,p.city,p.project_logo,p.kernel_desc,p.short_name,p.full_name,pfl.stage,pfl.financing_time,pfl.financing_time_year from investment_institutions_project iip
+        left join projects p on iip.project_id = p.ID
         <if test="segmentationName != null and segmentationName!=''">
-            and ps.segmentation_name = #{segmentationName}
+            left join project_segmentation ps on ps.project_id = iip.project_id
+        </if>
+        left join project_financing_log pfl on p.ID = pfl.project_id
+        where iip.investment_institutions_id = #{institutionId}
+        and p.short_name is not null
+        and p.short_name != ""
+        and pfl.financing_time is not null
+        <if test="segmentationName != null and segmentationName!=''">
+            and ps.segmentation_name in
+            <foreach close=")" collection="segmentationName" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
         <if test="financingTime != null and financingTime != ''">
-            and pfl.financing_time like CONCAT(CONCAT('%', #{financingTime}), '%')
+            and pfl.financing_time_year in
+            <foreach close=")" collection="financingTime" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
         group by p.short_name
-        order by pfl.financing_time desc
+        order by pfl.financing_time desc,p.ID asc
         limit #{startNum},#{pageSize}
     </select>
 </mapper>

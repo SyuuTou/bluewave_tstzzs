@@ -19,4 +19,13 @@
   <select id="findfollowyn"  resultMap="BaseResultMap">
   SELECT * FROM follow WHERE user_id =#{userId} AND projects_id=#{id} ORDER BY create_time DESC LIMIT 1
   </select>
+  <select id="getProjectsFollowByIds" resultType="java.util.HashMap">
+    select count(*) as ct,projects_id from follow where
+    1=1
+    <if test="projectsIds != null and projectsIds!=''">
+      and projects_id in
+      <foreach close=")" collection="projectsIds" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+    group by projects_id
+  </select>
 </mapper>

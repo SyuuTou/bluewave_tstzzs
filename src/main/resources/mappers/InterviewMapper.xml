@@ -12,4 +12,13 @@
     <result column="desc" property="desc" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <select id="findProjectInterviewByIds" resultType="java.util.HashMap">
+    select count(*) as ct,projects_id from interview where
+    1=1
+    <if test="projectsIds != null and projectsIds!=''">
+      and projects_id in
+      <foreach close=")" collection="projectsIds" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+    group by projects_id;
+  </select>
 </mapper>

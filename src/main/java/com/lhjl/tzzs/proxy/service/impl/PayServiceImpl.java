@@ -81,6 +81,8 @@ public class PayServiceImpl implements PayService {
 
         MetaScene scene = sceneMapper.selectOne(queryMS);
 
+        String sceneType = payRequestBody.getSceneType();
+
 
 
         try {
@@ -101,7 +103,7 @@ public class PayServiceImpl implements PayService {
                     .outTradeNo(tradeNo)
                     .totalFee(WxPayBaseRequest.yuanToFee(userMoneyRecord.getMoney().toString()))
                     .body(scene.getDesc())
-                    .attach(payRequestBody.getSceneKey())
+                    .attach(payRequestBody.getSceneKey()+"|"+sceneType)
                     .spbillCreateIp("39.106.44.53")
                     .build();
             Map<String, String> payInfo =payService.getPayInfo(prepayInfo);
@@ -133,7 +135,7 @@ public class PayServiceImpl implements PayService {
         usersPay.setPayTime(DateTime.now().toDate());
         usersPay.setReceived(new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())));
         usersPayMapper.updateByPrimaryKey(usersPay);
-        if (result.getAttach().equals("Rxq0KR1l")){
+        if (result.getAttach().split("|")[1].equals("SERVICES")){
 
             UserToken queryToken = new UserToken();
             queryToken.setUserId(usersPay.getUserId());
@@ -142,6 +144,7 @@ public class PayServiceImpl implements PayService {
 
             Map<String,Object> parms = new HashMap<>();
             parms.put("token",users.getToken());
+            parms.put("sceneKey",result.getAttach().split("|")[0]);
             activityApprovalLogService.createActicityApprovalLog(parms);
         }else {
             userIntegralsService.payAfter(usersPay.getUserId(), usersPay.getSceneKey(), new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())), 1);

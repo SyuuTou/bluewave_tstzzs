@@ -212,7 +212,10 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
         }
 
         //组装返回数据
-        map.put("institutionDesc",investmentInstitutions.getComment());
+        if (investmentInstitutions.getKenelCase() == null){
+            investmentInstitutions.setKenelCase("");
+        }
+        map.put("institutionDesc",investmentInstitutions.getKenelCase());
         map.put("institutionSegmentation",segmentList);
         map.put("institutionStage",stageList);
         map.put("address",listiia);
@@ -246,6 +249,11 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
 
         List<Map<String,Object>> yearList = new ArrayList<>();
         yearList = investmentInstitutionsSegmentationMapper.findYear(institutionId);
+        for (int i = 0;i < yearList.size();i++){
+
+            yearList.get(i).put("ydate",yearList.get(i).get("financing_time_year"));
+
+        }
 
         map.put("segmentation",segmentList);
         map.put("years",yearList);

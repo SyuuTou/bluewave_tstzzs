@@ -5,6 +5,15 @@ public class PayRequestBody {
     private String sceneKey;//场景key
     private Integer moneyId;//支付金额记录ID
     private String localIp;// 本地用户IP
+    private String sceneType;
+
+    public String getSceneType() {
+        return sceneType;
+    }
+
+    public void setSceneType(String sceneType) {
+        this.sceneType = sceneType;
+    }
 
     public String getLocalIp() {
         return localIp;
