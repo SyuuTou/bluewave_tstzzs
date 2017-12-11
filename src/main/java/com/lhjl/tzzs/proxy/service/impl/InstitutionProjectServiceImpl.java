@@ -198,11 +198,9 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
                 }
 
                 //获取项目领域
-                Example psegmentExample = new Example(ProjectSegmentation.class);
-                psegmentExample.and().andEqualTo("projectId",projectId);
 
                 List<String> psegment = new ArrayList<>();
-                List<ProjectSegmentation> psegmentationList = projectSegmentationMapper.selectByExample(psegmentExample);
+                List<ProjectSegmentation> psegmentationList = projectSegmentationMapper.findProjectSegmentation(projectId);
                 if (psegmentationList.size()>0){
                     if (psegmentationList.size()<3){
                         for (ProjectSegmentation pss:psegmentationList){
