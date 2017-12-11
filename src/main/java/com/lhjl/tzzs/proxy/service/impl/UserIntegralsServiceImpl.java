@@ -469,7 +469,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
                 Float bei = usersMapper.findByBei(leId);
                 BigDecimal dnum = body.getQj();
                 Integer dnum1 = dnum.intValue();
-                //if (dnum1 >= 188) {
+                if (dnum1 >= 188) {
                     map.put("dnum", dnum);
 
                     map.put("snum", (int) (bei * dnum1));
@@ -493,16 +493,16 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
                     userMoneyRecord.setUserId(userId);
                     userMoneyRecordMapper.insert(userMoneyRecord);
                     map.put("Money_ID", userMoneyRecord.getId());
-//                } else {
-//                    result.setStatus(5019);
-//                    result.setMessage("充值金额不能小于188元");
-//                }
+                } else {
+                    result.setStatus(5019);
+                    result.setMessage("充值金额不能小于188元");
+                }
 			}else{
 				leId=0;
 				Float bei =usersMapper.findByBei(leId+1);
 				BigDecimal dnum = body.getQj();
                 Integer dnum1=dnum.intValue();
-//				if(dnum1 >= 188){
+				if(dnum1>=188){
 					map.put("dnum",dnum);
 
 					map.put("snum",(int)(bei*dnum1));
@@ -519,11 +519,11 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userMoneyRecord.setUserId(userId);
 					userMoneyRecordMapper.insert(userMoneyRecord);
 					map.put("Money_ID",userMoneyRecord.getId());
-//				}
-//				else{
-//					result.setStatus(5019);
-//					result.setMessage("充值金额不能小于188元");
-//				}
+				}
+				else{
+					result.setStatus(5019);
+					result.setMessage("充值金额不能小于188元");
+				}
 			}
 		}else{
 			result.setStatus(5013);
