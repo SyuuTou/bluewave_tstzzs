@@ -58,4 +58,6 @@ public class ElegantServiceController {
 
         return result;
     }
+
+    //录入信息接口
 }
