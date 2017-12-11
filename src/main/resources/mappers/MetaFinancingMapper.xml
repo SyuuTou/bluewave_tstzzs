@@ -81,10 +81,16 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
     <select id="queryFinancingCount" resultType="map">
         select count(1) total from (
         select CEILING(pfl.${flag}/${granularity}) * ${granularity} as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
-        right JOIN project_segmentation ps on ps.project_id = mf.id
+        <if test="industryName != '' and industryName != null">
+            right JOIN project_segmentation ps on ps.project_id = mf.id
+        </if>
         LEFT JOIN founders f on mf.id = f.project_id
-        right join founders_education  fe on fe.founder_ID = f.id
-        right join founders_work fw on fw.founder_id = f.id
+        <if test="educationName != '' and educationName != null">
+            right join founders_education  fe on fe.founder_ID = f.id
+        </if>
+        <if test="workName != '' and workName != null">
+            right join founders_work fw on fw.founder_id = f.id
+        </if>
         <if test="investment != '' and investment != null and investment != -1">
             LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
         </if>
@@ -116,10 +122,16 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
     <select id="queryValuationCount" resultType="map">
         select count(1) total from (
         select CEILING(pfl.valuation/500) * 500 as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
-        right JOIN project_segmentation ps on ps.project_id = mf.id
+        <if test="industryName != '' and industryName != null">
+            right JOIN project_segmentation ps on ps.project_id = mf.id
+        </if>
         LEFT JOIN founders f on mf.id = f.project_id
-        right join founders_education  fe on fe.founder_ID = f.id
-        right join founders_work fw on fw.founder_id = f.id
+        <if test="educationName != '' and educationName != null">
+            right join founders_education  fe on fe.founder_ID = f.id
+        </if>
+        <if test="workName != '' and workName != null">
+            right join founders_work fw on fw.founder_id = f.id
+        </if>
         <if test="investment != '' and investment != null and investment != -1">
             LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
         </if>
@@ -153,10 +165,16 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
 
         SELECT avg(amount) from (
         select pfl.${flag} amount  from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
-        right JOIN project_segmentation ps on ps.project_id = mf.id
+        <if test="industryName != '' and industryName != null">
+            right JOIN project_segmentation ps on ps.project_id = mf.id
+        </if>
         LEFT JOIN founders f on mf.id = f.project_id
-        right join founders_education  fe on fe.founder_ID = f.id
-        right join founders_work fw on fw.founder_id = f.id
+        <if test="educationName != '' and educationName != null">
+            right join founders_education  fe on fe.founder_ID = f.id
+        </if>
+        <if test="workName != '' and workName != null">
+            right join founders_work fw on fw.founder_id = f.id
+        </if>
         <if test="investment != '' and investment != null and investment != -1">
             LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
         </if>
@@ -191,10 +209,16 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
 
 
         select avg(pfl.valuation) money from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
-        right JOIN project_segmentation ps on ps.project_id = mf.id
+        <if test="industryName != '' and industryName != null">
+            right JOIN project_segmentation ps on ps.project_id = mf.id
+        </if>
         LEFT JOIN founders f on mf.id = f.project_id
-        right join founders_education  fe on fe.founder_ID = f.id
-        right join founders_work fw on fw.founder_id = f.id
+        <if test="educationName != '' and educationName != null">
+            right join founders_education  fe on fe.founder_ID = f.id
+        </if>
+        <if test="workName != '' and workName != null">
+            right join founders_work fw on fw.founder_id = f.id
+        </if>
         <if test="investment != '' and investment != null and investment != -1">
             LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
         </if>
@@ -228,10 +252,16 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         select money,dcount from (
         SELECT dis money, count(1) dcount from (
         select ROUND(pfl.valuation/${granularity}) * ${granularity} as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
-        right JOIN project_segmentation ps on ps.project_id = mf.id
+        <if test="industryName != '' and industryName != null">
+            right JOIN project_segmentation ps on ps.project_id = mf.id
+        </if>
         LEFT JOIN founders f on mf.id = f.project_id
-        right join founders_education  fe on fe.founder_ID = f.id
-        right join founders_work fw on fw.founder_id = f.id
+        <if test="educationName != '' and educationName != null">
+            right join founders_education  fe on fe.founder_ID = f.id
+        </if>
+        <if test="workName != '' and workName != null">
+            right join founders_work fw on fw.founder_id = f.id
+        </if>
         <if test="investment != '' and investment != null and investment != -1">
             LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
         </if>
@@ -265,10 +295,56 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         select money,dcount from (
         SELECT dis money, count(1) dcount from (
         select ROUND(pfl.${flag}/${granularity}) * ${granularity} as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
-        right JOIN project_segmentation ps on ps.project_id = mf.id
+        <if test="industryName != '' and industryName != null">
+            right JOIN project_segmentation ps on ps.project_id = mf.id
+        </if>
         LEFT JOIN founders f on mf.id = f.project_id
+        <if test="educationName != '' and educationName != null">
+            right join founders_education  fe on fe.founder_ID = f.id
+        </if>
+        <if test="workName != '' and workName != null">
+            right join founders_work fw on fw.founder_id = f.id
+        </if>
+        <if test="investment != '' and investment != null and investment != -1">
+            LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
+        </if>
+
+        where pfl.${flag} > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
+        <if test="roundName != '' and roundName != null">
+            and pfl.stage = #{roundName}
+        </if>
+        <if test="industryName != '' and industryName != null">
+            and ps.segmentation_name = #{industryName}
+        </if>
+        <if test="cityName != '' and cityName != null">
+            and mf.city =#{cityName}
+        </if>
+        <if test="educationName != '' and educationName != null">
+            and fe.education_experience =#{educationName}
+        </if>
+        <if test="workName != '' and workName != null">
+            and fw.work_experience =#{workName}
+        </if>
+        <if test="investment != '' and investment != null and investment != -1">
+            AND ii.type = #{investment}
+        </if>
+        group by pfl.stage,mf.full_name
+
+        ) b where dis > 0 GROUP by b.dis order by dcount DESC
+
+        limit 0, 10select money,dcount from (
+        SELECT dis money, count(1) dcount from (
+        select ROUND(pfl.${flag}/${granularity}) * ${granularity} as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
+        <if test="industryName != '' and industryName != null">
+        right JOIN project_segmentation ps on ps.project_id = mf.id
+        </if>
+        LEFT JOIN founders f on mf.id = f.project_id
+        <if test="educationName != '' and educationName != null">
         right join founders_education  fe on fe.founder_ID = f.id
+        </if>
+        <if test="workName != '' and workName != null">
         right join founders_work fw on fw.founder_id = f.id
+        </if>
         <if test="investment != '' and investment != null and investment != -1">
             LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
         </if>
@@ -305,10 +381,16 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
 
     <select id="queryFinancingAvgAmount" resultType="decimal">
         select avg(pfl.${flag}) amount  from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
-        right JOIN project_segmentation ps on ps.project_id = mf.id
+        <if test="industryName != '' and industryName != null">
+            right JOIN project_segmentation ps on ps.project_id = mf.id
+        </if>
         LEFT JOIN founders f on mf.id = f.project_id
-        right join founders_education  fe on fe.founder_ID = f.id
-        right join founders_work fw on fw.founder_id = f.id
+        <if test="educationName != '' and educationName != null">
+            right join founders_education  fe on fe.founder_ID = f.id
+        </if>
+        <if test="workName != '' and workName != null">
+            right join founders_work fw on fw.founder_id = f.id
+        </if>
         <if test="investment != '' and investment != null and investment != -1">
             LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
         </if>

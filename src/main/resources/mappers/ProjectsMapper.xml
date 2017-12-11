@@ -383,7 +383,7 @@
 
     <select id="findInstitutionProject" resultType="java.util.HashMap">
         select p.id,p.city,p.project_logo,p.kernel_desc,p.short_name,p.full_name,pfl.stage,pfl.financing_time,pfl.financing_time_year from investment_institutions_project iip
-        left join (select * from projects group by short_name) p on iip.project_id = p.ID
+        left join projects p on iip.project_id = p.ID
         <if test="segmentationName != null and segmentationName!=''">
             left join project_segmentation ps on ps.project_id = iip.project_id
         </if>
@@ -400,6 +400,7 @@
             and pfl.financing_time_year in
             <foreach close=")" collection="financingTime" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
+        group by p.short_name
         order by pfl.financing_time desc,p.ID asc
         limit #{startNum},#{pageSize}
     </select>
