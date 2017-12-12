@@ -75,6 +75,14 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
             //查询所有机构列表
             list = investmentInstitutionsMapper.serachInstitution(shortName, beginNum, pageSize);
             for(InvestmentInstitutionsDto d : list) {
+
+               //处理logo
+                String logo = "http://img.idatavc.com/static/logo/jg_default.png";
+                if (d.getLogo() == null){
+                    d.setLogo(logo);
+                }
+
+
                 //带回是否投递的状态
                 ProjectSendLogs projectSendLogs = new ProjectSendLogs();
                 projectSendLogs.setUserid(userToken.getUserId());
