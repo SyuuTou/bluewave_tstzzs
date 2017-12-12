@@ -29,7 +29,7 @@ public class ElegantServiceDescription {
     /**
      * 是否有效，0表示无效，1表示有效
      */
-    private String yn;
+    private Integer yn;
 
     /**
      * @return id
@@ -104,7 +104,7 @@ public class ElegantServiceDescription {
      *
      * @return yn - 是否有效，0表示无效，1表示有效
      */
-    public String getYn() {
+    public Integer getYn() {
         return yn;
     }
 
@@ -113,7 +113,7 @@ public class ElegantServiceDescription {
      *
      * @param yn 是否有效，0表示无效，1表示有效
      */
-    public void setYn(String yn) {
+    public void setYn(Integer yn) {
         this.yn = yn;
     }
 }
