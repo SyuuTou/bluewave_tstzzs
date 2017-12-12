@@ -8,4 +8,12 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="type_name" property="typeName" jdbcType="VARCHAR" />
   </resultMap>
+  <select id="findMetaIndentityType" resultMap="BaseResultMap">
+    SELECT * FROM meta_identity_type where
+    1=1
+    <if test="identityType != null and identityType != ''">
+     and type_name in
+      <foreach close=")" collection="identityType" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+  </select>
 </mapper>

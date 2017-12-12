@@ -1,9 +1,13 @@
 package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.service.ElegantServiceService;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -60,4 +64,17 @@ public class ElegantServiceController {
     }
 
     //录入信息接口
+    @PostMapping("insert/elegantservice")
+    public CommonDto<String> insertElegantService(@RequestBody ElegantServiceInputDto body){
+        CommonDto<String> result = new CommonDto<>();
+        try {
+            result= elegantServiceService.insertElagantService(body);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端出现错误");
+            result.setData(null);
+        }
+        return result;
+    }
 }

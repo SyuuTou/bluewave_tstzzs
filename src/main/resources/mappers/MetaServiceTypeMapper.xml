@@ -8,4 +8,12 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="service_type_name" property="serviceTypeName" jdbcType="VARCHAR" />
   </resultMap>
+  <select id="findMetaServiceType" resultMap="BaseResultMap">
+    SELECT * FROM meta_service_type where
+    1=1
+    <if test="serviceType != null and serviceType != ''">
+      and service_type_name in
+      <foreach close=")" collection="serviceType" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+  </select>
 </mapper>
