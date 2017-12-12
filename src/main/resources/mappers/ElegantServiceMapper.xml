@@ -16,10 +16,12 @@
     <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="on_off" jdbcType="INTEGER" property="onOff" />
+    <result column="recommend_yn" jdbcType="INTEGER" property="recommendYn" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="scence_key" jdbcType="VARCHAR" property="scenceKey" />
     <result column="yn" jdbcType="INTEGER" property="yn" />
+    <result column="web_switch" jdbcType="INTEGER" property="webSwitch" />
   </resultMap>
 
   <select id="findElegantServiceList" resultType="java.util.HashMap">

@@ -70,6 +70,12 @@ public class ElegantService {
     private Integer onOff;
 
     /**
+     * 是否推荐，0表示不推荐，1表示推荐
+     */
+    @Column(name = "recommend_yn")
+    private Integer recommendYn;
+
+    /**
      * 排序
      */
     private Integer sort;
@@ -87,9 +93,15 @@ public class ElegantService {
     private String scenceKey;
 
     /**
-     * 是否有效，0表示已被删除，1表示未被删除
+     * 是否推荐
      */
     private Integer yn;
+
+    /**
+     * 网页切换开关，0表示显示小程序页面，1表示显示网页
+     */
+    @Column(name = "web_switch")
+    private Integer webSwitch;
 
     /**
      * @return id
@@ -286,6 +298,24 @@ public class ElegantService {
     }
 
     /**
+     * 获取是否推荐，0表示不推荐，1表示推荐
+     *
+     * @return recommend_yn - 是否推荐，0表示不推荐，1表示推荐
+     */
+    public Integer getRecommendYn() {
+        return recommendYn;
+    }
+
+    /**
+     * 设置是否推荐，0表示不推荐，1表示推荐
+     *
+     * @param recommendYn 是否推荐，0表示不推荐，1表示推荐
+     */
+    public void setRecommendYn(Integer recommendYn) {
+        this.recommendYn = recommendYn;
+    }
+
+    /**
      * 获取排序
      *
      * @return sort - 排序
@@ -340,20 +370,38 @@ public class ElegantService {
     }
 
     /**
-     * 获取是否有效，0表示已被删除，1表示未被删除
+     * 获取是否推荐
      *
-     * @return yn - 是否有效，0表示已被删除，1表示未被删除
+     * @return yn - 是否推荐
      */
     public Integer getYn() {
         return yn;
     }
 
     /**
-     * 设置是否有效，0表示已被删除，1表示未被删除
+     * 设置是否推荐
      *
-     * @param yn 是否有效，0表示已被删除，1表示未被删除
+     * @param yn 是否推荐
      */
     public void setYn(Integer yn) {
         this.yn = yn;
+    }
+
+    /**
+     * 获取网页切换开关，0表示显示小程序页面，1表示显示网页
+     *
+     * @return web_switch - 网页切换开关，0表示显示小程序页面，1表示显示网页
+     */
+    public Integer getWebSwitch() {
+        return webSwitch;
+    }
+
+    /**
+     * 设置网页切换开关，0表示显示小程序页面，1表示显示网页
+     *
+     * @param webSwitch 网页切换开关，0表示显示小程序页面，1表示显示网页
+     */
+    public void setWebSwitch(Integer webSwitch) {
+        this.webSwitch = webSwitch;
     }
 }
