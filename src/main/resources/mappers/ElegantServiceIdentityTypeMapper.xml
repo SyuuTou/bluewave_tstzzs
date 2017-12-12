@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ElegantServiceIdentityTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ElegantServiceIdentityType" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="elegant_service_id" property="elegantServiceId" jdbcType="INTEGER" />
+    <result column="meta_identity_type_id" property="metaIdentityTypeId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>
