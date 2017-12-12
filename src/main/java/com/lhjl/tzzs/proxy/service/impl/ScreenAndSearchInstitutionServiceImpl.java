@@ -82,6 +82,12 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     d.setLogo(logo);
                 }
 
+                //处理机构简介为空处理
+                String description = "";
+                if (d.getKenelCase() == null){
+                    d.setKenelCase(description);
+                }
+
 
                 //带回是否投递的状态
                 ProjectSendLogs projectSendLogs = new ProjectSendLogs();
