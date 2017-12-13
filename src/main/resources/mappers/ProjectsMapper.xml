@@ -223,10 +223,19 @@
 
     <!--查询机构类型-->
     <select id="findIvestmentTypeById" resultType="Integer">
-        SELECT ii.type FROM projects p LEFT JOIN investment_institutions_project iip ON  iip.project_id = p.ID
+
+        select ii.`type` from projects p
+        left join project_financing_log pfl on pfl.project_id = p.ID
+        left join investment_institutions_project iip on pfl.ID = iip.project_id
         left join investment_institutions ii on iip.investment_institutions_id = ii.ID
-        WHERE p.ID = #{projectsId}
-        group by project_id
+        where p.ID = #{projectsId}
+        and ii.`type` = 1
+        group by ii.`type`;
+        <!---->
+        <!--SELECT ii.type FROM projects p LEFT JOIN investment_institutions_project iip ON  iip.project_id = p.ID-->
+        <!--left join investment_institutions ii on iip.investment_institutions_id = ii.ID-->
+        <!--WHERE p.ID = #{projectsId}-->
+        <!--group by project_id-->
     </select>
 
     <!--处理amount的xml-->
