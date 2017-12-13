@@ -205,7 +205,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 
             obj.put("create_time",String.valueOf(obj.get("create_time")));
             String investorsType = "未认证或未审核投资人";
-            if (obj.get("identity_type") == null){
+            if (obj.get("investors_type") == null){
                 investorsType = "未认证或未审核投资人";
             }else {
                 Integer investorsNum = (Integer)obj.get("investors_type");
