@@ -230,12 +230,16 @@ public class UserEditImpl implements UserEditService {
             //获取投资人类型
             Investors investors =new Investors();
             investors.setUserId(userid);
+            investors.setApprovalStatus(1);
 
             List<Investors> investorsList = investorsMapper.select(investors);
             if (investorsList.size() > 0){
                 Investors investorsForLeixing = new Investors();
                 investorsForLeixing = investorsList.get(0);
-                int leixingResult = investorsForLeixing.getInvestorsType();
+                Integer leixingResult = investorsForLeixing.getInvestorsType();
+                if (leixingResult == null){
+                    leixingResult = 100;
+                }
                 switch (leixingResult){
                     case 0: leixing = "个人投资人";
                     break;
