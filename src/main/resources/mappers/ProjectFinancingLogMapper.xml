@@ -31,6 +31,8 @@
   </resultMap>
 
   <select id="selectProjectFinancingLogList" parameterType="Integer" resultMap="BaseResultMap">
-    select * from project_financing_log where project_id = #{projectId} and `status`= #{projectStatus} order by create_time desc
+    select * from project_financing_log where project_id = #{projectId} and `status`= #{projectStatus}
+    group by stage
+    order by create_time desc
   </select>
 </mapper>

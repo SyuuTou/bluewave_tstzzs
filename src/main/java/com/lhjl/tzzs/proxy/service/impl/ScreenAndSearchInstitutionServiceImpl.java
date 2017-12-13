@@ -75,6 +75,20 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
             //查询所有机构列表
             list = investmentInstitutionsMapper.serachInstitution(shortName, beginNum, pageSize);
             for(InvestmentInstitutionsDto d : list) {
+
+               //处理logo
+                String logo = "http://img.idatavc.com/static/logo/jg_default.png";
+                if (d.getLogo() == null){
+                    d.setLogo(logo);
+                }
+
+                //处理机构简介为空处理
+                String description = "";
+                if (d.getKenelCase() == null){
+                    d.setKenelCase(description);
+                }
+
+
                 //带回是否投递的状态
                 ProjectSendLogs projectSendLogs = new ProjectSendLogs();
                 projectSendLogs.setUserid(userToken.getUserId());
@@ -508,6 +522,19 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
             //循环插入项目的id
             list=investmentInstitutionsMapper.screenInstitutionAll(workArray,types,beginNum,pageSize);
             for(InvestmentInstitutionsDto d : list){
+
+                //处理logo
+                String logo = "http://img.idatavc.com/static/logo/jg_default.png";
+                if (d.getLogo() == null){
+                    d.setLogo(logo);
+                }
+
+                //处理机构简介为空处理
+                String description = "";
+                if (d.getKenelCase() == null){
+                    d.setKenelCase(description);
+                }
+
                 //带回是否投递的状态
                 ProjectSendLogs projectSendLogs =new ProjectSendLogs();
                 projectSendLogs.setUserid(userToken.getUserId());
