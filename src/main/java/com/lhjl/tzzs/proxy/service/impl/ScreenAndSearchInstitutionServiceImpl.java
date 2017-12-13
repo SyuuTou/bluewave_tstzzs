@@ -465,7 +465,6 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
      * @param body
      * @return
      */
-    @Cacheable(value = "screenInstitutionAll", keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<InvestmentInstitutionsDto>> screenInstitutionAll(SaveScreenDto body) {
         CommonDto<List<InvestmentInstitutionsDto>> result = new CommonDto<List<InvestmentInstitutionsDto>>();
@@ -507,7 +506,9 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     types[i] = Integer.parseInt(type2[i]);
                 }
             }
-            List<Integer> integerList =projectsMapper.screenInvestmentAll(domains,stages);
+
+            //获取机构id列表
+            List<Integer> integerList =getIntegerList(domains,stages);
             //判断是否有符合条件的机构
             Integer[] workArray = null;
             if(integerList.size()>0) {
@@ -605,6 +606,19 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
             result.setMessage("用户token为空");
         }
         result.setData(list);
+        return result;
+    }
+
+    /**
+     * 获取满足条件机构id的私有方法
+     * @param domains 领域数组
+     * @param stages 阶段数组
+     * @return
+     */
+    @Cacheable(value = "getIntegerList", keyGenerator = "wiselyKeyGenerator")
+    private List<Integer> getIntegerList(String[] domains,String[] stages){
+        List<Integer> result = projectsMapper.screenInvestmentAll(domains,stages);
+
         return result;
     }
 }
