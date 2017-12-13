@@ -12,6 +12,7 @@ import com.lhjl.tzzs.proxy.service.common.SmsCommonService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +56,9 @@ public class UserEditImpl implements UserEditService {
 
     @Resource
     private InvestorsApprovalService investorsApprovalService;
+
+    @Autowired
+    private SubjectMapper subjectMapper;
 
     @Transactional
     @Override
@@ -623,6 +627,13 @@ public class UserEditImpl implements UserEditService {
 
         //获取用户id
         int userid = userExistJudgmentService.getUserId(token);
+        if (userid == -1){
+            result.setMessage("用户token无效了，请检查");
+            result.setStatus(50001);
+            result.setData(null);
+
+            return result;
+        }
 
         // 获取用户信息
         Users users =new Users();
@@ -852,6 +863,49 @@ public class UserEditImpl implements UserEditService {
 
         if (userWorkCard == null){
             userWorkCard = "";
+        }
+
+        //先获取到用户是否是投资人
+        Investors investors = new Investors();
+        investors.setUserId(userid);
+
+        List<Investors> investorsList = investorsMapper.select(investors);
+        Boolean investorsString = false;
+        if (investorsList.size() > 0){
+            Investors investorsForJudge = investorsList.get(0);
+            if (investorsForJudge.getInvestorsType() != null){
+                investorsString = true;
+            }
+        }
+
+        //获取项目/机构对应的id和类型
+        Integer sourceId = null;
+        Integer sourceType = 0;
+        if (userCompanyName != null && userCompanyName != ""){
+            Map<String,Object> subjectType = subjectMapper.getSubejectType(userCompanyName);
+            if (subjectType != null){
+                sourceId = (Integer)subjectType.get("sourceId");
+                sourceType = (Integer)subjectType.get("types");
+            }
+        }
+
+        //根据身份类型返回项目或机构
+        if (investorsString){
+            obj.put("sourceId",sourceId);
+            obj.put("sourceType",sourceType);
+        }else {
+            if (shenfenleixingInt == 1){
+                if (sourceType == 2){
+                    obj.put("sourceId",null);
+                    obj.put("sourceType",0);
+                }else {
+                    obj.put("sourceId",sourceId);
+                    obj.put("sourceType",sourceType);
+                }
+            }else {
+                obj.put("sourceId",null);
+                obj.put("sourceType",0);
+            }
         }
 
         obj.put("xuexiao",educationForAdd);
