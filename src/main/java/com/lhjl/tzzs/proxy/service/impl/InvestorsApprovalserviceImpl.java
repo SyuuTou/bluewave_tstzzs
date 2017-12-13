@@ -431,6 +431,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		String approveResult = body.getApproveResult();
 		String explanation = body.getExplanation();
 		String approvalStatus = body.getApprovalStatus();
+		Date now = new Date();
 
 		if (approvalId == null){
 			result.setMessage("申请记录id不能为空");
@@ -472,25 +473,34 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			switch(Integer.parseInt(approveResult)){
 				case 3:
 					investors.setInvestorsType(0);
+					investors.setApprovalStatus(1);
+					investors.setApprovalTime(now);
 					break;
 				case 4:
 					investors.setInvestorsType(1);
+					investors.setApprovalStatus(1);
+					investors.setApprovalTime(now);
 					break;
 				case 5:
 					investors.setInvestorsType(2);
+					investors.setApprovalStatus(1);
+					investors.setApprovalTime(now);
 					break;
 				default:
 					investors.setInvestorsType(null);
+					investors.setApprovalStatus(0);
+					investors.setApprovalTime(now);
 			}
 
 			//升级为VIP投资人
-			if(investors.getInvestorsType() == 2 || investors.getInvestorsType() == 1){
-				UserToken userToken = new UserToken();
-				userToken.setUserId(userId);
-				userToken = userTokenMapper.selectOne(userToken);
-				userLevelService.upLevel(userToken.getToken(), 4, null);
+			if (investors.getInvestorsType() != null) {
+				if (investors.getInvestorsType() == 2 || investors.getInvestorsType() == 1) {
+					UserToken userToken = new UserToken();
+					userToken.setUserId(userId);
+					userToken = userTokenMapper.selectOne(userToken);
+					userLevelService.upLevel(userToken.getToken(), 4, null);
+				}
 			}
-
 
 			investorsMapper.updateByPrimaryKey(investors);
 
@@ -511,22 +521,32 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			switch(Integer.parseInt(approveResult)){
 				case 3:
 					newInvestors.setInvestorsType(0);
+					newInvestors.setApprovalStatus(1);
+					newInvestors.setApprovalTime(now);
 					break;
 				case 4:
 					newInvestors.setInvestorsType(1);
+					newInvestors.setApprovalStatus(1);
+					newInvestors.setApprovalTime(now);
 					break;
 				case 5:
 					newInvestors.setInvestorsType(2);
+					newInvestors.setApprovalStatus(1);
+					newInvestors.setApprovalTime(now);
 					break;
 				default:
 					newInvestors.setInvestorsType(null);
+					newInvestors.setApprovalStatus(0);
+					newInvestors.setApprovalTime(now);
 			}
 			//升级为VIP投资人
-			if(newInvestors.getInvestorsType() == 2 || newInvestors.getInvestorsType() == 1){
-				UserToken userToken = new UserToken();
-				userToken.setUserId(userId);
-				userToken = userTokenMapper.selectOne(userToken);
-				userLevelService.upLevel(userToken.getToken(), 4, null);
+			if (newInvestors.getInvestorsType() != null) {
+				if (newInvestors.getInvestorsType() == 2 || newInvestors.getInvestorsType() == 1) {
+					UserToken userToken = new UserToken();
+					userToken.setUserId(userId);
+					userToken = userTokenMapper.selectOne(userToken);
+					userLevelService.upLevel(userToken.getToken(), 4, null);
+				}
 			}
 			newInvestors.setApprovalStatus(Integer.parseInt(approvalStatus));
 			newInvestors.setCreateTime(new Date());
@@ -890,11 +910,13 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			investorsMapper.updateByPrimaryKeySelective(investors);
 
 			//升级为VIP投资人
+			if (investors.getInvestorsType() != null){
 			if(investors.getInvestorsType() == 2 || investors.getInvestorsType() == 1){
 				UserToken userToken = new UserToken();
 				userToken.setUserId(userId);
 				userToken = userTokenMapper.selectOne(userToken);
 				userLevelService.upLevel(userToken.getToken(), 4, "VIP_Investor");
+			}
 			}
 
 			//更新用户表的信息
