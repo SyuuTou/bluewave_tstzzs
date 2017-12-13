@@ -230,7 +230,6 @@ public class UserEditImpl implements UserEditService {
             //获取投资人类型
             Investors investors =new Investors();
             investors.setUserId(userid);
-            investors.setApprovalStatus(1);
 
             List<Investors> investorsList = investorsMapper.select(investors);
             if (investorsList.size() > 0){
