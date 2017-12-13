@@ -382,15 +382,17 @@
     </select>
 
     <select id="findInstitutionProject" resultType="java.util.HashMap">
-        select p.id,p.city,p.project_logo,p.kernel_desc,p.short_name,p.full_name,pfl.stage,pfl.financing_time,pfl.financing_time_year from investment_institutions_project iip
-        left join projects p on iip.project_id = p.ID
+
+        select p.id,p.city,p.project_logo,p.kernel_desc,p.short_name,p.full_name,pfl.stage,pfl.financing_time,pfl.financing_time_year
+        from investment_institutions_project iip
+        left join project_financing_log pfl on pfl.id = iip.project_id
         <if test="segmentationName != null and segmentationName!=''">
-            left join project_segmentation ps on ps.project_id = iip.project_id
+            right join project_segmentation ps on pfl.project_id = ps.project_id
         </if>
-        left join project_financing_log pfl on p.ID = pfl.project_id
+        left join projects p on pfl.project_id = p.id
         where iip.investment_institutions_id = #{institutionId}
-        and p.short_name is not null
         and p.short_name != ""
+        and p.short_name is not null
         <if test="segmentationName != null and segmentationName!=''">
             and ps.segmentation_name in
             <foreach close=")" collection="segmentationName" index="index" item="item" open="(" separator=",">#{item}</foreach>
@@ -400,7 +402,27 @@
             <foreach close=")" collection="financingTime" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
         group by p.short_name
-        order by pfl.financing_time desc,p.ID asc
+        order by pfl.financing_time desc,p.id asc
         limit #{startNum},#{pageSize}
+        <!--select p.id,p.city,p.project_logo,p.kernel_desc,p.short_name,p.full_name,pfl.stage,pfl.financing_time,pfl.financing_time_year from investment_institutions_project iip-->
+        <!--left join projects p on iip.project_id = p.ID-->
+        <!--<if test="segmentationName != null and segmentationName!=''">-->
+            <!--left join project_segmentation ps on ps.project_id = iip.project_id-->
+        <!--</if>-->
+        <!--left join project_financing_log pfl on p.ID = pfl.project_id-->
+        <!--where iip.investment_institutions_id = #{institutionId}-->
+        <!--and p.short_name is not null-->
+        <!--and p.short_name != ""-->
+        <!--<if test="segmentationName != null and segmentationName!=''">-->
+            <!--and ps.segmentation_name in-->
+            <!--<foreach close=")" collection="segmentationName" index="index" item="item" open="(" separator=",">#{item}</foreach>-->
+        <!--</if>-->
+        <!--<if test="financingTime != null and financingTime != ''">-->
+            <!--and pfl.financing_time_year in-->
+            <!--<foreach close=")" collection="financingTime" index="index" item="item" open="(" separator=",">#{item}</foreach>-->
+        <!--</if>-->
+        <!--group by p.short_name-->
+        <!--order by pfl.financing_time desc,p.ID asc-->
+        <!--limit #{startNum},#{pageSize}-->
     </select>
 </mapper>
