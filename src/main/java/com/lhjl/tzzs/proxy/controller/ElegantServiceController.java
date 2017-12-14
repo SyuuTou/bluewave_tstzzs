@@ -2,6 +2,9 @@ package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceInputDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceOutputDto;
+import com.lhjl.tzzs.proxy.model.MetaIdentityType;
+import com.lhjl.tzzs.proxy.model.MetaServiceType;
 import com.lhjl.tzzs.proxy.service.ElegantServiceService;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.LoggerFactory;
@@ -63,7 +66,11 @@ public class ElegantServiceController {
         return result;
     }
 
-    //录入信息接口
+    /**
+     * 精选活动录入和更新接口
+     * @param body
+     * @return
+     */
     @PostMapping("insert/elegantservice")
     public CommonDto<String> insertElegantService(@RequestBody ElegantServiceInputDto body){
         CommonDto<String> result = new CommonDto<>();
@@ -77,4 +84,60 @@ public class ElegantServiceController {
         }
         return result;
     }
+
+    /**
+     * 获取基础身份类型接口
+     * @return
+     */
+    @GetMapping("meta/identity/type")
+    public CommonDto<List<MetaIdentityType>> findMetaIdentityType(){
+        CommonDto<List<MetaIdentityType>> result = new CommonDto<>();
+
+        try {
+            result = elegantServiceService.getMetaIdentityType();
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+            result.setStatus(502);
+        }
+
+        return result;
+    }
+
+    /**
+     * 获取基础服务类型接口
+     * @return
+     */
+    @GetMapping("meta/service/type")
+    public CommonDto<List<MetaServiceType>> findMetaServiceType(){
+        CommonDto<List<MetaServiceType>> result = new CommonDto<>();
+
+        try {
+            result = elegantServiceService.getMetaServiceType();
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+            result.setStatus(502);
+        }
+
+        return result;
+    }
+
+    @GetMapping("get/elegantservice/info")
+    public CommonDto<ElegantServiceOutputDto> getElegantServiceInfo(Integer elegantServiceId){
+        CommonDto<ElegantServiceOutputDto> result  = new CommonDto<>();
+
+        try {
+            result = elegantServiceService.getElegantServiceInfo(elegantServiceId);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+            result.setStatus(502);
+        }
+        return result;
+    }
+
 }
