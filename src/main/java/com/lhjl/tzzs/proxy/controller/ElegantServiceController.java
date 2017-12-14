@@ -125,6 +125,11 @@ public class ElegantServiceController {
         return result;
     }
 
+    /**
+     * 获取精选活动回显接口
+     * @param elegantServiceId 精选活动id
+     * @return
+     */
     @GetMapping("get/elegantservice/info")
     public CommonDto<ElegantServiceOutputDto> getElegantServiceInfo(Integer elegantServiceId){
         CommonDto<ElegantServiceOutputDto> result  = new CommonDto<>();
