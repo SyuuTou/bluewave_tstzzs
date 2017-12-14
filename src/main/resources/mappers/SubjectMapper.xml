@@ -14,12 +14,21 @@
   <select id="getIntelligentSearchInfo" resultMap="BaseResultMap">
     SELECT * FROM subject where short_name like CONCAT(CONCAT("%",#{inputsWords}),"%")
     and short_name != ""
+    group by short_name
     LIMIT #{startPage},#{pageSize}
   </select>
 
   <select id="getIntelligentSearchInfoFullName" resultMap="BaseResultMap">
     SELECT * FROM subject where full_name like CONCAT(CONCAT("%",#{inputsWords}),"%")
     and full_name != ""
+    group by full_name
     LIMIT #{startPage},#{pageSize}
+  </select>
+  <select id="getSubejectType" resultType="java.util.HashMap">
+    SELECT s.short_name,s.sourceId,st.type_name,st.types FROM idatavc.subject s
+    right join subject_type_relational str on s.id = str.subject_id
+    left join subject_type st on str.subject_type_id = st.id
+    where s.short_name = #{userCompanyName}
+    group by s.short_name;
   </select>
 </mapper>

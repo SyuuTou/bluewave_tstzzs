@@ -499,12 +499,33 @@ public class ProjectsServiceImpl implements ProjectsService {
         //设置数据
         projectDetailOutputDto.setField(field);
         projectDetailOutputDto.setFinancingStage(financingStage);
+        if (projects.getShortName() == null){
+            projects.setShortName("");
+        }
         projectDetailOutputDto.setShortName(projects.getShortName());
+        if (projects.getFullName() == null){
+            projects.setFullName("");
+        }
         projectDetailOutputDto.setFullName(projects.getFullName());
+        if (projects.getKernelDesc() == null){
+            projects.setKernelDesc("");
+        }
         projectDetailOutputDto.setKernelDesc(projects.getKernelDesc());
+        if (projects.getCommet() == null){
+            projects.setCommet("");
+        }
         projectDetailOutputDto.setCommet(projects.getCommet());
+        if (projects.getUrl() == null){
+            projects.setUrl("");
+        }
         projectDetailOutputDto.setUrl(projects.getUrl());
+        if (projects.getCity() == null){
+            projects.setCity("");
+        }
         projectDetailOutputDto.setTerritory(projects.getCity());
+        if (projects.getProjectLogo() == null){
+            projects.setProjectLogo("");
+        }
         projectDetailOutputDto.setProjectLogo(projects.getProjectLogo());
         if (projects.getProjectInvestmentHighlights() == null){
             projects.setProjectInvestmentHighlights("");

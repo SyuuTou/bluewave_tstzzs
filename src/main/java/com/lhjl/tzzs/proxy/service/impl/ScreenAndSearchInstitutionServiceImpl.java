@@ -8,6 +8,7 @@ import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.EvaluateService;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.service.ScreenAndSearchInstitutionService;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,6 +76,20 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
             //查询所有机构列表
             list = investmentInstitutionsMapper.serachInstitution(shortName, beginNum, pageSize);
             for(InvestmentInstitutionsDto d : list) {
+
+               //处理logo
+                String logo = "http://img.idatavc.com/static/logo/jg_default.png";
+                if (d.getLogo() == null){
+                    d.setLogo(logo);
+                }
+
+                //处理机构简介为空处理
+                String description = "";
+                if (d.getKenelCase() == null){
+                    d.setKenelCase(description);
+                }
+
+
                 //带回是否投递的状态
                 ProjectSendLogs projectSendLogs = new ProjectSendLogs();
                 projectSendLogs.setUserid(userToken.getUserId());
@@ -491,7 +506,9 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     types[i] = Integer.parseInt(type2[i]);
                 }
             }
-            List<Integer> integerList =projectsMapper.screenInvestmentAll(domains,stages);
+
+            //获取机构id列表
+            List<Integer> integerList =getIntegerList(domains,stages);
             //判断是否有符合条件的机构
             Integer[] workArray = null;
             if(integerList.size()>0) {
@@ -508,6 +525,19 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
             //循环插入项目的id
             list=investmentInstitutionsMapper.screenInstitutionAll(workArray,types,beginNum,pageSize);
             for(InvestmentInstitutionsDto d : list){
+
+                //处理logo
+                String logo = "http://img.idatavc.com/static/logo/jg_default.png";
+                if (d.getLogo() == null){
+                    d.setLogo(logo);
+                }
+
+                //处理机构简介为空处理
+                String description = "";
+                if (d.getKenelCase() == null){
+                    d.setKenelCase(description);
+                }
+
                 //带回是否投递的状态
                 ProjectSendLogs projectSendLogs =new ProjectSendLogs();
                 projectSendLogs.setUserid(userToken.getUserId());
@@ -576,6 +606,19 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
             result.setMessage("用户token为空");
         }
         result.setData(list);
+        return result;
+    }
+
+    /**
+     * 获取满足条件机构id的私有方法
+     * @param domains 领域数组
+     * @param stages 阶段数组
+     * @return
+     */
+    @Cacheable(value = "getIntegerList", keyGenerator = "wiselyKeyGenerator")
+    private List<Integer> getIntegerList(String[] domains,String[] stages){
+        List<Integer> result = projectsMapper.screenInvestmentAll(domains,stages);
+
         return result;
     }
 }

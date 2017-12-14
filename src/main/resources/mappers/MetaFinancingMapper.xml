@@ -48,7 +48,7 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
 
         LEFT JOIN founders f on mf.id = f.project_id
 
-        right join founders_education fe on fe.founder_id = f.id and fe.education_experience != ''
+        right join founders_education fe on fe.founder_id = f.id and fe.education_experience != '' and fe.education_experience is not null
         where pfl.financing_time > '2017-01-01'
         group by fe.education_experience
         order by count desc
@@ -58,7 +58,7 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
         left join investment_institutions ii on mf.`investment_institutions_id` = ii.id
         LEFT JOIN founders f on mf.id = f.project_id
 
-        right join founders_work fw on fw.founder_id = f.id
+        right join founders_work fw on fw.founder_id = f.id AND fw.work_experience !='' and fw.work_experience is not NULL
         where pfl.financing_time > '2017-01-01'
         group by fw.work_experience
         order by count desc
@@ -71,6 +71,7 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
       left join `investment_institutions` ii on p.`investment_institutions_id` = ii.id
       where pfl.financing_time > '2017-01-01'
       and pfl.stage in ('种子轮','天使轮','Pre-A轮')
+      AND ps.segmentation_name is not NULL and ps.segmentation_name != ''
       group by ps.segmentation_name
       ) a
       on ms.name= a.segmentation_name
@@ -332,50 +333,7 @@ select fe.education_experience name, fe.education_experience `value`, count(dist
 
         ) b where dis > 0 GROUP by b.dis order by dcount DESC
 
-        limit 0, 10select money,dcount from (
-        SELECT dis money, count(1) dcount from (
-        select ROUND(pfl.${flag}/${granularity}) * ${granularity} as dis, pfl.stage,mf.full_name from  project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
-        <if test="industryName != '' and industryName != null">
-        right JOIN project_segmentation ps on ps.project_id = mf.id
-        </if>
-        LEFT JOIN founders f on mf.id = f.project_id
-        <if test="educationName != '' and educationName != null">
-        right join founders_education  fe on fe.founder_ID = f.id
-        </if>
-        <if test="workName != '' and workName != null">
-        right join founders_work fw on fw.founder_id = f.id
-        </if>
-        <if test="investment != '' and investment != null and investment != -1">
-            LEFT JOIN investment_institutions ii on ii.ID = mf.investment_institutions_id
-        </if>
-
-        where pfl.${flag} > 0 and  pfl.financing_time between #{beginTime} and #{endTime}
-        <if test="roundName != '' and roundName != null">
-            and pfl.stage = #{roundName}
-        </if>
-        <if test="industryName != '' and industryName != null">
-            and ps.segmentation_name = #{industryName}
-        </if>
-        <if test="cityName != '' and cityName != null">
-            and mf.city =#{cityName}
-        </if>
-        <if test="educationName != '' and educationName != null">
-            and fe.education_experience =#{educationName}
-        </if>
-        <if test="workName != '' and workName != null">
-            and fw.work_experience =#{workName}
-        </if>
-        <if test="investment != '' and investment != null and investment != -1">
-            AND ii.type = #{investment}
-        </if>
-        group by pfl.stage,mf.full_name
-
-        ) b where dis > 0 GROUP by b.dis order by dcount DESC
-
-        limit 0, 10
-
-
-        ) c
+        limit 0, 10) c
     </select>
 
 

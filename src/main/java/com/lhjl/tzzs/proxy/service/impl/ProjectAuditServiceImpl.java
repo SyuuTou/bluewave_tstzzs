@@ -836,6 +836,18 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
         List<XiangsiDto> likes = projectsMapper.findLikesall(educationArray,projectTagArry,shortName,id);
 
+
+        //处理城市为空,轮次为空的情况
+        for (XiangsiDto xd:likes){
+            if (xd.getCity() == null){
+                xd.setCity("");
+            }
+
+            if (xd.getStage() == null){
+                xd.setStage("");
+            }
+        }
+
         result.setData(likes);
 		return result;
 	}
