@@ -49,4 +49,11 @@ public interface ElegantServiceService {
      * @return
      */
     CommonDto<ElegantServiceOutputDto> getElegantServiceInfo(Integer elegantServiceId);
+
+    /**
+     * 删除精选活动的接口
+     * @param elegantServiceId 精选服务id
+     * @return
+     */
+    CommonDto<String> deleteElegantServiceInfo(Integer elegantServiceId);
 }

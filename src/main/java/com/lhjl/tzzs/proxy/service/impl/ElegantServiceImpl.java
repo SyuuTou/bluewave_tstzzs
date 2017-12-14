@@ -449,6 +449,36 @@ public class ElegantServiceImpl implements ElegantServiceService{
     }
 
     /**
+     * 删除精选活动的接口
+     * @param elegantServiceId 精选服务id
+     * @return
+     */
+    @Override
+    public CommonDto<String> deleteElegantServiceInfo(Integer elegantServiceId) {
+        CommonDto<String> result = new CommonDto<>();
+
+        if (elegantServiceId == null){
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("精选服务id不能为空，请检查");
+
+            return result;
+        }
+
+        ElegantService elegantService = new ElegantService();
+        elegantService.setId(elegantServiceId);
+        elegantService.setYn(0);
+
+        elegantServiceMapper.updateByPrimaryKeySelective(elegantService);
+
+        result.setMessage("success");
+        result.setData(null);
+        result.setStatus(200);
+
+        return result;
+    }
+
+    /**
      * 随机字符生成器
      * @param length
      * @return
