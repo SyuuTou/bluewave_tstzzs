@@ -197,6 +197,8 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
                     m.put("project_logo","");
                 }
 
+                m.putIfAbsent("commet","");
+                m.putIfAbsent("kernel_desc",m.get("commet"));
                 //获取项目领域
 
                 List<String> psegment = new ArrayList<>();
