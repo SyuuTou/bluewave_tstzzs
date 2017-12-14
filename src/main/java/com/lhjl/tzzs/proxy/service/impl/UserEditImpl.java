@@ -881,11 +881,15 @@ public class UserEditImpl implements UserEditService {
         //获取项目/机构对应的id和类型
         Integer sourceId = null;
         Integer sourceType = 0;
+        String logo = "http://img.idatavc.com/static/logo/jg_default.png";
         if (userCompanyName != null && userCompanyName != ""){
             Map<String,Object> subjectType = subjectMapper.getSubejectType(userCompanyName);
             if (subjectType != null){
                 sourceId = (Integer)subjectType.get("sourceId");
                 sourceType = (Integer)subjectType.get("types");
+                if (subjectType.get("picture") != null){
+                    logo = (String) subjectType.get("picture");
+                }
             }
         }
 
@@ -893,18 +897,22 @@ public class UserEditImpl implements UserEditService {
         if (investorsString){
             obj.put("sourceId",sourceId);
             obj.put("sourceType",sourceType);
+            obj.put("logo",logo);
         }else {
             if (shenfenleixingInt == 1){
                 if (sourceType == 2){
                     obj.put("sourceId",null);
                     obj.put("sourceType",0);
+                    obj.put("logo",logo);
                 }else {
                     obj.put("sourceId",sourceId);
                     obj.put("sourceType",sourceType);
+                    obj.put("logo",logo);
                 }
             }else {
                 obj.put("sourceId",null);
                 obj.put("sourceType",0);
+                obj.put("logo",logo);
             }
         }
 
