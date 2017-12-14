@@ -1040,6 +1040,7 @@ public class ProjectsServiceImpl implements ProjectsService {
         projectSegExample.and().andEqualTo("projectId",xmid);
         PageHelper pageHelper = new PageHelper();
         PageHelper.startPage(0,3);
+        String fieldEdit = "";
 
         List<ProjectSegmentation> projectSegmentationList = projectSegmentationMapper.selectByExample(projectSegExample);
         if (projectSegmentationList.size() > 0){
@@ -1047,8 +1048,9 @@ public class ProjectsServiceImpl implements ProjectsService {
                 field += ps.getSegmentationName();
                 field += " ";
             }
+            fieldEdit = field.substring(0,field.length()-1);
         }
-        String fieldEdit = field.substring(0,field.length()-1);
+
 
         ProjectComplexOutputDto projectComplexOutputDto =new ProjectComplexOutputDto();
         projectComplexOutputDto.setProjectDesc(projects.getKernelDesc());
