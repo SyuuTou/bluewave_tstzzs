@@ -5,6 +5,9 @@ package com.lhjl.tzzs.proxy.dto;
  */
 public class SaveScreenDto {
     private String token;
+    /**
+     * 指数类型，50传1，非50传“”（空）
+     */
     private String investmentType;
     private  String stage;
     private String domain;

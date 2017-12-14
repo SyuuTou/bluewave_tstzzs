@@ -415,7 +415,7 @@
 
     <select id="findInstitutionProject" resultType="java.util.HashMap">
 
-        select p.id,p.city,p.project_logo,p.kernel_desc,p.short_name,p.full_name,pfl.stage,pfl.financing_time,pfl.financing_time_year
+        select p.id,p.city,p.project_logo,p.kernel_desc,p.commet,p.short_name,p.full_name,pfl.stage,pfl.financing_time,pfl.financing_time_year
         from investment_institutions_project iip
         left join project_financing_log pfl on pfl.id = iip.project_id
         <if test="segmentationName != null and segmentationName!=''">
