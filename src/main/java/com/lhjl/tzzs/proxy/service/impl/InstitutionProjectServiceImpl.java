@@ -198,7 +198,9 @@ public class InstitutionProjectServiceImpl implements InstitutionsProjectService
                 }
 
                 m.putIfAbsent("commet","");
-                m.putIfAbsent("kernel_desc",m.get("commet"));
+                if ("".equals(m.get("kernel_desc")) || m.get("kernel_desc") == null){
+                    m.put("kernel_desc",m.get("commet"));
+                }
                 //获取项目领域
 
                 List<String> psegment = new ArrayList<>();
