@@ -37,7 +37,7 @@ public class ProjectsServiceImplUtil {
      */
    @Cacheable(value = "getBaseProjectInfo", keyGenerator = "wiselyKeyGenerator")
    //@CacheEvict(value = "getBaseProjectInfo", allEntries=true)
-    public List<Map<String, Object>> getBaseProjectInfo(String userId, String type, String segmentation,
+    public List<Map<String, Object>> getBaseProjectInfo(String type, String segmentation,
                                                         String stage, String city,
                                                         String working_background_desc, String educational_background_desc,
                                                         Integer sizea, Integer froma) {
@@ -89,7 +89,7 @@ public class ProjectsServiceImplUtil {
 //        } else {
 //            list = projectsMapper.findProjectBySview(userId, types, segmentations, stages, cities, working_background_descs, educational_background_descs, sizea, froma);
 //        }
-        list = projectsMapper.findProjectBySview(userId, types, segmentations, stages, cities, working_background_descs, educational_background_descs, sizea, froma);
+        list = projectsMapper.findProjectBySview(types, segmentations, stages, cities, working_background_descs, educational_background_descs, sizea, froma);
         return list;
     }
 
@@ -148,7 +148,7 @@ public class ProjectsServiceImplUtil {
      */
    @Cacheable(value = "getBaseProjectInfoA", keyGenerator = "wiselyKeyGenerator")
    //@CacheEvict(value = "getBaseProjectInfoA", allEntries=true)
-    public List<Map<String, Object>> getBaseProjectInfoA(String userId, String type, String segmentation,
+    public List<Map<String, Object>> getBaseProjectInfoA(String type, String segmentation,
                                                         String stage, String city,
                                                         String working_background_desc, String educational_background_desc,
                                                         Integer sizea, Integer froma,String endTime,String beginTime) {
@@ -201,7 +201,7 @@ public class ProjectsServiceImplUtil {
 //        } else {
 //            list = projectsMapper.findProjectBySview(userId, types, segmentations, stages, cities, working_background_descs, educational_background_descs, sizea, froma);
 //        }
-        list = projectsMapper.findProjectBySviewA(userId,types,segmentations, stages, cities, working_background_descs, educational_background_descs, sizea, froma,beginTime,endTime);
+        list = projectsMapper.findProjectBySviewA(types,segmentations, stages, cities, working_background_descs, educational_background_descs, sizea, froma,beginTime,endTime);
         return list;
     }
 }

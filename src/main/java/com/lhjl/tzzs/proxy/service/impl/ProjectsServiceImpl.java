@@ -288,7 +288,7 @@ public class ProjectsServiceImpl implements ProjectsService {
 //	        String[] stages = sereachDto.getStage().split(",");
 
         //查询项目基础数据
-        List<Map<String, Object>> list = projectsServiceImplUtil.getBaseProjectInfo(userId, type, segmentation, stage,
+        List<Map<String, Object>> list = projectsServiceImplUtil.getBaseProjectInfo(type, segmentation, stage,
                 city, working_background_desc, educational_background_desc, sizea, froma);
 
         //查询项目实时统计数据
@@ -377,7 +377,7 @@ public class ProjectsServiceImpl implements ProjectsService {
 //	        String[] stages = sereachDto.getStage().split(",");
 
             //查询项目基础数据
-            List<Map<String, Object>> list = projectsServiceImplUtil.getBaseProjectInfoA(userId, type, segmentation, stage,
+            List<Map<String, Object>> list = projectsServiceImplUtil.getBaseProjectInfoA( type, segmentation, stage,
                     city, working_background_desc, educational_background_desc, sizea, froma, endTime, beginTime);
 
             //查询项目实时统计数据
