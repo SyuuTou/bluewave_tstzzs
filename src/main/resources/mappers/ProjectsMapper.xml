@@ -181,8 +181,8 @@
         (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1) stage
         FROM projects mf
         WHERE 1=1
-        AND mf.id IN(SELECT a.project_id FROM project_financing_log a WHERE a.financing_time BETWEEN '2017-01-01' AND '2017-06-30')
-        AND mf.id IN (SELECT project_id FROM project_financing_log WHERE stage IN('天使轮','种子轮','Pre-A轮'))
+        AND mf.id IN(SELECT a.project_id FROM project_financing_log a WHERE a.financing_time BETWEEN '2017-01-01' AND '2017-06-30' and  stage IN('天使轮','种子轮','Pre-A轮'))
+
         <if test=" types !='' and types != null">
             AND mf.`investment_institutions_id` IN (SELECT id FROM investment_institutions WHERE `type` IN
             <foreach close=")" collection="types" index="index" item="item" open="(" separator=",">#{item}</foreach>
@@ -368,7 +368,7 @@
         limit #{startNum},#{pageSize}
     </select>
     <select id="screenInvestmentAll"  resultType="INTEGER">
-        select ii.ID from idatavc.projects p
+        select ii.ID from projects p
         left join investment_institutions ii on p.investment_institutions_id = ii.ID
         <if test="domains !='' and domains != null">
             left join project_segmentation ps on ps.project_id = p.ID
