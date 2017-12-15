@@ -51,7 +51,7 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
 
     BigDecimal findProjectAllByRoundAndC(@Param("stage") String stage, @Param("city") String city);
     List<Map<String,Object>> findLikes(@Param("educationArray") String [] educationArray, @Param("city") String city,@Param("pslArray") String [] pslArray, @Param("shortName") String shortName);
-    List<XiangsiDto> findLikesall(@Param("educationArray") String [] educationArray,@Param("projectTagArry") String [] projectTagArry,@Param("shortName") String shortName,@Param("id") int  id);
+    List<XiangsiDto> findLikesall(@Param("educationArray") String [] educationArray,@Param("projectTagArry") String [] projectTagArry,@Param("shortName") String shortName,@Param("id") int  id,@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
 
     /**
      * 后台获取项目列表接口mapper,数据导入项目
@@ -79,7 +79,7 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
      * @param stages
      * @return
      */
-    List<Integer>screenInvestmentAll(@Param("domains")String [] domains,@Param("stages")String [] stages);
+    List<Integer>screenInvestmentAll(@Param("domains")Integer[] domains,@Param("stages")Integer[] stages);
 
     /**
      * 获取用户创建项目编号最大值的接口
