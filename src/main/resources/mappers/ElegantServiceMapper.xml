@@ -33,7 +33,7 @@
 
   <select id="findElegantServiceById" resultType="java.util.HashMap">
     select es.service_name,es.original_price,es.vip_price,es.pre_vip_price_descript,es.unit,es.background_picture,es.scence_key,esdd.detail_description,esdd.description_type
-    from idatavc.elegant_service es
+    from elegant_service es
     left join elegant_service_description_detail esdd on es.id = esdd.elegant_service_id
     where es.id=#{elegantServiceId}
 
