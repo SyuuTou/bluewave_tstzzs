@@ -616,7 +616,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
      * @return
      */
     @Cacheable(value = "getIntegerList", keyGenerator = "wiselyKeyGenerator")
-    private List<Integer> getIntegerList(String[] domains,String[] stages){
+    public List<Integer> getIntegerList(String[] domains,String[] stages){
         List<Integer> result = projectsMapper.screenInvestmentAll(domains,stages);
 
         return result;
