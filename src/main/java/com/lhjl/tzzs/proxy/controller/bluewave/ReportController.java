@@ -2,7 +2,6 @@ package com.lhjl.tzzs.proxy.controller.bluewave;
 
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.bluewave.ReportPutBody;
 import com.lhjl.tzzs.proxy.dto.bluewave.ReportReqBody;
 import com.lhjl.tzzs.proxy.model.MetaColumn;
 import com.lhjl.tzzs.proxy.model.MetaSegmentation;
@@ -83,11 +82,18 @@ public class ReportController {
     }
 
     @PutMapping("report")
-    public CommonDto<String> reportSaveOrUpdate(@RequestBody ReportPutBody reqBody ){
+    public CommonDto<String> reportSaveOrUpdate(@RequestBody ReportReqBody reqBody ){
 
         CommonDto<String> result = null;
 
-        result = reportService.saveOrUpdate(reqBody);
+        try {
+            result = reportService.saveOrUpdate(reqBody);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result = new CommonDto<>();
+            result.setStatus(500);
+            result.setMessage("服务器繁忙，请售后再试。");
+        }
 
         return  result;
 

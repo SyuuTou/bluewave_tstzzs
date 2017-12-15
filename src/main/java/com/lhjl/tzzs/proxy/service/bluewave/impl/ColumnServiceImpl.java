@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service.bluewave.impl;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.mapper.MetaColumnMapper;
 import com.lhjl.tzzs.proxy.model.MetaColumn;
+import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.bluewave.ColumnService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +14,9 @@ import java.util.List;
 
 
 @Service
-public class ColumnServiceImpl implements ColumnService {
+public class ColumnServiceImpl extends GenericService implements ColumnService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ColumnService.class);
+
 
     @Autowired
     private MetaColumnMapper columnMapper;
