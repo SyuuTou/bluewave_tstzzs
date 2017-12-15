@@ -187,11 +187,8 @@ public class UserInfoServiceImpl implements UserInfoService{
         for(Map<String,Object> obj :list){
             //查找用户的最近登录记录
             if (obj.get("ID") != null){
-                Example userExample = new Example(UserChooseRecord.class);
-                userExample.and().andEqualTo("userId",obj.get("ID")).andEqualTo("sceneKey","shouye");
-                userExample.setOrderByClause("create_time desc");
-
-                List<UserChooseRecord> userChooseRecordList = userChooseRecordMapper.selectByExample(userExample);
+                Integer usersId = (Integer)obj.get("ID");
+                List<UserChooseRecord> userChooseRecordList = userChooseRecordMapper.getUserChooseLogByScence(usersId,"shouye");
                 if (userChooseRecordList.size() > 0){
                     String cctime = sdf.format(userChooseRecordList.get(0).getCreateTime());
                     obj.put("cctime",cctime);

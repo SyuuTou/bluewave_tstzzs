@@ -334,19 +334,21 @@
             
         </if>
         <if test=" projectTagArry !='' and projectTagArry != null">
-            AND  mf.item_label LIKE
-            <foreach close="" collection="projectTagArry" index="index" item="item" open="" separator="OR"> CONCAT(CONCAT('%', #{item}), '%')</foreach>
+            AND  mf.item_label in
+            <foreach close=")" collection="projectTagArry" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            <!--<foreach close="" collection="projectTagArry" index="index" item="item" open="" separator="OR"> CONCAT(CONCAT('%', #{item}), '%')</foreach>-->
         </if>
         and mf.short_name !=#{shortName}
         GROUP BY mf.short_name
         ORDER BY mf.evaluation_recommend DESC
+        limit #{startPage},#{pageSize}
     </select>
 
     <select id="adminGetProjectListOne"  resultType="java.util.HashMap">
         select p.ID,p.short_name,p.kernel_desc,p.project_investment_highlights,p.url,p.item_label,p.create_time,f.`name`,a.rating_stage
         from projects p
         left join admin_project_rating_log a on p.ID = a.project_id
-        left join founders f on p.userid = f.project_id
+        right join founders f on f.project_id = p.ID
         where p.project_source is null
         <if test="shortName !=null and shortName!='' ">
             and p.short_name like CONCAT(CONCAT('%', #{shortName}), '%')
