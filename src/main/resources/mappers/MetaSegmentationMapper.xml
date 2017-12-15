@@ -12,4 +12,12 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="creater" property="creater" jdbcType="VARCHAR" />
   </resultMap>
+  <select id="findMetaSegmentationBySegmentation" resultType="INTEGER">
+    select id from meta_segmentation
+    where 1=1
+    <if test="domains != null and domains !=''">
+      and `name` in
+      <foreach collection="domains" close=")" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+  </select>
 </mapper>
