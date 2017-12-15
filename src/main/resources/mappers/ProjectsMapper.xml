@@ -334,12 +334,14 @@
             
         </if>
         <if test=" projectTagArry !='' and projectTagArry != null">
-            AND  mf.item_label LIKE
-            <foreach close="" collection="projectTagArry" index="index" item="item" open="" separator="OR"> CONCAT(CONCAT('%', #{item}), '%')</foreach>
+            AND  mf.item_label in
+            <foreach close=")" collection="projectTagArry" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            <!--<foreach close="" collection="projectTagArry" index="index" item="item" open="" separator="OR"> CONCAT(CONCAT('%', #{item}), '%')</foreach>-->
         </if>
         and mf.short_name !=#{shortName}
         GROUP BY mf.short_name
         ORDER BY mf.evaluation_recommend DESC
+        limit #{startPage},#{pageSize}
     </select>
 
     <select id="adminGetProjectListOne"  resultType="java.util.HashMap">

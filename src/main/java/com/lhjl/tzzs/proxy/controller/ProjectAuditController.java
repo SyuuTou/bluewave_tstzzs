@@ -110,19 +110,19 @@ public class ProjectAuditController {
         return result;
     }
     @GetMapping("search/likes/all")
-    public  CommonDto<List<XiangsiDto>> findProjectall(int id){
+    public  CommonDto<List<XiangsiDto>> findProjectall(int id,Integer pageNumber,Integer pageSize){
     	 CommonDto<List<XiangsiDto>> result =new  CommonDto<List<XiangsiDto>>();
 
         try {
             //初始化分页信息
-            result = projectAuditService.findProjectall(id);
+            result = projectAuditService.findProjectall(id,pageNumber,pageSize);
             if(result.getStatus() == null){
                 result.setStatus(200);
                 result.setMessage("success");
             }
         } catch (Exception e) {
             result.setStatus(5101);
-            result.setMessage("项目id不存在");
+            result.setMessage("服务器端发生错误");
             log.error(e.getMessage());
         }
         return result;

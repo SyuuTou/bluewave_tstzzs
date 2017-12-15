@@ -12,6 +12,7 @@ import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springfox.documentation.spring.web.json.Json;
@@ -28,6 +29,12 @@ import java.util.Map;
 @Service
 public class ProjectAuditServiceImpl implements ProjectAuditService {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(ProjectAuditServiceImpl.class);
+
+    @Value("${pageSize}")
+    private Integer pageSizeDefalut;
+
+    @Value("${pageNum}")
+    private Integer pageNum;
 
     @Autowired
     private ProjectSendLogsMapper projectSendLogsMapper;
@@ -796,8 +803,17 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
      * @return
      */
     @Override
-    public CommonDto<List<XiangsiDto>> findProjectall(int id) {
+    public CommonDto<List<XiangsiDto>> findProjectall(int id,Integer pageNumber,Integer pageSize) {
 		 CommonDto<List<XiangsiDto>>  result = new  CommonDto<List<XiangsiDto>> ();
+
+		 if (pageNumber == null || pageNumber < 1){
+		     pageNumber = pageNum;
+         }
+
+         if (pageSize == null || pageSize < 0){
+		     pageSize = pageSizeDefalut;
+         }
+
         Projects projects =new Projects();
         projects.setId(id);
         projects  = projectsMapper.selectByPrimaryKey(id);
@@ -830,11 +846,18 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
         //获取项目标签
         String projectTags = projects.getItemLabel();
-        String[] projectTagArry = projectTags.split("、");
+        String[] projectTagArry = null;
+        if (projectTags != null && projectTags != ""){
+            projectTagArry = projectTags.split("、");
+        }
 
 
+        int startPage = (pageNumber-1)*pageSize;
 
-        List<XiangsiDto> likes = projectsMapper.findLikesall(educationArray,projectTagArry,shortName,id);
+        List<XiangsiDto> likes = new ArrayList<>();
+        if (educationArray != null && projectTagArry != null){
+            likes = projectsMapper.findLikesall(educationArray,projectTagArry,shortName,id,startPage,pageSize);
+        }
 
 
         //处理城市为空,轮次为空的情况
