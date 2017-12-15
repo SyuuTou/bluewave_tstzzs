@@ -11,4 +11,16 @@
     <result column="scene_key" jdbcType="VARCHAR" property="sceneKey" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
+  <select id="getUserChooseLogByScence" resultMap="BaseResultMap">
+    select * from user_choose_record
+    where 1=1
+    <if test="userId != null and userId !=''">
+     and user_id = #{userId}
+    </if>
+    <if test="sceneKey != null and sceneKey !=''">
+      and scene_key= #{sceneKey}
+    </if>
+    order by create_time desc
+    limit 0,3
+  </select>
 </mapper>
