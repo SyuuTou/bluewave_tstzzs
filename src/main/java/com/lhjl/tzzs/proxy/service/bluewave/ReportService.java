@@ -1,7 +1,6 @@
 package com.lhjl.tzzs.proxy.service.bluewave;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.bluewave.ReportPutBody;
 import com.lhjl.tzzs.proxy.dto.bluewave.ReportReqBody;
 import com.lhjl.tzzs.proxy.model.Report;
 
@@ -12,5 +11,5 @@ public interface ReportService {
 
     CommonDto<Report> getReportById(Integer id);
 
-    CommonDto<String> saveOrUpdate(ReportPutBody reqBody);
+    CommonDto<String> saveOrUpdate(ReportReqBody reqBody);
 }

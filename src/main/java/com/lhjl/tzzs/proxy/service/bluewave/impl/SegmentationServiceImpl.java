@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service.bluewave.impl;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
 import com.lhjl.tzzs.proxy.model.MetaSegmentation;
+import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.bluewave.SegmentationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +15,8 @@ import java.util.List;
 
 @Transactional(readOnly = true)
 @Service
-public class SegmentationServiceImpl implements SegmentationService {
+public class SegmentationServiceImpl extends GenericService implements SegmentationService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SegmentationService.class);
 
     @Autowired
     private MetaSegmentationMapper segmentationMapper;
