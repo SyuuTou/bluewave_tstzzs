@@ -1,6 +1,8 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceInputDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceOutputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceOutputDto;
 import com.lhjl.tzzs.proxy.mapper.*;
@@ -9,6 +11,7 @@ import com.lhjl.tzzs.proxy.service.ElegantServiceService;
 import com.sun.tools.internal.ws.wsdl.document.jaxws.Exception;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +25,12 @@ import java.util.*;
 @Service
 public class ElegantServiceImpl implements ElegantServiceService{
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(ElegantServiceImpl.class);
+
+    @Value("${pageNum}")
+    private Integer pageNumDefault;
+
+    @Value("${pageSize}")
+    private Integer pageSizeDefault;
 
     @Autowired
     private ElegantServiceMapper elegantServiceMapper;
@@ -478,6 +487,36 @@ public class ElegantServiceImpl implements ElegantServiceService{
         return result;
     }
 
+
+    /**
+     * 后台获取精选服务列表接口
+     * @param body
+     * @return
+     */
+    @Override
+    public CommonDto<List<BackstageElegantServiceOutputDto>> backstageElegantServiceList(BackstageElegantServiceInputDto body) {
+        CommonDto<List<BackstageElegantServiceOutputDto>> result = new CommonDto<>();
+        List<BackstageElegantServiceOutputDto> list = new ArrayList<>();
+
+        Integer pageSize = pageSizeDefault;
+        Integer pageNum = pageNumDefault;
+        //输入参数初始化
+        if (body.getPageSize() != null){
+            pageSize = body.getPageSize();
+        }
+
+        if (body.getPageNumber() != null){
+            pageNum = body.getPageNumber();
+        }
+
+
+        result.setData(list);
+        result.setStatus(200);
+        result.setMessage("success");
+
+        return result;
+    }
+
     /**
      * 随机字符生成器
      * @param length
@@ -501,7 +540,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
      * @return
      */
     @Transactional
-    private CommonDto<String> createElegantService(ElegantServiceInputDto body){
+    public CommonDto<String> createElegantService(ElegantServiceInputDto body){
         CommonDto<String> result = new CommonDto<>();
         Date now = new Date();
 
@@ -529,8 +568,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
             return result;
         }
-
-
 
         //生成场景码
         String sceneKey = getRandomString(8);
@@ -645,23 +682,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
             elegantServiceIdentityTypeMapper.insertSelective(elegantServiceIdentityType);
         }
-//        List<MetaIdentityType> identityTypeList = metaIdentityTypeMapper.findMetaIndentityType(identityType);
-//        if (identityTypeList.size() > 0){
-//            for (MetaIdentityType mit:identityTypeList){
-//                ElegantServiceIdentityType elegantServiceIdentityType = new ElegantServiceIdentityType();
-//                elegantServiceIdentityType.setElegantServiceId(elegantServiceId);
-//                elegantServiceIdentityType.setMetaIdentityTypeId(mit.getId());
-//                elegantServiceIdentityType.setCreateTime(now);
-//
-//                elegantServiceIdentityTypeMapper.insertSelective(elegantServiceIdentityType);
-//            }
-//        }else {
-//            result.setData(null);
-//            result.setStatus(502);
-//            result.setMessage("谁把身份类型源数据表删了？没找到数据");
-//
-//            return result;
-//        }
 
 
         //创建服务-服务类型关系表
@@ -676,22 +696,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
             elegantServiceServiceTypeMapper.insertSelective(elegantServiceServiceType);
         }
 
-//        List<MetaServiceType> metaServiceTypeList = metaServiceTypeMapper.findMetaServiceType(serviceType);
-//        if (metaServiceTypeList.size() > 0){
-//            for (MetaServiceType mst:metaServiceTypeList){
-//                ElegantServiceServiceType elegantServiceServiceType = new ElegantServiceServiceType();
-//                elegantServiceServiceType.setElegantServiceId(elegantServiceId);
-//                elegantServiceServiceType.setMetaServiceTypeId(mst.getId());
-//
-//                elegantServiceServiceTypeMapper.insertSelective(elegantServiceServiceType);
-//            }
-//        }else {
-//            result.setData(null);
-//            result.setStatus(502);
-//            result.setMessage("谁把服务类型源数据表删了？没找到数据");
-//
-//            return result;
-//        }
 
         return result;
     }
@@ -702,7 +706,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
      * @return
      */
     @Transactional
-    private CommonDto<String> updateElegantService(ElegantServiceInputDto body){
+    public CommonDto<String> updateElegantService(ElegantServiceInputDto body){
         CommonDto<String> result  = new CommonDto<>();
         Date now = new Date();
 

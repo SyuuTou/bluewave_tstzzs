@@ -40,5 +40,8 @@
     where es.id=#{elegantServiceId}
 
   </select>
+  <select id="findBackstageElegantServiceList" resultType="java.util.HashMap">
+
+  </select>
 
 </mapper>

@@ -1,6 +1,8 @@
 package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceInputDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceOutputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceOutputDto;
 import com.lhjl.tzzs.proxy.model.MetaIdentityType;
@@ -56,4 +58,11 @@ public interface ElegantServiceService {
      * @return
      */
     CommonDto<String> deleteElegantServiceInfo(Integer elegantServiceId);
+
+    /**
+     * 后台获取精选服务列表接口
+     * @param body
+     * @return
+     */
+    CommonDto<List<BackstageElegantServiceOutputDto>> backstageElegantServiceList(BackstageElegantServiceInputDto body);
 }
