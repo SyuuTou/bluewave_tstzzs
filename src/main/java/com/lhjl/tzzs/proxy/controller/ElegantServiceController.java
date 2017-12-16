@@ -173,8 +173,8 @@ public class ElegantServiceController {
      * @return
      */
     @PostMapping("backstage/elegantservice/list")
-    public CommonDto<List<BackstageElegantServiceOutputDto>> findBackstageElegantServiceList(@RequestBody BackstageElegantServiceInputDto body){
-        CommonDto<List<BackstageElegantServiceOutputDto>> result  = new CommonDto<>();
+    public CommonDto<Map<String,Object>> findBackstageElegantServiceList(@RequestBody BackstageElegantServiceInputDto body){
+        CommonDto<Map<String,Object>> result  = new CommonDto<>();
 
         try {
             result = elegantServiceService.backstageElegantServiceList(body);

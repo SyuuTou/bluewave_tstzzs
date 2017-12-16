@@ -9,4 +9,9 @@
     <result column="elegant_service_id" property="elegantServiceId" jdbcType="INTEGER" />
     <result column="meta_service_type_id" property="metaServiceTypeId" jdbcType="INTEGER" />
   </resultMap>
+  <select id="getServiceTypeByServiceId" resultType="java.util.HashMap">
+    select mst.service_type_name from elegant_service_service_type esst
+    left join meta_service_type mst on esst.meta_service_type_id = mst.id
+    where esst.elegant_service_id = #{serviceId}
+  </select>
 </mapper>

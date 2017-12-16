@@ -8,14 +8,12 @@ import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceOutputDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.ElegantServiceService;
-import com.sun.tools.internal.ws.wsdl.document.jaxws.Exception;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.dc.pr.PRError;
 import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
@@ -494,9 +492,9 @@ public class ElegantServiceImpl implements ElegantServiceService{
      * @return
      */
     @Override
-    public CommonDto<List<BackstageElegantServiceOutputDto>> backstageElegantServiceList(BackstageElegantServiceInputDto body) {
-        CommonDto<List<BackstageElegantServiceOutputDto>> result = new CommonDto<>();
-        List<BackstageElegantServiceOutputDto> list = new ArrayList<>();
+    public CommonDto<Map<String,Object>> backstageElegantServiceList(BackstageElegantServiceInputDto body){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> map = new HashMap<>();
 
         Integer pageSize = pageSizeDefault;
         Integer pageNum = pageNumDefault;
@@ -509,8 +507,111 @@ public class ElegantServiceImpl implements ElegantServiceService{
             pageNum = body.getPageNumber();
         }
 
+        if (body.getSearchWord() == null){
+            body.setSearchWord("");
+        }
 
-        result.setData(list);
+        //格式化时间
+        String beginTime = body.getBeginTime();
+        String endTime = body.getEndTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date begintime = null;
+        if (beginTime == null || "".equals(beginTime)){
+        }else {
+            try {
+                begintime = sdf.parse(beginTime);
+                Date endtime = sdf.parse(endTime);
+            }catch (Exception e){
+                log.error(e.getMessage(),e.fillInStackTrace());
+                result.setMessage("时间格式化出错");
+                result.setStatus(502);
+                result.setData(null);
+
+                return result;
+            }
+        }
+      Date endtime = null;
+        if (endTime == null || "".equals(endTime)){
+
+        }else {
+            try {
+                endtime = sdf.parse(endTime);
+            }catch (Exception e){
+                log.error(e.getMessage(),e.fillInStackTrace());
+                result.setMessage("时间格式化出错");
+                result.setStatus(502);
+                result.setData(null);
+
+                return result;
+            }
+        }
+
+
+        Integer startPage = (pageNum-1)*pageSize;
+
+        //获取服务主要信息
+        List<Map<String,Object>> mapList = elegantServiceMapper.findBackstageElegantServiceList(body.getSearchWord(),begintime,endtime,startPage,pageSize);
+        if (mapList.size()>0){
+            for (Map<String,Object> m:mapList){
+                Integer esid = (Integer) m.get("id");
+                List<Map<String,Object>> serviceIdentityTypeList = new ArrayList<>();
+                serviceIdentityTypeList = elegantServiceIdentityTypeMapper.getServiceIndentyTypeByServiceId(esid);
+
+                //解析成字符串
+                String serviceIdentityType = "";
+                for (Map<String,Object> sitl:serviceIdentityTypeList){
+                    String jieguo = (String) sitl.get("type_name");
+                    serviceIdentityType = serviceIdentityType + jieguo + ",";
+                }
+                if (serviceIdentityType.length() > 1){
+                    serviceIdentityType = serviceIdentityType.substring(0,serviceIdentityType.length()-1);
+                }
+
+                m.put("serviceIdentityType",serviceIdentityType);
+
+                List<Map<String,Object>> serviceTypeList = new ArrayList<>();
+                serviceTypeList =elegantServiceServiceTypeMapper.getServiceTypeByServiceId(esid);
+
+                String serviceType = "";
+                for (Map<String,Object> st:serviceTypeList){
+                    String jieguo = (String) st.get("service_type_name");
+                    serviceType = serviceType + jieguo + ",";
+                }
+                if (serviceType.length() > 1){
+                    serviceType = serviceType.substring(0,serviceType.length()-1);
+                }
+                m.put("serviceType",serviceType);
+
+                //格式化时间
+                String begin_time = "";
+                if (m.get("begin_time") != null){
+                    Date beginTimes = (Date) m.get("begin_time");
+                    begin_time = sdf1.format(beginTimes);
+                }
+
+                String end_time = "";
+                if (m.get("end_time") != null){
+                    Date endTimes = (Date)m.get("end_time");
+                    end_time = sdf1.format(endTimes);
+                }
+
+                m.put("begin_time",begin_time);
+                m.put("end_time",end_time);
+            }
+        }
+
+        //获取数据总量
+        Integer allCount =0;
+        allCount = elegantServiceMapper.selectCountBySearch(body.getSearchWord(),begintime,endtime);
+
+        //往结果里放数据
+        map.put("list",mapList);
+        map.put("pagNum",pageNum);
+        map.put("allCount",allCount);
+
+        result.setData(map);
         result.setStatus(200);
         result.setMessage("success");
 

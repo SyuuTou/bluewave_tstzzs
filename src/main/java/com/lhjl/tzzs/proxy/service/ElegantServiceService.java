@@ -8,6 +8,7 @@ import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceOutputDto;
 import com.lhjl.tzzs.proxy.model.MetaIdentityType;
 import com.lhjl.tzzs.proxy.model.MetaServiceType;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -64,5 +65,5 @@ public interface ElegantServiceService {
      * @param body
      * @return
      */
-    CommonDto<List<BackstageElegantServiceOutputDto>> backstageElegantServiceList(BackstageElegantServiceInputDto body);
+    CommonDto<Map<String,Object>> backstageElegantServiceList(BackstageElegantServiceInputDto body) throws ParseException;
 }

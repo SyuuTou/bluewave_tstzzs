@@ -23,4 +23,6 @@ public interface ElegantServiceMapper extends OwnerMapper<ElegantService> {
     Map<String,Object> findElegantServiceById(@Param("elegantServiceId") Integer elegantServiceId);
 
     List<Map<String,Object>> findBackstageElegantServiceList(@Param("searchWord") String searchWord, @Param("beginTime") Date beginTime,@Param("endTime") Date endTime,@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
+
+    Integer selectCountBySearch(@Param("searchWord") String searchWord, @Param("beginTime") Date beginTime,@Param("endTime") Date endTime);
 }
