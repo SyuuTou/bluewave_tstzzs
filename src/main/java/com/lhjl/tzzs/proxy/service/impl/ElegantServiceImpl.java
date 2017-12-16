@@ -610,6 +610,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
         map.put("list",mapList);
         map.put("pagNum",pageNum);
         map.put("allCount",allCount);
+        map.put("pageSize",pageSize);
 
         result.setData(map);
         result.setStatus(200);
