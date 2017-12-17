@@ -20,7 +20,7 @@ public class BackstageElegantServiceInputDto {
     /**
      * 当前页码
      */
-    private Integer pageNumber;
+    private Integer currentPage;
 
     public String getSearchWord() {
         return searchWord;
@@ -54,11 +54,11 @@ public class BackstageElegantServiceInputDto {
         this.pageSize = pageSize;
     }
 
-    public Integer getPageNumber() {
-        return pageNumber;
+    public Integer getCurrentPage() {
+        return currentPage;
     }
 
-    public void setPageNumber(Integer pageNumber) {
-        this.pageNumber = pageNumber;
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
     }
 }
