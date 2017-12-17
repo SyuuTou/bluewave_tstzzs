@@ -503,8 +503,8 @@ public class ElegantServiceImpl implements ElegantServiceService{
             pageSize = body.getPageSize();
         }
 
-        if (body.getPageNumber() != null){
-            pageNum = body.getPageNumber();
+        if (body.getCurrentPage() != null){
+            pageNum = body.getCurrentPage();
         }
 
         if (body.getSearchWord() == null){
