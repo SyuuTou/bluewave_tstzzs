@@ -608,7 +608,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         //往结果里放数据
         map.put("list",mapList);
-        map.put("current",pageNum);
+        map.put("currentPage",pageNum);
         map.put("total",allCount);
         map.put("pageSize",pageSize);
 
