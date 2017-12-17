@@ -33,6 +33,18 @@ public class UserChooseRecord {
     private Date createTime;
 
     /**
+     * 行为类型，0表示浏览，1表示报名，2表示支付，3表示支付完成；
+     */
+    @Column(name = "action_type")
+    private Integer actionType;
+
+    /**
+     * log类型，1表示精选服务报名类型操作，null为其他类型
+     */
+    @Column(name = "log_type")
+    private Integer logType;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -116,5 +128,41 @@ public class UserChooseRecord {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    /**
+     * 获取行为类型，0表示浏览，1表示报名，2表示支付，3表示支付完成；
+     *
+     * @return action_type - 行为类型，0表示浏览，1表示报名，2表示支付，3表示支付完成；
+     */
+    public Integer getActionType() {
+        return actionType;
+    }
+
+    /**
+     * 设置行为类型，0表示浏览，1表示报名，2表示支付，3表示支付完成；
+     *
+     * @param actionType 行为类型，0表示浏览，1表示报名，2表示支付，3表示支付完成；
+     */
+    public void setActionType(Integer actionType) {
+        this.actionType = actionType;
+    }
+
+    /**
+     * 获取log类型，1表示精选服务报名类型操作，null为其他类型
+     *
+     * @return log_type - log类型，1表示精选服务报名类型操作，null为其他类型
+     */
+    public Integer getLogType() {
+        return logType;
+    }
+
+    /**
+     * 设置log类型，1表示精选服务报名类型操作，null为其他类型
+     *
+     * @param logType log类型，1表示精选服务报名类型操作，null为其他类型
+     */
+    public void setLogType(Integer logType) {
+        this.logType = logType;
     }
 }

@@ -10,6 +10,8 @@
     <result column="datas" jdbcType="VARCHAR" property="datas" />
     <result column="scene_key" jdbcType="VARCHAR" property="sceneKey" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="action_type" jdbcType="INTEGER" property="actionType" />
+    <result column="log_type" jdbcType="INTEGER" property="logType" />
   </resultMap>
   <select id="getUserChooseLogByScence" resultMap="BaseResultMap">
     select * from user_choose_record
