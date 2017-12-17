@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.Map;
 
 @Service
 public class LogInfoServiceImpl implements LogInfoService{
@@ -67,6 +68,69 @@ public class LogInfoServiceImpl implements LogInfoService{
         result.setData(null);
         result.setMessage("success");
         result.setStatus(200);
+
+        return result;
+    }
+
+    /**
+     * 记录精选活动操作记录接口
+     * @param body
+     * @return
+     */
+    @Override
+    public CommonDto<String> saveElegantServiceLog(Map<String, Object> body) {
+        CommonDto<String> result = new CommonDto<>();
+
+        Date now = new Date();
+        if (body.get("token") == null || "".equals(body.get("token")) || "undefined".equals(body.get("token"))){
+            result.setMessage("缺少必要参数用户id");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+        if (body.get("sceneKey") == null || "".equals(body.get("sceneKey")) || "undefined".equals(body.get("sceneKey"))){
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("缺少必要参数场景key");
+
+            return result;
+        }
+
+        if (body.get("actionType") == null || "".equals(body.get("actionType")) || "undefined".equals(body.get("actionType"))){
+            result.setMessage("缺少必要参数操作类型");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+        String token = (String)body.get("token");
+        Integer userId = userExistJudgmentService.getUserId(token);
+
+        if (userId == -1){
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("用户token无效");
+
+            return result;
+        }
+
+        String sceneKey = (String) body.get("sceneKey");
+        Integer actionType = (Integer)body.get("actionType");
+
+        UserChooseRecord userChooseRecord = new UserChooseRecord();
+        userChooseRecord.setUserId(userId);
+        userChooseRecord.setSceneKey(sceneKey);
+        userChooseRecord.setCreateTime(now);
+        userChooseRecord.setActionType(actionType);
+        userChooseRecord.setLogType(1);
+
+        userChooseRecordMapper.insertSelective(userChooseRecord);
+
+        result.setMessage("success");
+        result.setStatus(200);
+        result.setData(null);
 
         return result;
     }
