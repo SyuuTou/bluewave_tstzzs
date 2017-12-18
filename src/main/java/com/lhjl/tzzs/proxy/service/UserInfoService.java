@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
+import com.lhjl.tzzs.proxy.dto.UserChooseLogDto.UserElegantServiceInputDto;
 
 import java.util.List;
 import java.util.Map;
@@ -67,4 +68,11 @@ public interface UserInfoService {
      * @return
      */
     CommonDto<Integer> getUserInvestmentInstitution(String token);
+
+    /**
+     * 获取用户精选活动信息列表的接口
+     * @param body
+     * @return
+     */
+    CommonDto<Map<String,Object>> getElegantServiceLogList(UserElegantServiceInputDto body);
 }

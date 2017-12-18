@@ -25,4 +25,49 @@
     order by create_time desc
     limit 0,3
   </select>
+  <select id="getUserElegantLogList" resultType="java.util.HashMap">
+    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.actual_name,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status
+    from user_choose_record ucr
+    left join users u on ucr.user_id = u.ID
+    left join meta_scene ms on ucr.scene_key = ms.key
+    left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
+    where ucr.log_type = 1
+    <if test="beginTime != null and beginTime !='' ">
+      and date(ucr.create_time)between(#{beginTime})and(#{endTime})
+    </if>
+    <if test="actonType != null and actonType != ''">
+      and ucr.action_type = #{actonType}
+    </if>
+    <if test="contactStatus != null and contactStatus != ''">
+      and acl.contact_status = #{contactStatus}
+    </if>
+    <if test="searchWord != null and searchWord !=''">
+      and u.actual_name like CONCAT(CONCAT('%', #{searchWord}), '%') or u.company_duties like CONCAT(CONCAT('%', #{searchWord}), '%') or u.company_name like CONCAT(CONCAT('%', #{searchWord}), '%') or ms.`desc` like CONCAT(CONCAT('%', #{searchWord}), '%')
+    </if>
+    order by ucr.id desc
+    limit #{startPage},#{pageSize};
+  </select>
+
+  <select id="getUserElegantLogListCount" resultType="INTEGER">
+    select count(*) from
+    (select ucr.id
+    from user_choose_record ucr
+    left join users u on ucr.user_id = u.ID
+    left join meta_scene ms on ucr.scene_key = ms.key
+    left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
+    where ucr.log_type = 1
+    <if test="beginTime != null and beginTime !='' ">
+      and date(ucr.create_time)between(#{beginTime})and(#{endTime})
+    </if>
+    <if test="actonType != null and actonType != ''">
+      and ucr.action_type = #{actonType}
+    </if>
+    <if test="contactStatus != null and contactStatus != ''">
+      and acl.contact_status = #{contactStatus}
+    </if>
+    <if test="searchWord != null and searchWord !=''">
+      and u.actual_name like CONCAT(CONCAT('%', #{searchWord}), '%') or u.company_duties like CONCAT(CONCAT('%', #{searchWord}), '%') or u.company_name like CONCAT(CONCAT('%', #{searchWord}), '%') or ms.`desc` like CONCAT(CONCAT('%', #{searchWord}), '%')
+    </if>
+    order by ucr.id desc) as bb
+  </select>
 </mapper>

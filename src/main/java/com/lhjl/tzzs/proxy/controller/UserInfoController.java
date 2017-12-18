@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
+import com.lhjl.tzzs.proxy.dto.UserChooseLogDto.UserElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
 import org.slf4j.Logger;
@@ -146,6 +147,27 @@ public class UserInfoController {
             result.setStatus(502);
             result.setMessage("服务器端发生错误");
         }
+        return result;
+    }
+
+    /**
+     * 获取用户精选活动信息列表的接口
+     * @param body
+     * @return
+     */
+    @PostMapping("elegantservice/log/list")
+    public CommonDto<Map<String,Object>> elegantServiceLogList(@RequestBody UserElegantServiceInputDto body){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        try {
+            result= userInfoService.getElegantServiceLogList(body);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+        }
+
         return result;
     }
 }
