@@ -50,6 +50,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 
     @Autowired
     private InvestorsMapper investorsMapper;
+
+    @Autowired
+    private AdminContactLogMapper adminContactLogMapper;
     /**
      * 获取个人资料
      * @param userId 用户ID
@@ -660,6 +663,41 @@ public class UserInfoServiceImpl implements UserInfoService{
         result.setStatus(200);
         result.setMessage("success");
         result.setData(map);
+
+        return result;
+    }
+
+    /**
+     * 设置记录的联系状态
+     * @param logId
+     * @return
+     */
+    @Override
+    public CommonDto<String> setElegantServiceLogStatus(Integer logId) {
+        CommonDto<String> result = new CommonDto<>();
+        Date now = new Date();
+
+        AdminContactLog adminContactLog = new AdminContactLog();
+        adminContactLog.setUserChooseRecordId(logId);
+
+        AdminContactLog adminContactLogForUpdate = adminContactLogMapper.selectOne(adminContactLog);
+
+        if (adminContactLogForUpdate == null){
+            AdminContactLog adminContactLog1 = new AdminContactLog();
+            adminContactLog1.setContactStatus(1);
+            adminContactLog1.setConcactTime(now);
+            adminContactLog1.setUserChooseRecordId(logId);
+
+            adminContactLogMapper.insertSelective(adminContactLog1);
+        }else {
+            adminContactLogForUpdate.setConcactTime(now);
+
+            adminContactLogMapper.updateByPrimaryKeySelective(adminContactLogForUpdate);
+        }
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(null);
 
         return result;
     }

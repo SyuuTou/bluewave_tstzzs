@@ -75,4 +75,11 @@ public interface UserInfoService {
      * @return
      */
     CommonDto<Map<String,Object>> getElegantServiceLogList(UserElegantServiceInputDto body);
+
+    /**
+     * 设置记录的联系状态
+     * @param logId
+     * @return
+     */
+    CommonDto<String> setElegantServiceLogStatus(Integer logId);
 }

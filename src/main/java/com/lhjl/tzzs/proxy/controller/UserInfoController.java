@@ -170,4 +170,25 @@ public class UserInfoController {
 
         return result;
     }
+
+    /**
+     * 设置记录的联系状态
+     * @param logId
+     * @return
+     */
+    @GetMapping("set/elegantservice/log/status")
+    public CommonDto<String> setElegantServiceLogStatus(Integer logId){
+        CommonDto<String> result  =new CommonDto<>();
+
+        try {
+            result = userInfoService.setElegantServiceLogStatus(logId);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+        }
+
+        return result;
+    }
 }
