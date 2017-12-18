@@ -75,6 +75,25 @@ public class ReportReqBody {
     private List<Integer> segmentations;
     private List<String> reportLabels;
 
+    private Integer pageSize = 10;
+    private Integer pageNo;
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Integer getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(Integer pageNo) {
+        this.pageNo = pageNo;
+    }
+
     public Integer getId() {
         return id;
     }

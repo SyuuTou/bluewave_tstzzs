@@ -4,4 +4,6 @@ import com.lhjl.tzzs.proxy.model.ReportColumn;
 
 public interface ReportColumnService {
     void save(ReportColumn metaColumn);
+
+    void deleteAll(Integer reportId);
 }
