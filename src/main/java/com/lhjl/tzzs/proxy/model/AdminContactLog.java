@@ -9,8 +9,11 @@ public class AdminContactLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "user_pay_id")
-    private Integer userPayId;
+    /**
+     * 用户操作记录id
+     */
+    @Column(name = "user_choose_record_id")
+    private Integer userChooseRecordId;
 
     /**
      * 0表示未联系，1表示已联系；
@@ -39,17 +42,21 @@ public class AdminContactLog {
     }
 
     /**
-     * @return user_pay_id
+     * 获取用户操作记录id
+     *
+     * @return user_choose_record_id - 用户操作记录id
      */
-    public Integer getUserPayId() {
-        return userPayId;
+    public Integer getUserChooseRecordId() {
+        return userChooseRecordId;
     }
 
     /**
-     * @param userPayId
+     * 设置用户操作记录id
+     *
+     * @param userChooseRecordId 用户操作记录id
      */
-    public void setUserPayId(Integer userPayId) {
-        this.userPayId = userPayId;
+    public void setUserChooseRecordId(Integer userChooseRecordId) {
+        this.userChooseRecordId = userChooseRecordId;
     }
 
     /**
