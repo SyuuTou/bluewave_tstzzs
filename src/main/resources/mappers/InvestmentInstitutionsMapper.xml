@@ -146,7 +146,7 @@
             <foreach close=")" collection="workArray" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
         GROUP BY ii.short_name
-        ORDER BY ii.sort
+        ORDER BY ii.count desc
         LIMIT #{beginNum},#{pageSize}
     </select>
 

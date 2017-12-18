@@ -1,6 +1,6 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import java.util.*;
+
 
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
@@ -12,6 +12,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.service.ScreenAndSearchInstitutionService;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 /**
  * Created by lmy on 2017/11/20.
@@ -44,6 +46,12 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
 
     @Autowired
     private InvestmentInstitutionInformationMapper investmentInstitutionInformationMapper;
+
+    @Autowired
+    private MetaSegmentationMapper metaSegmentationMapper;
+
+    @Autowired
+    private MetaProjectStageMapper metaProjectStageMapper;
 
 
     /**
@@ -506,9 +514,31 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     types[i] = Integer.parseInt(type2[i]);
                 }
             }
+            //先获取到领域和阶段对应的元数据表中的id用来接下来的一步查询
+            List<Integer> metaSegmentation = null;
+            metaSegmentation = metaSegmentationMapper.findMetaSegmentationBySegmentation(domains);
+            List<Integer> metaProjectStage = null;
+            metaProjectStage = metaProjectStageMapper.findMetaProjectStageByName(stages);
+
+            //list转数组
+            List<Integer> c1 =new LinkedList<Integer>();
+            Integer [] workArray2a =null;
+            for(Integer d: metaSegmentation){
+                c1.add(d);
+                workArray2a= new Integer[c1.size()];
+                workArray2a= c1.toArray(workArray2a);
+            }
+
+            List<Integer> b1 =new LinkedList<Integer>();
+            Integer [] workArray1a =null;
+            for(Integer d: metaProjectStage){
+                b1.add(d);
+                workArray1a= new Integer[b1.size()];
+                workArray1a=b1.toArray(workArray1a);
+            }
 
             //获取机构id列表
-            List<Integer> integerList =getIntegerList(domains,stages);
+            List<Integer> integerList =getIntegerList(workArray2a,workArray1a);
             //判断是否有符合条件的机构
             Integer[] workArray = null;
             if(integerList.size()>0) {
@@ -616,7 +646,8 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
      * @return
      */
     @Cacheable(value = "getIntegerList", keyGenerator = "wiselyKeyGenerator")
-    public List<Integer> getIntegerList(String[] domains,String[] stages){
+    public List<Integer> getIntegerList(Integer[] domains,Integer[] stages){
+
         List<Integer> result = projectsMapper.screenInvestmentAll(domains,stages);
 
         return result;

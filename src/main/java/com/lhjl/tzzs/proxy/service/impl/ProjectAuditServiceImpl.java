@@ -116,6 +116,13 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 
      @Autowired
      private FollowMapper followMapper;
+
+     @Autowired
+     private  SubjectTypeRelationalMapper subjectTypeRelationalMapper;
+
+
+     @Autowired
+     private SubjectMapper subjectMapper;
     /**
      * 管理员审核项目接口
      * @param body
@@ -605,6 +612,32 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
         adminProjectApprovalLog.setApprovaledDescription(body.getAuditDescription());
 
         adminProjectApprovalLogMapper.insert(adminProjectApprovalLog);
+
+        //审核通过向主体库插入数据
+        Subject subject =new Subject();
+        subject.setSourceid(xmid);
+        List<Subject> subjects=subjectMapper.select(subject);
+        if(subjects.size() >0){
+            //什么也不做
+        }else{
+            //向主体库插入数据
+            subject.setFullName(projectSendLogs.getCompanyShortName());
+            subject.setShortName(projectSendLogs.getCompanyShortName());
+            subject.setPicture(projectSendLogs.getCompanyLogo());
+            subject.setSummary(projectSendLogs.getCompanyOneSentenceIntroduct());
+            subject.setSourceid(xmid);
+
+            subjectMapper.insertSelective(subject);
+            //向类型表插入关联关系
+            SubjectTypeRelational subjectTypeRelational =new SubjectTypeRelational();
+
+            subjectTypeRelational.setSubjectId(subject.getId());
+            subjectTypeRelational.setSubjectTypeId(1);
+            subjectTypeRelationalMapper.insertSelective(subjectTypeRelational);
+
+        }
+
+
 
         String xmids =String.valueOf(xmid);
          result.setStatus(200);
