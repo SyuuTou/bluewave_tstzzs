@@ -45,7 +45,6 @@
     <if test="searchWord != null and searchWord !=''">
       and u.actual_name like CONCAT(CONCAT('%', #{searchWord}), '%')
     </if>
-    limit #{startPage},#{pageSize}
 
     union
 
@@ -67,7 +66,6 @@
     <if test="searchWord != null and searchWord !=''">
       and u.company_duties like CONCAT(CONCAT('%', #{searchWord}), '%')
     </if>
-    limit #{startPage},#{pageSize}
 
     union
 
@@ -89,7 +87,6 @@
     <if test="searchWord != null and searchWord !=''">
       and  u.company_name like CONCAT(CONCAT('%', #{searchWord}), '%')
     </if>
-    limit #{startPage},#{pageSize}
 
     union
 
@@ -111,10 +108,11 @@
     <if test="searchWord != null and searchWord !=''">
       and ms.`desc` like CONCAT(CONCAT('%', #{searchWord}), '%')
     </if>
-    limit #{startPage},#{pageSize}
 
     ) a
     order by a.create_time desc
+    limit #{startPage},#{pageSize}
+
   </select>
 
   <select id="getUserElegantLogListCount" resultType="INTEGER">
@@ -200,7 +198,6 @@
     <if test="searchWord != null and searchWord !=''">
       and ms.`desc` like CONCAT(CONCAT('%', #{searchWord}), '%')
     </if>
-
     ) a
   </select>
 </mapper>
