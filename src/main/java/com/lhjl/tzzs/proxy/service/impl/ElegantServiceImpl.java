@@ -517,42 +517,11 @@ public class ElegantServiceImpl implements ElegantServiceService{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 
-        Date begintime = null;
-        if (beginTime == null || "".equals(beginTime)){
-        }else {
-            try {
-                begintime = sdf.parse(beginTime);
-                Date endtime = sdf.parse(endTime);
-            }catch (Exception e){
-                log.error(e.getMessage(),e.fillInStackTrace());
-                result.setMessage("时间格式化出错");
-                result.setStatus(502);
-                result.setData(null);
-
-                return result;
-            }
-        }
-      Date endtime = null;
-        if (endTime == null || "".equals(endTime)){
-
-        }else {
-            try {
-                endtime = sdf.parse(endTime);
-            }catch (Exception e){
-                log.error(e.getMessage(),e.fillInStackTrace());
-                result.setMessage("时间格式化出错");
-                result.setStatus(502);
-                result.setData(null);
-
-                return result;
-            }
-        }
-
 
         Integer startPage = (pageNum-1)*pageSize;
 
         //获取服务主要信息
-        List<Map<String,Object>> mapList = elegantServiceMapper.findBackstageElegantServiceList(body.getSearchWord(),begintime,endtime,startPage,pageSize);
+        List<Map<String,Object>> mapList = elegantServiceMapper.findBackstageElegantServiceList(body.getSearchWord(),beginTime,endTime,startPage,pageSize);
         if (mapList.size()>0){
             for (Map<String,Object> m:mapList){
                 Integer esid = (Integer) m.get("id");
@@ -604,7 +573,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         //获取数据总量
         Integer allCount =0;
-        allCount = elegantServiceMapper.selectCountBySearch(body.getSearchWord(),begintime,endtime);
+        allCount = elegantServiceMapper.selectCountBySearch(body.getSearchWord(),beginTime,endTime);
 
         //往结果里放数据
         map.put("list",mapList);
