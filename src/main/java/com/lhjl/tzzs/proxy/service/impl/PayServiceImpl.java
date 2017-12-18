@@ -11,6 +11,7 @@ import com.lhjl.tzzs.proxy.dto.PayRequestBody;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.ActivityApprovalLogService;
+import com.lhjl.tzzs.proxy.service.LogInfoService;
 import com.lhjl.tzzs.proxy.service.PayService;
 import com.lhjl.tzzs.proxy.service.UserIntegralsService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
@@ -59,6 +60,9 @@ public class PayServiceImpl implements PayService {
 
     @Value("notifyURL")
     private String notifyURL;
+
+    @Resource
+    private LogInfoService logInfoService;
 
     @Override
     public CommonDto<Map<String, String>> generatePayInfo(PayRequestBody payRequestBody) {
@@ -146,6 +150,15 @@ public class PayServiceImpl implements PayService {
             parms.put("token",users.getToken());
             parms.put("sceneKey",result.getAttach().split("\\|")[0]);
             activityApprovalLogService.createActicityApprovalLog(parms);
+
+            //支付完成后创建支付结果信息，zyy20171218
+            Map<String,Object> parms1 = new HashMap<>();
+            parms1.put("token",users.getToken());
+            parms1.put("sceneKey",result.getAttach().split("\\|")[0]);
+            parms1.put("actionType",3);
+            logInfoService.saveElegantServiceLog(parms1);
+
+
         }else {
             userIntegralsService.payAfter(usersPay.getUserId(), usersPay.getSceneKey(), new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())), 1);
         }
