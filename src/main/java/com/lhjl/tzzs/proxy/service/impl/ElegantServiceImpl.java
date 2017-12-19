@@ -747,7 +747,11 @@ public class ElegantServiceImpl implements ElegantServiceService{
         ElegantServiceDescriptionDetail elegantServiceDescriptionDetail = new ElegantServiceDescriptionDetail();
         elegantServiceDescriptionDetail.setCreateTime(now);
         elegantServiceDescriptionDetail.setElegantServiceId(elegantServiceId);
-        elegantServiceDescriptionDetail.setDescriptionType(1);//默认展示卡片详情
+        if(body.getWebSwitch() == 1){
+            elegantServiceDescriptionDetail.setDescriptionType(0);
+        }else {
+            elegantServiceDescriptionDetail.setDescriptionType(1);//默认展示卡片详情
+        }
         elegantServiceDescriptionDetail.setDetailDescription(body.getDetailDescription());
         elegantServiceDescriptionDetail.setYn(1);//默认有效
 
@@ -898,6 +902,11 @@ public class ElegantServiceImpl implements ElegantServiceService{
             elegantServiceDescriptionDetailUpdate.setElegantServiceId(elegantServiceDescriptionDetailForUpdate.getElegantServiceId());
             elegantServiceDescriptionDetailUpdate.setDetailDescription(body.getDetailDescription());
             elegantServiceDescriptionDetailUpdate.setId(elegantServiceDescriptionDetailForUpdate.getId());
+            if (body.getWebSwitch() == 1){
+                elegantServiceDescriptionDetailUpdate.setDescriptionType(0);
+            }else {
+                elegantServiceDescriptionDetailUpdate.setDescriptionType(1);
+            }
 
             elegantServiceDescriptionDetailMapper.updateByPrimaryKeySelective(elegantServiceDescriptionDetailUpdate);
         }
