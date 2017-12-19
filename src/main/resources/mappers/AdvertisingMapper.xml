@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.AdvertisingMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Advertising" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="advertising_posistion_id" property="advertisingPosistionId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="picture" property="picture" jdbcType="VARCHAR" />
+    <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="hides" property="hides" jdbcType="INTEGER" />
+    <result column="edit_status" property="editStatus" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="yn" property="yn" jdbcType="INTEGER" />
+    <result column="appid" property="appid" jdbcType="INTEGER" />
+  </resultMap>
+</mapper>
