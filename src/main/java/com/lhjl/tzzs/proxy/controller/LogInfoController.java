@@ -90,4 +90,25 @@ public class LogInfoController {
         }
         return result;
     }
+
+    /**
+     * 记录精选活动操作记录接口
+     * @param body
+     * @return
+     */
+    @PostMapping("set/elegantservice/log")
+    public CommonDto<String> setElegantServiceLog(@RequestBody Map<String,Object> body){
+        CommonDto<String> result = new CommonDto<>();
+
+        try {
+            result = logInfoService.saveElegantServiceLog(body);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+        }
+
+        return result;
+    }
 }

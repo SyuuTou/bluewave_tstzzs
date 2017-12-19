@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
+import com.lhjl.tzzs.proxy.dto.UserChooseLogDto.UserElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
@@ -9,6 +10,7 @@ import com.lhjl.tzzs.proxy.service.UserInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -23,6 +25,10 @@ import java.util.*;
 public class UserInfoServiceImpl implements UserInfoService{
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(UserInfoServiceImpl.class);
 
+    @Value("${pageNum}")
+    private Integer pageNumDefault;
+    @Value("${pageSize}")
+    private Integer pageSizeDefault;
     @Resource
     private UsersMapper usersMapper;
     @Resource
@@ -44,6 +50,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 
     @Autowired
     private InvestorsMapper investorsMapper;
+
+    @Autowired
+    private AdminContactLogMapper adminContactLogMapper;
     /**
      * 获取个人资料
      * @param userId 用户ID
@@ -592,6 +601,103 @@ public class UserInfoServiceImpl implements UserInfoService{
             result.setStatus(202);
             result.setData(null);
         }
+
+        return result;
+    }
+
+    @Override
+    public CommonDto<Map<String, Object>> getElegantServiceLogList(UserElegantServiceInputDto body) {
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> map = new HashMap<>();
+
+        //验证、格式化参数信息
+        if (body.getSearchWord() == null){
+            body.setSearchWord("");
+        }
+
+        if (body.getPageSize() == null){
+            body.setPageSize(pageSizeDefault);
+        }
+
+        if (body.getCurrentPage() == null){
+            body.setCurrentPage(pageNumDefault);
+        }
+
+        if (body.getBeginTime() == null){
+            body.setBeginTime("");
+        }
+
+        if (body.getEndTime() == null){
+            body.setEndTime("");
+        }
+
+        Integer startPage = (body.getCurrentPage()-1)*body.getPageSize();
+        //获取到列表信息
+        List<Map<String,Object>> list = userChooseRecordMapper.getUserElegantLogList(body.getSearchWord(),body.getActonType(),body.getContactStatus(),body.getBeginTime(),body.getEndTime(),startPage,body.getPageSize());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        for (Map<String,Object> m :list){
+            if (m.get("create_time") != null){
+                Date createTime = (Date) m.get("create_time");
+                String createTimeFormat = sdf.format(createTime);
+                m.put("create_time",createTimeFormat);
+            }
+            m.putIfAbsent("create_time","");
+            m.putIfAbsent("contact_status",0);
+            m.putIfAbsent("company_name","");
+            m.putIfAbsent("company_duties","");
+            m.putIfAbsent("phonenumber","");
+            m.putIfAbsent("identity_type",-1);
+            m.putIfAbsent("desc","");
+        }
+
+        Integer total = userChooseRecordMapper.getUserElegantLogListCount(body.getSearchWord(),body.getActonType(),body.getContactStatus(),body.getBeginTime(),body.getEndTime());
+
+        map.put("list",list);
+        map.put("currentPage",body.getCurrentPage());
+        map.put("pageSize",body.getPageSize());
+        map.put("total",total);
+
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(map);
+
+        return result;
+    }
+
+    /**
+     * 设置记录的联系状态
+     * @param logId
+     * @return
+     */
+    @Override
+    public CommonDto<String> setElegantServiceLogStatus(Integer logId) {
+        CommonDto<String> result = new CommonDto<>();
+        Date now = new Date();
+
+        AdminContactLog adminContactLog = new AdminContactLog();
+        adminContactLog.setUserChooseRecordId(logId);
+
+        AdminContactLog adminContactLogForUpdate = adminContactLogMapper.selectOne(adminContactLog);
+
+        if (adminContactLogForUpdate == null){
+            AdminContactLog adminContactLog1 = new AdminContactLog();
+            adminContactLog1.setContactStatus(1);
+            adminContactLog1.setConcactTime(now);
+            adminContactLog1.setUserChooseRecordId(logId);
+
+            adminContactLogMapper.insertSelective(adminContactLog1);
+        }else {
+            adminContactLogForUpdate.setConcactTime(now);
+
+            adminContactLogMapper.updateByPrimaryKeySelective(adminContactLogForUpdate);
+        }
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(null);
 
         return result;
     }

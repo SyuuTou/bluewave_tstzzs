@@ -10,4 +10,9 @@
     <result column="meta_identity_type_id" property="metaIdentityTypeId" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <select id="getServiceIndentyTypeByServiceId" resultType="java.util.HashMap">
+    select mit.type_name from elegant_service_identity_type esit
+    left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
+    where esit.elegant_service_id = #{serviceId}
+  </select>
 </mapper>

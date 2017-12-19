@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.model.ElegantService;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -20,4 +21,8 @@ public interface ElegantServiceMapper extends OwnerMapper<ElegantService> {
      * @return
      */
     Map<String,Object> findElegantServiceById(@Param("elegantServiceId") Integer elegantServiceId);
+
+    List<Map<String,Object>> findBackstageElegantServiceList(@Param("searchWord") String searchWord, @Param("beginTime") String beginTime,@Param("endTime") String endTime,@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
+
+    Integer selectCountBySearch(@Param("searchWord") String searchWord, @Param("beginTime") String beginTime,@Param("endTime") String endTime);
 }

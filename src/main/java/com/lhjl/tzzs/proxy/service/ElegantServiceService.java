@@ -1,11 +1,14 @@
 package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceInputDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceOutputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceOutputDto;
 import com.lhjl.tzzs.proxy.model.MetaIdentityType;
 import com.lhjl.tzzs.proxy.model.MetaServiceType;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -49,4 +52,18 @@ public interface ElegantServiceService {
      * @return
      */
     CommonDto<ElegantServiceOutputDto> getElegantServiceInfo(Integer elegantServiceId);
+
+    /**
+     * 删除精选活动的接口
+     * @param elegantServiceId 精选服务id
+     * @return
+     */
+    CommonDto<String> deleteElegantServiceInfo(Integer elegantServiceId);
+
+    /**
+     * 后台获取精选服务列表接口
+     * @param body
+     * @return
+     */
+    CommonDto<Map<String,Object>> backstageElegantServiceList(BackstageElegantServiceInputDto body) throws ParseException;
 }

@@ -1,6 +1,8 @@
 package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceInputDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceOutputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceOutputDto;
 import com.lhjl.tzzs.proxy.model.MetaIdentityType;
@@ -145,4 +147,44 @@ public class ElegantServiceController {
         return result;
     }
 
+    /**
+     * 删除精选活动接口
+     * @param elegantServiceId
+     * @return
+     */
+    @GetMapping("delete/elegantservice/info")
+    public CommonDto<String> deleteElegantServiceInfo(Integer elegantServiceId){
+        CommonDto<String> result  = new CommonDto<>();
+
+        try {
+            result = elegantServiceService.deleteElegantServiceInfo(elegantServiceId);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+        }
+        return result;
+    }
+
+    /**
+     * 后台获取精选服务列表接口
+     * @param body
+     * @return
+     */
+    @PostMapping("backstage/elegantservice/list")
+    public CommonDto<Map<String,Object>> findBackstageElegantServiceList(@RequestBody BackstageElegantServiceInputDto body){
+        CommonDto<Map<String,Object>> result  = new CommonDto<>();
+
+        try {
+            result = elegantServiceService.backstageElegantServiceList(body);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+
+        }
+        return result;
+    }
 }
