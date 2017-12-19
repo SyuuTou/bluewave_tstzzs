@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto;
+import com.lhjl.tzzs.proxy.dto.SaveInformationDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionInformation;
 import com.lhjl.tzzs.proxy.model.Investors;
@@ -24,6 +25,12 @@ import java.util.*;
 @Service
 public class InvesmentInformationServiceImpl  implements InvesmentInformationService{
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(InvesmentInformationServiceImpl.class);
+
+    @Value("${pageNum}")
+    private Integer pageNumDefalut;
+
+    @Value("${pageSize}")
+    private Integer pageSizeDefalut;
 
     @Resource
     private InvestmentInstitutionsMapper investmentInstitutionsMapper;
@@ -472,4 +479,81 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
 		        result.setData(list);
 			return result;
 		}
+
+    /**
+     * 获取最近活跃的机构
+     * @param body
+     * @return
+     */
+    @Override
+    public CommonDto<List<InvestmentInstitutionsDto>> findRecentlyInstitution(SaveInformationDto body) {
+        CommonDto<List<InvestmentInstitutionsDto>> result = new CommonDto<>();
+        List<InvestmentInstitutionsDto> list = new ArrayList<>();
+
+        //初始化参数
+        if (body.getToken() == null){
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("用户token不能为空");
+
+            return result;
+        }
+
+        if (body.getPageNum() == null || body.getPageNum() <1){
+            body.setPageNum(pageNumDefalut);
+        }
+
+        if (body.getPageSize() == null || body.getPageSize() < 1){
+            body.setPageSize(pageSizeDefalut);
+        }
+
+        Integer userId = userExistJudgmentService.getUserId(body.getToken());
+        if (userId == -1 ){
+            result.setMessage("用户token无效");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+
+
+        Integer startPage = (body.getPageNum()-1)*body.getPageSize();
+        Integer pageSize = body.getPageSize();
+
+        //最多返回150条记录
+        if (startPage > 150) {
+            result.setStatus(201);
+            result.setMessage("查询记录数超出限制（150条）");
+            return result;
+        } else {
+            pageSize = (150 - startPage) >= pageSize ? pageSize : (150 - startPage);
+        }
+
+        list = investmentInstitutionsMapper.findRecentlyActiveInstitution(startPage,pageSize);
+
+        //判断身份类型
+        Example investorExample = new Example(Investors.class);
+        investorExample.and().andEqualTo("userId",userId).andEqualTo("yn",1);
+        List<Investors> investorsSearch = investorsMapper.selectByExample(investorExample);
+        Integer leixing = 0;//身份类型，0表示非投资人，1表示投资人
+
+        if (investorsSearch.size() > 0){
+            leixing = 1;
+        }
+
+        if (leixing == 0){
+            //创始人的逻辑
+            list = setInvestmentInstitutionsCYZ(list,userId);
+        }else{
+            //非创始人的时候的逻辑
+            list = setInvestmentInstitutionsTZR(list,userId);
+        }
+
+        result.setData(list);
+        result.setStatus(200);
+        result.setMessage("success");
+
+        return result;
+    }
 }

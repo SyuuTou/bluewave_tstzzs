@@ -141,4 +141,24 @@ public class InvesmentInformationController {
         return result;
     }
 
+    /**
+     * 获取最近活跃的机构
+     * @param body
+     * @return
+     */
+    @PostMapping("find/investment/active")
+    public CommonDto<List<InvestmentInstitutionsDto>> findRecentlyActiveInvestment(@RequestBody SaveInformationDto body){
+        CommonDto<List<InvestmentInstitutionsDto>> result = new CommonDto<>();
+
+        try {
+            result = invesmentInformationService.findRecentlyInstitution(body);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+
+        return result;
+    }
 }

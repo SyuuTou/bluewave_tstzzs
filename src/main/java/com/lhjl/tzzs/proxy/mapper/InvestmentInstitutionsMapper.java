@@ -30,4 +30,12 @@ public interface InvestmentInstitutionsMapper extends OwnerMapper<InvestmentInst
      * @return
      */
     List<Integer>serachSendProjectIdZ(@Param("workArray1")List<Integer> workArray1);
+
+    /**
+     * 获取最近活跃机构
+     * @param startPage 开始数量
+     * @param pageSize 每页显示数量
+     * @return
+     */
+    List<InvestmentInstitutionsDto> findRecentlyActiveInstitution(@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
 }
