@@ -19,4 +19,28 @@
     <result column="yn" property="yn" jdbcType="INTEGER" />
     <result column="appid" property="appid" jdbcType="INTEGER" />
   </resultMap>
+  <select id="findAdvertisingList" resultMap="BaseResultMap">
+    SELECT * FROM idatavc.advertising
+    where yn = 1
+    <if test="editStatus != null and editStatus !=''">
+      and edit_status = #{editStatus}
+    </if>
+    <if test="hides != null and hides !=''">
+      and hides = #{hides}
+    </if>
+    <if test="appId != null and appId != ''">
+      and appid = #{appId}
+    </if>
+    <if test="startTime !=null and startTime !=''">
+      and date(begin_time)between(#{startTime})and(#{endTime})
+    </if>
+    <if test="timeYn != null and timeYn !=''">
+      and date(begin_time) &lt; date(now())
+      and date(end_time) &gt; date(now())
+    </if>
+    <if test="positionId != null and positionId!=''">
+      and advertising_posistion_id = #{positionId}
+    </if>
+    order by sort desc;
+  </select>
 </mapper>
