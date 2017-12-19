@@ -409,9 +409,23 @@ public class ElegantServiceImpl implements ElegantServiceService{
         //整理返回数据
         ElegantServiceOutputDto elegantServiceOutputDto = new ElegantServiceOutputDto();
         elegantServiceOutputDto.setServiceName(elegantService.getServiceName());
-        elegantServiceOutputDto.setCooperationName(elegantServiceCooperation.getCooperationName());
-        elegantServiceOutputDto.setVipPrice(String.valueOf(elegantService.getVipPrice()));
-        elegantServiceOutputDto.setOriginalPrice(String.valueOf(elegantService.getOriginalPrice()));
+        String cooperationName = "";
+        if (elegantServiceCooperation != null){
+            cooperationName = elegantServiceCooperation.getCooperationName();
+        }
+        elegantServiceOutputDto.setCooperationName(cooperationName);
+        if (elegantService.getVipPrice() == null){
+            elegantServiceOutputDto.setVipPrice("");
+        }else {
+            elegantServiceOutputDto.setVipPrice(String.valueOf(elegantService.getVipPrice()));
+        }
+//        elegantServiceOutputDto.setVipPrice(String.valueOf(elegantService.getVipPrice()));
+        if (elegantService.getOriginalPrice() == null){
+            elegantServiceOutputDto.setOriginalPrice("");
+        }else {
+            elegantServiceOutputDto.setOriginalPrice(String.valueOf(elegantService.getOriginalPrice()));
+        }
+//        elegantServiceOutputDto.setOriginalPrice(String.valueOf(elegantService.getOriginalPrice()));
         elegantServiceOutputDto.setUnit(elegantService.getUnit());
         elegantServiceOutputDto.setSort(elegantService.getSort());
         elegantServiceOutputDto.setBackgroundPicture(elegantService.getBackgroundPicture());
