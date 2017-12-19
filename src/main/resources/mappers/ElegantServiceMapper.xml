@@ -111,7 +111,7 @@
     </if>
     group by es.id
     ) as a
-    order by a.sort desc
+    order by a.sort
     limit #{startPage},#{pageSize}
   </select>
 
