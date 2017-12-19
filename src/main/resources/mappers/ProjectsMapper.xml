@@ -181,8 +181,8 @@
         (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1) stage
         FROM projects mf
         WHERE 1=1
-        AND mf.id IN(SELECT a.project_id FROM project_financing_log a WHERE a.financing_time BETWEEN '2017-01-01' AND '2017-06-30')
-        AND mf.id IN (SELECT project_id FROM project_financing_log WHERE stage IN('天使轮','种子轮','Pre-A轮'))
+        AND mf.id IN(SELECT a.project_id FROM project_financing_log a WHERE a.financing_time BETWEEN '2017-01-01' AND '2017-06-30' and  stage IN('天使轮','种子轮','Pre-A轮'))
+
         <if test=" types !='' and types != null">
             AND mf.`investment_institutions_id` IN (SELECT id FROM investment_institutions WHERE `type` IN
             <foreach close=")" collection="types" index="index" item="item" open="(" separator=",">#{item}</foreach>
@@ -334,19 +334,21 @@
             
         </if>
         <if test=" projectTagArry !='' and projectTagArry != null">
-            AND  mf.item_label LIKE
-            <foreach close="" collection="projectTagArry" index="index" item="item" open="" separator="OR"> CONCAT(CONCAT('%', #{item}), '%')</foreach>
+            AND  mf.item_label in
+            <foreach close=")" collection="projectTagArry" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            <!--<foreach close="" collection="projectTagArry" index="index" item="item" open="" separator="OR"> CONCAT(CONCAT('%', #{item}), '%')</foreach>-->
         </if>
         and mf.short_name !=#{shortName}
         GROUP BY mf.short_name
         ORDER BY mf.evaluation_recommend DESC
+        limit #{startPage},#{pageSize}
     </select>
 
     <select id="adminGetProjectListOne"  resultType="java.util.HashMap">
         select p.ID,p.short_name,p.kernel_desc,p.project_investment_highlights,p.url,p.item_label,p.create_time,f.`name`,a.rating_stage
         from projects p
         left join admin_project_rating_log a on p.ID = a.project_id
-        left join founders f on p.userid = f.project_id
+        right join founders f on f.project_id = p.ID
         where p.project_source is null
         <if test="shortName !=null and shortName!='' ">
             and p.short_name like CONCAT(CONCAT('%', #{shortName}), '%')
@@ -368,32 +370,30 @@
         limit #{startNum},#{pageSize}
     </select>
     <select id="screenInvestmentAll"  resultType="INTEGER">
-        select ii.ID from idatavc.projects p
-        left join investment_institutions ii on p.investment_institutions_id = ii.ID
-        <if test="domains !='' and domains != null">
-            left join project_segmentation ps on ps.project_id = p.ID
-        </if>
-        <if test="stages !='' and stages != null">
-            left join project_financing_log pfl on pfl.project_id = p.ID
-        </if>
-        where p.investment_institutions_id is not null
+        select ii.id from investment_institutions ii
+        left join investment_institutions_segmentation iis on iis.investment_institutions_id = ii.ID
+        left join investment_institutions_stage iiss on iis.investment_institutions_id = iiss.investment_institution_id
+        where 1=1
         <if test=" domains !='' and domains != null">
-            AND ps.segmentation_name IN
+            AND iis.meta_segmentation_id IN
             <foreach close=")" collection="domains" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
-        <!--and ps.segmentation_name in ("企业服务","工具软件")-->
         <if test=" stages !='' and stages != null">
-            AND pfl.stage IN
+            AND iiss.meta_project_stage_id IN
             <foreach close=")" collection="stages" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
-        <!--and pfl.stage in ("种子轮","天使轮")-->
         group by ii.short_name
         order by ii.count desc,ii.ID asc
 
-
-        <!--SELECT investment_institutions_id FROM projects mf RIGHT JOIN project_segmentation ps-->
-        <!--ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id-->
-        <!--WHERE 1=1-->
+        <!--select ii.ID from projects p-->
+        <!--left join investment_institutions ii on p.investment_institutions_id = ii.ID-->
+        <!--<if test="domains !='' and domains != null">-->
+            <!--left join project_segmentation ps on ps.project_id = p.ID-->
+        <!--</if>-->
+        <!--<if test="stages !='' and stages != null">-->
+            <!--left join project_financing_log pfl on pfl.project_id = p.ID-->
+        <!--</if>-->
+        <!--where p.investment_institutions_id is not null-->
         <!--<if test=" domains !='' and domains != null">-->
             <!--AND ps.segmentation_name IN-->
             <!--<foreach close=")" collection="domains" index="index" item="item" open="(" separator=",">#{item}</foreach>-->
@@ -402,9 +402,9 @@
             <!--AND pfl.stage IN-->
             <!--<foreach close=")" collection="stages" index="index" item="item" open="(" separator=",">#{item}</foreach>-->
         <!--</if>-->
-        <!--AND mf.investment_institutions_id IS NOT NULL-->
-        <!--GROUP BY mf.short_name, pfl.stage-->
-        <!--ORDER BY mf.evaluation_recommend DESC-->
+        <!--group by ii.short_name-->
+        <!--order by ii.count desc,ii.ID asc-->
+
     </select>
 
     <select id="projectLastSerialNumber" resultMap="BaseResultMap">

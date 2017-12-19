@@ -25,7 +25,7 @@
     LIMIT #{startPage},#{pageSize}
   </select>
   <select id="getSubejectType" resultType="java.util.HashMap">
-    SELECT s.short_name,s.sourceId,st.type_name,st.types FROM idatavc.subject s
+    SELECT s.short_name,s.sourceId,s.picture,st.type_name,st.types FROM subject s
     right join subject_type_relational str on s.id = str.subject_id
     left join subject_type st on str.subject_type_id = st.id
     where s.short_name = #{userCompanyName}

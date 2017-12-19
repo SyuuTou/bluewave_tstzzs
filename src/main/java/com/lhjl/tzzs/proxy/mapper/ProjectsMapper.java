@@ -16,7 +16,7 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
     List<Map<String, Object>> findProjectByUserId(@Param("userId") String userId, @Param("beginNum") Integer beginNum, @Param("pageSize") Integer pageSize);
     List<Map<String, Object>> findProjectByShortName(@Param("shortName") String shortName,@Param("userId") String userId);
     List<Map<String, Object>> findProjectByShortNameAll(@Param("shortName") String shortName,@Param("userId") String userId,@Param("sizea") Integer sizea,@Param("froma") Integer froma);
-    List<Map<String, Object>> findProjectBySview(@Param("userId")String userId,@Param("types")int[] types,@Param("segmentations")String [] segmentations,
+    List<Map<String, Object>> findProjectBySview(@Param("types")int[] types,@Param("segmentations")String [] segmentations,
                                                  @Param("stages")String [] stages,@Param("cities")String [] cities,
                                                  @Param("working_background_descs")String [] working_background_descs,@Param("educational_background_descs")String [] educational_background_descs,
                                                  @Param("sizea") Integer sizea,@Param("froma") Integer froma
@@ -29,7 +29,7 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
 
 
 
-    List<Map<String, Object>> findProjectBySviewA(@Param("userId")String userId,@Param("types")int[] types,@Param("segmentations")String [] segmentations,
+    List<Map<String, Object>> findProjectBySviewA(@Param("types")int[] types,@Param("segmentations")String [] segmentations,
                                                   @Param("stages")String [] stages,@Param("cities")String [] cities,
                                                   @Param("working_background_descs")String [] working_background_descs,@Param("educational_background_descs")String [] educational_background_descs,
                                                   @Param("sizea") Integer sizea,@Param("froma") Integer froma,
@@ -51,7 +51,7 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
 
     BigDecimal findProjectAllByRoundAndC(@Param("stage") String stage, @Param("city") String city);
     List<Map<String,Object>> findLikes(@Param("educationArray") String [] educationArray, @Param("city") String city,@Param("pslArray") String [] pslArray, @Param("shortName") String shortName);
-    List<XiangsiDto> findLikesall(@Param("educationArray") String [] educationArray,@Param("projectTagArry") String [] projectTagArry,@Param("shortName") String shortName,@Param("id") int  id);
+    List<XiangsiDto> findLikesall(@Param("educationArray") String [] educationArray,@Param("projectTagArry") String [] projectTagArry,@Param("shortName") String shortName,@Param("id") int  id,@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
 
     /**
      * 后台获取项目列表接口mapper,数据导入项目
@@ -79,7 +79,7 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
      * @param stages
      * @return
      */
-    List<Integer>screenInvestmentAll(@Param("domains")String [] domains,@Param("stages")String [] stages);
+    List<Integer>screenInvestmentAll(@Param("domains")Integer[] domains,@Param("stages")Integer[] stages);
 
     /**
      * 获取用户创建项目编号最大值的接口

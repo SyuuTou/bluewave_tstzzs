@@ -288,7 +288,7 @@ public class ProjectsServiceImpl implements ProjectsService {
 //	        String[] stages = sereachDto.getStage().split(",");
 
         //查询项目基础数据
-        List<Map<String, Object>> list = projectsServiceImplUtil.getBaseProjectInfo(userId, type, segmentation, stage,
+        List<Map<String, Object>> list = projectsServiceImplUtil.getBaseProjectInfo(type, segmentation, stage,
                 city, working_background_desc, educational_background_desc, sizea, froma);
 
         //查询项目实时统计数据
@@ -347,7 +347,7 @@ public class ProjectsServiceImpl implements ProjectsService {
             String educational_background_desc = sereachDto.getEducational_background_desc();
 
             String size = "0";
-            String from = "20";
+            String from = "10";
             if (sereachDto.getPageNum() != null && !"".equals(sereachDto.getPageNum())) {
                 size = sereachDto.getPageNum();
             }
@@ -359,7 +359,7 @@ public class ProjectsServiceImpl implements ProjectsService {
                 sizeb = Integer.parseInt(size);
             }
 
-            int froma = 20;
+            int froma = 10;
             if (null != from) {
                 froma = Integer.parseInt(from);
             }
@@ -377,7 +377,7 @@ public class ProjectsServiceImpl implements ProjectsService {
 //	        String[] stages = sereachDto.getStage().split(",");
 
             //查询项目基础数据
-            List<Map<String, Object>> list = projectsServiceImplUtil.getBaseProjectInfoA(userId, type, segmentation, stage,
+            List<Map<String, Object>> list = projectsServiceImplUtil.getBaseProjectInfoA( type, segmentation, stage,
                     city, working_background_desc, educational_background_desc, sizea, froma, endTime, beginTime);
 
             //查询项目实时统计数据
@@ -1040,6 +1040,7 @@ public class ProjectsServiceImpl implements ProjectsService {
         projectSegExample.and().andEqualTo("projectId",xmid);
         PageHelper pageHelper = new PageHelper();
         PageHelper.startPage(0,3);
+        String fieldEdit = "";
 
         List<ProjectSegmentation> projectSegmentationList = projectSegmentationMapper.selectByExample(projectSegExample);
         if (projectSegmentationList.size() > 0){
@@ -1047,8 +1048,9 @@ public class ProjectsServiceImpl implements ProjectsService {
                 field += ps.getSegmentationName();
                 field += " ";
             }
+            fieldEdit = field.substring(0,field.length()-1);
         }
-        String fieldEdit = field.substring(0,field.length()-1);
+
 
         ProjectComplexOutputDto projectComplexOutputDto =new ProjectComplexOutputDto();
         projectComplexOutputDto.setProjectDesc(projects.getKernelDesc());

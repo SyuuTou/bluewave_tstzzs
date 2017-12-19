@@ -9,7 +9,7 @@
     <id column="segmentation_name" property="segmentationName" jdbcType="VARCHAR" />
   </resultMap>
   <select id="findProjectSegmentation" resultMap="BaseResultMap">
-    SELECT * FROM idatavc.project_segmentation where project_id = #{projectId}
+    SELECT * FROM project_segmentation where project_id = #{projectId}
     group by segmentation_name;
   </select>
 </mapper>
