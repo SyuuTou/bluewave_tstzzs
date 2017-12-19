@@ -66,7 +66,14 @@ public class ReportController {
     public CommonDto<List<Report>> reportList(@RequestBody ReportReqBody reqBody){
         CommonDto<List<Report>> result = null;
 
-        result = reportService.queryReport(reqBody);
+        try {
+            result = reportService.queryReport(reqBody);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result = new CommonDto<>();
+            result.setStatus(500);
+            result.setMessage("服务器繁忙，请售后再试。");
+        }
 
         return result;
 
@@ -76,7 +83,14 @@ public class ReportController {
     public CommonDto<Report> reportById(Integer id){
         CommonDto<Report> result = null;
 
-        result = reportService.getReportById(id);
+        try {
+            result = reportService.getReportById(id);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result = new CommonDto<>();
+            result.setStatus(500);
+            result.setMessage("服务器繁忙，请售后再试。");
+        }
 
         return result;
     }

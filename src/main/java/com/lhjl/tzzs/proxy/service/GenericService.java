@@ -5,5 +5,5 @@ import org.slf4j.LoggerFactory;
 
 public abstract class GenericService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+    protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 }
