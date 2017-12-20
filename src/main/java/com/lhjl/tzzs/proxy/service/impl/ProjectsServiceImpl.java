@@ -672,19 +672,11 @@ public class ProjectsServiceImpl implements ProjectsService {
                 projectFinancingHistoryInvestors.setProjectFinancingHistoryId(pflid);
 
                 List<ProjectFinancingHistoryInvestors> projectFinancingHistoryInvestorsList = projectFinancingHistoryInvestorsMapper.select(projectFinancingHistoryInvestors);
-                StringBuffer touzifang= new StringBuffer();
+                List<String> touzifang= new ArrayList<>();
                 if (projectFinancingHistoryInvestorsList.size() > 0){
-                    if (projectFinancingHistoryInvestorsList.size() > 2){
-                        for (Integer i = 0;i < 2 ;i++){
-                            touzifang.append(projectFinancingHistoryInvestorsList.get(i).getInvestorName());
-                            touzifang.append(" ");
-                        }
-                    }else {
                         for (ProjectFinancingHistoryInvestors pfhi:projectFinancingHistoryInvestorsList){
-                            touzifang.append(pfhi.getInvestorName());
-                            touzifang.append(" ");
+                            touzifang.add(pfhi.getInvestorName());
                         }
-                    }
                 }
 
                 obj.put("financingTime",dateString);
