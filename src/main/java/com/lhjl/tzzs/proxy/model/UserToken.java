@@ -27,6 +27,12 @@ public class UserToken {
     private Date registerTime;
 
     /**
+     * 应用id
+     */
+    @Column(name = "meta_app_id")
+    private String metaAppId;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -92,5 +98,23 @@ public class UserToken {
      */
     public void setRegisterTime(Date registerTime) {
         this.registerTime = registerTime;
+    }
+
+    /**
+     * 获取应用id
+     *
+     * @return meta_app_id - 应用id
+     */
+    public String getMetaAppId() {
+        return metaAppId;
+    }
+
+    /**
+     * 设置应用id
+     *
+     * @param metaAppId 应用id
+     */
+    public void setMetaAppId(String metaAppId) {
+        this.metaAppId = metaAppId;
     }
 }
