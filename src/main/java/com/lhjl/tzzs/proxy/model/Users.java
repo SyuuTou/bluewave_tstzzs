@@ -130,17 +130,22 @@ public class Users {
     @Column(name = "work_card")
     private String workCard;
 
+    /**
+     * 用户身份类型
+     */
     @Column(name = "id_type")
     private String idType;
 
+    /**
+     * 微信唯一ID
+     */
+    private String unionid;
 
-    public String getIdType() {
-        return idType;
-    }
-
-    public void setIdType(String idType) {
-        this.idType = idType;
-    }
+    /**
+     * 应用id
+     */
+    @Column(name = "meta_app_id")
+    private Integer metaAppId;
 
     /**
      * @return ID
@@ -546,5 +551,59 @@ public class Users {
      */
     public void setWorkCard(String workCard) {
         this.workCard = workCard;
+    }
+
+    /**
+     * 获取用户身份类型
+     *
+     * @return id_type - 用户身份类型
+     */
+    public String getIdType() {
+        return idType;
+    }
+
+    /**
+     * 设置用户身份类型
+     *
+     * @param idType 用户身份类型
+     */
+    public void setIdType(String idType) {
+        this.idType = idType;
+    }
+
+    /**
+     * 获取微信唯一ID
+     *
+     * @return unionid - 微信唯一ID
+     */
+    public String getUnionid() {
+        return unionid;
+    }
+
+    /**
+     * 设置微信唯一ID
+     *
+     * @param unionid 微信唯一ID
+     */
+    public void setUnionid(String unionid) {
+        this.unionid = unionid;
+    }
+
+    /**
+     * 获取应用id
+     *
+     * @return meta_app_id - 应用id
+     */
+    public Integer getMetaAppId() {
+        return metaAppId;
+    }
+
+    /**
+     * 设置应用id
+     *
+     * @param metaAppId 应用id
+     */
+    public void setMetaAppId(Integer metaAppId) {
+        this.metaAppId = metaAppId;
     }
 }

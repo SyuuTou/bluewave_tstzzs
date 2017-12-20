@@ -29,8 +29,9 @@
     <result column="industry" jdbcType="VARCHAR" property="industry" />
     <result column="work_card" jdbcType="VARCHAR" property="workCard" />
     <result column="id_type" jdbcType="VARCHAR" property="idType" />
+    <result column="unionid" jdbcType="VARCHAR" property="unionid" />
+    <result column="meta_app_id" jdbcType="INTEGER" property="metaAppId" />
   </resultMap>
-
 
   <select id="findByUuid" parameterType="String" resultType="INTEGER">
     SELECT u.ID FROM users u WHERE u.uuid=#{uuids}
