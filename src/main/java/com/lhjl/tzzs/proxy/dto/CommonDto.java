@@ -7,6 +7,16 @@ public class CommonDto<T> {
     private Integer status;
     private T data;
 
+    public CommonDto(){
+
+    }
+
+    public CommonDto(T data, String message, Integer status){
+        this.data = data;
+        this.message = message;
+        this.status = status;
+    }
+
     public String getMessage() {
         return message;
     }

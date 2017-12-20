@@ -154,7 +154,7 @@ public class ProjectsController {
     @PostMapping("choose/sview")
     public CommonDto<List<Map<String,Object>>>findProjectBySview(@RequestBody SereachDto body)
     {
-        CommonDto<List<Map<String,Object>>> result =new CommonDto<List<Map<String, Object>>>();
+        CommonDto<List<Map<String,Object>>> result =new CommonDto<>();
         try {
             result = projectsService.findProjectBySview(body);
 

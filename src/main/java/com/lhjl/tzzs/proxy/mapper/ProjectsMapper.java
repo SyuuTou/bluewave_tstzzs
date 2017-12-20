@@ -1,5 +1,7 @@
 package com.lhjl.tzzs.proxy.mapper;
 
+import com.lhjl.tzzs.proxy.dto.ProjectReqDto;
+import com.lhjl.tzzs.proxy.dto.ProjectResDto;
 import com.lhjl.tzzs.proxy.dto.XiangsiDto;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
@@ -99,6 +101,7 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
      */
     List<Map<String,Object>> findInstitutionProject(@Param("institutionId") Integer institutionId,@Param("stage") String stage,@Param("segmentationName") String[] segmentationName,@Param("financingTime") String[] financingTime,@Param("startNum") Integer startNum,@Param("pageSize") Integer pageSize);
 
+    List<ProjectResDto> projectFilter(ProjectReqDto reqDto);
 }
 
 

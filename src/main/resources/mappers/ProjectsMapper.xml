@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectsMapper">
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Projects">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="ID" jdbcType="INTEGER" property="id" />
-    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
-    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
-    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
-    <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc" />
-    <result column="commet" jdbcType="VARCHAR" property="commet" />
-    <result column="url" jdbcType="VARCHAR" property="url" />
-    <result column="established_time" jdbcType="DATE" property="establishedTime" />
-    <result column="segmentation" jdbcType="VARCHAR" property="segmentation" />
-    <result column="item_label" jdbcType="VARCHAR" property="itemLabel" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="territory" jdbcType="VARCHAR" property="territory" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="continent" jdbcType="VARCHAR" property="continent" />
-    <result column="country" jdbcType="VARCHAR" property="country" />
-    <result column="province" jdbcType="VARCHAR" property="province" />
-    <result column="city" jdbcType="VARCHAR" property="city" />
-    <result column="region" jdbcType="VARCHAR" property="region" />
-    <result column="investment_institutions_id" jdbcType="INTEGER" property="investmentInstitutionsId" />
-    <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
-    <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
-    <result column="yn" jdbcType="INTEGER" property="yn" />
-    <result column="userid" jdbcType="INTEGER" property="userid" />
-    <result column="kernel_desc_status" jdbcType="INTEGER" property="kernelDescStatus" />
-    <result column="city_count" jdbcType="INTEGER" property="cityCount" />
-    <result column="evaluation_recommend" jdbcType="INTEGER" property="evaluationRecommend" />
-    <result column="project_type" jdbcType="INTEGER" property="projectType" />
-    <result column="project_source" jdbcType="INTEGER" property="projectSource" />
-    <result column="project_logo" jdbcType="VARCHAR" property="projectLogo" />
-    <result column="project_investment_highlights" jdbcType="VARCHAR" property="projectInvestmentHighlights" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Projects">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="serial_number" jdbcType="INTEGER" property="serialNumber"/>
+        <result column="short_name" jdbcType="VARCHAR" property="shortName"/>
+        <result column="full_name" jdbcType="VARCHAR" property="fullName"/>
+        <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc"/>
+        <result column="commet" jdbcType="VARCHAR" property="commet"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="established_time" jdbcType="DATE" property="establishedTime"/>
+        <result column="segmentation" jdbcType="VARCHAR" property="segmentation"/>
+        <result column="item_label" jdbcType="VARCHAR" property="itemLabel"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="territory" jdbcType="VARCHAR" property="territory"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="continent" jdbcType="VARCHAR" property="continent"/>
+        <result column="country" jdbcType="VARCHAR" property="country"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="region" jdbcType="VARCHAR" property="region"/>
+        <result column="investment_institutions_id" jdbcType="INTEGER" property="investmentInstitutionsId"/>
+        <result column="approval_status" jdbcType="INTEGER" property="approvalStatus"/>
+        <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime"/>
+        <result column="yn" jdbcType="INTEGER" property="yn"/>
+        <result column="userid" jdbcType="INTEGER" property="userid"/>
+        <result column="kernel_desc_status" jdbcType="INTEGER" property="kernelDescStatus"/>
+        <result column="city_count" jdbcType="INTEGER" property="cityCount"/>
+        <result column="evaluation_recommend" jdbcType="INTEGER" property="evaluationRecommend"/>
+        <result column="project_type" jdbcType="INTEGER" property="projectType"/>
+        <result column="project_source" jdbcType="INTEGER" property="projectSource"/>
+        <result column="project_logo" jdbcType="VARCHAR" property="projectLogo"/>
+        <result column="project_investment_highlights" jdbcType="VARCHAR" property="projectInvestmentHighlights"/>
+    </resultMap>
     <!-- 用户关注的项目 -->
 
-  <select id="findProjectByUserId" resultType="java.util.HashMap">
-   <!-- SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage
-    FROM follow a LEFT JOIN view_projects_info b ON a.`projects_id` = b.`ID`
-    WHERE a.user_id = #{userId}  AND a.`status` = 1-->
+    <select id="findProjectByUserId" resultType="java.util.HashMap">
+        <!-- SELECT b.id ID,b.short_name,b.kernel_desc,b.`city`,b.`segmentation`,b.stage
+         FROM follow a LEFT JOIN view_projects_info b ON a.`projects_id` = b.`ID`
+         WHERE a.user_id = #{userId}  AND a.`status` = 1-->
 
-      SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,ps.segmentation_name segementation ,
-      pfl.stage
-      FROM follow a LEFT JOIN projects mf  ON a.`projects_id` = mf.`ID`
-      RIGHT JOIN project_segmentation ps on ps.project_id = mf.id
-      left join project_financing_log pfl on pfl.project_id = mf.id
-    WHERE a.user_id = #{userId}  AND a.`status` = 1
-    GROUP BY mf.`id`  ORDER BY a.create_time DESC LIMIT #{beginNum},#{pageSize}
-  </select>
-   <!-- <select id="findProjectByShortName" parameterType="String" resultMap="BaseResultMap" >
-    SELECT p.*,s.* FROM projects p LEFT JOIN (SELECT ff.* FROM follow ff WHERE ff.ID IN(SELECT MAX(f.ID) FROM follow f GROUP BY  f.projects_id)) s ON p.ID=s.projects_id WHERE p.`short_name` LIKE '%"#{shortName}"%';
-  </select> -->
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,ps.segmentation_name segementation ,
+        pfl.stage
+        FROM follow a LEFT JOIN projects mf ON a.`projects_id` = mf.`ID`
+        RIGHT JOIN project_segmentation ps on ps.project_id = mf.id
+        left join project_financing_log pfl on pfl.project_id = mf.id
+        WHERE a.user_id = #{userId} AND a.`status` = 1
+        GROUP BY mf.`id` ORDER BY a.create_time DESC LIMIT #{beginNum},#{pageSize}
+    </select>
+    <!-- <select id="findProjectByShortName" parameterType="String" resultMap="BaseResultMap" >
+     SELECT p.*,s.* FROM projects p LEFT JOIN (SELECT ff.* FROM follow ff WHERE ff.ID IN(SELECT MAX(f.ID) FROM follow f GROUP BY  f.projects_id)) s ON p.ID=s.projects_id WHERE p.`short_name` LIKE '%"#{shortName}"%';
+   </select> -->
     <select id="findProjectByShortNameAll" resultType="java.util.HashMap">
         <!-- SELECT b.*,
         (SELECT COUNT(*) FROM follow a WHERE a.projects_id = b.`ID` AND a.status = 1)num,
@@ -61,46 +61,71 @@
         FROM projects b
         WHERE short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')  -->
         SELECT ID, short_name, kernel_desc,city,segementation, stage FROM (
-        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE    mf.short_name like CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
-        UNION  ALL
-        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE   ps.segmentation_name like  CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation ,
+        pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id
+        LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id WHERE mf.short_name like
+        CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
         UNION ALL
-        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE   mf.kernel_desc LIKE  CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation ,
+        pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id
+        LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id WHERE ps.segmentation_name like
+        CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
         UNION ALL
-        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE   mf.item_label LIKE  CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation ,
+        pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id
+        LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id WHERE mf.kernel_desc LIKE
+        CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+        UNION ALL
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation ,
+        pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id
+        LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id WHERE mf.item_label LIKE
+        CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
         ) a
         GROUP BY a.short_name , a.stage
         ORDER BY a.evaluation_recommend DESC LIMIT #{sizea},#{froma}
     </select>
     <select id="findProjectByShortName" parameterType="String" resultType="java.util.HashMap">
-         <!-- SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,stage.stage
-          FROM projects mf
-          LEFT JOIN (SELECT s.project_id,s.stage,s.financing_time FROM project_financing_log s GROUP BY s.`project_id` ORDER BY financing_time DESC)stage ON mf.`id` = stage.project_id
-          WHERE
-          mf.short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
-          OR mf.kernel_desc LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
-          OR mf.id IN (SELECT project_id FROM project_segmentation WHERE segmentation_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
-          OR mf.id IN
-          (SELECT project_id FROM project_financing_log WHERE stage  LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
-          OR mf.city LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
-          OR mf.id IN (SELECT f.project_id FROM founders_work fw LEFT JOIN founders f ON fw.founder_id = f.id WHERE fw.work_experience LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
-          OR mf.id IN (SELECT f.project_id FROM founders_education fe LEFT JOIN founders f ON fe.founder_id = f.id WHERE fe.education_experience LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')) 
-          GROUP BY mf.id LIMIT 3-->
+        <!-- SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation`,stage.stage
+         FROM projects mf
+         LEFT JOIN (SELECT s.project_id,s.stage,s.financing_time FROM project_financing_log s GROUP BY s.`project_id` ORDER BY financing_time DESC)stage ON mf.`id` = stage.project_id
+         WHERE
+         mf.short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+         OR mf.kernel_desc LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+         OR mf.id IN (SELECT project_id FROM project_segmentation WHERE segmentation_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
+         OR mf.id IN
+         (SELECT project_id FROM project_financing_log WHERE stage  LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
+         OR mf.city LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+         OR mf.id IN (SELECT f.project_id FROM founders_work fw LEFT JOIN founders f ON fw.founder_id = f.id WHERE fw.work_experience LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
+         OR mf.id IN (SELECT f.project_id FROM founders_education fe LEFT JOIN founders f ON fe.founder_id = f.id WHERE fe.education_experience LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%'))
+         GROUP BY mf.id LIMIT 3-->
 
-          SELECT ID, short_name, kernel_desc,city,segementation, stage FROM (
-          SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE   mf.short_name like CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
-          UNION  ALL
-          SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE   ps.segmentation_name like  CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
-          UNION ALL
-          SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE   mf.kernel_desc LIKE  CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
-          UNION ALL
-          SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation , pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id  WHERE   mf.item_label LIKE  CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
-           ) a
-           GROUP BY short_name,stage
-           ORDER BY a.evaluation_recommend DESC LIMIT 3
+        SELECT ID, short_name, kernel_desc,city,segementation, stage FROM (
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation ,
+        pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id
+        LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id WHERE mf.short_name like
+        CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+        UNION ALL
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation ,
+        pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id
+        LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id WHERE ps.segmentation_name like
+        CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+        UNION ALL
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation ,
+        pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id
+        LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id WHERE mf.kernel_desc LIKE
+        CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+        UNION ALL
+        SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation ,
+        pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps ON ps.project_id = mf.id
+        LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id WHERE mf.item_label LIKE
+        CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
+        ) a
+        GROUP BY short_name,stage
+        ORDER BY a.evaluation_recommend DESC LIMIT 3
     </select>
 
-    <select id="findProjectBySegmentation" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
+    <select id="findProjectBySegmentation" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto"
+            resultType="java.util.HashMap">
         SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation` segementation,mf.stage
         FROM view_segemention_info mf
         where 1=1
@@ -111,7 +136,8 @@
         </if>
         <if test=" segmentations !='' and segmentations != null">
             AND mf.segmentation IN
-            <foreach close=")" collection="segmentations" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            <foreach close=")" collection="segmentations" index="index" item="item" open="(" separator=",">#{item}
+            </foreach>
         </if>
 
         <if test=" stages !='' and stages != null">
@@ -135,7 +161,8 @@
         </if>
         <if test=" segmentations !='' and segmentations != null">
             AND mf.id IN (SELECT project_id FROM project_segmentation WHERE segmentation_name IN
-            <foreach close=")" collection="segmentations" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            <foreach close=")" collection="segmentations" index="index" item="item" open="(" separator=",">#{item}
+            </foreach>
             )
         </if>
 
@@ -151,14 +178,20 @@
         </if>
 
         <if test=" working_background_descs!='' and working_background_descs != null">
-            AND mf.id IN (SELECT f.project_id FROM founders_work fw LEFT JOIN founders f ON fw.founder_id = f.id WHERE fw.work_experience IN
-            <foreach close=")" collection="working_background_descs" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            AND mf.id IN (SELECT f.project_id FROM founders_work fw LEFT JOIN founders f ON fw.founder_id = f.id WHERE
+            fw.work_experience IN
+            <foreach close=")" collection="working_background_descs" index="index" item="item" open="(" separator=",">
+                #{item}
+            </foreach>
             )
         </if>
 
         <if test="educational_background_descs!='' and educational_background_descs!= null">
-            AND mf.id IN (SELECT f.project_id FROM founders_education fe LEFT JOIN founders f ON fe.founder_id = f.id WHERE fe.education_experience IN
-            <foreach close=")" collection="educational_background_descs" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            AND mf.id IN (SELECT f.project_id FROM founders_education fe LEFT JOIN founders f ON fe.founder_id = f.id
+            WHERE fe.education_experience IN
+            <foreach close=")" collection="educational_background_descs" index="index" item="item" open="("
+                     separator=",">#{item}
+            </foreach>
             )
         </if>
         GROUP BY mf.short_name,stage
@@ -175,13 +208,13 @@
     </select>
 
 
-
     <select id="findProjectBySviewA" resultType="java.util.HashMap">
         SELECT mf.id ID ,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation` segementation,mf.evaluation_recommend,
         (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1) stage
         FROM projects mf
         WHERE 1=1
-        AND mf.id IN(SELECT a.project_id FROM project_financing_log a WHERE a.financing_time BETWEEN '2017-01-01' AND '2017-06-30' and  stage IN('天使轮','种子轮','Pre-A轮'))
+        AND mf.id IN(SELECT a.project_id FROM project_financing_log a WHERE a.financing_time BETWEEN '2017-01-01' AND
+        '2017-06-30' and stage IN('天使轮','种子轮','Pre-A轮'))
 
         <if test=" types !='' and types != null">
             AND mf.`investment_institutions_id` IN (SELECT id FROM investment_institutions WHERE `type` IN
@@ -190,7 +223,8 @@
         </if>
         <if test=" segmentations !='' and segmentations != null">
             AND mf.id IN (SELECT project_id FROM project_segmentation WHERE segmentation_name IN
-            <foreach close=")" collection="segmentations" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            <foreach close=")" collection="segmentations" index="index" item="item" open="(" separator=",">#{item}
+            </foreach>
             )
         </if>
 
@@ -206,14 +240,20 @@
         </if>
 
         <if test=" working_background_descs!='' and working_background_descs != null">
-            AND mf.id IN (SELECT f.project_id FROM founders_work fw LEFT JOIN founders f ON fw.founder_id = f.id WHERE fw.work_experience IN
-            <foreach close=")" collection="working_background_descs" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            AND mf.id IN (SELECT f.project_id FROM founders_work fw LEFT JOIN founders f ON fw.founder_id = f.id WHERE
+            fw.work_experience IN
+            <foreach close=")" collection="working_background_descs" index="index" item="item" open="(" separator=",">
+                #{item}
+            </foreach>
             )
         </if>
 
         <if test="educational_background_descs!='' and educational_background_descs!= null">
-            AND mf.id IN (SELECT f.project_id FROM founders_education fe LEFT JOIN founders f ON fe.founder_id = f.id WHERE fe.education_experience IN
-            <foreach close=")" collection="educational_background_descs" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            AND mf.id IN (SELECT f.project_id FROM founders_education fe LEFT JOIN founders f ON fe.founder_id = f.id
+            WHERE fe.education_experience IN
+            <foreach close=")" collection="educational_background_descs" index="index" item="item" open="("
+                     separator=",">#{item}
+            </foreach>
             )
         </if>
         GROUP BY mf.short_name, stage
@@ -244,7 +284,8 @@
     </select>
 
     <select id="findProjectByRoundAndE" parameterType="String" resultType="java.math.BigDecimal">
-        SELECT avg(n.amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join project_segmentation f on m.ID = f.project_id where n.amount &gt; 0 and n.financing_time &gt;= '2016-07-01'
+        SELECT avg(n.amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join
+        project_segmentation f on m.ID = f.project_id where n.amount &gt; 0 and n.financing_time &gt;= '2016-07-01'
         <if test="segmentation!='null' and segmentation != null">
             and f.segmentation_name = #{segmentation}
         </if>
@@ -254,7 +295,8 @@
     </select>
 
     <select id="findProjectByRoundAndC" parameterType="String" resultType="java.math.BigDecimal">
-        SELECT avg(n.amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join project_segmentation f on m.ID = f.project_id where n.amount &gt; 0 and n.financing_time &gt;= '2016-07-01'
+        SELECT avg(n.amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join
+        project_segmentation f on m.ID = f.project_id where n.amount &gt; 0 and n.financing_time &gt;= '2016-07-01'
         <if test="stage!='null' and stage != null">
             and n.stage = #{stage}
         </if>
@@ -269,7 +311,9 @@
     </select>
 
     <select id="findProjectAllByRoundAndE" parameterType="String" resultType="java.math.BigDecimal">
-        SELECT avg(n.total_amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join project_segmentation f on m.ID = f.project_id where n.total_amount &gt; 0 and n.financing_time &gt;= '2016-07-01'
+        SELECT avg(n.total_amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join
+        project_segmentation f on m.ID = f.project_id where n.total_amount &gt; 0 and n.financing_time &gt;=
+        '2016-07-01'
         <if test="segmentation!='null' and segmentation != null">
             and f.segmentation_name = #{segmentation}
         </if>
@@ -279,7 +323,9 @@
     </select>
 
     <select id="findProjectAllByRoundAndC" parameterType="String" resultType="java.math.BigDecimal">
-        SELECT avg(n.total_amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join project_segmentation f on m.ID = f.project_id where n.total_amount &gt; 0 and n.financing_time &gt;= '2016-07-01'
+        SELECT avg(n.total_amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join
+        project_segmentation f on m.ID = f.project_id where n.total_amount &gt; 0 and n.financing_time &gt;=
+        '2016-07-01'
         <if test="stage!='null' and stage != null">
             and n.stage = #{stage}
         </if>
@@ -290,31 +336,32 @@
 
 
     <resultMap id="projectMap" type="com.lhjl.tzzs.proxy.dto.ProjectValuation">
-        <result column="id" jdbcType="BIGINT" property="id" />
-        <result column="type" jdbcType="BIGINT" property="type" />
-        <result column="segmentation" jdbcType="VARCHAR" property="segmentation" />
-        <result column="city" jdbcType="VARCHAR" property="city" />
-        <result column="edu" jdbcType="VARCHAR" property="edu" />
-        <result column="work" jdbcType="VARCHAR" property="work" />
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="type" jdbcType="BIGINT" property="type"/>
+        <result column="segmentation" jdbcType="VARCHAR" property="segmentation"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="edu" jdbcType="VARCHAR" property="edu"/>
+        <result column="work" jdbcType="VARCHAR" property="work"/>
     </resultMap>
 
 
     <select id="queryProjectValuation" parameterType="map" resultMap="projectMap">
 
     </select>
-     <select id="findLikes"  resultType="java.util.HashMap">
+    <select id="findLikes" resultType="java.util.HashMap">
         SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation ,mf.`project_logo`,
         pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps
         ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id
         WHERE 1=1
         <if test=" educationArray !='' and educationArray != null">
-        AND ps.segmentation_name IN
-            <foreach close=")" collection="educationArray" index="index" item="item" open="(" separator=",">#{item}</foreach>
-            
+            AND ps.segmentation_name IN
+            <foreach close=")" collection="educationArray" index="index" item="item" open="(" separator=",">#{item}
+            </foreach>
+
         </if>
         AND mf.city =#{city}
         <if test=" pslArray !='' and pslArray != null">
-        AND pfl.stage IN
+            AND pfl.stage IN
             <foreach close=")" collection="pslArray" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
         and mf.short_name !=#{shortName}
@@ -322,20 +369,22 @@
         ORDER BY mf.evaluation_recommend DESC
         LIMIT 3
     </select>
-    <select id="findLikesall"  resultType="com.lhjl.tzzs.proxy.dto.XiangsiDto">
+    <select id="findLikesall" resultType="com.lhjl.tzzs.proxy.dto.XiangsiDto">
         SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.city, ps.segmentation_name segementation ,mf.`project_logo`,
         pfl.stage,mf.evaluation_recommend FROM projects mf RIGHT JOIN project_segmentation ps
         ON ps.project_id = mf.id LEFT JOIN project_financing_log pfl ON mf.id = pfl.project_id
         WHERE 1=1
         AND pfl.project_id != #{id}
         <if test=" educationArray !='' and educationArray != null">
-        AND ps.segmentation_name IN
-            <foreach close=")" collection="educationArray" index="index" item="item" open="(" separator=",">#{item}</foreach>
-            
+            AND ps.segmentation_name IN
+            <foreach close=")" collection="educationArray" index="index" item="item" open="(" separator=",">#{item}
+            </foreach>
+
         </if>
         <if test=" projectTagArry !='' and projectTagArry != null">
-            AND  mf.item_label in
-            <foreach close=")" collection="projectTagArry" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            AND mf.item_label in
+            <foreach close=")" collection="projectTagArry" index="index" item="item" open="(" separator=",">#{item}
+            </foreach>
             <!--<foreach close="" collection="projectTagArry" index="index" item="item" open="" separator="OR"> CONCAT(CONCAT('%', #{item}), '%')</foreach>-->
         </if>
         and mf.short_name !=#{shortName}
@@ -344,8 +393,9 @@
         limit #{startPage},#{pageSize}
     </select>
 
-    <select id="adminGetProjectListOne"  resultType="java.util.HashMap">
-        select p.ID,p.short_name,p.kernel_desc,p.project_investment_highlights,p.url,p.item_label,p.create_time,f.`name`,a.rating_stage
+    <select id="adminGetProjectListOne" resultType="java.util.HashMap">
+        select
+        p.ID,p.short_name,p.kernel_desc,p.project_investment_highlights,p.url,p.item_label,p.create_time,f.`name`,a.rating_stage
         from projects p
         left join admin_project_rating_log a on p.ID = a.project_id
         right join founders f on f.project_id = p.ID
@@ -358,7 +408,8 @@
     </select>
 
     <select id="adminGetProjectListTwo" resultType="java.util.HashMap">
-        select p.ID,p.short_name,p.kernel_desc,p.project_investment_highlights,p.url,p.item_label,p.create_time,u.actual_name,a.rating_stage
+        select
+        p.ID,p.short_name,p.kernel_desc,p.project_investment_highlights,p.url,p.item_label,p.create_time,u.actual_name,a.rating_stage
         from projects p
         left join admin_project_rating_log a on p.ID = a.project_id
         left join users u on p.userid = u.ID
@@ -369,7 +420,7 @@
         order by create_time desc
         limit #{startNum},#{pageSize}
     </select>
-    <select id="screenInvestmentAll"  resultType="INTEGER">
+    <select id="screenInvestmentAll" resultType="INTEGER">
         select ii.id from investment_institutions ii
         left join investment_institutions_segmentation iis on iis.investment_institutions_id = ii.ID
         left join investment_institutions_stage iiss on iis.investment_institutions_id = iiss.investment_institution_id
@@ -388,19 +439,19 @@
         <!--select ii.ID from projects p-->
         <!--left join investment_institutions ii on p.investment_institutions_id = ii.ID-->
         <!--<if test="domains !='' and domains != null">-->
-            <!--left join project_segmentation ps on ps.project_id = p.ID-->
+        <!--left join project_segmentation ps on ps.project_id = p.ID-->
         <!--</if>-->
         <!--<if test="stages !='' and stages != null">-->
-            <!--left join project_financing_log pfl on pfl.project_id = p.ID-->
+        <!--left join project_financing_log pfl on pfl.project_id = p.ID-->
         <!--</if>-->
         <!--where p.investment_institutions_id is not null-->
         <!--<if test=" domains !='' and domains != null">-->
-            <!--AND ps.segmentation_name IN-->
-            <!--<foreach close=")" collection="domains" index="index" item="item" open="(" separator=",">#{item}</foreach>-->
+        <!--AND ps.segmentation_name IN-->
+        <!--<foreach close=")" collection="domains" index="index" item="item" open="(" separator=",">#{item}</foreach>-->
         <!--</if>-->
         <!--<if test=" stages !='' and stages != null">-->
-            <!--AND pfl.stage IN-->
-            <!--<foreach close=")" collection="stages" index="index" item="item" open="(" separator=",">#{item}</foreach>-->
+        <!--AND pfl.stage IN-->
+        <!--<foreach close=")" collection="stages" index="index" item="item" open="(" separator=",">#{item}</foreach>-->
         <!--</if>-->
         <!--group by ii.short_name-->
         <!--order by ii.count desc,ii.ID asc-->
@@ -415,7 +466,8 @@
 
     <select id="findInstitutionProject" resultType="java.util.HashMap">
 
-        select p.id,p.city,p.project_logo,p.kernel_desc,p.commet,p.short_name,p.full_name,pfl.stage,pfl.financing_time,pfl.financing_time_year
+        select
+        p.id,p.city,p.project_logo,p.kernel_desc,p.commet,p.short_name,p.full_name,pfl.stage,pfl.financing_time,pfl.financing_time_year
         from investment_institutions_project iip
         left join project_financing_log pfl on pfl.id = iip.project_id
         <if test="segmentationName != null and segmentationName!=''">
@@ -427,11 +479,13 @@
         and p.short_name is not null
         <if test="segmentationName != null and segmentationName!=''">
             and ps.segmentation_name in
-            <foreach close=")" collection="segmentationName" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            <foreach close=")" collection="segmentationName" index="index" item="item" open="(" separator=",">#{item}
+            </foreach>
         </if>
         <if test="financingTime != null and financingTime != ''">
             and pfl.financing_time_year in
-            <foreach close=")" collection="financingTime" index="index" item="item" open="(" separator=",">#{item}</foreach>
+            <foreach close=")" collection="financingTime" index="index" item="item" open="(" separator=",">#{item}
+            </foreach>
         </if>
         group by p.short_name
         order by pfl.financing_time desc,p.id asc
@@ -439,22 +493,80 @@
         <!--select p.id,p.city,p.project_logo,p.kernel_desc,p.short_name,p.full_name,pfl.stage,pfl.financing_time,pfl.financing_time_year from investment_institutions_project iip-->
         <!--left join projects p on iip.project_id = p.ID-->
         <!--<if test="segmentationName != null and segmentationName!=''">-->
-            <!--left join project_segmentation ps on ps.project_id = iip.project_id-->
+        <!--left join project_segmentation ps on ps.project_id = iip.project_id-->
         <!--</if>-->
         <!--left join project_financing_log pfl on p.ID = pfl.project_id-->
         <!--where iip.investment_institutions_id = #{institutionId}-->
         <!--and p.short_name is not null-->
         <!--and p.short_name != ""-->
         <!--<if test="segmentationName != null and segmentationName!=''">-->
-            <!--and ps.segmentation_name in-->
-            <!--<foreach close=")" collection="segmentationName" index="index" item="item" open="(" separator=",">#{item}</foreach>-->
+        <!--and ps.segmentation_name in-->
+        <!--<foreach close=")" collection="segmentationName" index="index" item="item" open="(" separator=",">#{item}</foreach>-->
         <!--</if>-->
         <!--<if test="financingTime != null and financingTime != ''">-->
-            <!--and pfl.financing_time_year in-->
-            <!--<foreach close=")" collection="financingTime" index="index" item="item" open="(" separator=",">#{item}</foreach>-->
+        <!--and pfl.financing_time_year in-->
+        <!--<foreach close=")" collection="financingTime" index="index" item="item" open="(" separator=",">#{item}</foreach>-->
         <!--</if>-->
         <!--group by p.short_name-->
         <!--order by pfl.financing_time desc,p.ID asc-->
         <!--limit #{startNum},#{pageSize}-->
+    </select>
+
+    <resultMap id="projectFilterMap" type="com.lhjl.tzzs.proxy.dto.ProjectResDto">
+        <result column="ID" jdbcType="INTEGER" property="ID"/>
+        <result column="short_name" jdbcType="VARCHAR" property="shortName"/>
+        <result column="full_name" jdbcType="VARCHAR" property="fullName"/>
+        <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="segmentation" jdbcType="VARCHAR" property="segmentation"/>
+        <result column="evaluation_recommend" jdbcType="VARCHAR" property="evaluationRecommend"/>
+        <result column="stage" jdbcType="VARCHAR" property="stage"/>
+        <result column="followNum" jdbcType="INTEGER" property="followNum"/>
+        <result column="interviewNum" jdbcType="INTEGER" property="interviewNum"/>
+        <result column="yn" jdbcType="INTEGER" property="yn"/>
+    </resultMap>
+
+    <select id="projectFilter" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
+        select a.id,
+        a.short_name,a.full_name,a.kernel_desc,a.city,a.segmentation_name,a.evaluation_recommend,a.stage,
+        case WHEN b.followNum = null then 0 ELSE b.followNum END followNum,
+        case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
+        case WHEN b.followNum = null OR b.followNum = 0 then 0 ELSE 1 END yn
+        from(
+        select p.id, p.short_name,p.full_name,p.kernel_desc,p.city,ps.segmentation_name,p.evaluation_recommend,pfl.stage
+        from project_financing_log pfl left join projects p on pfl.project_id = p.id
+        <if test="segmentation != '' and segmentation != null">
+            right join project_segmentation ps on ps.project_id = p.id and ps.segmentation_name in (#{segmentation})
+        </if>
+        <if test="edus != '' and edus != null">
+            right join (select f.project_id from founders f right join founders_education fe on fe.founder_ID = f.id
+            where fe.education_experience in (#{edus})) ffe on ffe.project_id = p.id
+        </if>
+        <if test="works != '' and works != null">
+            right join (select f.project_id from founders f right join founders_work fw on fw.founder_ID = f.id where
+            fw.work_experience in (#{works})) ffw on ffe.project_id = p.id
+        </if>
+        <if test="dataVcType != '' and dataVcType != null">
+            right join (select iip.project_id from investment_institutions_project iip left join investment_institutions
+            ii on iip.investment_institutions_id = ii.id and ii.type in (dataVcType)) iid on iid.project_id = p.id
+        </if>
+        where 1=1
+        <if test="city != '' and city != null">
+            and p.city in (#{city})
+        </if>
+        <if test="stage != '' and stage != null">
+            AND pfl.stage in (#{stage})
+        </if>
+        <if test="keyWords != '' and keyWords != '' ">
+            AND (p.short_name like "%"#{keyWords}"%" or p.full_name like "%"#{keyWords}"%" or p.kernel_desc like "%"#{keyWords}"%" )
+        </if>
+        and pfl.financing_time between #{beginTime} and #{endTime}
+
+        group by p.short_name
+        limit #{offset},#{pageSize}
+        ) a left join (select count(user_id) followNum ,projects_id from follow group by projects_id) b on a.id =
+        b.projects_id
+        left join (select count(user_id) interviewNum ,projects_id from interview group by projects_id) c on a.id =
+        c.projects_id
     </select>
 </mapper>
