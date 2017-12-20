@@ -30,7 +30,7 @@ public class UsersTokenLts {
      * 应用id
      */
     @Column(name = "meta_app_id")
-    private String metaAppId;
+    private Integer metaAppId;
 
     /**
      * @return id
@@ -105,7 +105,7 @@ public class UsersTokenLts {
      *
      * @return meta_app_id - 应用id
      */
-    public String getMetaAppId() {
+    public Integer getMetaAppId() {
         return metaAppId;
     }
 
@@ -114,7 +114,7 @@ public class UsersTokenLts {
      *
      * @param metaAppId 应用id
      */
-    public void setMetaAppId(String metaAppId) {
+    public void setMetaAppId(Integer metaAppId) {
         this.metaAppId = metaAppId;
     }
 }
