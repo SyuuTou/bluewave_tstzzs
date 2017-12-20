@@ -47,6 +47,12 @@ public class UsersWeixin {
     private String openid;
 
     /**
+     * 应用id
+     */
+    @Column(name = "meta_app_id")
+    private Integer metaAppId;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -170,5 +176,23 @@ public class UsersWeixin {
      */
     public void setOpenid(String openid) {
         this.openid = openid;
+    }
+
+    /**
+     * 获取应用id
+     *
+     * @return meta_app_id - 应用id
+     */
+    public Integer getMetaAppId() {
+        return metaAppId;
+    }
+
+    /**
+     * 设置应用id
+     *
+     * @param metaAppId 应用id
+     */
+    public void setMetaAppId(Integer metaAppId) {
+        this.metaAppId = metaAppId;
     }
 }
