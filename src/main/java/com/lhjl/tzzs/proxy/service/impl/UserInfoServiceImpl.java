@@ -635,15 +635,15 @@ public class UserInfoServiceImpl implements UserInfoService{
 
         //解析行为类型字符串
         String[] actionType = null;
-        if (body.getActonType() != null){
-            actionType = body.getActonType().split(",");
+        if (body.getAction_type() != null){
+            actionType = body.getAction_type().split(",");
         }
 
         Integer contactType = null;
         String[] contactStatus = null;
         //解析联系类型字符串
-        if (body.getContactStatus() != null){
-            contactStatus = body.getContactStatus().split(",");
+        if (body.getContact_status() != null){
+            contactStatus = body.getContact_status().split(",");
             if (contactStatus.length >1){
                 contactStatus = null;
             }else {
