@@ -675,7 +675,7 @@ public class ProjectsServiceImpl implements ProjectsService {
                 StringBuffer touzifang= new StringBuffer();
                 if (projectFinancingHistoryInvestorsList.size() > 0){
                     if (projectFinancingHistoryInvestorsList.size() > 2){
-                        for (Integer i = 0;i < 1 ;i++){
+                        for (Integer i = 0;i < 2 ;i++){
                             touzifang.append(projectFinancingHistoryInvestorsList.get(i).getInvestorName());
                             touzifang.append(" ");
                         }
