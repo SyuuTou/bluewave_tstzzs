@@ -25,11 +25,11 @@ public class UserElegantServiceInputDto {
     /**
      * 行为类型
      */
-    private Integer actonType;
+    private String actonType;
     /**
      * 联系类型
      */
-    private Integer contactStatus;
+    private String contactStatus;
 
     public String getSearchWord() {
         return searchWord;
@@ -71,19 +71,19 @@ public class UserElegantServiceInputDto {
         this.pageSize = pageSize;
     }
 
-    public Integer getActonType() {
+    public String getActonType() {
         return actonType;
     }
 
-    public void setActonType(Integer actonType) {
+    public void setActonType(String actonType) {
         this.actonType = actonType;
     }
 
-    public Integer getContactStatus() {
+    public String getContactStatus() {
         return contactStatus;
     }
 
-    public void setContactStatus(Integer contactStatus) {
+    public void setContactStatus(String contactStatus) {
         this.contactStatus = contactStatus;
     }
 }

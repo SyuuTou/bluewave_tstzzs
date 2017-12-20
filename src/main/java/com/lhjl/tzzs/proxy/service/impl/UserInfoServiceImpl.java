@@ -632,8 +632,31 @@ public class UserInfoServiceImpl implements UserInfoService{
         }
 
         Integer startPage = (body.getCurrentPage()-1)*body.getPageSize();
+
+        //解析行为类型字符串
+        String[] actionType = null;
+        if (body.getActonType() != null){
+            actionType = body.getActonType().split(",");
+        }
+
+        Integer contactType = null;
+        String[] contactStatus = null;
+        //解析联系类型字符串
+        if (body.getContactStatus() != null){
+            contactStatus = body.getContactStatus().split(",");
+            if (contactStatus.length >1){
+                contactStatus = null;
+            }else {
+                if ("0".equals(contactStatus[0])){
+                    contactType =0;
+                }else {
+                    contactType =1;
+                }
+            }
+        }
+
         //获取到列表信息
-        List<Map<String,Object>> list = userChooseRecordMapper.getUserElegantLogList(body.getSearchWord(),body.getActonType(),body.getContactStatus(),body.getBeginTime(),body.getEndTime(),startPage,body.getPageSize());
+        List<Map<String,Object>> list = userChooseRecordMapper.getUserElegantLogList(body.getSearchWord(),actionType,contactStatus,body.getBeginTime(),body.getEndTime(),startPage,body.getPageSize(),contactType);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -652,7 +675,7 @@ public class UserInfoServiceImpl implements UserInfoService{
             m.putIfAbsent("desc","");
         }
 
-        Integer total = userChooseRecordMapper.getUserElegantLogListCount(body.getSearchWord(),body.getActonType(),body.getContactStatus(),body.getBeginTime(),body.getEndTime());
+        Integer total = userChooseRecordMapper.getUserElegantLogListCount(body.getSearchWord(),actionType,contactStatus,body.getBeginTime(),body.getEndTime(),contactType);
 
         map.put("list",list);
         map.put("currentPage",body.getCurrentPage());

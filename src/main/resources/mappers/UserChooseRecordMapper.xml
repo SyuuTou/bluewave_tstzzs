@@ -36,11 +36,17 @@
     <if test="beginTime != null and beginTime !='' ">
       and date(ucr.create_time)between(#{beginTime})and(#{endTime})
     </if>
-    <if test="actonType != null and actonType != ''">
-      and ucr.action_type = #{actonType}
+    <if test="actionType != null and actionType != ''">
+      and ucr.action_type in
+      <foreach close=")" collection="actionType" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="contactStatus != null and contactStatus != ''">
-      and acl.contact_status = #{contactStatus}
+    <if test="contactType != null and contactType !=''">
+      <if test="contactType != 0">
+        and acl.contact_status = 1
+      </if>
+      <if test="contactType != 1">
+        and acl.contact_status is null
+      </if>
     </if>
     <if test="searchWord != null and searchWord !=''">
       and u.actual_name like CONCAT(CONCAT('%', #{searchWord}), '%')
@@ -57,11 +63,17 @@
     <if test="beginTime != null and beginTime !='' ">
       and date(ucr.create_time)between(#{beginTime})and(#{endTime})
     </if>
-    <if test="actonType != null and actonType != ''">
-      and ucr.action_type = #{actonType}
+    <if test="actionType != null and actionType != ''">
+      and ucr.action_type in
+      <foreach close=")" collection="actionType" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="contactStatus != null and contactStatus != ''">
-      and acl.contact_status = #{contactStatus}
+    <if test="contactType != null and contactType !=''">
+      <if test="contactType != 0">
+        and acl.contact_status = 1
+      </if>
+      <if test="contactType != 1">
+        and acl.contact_status is null
+      </if>
     </if>
     <if test="searchWord != null and searchWord !=''">
       and u.company_duties like CONCAT(CONCAT('%', #{searchWord}), '%')
@@ -78,11 +90,17 @@
     <if test="beginTime != null and beginTime !='' ">
       and date(ucr.create_time)between(#{beginTime})and(#{endTime})
     </if>
-    <if test="actonType != null and actonType != ''">
-      and ucr.action_type = #{actonType}
+    <if test="actionType != null and actionType != ''">
+      and ucr.action_type in
+      <foreach close=")" collection="actionType" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="contactStatus != null and contactStatus != ''">
-      and acl.contact_status = #{contactStatus}
+    <if test="contactType != null and contactType !=''">
+      <if test="contactType != 0">
+        and acl.contact_status = 1
+      </if>
+      <if test="contactType != 1">
+        and acl.contact_status is null
+      </if>
     </if>
     <if test="searchWord != null and searchWord !=''">
       and  u.company_name like CONCAT(CONCAT('%', #{searchWord}), '%')
@@ -99,11 +117,17 @@
     <if test="beginTime != null and beginTime !='' ">
       and date(ucr.create_time)between(#{beginTime})and(#{endTime})
     </if>
-    <if test="actonType != null and actonType != ''">
-      and ucr.action_type = #{actonType}
+    <if test="actionType != null and actionType != ''">
+      and ucr.action_type in
+      <foreach close=")" collection="actionType" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="contactStatus != null and contactStatus != ''">
-      and acl.contact_status = #{contactStatus}
+    <if test="contactType != null and contactType !=''">
+      <if test="contactType != 0">
+        and acl.contact_status = 1
+      </if>
+      <if test="contactType != 1">
+        and acl.contact_status is null
+      </if>
     </if>
     <if test="searchWord != null and searchWord !=''">
       and ms.`desc` like CONCAT(CONCAT('%', #{searchWord}), '%')
@@ -126,11 +150,17 @@
     <if test="beginTime != null and beginTime !='' ">
       and date(ucr.create_time)between(#{beginTime})and(#{endTime})
     </if>
-    <if test="actonType != null and actonType != ''">
-      and ucr.action_type = #{actonType}
+    <if test="actionType != null and actionType != ''">
+      and ucr.action_type in
+      <foreach close=")" collection="actionType" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="contactStatus != null and contactStatus != ''">
-      and acl.contact_status = #{contactStatus}
+    <if test="contactType != null and contactType !=''">
+      <if test="contactType != 0">
+        and acl.contact_status = 1
+      </if>
+      <if test="contactType != 1">
+        and acl.contact_status is null
+      </if>
     </if>
     <if test="searchWord != null and searchWord !=''">
       and u.actual_name like CONCAT(CONCAT('%', #{searchWord}), '%')
@@ -147,11 +177,17 @@
     <if test="beginTime != null and beginTime !='' ">
       and date(ucr.create_time)between(#{beginTime})and(#{endTime})
     </if>
-    <if test="actonType != null and actonType != ''">
-      and ucr.action_type = #{actonType}
+    <if test="actionType != null and actionType != ''">
+      and ucr.action_type in
+      <foreach close=")" collection="actionType" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="contactStatus != null and contactStatus != ''">
-      and acl.contact_status = #{contactStatus}
+    <if test="contactType != null and contactType !=''">
+      <if test="contactType != 0">
+        and acl.contact_status = 1
+      </if>
+      <if test="contactType != 1">
+        and acl.contact_status is null
+      </if>
     </if>
     <if test="searchWord != null and searchWord !=''">
       and u.company_duties like CONCAT(CONCAT('%', #{searchWord}), '%')
@@ -168,11 +204,17 @@
     <if test="beginTime != null and beginTime !='' ">
       and date(ucr.create_time)between(#{beginTime})and(#{endTime})
     </if>
-    <if test="actonType != null and actonType != ''">
-      and ucr.action_type = #{actonType}
+    <if test="actionType != null and actionType != ''">
+      and ucr.action_type in
+      <foreach close=")" collection="actionType" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="contactStatus != null and contactStatus != ''">
-      and acl.contact_status = #{contactStatus}
+    <if test="contactType != null and contactType !=''">
+      <if test="contactType != 0">
+        and acl.contact_status = 1
+      </if>
+      <if test="contactType != 1">
+        and acl.contact_status is null
+      </if>
     </if>
     <if test="searchWord != null and searchWord !=''">
       and  u.company_name like CONCAT(CONCAT('%', #{searchWord}), '%')
@@ -189,11 +231,17 @@
     <if test="beginTime != null and beginTime !='' ">
       and date(ucr.create_time)between(#{beginTime})and(#{endTime})
     </if>
-    <if test="actonType != null and actonType != ''">
-      and ucr.action_type = #{actonType}
+    <if test="actionType != null and actionType != ''">
+      and ucr.action_type in
+      <foreach close=")" collection="actionType" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="contactStatus != null and contactStatus != ''">
-      and acl.contact_status = #{contactStatus}
+    <if test="contactType != null and contactType !=''">
+      <if test="contactType != 0">
+        and acl.contact_status = 1
+      </if>
+      <if test="contactType != 1">
+        and acl.contact_status is null
+      </if>
     </if>
     <if test="searchWord != null and searchWord !=''">
       and ms.`desc` like CONCAT(CONCAT('%', #{searchWord}), '%')
