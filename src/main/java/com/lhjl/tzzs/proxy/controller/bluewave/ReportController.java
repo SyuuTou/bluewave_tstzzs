@@ -45,6 +45,16 @@ public class ReportController {
         return result;
     }
 
+    @PostMapping("columns")
+    public CommonDto<String> columnSaveOrUpdate(@RequestBody MetaColumn column){
+        CommonDto<String> result = null;
+
+        result = columnService.saveOrUpdate(column);
+
+        return result;
+    }
+
+
     @GetMapping("segmentations")
     public CommonDto<List<MetaSegmentation>> segmentationQuery(){
         CommonDto<List<MetaSegmentation>> result = null;
