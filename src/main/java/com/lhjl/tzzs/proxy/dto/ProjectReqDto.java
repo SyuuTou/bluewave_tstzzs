@@ -24,7 +24,7 @@ public class ProjectReqDto {
     private String financingTime;
 
     private Integer pageNo;
-    private Integer pageSize;
+    private Integer pageSize = 10;
 
     private String beginTime;
     private String endTime;

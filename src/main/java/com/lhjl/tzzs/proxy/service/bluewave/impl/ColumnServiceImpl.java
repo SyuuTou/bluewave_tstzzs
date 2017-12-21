@@ -30,4 +30,17 @@ public class ColumnServiceImpl extends GenericService implements ColumnService {
 
         return result;
     }
+
+    @Override
+    public CommonDto<String> saveOrUpdate(MetaColumn column) {
+
+        Integer num = null;
+        if (null == column.getId()){
+            num = columnMapper.insert(column);
+        }else {
+            num = columnMapper.updateByPrimaryKeySelective(column);
+        }
+
+        return new CommonDto<>(String.valueOf(num),"success",200);
+    }
 }

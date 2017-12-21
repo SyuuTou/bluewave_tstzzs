@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ColumnService {
     CommonDto<List<MetaColumn>> queryAll();
+
+    CommonDto<String> saveOrUpdate(MetaColumn column);
 }
