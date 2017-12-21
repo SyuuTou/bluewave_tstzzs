@@ -535,8 +535,9 @@
         from(
         select p.id, p.short_name,p.full_name,p.kernel_desc,p.city,ps.segmentation_name,p.evaluation_recommend,pfl.stage
         from project_financing_log pfl left join projects p on pfl.project_id = p.id
+        right join project_segmentation ps on ps.project_id = p.id
         <if test="segmentation != '' and segmentation != null">
-            right join project_segmentation ps on ps.project_id = p.id and ps.segmentation_name in (#{segmentation})
+             and ps.segmentation_name in (#{segmentation})
         </if>
         <if test="edus != '' and edus != null">
             right join (select f.project_id from founders f right join founders_education fe on fe.founder_ID = f.id
