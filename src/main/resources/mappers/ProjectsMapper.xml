@@ -573,23 +573,16 @@
 
     <select id="projectFilterOne" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
         select a.id,
-        a.short_name,a.full_name,a.kernel_desc,a.city,
-        <if test="segmentation != '' and segmentation != null">
-        a.segmentation_name,
-        </if>
-        a.evaluation_recommend,a.stage,
+        a.short_name,a.full_name,a.kernel_desc,a.city,a.segmentation_name,a.evaluation_recommend,a.stage,
         case WHEN b.followNum = null then 0 ELSE b.followNum END followNum,
         case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
         case WHEN b.followNum = null OR b.followNum = 0 then 0 ELSE 1 END yn
         from(
-        select p.id, p.short_name,p.full_name,p.kernel_desc,p.city,
-        <if test="segmentation != '' and segmentation != null">
-        ps.segmentation_name,
-        </if>
-        p.evaluation_recommend,pfl.stage
+        select p.id, p.short_name,p.full_name,p.kernel_desc,p.city,GROUP_CONCAT(ps.segmentation_name) segmentation_name,p.evaluation_recommend,pfl.stage
         from project_financing_log pfl left join projects p on pfl.project_id = p.id
+        right join project_segmentation ps on ps.project_id = p.id
         <if test="segmentation != '' and segmentation != null">
-            right join project_segmentation ps on ps.project_id = p.id and ps.segmentation_name in (#{segmentation})
+            and ps.segmentation_name in (#{segmentation})
         </if>
         <if test="edus != '' and edus != null">
             right join (select f.project_id from founders f right join founders_education fe on fe.founder_ID = f.id
@@ -611,7 +604,7 @@
             AND pfl.stage in (#{stage})
         </if>
         <if test="keyWords != '' and keyWords != '' ">
-            AND (p.short_name like '%'#{keyWords}'%' or p.full_name like '%'#{keyWords}'%' or p.kernel_desc like '%'#{keyWords}'%' )
+            AND (p.short_name like "%"#{keyWords}"%" or p.full_name like "%"#{keyWords}"%" or p.kernel_desc like "%"#{keyWords}"%" )
         </if>
         and pfl.financing_time between #{beginTime} and #{endTime}
 
