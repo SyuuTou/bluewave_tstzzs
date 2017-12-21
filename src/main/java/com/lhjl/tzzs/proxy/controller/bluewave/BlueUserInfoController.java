@@ -31,6 +31,12 @@ public class BlueUserInfoController extends GenericService{
         return result;
     }
 
+    /**
+     * 修改用户头像接口
+     * @param appid
+     * @param body
+     * @return
+     */
     @PostMapping("/v{appid}/update/headpic")
     public CommonDto<String> updateUserHeadpic(@PathVariable Integer appid, @RequestBody Map<String,Object> body){
         CommonDto<String> result = new CommonDto<>();

@@ -87,6 +87,12 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
         return result;
     }
 
+    /**
+     * 修改用户头像接口
+     * @param appid
+     * @param body
+     * @return
+     */
     @Override
     public CommonDto<String> updateUserHeadpic(Integer appid, Map<String, Object> body) {
         CommonDto<String> result  =new CommonDto<>();
