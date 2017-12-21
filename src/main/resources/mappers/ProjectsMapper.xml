@@ -518,7 +518,7 @@
         <result column="full_name" jdbcType="VARCHAR" property="fullName"/>
         <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc"/>
         <result column="city" jdbcType="VARCHAR" property="city"/>
-        <result column="segmentation" jdbcType="VARCHAR" property="segmentation"/>
+        <result column="segmentation_name" jdbcType="VARCHAR" property="segmentation"/>
         <result column="evaluation_recommend" jdbcType="VARCHAR" property="evaluationRecommend"/>
         <result column="stage" jdbcType="VARCHAR" property="stage"/>
         <result column="followNum" jdbcType="INTEGER" property="followNum"/>
@@ -533,7 +533,7 @@
         case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
         case WHEN b.followNum = null OR b.followNum = 0 then 0 ELSE 1 END yn
         from(
-        select p.id, p.short_name,p.full_name,p.kernel_desc,p.city,ps.segmentation_name,p.evaluation_recommend,pfl.stage
+        select p.id, p.short_name,p.full_name,p.kernel_desc,p.city,GROUP_CONCAT(ps.segmentation_name) segmentation_name,p.evaluation_recommend,pfl.stage
         from project_financing_log pfl left join projects p on pfl.project_id = p.id
         right join project_segmentation ps on ps.project_id = p.id
         <if test="segmentation != '' and segmentation != null">
@@ -611,7 +611,7 @@
             AND pfl.stage in (#{stage})
         </if>
         <if test="keyWords != '' and keyWords != '' ">
-            AND (p.short_name like "%"#{keyWords}"%" or p.full_name like "%"#{keyWords}"%" or p.kernel_desc like "%"#{keyWords}"%" )
+            AND (p.short_name like '%'#{keyWords}'%' or p.full_name like '%'#{keyWords}'%' or p.kernel_desc like '%'#{keyWords}'%' )
         </if>
         and pfl.financing_time between #{beginTime} and #{endTime}
 
