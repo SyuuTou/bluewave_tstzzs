@@ -87,6 +87,60 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
         return result;
     }
 
+    @Override
+    public CommonDto<String> updateUserHeadpic(Integer appid, Map<String, Object> body) {
+        CommonDto<String> result  =new CommonDto<>();
+
+        if (appid == null){
+            result.setMessage("应用id不能为空");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+        if (body.get("token") == null || "".equals("token")){
+            result.setMessage("用户token不能为空");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+
+        if (body.get("headpic") == null || "".equals("headpic")){
+            result.setMessage("更新的头像不能为空");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+        String token = (String) body.get("token");
+        String headpic = (String)body.get("headpic");
+
+        Integer userId = userLoginService.getUserIdByToken(token);
+
+        if (userId == -1){
+            result.setMessage("用户token非法，请检查");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+        Users users = new Users();
+        users.setId(userId);
+        users.setHeadpicReal(headpic);
+
+        usersMapper.updateByPrimaryKeySelective(users);
+
+        result.setData(null);
+        result.setStatus(200);
+        result.setMessage("success");
+
+        return result;
+    }
+
     /**
      * 获取用户头像和姓名的方法
      * @param appid
