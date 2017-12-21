@@ -102,6 +102,8 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
     List<Map<String,Object>> findInstitutionProject(@Param("institutionId") Integer institutionId,@Param("stage") String stage,@Param("segmentationName") String[] segmentationName,@Param("financingTime") String[] financingTime,@Param("startNum") Integer startNum,@Param("pageSize") Integer pageSize);
 
     List<ProjectResDto> projectFilter(ProjectReqDto reqDto);
+
+    List<ProjectResDto> projectFilterOne(ProjectReqDto reqDto);
 }
 
 

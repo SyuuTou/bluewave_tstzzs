@@ -60,4 +60,37 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
 
         return new CommonDto<>(projectResDtos,"success", 200);
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public CommonDto<List<ProjectResDto>> projectFilterOrderByFinancing(ProjectReqDto reqDto) {
+
+        if (StringUtils.isNotEmpty(reqDto.getCity())){
+            reqDto.setCity("'"+reqDto.getCity().replace(",","','")+"'");
+        }
+
+        if (StringUtils.isNotEmpty(reqDto.getSegmentation())){
+            reqDto.setSegmentation("'"+reqDto.getSegmentation().replace(",","','")+"'");
+        }
+
+        if (StringUtils.isNotEmpty(reqDto.getEdus())){
+            reqDto.setEdus("'"+reqDto.getEdus().replace(",","','")+"'");
+        }
+
+        if (StringUtils.isNotEmpty(reqDto.getWorks())){
+            reqDto.setWorks("'"+reqDto.getWorks().replace(",","','")+"'");
+        }
+
+        if (StringUtils.isNotEmpty(reqDto.getStage())){
+            reqDto.setStage("'"+reqDto.getStage().replace(",","','")+"'");
+        }
+
+        reqDto.setBeginTime(beginTime);
+        reqDto.setEndTime(endTime);
+
+        reqDto.setOffset((reqDto.getPageNo()-1)*reqDto.getPageSize());
+        List<ProjectResDto> projectResDtos = projectsMapper.projectFilterOne(reqDto);
+
+        return new CommonDto<>(projectResDtos,"success", 200);
+    }
 }

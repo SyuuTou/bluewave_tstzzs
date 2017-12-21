@@ -9,4 +9,6 @@ import java.util.List;
 public interface ProjectSearchService {
 
     CommonDto<List<ProjectResDto>> projectFilter(ProjectReqDto reqDto);
+
+    CommonDto<List<ProjectResDto>> projectFilterOrderByFinancing(ProjectReqDto reqDto);
 }

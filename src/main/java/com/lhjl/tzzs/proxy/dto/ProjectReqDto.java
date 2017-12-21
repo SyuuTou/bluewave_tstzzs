@@ -30,6 +30,10 @@ public class ProjectReqDto {
     private String endTime;
 
     private Integer offset;
+    /**
+     * 是否按照融资时间排序
+     */
+    private Integer financingOrder;
 
 
     public String getToken() {
@@ -142,5 +146,13 @@ public class ProjectReqDto {
 
     public void setOffset(Integer offset) {
         this.offset = offset;
+    }
+
+    public Integer getFinancingOrder() {
+        return financingOrder;
+    }
+
+    public void setFinancingOrder(Integer financingOrder) {
+        this.financingOrder = financingOrder;
     }
 }

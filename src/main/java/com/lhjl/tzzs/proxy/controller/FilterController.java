@@ -27,4 +27,19 @@ public class FilterController extends GenericController {
 
         return result;
     }
+
+    @PostMapping("project/search/financingtime")
+    public CommonDto<List<ProjectResDto>> searchRecently(@RequestBody ProjectReqDto reqDto){
+        CommonDto<List<ProjectResDto>> result  = new CommonDto<>();
+        try {
+            result = projectSearchService.projectFilterOrderByFinancing(reqDto);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+        }
+
+        return result;
+    }
 }
