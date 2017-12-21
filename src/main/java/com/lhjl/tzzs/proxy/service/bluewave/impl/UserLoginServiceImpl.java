@@ -437,7 +437,7 @@ public class UserLoginServiceImpl implements UserLoginService{
         usersTokenLts.setMetaAppId(appid);
 
         List<UsersTokenLts> usersTokenLtsList = usersTokenLtsMapper.select(usersTokenLts);
-        if (usersTokenLtsList == null){
+        if (usersTokenLtsList.size() < 1){
               result.setData(null);
               result.setMessage("用户token不存在");
               result.setStatus(502);
