@@ -284,7 +284,7 @@ public class UserLoginServiceImpl implements UserLoginService{
             String openId = session.getOpenid();
             String sessionKey = session.getSessionKey();
             String unionid = "testunionid";
-            if (session.getUnionid() == null){
+            if (session.getUnionid() != null){
                 unionid = session.getUnionid();
             }
 
