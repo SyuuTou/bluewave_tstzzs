@@ -531,6 +531,21 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
         }
 
         list = investmentInstitutionsMapper.findRecentlyActiveInstitution(startPage,pageSize);
+        if (list.size() > 0){
+            for (InvestmentInstitutionsDto iid:list){
+                if (iid.getCount() == null){
+                    iid.setCount(0);
+                }
+
+                if (iid.getKenelCase() == null){
+                    if (iid.getComment() != null){
+                        iid.setKenelCase(iid.getComment());
+                    }else {
+                        iid.setKenelCase("");
+                    }
+                }
+            }
+        }
 
         //判断身份类型
         Example investorExample = new Example(Investors.class);
