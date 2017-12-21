@@ -536,6 +536,14 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
                 if (iid.getCount() == null){
                     iid.setCount(0);
                 }
+
+                if (iid.getKenelCase() == null){
+                    if (iid.getComment() != null){
+                        iid.setKenelCase(iid.getComment());
+                    }else {
+                        iid.setKenelCase("");
+                    }
+                }
             }
         }
 
