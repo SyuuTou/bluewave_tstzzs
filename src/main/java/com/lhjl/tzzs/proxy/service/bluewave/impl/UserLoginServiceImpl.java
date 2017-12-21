@@ -283,7 +283,10 @@ public class UserLoginServiceImpl implements UserLoginService{
 
             String openId = session.getOpenid();
             String sessionKey = session.getSessionKey();
-            String unionid = session.getUnionid();
+            String unionid = "testunionid";
+            if (session.getUnionid() == null){
+                unionid = session.getUnionid();
+            }
 
             result = userRegister(openId, unionid, appid);
 
@@ -532,6 +535,9 @@ public class UserLoginServiceImpl implements UserLoginService{
             UsersWeixinLts usersWeixinLtsForInsert = new UsersWeixinLts();
             usersWeixinLtsForInsert.setNickName(userInfo.getNickName());
             usersWeixinLtsForInsert.setOpenid(userInfo.getOpenId());
+            if (userInfo.getUnionId() == null){
+                userInfo.setUnionId("");
+            }
             usersWeixinLtsForInsert.setUnionId(userInfo.getUnionId());
             usersWeixinLtsForInsert.setMetaAppId(appid);
             usersWeixinLtsForInsert.setUserId(userId);
