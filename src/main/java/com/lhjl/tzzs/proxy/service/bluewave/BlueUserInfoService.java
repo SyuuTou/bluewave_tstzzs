@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.service.bluewave;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.bluewave.UserHeadPicOutputDto;
+import com.lhjl.tzzs.proxy.dto.bluewave.UserInfomationInputDto;
 import com.lhjl.tzzs.proxy.dto.bluewave.UserInformationOutputDto;
 import com.lhjl.tzzs.proxy.model.MetaIdentityType;
 
@@ -39,4 +40,11 @@ public interface BlueUserInfoService {
      * @return
      */
     CommonDto<List<MetaIdentityType>> getMetaIdentityType();
+
+    /**
+     * 编辑用户信息的接口
+     * @param body
+     * @return
+     */
+    CommonDto<String> editUserInfo(UserInfomationInputDto body);
 }

@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.controller.bluewave;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.bluewave.UserHeadPicOutputDto;
+import com.lhjl.tzzs.proxy.dto.bluewave.UserInfomationInputDto;
 import com.lhjl.tzzs.proxy.dto.bluewave.UserInformationOutputDto;
 import com.lhjl.tzzs.proxy.model.MetaIdentityType;
 import com.lhjl.tzzs.proxy.service.GenericService;
@@ -88,6 +89,21 @@ public class BlueUserInfoController extends GenericService{
             result.setData(null);
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
+        }
+
+        return result;
+    }
+
+    @PostMapping("/v{appid}/edit/userinfo")
+    public CommonDto<String> editUserInfo(@PathVariable Integer appid, @RequestBody UserInfomationInputDto body){
+        CommonDto<String> result = new CommonDto<>();
+        try {
+            result = blueUserInfoService.editUserInfo(body);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
         }
 
         return result;
