@@ -494,7 +494,7 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 ProjectSendLogs p2 = new ProjectSendLogs();
                                 p2.setCompanyShortName(params.getCompanyshortname());
                                 p2 = projectSendLogsMapper.selectOne(p2);
-                                if (p2 == null) {
+
                                     Users users = new Users();
                                     users.setId(userId);
                                     users = usersMapper.selectByPrimaryKey(users);
@@ -742,16 +742,12 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                         foundersWork.setFounderId(foundersId);
                                         foundersWorkMapper.delete(foundersWork);
                                     }
-                                } else {
-                                    result.setStatus(5002);
-                                    result.setMessage("不能提交重复的项目");
-                                }
                             }
                         }else{
                             ProjectSendLogs p2 = new ProjectSendLogs();
                             p2.setCompanyShortName(params.getCompanyshortname());
                             p2 = projectSendLogsMapper.selectOne(p2);
-                            if (p2 == null) {
+
                                 Users users = new Users();
                                 users.setId(userId);
                                 users = usersMapper.selectByPrimaryKey(users);
@@ -1000,17 +996,12 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                     foundersWork.setFounderId(foundersId);
                                     foundersWorkMapper.delete(foundersWork);
                                 }
-                            } else {
-                                result.setStatus(5002);
-                                result.setMessage("不能提交重复的项目");
-                            }
                         }
 
                     }else{
                         ProjectSendLogs p2 = new ProjectSendLogs();
                         p2.setCompanyShortName(params.getCompanyshortname());
                         p2 = projectSendLogsMapper.selectOne(p2);
-                        if (p2 == null) {
                             Users users = new Users();
                             users.setId(userId);
                             users = usersMapper.selectByPrimaryKey(users);
@@ -1277,17 +1268,12 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 foundersWork.setFounderId(foundersId);
                                 foundersWorkMapper.delete(foundersWork);
                             }
-                        } else {
-                            result.setStatus(5002);
-                            result.setMessage("不能提交重复的项目");
-                        }
                     }
                     //条件1
                 }else{
                 	ProjectSendLogs p2 = new ProjectSendLogs();
                     p2.setCompanyShortName(params.getCompanyshortname());
                     p2 = projectSendLogsMapper.selectOne(p2);
-                    if (p2 == null) {
                         Users users = new Users();
                         users.setId(userId);
                         users = usersMapper.selectByPrimaryKey(users);
@@ -1537,16 +1523,11 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                             foundersWork.setFounderId(foundersId);
                             foundersWorkMapper.delete(foundersWork);
                         }
-                    } else {
-                        result.setStatus(5002);
-                        result.setMessage("不能提交重复的项目");
-                    }
                 }
                 } else {
                     ProjectSendLogs p2 = new ProjectSendLogs();
                     p2.setCompanyShortName(params.getCompanyshortname());
                     p2 = projectSendLogsMapper.selectOne(p2);
-                    if (p2 == null) {
                         Users users = new Users();
                         users.setId(userId);
                         users = usersMapper.selectByPrimaryKey(users);
@@ -1746,10 +1727,6 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                             foundersWork.setFounderId(foundersId);
                             foundersWorkMapper.delete(foundersWork);
                         }
-                    } else {
-                        result.setStatus(5002);
-                        result.setMessage("不能提交重复的项目");
-                    }
                 }
 
             return result;
