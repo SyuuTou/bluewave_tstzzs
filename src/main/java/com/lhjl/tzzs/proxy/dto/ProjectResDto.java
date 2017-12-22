@@ -27,6 +27,8 @@ public class ProjectResDto {
     /**  */
     private Integer yn;
 
+    private Integer projectId;
+
     public Integer getID() {
         return ID;
     }
@@ -113,5 +115,13 @@ public class ProjectResDto {
 
     public void setYn(Integer yn) {
         this.yn = yn;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
     }
 }
