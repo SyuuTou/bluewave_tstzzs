@@ -527,7 +527,7 @@
     </resultMap>
 
     <select id="projectFilter" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
-        select a.id,
+        select a.id as projectId,
         a.short_name,a.full_name,a.kernel_desc,a.city,a.segmentation_name,a.evaluation_recommend,a.stage,
         case WHEN b.followNum = null then 0 ELSE b.followNum END followNum,
         case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
@@ -572,7 +572,7 @@
     </select>
 
     <select id="projectFilterOne" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
-        select a.id,
+        select a.id as projectId,
         a.short_name,a.full_name,a.kernel_desc,a.city,a.segmentation_name,a.evaluation_recommend,a.stage,
         case WHEN b.followNum = null then 0 ELSE b.followNum END followNum,
         case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
