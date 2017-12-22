@@ -224,6 +224,7 @@
         select ii.* from project_financing_log pfl
         left join investment_institutions_project iip on  iip.project_id = pfl.ID
         left join investment_institutions ii on iip.investment_institutions_id = ii.ID
+        where ii.short_name is not null
         group by ii.short_name
         order by pfl.financing_time desc
         limit #{startPage},#{pageSize}
