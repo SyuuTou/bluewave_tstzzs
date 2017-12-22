@@ -33,9 +33,10 @@ public class UserFilterLogController {
         String education = body.get("education");
         String work = body.get("work");
         String user_id = body.get("user_id");
+        String financingYear = body.get("financingYear");
 
         try {
-            result = userFilterLogService.userFilterAddLog( investment_institutions_type, investment_institutions_field, financing_stage, city, education, work, user_id);
+            result = userFilterLogService.userFilterAddLog( investment_institutions_type, investment_institutions_field, financing_stage, city, education, work, user_id,financingYear);
 
         }catch (Exception e){
             result.setMessage(e.getMessage());
@@ -55,8 +56,8 @@ public class UserFilterLogController {
      * @return
      */
     @GetMapping("user/filter/rlog/{id}")
-    public CommonDto<UserFilterLog> getLastLog(@PathVariable String id){
-        CommonDto<UserFilterLog> result =new CommonDto<UserFilterLog>();
+    public CommonDto<Map<String,Object>> getLastLog(@PathVariable String id){
+        CommonDto<Map<String,Object>> result =new CommonDto<>();
 
         try {
             result = userFilterLogService.userFilterSearchLog(id);
