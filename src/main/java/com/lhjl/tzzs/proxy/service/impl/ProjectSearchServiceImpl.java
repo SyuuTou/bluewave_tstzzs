@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("projectSearchService")
@@ -92,7 +93,13 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
         reqDto.setEndTime(endTime);
 
         reqDto.setOffset((reqDto.getPageNo()-1)*reqDto.getPageSize());
-        List<ProjectResDto> projectResDtos = projectsMapper.projectFilterOne(reqDto);
+        List<ProjectResDto> projectResDtos = new ArrayList<>();
+        if (reqDto.getFinancingRecently() == 1){
+            projectResDtos = projectsMapper.projectFilterTwo(reqDto);
+        }else {
+            projectResDtos = projectsMapper.projectFilterOne(reqDto);
+        }
+
 
         return new CommonDto<>(projectResDtos,"success", 200);
     }

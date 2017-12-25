@@ -43,7 +43,13 @@ public class UserFilterLog {
     private String work;
 
     /**
-     * 筛选用户id
+     * 融资年份
+     */
+    @Column(name = "financing_year")
+    private String financingYear;
+
+    /**
+     * 筛选用户id(MD5)关联原平台用户id
      */
     @Column(name = "user_id")
     private String userId;
@@ -176,18 +182,36 @@ public class UserFilterLog {
     }
 
     /**
-     * 获取筛选用户id
+     * 获取融资年份
      *
-     * @return user_id - 筛选用户id
+     * @return financing_year - 融资年份
+     */
+    public String getFinancingYear() {
+        return financingYear;
+    }
+
+    /**
+     * 设置融资年份
+     *
+     * @param financingYear 融资年份
+     */
+    public void setFinancingYear(String financingYear) {
+        this.financingYear = financingYear;
+    }
+
+    /**
+     * 获取筛选用户id(MD5)关联原平台用户id
+     *
+     * @return user_id - 筛选用户id(MD5)关联原平台用户id
      */
     public String getUserId() {
         return userId;
     }
 
     /**
-     * 设置筛选用户id
+     * 设置筛选用户id(MD5)关联原平台用户id
      *
-     * @param userId 筛选用户id
+     * @param userId 筛选用户id(MD5)关联原平台用户id
      */
     public void setUserId(String userId) {
         this.userId = userId;

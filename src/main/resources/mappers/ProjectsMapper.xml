@@ -527,11 +527,12 @@
     </resultMap>
 
     <select id="projectFilter" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
-        select a.id,
+        select a.id as projectId,
         a.short_name,a.full_name,a.kernel_desc,a.city,a.segmentation_name,a.evaluation_recommend,a.stage,
         case WHEN b.followNum = null then 0 ELSE b.followNum END followNum,
         case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
-        case WHEN b.followNum = null OR b.followNum = 0 then 0 ELSE 1 END yn
+        case WHEN b.followNum = null OR b.followNum = 0 then 0 ELSE 1 END yn,
+        case WHEN d.`status` = 0 then 1 else 0 END `status`
         from(
         select p.id, p.short_name,p.full_name,p.kernel_desc,p.city,GROUP_CONCAT(ps.segmentation_name) segmentation_name,p.evaluation_recommend,pfl.stage
         from project_financing_log pfl left join projects p on pfl.project_id = p.id
@@ -549,7 +550,7 @@
         </if>
         <if test="dataVcType != '' and dataVcType != null">
             right join (select iip.project_id from investment_institutions_project iip left join investment_institutions
-            ii on iip.investment_institutions_id = ii.id and ii.type in (${dataVcType})) iid on iid.project_id = p.id
+            ii on iip.investment_institutions_id = ii.id and ii.type in (dataVcType)) iid on iid.project_id = p.id
         </if>
         where 1=1
         <if test="city != '' and city != null">
@@ -569,27 +570,23 @@
         b.projects_id
         left join (select count(user_id) interviewNum ,projects_id from interview group by projects_id) c on a.id =
         c.projects_id
+        left join (SELECT `status`,projects_id FROM follow where user_id = #{token}
+        and `status` = 0) d on a.id = d.projects_id
     </select>
 
     <select id="projectFilterOne" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
-        select a.id,
-        a.short_name,a.full_name,a.kernel_desc,a.city,
-        <if test="segmentation != '' and segmentation != null">
-        a.segmentation_name,
-        </if>
-        a.evaluation_recommend,a.stage,
+        select a.id as projectId,
+        a.short_name,a.full_name,a.kernel_desc,a.city,a.segmentation_name,a.evaluation_recommend,a.stage,
         case WHEN b.followNum = null then 0 ELSE b.followNum END followNum,
         case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
-        case WHEN b.followNum = null OR b.followNum = 0 then 0 ELSE 1 END yn
+        case WHEN b.followNum = null OR b.followNum = 0 then 0 ELSE 1 END yn,
+        case WHEN d.`status` = 0 then 1 else 0 END `status`
         from(
-        select p.id, p.short_name,p.full_name,p.kernel_desc,p.city,
-        <if test="segmentation != '' and segmentation != null">
-        ps.segmentation_name,
-        </if>
-        p.evaluation_recommend,pfl.stage
+        select p.id, p.short_name,p.full_name,p.kernel_desc,p.city,GROUP_CONCAT(ps.segmentation_name) segmentation_name,p.evaluation_recommend,pfl.stage
         from project_financing_log pfl left join projects p on pfl.project_id = p.id
+        right join project_segmentation ps on ps.project_id = p.id
         <if test="segmentation != '' and segmentation != null">
-            right join project_segmentation ps on ps.project_id = p.id and ps.segmentation_name in (#{segmentation})
+            and ps.segmentation_name in (#{segmentation})
         </if>
         <if test="edus != '' and edus != null">
             right join (select f.project_id from founders f right join founders_education fe on fe.founder_ID = f.id
@@ -611,7 +608,7 @@
             AND pfl.stage in (#{stage})
         </if>
         <if test="keyWords != '' and keyWords != '' ">
-            AND (p.short_name like '%'#{keyWords}'%' or p.full_name like '%'#{keyWords}'%' or p.kernel_desc like '%'#{keyWords}'%' )
+            AND (p.short_name like "%"#{keyWords}"%" or p.full_name like "%"#{keyWords}"%" or p.kernel_desc like "%"#{keyWords}"%" )
         </if>
         and pfl.financing_time between #{beginTime} and #{endTime}
 
@@ -624,5 +621,60 @@
         b.projects_id
         left join (select count(user_id) interviewNum ,projects_id from interview group by projects_id) c on a.id =
         c.projects_id
+        left join (SELECT `status`,projects_id FROM follow where user_id = #{token}
+        and `status` = 0) d on a.id = d.projects_id
+    </select>
+
+    <select id="projectFilterTwo" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
+        select a.id as projectId,
+        a.short_name,a.full_name,a.kernel_desc,a.city,a.segmentation_name,a.evaluation_recommend,a.stage,
+        case WHEN b.followNum = null then 0 ELSE b.followNum END followNum,
+        case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
+        case WHEN b.followNum = null OR b.followNum = 0 then 0 ELSE 1 END yn,
+        case WHEN d.`status` = 0 then 1 else 0 END `status`
+        from(
+        select p.id, p.short_name,p.full_name,p.kernel_desc,p.city,GROUP_CONCAT(ps.segmentation_name) segmentation_name,p.evaluation_recommend,pfl.stage
+        from project_financing_log pfl left join projects p on pfl.project_id = p.id
+        right join project_segmentation ps on ps.project_id = p.id
+        <if test="segmentation != '' and segmentation != null">
+            and ps.segmentation_name in (#{segmentation})
+        </if>
+        <if test="edus != '' and edus != null">
+            right join (select f.project_id from founders f right join founders_education fe on fe.founder_ID = f.id
+            where fe.education_experience in (#{edus})) ffe on ffe.project_id = p.id
+        </if>
+        <if test="works != '' and works != null">
+            right join (select f.project_id from founders f right join founders_work fw on fw.founder_ID = f.id where
+            fw.work_experience in (#{works})) ffw on ffe.project_id = p.id
+        </if>
+        <if test="dataVcType != '' and dataVcType != null">
+            right join (select iip.project_id from investment_institutions_project iip left join investment_institutions
+            ii on iip.investment_institutions_id = ii.id and ii.type in (#{dataVcType})) iid on iid.project_id = p.id
+        </if>
+        where 1=1
+        <if test="city != '' and city != null">
+            and p.city in (#{city})
+        </if>
+        <if test="stage != '' and stage != null">
+            AND pfl.stage in (#{stage})
+        </if>
+        <if test="keyWords != '' and keyWords != '' ">
+            AND (p.short_name like "%"#{keyWords}"%" or p.full_name like "%"#{keyWords}"%" or p.kernel_desc like "%"#{keyWords}"%" )
+        </if>
+        <if test="financingRecently != '' and financingRecently != null">
+            and p.project_source is not null
+        </if>
+        <!--and pfl.financing_time between #{beginTime} and #{endTime}-->
+        group by p.short_name
+        <if test="financingOrder != '' and financingOrder != null">
+            order by pfl.financing_time desc
+        </if>
+        limit #{offset},#{pageSize}
+        ) a left join (select count(user_id) followNum ,projects_id from follow group by projects_id) b on a.id =
+        b.projects_id
+        left join (select count(user_id) interviewNum ,projects_id from interview group by projects_id) c on a.id =
+        c.projects_id
+        left join (SELECT `status`,projects_id FROM follow where user_id = #{token}
+        and `status` = 0) d on a.id = d.projects_id
     </select>
 </mapper>

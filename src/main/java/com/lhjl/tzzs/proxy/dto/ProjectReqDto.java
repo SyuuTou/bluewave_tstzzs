@@ -35,6 +35,11 @@ public class ProjectReqDto {
      */
     private Integer financingOrder;
 
+    /**
+     * 是否查询最近获投的项目
+     */
+    private Integer financingRecently;
+
 
     public String getToken() {
         return token;
@@ -154,5 +159,13 @@ public class ProjectReqDto {
 
     public void setFinancingOrder(Integer financingOrder) {
         this.financingOrder = financingOrder;
+    }
+
+    public Integer getFinancingRecently() {
+        return financingRecently;
+    }
+
+    public void setFinancingRecently(Integer financingRecently) {
+        this.financingRecently = financingRecently;
     }
 }

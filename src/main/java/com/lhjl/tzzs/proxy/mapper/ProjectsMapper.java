@@ -104,6 +104,8 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
     List<ProjectResDto> projectFilter(ProjectReqDto reqDto);
 
     List<ProjectResDto> projectFilterOne(ProjectReqDto reqDto);
+
+    List<ProjectResDto> projectFilterTwo(ProjectReqDto reqDto);
 }
 
 
