@@ -1,6 +1,5 @@
 package com.lhjl.tzzs.proxy.conf;
 
-import cn.binarywang.wx.miniapp.api.WxMaService;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;

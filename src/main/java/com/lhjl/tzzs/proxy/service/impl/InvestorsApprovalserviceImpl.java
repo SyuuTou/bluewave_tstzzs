@@ -772,14 +772,14 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				if (status == 1 || status == 2) {//认证失败
 					datas.add(new WxMaTemplateMessage.Data("keyword1",name));
 //					datas.add(new WxMaTemplateMessage.Data("keyword2",xiaoxi,"#EA4343"));
-					this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("RcjdkVcWR9K3Jmfz2HVbMKKLoVHhXEJkpz42Lgr6t6E").formId(formId).toUser(openId).data(datas).build());
+					this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.builder().templateId("RcjdkVcWR9K3Jmfz2HVbMKKLoVHhXEJkpz42Lgr6t6E").formId(formId).toUser(openId).data(datas).build());
 				}
 
 				if (status == 3 || status == 4 || status == 5) { //认证成功
 					datas.add(new WxMaTemplateMessage.Data("keyword1",name));
 					datas.add(new WxMaTemplateMessage.Data("keyword2",xiaoxi,"#EA4343"));
 					datas.add(new WxMaTemplateMessage.Data("keyword3",desc));
-					this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("IQL59_p78hezrN9Oz6UAStwSyFk8ZbLgVPaPqEi1KyA").formId(formId).toUser(openId).data(datas).page("pages/boot/boot").build());
+					this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.builder().templateId("IQL59_p78hezrN9Oz6UAStwSyFk8ZbLgVPaPqEi1KyA").formId(formId).toUser(openId).data(datas).page("pages/boot/boot").build());
 				}
 			} catch (WxErrorException e) {
 				e.printStackTrace();

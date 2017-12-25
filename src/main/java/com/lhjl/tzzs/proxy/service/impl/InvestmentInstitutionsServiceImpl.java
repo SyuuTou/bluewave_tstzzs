@@ -1,6 +1,11 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import com.github.stuxuhai.jpinyin.PinyinException;
+import com.github.stuxuhai.jpinyin.PinyinFormat;
+import com.github.stuxuhai.jpinyin.PinyinHelper;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ImageHandlerDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressMapper;
@@ -9,13 +14,21 @@ import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsSegmentationMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsStageMapper;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddress;
-import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsSegmentation;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
+import com.lhjl.tzzs.proxy.utils.MD5Util;
+import me.chanjar.weixin.common.exception.WxErrorException;
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Positions;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 @Service
@@ -33,6 +46,9 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
 
     @Autowired
     private InvestmentInstitutionsAddressMapper investmentInstitutionsAddressMapper;
+
+    @Autowired
+    private WxMaService qrcodeService;
 
     @Override
     public CommonDto<InvestmentInstitutionComplexOutputDto> getInvestmentInstitutionsComlexInfo(Map<String,Integer> body){
@@ -263,5 +279,47 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
         result.setMessage("success");
 
         return result;
+    }
+
+    @Transactional
+    @Override
+    public InputStream imageHandler(ImageHandlerDto reqDto) {
+
+        InvestmentInstitutions query = new InvestmentInstitutions();
+        query.setShortName(reqDto.getName());
+        List<InvestmentInstitutions> investmentInstitutions = investmentInstitutionsMapper.select(query);
+        if (null == investmentInstitutions || investmentInstitutions.size() == 0){
+            return null;
+        }
+        InvestmentInstitutions ii = investmentInstitutions.get(0);
+        if (null == ii.getKeyWords() || ii.getKeyWords().equals("")){
+            try {
+                String keyWords = MD5Util.md5Encode(PinyinHelper.convertToPinyinString(reqDto.getName(), "", PinyinFormat.WITHOUT_TONE).toUpperCase(),"").substring(12,32);
+                ii.setKeyWords(keyWords);
+                investmentInstitutionsMapper.updateByPrimaryKey(ii);
+            } catch (PinyinException e) {
+                log.error(e.getLocalizedMessage(),e.fillInStackTrace());
+            }
+        }
+
+        ;
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        try {
+
+            File img2 = qrcodeService.getQrcodeService().createQrcode("pages/discovery/activity/activitydetail/activitydetail?id=28",reqDto.getW());
+
+            File img =  qrcodeService.getQrcodeService().createWxCodeLimit(ii.getKeyWords()+"_"+reqDto.getActivityId(),reqDto.getPath(),reqDto.getW(),true,null);
+            BufferedImage qcode = ImageIO.read(img);
+            Thumbnails.of(new URL(reqDto.getTemplateUrl()).openStream()).size(750,7452).sourceRegion(reqDto.getX(),reqDto.getY(),reqDto.getW(),reqDto.getH()).watermark(Positions.CENTER, qcode,1.0f).toOutputStream(os);
+//            ImageIO.write(scaledImage, "jpg", os);
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage(),e.fillInStackTrace());
+        } catch (WxErrorException e) {
+            log.error(e.getLocalizedMessage(),e.fillInStackTrace());
+        } catch (Exception e){
+            log.error(e.getLocalizedMessage(),e.fillInStackTrace());
+        }
+
+        return new ByteArrayInputStream(os.toByteArray());
     }
 }
