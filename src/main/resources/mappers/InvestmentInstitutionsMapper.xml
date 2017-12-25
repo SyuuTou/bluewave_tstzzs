@@ -229,6 +229,7 @@
         WHERE investment_institutions_id IS NOT NULL
         ORDER BY pfl.financing_time DESC) u  ON u.investment_institutions_id =ii.id
         ORDER BY u.financing_time DESC
+        group by ii.short_name
         limit #{startPage},#{pageSize}
     </select>
 </mapper>
