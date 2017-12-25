@@ -91,9 +91,13 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
 
         reqDto.setOffset((reqDto.getPageNo()-1)*reqDto.getPageSize());
         List<ProjectResDto> projectResDtos = new ArrayList<>();
-        if (reqDto.getFinancingRecently() == 1){
-            projectResDtos = projectsMapper.projectFilterTwo(reqDto);
-        }else {
+        if (reqDto.getFinancingRecently() != null){
+            if (reqDto.getFinancingRecently() == 1){
+                projectResDtos = projectsMapper.projectFilterTwo(reqDto);
+            } else {
+                projectResDtos = projectsMapper.projectFilterOne(reqDto);
+            }
+        } else {
             projectResDtos = projectsMapper.projectFilterOne(reqDto);
         }
 
