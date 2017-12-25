@@ -623,6 +623,7 @@
         c.projects_id
         left join (SELECT `status`,projects_id FROM follow where user_id = #{token}
         and `status` = 0) d on a.id = d.projects_id
+        group by a.short_name
     </select>
 
     <select id="projectFilterTwo" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
@@ -676,5 +677,6 @@
         c.projects_id
         left join (SELECT `status`,projects_id FROM follow where user_id = #{token}
         and `status` = 0) d on a.id = d.projects_id
+        group by a.short_name
     </select>
 </mapper>
