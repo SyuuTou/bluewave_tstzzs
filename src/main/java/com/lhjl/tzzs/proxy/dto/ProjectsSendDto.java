@@ -110,19 +110,39 @@ public class ProjectsSendDto {
      */
     private String xmid;
 
+    /**
+     * 项目logo
+     */
     private String logo;
 
+    /**
+     * 公司简称
+     */
     private String companyshortname;
 
-
+    /**
+     * 一句话介绍
+     */
     private String oneintroduct;
 
+    /**
+     * 项目亮点
+     */
     private String highlights;
 
+    /**
+     * 官网
+     */
     private String website;
 
+    /**
+     * 竞品
+     */
     private String competing;
 
+    /**
+     * 信息流进来的项目id(仅信息流)
+     */
     private Integer pid;
 
     public Integer getPid() {
