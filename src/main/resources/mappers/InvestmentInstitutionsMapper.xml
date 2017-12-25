@@ -221,7 +221,7 @@
         ORDER BY ii.sort
     </select>
     <select id="findRecentlyActiveInstitution" resultMap="newDtoMap">
-        SELECT ii.short_name FROM
+        SELECT ii.* FROM
         investment_institutions ii
         LEFT JOIN (
         SELECT iip.investment_institutions_id,iip.financing_time FROM
