@@ -567,7 +567,7 @@
 
         group by p.short_name
         limit #{offset},#{pageSize}
-        ) a left join (select count(user_id) followNum ,projects_id from follow group by projects_id) b on a.id =
+        ) a left join (select count(user_id) followNum ,projects_id from follow where `status`=1 group by projects_id) b on a.id =
         b.projects_id
         left join (select count(user_id) interviewNum ,projects_id from interview group by projects_id) c on a.id =
         c.projects_id
@@ -618,7 +618,7 @@
             order by pfl.financing_time desc
         </if>
         limit #{offset},#{pageSize}
-        ) a left join (select count(user_id) followNum ,projects_id from follow group by projects_id) b on a.id =
+        ) a left join (select count(user_id) followNum ,projects_id from follow where `status`=1 group by projects_id) b on a.id =
         b.projects_id
         left join (select count(user_id) interviewNum ,projects_id from interview group by projects_id) c on a.id =
         c.projects_id
@@ -671,7 +671,7 @@
             order by pfl.financing_time desc
         </if>
         limit #{offset},#{pageSize}
-        ) a left join (select count(user_id) followNum ,projects_id from follow group by projects_id) b on a.id =
+        ) a left join (select count(user_id) followNum ,projects_id from follow where `status`=1 group by projects_id) b on a.id =
         b.projects_id
         left join (select count(user_id) interviewNum ,projects_id from interview group by projects_id) c on a.id =
         c.projects_id
