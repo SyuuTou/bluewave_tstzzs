@@ -311,11 +311,11 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
 
-            File img = qrcodeService.getQrcodeService().createQrcode(reqDto.getPath()+"&jg="+ii.getKeyWords(),reqDto.getW());
-
-//            File img =  qrcodeService.getQrcodeService().createWxCodeLimit(ii.getKeyWords()+"_"+reqDto.getActivityId(),reqDto.getPath(),reqDto.getW(),true,null);
+            File img = qrcodeService.getQrcodeService().createWxCode(reqDto.getPath()+"&jg="+ii.getKeyWords(),reqDto.getW());
+//
+//            File img =  qrcodeService.getQrcodeService().createWxCode().createWxCodeLimit(ii.getKeyWords()+"_"+reqDto.getActivityId(),reqDto.getPath(),reqDto.getW(),true,null);
             BufferedImage qcode = ImageIO.read(img);
-            Thumbnails.of(new URL(reqDto.getTemplateUrl()).openStream()).size(reqDto.getW(),reqDto.getH()).watermark(new Position() {
+            Thumbnails.of(new URL(reqDto.getTemplateUrl()).openStream()).size(750,7452).watermark(new Position() {
                 @Override
                 public Point calculate(int enclosingWidth, int enclosingHeight, int width, int height, int insetLeft, int insetRight, int insetTop, int insetBottom) {
                     return new Point(reqDto.getX(),reqDto.getY());
