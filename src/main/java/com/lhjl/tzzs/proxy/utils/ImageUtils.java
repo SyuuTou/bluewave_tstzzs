@@ -17,6 +17,9 @@ import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URI;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 
@@ -467,6 +470,33 @@ public class ImageUtils {
             // 水印文件结束
             g.dispose();
             ImageIO.write((BufferedImage) image, "JPEG", new File(destImageFile));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public final static void pressImage(URL pressImg, File srcImageFile, OutputStream destImageFile,
+                                        int x, int y, float alpha) {
+        try {
+            File img = srcImageFile;
+            Image src = ImageIO.read(img);
+            int wideth = src.getWidth(null);
+            int height = src.getHeight(null);
+            BufferedImage image = new BufferedImage(wideth, height,
+                    BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = image.createGraphics();
+            g.drawImage(src, 0,0, wideth, height, null);
+            // 水印文件
+            Image src_biao = ImageIO.read(pressImg.openStream());
+            int wideth_biao = src_biao.getWidth(null);
+            int height_biao = src_biao.getHeight(null);
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP,
+                    alpha));
+            g.drawImage(src_biao, (wideth - wideth_biao) / 2,
+                    (height - height_biao) / 2, wideth_biao, height_biao, null);
+            // 水印文件结束
+            g.dispose();
+            ImageIO.write((BufferedImage) image, "JPEG", destImageFile);
         } catch (Exception e) {
             e.printStackTrace();
         }

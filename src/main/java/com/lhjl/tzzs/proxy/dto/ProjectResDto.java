@@ -26,23 +26,11 @@ public class ProjectResDto {
     private Integer interviewNum;
     /**  */
     private Integer yn;
-    /**
-     * 返回前端需要的项目id
-     */
-    private Integer projectId;
 
     /**
      * 项目关注状态
      */
     private Integer status;
-
-    public Integer getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
-    }
 
     public String getShortName() {
         return shortName;

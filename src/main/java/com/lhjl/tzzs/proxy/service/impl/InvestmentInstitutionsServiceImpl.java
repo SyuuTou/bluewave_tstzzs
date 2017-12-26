@@ -15,9 +15,11 @@ import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsStageMapper;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddress;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
+import com.lhjl.tzzs.proxy.utils.ImageUtils;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Position;
 import net.coobird.thumbnailator.geometry.Positions;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +28,13 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URI;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 @Service
 public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutionsService{
@@ -302,16 +307,24 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
             }
         }
 
-        ;
+
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
 
-            File img2 = qrcodeService.getQrcodeService().createQrcode("pages/discovery/activity/activitydetail/activitydetail?id=28",reqDto.getW());
+            File img = qrcodeService.getQrcodeService().createQrcode("pages/discovery/activity/activitydetail/activitydetail?id=28&jg="+ii.getKeyWords(),reqDto.getW());
 
-            File img =  qrcodeService.getQrcodeService().createWxCodeLimit(ii.getKeyWords()+"_"+reqDto.getActivityId(),reqDto.getPath(),reqDto.getW(),true,null);
+//            File img =  qrcodeService.getQrcodeService().createWxCodeLimit(ii.getKeyWords()+"_"+reqDto.getActivityId(),reqDto.getPath(),reqDto.getW(),true,null);
             BufferedImage qcode = ImageIO.read(img);
-            Thumbnails.of(new URL(reqDto.getTemplateUrl()).openStream()).size(750,7452).sourceRegion(reqDto.getX(),reqDto.getY(),reqDto.getW(),reqDto.getH()).watermark(Positions.CENTER, qcode,1.0f).toOutputStream(os);
+            Thumbnails.of(new URL(reqDto.getTemplateUrl()).openStream()).size(reqDto.getW(),reqDto.getH()).watermark(new Position() {
+                @Override
+                public Point calculate(int enclosingWidth, int enclosingHeight, int width, int height, int insetLeft, int insetRight, int insetTop, int insetBottom) {
+                    return new Point(reqDto.getX(),reqDto.getY());
+                }
+            }, qcode, 1.0f).toOutputStream(os);
+//            Thumbnails.of(new File("/Users/zhhu/Downloads/1.jpg")).size(750,1334).watermark(Positions.CENTER, qcode,1.0f).toFile("/Users/zhhu/Downloads/b.jpg");
 //            ImageIO.write(scaledImage, "jpg", os);
+//            ImageIO.write()
+//            ImageUtils.pressImage(new URL(reqDto.getTemplateUrl()),img,os,750,7452,1f);
         } catch (IOException e) {
             log.error(e.getLocalizedMessage(),e.fillInStackTrace());
         } catch (WxErrorException e) {
