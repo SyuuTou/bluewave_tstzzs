@@ -32,6 +32,9 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
     @Override
     public CommonDto<List<ProjectResDto>> projectFilter(ProjectReqDto reqDto) {
 
+        if (StringUtils.isNotEmpty(reqDto.getDataVcType())){
+            reqDto.setDataVcType(reqDto.getDataVcType().replace("50指数机构","1"));
+        }
 
         if (StringUtils.isNotEmpty(reqDto.getCity())){
             reqDto.setCity("'"+reqDto.getCity().replace(",","','")+"'");

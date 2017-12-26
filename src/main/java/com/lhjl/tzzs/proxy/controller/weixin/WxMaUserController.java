@@ -359,7 +359,7 @@ public class WxMaUserController {
         datas.add(new WxMaTemplateMessage.Data("keyword2.DATA","说明"));
         datas.add(new WxMaTemplateMessage.Data("keyword3.DATA","认证时间"));
         try {
-            this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.newBuilder().templateId("IQL59_p78hezrN9Oz6UAStwSyFk8ZbLgVPaPqEi1KyA").formId(formId).toUser("oA0AB0eQ76iCm2ADN9i9kiL2XUgE").data(datas).build());
+            this.wxService.getMsgService().sendTemplateMsg(WxMaTemplateMessage.builder().templateId("IQL59_p78hezrN9Oz6UAStwSyFk8ZbLgVPaPqEi1KyA").formId(formId).toUser("oA0AB0eQ76iCm2ADN9i9kiL2XUgE").data(datas).build());
         } catch (WxErrorException e) {
             e.printStackTrace();
         }

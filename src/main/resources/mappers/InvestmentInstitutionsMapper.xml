@@ -27,6 +27,7 @@
         <result column="yn" jdbcType="INTEGER" property="yn" />
         <result column="sort" jdbcType="INTEGER" property="sort" />
         <result column="count" jdbcType="INTEGER" property="count" />
+        <result column="key_words" jdbcType="INTEGER" property="keyWords" />
 
     </resultMap>
 

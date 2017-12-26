@@ -5,7 +5,7 @@ import io.swagger.models.auth.In;
 public class ProjectResDto {
 
     /** 项目ID */
-    private Integer ID;
+    private Integer projectId;
     /** 项目简称 */
     private String shortName;
     /** 项目全称 */
@@ -26,23 +26,11 @@ public class ProjectResDto {
     private Integer interviewNum;
     /**  */
     private Integer yn;
-    /**
-     * 返回前端需要的项目id
-     */
-    private Integer projectId;
 
     /**
      * 项目关注状态
      */
     private Integer status;
-
-    public Integer getID() {
-        return ID;
-    }
-
-    public void setID(Integer ID) {
-        this.ID = ID;
-    }
 
     public String getShortName() {
         return shortName;

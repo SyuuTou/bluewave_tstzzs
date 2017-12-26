@@ -1,9 +1,11 @@
 package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ImageHandlerDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -35,4 +37,6 @@ public interface InvestmentInstitutionsService {
      * @return
      */
     CommonDto<Map<String,Object>> findFliterInfo(Integer institutionId);
+
+    InputStream imageHandler(ImageHandlerDto reqDto);
 }

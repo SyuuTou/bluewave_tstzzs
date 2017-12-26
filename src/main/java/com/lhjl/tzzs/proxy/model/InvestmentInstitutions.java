@@ -93,6 +93,8 @@ public class InvestmentInstitutions {
 
     private Integer count;
 
+    private String keyWords;
+
     /**
      * @return ID
      */
@@ -399,5 +401,13 @@ public class InvestmentInstitutions {
      */
     public void setCount(Integer count) {
         this.count = count;
+    }
+
+    public String getKeyWords() {
+        return keyWords;
+    }
+
+    public void setKeyWords(String keyWords) {
+        this.keyWords = keyWords;
     }
 }
