@@ -311,7 +311,7 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
 
-            File img = qrcodeService.getQrcodeService().createQrcode("pages/discovery/activity/activitydetail/activitydetail?id=28&jg="+ii.getKeyWords(),reqDto.getW());
+            File img = qrcodeService.getQrcodeService().createQrcode(reqDto.getPath()+"&jg="+ii.getKeyWords(),reqDto.getW());
 
 //            File img =  qrcodeService.getQrcodeService().createWxCodeLimit(ii.getKeyWords()+"_"+reqDto.getActivityId(),reqDto.getPath(),reqDto.getW(),true,null);
             BufferedImage qcode = ImageIO.read(img);
