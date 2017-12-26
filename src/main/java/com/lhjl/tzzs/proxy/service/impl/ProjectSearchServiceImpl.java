@@ -57,8 +57,8 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
             reqDto.setStage("'" + reqDto.getStage().replace(",", "','") + "'");
         }
 
-//        reqDto.setBeginTime(beginTime);
-//        reqDto.setEndTime(endTime);
+        reqDto.setBeginTime(beginTime);
+        reqDto.setEndTime(endTime);
 
         reqDto.setOffset((reqDto.getPageNo() - 1) * reqDto.getPageSize());
         List<ProjectResDto> projectResDtos = projectsMapper.projectFilter(reqDto);
@@ -150,8 +150,8 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
             reqDto.setStage("'" + reqDto.getStage().replace(",", "','") + "'");
         }
 
-//        reqDto.setBeginTime(beginTime);
-//        reqDto.setEndTime(endTime);
+        reqDto.setBeginTime(beginTime);
+        reqDto.setEndTime(endTime);
 
         reqDto.setOffset((reqDto.getPageNo() - 1) * reqDto.getPageSize());
         List<Map<String, Object>> list = new ArrayList<>();
@@ -190,8 +190,8 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
             reqDto.setStage("'" + reqDto.getStage().replace(",", "','") + "'");
         }
 
-//        reqDto.setBeginTime(beginTime);
-//        reqDto.setEndTime(endTime);
+        reqDto.setBeginTime(beginTime);
+        reqDto.setEndTime(endTime);
 
         switch (reqDto.getStatisticsType()) {
             case "segmentation":
