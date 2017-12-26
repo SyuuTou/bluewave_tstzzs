@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.service.AdvertisingService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class AdertisingServiceImpl implements AdvertisingService{
      * @param body
      * @return
      */
+    @Transactional(readOnly = true)
     @Override
     public CommonDto<List<AdvertisingOutputDto>> getAdvertisingList(AdvertisingInputDto body) {
 
