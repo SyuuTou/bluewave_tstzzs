@@ -742,12 +742,12 @@
             and ps.segmentation_name in (${segmentation})
         </if>
 
-        <if test="statisticsType = 'ffe.education_experience'">
+        <if test="statisticsType == 'ffe.education_experience'.toString()">
             right join (select f.project_id,fe.education_experience from founders f right join founders_education fe on fe.founder_ID = f.id
              ) ffe on ffe.project_id = p.id
         </if>
 
-        <if test="statisticsType = 'ffw.work_experience'">
+        <if test="statisticsType == 'ffw.work_experience.toString()'">
             right join (select f.project_id,fw.work_experience  from founders f right join founders_work fw on fw.founder_ID = f.id ) ffw on ffw.project_id = p.id
         </if>
 
