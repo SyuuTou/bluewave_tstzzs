@@ -40,6 +40,11 @@ public class ProjectReqDto {
      */
     private Integer financingRecently;
 
+    /**
+     * 是否是查询相关机构的接口
+     */
+    private Integer relatedInstitution;
+
 
     public String getToken() {
         return token;
@@ -167,5 +172,13 @@ public class ProjectReqDto {
 
     public void setFinancingRecently(Integer financingRecently) {
         this.financingRecently = financingRecently;
+    }
+
+    public Integer getRelatedInstitution() {
+        return relatedInstitution;
+    }
+
+    public void setRelatedInstitution(Integer relatedInstitution) {
+        this.relatedInstitution = relatedInstitution;
     }
 }

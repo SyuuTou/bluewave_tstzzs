@@ -680,4 +680,45 @@
         and `status` = 0) d on a.id = d.projects_id
         group by a.short_name
     </select>
+    <select id="relatedInvestmentInstitution"  parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultType="java.util.HashMap">
+        select ii.id, ii.short_name,count(distinct p.id) as ct,
+        case when ii.kenel_case is null then (case when ii.`comment` is null then "" else ii.`comment` end) else ii.kenel_case end kenel_case,
+        case when ii.logo is null then "" else ii.logo end logo
+        from project_financing_log pfl left join projects p on pfl.project_id = p.id
+        right join investment_institutions_project iip on iip.project_id = pfl.id
+        left join investment_institutions ii on iip.investment_institutions_id = ii.id
+        <if test="segmentation != '' and segmentation != null">
+            right join project_segmentation ps on ps.project_id = p.id
+            and ps.segmentation_name in (#{segmentation})
+        </if>
+        <if test="edus != '' and edus != null">
+            right join (select f.project_id from founders f right join founders_education fe on fe.founder_ID = f.id
+            where fe.education_experience in (#{edus})) ffe on ffe.project_id = p.id
+        </if>
+        <if test="works != '' and works != null">
+            right join (select f.project_id from founders f right join founders_work fw on fw.founder_ID = f.id where
+            fw.work_experience in (#{works})) ffw on ffe.project_id = p.id
+        </if>
+        <if test="dataVcType != '' and dataVcType != null">
+            right join (select iip.project_id from investment_institutions_project iip left join investment_institutions
+            ii on iip.investment_institutions_id = ii.id and ii.type in (#{dataVcType})) iid on iid.project_id = p.id
+        </if>
+        where 1=1
+        <if test="city != '' and city != null">
+            and p.city in (#{city})
+        </if>
+        <if test="stage != '' and stage != null">
+            AND pfl.stage in (#{stage})
+        </if>
+        <if test="keyWords != '' and keyWords != '' ">
+            AND (p.short_name like "%"#{keyWords}"%" or p.full_name like "%"#{keyWords}"%" or p.kernel_desc like "%"#{keyWords}"%" )
+        </if>
+        <if test="financingRecently != '' and financingRecently != null">
+            and p.project_source is not null
+        </if>
+        and pfl.financing_time between #{beginTime} and #{endTime}
+        group BY ii.short_name
+        order by ct desc
+        limit #{offset},#{pageSize}
+    </select>
 </mapper>

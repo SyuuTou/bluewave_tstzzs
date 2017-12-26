@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service("projectSearchService")
 public class ProjectSearchServiceImpl extends GenericService implements ProjectSearchService {
@@ -103,5 +104,59 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
 
 
         return new CommonDto<>(projectResDtos,"success", 200);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public CommonDto<List<Map<String,Object>>> ralatedInstitution(ProjectReqDto reqDto) {
+        CommonDto<List<Map<String,Object>>> result = new CommonDto<>();
+
+        if (reqDto.getRelatedInstitution() == null ){
+            result.setMessage("相关项目的参数未传入，或不正确");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+
+        }else if (reqDto.getRelatedInstitution() != 1){
+            result.setMessage("相关项目的参数未传入，或不正确");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+        if (StringUtils.isNotEmpty(reqDto.getCity())){
+            reqDto.setCity("'"+reqDto.getCity().replace(",","','")+"'");
+        }
+
+        if (StringUtils.isNotEmpty(reqDto.getSegmentation())){
+            reqDto.setSegmentation("'"+reqDto.getSegmentation().replace(",","','")+"'");
+        }
+
+        if (StringUtils.isNotEmpty(reqDto.getEdus())){
+            reqDto.setEdus("'"+reqDto.getEdus().replace(",","','")+"'");
+        }
+
+        if (StringUtils.isNotEmpty(reqDto.getWorks())){
+            reqDto.setWorks("'"+reqDto.getWorks().replace(",","','")+"'");
+        }
+
+        if (StringUtils.isNotEmpty(reqDto.getStage())){
+            reqDto.setStage("'"+reqDto.getStage().replace(",","','")+"'");
+        }
+
+        reqDto.setBeginTime(beginTime);
+        reqDto.setEndTime(endTime);
+
+        reqDto.setOffset((reqDto.getPageNo()-1)*reqDto.getPageSize());
+        List<Map<String,Object>> list= new ArrayList<>();
+        list = projectsMapper.relatedInvestmentInstitution(reqDto);
+
+        result.setData(list);
+        result.setStatus(200);
+        result.setMessage("success");
+
+        return result;
     }
 }
