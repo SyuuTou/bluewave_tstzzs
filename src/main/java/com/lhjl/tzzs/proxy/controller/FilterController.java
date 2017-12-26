@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class FilterController extends GenericController {
@@ -33,6 +34,21 @@ public class FilterController extends GenericController {
         CommonDto<List<ProjectResDto>> result  = new CommonDto<>();
         try {
             result = projectSearchService.projectFilterOrderByFinancing(reqDto);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+        }
+
+        return result;
+    }
+
+    @PostMapping("project/related/institution")
+    public CommonDto<List<Map<String,Object>>> getRelatedInstitution(@RequestBody ProjectReqDto reqDto){
+        CommonDto<List<Map<String,Object>>> result = new CommonDto<>();
+        try {
+            result = projectSearchService.ralatedInstitution(reqDto);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);

@@ -106,6 +106,8 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
     List<ProjectResDto> projectFilterOne(ProjectReqDto reqDto);
 
     List<ProjectResDto> projectFilterTwo(ProjectReqDto reqDto);
+
+    List<Map<String,Object>> relatedInvestmentInstitution(ProjectReqDto reqDto);
 }
 
 
