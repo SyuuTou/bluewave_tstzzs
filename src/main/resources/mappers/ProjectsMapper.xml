@@ -532,7 +532,7 @@
         case WHEN b.followNum = null then 0 ELSE b.followNum END followNum,
         case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
         case WHEN b.followNum = null OR b.followNum = 0 then 0 ELSE 1 END yn,
-        case WHEN d.`status` = 0 then 1 else 0 END `status`,
+        case WHEN d.`status` = 1 then 1 else 0 END `status`,
         case when a.kernel_desc is null or a.kernel_desc ="" then (case when a.commet is null then "" else a.commet end) else a.kernel_desc end kernel_desc
         from(
         select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,GROUP_CONCAT(DISTINCT ps.segmentation_name) segmentation_name,p.evaluation_recommend,pfl.stage
@@ -571,7 +571,7 @@
         b.projects_id
         left join (select count(user_id) interviewNum ,projects_id from interview group by projects_id) c on a.id =
         c.projects_id
-        left JOIN (select fo.status,projects_id,fo.user_id from   follow fo where fo.status= 0 and fo.user_id = #{token}  group by fo.projects_id,fo.user_id) d   on a.id = d.projects_id
+        left JOIN (select fo.status,projects_id,fo.user_id from   follow fo where fo.status= 1 and fo.user_id = #{token}  group by fo.projects_id,fo.user_id) d   on a.id = d.projects_id
     </select>
 
     <select id="projectFilterOne" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
@@ -580,7 +580,7 @@
         case WHEN b.followNum = null then 0 ELSE b.followNum END followNum,
         case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
         case WHEN b.followNum = null OR b.followNum = 0 then 0 ELSE 1 END yn,
-        case WHEN d.`status` = 0 then 1 else 0 END `status`,
+        case WHEN d.`status` = 1 then 1 else 0 END `status`,
         case when a.kernel_desc is null or a.kernel_desc ="" then (case when a.commet is null then "" else a.commet end) else a.kernel_desc end kernel_desc
         from(
         select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,GROUP_CONCAT(DISTINCT ps.segmentation_name) segmentation_name,p.evaluation_recommend,pfl.stage
@@ -622,7 +622,7 @@
         b.projects_id
         left join (select count(user_id) interviewNum ,projects_id from interview group by projects_id) c on a.id =
         c.projects_id
-        left JOIN (select fo.status,projects_id,fo.user_id from   follow fo where fo.status= 0 and fo.user_id = #{token}  group by fo.projects_id,fo.user_id) d   on a.id = d.projects_id
+        left JOIN (select fo.status,projects_id,fo.user_id from   follow fo where fo.status= 1 and fo.user_id = #{token}  group by fo.projects_id,fo.user_id) d   on a.id = d.projects_id
     </select>
 
     <select id="projectFilterTwo" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
@@ -675,7 +675,7 @@
         b.projects_id
         left join (select count(user_id) interviewNum ,projects_id from interview group by projects_id) c on a.id =
         c.projects_id
-        left JOIN (select fo.status,projects_id,fo.user_id from   follow fo where fo.status= 0 and fo.user_id = #{token}  group by fo.projects_id,fo.user_id) d   on a.id = d.projects_id
+        left JOIN (select fo.status,projects_id,fo.user_id from   follow fo where fo.status= 1 and fo.user_id = #{token}  group by fo.projects_id,fo.user_id) d   on a.id = d.projects_id
     </select>
     <select id="relatedInvestmentInstitution"  parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultType="java.util.HashMap">
         select ii.id, ii.short_name,count(distinct p.id) as ct,
