@@ -513,7 +513,7 @@
     </select>
 
     <resultMap id="projectFilterMap" type="com.lhjl.tzzs.proxy.dto.ProjectResDto">
-        <result column="ID" jdbcType="INTEGER" property="projectId"/>
+        <result column="projectId" jdbcType="INTEGER" property="projectId"/>
         <result column="short_name" jdbcType="VARCHAR" property="shortName"/>
         <result column="full_name" jdbcType="VARCHAR" property="fullName"/>
         <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc"/>
@@ -550,7 +550,7 @@
         </if>
         <if test="dataVcType != '' and dataVcType != null">
             right join (select iip.project_id from investment_institutions_project iip left join investment_institutions
-            ii on iip.investment_institutions_id = ii.id and ii.type in (dataVcType)) iid on iid.project_id = p.id
+            ii on iip.investment_institutions_id = ii.id and ii.type in (#{dataVcType})) iid on iid.project_id = p.id
         </if>
         where 1=1
         <if test="city != '' and city != null">
