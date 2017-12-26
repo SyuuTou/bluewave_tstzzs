@@ -91,8 +91,8 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
             reqDto.setStage("'" + reqDto.getStage().replace(",", "','") + "'");
         }
 
-//        reqDto.setBeginTime(beginTime);
-//        reqDto.setEndTime(endTime);
+        reqDto.setBeginTime(beginTime);
+        reqDto.setEndTime(endTime);
 
         reqDto.setOffset((reqDto.getPageNo() - 1) * reqDto.getPageSize());
         List<ProjectResDto> projectResDtos = new ArrayList<>();
@@ -164,6 +164,7 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
         return result;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CommonDto<List<HistogramList>> projectFilterStatistices(ProjectReqDto reqDto) {
         if (StringUtils.isNotEmpty(reqDto.getDataVcType())) {
