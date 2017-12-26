@@ -777,6 +777,7 @@
 
             and pfl.financing_time between #{beginTime} and #{endTime}
         </if>
+            and ${statisticsType} is not null and ${statisticsType} != ''
         </where>
         GROUP BY ${statisticsType}
         ORDER BY x desc
