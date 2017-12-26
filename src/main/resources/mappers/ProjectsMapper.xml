@@ -742,14 +742,13 @@
             and ps.segmentation_name in (${segmentation})
         </if>
 
-        <if test="edus != '' and edus != null">
+        <if test="statisticsType = 'ffe.education_experience'">
             right join (select f.project_id,fe.education_experience from founders f right join founders_education fe on fe.founder_ID = f.id
-            where fe.education_experience in (${edus})) ffe on ffe.project_id = p.id
+             ) ffe on ffe.project_id = p.id
         </if>
 
-        <if test="works != '' and works != null">
-            right join (select f.project_id,fw.work_experience  from founders f right join founders_work fw on fw.founder_ID = f.id where
-            fw.work_experience in (${works})) ffw on ffw.project_id = p.id
+        <if test="statisticsType = 'ffw.work_experience'">
+            right join (select f.project_id,fw.work_experience  from founders f right join founders_work fw on fw.founder_ID = f.id ) ffw on ffw.project_id = p.id
         </if>
 
         <if test="dataVcType != '' and dataVcType != null">
@@ -762,6 +761,14 @@
         </if>
         <if test="stage != '' and stage != null">
             AND pfl.stage in (${stage})
+        </if>
+            <if test="works != '' and works != null">
+            AND
+                ffw.work_experience in (${works})
+        </if>
+            <if test="works != '' and works != null">
+            AND
+                ffe.education_experience in (${edus})
         </if>
         <if test="keyWords != '' and keyWords != null ">
             AND (p.short_name like "%"#{keyWords}"%" or p.full_name like "%"#{keyWords}"%" or p.kernel_desc like "%"#{keyWords}"%" )
