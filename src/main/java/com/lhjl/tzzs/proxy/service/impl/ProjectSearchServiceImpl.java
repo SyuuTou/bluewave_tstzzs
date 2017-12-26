@@ -204,10 +204,10 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
                 reqDto.setStatisticsType("p.city");
                 break;
             case "work":
-                reqDto.setStatisticsType("fw.work_experience");
+                reqDto.setStatisticsType("ffw.work_experience");
                 break;
             case "edus":
-                reqDto.setStatisticsType("fe.education_experience");
+                reqDto.setStatisticsType("ffe.education_experience");
                 break;
             case "financingTime":
                 reqDto.setStatisticsType("pfl.financing_time_year");
