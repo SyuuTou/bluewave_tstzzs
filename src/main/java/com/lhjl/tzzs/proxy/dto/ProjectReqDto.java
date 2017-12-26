@@ -45,6 +45,9 @@ public class ProjectReqDto {
      */
     private Integer relatedInstitution;
 
+    /** 统计类型 */
+    private String statisticsType; // 1、segmentation（领域）2、stage（轮次）3、city（城市）4、work(工作背景) 5、edus（教育背景）6、financingTime（投资时间）
+
 
     public String getToken() {
         return token;
@@ -180,5 +183,13 @@ public class ProjectReqDto {
 
     public void setRelatedInstitution(Integer relatedInstitution) {
         this.relatedInstitution = relatedInstitution;
+    }
+
+    public String getStatisticsType() {
+        return statisticsType;
+    }
+
+    public void setStatisticsType(String statisticsType) {
+        this.statisticsType = statisticsType;
     }
 }

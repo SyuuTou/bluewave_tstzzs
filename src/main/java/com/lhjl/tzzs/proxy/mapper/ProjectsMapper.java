@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.mapper;
 
+import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.dto.ProjectReqDto;
 import com.lhjl.tzzs.proxy.dto.ProjectResDto;
 import com.lhjl.tzzs.proxy.dto.XiangsiDto;
@@ -108,6 +109,8 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
     List<ProjectResDto> projectFilterTwo(ProjectReqDto reqDto);
 
     List<Map<String,Object>> relatedInvestmentInstitution(ProjectReqDto reqDto);
+
+    List<HistogramList> projectSearchStatistics(ProjectReqDto reqDto);
 }
 
 

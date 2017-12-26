@@ -40,6 +40,7 @@ public class WxMaConfiguration {
         System.out.println("收到消息：" + wxMessage.toString());
         service.getMsgService().sendKefuMsg(WxMaKefuMessage.newTextBuilder().content("收到信息为：" + wxMessage.toJson())
                 .toUser(wxMessage.getFromUser()).build());
+
     };
 
     private final WxMaMessageHandler textHandler = (wxMessage, context, service, sessionManager) ->

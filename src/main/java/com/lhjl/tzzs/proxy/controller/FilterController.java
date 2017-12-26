@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.controller;
 
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.dto.ProjectReqDto;
 import com.lhjl.tzzs.proxy.dto.ProjectResDto;
 import com.lhjl.tzzs.proxy.service.ProjectSearchService;
@@ -24,7 +25,14 @@ public class FilterController extends GenericController {
     public CommonDto<List<ProjectResDto>> search(@RequestBody ProjectReqDto reqDto){
         CommonDto<List<ProjectResDto>> result = null;
 
-        result = projectSearchService.projectFilter(reqDto);
+        try {
+            result = projectSearchService.projectFilter(reqDto);
+        } catch (Exception e) {
+            result= new CommonDto<>();
+            result.setStatus(500);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+        }
 
         return result;
     }
@@ -58,4 +66,15 @@ public class FilterController extends GenericController {
 
         return result;
     }
+
+    @PostMapping("project/search/statistics")
+    public CommonDto<List<HistogramList>> projectSearchStatistics(@RequestBody ProjectReqDto reqDto){
+        CommonDto<List<HistogramList>> result = null;
+
+        result = projectSearchService.projectFilterStatistices(reqDto);
+
+        return result;
+    }
+
+
 }
