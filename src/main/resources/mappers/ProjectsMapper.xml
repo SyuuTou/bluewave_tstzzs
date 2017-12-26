@@ -747,7 +747,7 @@
              ) ffe on ffe.project_id = p.id
         </if>
 
-        <if test="statisticsType == 'ffw.work_experience.toString()'">
+        <if test="statisticsType == 'ffw.work_experience'.toString()">
             right join (select f.project_id,fw.work_experience  from founders f right join founders_work fw on fw.founder_ID = f.id ) ffw on ffw.project_id = p.id
         </if>
 
