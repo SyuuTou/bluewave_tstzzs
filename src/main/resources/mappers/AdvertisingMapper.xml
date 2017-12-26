@@ -20,7 +20,7 @@
     <result column="appid" property="appid" jdbcType="INTEGER" />
   </resultMap>
   <select id="findAdvertisingList" resultMap="BaseResultMap">
-    SELECT * FROM idatavc.advertising
+    SELECT * FROM advertising
     where yn = 1
     <if test="editStatus != null and editStatus !=''">
       and edit_status = #{editStatus}
@@ -32,11 +32,11 @@
       and appid = #{appId}
     </if>
     <if test="startTime !=null and startTime !=''">
-      and date(begin_time)between(#{startTime})and(#{endTime})
+      and begin_time between #{startTime} and #{endTime}
     </if>
     <if test="timeYn != null and timeYn !=''">
-      and date(begin_time) &lt; date(now())
-      and date(end_time) &gt; date(now())
+      and begin_time &lt; now()
+      and end_time &gt; now()
     </if>
     <if test="positionId != null and positionId!=''">
       and advertising_posistion_id = #{positionId}
