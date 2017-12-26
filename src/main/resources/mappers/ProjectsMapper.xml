@@ -204,7 +204,8 @@
     </select>
 
     <select id="maxSerialNumber" resultMap="BaseResultMap">
-        select * from projects where serial_number between 100000 and 200000 order by serial_number desc;
+        select * from projects where serial_number between 100000 and 200000 order by serial_number desc
+        limit 0,1;
     </select>
 
 
