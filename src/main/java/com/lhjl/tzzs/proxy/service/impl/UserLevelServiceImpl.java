@@ -639,7 +639,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             }
         }
         DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
-        List<String> sceneKeys = userLevelRelationMapper.findByUserIdLeid(localUserId,dateFormat.format(DateTime.now().toDate()));
+        List<String> sceneKeys = userLevelRelationMapper.findByUserIdLeid(localUserId,action.getSceneKey(),dateFormat.format(DateTime.now().toDate()));
         data.put("levelId", userLevel);
         //查询当前用户金币余额
         Integer z =userIntegralsMapper.findIntegralsZ(localUserId);
