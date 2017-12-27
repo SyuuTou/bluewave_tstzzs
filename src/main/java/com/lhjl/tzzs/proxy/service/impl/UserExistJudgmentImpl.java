@@ -63,7 +63,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
 
             List<UserToken> userTokens = userTokenMapper.select(userToken);
 
-            log.info("你在这里呀！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
+          //  log.info("你在这里呀！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
             if (userTokens.size() > 0){
                 //获取到token
                 UserToken userTokenForToken = userTokens.get(0);
@@ -258,7 +258,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
         userToken.setToken(token);
 
         List<UserToken> userTokens = userTokenMapper.select(userToken);
-        log.info("还是在这里呀～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～`");
+       // log.info("还是在这里呀～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～`");
 
         if (userTokens.size() > 0){
             UserToken userTokenForId = userTokens.get(0);
@@ -312,7 +312,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
             userToken.setToken(token);
 
             UserToken userTokens = userTokenMapper.selectOne(userToken);
-            log.info("原来是你这里呀啊～～～～～～～～～～～！！！！！！！！{}",userToken);
+            //log.info("原来是你这里呀啊～～～～～～～～～～～！！！！！！！！{}",userToken);
             result = userTokens.getUserId();
 
         } catch (Exception e) {
