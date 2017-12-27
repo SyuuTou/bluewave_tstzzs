@@ -30,8 +30,9 @@
     SELECT mo.scene_key  FROM user_level_relation u
     left join meta_obtain_integral mo on u.level_id = mo.user_level
     WHERE u.user_id=#{userId}
-    and Date(u.begin_time) &lt;= #{now}
-    and Date(u.end_time)  &gt;= #{now}
+    and u.begin_time &lt;= #{now}
+    and u.end_time  &gt;= #{now}
+    limit 0,10
   </select>
 
   <select id="findByUserScene" parameterType="INTEGER" resultType="map">
