@@ -304,12 +304,15 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
     @Override
     public int getUserId(String token){
         int result = -1;
+        if (token == null || "".equals(token)){
+            return result;
+        }
         try {
             UserToken userToken = new UserToken();
             userToken.setToken(token);
 
             UserToken userTokens = userTokenMapper.selectOne(userToken);
-
+            log.info("原来是你这里呀啊～～～～～～～～～～～！！！！！！！！{}",userToken);
             result = userTokens.getUserId();
 
         } catch (Exception e) {
