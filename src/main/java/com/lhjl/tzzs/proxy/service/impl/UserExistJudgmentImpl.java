@@ -243,6 +243,13 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
     public CommonDto<UserYnDto> userYn(String token){
         CommonDto<UserYnDto> result =new CommonDto<>();
 
+        if (token == null || "".equals(token)){
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("token不能为空");
+
+            return result;
+        }
         UserYnDto userYnDto =new UserYnDto();
 
         UserToken userToken = new UserToken();
@@ -298,12 +305,10 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
             UserToken userToken = new UserToken();
             userToken.setToken(token);
 
-            List<UserToken> userTokens = userTokenMapper.select(userToken);
+            UserToken userTokens = userTokenMapper.selectOne(userToken);
 
-            if (userTokens.size() > 0){
-                UserToken userTokenForId = userTokens.get(0);
-                result = userTokenForId.getUserId();
-            }
+            result = userTokens.getUserId();
+
         } catch (Exception e) {
             log.error(e.getMessage(),e.fillInStackTrace());
         }
