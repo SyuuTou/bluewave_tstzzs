@@ -638,7 +638,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 }
             }
         }
-        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<String> sceneKeys = userLevelRelationMapper.findByUserIdLeid(localUserId,action.getSceneKey(),dateFormat.format(DateTime.now().toDate()));
         data.put("levelId", userLevel);
         //查询当前用户金币余额
