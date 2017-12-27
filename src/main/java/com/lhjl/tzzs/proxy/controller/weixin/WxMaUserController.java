@@ -278,6 +278,8 @@ public class WxMaUserController {
 
             String info = WxMaCryptUtils.decrypt(sessionKey, body.get("encryptedData"), body.get("iv"));
             PhonenumberInfo phonenumberInfo = WxMaGsonBuilder.create().fromJson(info, PhonenumberInfo.class);
+
+            logger.info("解析完毕以后phonenumber为：{}",phonenumberInfo.getPhoneNumber());
             result.setData(phonenumberInfo);
             result.setMessage("success");
             result.setStatus(200);
