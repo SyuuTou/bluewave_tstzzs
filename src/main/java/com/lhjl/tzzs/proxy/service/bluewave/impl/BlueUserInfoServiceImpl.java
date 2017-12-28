@@ -75,7 +75,7 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
             return result;
         }
 
-        Integer userId = userLoginService.getUserIdByToken(token);
+        Integer userId = userLoginService.getUserIdByToken(token,appid);
         if (userId == -1){
             result.setData(null);
             result.setStatus(502);
@@ -137,7 +137,7 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
         String token = (String) body.get("token");
         String headpic = (String)body.get("headpic");
 
-        Integer userId = userLoginService.getUserIdByToken(token);
+        Integer userId = userLoginService.getUserIdByToken(token,appid);
 
         if (userId == -1){
             result.setMessage("用户token非法，请检查");
@@ -180,7 +180,7 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
             return result;
         }
 
-        Integer userId = userLoginService.getUserIdByToken(token);
+        Integer userId = userLoginService.getUserIdByToken(token,appid);
         if (userId == -1){
             result.setData(null);
             result.setMessage("用户token无效");
@@ -291,7 +291,7 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
      */
     @Transactional
     @Override
-    public CommonDto<String> editUserInfo(UserInfomationInputDto body) {
+    public CommonDto<String> editUserInfo(UserInfomationInputDto body,Integer appid) {
         CommonDto<String> result = new CommonDto<>();
         if (body.getToken() ==null || "".equals(body.getToken()) || "undefined".equals(body.getToken())){
             result.setData(null);
@@ -300,7 +300,7 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
 
             return result;
         }
-        Integer userId = userLoginService.getUserIdByToken(body.getToken());
+        Integer userId = userLoginService.getUserIdByToken(body.getToken(),appid);
         if (userId == -1){
             result.setStatus(502);
             result.setMessage("用户token无效，请检查");
@@ -364,7 +364,9 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
         if (body.getWorkCard() != null){
             users.setWorkCard(body.getWorkCard());
         }
-
+        if (body.getDesc() != null){
+            users.setDesc(body.getDesc());
+        }
         usersMapper.updateByPrimaryKeySelective(users);
 
         Integer founderId = findOrCreatFounder(userId,body.getActualName(),body.getCompanyDuties(),body.getDesc());
@@ -394,7 +396,7 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
         obj.put("companyName","");
         obj.put("companyDuties","");
 
-        Integer userId = userLoginService.getUserIdByToken(token);
+        Integer userId = userLoginService.getUserIdByToken(token,appid);
         Users users = usersMapper.selectByPrimaryKey(userId);
 
         UsersWeixinLts usersWeixinLtsForSearch = new UsersWeixinLts();
@@ -439,7 +441,7 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
         map.put("investorType","");
         map.put("identityType","");
 
-        Integer userId = userLoginService.getUserIdByToken(token);
+        Integer userId = userLoginService.getUserIdByToken(token,appid);
 
         Investors investors = new Investors();
         investors.setUserId(userId);

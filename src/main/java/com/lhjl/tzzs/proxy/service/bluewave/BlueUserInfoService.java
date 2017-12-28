@@ -46,5 +46,5 @@ public interface BlueUserInfoService {
      * @param body
      * @return
      */
-    CommonDto<String> editUserInfo(UserInfomationInputDto body);
+    CommonDto<String> editUserInfo(UserInfomationInputDto body,Integer appid);
 }
