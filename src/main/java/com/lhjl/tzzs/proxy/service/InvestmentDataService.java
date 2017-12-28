@@ -1,6 +1,5 @@
 package com.lhjl.tzzs.proxy.service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 
