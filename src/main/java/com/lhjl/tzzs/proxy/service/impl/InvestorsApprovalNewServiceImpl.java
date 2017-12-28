@@ -2,7 +2,6 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.TouZiDto;
 import com.lhjl.tzzs.proxy.dto.TouZiNewDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.InvestorsApproval;
