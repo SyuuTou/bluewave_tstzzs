@@ -13,4 +13,11 @@ public interface FounderEducationService {
      * @return
      */
     CommonDto<List<FoundersEducation>> getFounderEducationIntelligent(String inputsWords, Integer pageSize);
+
+    /**
+     * 创建或者更新创始人教育经历的接口
+     * @param founderId
+     * @param educationExperience
+     */
+    void createOrUpdateFounderEducation(Integer founderId,List<String> educationExperience);
 }

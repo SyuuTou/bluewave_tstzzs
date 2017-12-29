@@ -45,4 +45,36 @@ public class FounderEducationServiceImpl implements FounderEducationService {
 
         return result;
      }
+
+    /**
+     * 创建或更新创始人教育经历的方法
+     * @param founderId
+     * @param educationExperience
+     */
+    @Override
+    public void createOrUpdateFounderEducation(Integer founderId, List<String> educationExperience) {
+        if (founderId == null){
+            return;
+        }
+
+        if (educationExperience.size() < 1){
+            return;
+        }
+        //先找到该创始人的原来的教育经历
+        FoundersEducation foundersEducation = new FoundersEducation();
+        foundersEducation.setFounderId(founderId);
+
+        List<FoundersEducation> foundersEducationList = foundersEducationMapper.select(foundersEducation);
+        if (foundersEducationList.size() > 0){
+            foundersEducationMapper.delete(foundersEducation);
+        }else {
+            for (String s:educationExperience){
+               FoundersEducation foundersEducationForInsert = new FoundersEducation();
+               foundersEducationForInsert.setFounderId(founderId);
+               foundersEducationForInsert.setEducationExperience(s);
+
+               foundersEducationMapper.insertSelective(foundersEducationForInsert);
+            }
+        }
+    }
 }
