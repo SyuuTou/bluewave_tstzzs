@@ -73,6 +73,12 @@ public class ProjectSendB {
     private Integer prepareId;
 
     /**
+     * 编辑状态，0表示未编辑完成，1表示编辑完成了
+     */
+    @Column(name = "edit_status")
+    private Integer editStatus;
+
+    /**
      * 应用id
      */
     private Integer appid;
@@ -287,6 +293,24 @@ public class ProjectSendB {
      */
     public void setPrepareId(Integer prepareId) {
         this.prepareId = prepareId;
+    }
+
+    /**
+     * 获取编辑状态，0表示未编辑完成，1表示编辑完成了
+     *
+     * @return edit_status - 编辑状态，0表示未编辑完成，1表示编辑完成了
+     */
+    public Integer getEditStatus() {
+        return editStatus;
+    }
+
+    /**
+     * 设置编辑状态，0表示未编辑完成，1表示编辑完成了
+     *
+     * @param editStatus 编辑状态，0表示未编辑完成，1表示编辑完成了
+     */
+    public void setEditStatus(Integer editStatus) {
+        this.editStatus = editStatus;
     }
 
     /**

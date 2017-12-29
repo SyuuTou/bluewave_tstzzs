@@ -1,22 +1,23 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectSendBMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectSendB" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectSendBMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectSendB">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="project_logo" property="projectLogo" jdbcType="VARCHAR" />
-    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
-    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
-    <result column="kernel_desc" property="kernelDesc" jdbcType="VARCHAR" />
-    <result column="project_investment_highlights" property="projectInvestmentHighlights" jdbcType="VARCHAR" />
-    <result column="commet" property="commet" jdbcType="VARCHAR" />
-    <result column="url" property="url" jdbcType="VARCHAR" />
-    <result column="city" property="city" jdbcType="VARCHAR" />
-    <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="prepare_id" property="prepareId" jdbcType="INTEGER" />
-    <result column="appid" property="appid" jdbcType="INTEGER" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="project_logo" jdbcType="VARCHAR" property="projectLogo" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+    <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc" />
+    <result column="project_investment_highlights" jdbcType="VARCHAR" property="projectInvestmentHighlights" />
+    <result column="commet" jdbcType="VARCHAR" property="commet" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="prepare_id" jdbcType="INTEGER" property="prepareId" />
+    <result column="edit_status" jdbcType="INTEGER" property="editStatus" />
+    <result column="appid" jdbcType="INTEGER" property="appid" />
   </resultMap>
 </mapper>
