@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -449,20 +450,40 @@ public class UserLoginServiceImpl implements UserLoginService{
 
             return result;
         }
+        Integer userId = -1;
+        if (appid != 1){
+            UsersTokenLts usersTokenLts = new UsersTokenLts();
+            usersTokenLts.setToken(token);
+            usersTokenLts.setMetaAppId(appid);
 
-        UsersTokenLts usersTokenLts = new UsersTokenLts();
-        usersTokenLts.setToken(token);
-        usersTokenLts.setMetaAppId(appid);
+            List<UsersTokenLts> usersTokenLtsList = usersTokenLtsMapper.select(usersTokenLts);
+            if (usersTokenLtsList.size() < 1){
+                result.setData(null);
+                result.setMessage("用户token不存在");
+                result.setStatus(502);
 
-        List<UsersTokenLts> usersTokenLtsList = usersTokenLtsMapper.select(usersTokenLts);
-        if (usersTokenLtsList.size() < 1){
-              result.setData(null);
-              result.setMessage("用户token不存在");
-              result.setStatus(502);
+                return result;
+            }
 
-              return result;
+           userId = getUserIdByToken(token,appid);
+        }else {
+            UserToken userToken = new UserToken();
+            userToken.setToken(token);
+
+            List<UserToken> userTokenList = userTokenMapper.select(userToken);
+            if (userTokenList.size() < 1){
+                result.setData(null);
+                result.setMessage("用户token不存在");
+                result.setStatus(502);
+
+                return result;
+
+            }
+            userId = getUserIdByToken(token,userId);
         }
-        Integer userId = getUserIdByToken(token,appid);
+
+
+
         if (userId == -1){
               result.setData(null);
               result.setStatus(502);
