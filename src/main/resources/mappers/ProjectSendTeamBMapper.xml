@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectSendTeamBMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectSendTeamB" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="project_send_b_id" property="projectSendBId" jdbcType="INTEGER" />
+    <result column="member_name" property="memberName" jdbcType="VARCHAR" />
+    <result column="company_duties" property="companyDuties" jdbcType="VARCHAR" />
+    <result column="stock_ratio" property="stockRatio" jdbcType="DECIMAL" />
+    <result column="member_desc" property="memberDesc" jdbcType="VARCHAR" />
+    <result column="appid" property="appid" jdbcType="INTEGER" />
+  </resultMap>
+</mapper>

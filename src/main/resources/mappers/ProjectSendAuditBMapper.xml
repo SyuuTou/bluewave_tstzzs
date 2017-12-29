@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectSendAuditBMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectSendAuditB" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="project_send_b_id" property="projectSendBId" jdbcType="INTEGER" />
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
+    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="audit_admin" property="auditAdmin" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="prepare_id" property="prepareId" jdbcType="INTEGER" />
+    <result column="appid" property="appid" jdbcType="INTEGER" />
+  </resultMap>
+</mapper>

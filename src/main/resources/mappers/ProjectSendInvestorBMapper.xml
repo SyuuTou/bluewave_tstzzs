@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectSendInvestorBMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectSendInvestorB" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ps_financing_history_b_id" property="psFinancingHistoryBId" jdbcType="INTEGER" />
+    <result column="investor_name" property="investorName" jdbcType="VARCHAR" />
+    <result column="stock_ratio" property="stockRatio" jdbcType="DECIMAL" />
+    <result column="appid" property="appid" jdbcType="INTEGER" />
+  </resultMap>
+</mapper>
