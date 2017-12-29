@@ -45,6 +45,11 @@ public class ProjectSendTeamB {
     private Integer appid;
 
     /**
+     * 是否删除，0表示未被删，1表是已被删除
+     */
+    private Integer yn;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -164,5 +169,23 @@ public class ProjectSendTeamB {
      */
     public void setAppid(Integer appid) {
         this.appid = appid;
+    }
+
+    /**
+     * 获取是否删除，0表示未被删，1表是已被删除
+     *
+     * @return yn - 是否删除，0表示未被删，1表是已被删除
+     */
+    public Integer getYn() {
+        return yn;
+    }
+
+    /**
+     * 设置是否删除，0表示未被删，1表是已被删除
+     *
+     * @param yn 是否删除，0表示未被删，1表是已被删除
+     */
+    public void setYn(Integer yn) {
+        this.yn = yn;
     }
 }
