@@ -21,5 +21,5 @@ public interface ProjectSendBService {
      */
     CommonDto<String> updateProject(ProjectSendBDto body,Integer appid);
 
-    //CommonDto<String> createProjectSegmentation(ProjectSendBDto body,Integer appid);
+  //  CommonDto<String> updateUserInfo(ProjectSendBDto body,Integer appid);
 }

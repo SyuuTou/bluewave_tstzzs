@@ -45,4 +45,44 @@ public class FounderWorkServiceImpl implements FounderWorkService{
 
         return result;
     }
+
+    /**
+     * 更新或者创建创始人工作背景方法
+     * @param founderId
+     * @param workExperience
+     */
+    @Override
+    public void createOrUpdateFounderWork(Integer founderId, List<String> workExperience) {
+        if (founderId == null){
+            return;
+        }
+
+        FoundersWork foundersWork = new FoundersWork();
+        foundersWork.setFounderId(founderId);
+
+        List<FoundersWork> foundersWorkList = foundersWorkMapper.select(foundersWork);
+        if (foundersWorkList.size() > 0){
+            foundersWorkMapper.delete(foundersWork);
+            if (workExperience != null){
+                for (String s:workExperience){
+                    FoundersWork foundersWorkForInsert = new FoundersWork();
+                    foundersWorkForInsert.setFounderId(founderId);
+                    foundersWorkForInsert.setWorkExperience(s);
+
+                    foundersWorkMapper.insertSelective(foundersWorkForInsert);
+                }
+            }
+
+        }else {
+            if (workExperience != null){
+                for (String s:workExperience){
+                    FoundersWork foundersWorkForInsert = new FoundersWork();
+                    foundersWorkForInsert.setFounderId(founderId);
+                    foundersWorkForInsert.setWorkExperience(s);
+
+                    foundersWorkMapper.insertSelective(foundersWorkForInsert);
+                }
+            }
+        }
+    }
 }

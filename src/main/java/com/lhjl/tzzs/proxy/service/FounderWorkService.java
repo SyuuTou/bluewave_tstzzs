@@ -13,4 +13,11 @@ public interface FounderWorkService {
      * @return
      */
     CommonDto<List<FoundersWork>> findFounderWork(String inputsWords,Integer pageSize);
+
+    /**
+     * 创建或者更新创始人的工作经历接口
+     * @param founderId
+     * @param workExperience
+     */
+    void createOrUpdateFounderWork(Integer founderId,List<String> workExperience);
 }

@@ -4,6 +4,8 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
+import com.lhjl.tzzs.proxy.service.FounderEducationService;
+import com.lhjl.tzzs.proxy.service.FounderWorkService;
 import com.lhjl.tzzs.proxy.service.ProjectSendBService;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +41,18 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
 
     @Autowired
     private ProjectSendFinancingApprovalBMapper projectSendFinancingApprovalBMapper;
+
+    @Autowired
+    private UsersMapper usersMapper;
+
+    @Resource
+    private FounderWorkService founderWorkService;
+
+    @Resource
+    private FounderEducationService founderEducationService;
+
+    @Autowired
+    private FoundersMapper foundersMapper;
 
     /**
      * 获取prepareid的方法
@@ -373,6 +387,76 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         return result;
     }
 
+    /**
+     * 更新用户信息
+     * @param body
+     * @param appid
+     * @return
+     */
+    @Transactional
+    public CommonDto<String> updateUserInfo(ProjectSendBDto body,Integer appid){
+        CommonDto<String> result  = new CommonDto<>();
+        Date now = new Date();
 
+        if (body.getToken() == null){
+            result.setStatus(502);
+            result.setMessage("用户token不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        if (StringUtils.isAnyBlank(body.getActualName(),body.getCompanyDuties(),body.getDesc(),body.getEmail(),body.getWechat())){
+            result.setData(null);
+            result.setMessage("用户信息必填项中，包含未填写项，请检查");
+            result.setStatus(520);
+
+            return result;
+        }
+
+        Integer userId = userLoginService.getUserIdByToken(body.getToken(),appid);
+        if (userId == -1){
+            result.setData(null);
+            result.setMessage("用户token无效");
+            result.setStatus(502);
+
+            return result;
+        }
+
+        Users users = new Users();
+        users.setId(userId);
+        users.setActualName(body.getActualName());
+        users.setCompanyDuties(body.getCompanyDuties());
+        users.setDesc(body.getDesc());
+        users.setEmail(body.getEmail());
+        users.setWechat(body.getWechat());
+
+        usersMapper.updateByPrimaryKeySelective(users);
+
+        //更新创始人信息
+        Example founderExample = new Example(Founders.class);
+        founderExample.and().andEqualTo("userId",userId);
+
+        List<Founders> foundersList = foundersMapper.selectByExample(founderExample);
+
+        Integer founderId = null;
+        if (foundersList.size() > 0){
+            founderId = foundersList.get(0).getId();
+        }else {
+            Founders founders = new Founders();
+            founders.setName(body.getActualName());
+            founders.setUserId(userId);
+            founders.setYn(0);
+            founders.setCreateTime(now);
+
+            foundersMapper.insertSelective(founders);
+            founderId = founders.getId();
+        }
+
+        founderWorkService.createOrUpdateFounderWork(founderId,body.getWorkExperience());
+        founderEducationService.createOrUpdateFounderEducation(founderId,body.getEducationExperience());
+
+        return result;
+    }
 
 }
