@@ -48,6 +48,16 @@ public class ProjectReqDto {
     /** 统计类型 */
     private String statisticsType; // 1、segmentation（领域）2、stage（轮次）3、city（城市）4、work(工作背景) 5、edus（教育背景）6、financingTime（投资时间）
 
+    /** 来源 */
+    private String sourceType;
+
+    public String getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(String sourceType) {
+        this.sourceType = sourceType;
+    }
 
     public String getToken() {
         return token;
