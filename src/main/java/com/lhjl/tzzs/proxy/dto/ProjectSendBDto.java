@@ -79,6 +79,9 @@ public class ProjectSendBDto {
     /**提交项目id*/
     private Integer projectSendId;
 
+    /**机构id*/
+    private List<Integer> institutionId;
+
     public String getProjectLogo() {
         return projectLogo;
     }
@@ -277,5 +280,13 @@ public class ProjectSendBDto {
 
     public void setProjectSendId(Integer projectSendId) {
         this.projectSendId = projectSendId;
+    }
+
+    public List<Integer> getInstitutionId() {
+        return institutionId;
+    }
+
+    public void setInstitutionId(List<Integer> institutionId) {
+        this.institutionId = institutionId;
     }
 }
