@@ -98,7 +98,7 @@ public class BlueUserInfoController extends GenericService{
     public CommonDto<String> editUserInfo(@PathVariable Integer appid, @RequestBody UserInfomationInputDto body){
         CommonDto<String> result = new CommonDto<>();
         try {
-            result = blueUserInfoService.editUserInfo(body);
+            result = blueUserInfoService.editUserInfo(body,appid);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");

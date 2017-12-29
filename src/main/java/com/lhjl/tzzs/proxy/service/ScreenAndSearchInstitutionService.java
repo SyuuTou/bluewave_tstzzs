@@ -3,7 +3,6 @@ package com.lhjl.tzzs.proxy.service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto;
 import com.lhjl.tzzs.proxy.dto.SaveScreenDto;
-import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.SearchInvestmentRecord;
 import java.util.List;
 import java.util.Map;

@@ -42,6 +42,9 @@ public class UserLoginServiceImpl implements UserLoginService{
 
     @Resource
     private SessionKeyService sessionKeyService;
+
+    @Resource
+    private UserTokenMapper userTokenMapper;
     /**
      * 用户登录注册方法
      * @param openId
@@ -283,18 +286,20 @@ public class UserLoginServiceImpl implements UserLoginService{
 
             String openId = session.getOpenid();
             String sessionKey = session.getSessionKey();
-            String unionid = "testunionid";
-            if (session.getUnionid() != null){
-                unionid = session.getUnionid();
-            }
 
-            result = userRegister(openId, unionid, appid);
-
-            String userid = String.valueOf(result.getData().getYhid());
+            //存sessionkey用的秘钥
+            String secretKey = encode();
             //给sessionKey加上前缀
-            String cacheKeyId = "sessionkey:" + userid;
+            String cacheKeyId = "sessionkey:" + secretKey;
 
             boolean jieguo = sessionKeyService.setSessionKey(sessionKey, cacheKeyId);
+
+            userExsitJudgmentDto.setSuccess(true);
+            userExsitJudgmentDto.setToken(secretKey);
+
+            result.setData(userExsitJudgmentDto);
+            result.setMessage("success");
+            result.setStatus(200);
 
             if (!jieguo) {
                 userExsitJudgmentDto.setSuccess(false);
@@ -326,27 +331,16 @@ public class UserLoginServiceImpl implements UserLoginService{
     public CommonDto<String> analysisUserInfo(Integer appid, Map<String, Object> body) {
         CommonDto<String> result = new CommonDto<>();
 
-        log.info("解析用户信息场景,token:{},signature:{},rawData:{},encryptedData:{},iv:{}",body.get("token"),body.get("signature"),body.get("rawData"),body.get("encryptedData"),body.get("iv"));
+        log.info("解析用户信息场景secretKey:{},signature:{},rawData:{},encryptedData:{},iv:{}",body.get("secretKey"),body.get("signature"),body.get("rawData"),body.get("encryptedData"),body.get("iv"));
 
-        String token = (String) body.get("token");
+        String secretKey = (String) body.get("secretKey");
         String signature = (String) body.get("signature");
         String rawData = (String) body.get("rawData");
         String encryptedData = (String) body.get("encryptedData");
         String iv = (String) body.get("iv");
 
-        Integer userId = getUserIdByToken(token);
-        if (userId == -1){
-
-            log.info("用户token无效，抢检查");
-            result.setMessage("用户token无效请检查");
-            result.setStatus(502);
-            result.setData(null);
-
-            return result;
-        }
-
         //sessionkey加前缀
-        String redisKeyId = "sessionkey:" + userId;
+        String redisKeyId = "sessionkey:" + secretKey;
         log.info(redisKeyId);
         //取到sessionKey
         String sessionKey = sessionKeyService.getSessionKey(redisKeyId);
@@ -385,9 +379,17 @@ public class UserLoginServiceImpl implements UserLoginService{
             log.error(e.getMessage(),e.fillInStackTrace());
             throw e;
         }
+        log.info("解析的用户信息为：{}",userInfo);
+        //先注册用户
+        CommonDto<UserExsitJudgmentDto> registerResult = userRegister(userInfo.getOpenId(),userInfo.getUnionId(),appid);
+
+        Integer userId = registerResult.getData().getYhid();
 
         //更新用户信息
         result = updateUserWechatInfo(appid,userId,userInfo);
+
+        result.setData(registerResult.getData().getToken());
+
         return result;
     }
 
@@ -397,15 +399,28 @@ public class UserLoginServiceImpl implements UserLoginService{
      * @return
      */
     @Override
-    public Integer getUserIdByToken(String token) {
+    public Integer getUserIdByToken(String token,Integer appid) {
         Integer result  = -1;
+        if (token == null || "".equals(token) || "undefined".equals(token)){
+            return result;
+        }
 
+        if (appid != 1){
         UsersTokenLts usersTokenLts = new UsersTokenLts();
         usersTokenLts.setToken(token);
 
         List<UsersTokenLts> usersTokenLtsList = usersTokenLtsMapper.select(usersTokenLts);
         if (usersTokenLtsList.size() > 0){
             result = usersTokenLtsList.get(0).getUserId();
+        }
+        }else {
+            UserToken userToken = new UserToken();
+            userToken.setToken(token);
+
+            List<UserToken> userTokenList = userTokenMapper.select(userToken);
+            if (userTokenList.size() > 0){
+                result = userTokenList.get(0).getUserId();
+            }
         }
 
         return result;
@@ -447,7 +462,7 @@ public class UserLoginServiceImpl implements UserLoginService{
 
               return result;
         }
-        Integer userId = getUserIdByToken(token);
+        Integer userId = getUserIdByToken(token,appid);
         if (userId == -1){
               result.setData(null);
               result.setStatus(502);
@@ -481,7 +496,7 @@ public class UserLoginServiceImpl implements UserLoginService{
             return result;
         }
 
-        Integer userId = getUserIdByToken(token);
+        Integer userId = getUserIdByToken(token,appid);
         if (userId == -1){
             result.setMessage("用户token无效，请检查");
             result.setStatus(502);
@@ -529,6 +544,7 @@ public class UserLoginServiceImpl implements UserLoginService{
         if (usersWeixinLtsList.size() > 0){
             UsersWeixinLts usersWeixinLtsForUpdate = usersWeixinLtsList.get(0);
             usersWeixinLtsForUpdate.setNickName(userInfo.getNickName());
+            usersWeixinLtsForUpdate.setUnionId(userInfo.getUnionId());
 
             usersWeixinLtsMapper.updateByPrimaryKeySelective(usersWeixinLtsForUpdate);
         }else {
@@ -550,6 +566,7 @@ public class UserLoginServiceImpl implements UserLoginService{
         Users users = new Users();
         users.setId(userId);
         users.setHeadpic(userInfo.getAvatarUrl());
+        users.setUnionid(userInfo.getUnionId());
 
         usersMapper.updateByPrimaryKeySelective(users);
 

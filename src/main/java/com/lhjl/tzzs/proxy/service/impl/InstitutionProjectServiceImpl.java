@@ -2,13 +2,11 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InstitutionsProjectDto.InstitutionsProjectInputDto;
-import com.lhjl.tzzs.proxy.dto.InstitutionsProjectDto.InstitutionsProjectOutputDto;
 import com.lhjl.tzzs.proxy.mapper.FollowMapper;
 import com.lhjl.tzzs.proxy.mapper.InterviewMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSegmentationMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
 import com.lhjl.tzzs.proxy.model.Follow;
-import com.lhjl.tzzs.proxy.model.Interview;
 import com.lhjl.tzzs.proxy.model.ProjectSegmentation;
 import com.lhjl.tzzs.proxy.service.InstitutionsProjectService;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
@@ -16,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;

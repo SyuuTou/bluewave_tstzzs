@@ -11,7 +11,6 @@ import com.lhjl.tzzs.proxy.dto.EventDto;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,11 +21,9 @@ import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.mapper.FollowMapper;
 import com.lhjl.tzzs.proxy.model.Follow;
 import com.lhjl.tzzs.proxy.service.FollowService;
-import com.lhjl.tzzs.proxy.service.common.JedisCommonService;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import redis.clients.jedis.Jedis;
 /**
  * 关注
  * @author PP

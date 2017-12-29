@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.Page;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.InvestorsDemandLabel;
 import com.lhjl.tzzs.proxy.dto.LabelList;
 import com.lhjl.tzzs.proxy.mapper.DataLogDomainMapper;
 import com.lhjl.tzzs.proxy.mapper.DataLogEducationMapper;
@@ -31,7 +30,6 @@ import com.lhjl.tzzs.proxy.mapper.UsersMapper;
 import com.lhjl.tzzs.proxy.service.EvaluateService;
 import com.lhjl.tzzs.proxy.service.InvestmentDatalogService;
 
-import javassist.expr.NewArray;
 import tk.mybatis.mapper.util.StringUtil;
 @Service
 public class InvestmentDatalogServiceImpl implements InvestmentDatalogService {

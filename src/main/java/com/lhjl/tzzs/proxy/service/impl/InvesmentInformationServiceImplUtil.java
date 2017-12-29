@@ -3,7 +3,6 @@ package com.lhjl.tzzs.proxy.service.impl;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 

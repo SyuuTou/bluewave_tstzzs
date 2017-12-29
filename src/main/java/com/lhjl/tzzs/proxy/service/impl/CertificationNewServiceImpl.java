@@ -1,12 +1,10 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 

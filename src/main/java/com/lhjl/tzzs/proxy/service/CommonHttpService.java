@@ -6,7 +6,6 @@ import com.lhjl.tzzs.proxy.dto.LoginReqBody;
 import com.lhjl.tzzs.proxy.dto.SendsecuritycodeReqBody;
 import com.lhjl.tzzs.proxy.dto.ZhuceReqBody;
 
-import java.util.List;
 
 public interface  CommonHttpService {
 

@@ -37,7 +37,7 @@ public interface UserLoginService {
      * @param token
      * @return
      */
-    Integer getUserIdByToken(String token);
+    Integer getUserIdByToken(String token,Integer appid);
 
     /**
      * 检查用户是否有效的接口
