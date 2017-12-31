@@ -570,6 +570,7 @@
         </if>
 
         group by p.short_name
+        order by p.evaluation_recommend desc
         limit #{offset},#{pageSize}
         ) a left join (select count(user_id) followNum ,projects_id from follow where `status`=1 group by projects_id) b on a.id =
         b.projects_id
