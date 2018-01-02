@@ -459,7 +459,7 @@ public class ProjectsServiceImpl implements ProjectsService {
         //获取项目融资阶段
         Example projectFinancingLogExample = new Example(ProjectFinancingLog.class);
         projectFinancingLogExample.and().andEqualTo("projectId",xmid).andEqualTo("status",1);
-        projectFinancingLogExample.setOrderByClause("create_time DESC");
+        projectFinancingLogExample.setOrderByClause("financing_time DESC");
 
         String financingStage = "";
 
@@ -470,7 +470,7 @@ public class ProjectsServiceImpl implements ProjectsService {
        }else{
            Example projectFinancingLogListOne = new Example(ProjectFinancingLog.class);
            projectFinancingLogListOne.and().andEqualTo("projectId",xmid);
-           projectFinancingLogListOne.setOrderByClause("create_time DESC");
+           projectFinancingLogListOne.setOrderByClause("financing_time DESC");
 
             List<ProjectFinancingLog> projectFinancingLogList1 = projectFinancingLogMapper.selectByExample(projectFinancingLogListOne);
             if (projectFinancingLogList1.size() > 0){
@@ -667,20 +667,22 @@ public class ProjectsServiceImpl implements ProjectsService {
 
                 //获取投资方姓名
                 Integer pflid = pfl.getId();
-                ProjectFinancingHistoryInvestors projectFinancingHistoryInvestors = new ProjectFinancingHistoryInvestors();
-                projectFinancingHistoryInvestors.setProjectFinancingHistoryId(pflid);
+//                ProjectFinancingHistoryInvestors projectFinancingHistoryInvestors = new ProjectFinancingHistoryInvestors();
+//                projectFinancingHistoryInvestors.setProjectFinancingHistoryId(pflid);
+//
+//                List<ProjectFinancingHistoryInvestors> projectFinancingHistoryInvestorsList = projectFinancingHistoryInvestorsMapper.select(projectFinancingHistoryInvestors);
+//                List<String> touzifang= new ArrayList<>();
+//                if (projectFinancingHistoryInvestorsList.size() > 0){
+//                        for (ProjectFinancingHistoryInvestors pfhi:projectFinancingHistoryInvestorsList){
+//                            touzifang.add(pfhi.getInvestorName());
+//                        }
+//                }
 
-                List<ProjectFinancingHistoryInvestors> projectFinancingHistoryInvestorsList = projectFinancingHistoryInvestorsMapper.select(projectFinancingHistoryInvestors);
-                List<String> touzifang= new ArrayList<>();
-                if (projectFinancingHistoryInvestorsList.size() > 0){
-                        for (ProjectFinancingHistoryInvestors pfhi:projectFinancingHistoryInvestorsList){
-                            touzifang.add(pfhi.getInvestorName());
-                        }
-                }
+                List<String> projectFinancingLogListFor = projectFinancingLogMapper.selectInvestors(pflid);
 
                 obj.put("financingTime",dateString);
                 obj.put("stage",pfl.getStage());
-                obj.put("touzifang",touzifang);
+                obj.put("touzifang",projectFinancingLogListFor);
 
                 list.add(obj);
             }
