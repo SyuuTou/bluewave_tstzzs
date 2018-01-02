@@ -688,7 +688,7 @@
         left join (select count(user_id) interviewNum ,projects_id from interview group by projects_id) c on a.id =
         c.projects_id
         left JOIN (select fo.status,projects_id,fo.user_id from   follow fo where fo.status= 1 and fo.user_id = #{token}  group by fo.projects_id,fo.user_id) d   on a.id = d.projects_id
-        left join ()
+
     </select>
     <select id="relatedInvestmentInstitution" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultType="java.util.HashMap">
         select ii.id, ii.short_name,count(distinct p.id) as ct,
