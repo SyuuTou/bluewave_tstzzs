@@ -645,6 +645,7 @@
         from(
         select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,GROUP_CONCAT(DISTINCT ps.segmentation_name) segmentation_name,p.evaluation_recommend,pfl.stage
         from project_financing_log pfl left join projects p on pfl.project_id = p.id
+        left join meta_project_stage mps on pfl.stage = mps.name
         right join project_segmentation ps on ps.project_id = p.id
         <if test="segmentation != '' and segmentation != null">
             and ps.segmentation_name in (${segmentation})
@@ -675,6 +676,7 @@
             and p.project_source is not null
         </if>
         <!--and pfl.financing_time between #{beginTime} and #{endTime}-->
+        order by mps.id DESC
         group by p.short_name
         <if test="financingOrder != '' and financingOrder != null">
             order by pfl.financing_time desc
@@ -685,6 +687,7 @@
         left join (select count(user_id) interviewNum ,projects_id from interview group by projects_id) c on a.id =
         c.projects_id
         left JOIN (select fo.status,projects_id,fo.user_id from   follow fo where fo.status= 1 and fo.user_id = #{token}  group by fo.projects_id,fo.user_id) d   on a.id = d.projects_id
+        left join ()
     </select>
     <select id="relatedInvestmentInstitution"  parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultType="java.util.HashMap">
         select ii.id, ii.short_name,count(distinct p.id) as ct,
