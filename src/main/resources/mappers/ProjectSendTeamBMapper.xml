@@ -14,4 +14,9 @@
     <result column="appid" jdbcType="INTEGER" property="appid" />
     <result column="yn" jdbcType="INTEGER" property="yn" />
   </resultMap>
+  <select id="getTeamList" resultMap="BaseResultMap">
+    SELECT id,member_name,company_duties FROM project_send_team_b where project_send_b_id =#{projectSendBId}
+    and appid =#{appid}
+    and yn = 0;
+  </select>
 </mapper>

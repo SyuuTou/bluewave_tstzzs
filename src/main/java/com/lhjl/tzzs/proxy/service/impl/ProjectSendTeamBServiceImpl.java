@@ -15,7 +15,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -110,9 +112,17 @@ public class ProjectSendTeamBServiceImpl implements ProjectSendTeamBService{
         return result;
     }
 
+    /**
+     * 根据团队成员id获取团队成员信息方法
+     * @param projectSendMemberId 团队成员id
+     * @param appid
+     * @return
+     */
     @Override
     public CommonDto<ProjectSendTeamBDto> readTeamMemberById(Integer projectSendMemberId, Integer appid) {
         CommonDto<ProjectSendTeamBDto> result = new CommonDto<>();
+        ProjectSendTeamBDto projectSendTeamBDto = new ProjectSendTeamBDto();
+
         if (projectSendMemberId == null){
             result.setMessage("提交项目成员id不能为空");
             result.setStatus(502);
@@ -120,22 +130,104 @@ public class ProjectSendTeamBServiceImpl implements ProjectSendTeamBService{
 
             return result;
         }
-        //todo
         ProjectSendTeamB projectSendTeamB = projectSendTeamBMapper.selectByPrimaryKey(projectSendMemberId);
+        if (projectSendTeamB == null){
+            result.setMessage("当前id对应的团队成员不存在");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+        //查询团队成员的工作经历和教育经历
+        List<String> teamEducation = new ArrayList<>();
+        List<String> teamWork = new ArrayList<>();
+        List<String> teamEducation1 = projectSendTeamMemberEducationBMapper.findEductionList(projectSendMemberId);
+        List<String> teamWork1 = projectSendTeamMemberWorkBMapper.findWorkList(projectSendMemberId);
+        if (teamEducation1 != null){
+            teamEducation = teamEducation1;
+        }
+        if (teamWork1 != null ){
+            teamWork = teamWork1;
+        }
+
+        projectSendTeamBDto.setMemberName(projectSendTeamB.getMemberName());
+        projectSendTeamBDto.setCompanyDuties(projectSendTeamB.getCompanyDuties());
+        projectSendTeamBDto.setStockRatio(projectSendTeamB.getStockRatio());
+        projectSendTeamBDto.setMemberDesc(projectSendTeamB.getMemberDesc());
+        projectSendTeamBDto.setWorkExperience(teamWork);
+        projectSendTeamBDto.setEducationExperience(teamEducation);
+
+        result.setData(projectSendTeamBDto);
+        result.setStatus(200);
+        result.setMessage("success");
 
         return result;
     }
 
+    /**
+     * 获取团队成员列表
+     * @param projectSendBId
+     * @param appid
+     * @return
+     */
     @Override
     public CommonDto<List<ProjectSendTeamBOutDto>> readTeamMemberList(Integer projectSendBId, Integer appid) {
-        //todo
-        return null;
+        CommonDto<List<ProjectSendTeamBOutDto>> result = new CommonDto<>();
+
+        if (projectSendBId == null){
+            result.setMessage("提交项目id不能为空");
+            result.setStatus(502);
+            result.setData(null);
+        }
+
+        List<ProjectSendTeamBOutDto> list = new ArrayList<>();
+        List<ProjectSendTeamB> projectSendTeamBOutDtoList = projectSendTeamBMapper.getTeamList(projectSendBId,appid);
+        if (projectSendTeamBOutDtoList.size() > 0){
+           for (ProjectSendTeamB psb:projectSendTeamBOutDtoList){
+               ProjectSendTeamBOutDto projectSendTeamBOutDto = new ProjectSendTeamBOutDto();
+               projectSendTeamBOutDto.setCompanyDuties(psb.getCompanyDuties());
+               projectSendTeamBOutDto.setMemberName(psb.getMemberName());
+               projectSendTeamBOutDto.setId(psb.getId());
+               list.add(projectSendTeamBOutDto);
+           }
+        }
+
+        result.setData(list);
+        result.setStatus(200);
+        result.setMessage("success");
+
+        return result;
     }
 
+    /**
+     * 删除团队成员的方法
+     * @param projectSendMemberId
+     * @param appid
+     * @return
+     */
     @Override
     public CommonDto<String> deleteTeamMemberById(Integer projectSendMemberId, Integer appid) {
-        //todo
-        return null;
+        CommonDto<String> result  = new CommonDto<>();
+        if (projectSendMemberId == null){
+            result.setMessage("提交项目id不能为空");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+        ProjectSendTeamB projectSendTeamB = new ProjectSendTeamB();
+        projectSendTeamB.setId(projectSendMemberId);
+        projectSendTeamB.setYn(1);
+
+        projectSendTeamBMapper.updateByPrimaryKeySelective(projectSendTeamB);
+
+        result.setMessage("success");
+        result.setStatus(200);
+        result.setData(null);
+
+        return result;
     }
 
     /**

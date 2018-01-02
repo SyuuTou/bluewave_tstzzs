@@ -9,4 +9,7 @@
     <result column="ps_team_b_id" property="psTeamBId" jdbcType="INTEGER" />
     <result column="education_experience" property="educationExperience" jdbcType="VARCHAR" />
   </resultMap>
+  <select id="findEductionList" resultType="String">
+    SELECT education_experience FROM project_send_team_member_education_b where ps_team_b_id =#{projectSendMemberId};
+  </select>
 </mapper>
