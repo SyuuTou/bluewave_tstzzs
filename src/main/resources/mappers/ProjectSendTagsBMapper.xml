@@ -10,4 +10,8 @@
     <result column="tag_name" property="tagName" jdbcType="VARCHAR" />
     <result column="appid" property="appid" jdbcType="INTEGER" />
   </resultMap>
+  <insert id="copyProjectSendTagsB" parameterType="com.lhjl.tzzs.proxy.dto.ProjectSendSearchCommenDto">
+    insert into project_send_tags_b(project_send_b_id,tag_name,appid) select #{newid},tag_name,appid
+    from project_send_tags_b where project_send_b_id = #{oldid}
+  </insert>
 </mapper>

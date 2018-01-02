@@ -10,4 +10,8 @@
     <result column="segmentation_name" property="segmentationName" jdbcType="VARCHAR" />
     <result column="appid" property="appid" jdbcType="INTEGER" />
   </resultMap>
+  <insert id="copyProjectSendSegmentationB" parameterType="com.lhjl.tzzs.proxy.dto.ProjectSendSearchCommenDto">
+    insert into project_send_segmentation_b(project_send_b_id,segmentation_name,appid) select #{newid},segmentation_name,appid
+    from project_send_segmentation_b where project_send_b_id = #{oldid}
+  </insert>
 </mapper>

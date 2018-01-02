@@ -12,4 +12,8 @@
   <select id="findEductionList" resultType="String">
     SELECT education_experience FROM project_send_team_member_education_b where ps_team_b_id =#{projectSendMemberId};
   </select>
+  <insert id="copyProjectSendTeamMemberEducationB" parameterType="com.lhjl.tzzs.proxy.dto.ProjectSendSearchCommenDto">
+    insert into project_send_team_member_education_b(ps_team_b_id,education_experience) select #{newid},education_experience
+    from project_send_team_member_education_b where ps_team_b_id =#{oldid}
+  </insert>
 </mapper>

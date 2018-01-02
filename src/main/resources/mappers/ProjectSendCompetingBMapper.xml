@@ -10,4 +10,11 @@
     <result column="competing_name" property="competingName" jdbcType="VARCHAR" />
     <result column="appid" property="appid" jdbcType="INTEGER" />
   </resultMap>
+  <insert id="copyProjectSendCompetingB" keyProperty="id" useGeneratedKeys="true" parameterType="com.lhjl.tzzs.proxy.dto.ProjectSendSearchCommenDto">
+    insert into project_send_competing_b(project_send_b_id,competing_name,appid) select #{newid},competing_name,appid
+    from project_send_competing_b where project_send_b_id =#{oldid}
+    <selectKey keyProperty="id" resultType="java.lang.Integer">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
 </mapper>

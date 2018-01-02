@@ -19,4 +19,12 @@
     and appid =#{appid}
     and yn = 0;
   </select>
+
+  <insert id="copyProjectTeamB" parameterType="com.lhjl.tzzs.proxy.dto.ProjectSendSearchCommenDto" useGeneratedKeys="true" keyProperty="id">
+    insert into project_send_team_b(project_send_b_id,member_name,company_duties,stock_ratio,member_desc,appid,yn)
+    select #{newid},member_name,company_duties,stock_ratio,member_desc,appid,0 from project_send_team_b where id = #{oldid};
+    <selectKey keyProperty="id" resultType="java.lang.Integer">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
 </mapper>

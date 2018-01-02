@@ -36,4 +36,11 @@ public interface ProjectSendTeamBService {
      * @return
      */
     CommonDto<String> deleteTeamMemberById(Integer projectSendMemberId,Integer appid);
+
+    /**
+     * 复制团队成员的接口
+     * @param appid
+     * @param projectSendBId
+     */
+    void copyProjectSendBTeam(Integer appid,Integer projectSendBId);
 }

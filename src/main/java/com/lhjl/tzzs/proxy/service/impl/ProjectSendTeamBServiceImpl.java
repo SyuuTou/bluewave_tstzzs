@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ProjectSendSearchCommenDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendTeamBDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendTeamBOutDto;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamBMapper;
@@ -289,6 +290,41 @@ public class ProjectSendTeamBServiceImpl implements ProjectSendTeamBService{
 
                     projectSendTeamMemberWorkBMapper.insertSelective(projectSendTeamMemberWorkB);
                 }
+            }
+        }
+    }
+
+    /**
+     * 复制项目成员方法
+     * @param appid
+     * @param projectSendBId
+     */
+    @Transactional
+    @Override
+    public void copyProjectSendBTeam(Integer appid,Integer projectSendBId){
+        //先获取到原来的项目成员
+        ProjectSendTeamB projectSendTeamB = new ProjectSendTeamB();
+        projectSendTeamB.setProjectSendBId(projectSendBId);
+        projectSendTeamB.setId(0);
+        projectSendTeamB.setAppid(appid);
+
+        List<ProjectSendTeamB> projectSendTeamBList = projectSendTeamBMapper.select(projectSendTeamB);
+        if (projectSendTeamBList.size() > 0){
+            for (ProjectSendTeamB psb:projectSendTeamBList){
+                ProjectSendSearchCommenDto projectSendSearchCommenDto = new ProjectSendSearchCommenDto();
+                projectSendSearchCommenDto.setOldid(projectSendBId);
+                projectSendSearchCommenDto.setNewid(psb.getId());
+
+                projectSendTeamBMapper.copyProjectTeamB(projectSendSearchCommenDto);
+                Integer ptmId = projectSendSearchCommenDto.getId();
+
+                ProjectSendSearchCommenDto projectSendSearchCommenDto1 = new ProjectSendSearchCommenDto();
+                projectSendSearchCommenDto1.setOldid(psb.getId());
+                projectSendSearchCommenDto1.setNewid(ptmId);
+
+                projectSendTeamMemberEducationBMapper.copyProjectSendTeamMemberEducationB(projectSendSearchCommenDto1);
+                projectSendTeamMemberWorkBMapper.copyProjectSendTeamMemberWorkB(projectSendSearchCommenDto1);
+
             }
         }
     }

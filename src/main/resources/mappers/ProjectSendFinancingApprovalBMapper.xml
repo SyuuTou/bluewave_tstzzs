@@ -16,4 +16,10 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="appid" property="appid" jdbcType="INTEGER" />
   </resultMap>
+  <insert id="copyProjectSendFinancingApprovalB" parameterType="com.lhjl.tzzs.proxy.dto.ProjectSendSearchCommenDto">
+    insert into project_send_financing_approval_b(project_send_b_id,stage,amount,currency,share_divest,project_financing_useful,user_id,create_time,appid)
+    select #{newid},stage,amount,currency,share_divest,project_financing_useful,user_id,now(),appid
+    from project_send_financing_approval_b
+    where project_send_b_id = #{oldid}
+  </insert>
 </mapper>

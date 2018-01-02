@@ -1,12 +1,12 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.ProjectSendBDto;
+import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.FounderEducationService;
 import com.lhjl.tzzs.proxy.service.FounderWorkService;
 import com.lhjl.tzzs.proxy.service.ProjectSendBService;
+import com.lhjl.tzzs.proxy.service.ProjectSendTeamBService;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +53,9 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
 
     @Autowired
     private FoundersMapper foundersMapper;
+
+    @Resource
+    private ProjectSendTeamBService projectSendTeamBService;
 
     /**
      * 获取prepareid的方法
@@ -145,6 +148,51 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         return result;
     }
 
+    /**
+     * 读项目信息接口
+     * @param token
+     * @param appid
+     * @return
+     */
+    @Override
+    public CommonDto<ProjectSendBOutDto> readProjectInfomation(String token, Integer appid) {
+
+        CommonDto<ProjectSendBOutDto> result  = new CommonDto<>();
+
+        if (StringUtils.isAnyBlank(token)){
+            result.setStatus(502);
+            result.setMessage("用户token不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        Integer userId = userLoginService.getUserIdByToken(token,appid);
+        if (userId == -1){
+            result.setMessage("用户token非法");
+            result.setData(null);
+            result.setStatus(502);
+            return result;
+        }
+
+        Integer prepareId = getPrepareId(token,appid);
+        if (prepareId == null){
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("生产prepareId出错");
+
+            return result;
+        }
+
+        List<ProjectSendB> projectSendBList = projectSendBMapper.getLastCreateProject(userId,appid,prepareId);
+        if (projectSendBList.size() > 0){
+            //todo 查询到项目时的处理
+        }else {
+            //todo 没有查询到项目的处理
+        }
+
+        return result;
+    }
 
 
     /**
@@ -458,5 +506,49 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
 
         return result;
     }
+
+    /**
+     * 复制项目信息的方法
+     * @param prepareid 预生成id
+     * @param appid 应用id
+     * @param userId 用户id
+     * @return
+     */
+    @Transactional
+    @Override
+    public CommonDto<String> copyProject(Integer prepareid,Integer newprepareid,Integer appid,Integer userId,Integer projectSendBId){
+        CommonDto<String> result  = new CommonDto<>();
+        if (prepareid ==null || appid == null || userId == null || projectSendBId == null){
+            result.setMessage("缺少参数无法完成复制");
+            result.setData(null);
+            result.setStatus(502);
+
+            return result;
+        }
+        Integer id =0;
+        //复制项目主体信息
+        ProjectSendSearchDto projectSendSearchDto = new ProjectSendSearchDto();
+        projectSendSearchDto.setNewprepareid(newprepareid);
+        projectSendSearchDto.setPrepareid(prepareid);
+
+        projectSendBMapper.copyProjectSendB(projectSendSearchDto);
+        Integer newprojectSendId = projectSendSearchDto.getId();
+
+        ProjectSendSearchCommenDto projectSendSearchCommenDto = new ProjectSendSearchCommenDto();
+        projectSendSearchCommenDto.setNewid(newprojectSendId);
+        projectSendSearchCommenDto.setOldid(projectSendBId);
+
+        //复制项目相关信息
+        projectSendCompetingBMapper.copyProjectSendCompetingB(projectSendSearchCommenDto);
+        projectSendSegmentationBMapper.copyProjectSendSegmentationB(projectSendSearchCommenDto);
+        projectSendTagsBMapper.copyProjectSendTagsB(projectSendSearchCommenDto);
+        projectSendFinancingApprovalBMapper.copyProjectSendFinancingApprovalB(projectSendSearchCommenDto);
+
+        //复制团队成员
+        projectSendTeamBService.copyProjectSendBTeam(appid, projectSendBId);
+
+        return result;
+    }
+
 
 }
