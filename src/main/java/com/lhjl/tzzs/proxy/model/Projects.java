@@ -131,7 +131,7 @@ public class Projects {
     private Integer cityCount;
 
     @Column(name = "evaluation_recommend")
-    private Integer evaluationRecommend;
+    private Double evaluationRecommend;
 
     /**
      * 用来排除，国外机构投资的国外项目
@@ -156,6 +156,16 @@ public class Projects {
      */
     @Column(name = "project_investment_highlights")
     private String projectInvestmentHighlights;
+
+    /**
+     * ALTER TABLE `idatavc`.`projects`
+CHANGE COLUMN `project_type` `project_type` INT(11) NULL DEFAULT NULL COMMENT '用来排除，国外机构投资的国外项目' ;
+     */
+    @Column(name = "city_count_max")
+    private Integer cityCountMax;
+
+    @Column(name = "city_count_min")
+    private Integer cityCountMin;
 
     /**
      * @return ID
@@ -594,14 +604,14 @@ public class Projects {
     /**
      * @return evaluation_recommend
      */
-    public Integer getEvaluationRecommend() {
+    public Double getEvaluationRecommend() {
         return evaluationRecommend;
     }
 
     /**
      * @param evaluationRecommend
      */
-    public void setEvaluationRecommend(Integer evaluationRecommend) {
+    public void setEvaluationRecommend(Double evaluationRecommend) {
         this.evaluationRecommend = evaluationRecommend;
     }
 
@@ -675,5 +685,41 @@ public class Projects {
      */
     public void setProjectInvestmentHighlights(String projectInvestmentHighlights) {
         this.projectInvestmentHighlights = projectInvestmentHighlights;
+    }
+
+    /**
+     * 获取ALTER TABLE `idatavc`.`projects`
+CHANGE COLUMN `project_type` `project_type` INT(11) NULL DEFAULT NULL COMMENT '用来排除，国外机构投资的国外项目' ;
+     *
+     * @return city_count_max - ALTER TABLE `idatavc`.`projects`
+CHANGE COLUMN `project_type` `project_type` INT(11) NULL DEFAULT NULL COMMENT '用来排除，国外机构投资的国外项目' ;
+     */
+    public Integer getCityCountMax() {
+        return cityCountMax;
+    }
+
+    /**
+     * 设置ALTER TABLE `idatavc`.`projects`
+CHANGE COLUMN `project_type` `project_type` INT(11) NULL DEFAULT NULL COMMENT '用来排除，国外机构投资的国外项目' ;
+     *
+     * @param cityCountMax ALTER TABLE `idatavc`.`projects`
+CHANGE COLUMN `project_type` `project_type` INT(11) NULL DEFAULT NULL COMMENT '用来排除，国外机构投资的国外项目' ;
+     */
+    public void setCityCountMax(Integer cityCountMax) {
+        this.cityCountMax = cityCountMax;
+    }
+
+    /**
+     * @return city_count_min
+     */
+    public Integer getCityCountMin() {
+        return cityCountMin;
+    }
+
+    /**
+     * @param cityCountMin
+     */
+    public void setCityCountMin(Integer cityCountMin) {
+        this.cityCountMin = cityCountMin;
     }
 }

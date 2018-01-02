@@ -29,6 +29,12 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
     @Value("${statistics.endTime}")
     private String endTime;
 
+//    @Value("${statistics.beginTime}")
+//    private String beginTime;
+//
+//    @Value("${statistics.endTime}")
+//    private String endTime;
+
     @Transactional(readOnly = true)
     @Override
     public CommonDto<List<ProjectResDto>> projectFilter(ProjectReqDto reqDto) {
@@ -57,8 +63,10 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
             reqDto.setStage("'" + reqDto.getStage().replace(",", "','") + "'");
         }
 
-        reqDto.setBeginTime(beginTime);
-        reqDto.setEndTime(endTime);
+        if (null != reqDto.getSourceType() &&"chart".equals(reqDto.getSourceType())) {
+            reqDto.setBeginTime(beginTime);
+            reqDto.setEndTime(endTime);
+        }
 
         reqDto.setOffset((reqDto.getPageNo() - 1) * reqDto.getPageSize());
         List<ProjectResDto> projectResDtos = projectsMapper.projectFilter(reqDto);
@@ -150,8 +158,10 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
             reqDto.setStage("'" + reqDto.getStage().replace(",", "','") + "'");
         }
 
-        reqDto.setBeginTime(beginTime);
-        reqDto.setEndTime(endTime);
+        if (null != reqDto.getSourceType() &&"chart".equals(reqDto.getSourceType())) {
+            reqDto.setBeginTime(beginTime);
+            reqDto.setEndTime(endTime);
+        }
 
         reqDto.setOffset((reqDto.getPageNo() - 1) * reqDto.getPageSize());
         List<Map<String, Object>> list = new ArrayList<>();
@@ -191,8 +201,11 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
             reqDto.setStage("'" + reqDto.getStage().replace(",", "','") + "'");
         }
 
-        reqDto.setBeginTime(beginTime);
-        reqDto.setEndTime(endTime);
+            if (null != reqDto.getSourceType() &&"chart".equals(reqDto.getSourceType())) {
+                reqDto.setBeginTime(beginTime);
+                reqDto.setEndTime(endTime);
+            }
+
 
         switch (reqDto.getStatisticsType()) {
             case "segmentation":

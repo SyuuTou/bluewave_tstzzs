@@ -19,6 +19,7 @@ import com.lhjl.tzzs.proxy.utils.MD5Util;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Position;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,7 +80,12 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
             return result;
         }else {
             InvestmentInstitutionComplexOutputDto investmentInstitutionComplexOutputDto = new InvestmentInstitutionComplexOutputDto();
-            investmentInstitutionComplexOutputDto.setInvestmentInstitutionDesc(investmentInstitutions.getKenelCase());
+            if (StringUtils.isEmpty(investmentInstitutions.getKenelCase())){
+
+                investmentInstitutionComplexOutputDto.setInvestmentInstitutionDesc(investmentInstitutions.getComment());
+            }else {
+                investmentInstitutionComplexOutputDto.setInvestmentInstitutionDesc(investmentInstitutions.getKenelCase());
+            }
             investmentInstitutionComplexOutputDto.setInvestmentInstitutionLogo(investmentInstitutions.getLogo());
             investmentInstitutionComplexOutputDto.setInvestmentInstitutionName(investmentInstitutions.getShortName());
 
@@ -233,7 +239,12 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
         if (investmentInstitutions.getKenelCase() == null){
             investmentInstitutions.setKenelCase("");
         }
-        map.put("institutionDesc",investmentInstitutions.getKenelCase());
+        if (StringUtils.isEmpty(investmentInstitutions.getKenelCase())){
+
+            map.put("institutionDesc",investmentInstitutions.getComment());
+        }else {
+            map.put("institutionDesc", investmentInstitutions.getKenelCase());
+        }
         map.put("institutionSegmentation",segmentList);
         map.put("institutionStage",stageList);
         map.put("address",listiia);
