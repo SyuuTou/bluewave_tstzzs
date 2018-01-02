@@ -31,12 +31,13 @@
   </resultMap>
 
   <select id="selectProjectFinancingLogList" parameterType="Integer" resultMap="BaseResultMap">
-    select * from project_financing_log where project_id = #{projectId} and `status`= #{projectStatus}
-    group by stage
-    order by financing_time desc
+    select  a.* from( select * from project_financing_log where project_id =  #{projectId} and `status`= #{projectStatus}
+    order by financing_time) a
+    group by a.stage
+    order by a.financing_time desc
   </select>
   <select id="selectInvestors" resultType="String">
-    select ii.short_name from idatavc.investment_institutions_project iip
+    select ii.short_name from investment_institutions_project iip
     left join investment_institutions ii on iip.investment_institutions_id = ii.ID
     where project_id = #{pflid}
     limit 0,3
