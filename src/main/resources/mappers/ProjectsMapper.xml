@@ -540,38 +540,38 @@
         left join projects p on pfl.project_id = p.id
         order by mps.id desc
         ) pp
-        right join project_segmentation ps on ps.project_id = p.id
+        right join project_segmentation ps on ps.project_id = pp.id
         <if test="segmentation != '' and segmentation != null">
              and ps.segmentation_name in (${segmentation})
         </if>
         <if test="edus != '' and edus != null">
             right join (select f.project_id from founders f right join founders_education fe on fe.founder_ID = f.id
-            where fe.education_experience in (${edus})) ffe on ffe.project_id = p.id
+            where fe.education_experience in (${edus})) ffe on ffe.project_id = pp.id
         </if>
         <if test="works != '' and works != null">
             right join (select f.project_id from founders f right join founders_work fw on fw.founder_ID = f.id where
-            fw.work_experience in (${works})) ffw on ffw.project_id = p.id
+            fw.work_experience in (${works})) ffw on ffw.project_id = pp.id
         </if>
         <if test="dataVcType != '' and dataVcType != null">
             right join (select iip.project_id from investment_institutions_project iip left join investment_institutions
-            ii on iip.investment_institutions_id = ii.id and ii.type in (${dataVcType})) iid on iid.project_id = p.id
+            ii on iip.investment_institutions_id = ii.id and ii.type in (${dataVcType})) iid on iid.project_id = pp.id
         </if>
-        where p.short_name is not NULL and p.short_name != ''
+        where pp.short_name is not NULL and pp.short_name != ''
         <if test="city != '' and city != null">
-            and p.city in (${city})
+            and pp.city in (${city})
         </if>
         <if test="stage != '' and stage != null">
             AND pfl.stage in (${stage})
         </if>
         <if test="keyWords != '' and keyWords != null ">
-            AND (p.short_name like "%"#{keyWords}"%" or p.full_name like "%"#{keyWords}"%" or p.kernel_desc like "%"#{keyWords}"%" )
+            AND (pp.short_name like "%"#{keyWords}"%" or pp.full_name like "%"#{keyWords}"%" or pp.kernel_desc like "%"#{keyWords}"%" )
         </if>
         <if test="beginTime != '' and beginTime != null and endTime != '' and endTime != ''">
 
             and pfl.financing_time between #{beginTime} and #{endTime}
         </if>
-        group by p.short_name
-        order by p.evaluation_recommend desc
+        group by pp.short_name
+        order by pp.evaluation_recommend desc
         limit #{offset},#{pageSize}
         ) a left join (select count(user_id) followNum ,projects_id from follow where `status`=1 group by projects_id) b on a.id =
         b.projects_id
