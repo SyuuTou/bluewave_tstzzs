@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectsMapper">
-    <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Projects">
-        <!--
-          WARNING - @mbg.generated
-        -->
-        <id column="ID" jdbcType="INTEGER" property="id"/>
-        <result column="serial_number" jdbcType="INTEGER" property="serialNumber"/>
-        <result column="short_name" jdbcType="VARCHAR" property="shortName"/>
-        <result column="full_name" jdbcType="VARCHAR" property="fullName"/>
-        <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc"/>
-        <result column="commet" jdbcType="VARCHAR" property="commet"/>
-        <result column="url" jdbcType="VARCHAR" property="url"/>
-        <result column="established_time" jdbcType="DATE" property="establishedTime"/>
-        <result column="segmentation" jdbcType="VARCHAR" property="segmentation"/>
-        <result column="item_label" jdbcType="VARCHAR" property="itemLabel"/>
-        <result column="address" jdbcType="VARCHAR" property="address"/>
-        <result column="territory" jdbcType="VARCHAR" property="territory"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="continent" jdbcType="VARCHAR" property="continent"/>
-        <result column="country" jdbcType="VARCHAR" property="country"/>
-        <result column="province" jdbcType="VARCHAR" property="province"/>
-        <result column="city" jdbcType="VARCHAR" property="city"/>
-        <result column="region" jdbcType="VARCHAR" property="region"/>
-        <result column="investment_institutions_id" jdbcType="INTEGER" property="investmentInstitutionsId"/>
-        <result column="approval_status" jdbcType="INTEGER" property="approvalStatus"/>
-        <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime"/>
-        <result column="yn" jdbcType="INTEGER" property="yn"/>
-        <result column="userid" jdbcType="INTEGER" property="userid"/>
-        <result column="kernel_desc_status" jdbcType="INTEGER" property="kernelDescStatus"/>
-        <result column="city_count" jdbcType="INTEGER" property="cityCount"/>
-        <result column="evaluation_recommend" jdbcType="INTEGER" property="evaluationRecommend"/>
-        <result column="project_type" jdbcType="INTEGER" property="projectType"/>
-        <result column="project_source" jdbcType="INTEGER" property="projectSource"/>
-        <result column="project_logo" jdbcType="VARCHAR" property="projectLogo"/>
-        <result column="project_investment_highlights" jdbcType="VARCHAR" property="projectInvestmentHighlights"/>
-    </resultMap>
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Projects">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+    <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc" />
+    <result column="commet" jdbcType="VARCHAR" property="commet" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="established_time" jdbcType="DATE" property="establishedTime" />
+    <result column="segmentation" jdbcType="VARCHAR" property="segmentation" />
+    <result column="item_label" jdbcType="VARCHAR" property="itemLabel" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="territory" jdbcType="VARCHAR" property="territory" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="continent" jdbcType="VARCHAR" property="continent" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="investment_institutions_id" jdbcType="INTEGER" property="investmentInstitutionsId" />
+    <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
+    <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="kernel_desc_status" jdbcType="INTEGER" property="kernelDescStatus" />
+    <result column="city_count" jdbcType="INTEGER" property="cityCount" />
+    <result column="evaluation_recommend" jdbcType="DOUBLE" property="evaluationRecommend" />
+    <result column="project_type" jdbcType="INTEGER" property="projectType" />
+    <result column="project_source" jdbcType="INTEGER" property="projectSource" />
+    <result column="project_logo" jdbcType="VARCHAR" property="projectLogo" />
+    <result column="project_investment_highlights" jdbcType="VARCHAR" property="projectInvestmentHighlights" />
+    <result column="city_count_max" jdbcType="INTEGER" property="cityCountMax" />
+    <result column="city_count_min" jdbcType="INTEGER" property="cityCountMin" />
+  </resultMap>
     <!-- 用户关注的项目 -->
 
     <select id="findProjectByUserId" resultType="java.util.HashMap">
@@ -124,8 +126,7 @@
         ORDER BY a.evaluation_recommend DESC LIMIT 3
     </select>
 
-    <select id="findProjectBySegmentation" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto"
-            resultType="java.util.HashMap">
+    <select id="findProjectBySegmentation" parameterType="com.lhjl.tzzs.proxy.dto.SereachDto" resultType="java.util.HashMap">
         SELECT mf.id ID,mf.short_name,mf.kernel_desc,mf.`city`,mf.`segmentation` segementation,mf.stage
         FROM view_segemention_info mf
         where 1=1
@@ -153,7 +154,7 @@
         (SELECT stage FROM project_financing_log WHERE project_id = mf.`id` ORDER BY financing_time DESC LIMIT 1)stage
         FROM projects mf
         WHERE 1=1
-        AND mf.id IN(SELECT a.project_id FROM project_financing_log a WHERE a.financing_time > '2017-01-01')
+        AND mf.id IN(SELECT a.project_id FROM project_financing_log a WHERE a.financing_time &gt; '2017-01-01')
         <if test=" types !='' and types != null">
             AND mf.`investment_institutions_id` IN (SELECT id FROM investment_institutions WHERE `type` IN
             <foreach close=")" collection="types" index="index" item="item" open="(" separator=",">#{item}</foreach>
@@ -189,8 +190,7 @@
         <if test="educational_background_descs!='' and educational_background_descs!= null">
             AND mf.id IN (SELECT f.project_id FROM founders_education fe LEFT JOIN founders f ON fe.founder_id = f.id
             WHERE fe.education_experience IN
-            <foreach close=")" collection="educational_background_descs" index="index" item="item" open="("
-                     separator=",">#{item}
+            <foreach close=")" collection="educational_background_descs" index="index" item="item" open="(" separator=",">#{item}
             </foreach>
             )
         </if>
@@ -252,8 +252,7 @@
         <if test="educational_background_descs!='' and educational_background_descs!= null">
             AND mf.id IN (SELECT f.project_id FROM founders_education fe LEFT JOIN founders f ON fe.founder_id = f.id
             WHERE fe.education_experience IN
-            <foreach close=")" collection="educational_background_descs" index="index" item="item" open="("
-                     separator=",">#{item}
+            <foreach close=")" collection="educational_background_descs" index="index" item="item" open="(" separator=",">#{item}
             </foreach>
             )
         </if>
@@ -337,12 +336,12 @@
 
 
     <resultMap id="projectMap" type="com.lhjl.tzzs.proxy.dto.ProjectValuation">
-        <result column="id" jdbcType="BIGINT" property="id"/>
-        <result column="type" jdbcType="BIGINT" property="type"/>
-        <result column="segmentation" jdbcType="VARCHAR" property="segmentation"/>
-        <result column="city" jdbcType="VARCHAR" property="city"/>
-        <result column="edu" jdbcType="VARCHAR" property="edu"/>
-        <result column="work" jdbcType="VARCHAR" property="work"/>
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="type" jdbcType="BIGINT" property="type" />
+        <result column="segmentation" jdbcType="VARCHAR" property="segmentation" />
+        <result column="city" jdbcType="VARCHAR" property="city" />
+        <result column="edu" jdbcType="VARCHAR" property="edu" />
+        <result column="work" jdbcType="VARCHAR" property="work" />
     </resultMap>
 
 
@@ -514,17 +513,17 @@
     </select>
 
     <resultMap id="projectFilterMap" type="com.lhjl.tzzs.proxy.dto.ProjectResDto">
-        <result column="projectId" jdbcType="INTEGER" property="projectId"/>
-        <result column="short_name" jdbcType="VARCHAR" property="shortName"/>
-        <result column="full_name" jdbcType="VARCHAR" property="fullName"/>
-        <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc"/>
-        <result column="city" jdbcType="VARCHAR" property="city"/>
-        <result column="segmentation_name" jdbcType="VARCHAR" property="segmentation"/>
-        <result column="evaluation_recommend" jdbcType="VARCHAR" property="evaluationRecommend"/>
-        <result column="stage" jdbcType="VARCHAR" property="stage"/>
-        <result column="followNum" jdbcType="INTEGER" property="followNum"/>
-        <result column="interviewNum" jdbcType="INTEGER" property="interviewNum"/>
-        <result column="yn" jdbcType="INTEGER" property="yn"/>
+        <result column="projectId" jdbcType="INTEGER" property="projectId" />
+        <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+        <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+        <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc" />
+        <result column="city" jdbcType="VARCHAR" property="city" />
+        <result column="segmentation_name" jdbcType="VARCHAR" property="segmentation" />
+        <result column="evaluation_recommend" jdbcType="VARCHAR" property="evaluationRecommend" />
+        <result column="stage" jdbcType="VARCHAR" property="stage" />
+        <result column="followNum" jdbcType="INTEGER" property="followNum" />
+        <result column="interviewNum" jdbcType="INTEGER" property="interviewNum" />
+        <result column="yn" jdbcType="INTEGER" property="yn" />
     </resultMap>
 
     <select id="projectFilter" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
@@ -686,7 +685,7 @@
         c.projects_id
         left JOIN (select fo.status,projects_id,fo.user_id from   follow fo where fo.status= 1 and fo.user_id = #{token}  group by fo.projects_id,fo.user_id) d   on a.id = d.projects_id
     </select>
-    <select id="relatedInvestmentInstitution"  parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultType="java.util.HashMap">
+    <select id="relatedInvestmentInstitution" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultType="java.util.HashMap">
         select ii.id, ii.short_name,count(distinct p.id) as ct,
         case when ii.kenel_case is null OR ii.kenel_case = '' then (case when ii.`comment` is null OR ii.`comment` = '' then "" else ii.`comment` end) else ii.kenel_case end kenel_case,
         case when ii.logo is null then "" else ii.logo end logo
@@ -731,10 +730,10 @@
     </select>
 
     <resultMap id="histogramResultMap" type="com.lhjl.tzzs.proxy.dto.HistogramList">
-        <result column="money" jdbcType="BIGINT" property="money"/>
-        <result column="dcount" jdbcType="BIGINT" property="dcount"/>
-        <result column="x" jdbcType="VARCHAR" property="x"/>
-        <result column="y" jdbcType="VARCHAR" property="y"/>
+        <result column="money" jdbcType="BIGINT" property="money" />
+        <result column="dcount" jdbcType="BIGINT" property="dcount" />
+        <result column="x" jdbcType="VARCHAR" property="x" />
+        <result column="y" jdbcType="VARCHAR" property="y" />
     </resultMap>
     <select id="projectSearchStatistics" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="histogramResultMap">
 
