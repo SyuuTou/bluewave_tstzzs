@@ -536,10 +536,16 @@
         case when a.kernel_desc is null or a.kernel_desc ="" then (case when a.commet is null then "" else a.commet end) else a.kernel_desc end kernel_desc
         from(
         select pp.id, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.city,GROUP_CONCAT(DISTINCT ps.segmentation_name) segmentation_name,pp.evaluation_recommend,pp.stage
-        from (select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,pfl.stage from project_financing_log pfl left join meta_project_stage mps on pfl.stage = mps.name
+        from
+        (select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,pfl.stage from project_financing_log pfl
         left join projects p on pfl.project_id = p.id
-        order by mps.id desc
-        ) pp
+        <where>
+            <if test="beginTime != '' and beginTime != null and endTime != '' and endTime != ''">
+                pfl.stage in ('种子轮','天使轮','pre-A轮')
+                and pfl.financing_time between #{beginTime} and #{endTime}
+            </if>
+        </where>
+        ) pp left join (select id, name from meta_project_stage order by id desc )  mps on pp.stage = mps.name
         right join project_segmentation ps on ps.project_id = pp.id
         <if test="segmentation != '' and segmentation != null">
              and ps.segmentation_name in (${segmentation})
@@ -566,10 +572,7 @@
         <if test="keyWords != '' and keyWords != null ">
             AND (pp.short_name like "%"#{keyWords}"%" or pp.full_name like "%"#{keyWords}"%" or pp.kernel_desc like "%"#{keyWords}"%" )
         </if>
-        <if test="beginTime != '' and beginTime != null and endTime != '' and endTime != ''">
 
-            and pfl.financing_time between #{beginTime} and #{endTime}
-        </if>
         group by pp.short_name
         order by pp.evaluation_recommend desc
         limit #{offset},#{pageSize}
