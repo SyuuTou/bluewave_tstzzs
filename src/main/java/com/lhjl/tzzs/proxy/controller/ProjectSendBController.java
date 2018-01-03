@@ -154,4 +154,25 @@ public class ProjectSendBController extends GenericService{
         }
         return result;
     }
+
+    /**
+     * 读取项目信息接口
+     * @param token
+     * @param appid
+     * @return
+     */
+    @GetMapping("v{appid}/read/project/sendinfo")
+    public CommonDto<ProjectSendBOutDto> readProjectSendInfo(String token,@PathVariable Integer appid){
+        CommonDto<ProjectSendBOutDto> result  = new CommonDto<>();
+
+        try {
+            result = projectSendBService.readProjectInfomation(token, appid);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+        }
+        return result;
+    }
 }

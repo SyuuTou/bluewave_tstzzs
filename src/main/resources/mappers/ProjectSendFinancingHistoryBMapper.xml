@@ -15,4 +15,12 @@
     <result column="financing_time" jdbcType="TIMESTAMP" property="financingTime" />
     <result column="appid" jdbcType="INTEGER" property="appid" />
   </resultMap>
+  <insert id="copyProjectSendFinancingHistory" parameterType="com.lhjl.tzzs.proxy.dto.ProjectSendSearchCommenDto" keyProperty="id" useGeneratedKeys="true">
+    insert into project_send_financing_history_b(project_send_b_id,stage,amount,currency,total_amount,total_amount_currency,financing_time,appid)
+    select #{newid},stage,amount,currency,total_amount,total_amount_currency,financing_time,appid
+    from project_send_financing_history_b where id =#{oldid}
+    <selectKey keyProperty="id" resultType="java.lang.Integer">
+      select last_insert_id() as id
+    </selectKey>
+  </insert>
 </mapper>

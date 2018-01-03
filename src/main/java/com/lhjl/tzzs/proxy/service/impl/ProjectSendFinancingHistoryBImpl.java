@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service.impl;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendFinancingHistoryBDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendInvestorDto;
+import com.lhjl.tzzs.proxy.dto.ProjectSendSearchCommenDto;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendFinancingHistoryBMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendInvestorBMapper;
 import com.lhjl.tzzs.proxy.model.ProjectSendFinancingHistoryB;
@@ -174,6 +175,45 @@ public class ProjectSendFinancingHistoryBImpl implements ProjectSendFinancingHis
         result.setMessage("success");
 
         return result;
+    }
+
+    /**
+     * 复制提交项目融资历史信息的方法
+     * @param newprojectSendId
+     * @param projectSendBId
+     * @param appid
+     */
+    @Override
+    public void copyProjectSendFinancingHistoryB(Integer newprojectSendId,Integer projectSendBId,Integer appid) {
+
+        if (projectSendBId == null ){
+            return;
+        }
+        if (appid == null){
+            return;
+        }
+        ProjectSendFinancingHistoryB projectSendFinancingHistoryB = new ProjectSendFinancingHistoryB();
+        projectSendFinancingHistoryB.setProjectSendBId(projectSendBId);
+        projectSendFinancingHistoryB.setAppid(appid);
+
+        List<ProjectSendFinancingHistoryB> projectSendFinancingHistoryBList = projectSendFinancingHistoryBMapper.select(projectSendFinancingHistoryB);
+        if (projectSendFinancingHistoryBList.size() > 0){
+            for (ProjectSendFinancingHistoryB psf:projectSendFinancingHistoryBList){
+                ProjectSendSearchCommenDto projectSendSearchCommenDto = new ProjectSendSearchCommenDto();
+                projectSendSearchCommenDto.setOldid(psf.getId());
+                projectSendSearchCommenDto.setNewid(newprojectSendId);
+
+                projectSendFinancingHistoryBMapper.copyProjectSendFinancingHistory(projectSendSearchCommenDto);
+
+                Integer historyId = projectSendSearchCommenDto.getId();
+                ProjectSendSearchCommenDto projectSendSearchCommenDto1 = new ProjectSendSearchCommenDto();
+                projectSendSearchCommenDto1.setNewid(historyId);
+                projectSendSearchCommenDto1.setOldid(psf.getId());
+
+                projectSendInvestorBMapper.copyProjectSendInvestorB(projectSendSearchCommenDto1);
+            }
+        }
+
     }
 
     /**

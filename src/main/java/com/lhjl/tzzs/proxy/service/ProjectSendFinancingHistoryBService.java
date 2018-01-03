@@ -21,4 +21,12 @@ public interface ProjectSendFinancingHistoryBService {
      * @return
      */
     CommonDto<List<ProjectSendFinancingHistoryBDto>> readProjectSendFinancingHistoryB(Integer projectSendBId,Integer appid);
+
+    /**
+     * 复制提交项目融资历史的接口
+     * @param newprojectSendId
+     * @param projectSendBId
+     * @param appid
+     */
+    void copyProjectSendFinancingHistoryB(Integer newprojectSendId,Integer projectSendBId,Integer appid);
 }

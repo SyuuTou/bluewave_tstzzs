@@ -11,4 +11,8 @@
     <result column="stock_ratio" property="stockRatio" jdbcType="DECIMAL" />
     <result column="appid" property="appid" jdbcType="INTEGER" />
   </resultMap>
+  <insert id="copyProjectSendInvestorB" parameterType="com.lhjl.tzzs.proxy.dto.ProjectSendSearchCommenDto">
+    insert into project_send_investor_b(ps_financing_history_b_id,investor_name,stock_ratio,appid)
+    select #{newid},investor_name,stock_ratio,appid from project_send_investor_b where ps_financing_history_b_id = #{oldid}
+  </insert>
 </mapper>
