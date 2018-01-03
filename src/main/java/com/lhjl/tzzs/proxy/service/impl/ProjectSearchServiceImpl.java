@@ -108,6 +108,11 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
         reqDto.setBeginTime(beginTime);
         reqDto.setEndTime(endTime);
 
+        if (StringUtils.isEmpty(reqDto.getDataVcType())&&StringUtils.isEmpty(reqDto.getCity())&&StringUtils.isEmpty(reqDto.getSegmentation())&&StringUtils.isEmpty(reqDto.getEdus())&&StringUtils.isEmpty(reqDto.getWorks())&&StringUtils.isEmpty(reqDto.getStage())&&StringUtils.isEmpty(reqDto.getKeyWords())){
+            reqDto.setBeginTime(beginTime);
+            reqDto.setEndTime(endTime);
+        }
+
         reqDto.setOffset((reqDto.getPageNo() - 1) * reqDto.getPageSize());
         List<ProjectResDto> projectResDtos = new ArrayList<>();
         if (reqDto.getFinancingRecently() != null) {

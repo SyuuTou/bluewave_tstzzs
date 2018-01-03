@@ -567,7 +567,7 @@
             and pp.city in (${city})
         </if>
         <if test="stage != '' and stage != null">
-            AND pfl.stage in (${stage})
+            AND pp.stage in (${stage})
         </if>
         <if test="keyWords != '' and keyWords != null ">
             AND (pp.short_name like "%"#{keyWords}"%" or pp.full_name like "%"#{keyWords}"%" or pp.kernel_desc like "%"#{keyWords}"%" )
@@ -593,10 +593,16 @@
         case when a.kernel_desc is null or a.kernel_desc ="" then (case when a.commet is null then "" else a.commet end) else a.kernel_desc end kernel_desc
         from(
         select pp.id, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.city,GROUP_CONCAT(DISTINCT ps.segmentation_name) segmentation_name,pp.evaluation_recommend,pp.stage
-        from (select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,pfl.stage from project_financing_log pfl left join meta_project_stage mps on pfl.stage = mps.name
+        from
+        (select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,pfl.stage,pfl.financing_time from project_financing_log pfl
         left join projects p on pfl.project_id = p.id
-        order by mps.id desc
-        ) pp
+        <where>
+            <if test="beginTime != '' and beginTime != null and endTime != '' and endTime != ''">
+                pfl.stage in ('种子轮','天使轮','pre-A轮')
+                and pfl.financing_time between #{beginTime} and #{endTime}
+            </if>
+        </where>
+        ) pp left join (select id, name from meta_project_stage order by id desc )  mps on pp.stage = mps.name
         right join project_segmentation ps on ps.project_id = pp.id
         <if test="segmentation != '' and segmentation != null">
             and ps.segmentation_name in (${segmentation})
@@ -609,7 +615,6 @@
             right join (select f.project_id from founders f right join founders_work fw on fw.founder_ID = f.id where
             fw.work_experience in (${works})) ffw on ffw.project_id = pp.id
         </if>
-
         <if test="dataVcType != '' and dataVcType != null">
             right join (select iip.project_id from investment_institutions_project iip left join investment_institutions
             ii on iip.investment_institutions_id = ii.id and ii.type in (${dataVcType})) iid on iid.project_id = pp.id
@@ -619,19 +624,15 @@
             and pp.city in (${city})
         </if>
         <if test="stage != '' and stage != null">
-            AND pfl.stage in (${stage})
+            AND pp.stage in (${stage})
         </if>
         <if test="keyWords != '' and keyWords != null ">
             AND (pp.short_name like "%"#{keyWords}"%" or pp.full_name like "%"#{keyWords}"%" or pp.kernel_desc like "%"#{keyWords}"%" )
         </if>
-        <if test="beginTime != '' and beginTime != null and endTime != '' and endTime != ''">
-
-            and pfl.financing_time between #{beginTime} and #{endTime}
-        </if>
 
         group by pp.short_name
         <if test="financingOrder != '' and financingOrder != null">
-            order by pfl.financing_time desc
+            order by pp.financing_time desc
         </if>
         limit #{offset},#{pageSize}
         ) a left join (select count(user_id) followNum ,projects_id from follow where `status`=1 group by projects_id) b on a.id =
@@ -647,14 +648,20 @@
         case WHEN b.followNum = null then 0 ELSE b.followNum END followNum,
         case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
         case WHEN b.followNum = null OR b.followNum = 0 then 0 ELSE 1 END yn,
-        case WHEN d.`status` = 0 then 1 else 0 END `status`,
+        case WHEN d.`status` = 1 then 1 else 0 END `status`,
         case when a.kernel_desc is null or a.kernel_desc ="" then (case when a.commet is null then "" else a.commet end) else a.kernel_desc end kernel_desc
         from(
         select pp.id, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.city,GROUP_CONCAT(DISTINCT ps.segmentation_name) segmentation_name,pp.evaluation_recommend,pp.stage
-        from (select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,pfl.stage from project_financing_log pfl left join meta_project_stage mps on pfl.stage = mps.name
+        from
+        (select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,pfl.stage,pfl.financing_time from project_financing_log pfl
         left join projects p on pfl.project_id = p.id
-        order by mps.id desc
-        ) pp
+        <where>
+            <if test="beginTime != '' and beginTime != null and endTime != '' and endTime != ''">
+                pfl.stage in ('种子轮','天使轮','pre-A轮')
+                and pfl.financing_time between #{beginTime} and #{endTime}
+            </if>
+        </where>
+        ) pp left join (select id, name from meta_project_stage order by id desc )  mps on pp.stage = mps.name
         right join project_segmentation ps on ps.project_id = pp.id
         <if test="segmentation != '' and segmentation != null">
             and ps.segmentation_name in (${segmentation})
@@ -676,11 +683,13 @@
             and pp.city in (${city})
         </if>
         <if test="stage != '' and stage != null">
-            AND pfl.stage in (${stage})
+            AND pp.stage in (${stage})
         </if>
-        <if test="keyWords != '' and keyWords != '' ">
+        <if test="keyWords != '' and keyWords != null ">
             AND (pp.short_name like "%"#{keyWords}"%" or pp.full_name like "%"#{keyWords}"%" or pp.kernel_desc like "%"#{keyWords}"%" )
         </if>
+
+
         <if test="financingRecently != '' and financingRecently != null">
             and pp.project_source is not null
         </if>
@@ -688,7 +697,7 @@
 
         group by pp.short_name
         <if test="financingOrder != '' and financingOrder != null">
-            order by pfl.financing_time desc
+            order by pp.financing_time desc
         </if>
         limit #{offset},#{pageSize}
         ) a left join (select count(user_id) followNum ,projects_id from follow where `status`=1 group by projects_id) b on a.id =
