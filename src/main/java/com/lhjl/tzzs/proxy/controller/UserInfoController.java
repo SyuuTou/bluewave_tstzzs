@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.controller;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.dto.UserChooseLogDto.UserElegantServiceInputDto;
+import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
 import org.slf4j.Logger;
@@ -29,7 +30,6 @@ public class UserInfoController {
     private CommonUserService commonUserService;
     @Resource
     private UserInfoService userInfoService;
-
     /**
      * 获取个人资料
      * @param token 用户token

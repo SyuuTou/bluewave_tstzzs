@@ -53,6 +53,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 
     @Autowired
     private AdminContactLogMapper adminContactLogMapper;
+    
+
+   	
     /**
      * 获取个人资料
      * @param userId 用户ID
@@ -724,5 +727,30 @@ public class UserInfoServiceImpl implements UserInfoService{
 
         return result;
     }
+
+    /**
+     * *********测试用zd
+     */
+   	@Override
+   	public CommonDto<Users> getUserByUserId(int userId) {
+   		CommonDto<Users> result=new CommonDto<>();
+   		Users user = usersMapper.findUserById(userId);
+   		result.setStatus(200);
+   		result.setMessage("ありがとうございました");
+   		result.setData(user);
+   		return result;
+   	}
+   	/**
+   	 * *******测试用分页查询
+   	 */
+	@Override
+	public List<Users> listSplit(Integer pageNum, Integer pageSize) {
+		Map<String,Integer> map=new HashMap<>();
+		map.put("startPage", (pageNum-1)*pageSize);
+		map.put("pageSize", pageSize);
+		List<Users> userSplit = usersMapper.findSplit(map);
+		return userSplit;
+	}
+ 
 
 }

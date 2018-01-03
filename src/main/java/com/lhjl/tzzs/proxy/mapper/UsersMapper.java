@@ -13,6 +13,12 @@ import java.util.Map;
 @Mapper
 public interface UsersMapper extends OwnerMapper<Users> {
 	Integer findByUuid(@Param("uuids") String uuids);
+	
+	//根据用户Id获取用户信息
+	Users findUserById(@Param("userId") Integer userId);
+	//获取分页数据
+	List<Users> findSplit(Map<String,Integer> map);
+	
 	Integer findByUserid(@Param("userId") Integer userId);
 	Float findByBei(@Param("leId") Integer leId);
 	Integer findByJinE(@Param("skey") String skey);
