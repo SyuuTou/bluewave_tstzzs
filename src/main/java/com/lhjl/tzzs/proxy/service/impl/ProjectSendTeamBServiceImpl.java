@@ -211,7 +211,7 @@ public class ProjectSendTeamBServiceImpl implements ProjectSendTeamBService{
     public CommonDto<String> deleteTeamMemberById(Integer projectSendMemberId, Integer appid) {
         CommonDto<String> result  = new CommonDto<>();
         if (projectSendMemberId == null){
-            result.setMessage("提交项目id不能为空");
+            result.setMessage("提交项目成员id不能为空");
             result.setStatus(502);
             result.setData(null);
 
