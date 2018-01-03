@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "project_send_financing_history_b")
@@ -41,6 +42,12 @@ public class ProjectSendFinancingHistoryB {
      */
     @Column(name = "total_amount_currency")
     private Integer totalAmountCurrency;
+
+    /**
+     * 融资时间
+     */
+    @Column(name = "financing_time")
+    private Date financingTime;
 
     /**
      * 应用id
@@ -167,6 +174,24 @@ public class ProjectSendFinancingHistoryB {
      */
     public void setTotalAmountCurrency(Integer totalAmountCurrency) {
         this.totalAmountCurrency = totalAmountCurrency;
+    }
+
+    /**
+     * 获取融资时间
+     *
+     * @return financing_time - 融资时间
+     */
+    public Date getFinancingTime() {
+        return financingTime;
+    }
+
+    /**
+     * 设置融资时间
+     *
+     * @param financingTime 融资时间
+     */
+    public void setFinancingTime(Date financingTime) {
+        this.financingTime = financingTime;
     }
 
     /**
