@@ -1,13 +1,16 @@
 package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.model.ProjectSendFinancingHistoryB;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.ProjectSendBService;
+import com.lhjl.tzzs.proxy.service.ProjectSendFinancingHistoryBService;
 import com.lhjl.tzzs.proxy.service.ProjectSendTeamBService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ProjectSendBController extends GenericService{
@@ -17,6 +20,25 @@ public class ProjectSendBController extends GenericService{
 
     @Resource
     private ProjectSendTeamBService projectSendTeamBService;
+
+    @Resource
+    private ProjectSendFinancingHistoryBService projectSendFinancingHistoryBService;
+
+    @PostMapping("v{appid}/project/send/financing/history")
+    public CommonDto<String> createProjectSendFinancingHistory(@RequestBody Map<String,List<ProjectSendFinancingHistoryBDto>> param , @PathVariable Integer appid){
+        CommonDto<String> result  =  new CommonDto<>();
+        List<ProjectSendFinancingHistoryBDto> body = param.get("body");
+        try {
+            result = projectSendFinancingHistoryBService.creatProjectSendFinancingHistoryB(body, appid);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+
+        return result;
+    }
 
     /**
      * 读取提交项目团队成员列表信息

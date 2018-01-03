@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.dto;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public class ProjectSendFinancingHistoryBDto {
@@ -21,6 +22,9 @@ public class ProjectSendFinancingHistoryBDto {
 
     /**估值金额单位，投资币种（0人民币/1美元）*/
     private Integer totalAmountCurrency;
+
+    /**融资时间*/
+    private String financingTime;
 
     /**投资方*/
     private List<ProjectSendInvestorDto> investor;
@@ -71,6 +75,14 @@ public class ProjectSendFinancingHistoryBDto {
 
     public void setTotalAmountCurrency(Integer totalAmountCurrency) {
         this.totalAmountCurrency = totalAmountCurrency;
+    }
+
+    public String getFinancingTime() {
+        return financingTime;
+    }
+
+    public void setFinancingTime(String financingTime) {
+        this.financingTime = financingTime;
     }
 
     public List<ProjectSendInvestorDto> getInvestor() {
