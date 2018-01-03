@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,12 @@ public class ProjectSendFinancingHistoryBImpl implements ProjectSendFinancingHis
     @Resource
     private ProjectSendInvestorBMapper projectSendInvestorBMapper;
 
+    /**
+     * 保存项目融资历史信息接口
+     * @param body
+     * @param appid
+     * @return
+     */
     @Override
     public CommonDto<String> creatProjectSendFinancingHistoryB(List<ProjectSendFinancingHistoryBDto> body, Integer appid) {
         CommonDto<String> result  = new CommonDto<>();
@@ -92,13 +99,91 @@ public class ProjectSendFinancingHistoryBImpl implements ProjectSendFinancingHis
     }
 
     /**
+     * 读取提交项目融资历史信息接口
+     * @param projectSendBId
+     * @param appid
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public CommonDto<List<ProjectSendFinancingHistoryBDto>> readProjectSendFinancingHistoryB(Integer projectSendBId, Integer appid) {
+        CommonDto<List<ProjectSendFinancingHistoryBDto>> result  = new CommonDto<>();
+        List<ProjectSendFinancingHistoryBDto> list = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        if (projectSendBId == null){
+            result.setMessage("提交项目id不能为空");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+        ProjectSendFinancingHistoryB projectSendFinancingHistoryB = new ProjectSendFinancingHistoryB();
+        projectSendFinancingHistoryB.setProjectSendBId(projectSendBId);
+        projectSendFinancingHistoryB.setAppid(appid);
+
+        List<ProjectSendFinancingHistoryB> projectSendFinancingHistoryBList = projectSendFinancingHistoryBMapper.select(projectSendFinancingHistoryB);
+        if (projectSendFinancingHistoryBList.size() > 0){
+            for (ProjectSendFinancingHistoryB psf:projectSendFinancingHistoryBList){
+                Integer projectFinancingHistoryId = psf.getId();
+                ProjectSendInvestorB projectSendInvestorB = new ProjectSendInvestorB();
+                projectSendInvestorB.setPsFinancingHistoryBId(projectFinancingHistoryId);
+                List<ProjectSendInvestorB> projectSendInvestorBS = new ArrayList<>();
+
+                List<ProjectSendInvestorB> projectSendInvestorBList = projectSendInvestorBMapper.select(projectSendInvestorB);
+                if (projectSendInvestorBList.size()>0){
+                    projectSendInvestorBS = projectSendInvestorBList;
+                }
+
+                ProjectSendFinancingHistoryBDto projectSendFinancingHistoryBDto = new ProjectSendFinancingHistoryBDto();
+                projectSendFinancingHistoryBDto.setStage(psf.getStage());
+                projectSendFinancingHistoryBDto.setAmount(psf.getAmount());
+                projectSendFinancingHistoryBDto.setCurrency(psf.getCurrency());
+                projectSendFinancingHistoryBDto.setTotalAmount(psf.getTotalAmount());
+                projectSendFinancingHistoryBDto.setTotalAmountCurrency(psf.getTotalAmountCurrency());
+                projectSendFinancingHistoryBDto.setProjectSendBId(projectSendBId);
+                String financingTime = "";
+                if (psf.getFinancingTime() != null){
+                    try {
+                        financingTime = sdf.format(psf.getFinancingTime());
+                    }catch (Exception e){
+                        log.error(e.getMessage());
+                        log.info("解析时间失败");
+                    }
+                }
+                projectSendFinancingHistoryBDto.setFinancingTime(financingTime);
+                List<ProjectSendInvestorDto> projectSendInvestorDtoList = new ArrayList<>();
+                if (projectSendInvestorBS.size() > 0){
+                    for (ProjectSendInvestorB pb:projectSendInvestorBS){
+                        ProjectSendInvestorDto projectSendInvestorDto = new ProjectSendInvestorDto();
+                        projectSendInvestorDto.setInvestorName(pb.getInvestorName());
+                        projectSendInvestorDto.setProjectFinancingHistoryId(pb.getPsFinancingHistoryBId());
+                        projectSendInvestorDto.setShareRatio(pb.getStockRatio());
+
+                        projectSendInvestorDtoList.add(projectSendInvestorDto);
+                    }
+                }
+                projectSendFinancingHistoryBDto.setInvestor(projectSendInvestorDtoList);
+
+                list.add(projectSendFinancingHistoryBDto);
+            }
+        }
+
+        result.setData(list);
+        result.setStatus(200);
+        result.setMessage("success");
+
+        return result;
+    }
+
+    /**
      * 创建单个融资历史信息的方法
      * @param projectSendFinancingHistoryBDto
      * @param appid
      */
     @Transactional
     public void createFinancingOne(ProjectSendFinancingHistoryBDto projectSendFinancingHistoryBDto,Integer appid){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         ProjectSendFinancingHistoryB projectSendFinancingHistoryB = new ProjectSendFinancingHistoryB();
         projectSendFinancingHistoryB.setStage(projectSendFinancingHistoryBDto.getStage());
         projectSendFinancingHistoryB.setAmount(projectSendFinancingHistoryBDto.getAmount());
@@ -106,6 +191,7 @@ public class ProjectSendFinancingHistoryBImpl implements ProjectSendFinancingHis
         projectSendFinancingHistoryB.setTotalAmount(projectSendFinancingHistoryBDto.getTotalAmount());
         projectSendFinancingHistoryB.setTotalAmountCurrency(projectSendFinancingHistoryBDto.getTotalAmountCurrency());
         projectSendFinancingHistoryB.setProjectSendBId(projectSendFinancingHistoryBDto.getProjectSendBId());
+        projectSendFinancingHistoryB.setAppid(appid);
         if (projectSendFinancingHistoryBDto.getFinancingTime() != null){
             try {
                 Date financingTime = sdf.parse(projectSendFinancingHistoryBDto.getFinancingTime());
