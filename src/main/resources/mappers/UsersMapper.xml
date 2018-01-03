@@ -32,7 +32,16 @@
     <result column="unionid" jdbcType="VARCHAR" property="unionid" />
     <result column="meta_app_id" jdbcType="INTEGER" property="metaAppId" />
   </resultMap>
-
+  
+<!--  测试用zd-->
+<select id="findUserById" parameterType="INTEGER" resultMap="BaseResultMap">
+    SELECT * FROM users WHERE ID=#{userId}
+  </select>	
+  
+  <select id="findSplit" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    SELECT * FROM users limit #{startPage},#{pageSize}
+  </select>	
+  
   <select id="findByUuid" parameterType="String" resultType="INTEGER">
     SELECT u.ID FROM users u WHERE u.uuid=#{uuids}
   </select>

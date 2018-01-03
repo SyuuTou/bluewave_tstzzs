@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.dto.UserChooseLogDto.UserElegantServiceInputDto;
+import com.lhjl.tzzs.proxy.model.Users;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,19 @@ import java.util.Map;
  * Created by 蓝海巨浪 on 2017/10/25.
  */
 public interface UserInfoService {
-
+	/**
+	 * 测试用-->获得分页数据
+	 * @param pageNum
+	 * @param pageSize
+	 * @return
+	 */
+	List<Users> listSplit(Integer pageNum,Integer pageSize);
+	/**
+	 * ****用于测试用-->根据用户ID获取该用户信息
+	 * @param userId
+	 * @return
+	 */
+	CommonDto<Users> getUserByUserId(int userId);
     /**
      * 获取个人资料
      * @param userId 用户ID
