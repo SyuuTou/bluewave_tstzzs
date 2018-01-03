@@ -13,6 +13,6 @@
     <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
     <result column="total_amount_currency" jdbcType="INTEGER" property="totalAmountCurrency" />
     <result column="financing_time" jdbcType="TIMESTAMP" property="financingTime" />
-    <result column="appid" jdbcType="VARCHAR" property="appid" />
+    <result column="appid" jdbcType="INTEGER" property="appid" />
   </resultMap>
 </mapper>

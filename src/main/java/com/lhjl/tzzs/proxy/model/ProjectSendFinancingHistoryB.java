@@ -52,7 +52,7 @@ public class ProjectSendFinancingHistoryB {
     /**
      * 应用id
      */
-    private String appid;
+    private Integer appid;
 
     /**
      * @return id
@@ -199,7 +199,7 @@ public class ProjectSendFinancingHistoryB {
      *
      * @return appid - 应用id
      */
-    public String getAppid() {
+    public Integer getAppid() {
         return appid;
     }
 
@@ -208,7 +208,7 @@ public class ProjectSendFinancingHistoryB {
      *
      * @param appid 应用id
      */
-    public void setAppid(String appid) {
+    public void setAppid(Integer appid) {
         this.appid = appid;
     }
 }
