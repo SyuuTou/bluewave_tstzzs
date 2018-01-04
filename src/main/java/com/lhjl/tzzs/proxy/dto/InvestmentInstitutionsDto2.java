@@ -1,420 +1,347 @@
 package com.lhjl.tzzs.proxy.dto;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.Date;
+
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * Created by zyy on 2017/11/21.
+ * Created by zd on 2018/1/4.
  */
 public class InvestmentInstitutionsDto2 {
-    private Integer id;
-
+	/**
+     * 机构logo
+     */
+	private String logo;
+	
     /**
      * 机构简称
      */
     private String shortName;
-
     /**
-     * 机构备注
+     * 机构全名
      */
-    private String commet;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 机构类型：1: 50机构，0: 非50机构
-     */
-    private Integer type;
-
-    /**
-     * logoURl
-     */
-    private String logo;
-
-    /**
-     * 案例网址
-     */
-    private String caseUrl;
-
+    private String fullName;
     /**
      * 一句话介绍
      */
     private String kenelCase;
-
-    /**
-     * 简介
-     */
-    private String comment;
-
-    /**
-     * 所在城市
-     */
-    private String city;
-
+    
     /**
      * 投资阶段
      */
-    private String stage;
-
+    private Integer[] stages;
+    
     /**
-     * 客户代表
+     * 投资领域
      */
-    private String representative;
-
+    private Integer[] segmentations;
+    
     /**
-     * 审核状态，0表示审核未通过，1表示审核通过，默认0
+     * 自定义领域
      */
-    private Integer approvalStatus;
-
-    /**
-     * 审核时间，审核时存，其他时候为空
-     */
-    @Column(name = "approval_time")
-    private Date approvalTime;
-
+    private String[] newSegmentations;
+    
     /**
      * 官网地址
      */
     private String homeUrl;
-
-    private Integer yn;
-
-    private Integer sort;
-
-    private Integer count;
-
-    private Boolean sendyn;
-
-    private Boolean gouxuanyn;
-
-    /**
-     * @return ID
+    
+    /**  以下属于基金的范畴
+     * 总基金管理规模
      */
-    public Integer getId() {
-        return id;
-    }
-
+    private BigDecimal totalFundScale;
     /**
-     * @param id
+     * 人民币基金管理规模
      */
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
+    private BigDecimal rmbFundScale;
     /**
-     * 获取机构简称
-     *
-     * @return short_name - 机构简称
+     * 美元基金管理规模
      */
-    public String getShortName() {
-        return shortName;
-    }
-
+    private BigDecimal dollarFundScale;
     /**
-     * 设置机构简称
-     *
-     * @param shortName 机构简称
+     * 人民币单笔投资最小值
      */
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
-
+    private BigDecimal rmbInvestAmountMin;
     /**
-     * 获取机构备注
-     *
-     * @return commet - 机构备注
+     * 人人民币单笔投资最大值
      */
-    public String getCommet() {
-        return commet;
-    }
-
+    private BigDecimal rmbInvestAmountMax;
     /**
-     * 设置机构备注
-     *
-     * @param commet 机构备注
+     * 美元单笔投资最小值
      */
-    public void setCommet(String commet) {
-        this.commet = commet;
-    }
-
+    private BigDecimal dollarInvestAmountMin;
     /**
-     * 获取创建时间
-     *
-     * @return create_time - 创建时间
+     * 美元单笔投资最大值
      */
-    public Date getCreateTime() {
-        return createTime;
-    }
-
+    private BigDecimal dollarInvestAmountMax;
     /**
-     * 设置创建时间
-     *
-     * @param createTime 创建时间
+     * 投资理念
      */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
+    private String investmentIdea;
     /**
-     * 获取机构类型：1: 50机构，0: 非50机构
-     *
-     * @return type - 机构类型：1: 50机构，0: 非50机构
+     * 项目需求
      */
-    public Integer getType() {
-        return type;
-    }
-
+    private String productRequirement;
     /**
-     * 设置机构类型：1: 50机构，0: 非50机构
-     *
-     * @param type 机构类型：1: 50机构，0: 非50机构
+     * 招聘需求
      */
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
+    private String recruitmentRequirement;
+    
+    
+    /** 以下属于公司总部地址信息
+     * 所在城市
+     */
+    private String Town;
+    
     /**
-     * 获取logoURl
-     *
-     * @return logo - logoURl
+     * 详细地址
      */
-    public String getLogo() {
-        return logo;
-    }
-
+    private String detailAddress;
+    
     /**
-     * 设置logoURl
-     *
-     * @param logo logoURl
+     * 公司邮箱
      */
-    public void setLogo(String logo) {
-        this.logo = logo;
-    }
-
+    private String email;
     /**
-     * 获取案例网址
-     *
-     * @return case_url - 案例网址
+     * BP邮箱
      */
-    public String getCaseUrl() {
-        return caseUrl;
-    }
-
+    private String bpEmail;
     /**
-     * 设置案例网址
-     *
-     * @param caseUrl 案例网址
+     * 经度
      */
-    public void setCaseUrl(String caseUrl) {
-        this.caseUrl = caseUrl;
-    }
-
+    private BigDecimal longitude;
+    
     /**
-     * 获取一句话介绍
-     *
-     * @return kenel_case - 一句话介绍
+     * 纬度
      */
-    public String getKenelCase() {
-        return kenelCase;
-    }
-
-    /**
-     * 设置一句话介绍
-     *
-     * @param kenelCase 一句话介绍
+    private BigDecimal latitude;
+    
+    /** 
+     * 以下属于公司分部数组的信息
+     * 
      */
-    public void setKenelCase(String kenelCase) {
-        this.kenelCase = kenelCase;
-    }
+    private List<InvestmentInstitutionsAddressPart> investmentInstitutionsAddressParts;
 
-    /**
-     * 获取简介
-     *
-     * @return comment - 简介
-     */
-    public String getComment() {
-        return comment;
-    }
-
-    /**
-     * 设置简介
-     *
-     * @param comment 简介
-     */
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    /**
-     * 获取所在城市
-     *
-     * @return city - 所在城市
-     */
-    public String getCity() {
-        return city;
-    }
-
-    /**
-     * 设置所在城市
-     *
-     * @param city 所在城市
-     */
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    /**
-     * 获取投资阶段
-     *
-     * @return stage - 投资阶段
-     */
-    public String getStage() {
-        return stage;
-    }
-
-    /**
-     * 设置投资阶段
-     *
-     * @param stage 投资阶段
-     */
-    public void setStage(String stage) {
-        this.stage = stage;
-    }
-
-    /**
-     * 获取客户代表
-     *
-     * @return representative - 客户代表
-     */
-    public String getRepresentative() {
-        return representative;
-    }
-
-    /**
-     * 设置客户代表
-     *
-     * @param representative 客户代表
-     */
-    public void setRepresentative(String representative) {
-        this.representative = representative;
-    }
-
-    /**
-     * 获取审核状态，0表示审核未通过，1表示审核通过，默认0
-     *
-     * @return approval_status - 审核状态，0表示审核未通过，1表示审核通过，默认0
-     */
-    public Integer getApprovalStatus() {
-        return approvalStatus;
-    }
-
-    /**
-     * 设置审核状态，0表示审核未通过，1表示审核通过，默认0
-     *
-     * @param approvalStatus 审核状态，0表示审核未通过，1表示审核通过，默认0
-     */
-    public void setApprovalStatus(Integer approvalStatus) {
-        this.approvalStatus = approvalStatus;
-    }
-
-    /**
-     * 获取审核时间，审核时存，其他时候为空
-     *
-     * @return approval_time - 审核时间，审核时存，其他时候为空
-     */
-    public Date getApprovalTime() {
-        return approvalTime;
-    }
-
-    /**
-     * 设置审核时间，审核时存，其他时候为空
-     *
-     * @param approvalTime 审核时间，审核时存，其他时候为空
-     */
-    public void setApprovalTime(Date approvalTime) {
-        this.approvalTime = approvalTime;
-    }
-
-    /**
-     * 获取官网地址
-     *
-     * @return home_url - 官网地址
-     */
-    public String getHomeUrl() {
-        return homeUrl;
-    }
-
-    /**
-     * 设置官网地址
-     *
-     * @param homeUrl 官网地址
-     */
-    public void setHomeUrl(String homeUrl) {
-        this.homeUrl = homeUrl;
-    }
-
-    /**
-     * @return yn
-     */
-    public Integer getYn() {
-        return yn;
-    }
-
-    /**
-     * @param yn
-     */
-    public void setYn(Integer yn) {
-        this.yn = yn;
-    }
-
-    /**
-     * @return sort
-     */
-    public Integer getSort() {
-        return sort;
-    }
-
-    public Boolean getSendyn() {
-		return sendyn;
+	public String getLogo() {
+		return logo;
 	}
 
-	public void setSendyn(Boolean sendyn) {
-		this.sendyn = sendyn;
+	public void setLogo(String logo) {
+		this.logo = logo;
 	}
 
-	public Boolean getGouxuanyn() {
-		return gouxuanyn;
+	public String getShortName() {
+		return shortName;
 	}
 
-	public void setGouxuanyn(Boolean gouxuanyn) {
-		this.gouxuanyn = gouxuanyn;
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
 	}
 
-	/**
-     * @param sort
-     */
-    public void setSort(Integer sort) {
-        this.sort = sort;
-    }
+	public String getFullName() {
+		return fullName;
+	}
 
-    /**
-     * @return count
-     */
-    public Integer getCount() {
-        return count;
-    }
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 
-    /**
-     * @param count
-     */
-    public void setCount(Integer count) {
-        this.count = count;
-    }
+	public String getKenelCase() {
+		return kenelCase;
+	}
+
+	public void setKenelCase(String kenelCase) {
+		this.kenelCase = kenelCase;
+	}
+
+	public Integer[] getStages() {
+		return stages;
+	}
+
+	public void setStages(Integer[] stages) {
+		this.stages = stages;
+	}
+
+	public Integer[] getSegmentations() {
+		return segmentations;
+	}
+
+	public void setSegmentations(Integer[] segmentations) {
+		this.segmentations = segmentations;
+	}
+
+	public String[] getNewSegmentations() {
+		return newSegmentations;
+	}
+
+	public void setNewSegmentations(String[] newSegmentations) {
+		this.newSegmentations = newSegmentations;
+	}
+
+	public String getHomeUrl() {
+		return homeUrl;
+	}
+
+	public void setHomeUrl(String homeUrl) {
+		this.homeUrl = homeUrl;
+	}
+
+	public BigDecimal getTotalFundScale() {
+		return totalFundScale;
+	}
+
+	public void setTotalFundScale(BigDecimal totalFundScale) {
+		this.totalFundScale = totalFundScale;
+	}
+
+	public BigDecimal getRmbFundScale() {
+		return rmbFundScale;
+	}
+
+	public void setRmbFundScale(BigDecimal rmbFundScale) {
+		this.rmbFundScale = rmbFundScale;
+	}
+
+	public BigDecimal getDollarFundScale() {
+		return dollarFundScale;
+	}
+
+	public void setDollarFundScale(BigDecimal dollarFundScale) {
+		this.dollarFundScale = dollarFundScale;
+	}
+
+	public BigDecimal getRmbInvestAmountMin() {
+		return rmbInvestAmountMin;
+	}
+
+	public void setRmbInvestAmountMin(BigDecimal rmbInvestAmountMin) {
+		this.rmbInvestAmountMin = rmbInvestAmountMin;
+	}
+
+	public BigDecimal getRmbInvestAmountMax() {
+		return rmbInvestAmountMax;
+	}
+
+	public void setRmbInvestAmountMax(BigDecimal rmbInvestAmountMax) {
+		this.rmbInvestAmountMax = rmbInvestAmountMax;
+	}
+
+	public BigDecimal getDollarInvestAmountMin() {
+		return dollarInvestAmountMin;
+	}
+
+	public void setDollarInvestAmountMin(BigDecimal dollarInvestAmountMin) {
+		this.dollarInvestAmountMin = dollarInvestAmountMin;
+	}
+
+	public BigDecimal getDollarInvestAmountMax() {
+		return dollarInvestAmountMax;
+	}
+
+	public void setDollarInvestAmountMax(BigDecimal dollarInvestAmountMax) {
+		this.dollarInvestAmountMax = dollarInvestAmountMax;
+	}
+
+	public String getInvestmentIdea() {
+		return investmentIdea;
+	}
+
+	public void setInvestmentIdea(String investmentIdea) {
+		this.investmentIdea = investmentIdea;
+	}
+
+	public String getProductRequirement() {
+		return productRequirement;
+	}
+
+	public void setProductRequirement(String productRequirement) {
+		this.productRequirement = productRequirement;
+	}
+
+	public String getRecruitmentRequirement() {
+		return recruitmentRequirement;
+	}
+
+	public void setRecruitmentRequirement(String recruitmentRequirement) {
+		this.recruitmentRequirement = recruitmentRequirement;
+	}
+
+	public String getTown() {
+		return Town;
+	}
+
+	public void setTown(String town) {
+		Town = town;
+	}
+
+	public String getDetailAddress() {
+		return detailAddress;
+	}
+
+	public void setDetailAddress(String detailAddress) {
+		this.detailAddress = detailAddress;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getBpEmail() {
+		return bpEmail;
+	}
+
+	public void setBpEmail(String bpEmail) {
+		this.bpEmail = bpEmail;
+	}
+
+	public BigDecimal getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(BigDecimal longitude) {
+		this.longitude = longitude;
+	}
+
+	public BigDecimal getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(BigDecimal latitude) {
+		this.latitude = latitude;
+	}
+
+	public List<InvestmentInstitutionsAddressPart> getInvestmentInstitutionsAddressParts() {
+		return investmentInstitutionsAddressParts;
+	}
+
+	public void setInvestmentInstitutionsAddressParts(
+			List<InvestmentInstitutionsAddressPart> investmentInstitutionsAddressParts) {
+		this.investmentInstitutionsAddressParts = investmentInstitutionsAddressParts;
+	}
+
+	@Override
+	public String toString() {
+		return "InvestmentInstitutionsDto2 [logo=" + logo + ", shortName=" + shortName + ", fullName=" + fullName
+				+ ", kenelCase=" + kenelCase + ", stages=" + Arrays.toString(stages) + ", segmentations="
+				+ Arrays.toString(segmentations) + ", newSegmentations=" + Arrays.toString(newSegmentations)
+				+ ", homeUrl=" + homeUrl + ", totalFundScale=" + totalFundScale + ", rmbFundScale=" + rmbFundScale
+				+ ", dollarFundScale=" + dollarFundScale + ", rmbInvestAmountMin=" + rmbInvestAmountMin
+				+ ", rmbInvestAmountMax=" + rmbInvestAmountMax + ", dollarInvestAmountMin=" + dollarInvestAmountMin
+				+ ", dollarInvestAmountMax=" + dollarInvestAmountMax + ", investmentIdea=" + investmentIdea
+				+ ", productRequirement=" + productRequirement + ", recruitmentRequirement=" + recruitmentRequirement
+				+ ", Town=" + Town + ", detailAddress=" + detailAddress + ", email=" + email + ", bpEmail=" + bpEmail
+				+ ", longitude=" + longitude + ", latitude=" + latitude + ", investmentInstitutionsAddressParts="
+				+ investmentInstitutionsAddressParts + "]";
+	}
+
+	
+    
 }
 

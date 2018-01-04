@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.dto.ImageHandlerDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressMapper;
+import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressPartMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsSegmentationMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsStageMapper;
@@ -16,6 +17,7 @@ import com.lhjl.tzzs.proxy.mapper.MetaProjectStageMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddress;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
 import com.lhjl.tzzs.proxy.model.MetaProjectStage;
 import com.lhjl.tzzs.proxy.model.MetaSegmentation;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
@@ -62,6 +64,9 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
     
     @Autowired
     private MetaSegmentationMapper metaSegmentationMapper;
+    
+    @Autowired
+    private InvestmentInstitutionsAddressPartMapper investmentInstitutionsAddressPartMapper;
 
     @Override
     public CommonDto<InvestmentInstitutionComplexOutputDto> getInvestmentInstitutionsComlexInfo(Map<String,Integer> body){
@@ -375,6 +380,18 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
 		 result.setMessage("success");
 		 result.setStatus(200);
 		 
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<InvestmentInstitutionsAddressPart>> listAllAddressPartsById(Integer investmentInstitutionId) {
+		CommonDto<List<InvestmentInstitutionsAddressPart>> result=new CommonDto<>();
+		
+		List<InvestmentInstitutionsAddressPart> addrParts = investmentInstitutionsAddressPartMapper.findAllById(investmentInstitutionId);
+		result.setData(addrParts);
+		result.setMessage("success");
+		result.setStatus(200);
+		
 		return result;
 	}
 }

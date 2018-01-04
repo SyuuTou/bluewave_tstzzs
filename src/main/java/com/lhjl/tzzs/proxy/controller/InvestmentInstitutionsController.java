@@ -3,6 +3,8 @@ package com.lhjl.tzzs.proxy.controller;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
+import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto2;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
 import com.lhjl.tzzs.proxy.model.MetaProjectStage;
 import com.lhjl.tzzs.proxy.model.MetaSegmentation;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
@@ -18,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class InvestmentInstitutionsController {
+public class InvestmentInstitutionsController extends GenericController {
 
     private static final Logger log = LoggerFactory.getLogger(InvestmentInstitutionsController.class);
 
@@ -56,7 +58,7 @@ public class InvestmentInstitutionsController {
         CommonDto<InvestmentInstitutionComplexOutputDto> result = new CommonDto<>();
 
         try {
-            //result =  investmentInstitutionsService.getInvestmentInstitutionsComlexInfo(investmentInstitumentId);
+//            result =  investmentInstitutionsService.getInvestmentInstitutionsComlexInfo(investmentInstitumentId);
 
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());
@@ -68,7 +70,35 @@ public class InvestmentInstitutionsController {
         return result;
     }
     /**
-     * 获取所有的而投资阶段信息--zd
+     * 增加投资机构信息
+     * @param investmentInstitumentId
+     * @return
+     */
+    @PostMapping("saveinvestmentinstitution")
+    public Boolean saveInvestmentInstitution(@RequestBody InvestmentInstitutionsDto2 body){
+    	
+    	CommonDto<Boolean> result=new CommonDto<>();
+    	result.setData(null);
+    	result.setStatus(200);
+    	result.setMessage("success");
+    	
+    	this.LOGGER.error("***~~~~");
+    	System.err.println(body);
+      /*  try {
+            result =  investmentInstitutionsService.getInvestmentInstitutionsComlexInfo(investmentInstitumentId);
+
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }*/
+
+        return true;
+    }
+    
+    /**
+     * 获取所有的投资阶段信息--zd
      * @return
      */
     @GetMapping("get/invest_step")
@@ -96,6 +126,25 @@ public class InvestmentInstitutionsController {
     	
         try {
             result =  investmentInstitutionsService.listInvestementFields();
+
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+    	return result;
+    }
+    /**
+     * 获取该投资机构的所有分部信息
+     * @return
+     */
+    @GetMapping("get/addresspart")
+    public CommonDto<List<InvestmentInstitutionsAddressPart>> getAllAddressPartsById(Integer investmentInstitutionId){
+    	CommonDto<List<InvestmentInstitutionsAddressPart>> result=new CommonDto<>();
+    	
+        try {
+            result =  investmentInstitutionsService.listAllAddressPartsById(investmentInstitutionId);
 
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());

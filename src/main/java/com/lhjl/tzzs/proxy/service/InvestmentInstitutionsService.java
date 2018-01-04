@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ImageHandlerDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
 import com.lhjl.tzzs.proxy.model.MetaProjectStage;
 import com.lhjl.tzzs.proxy.model.MetaSegmentation;
 
@@ -22,6 +23,12 @@ public interface InvestmentInstitutionsService {
 	 * @return 投资领域信息list
 	 */
 	CommonDto<List<MetaSegmentation>> listInvestementFields();
+    /**
+     * 根据机构id获取机构所有分部信息
+     * @param investmentInstitutionId
+     * @return
+     */
+	CommonDto<List<InvestmentInstitutionsAddressPart>> listAllAddressPartsById(Integer investmentInstitutionId);
     /**
      * 根据机构id获取机构信息的接口
      * @param body
