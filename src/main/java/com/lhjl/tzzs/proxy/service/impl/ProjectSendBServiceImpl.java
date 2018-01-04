@@ -763,9 +763,12 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             projectSendBOutDto.setProjectFinancingUseful(projectSendFinancingApprovalBList.get(0).getProjectFinancingUseful());
 
         }else {
-            result.setMessage("没找到当前融资信息");
-            result.setStatus(502);
-            return result;
+            projectSendBOutDto.setStage("");
+            BigDecimal a = BigDecimal.ZERO;
+            projectSendBOutDto.setAmount(a);
+            projectSendBOutDto.setCurrency(0);
+            projectSendBOutDto.setShareDivest("");
+            projectSendBOutDto.setProjectFinancingUseful("");
         }
 
         //项目竞品

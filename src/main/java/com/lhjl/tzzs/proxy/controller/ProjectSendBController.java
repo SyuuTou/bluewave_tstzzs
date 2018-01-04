@@ -176,6 +176,12 @@ public class ProjectSendBController extends GenericService{
         return result;
     }
 
+    /**
+     * 创建项目提交信息的接口
+     * @param body
+     * @param appid
+     * @return
+     */
     @PostMapping("v{appid}/create/project/sendinfo")
     public CommonDto<String> createProjectSendInfo(@RequestBody ProjectSendBDto body,@PathVariable Integer appid){
         CommonDto<String> result  =new CommonDto<>();
