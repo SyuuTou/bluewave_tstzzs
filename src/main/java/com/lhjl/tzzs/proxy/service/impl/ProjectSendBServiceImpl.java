@@ -416,7 +416,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         if (body.getProjectTags().size() < 1){
             result.setStatus(502);
             result.setData(null);
-            result.setMessage("请选择项目领域");
+            result.setMessage("输入项目标签");
 
             return result;
         }
