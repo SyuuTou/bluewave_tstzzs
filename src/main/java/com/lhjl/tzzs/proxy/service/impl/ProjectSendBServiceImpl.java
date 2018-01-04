@@ -412,14 +412,14 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
 
             return result;
         }
-
-        if (body.getProjectTags().size() < 1){
-            result.setStatus(502);
-            result.setData(null);
-            result.setMessage("输入项目标签");
-
-            return result;
-        }
+//
+//        if (body.getProjectTags().size() < 1){
+//            result.setStatus(502);
+//            result.setData(null);
+//            result.setMessage("输入项目标签");
+//
+//            return result;
+//        }
 
         //先删除原有的
         ProjectSendTagsB projectSendTagsB1 = new ProjectSendTagsB();
@@ -464,13 +464,13 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             return result;
         }
 
-        if (body.getProjectCompeting().size() < 1){
-            result.setStatus(502);
-            result.setData(null);
-            result.setMessage("请选择项目领域");
-
-            return result;
-        }
+//        if (body.getProjectCompeting().size() < 1){
+//            result.setStatus(502);
+//            result.setData(null);
+//            result.setMessage("请选择项目领域");
+//
+//            return result;
+//        }
 
         //先删除原有的数据
         ProjectSendCompetingB projectSendCompetingB1 = new ProjectSendCompetingB();
