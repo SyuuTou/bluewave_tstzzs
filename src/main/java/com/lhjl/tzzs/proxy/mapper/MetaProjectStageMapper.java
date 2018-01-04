@@ -8,4 +8,9 @@ import java.util.List;
 
 public interface MetaProjectStageMapper extends OwnerMapper<MetaProjectStage> {
     List<Integer> findMetaProjectStageByName(@Param("stages") String[] stages);
+    /**
+     * 获取所有的阶段对象
+     * @return list存储
+     */
+    List<MetaProjectStage> findAll();
 }

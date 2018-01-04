@@ -4,12 +4,24 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ImageHandlerDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
+import com.lhjl.tzzs.proxy.model.MetaProjectStage;
+import com.lhjl.tzzs.proxy.model.MetaSegmentation;
 
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
 public interface InvestmentInstitutionsService {
+	/**
+	 * 获取所有的投资阶段信息
+	 * @return 投资阶段信息list
+	 */
+	CommonDto<List<MetaProjectStage>> listInvestementStages();
+	/**
+	 * 获取所有的投资领域信息
+	 * @return 投资领域信息list
+	 */
+	CommonDto<List<MetaSegmentation>> listInvestementFields();
     /**
      * 根据机构id获取机构信息的接口
      * @param body

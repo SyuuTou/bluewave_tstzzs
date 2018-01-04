@@ -12,8 +12,12 @@ import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsSegmentationMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsStageMapper;
+import com.lhjl.tzzs.proxy.mapper.MetaProjectStageMapper;
+import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddress;
+import com.lhjl.tzzs.proxy.model.MetaProjectStage;
+import com.lhjl.tzzs.proxy.model.MetaSegmentation;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
 import me.chanjar.weixin.common.exception.WxErrorException;
@@ -49,9 +53,15 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
 
     @Autowired
     private InvestmentInstitutionsAddressMapper investmentInstitutionsAddressMapper;
-
+    
     @Autowired
     private WxMaService qrcodeService;
+    
+    @Autowired
+    private MetaProjectStageMapper metaProjectStageMapper;
+    
+    @Autowired
+    private MetaSegmentationMapper metaSegmentationMapper;
 
     @Override
     public CommonDto<InvestmentInstitutionComplexOutputDto> getInvestmentInstitutionsComlexInfo(Map<String,Integer> body){
@@ -343,4 +353,28 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
 
         return new ByteArrayInputStream(os.toByteArray());
     }
+
+	@Override
+	public CommonDto<List<MetaProjectStage>> listInvestementStages() {
+		CommonDto<List<MetaProjectStage>> result= new CommonDto<>();
+		
+		List<MetaProjectStage> stages = metaProjectStageMapper.findAll();
+		result.setData(stages);
+		result.setMessage("success");
+		result.setStatus(200);
+		
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<MetaSegmentation>> listInvestementFields() {
+		CommonDto<List<MetaSegmentation>> result=new CommonDto<>();
+		
+		List<MetaSegmentation> segs = metaSegmentationMapper.findAll();
+		 result.setData(segs);
+		 result.setMessage("success");
+		 result.setStatus(200);
+		 
+		return result;
+	}
 }

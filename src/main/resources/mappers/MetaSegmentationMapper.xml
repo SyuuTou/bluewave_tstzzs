@@ -20,4 +20,7 @@
       <foreach collection="domains" close=")" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
   </select>
+  <select id="findAll" resultMap="BaseResultMap">
+  	select id,name,segmentation_logo,yn,create_time,creater from meta_segmentation
+  </select>
 </mapper>

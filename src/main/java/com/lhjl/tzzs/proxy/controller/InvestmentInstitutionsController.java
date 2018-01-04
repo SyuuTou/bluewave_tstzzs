@@ -3,6 +3,8 @@ package com.lhjl.tzzs.proxy.controller;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
+import com.lhjl.tzzs.proxy.model.MetaProjectStage;
+import com.lhjl.tzzs.proxy.model.MetaSegmentation;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +30,7 @@ public class InvestmentInstitutionsController {
      * @param body
      * @return
      */
-    @PostMapping("get/investmentinstitutons/complexinfo")
+ /*   @PostMapping("get/investmentinstitutons/complexinfo")
     public CommonDto<InvestmentInstitutionComplexOutputDto> getInvestmentInstitutionsComplexinfo(@RequestBody Map<String,Integer> body){
         CommonDto<InvestmentInstitutionComplexOutputDto> result = new CommonDto<>();
 
@@ -43,8 +45,66 @@ public class InvestmentInstitutionsController {
         }
 
         return result;
-    }
+    }*/
+    /**
+     * 根据机构id获取机构信息的接口
+     * @param body
+     * @return
+     */
+    @GetMapping("get/investmentinstitutons/complexinfo")
+    public CommonDto<InvestmentInstitutionComplexOutputDto> getInvestmentInstitutionsComplexinfo(String investmentInstitumentId){
+        CommonDto<InvestmentInstitutionComplexOutputDto> result = new CommonDto<>();
 
+        try {
+            //result =  investmentInstitutionsService.getInvestmentInstitutionsComlexInfo(investmentInstitumentId);
+
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+
+        return result;
+    }
+    /**
+     * 获取所有的而投资阶段信息--zd
+     * @return
+     */
+    @GetMapping("get/invest_step")
+    public CommonDto<List<MetaProjectStage>> getAllInvestementStages(){
+    	CommonDto<List<MetaProjectStage>> result=new CommonDto<>();
+    	
+        try {
+            result =  investmentInstitutionsService.listInvestementStages();
+
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+    	return result;
+    }
+    /**
+     * 获取所有的投资领域信息--zd
+     * @return
+     */
+    @GetMapping("get/invest_field")
+    public CommonDto<List<MetaSegmentation>> getAllInvestementFields(){
+    	CommonDto<List<MetaSegmentation>> result=new CommonDto<>();
+    	
+        try {
+            result =  investmentInstitutionsService.listInvestementFields();
+
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+    	return result;
+    }
     /**
      * 根据输入词搜索机构信息接口
      * @param inputsWords 输入的词
