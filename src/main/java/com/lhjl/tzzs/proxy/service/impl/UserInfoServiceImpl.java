@@ -125,7 +125,10 @@ public class UserInfoServiceImpl implements UserInfoService{
                         identiStr = "媒体";
                         break;
                     case 4:
-                        identiStr = "研究机构";
+                        identiStr = "政府机构";
+                        break;
+                    case 5:
+                        identiStr = "服务机构";
                         break;
                 }
                 params.put("user7excessfield", identiStr);
