@@ -91,7 +91,7 @@ public class ProjectSendBController extends GenericService{
     }
 
     /**
-     * 创建/更新提交项目接口
+     * 创建/更新提交项目团队成员接口
      * @param body
      * @param appid
      * @return
