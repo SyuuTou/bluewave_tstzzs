@@ -30,6 +30,15 @@ public interface ProjectSendBService {
      */
     CommonDto<ProjectSendBOutDto> readProjectInfomation(String token,Integer appid);
 
+    /**
+     * 复制项目信息接口
+     * @param prepareid
+     * @param newprepareid
+     * @param appid
+     * @param userId
+     * @param projectSendBId
+     * @return
+     */
     CommonDto<Integer> copyProject(Integer prepareid,Integer newprepareid,Integer appid,Integer userId,Integer projectSendBId);
 
 }

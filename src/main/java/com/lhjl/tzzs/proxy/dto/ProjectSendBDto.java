@@ -82,6 +82,9 @@ public class ProjectSendBDto {
     /**机构id*/
     private List<Integer> institutionId;
 
+    /**预生成id*/
+    private Integer prepareId;
+
     public String getProjectLogo() {
         return projectLogo;
     }
@@ -288,5 +291,13 @@ public class ProjectSendBDto {
 
     public void setInstitutionId(List<Integer> institutionId) {
         this.institutionId = institutionId;
+    }
+
+    public Integer getPrepareId() {
+        return prepareId;
+    }
+
+    public void setPrepareId(Integer prepareId) {
+        this.prepareId = prepareId;
     }
 }

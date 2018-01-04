@@ -15,4 +15,12 @@
     <result column="prepare_id" property="prepareId" jdbcType="INTEGER" />
     <result column="appid" property="appid" jdbcType="INTEGER" />
   </resultMap>
+  <select id="searchProjectSendAuditB" resultMap="BaseResultMap">
+    SELECT * FROM project_send_audit_b
+    where user_id = #{userid}
+    and appid = #{appid}
+    and audit_status = 0
+    order by create_time desc
+    limit 0,1;
+  </select>
 </mapper>
