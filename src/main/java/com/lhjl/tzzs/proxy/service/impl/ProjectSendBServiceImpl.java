@@ -204,7 +204,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         }
 
         //融资申请
-        CommonDto<String> result4 =createProjectFinancingApproval(body, appid);
+        CommonDto<String> result4 =createProjectFinancingApproval(body, appid,userid);
         if (result4.getStatus() != 200){
             result = result4;
 
@@ -504,8 +504,9 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
      * @return
      */
     @Transactional
-    public CommonDto<String> createProjectFinancingApproval(ProjectSendBDto body,Integer appid){
+    public CommonDto<String> createProjectFinancingApproval(ProjectSendBDto body,Integer appid,Integer userid){
         CommonDto<String> result  = new CommonDto<>();
+        Date now = new Date();
 
         if (body.getStage() == null || "".equals(body.getStage()) || "undefined".equals(body.getStage())){
             result.setStatus(502);
@@ -541,6 +542,10 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         ProjectSendFinancingApprovalB projectSendFinancingApprovalB = new ProjectSendFinancingApprovalB();
         projectSendFinancingApprovalB.setStage(body.getStage());
         projectSendFinancingApprovalB.setAmount(body.getAmount());
+        projectSendFinancingApprovalB.setProjectSendBId(body.getProjectSendId());
+        projectSendFinancingApprovalB.setAppid(appid);
+        projectSendFinancingApprovalB.setUserId(userid);
+        projectSendFinancingApprovalB.setCreateTime(now);
         if (body.getCurrency() == null){
             body.setCurrency(0);
         }
@@ -628,6 +633,10 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         founderWorkService.createOrUpdateFounderWork(founderId,body.getWorkExperience());
         founderEducationService.createOrUpdateFounderEducation(founderId,body.getEducationExperience());
 
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(null);
+
         return result;
     }
 
@@ -711,6 +720,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         }
         projectSendBOutDto.setProjectLogo(projectLogo);
         projectSendBOutDto.setShortName(projectSendB.getShortName());
+        projectSendBOutDto.setFullName(projectSendB.getFullName());
         projectSendBOutDto.setKernelDesc(projectSendB.getKernelDesc());
         projectSendBOutDto.setProjectInvestmentHighlights(projectSendB.getProjectInvestmentHighlights());
         projectSendBOutDto.setCommet(projectSendB.getCommet());
@@ -1000,6 +1010,12 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
 
             return result;
         }
+        //先删除原有的东西
+        ProjectSendInstitutionB projectSendInstitutionB1= new ProjectSendInstitutionB();
+        projectSendInstitutionB1.setProjectSendBId(projectSendId);
+        projectSendInstitutionB1.setAppid(appid);
+
+        projectSendInstitutionBMapper.delete(projectSendInstitutionB1);
 
         for (Integer i :institutionId){
             ProjectSendInstitutionB projectSendInstitutionB = new ProjectSendInstitutionB();
@@ -1010,6 +1026,10 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
 
             projectSendInstitutionBMapper.insertSelective(projectSendInstitutionB);
         }
+
+        result.setData(null);
+        result.setMessage("success");
+        result.setStatus(200);
 
         return result;
     }
@@ -1079,7 +1099,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             List<ProjectSendFinancingApprovalB> projectSendFinancingApprovalBList = projectSendFinancingApprovalBMapper.select(projectSendFinancingApprovalB);
             if (projectSendFinancingApprovalBList.size() > 0){
                 if (projectSendFinancingApprovalBList.get(0).getStage().equals(body.getStage())){
-                    if (!aduitYn){
+                    if (aduitYn){
                         jieguo=true;
                     }
                 }
