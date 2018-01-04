@@ -376,7 +376,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                 LabelList labelList =new LabelList();
                 labelList.setName("50指数机构");
                 labelList.setValue("50指数机构");
-                labelList.setChecked(true);
+                labelList.setChecked(false);
                 LabelList labelList1 =new LabelList();
                 labelList1.setName("行业指数机构");
                 labelList1.setValue("行业指数机构");
