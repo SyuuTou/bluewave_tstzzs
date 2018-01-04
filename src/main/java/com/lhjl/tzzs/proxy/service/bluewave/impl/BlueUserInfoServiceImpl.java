@@ -222,7 +222,16 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
             city = usersForSearch.getCity();
         }
         userInformationOutputDto.setCity(city);
-        userInformationOutputDto.setIdentityType(usersForSearch.getIdentityType());
+
+        Integer identityType = 0;
+        if (usersForSearch.getIdentityType() != null){
+            identityType = usersForSearch.getIdentityType();
+        }
+
+        if (appid == 1){
+            identityType = identityType +1;
+        }
+        userInformationOutputDto.setIdentityType(identityType);
         userInformationOutputDto.setIndustry(industry);
         String desc = "";
         if (usersForSearch.getDesc() != null){
@@ -341,7 +350,16 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
             users.setCity(body.getCity());
         }
         if (body.getIdentityType() != null){
-            users.setIdentityType(body.getIdentityType());
+            Integer identityType = 0;
+            if (appid ==1){
+                if (body.getIdentityType() > 0){
+                    identityType = body.getIdentityType() -1;
+                }
+            }else {
+                identityType = body.getIdentityType();
+            }
+
+            users.setIdentityType(identityType);
         }
         if (body.getIndustry() != null){
             users.setIndustry(body.getIndustry());
