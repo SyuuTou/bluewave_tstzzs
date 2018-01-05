@@ -301,19 +301,19 @@ public class ProjectSendTeamBServiceImpl implements ProjectSendTeamBService{
      */
     @Transactional
     @Override
-    public void copyProjectSendBTeam(Integer appid,Integer projectSendBId){
+    public void copyProjectSendBTeam(Integer appid,Integer projectSendBId,Integer newProjectSendBid){
         //先获取到原来的项目成员
         ProjectSendTeamB projectSendTeamB = new ProjectSendTeamB();
         projectSendTeamB.setProjectSendBId(projectSendBId);
-        projectSendTeamB.setId(0);
+        projectSendTeamB.setYn(0);
         projectSendTeamB.setAppid(appid);
 
         List<ProjectSendTeamB> projectSendTeamBList = projectSendTeamBMapper.select(projectSendTeamB);
         if (projectSendTeamBList.size() > 0){
             for (ProjectSendTeamB psb:projectSendTeamBList){
                 ProjectSendSearchCommenDto projectSendSearchCommenDto = new ProjectSendSearchCommenDto();
-                projectSendSearchCommenDto.setOldid(projectSendBId);
-                projectSendSearchCommenDto.setNewid(psb.getId());
+                projectSendSearchCommenDto.setOldid(psb.getId());
+                projectSendSearchCommenDto.setNewid(newProjectSendBid);
 
                 projectSendTeamBMapper.copyProjectTeamB(projectSendSearchCommenDto);
                 Integer ptmId = projectSendSearchCommenDto.getId();

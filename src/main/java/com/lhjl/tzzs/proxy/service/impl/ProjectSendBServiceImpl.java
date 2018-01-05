@@ -680,7 +680,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         projectSendFinancingApprovalBMapper.copyProjectSendFinancingApprovalB(projectSendSearchCommenDto);
 
         //复制团队成员
-        projectSendTeamBService.copyProjectSendBTeam(appid, projectSendBId);
+        projectSendTeamBService.copyProjectSendBTeam(appid, projectSendBId,newprojectSendId);
 
         //复制融资历史
         projectSendFinancingHistoryBService.copyProjectSendFinancingHistoryB(newprojectSendId,projectSendBId,appid);

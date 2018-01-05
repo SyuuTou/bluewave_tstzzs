@@ -42,5 +42,5 @@ public interface ProjectSendTeamBService {
      * @param appid
      * @param projectSendBId
      */
-    void copyProjectSendBTeam(Integer appid,Integer projectSendBId);
+    void copyProjectSendBTeam(Integer appid,Integer projectSendBId,Integer newprepareid);
 }
