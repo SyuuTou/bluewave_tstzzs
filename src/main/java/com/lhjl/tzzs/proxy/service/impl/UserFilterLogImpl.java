@@ -81,6 +81,29 @@ public class UserFilterLogImpl implements UserFilterLogService{
         UserFilterLog userFilterLog1 = userFilterLogMapper.selectOne(userFilterLog);
         Map<String,Object> map = new HashMap<>();
 
+        if (userFilterLog1 == null){
+            String[] investmentInstitutionsField = {};
+            String[] financingStage = {};
+            String[] city = {};
+            String[] education = {};
+            String[] work={};
+            String[] financingYear = {};
+            map.put("investmentInstitutionsType","");
+            map.putIfAbsent("investmentInstitutionsType","");
+            map.put("investmentInstitutionsField",investmentInstitutionsField);
+            map.put("financingStage",financingStage);
+            map.put("city",city);
+            map.put("education",education);
+            map.put("work",work);
+            map.put("financingYear",financingYear);
+
+            result.setData(map);
+            result.setStatus(200);
+            result.setMessage("success");
+
+            return result;
+        }
+
         String[] investmentInstitutionsField = {};
         if (userFilterLog1.getInvestmentInstitutionsField() != null){
             investmentInstitutionsField = userFilterLog1.getInvestmentInstitutionsField().split(",");
