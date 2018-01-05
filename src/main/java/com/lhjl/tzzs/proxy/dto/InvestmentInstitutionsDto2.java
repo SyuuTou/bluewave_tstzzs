@@ -28,8 +28,13 @@ public class InvestmentInstitutionsDto2 {
      * 一句话介绍
      */
     private String kenelCase;
-    
     /**
+     * 详细简介
+     */
+    private String comment;
+
+
+	/**
      * 投资阶段
      */
     private Integer[] stages;
@@ -110,12 +115,12 @@ public class InvestmentInstitutionsDto2 {
      */
     private String bpEmail;
     /**
-     * 经度
+     * 总部经度
      */
     private BigDecimal longitude;
     
     /**
-     * 纬度
+     * 总部纬度
      */
     private BigDecimal latitude;
     
@@ -156,7 +161,14 @@ public class InvestmentInstitutionsDto2 {
 	public void setKenelCase(String kenelCase) {
 		this.kenelCase = kenelCase;
 	}
+	
+    public String getComment() {
+		return comment;
+	}
 
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 	public Integer[] getStages() {
 		return stages;
 	}

@@ -1,24 +1,26 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddress" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddress">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="town" property="town" jdbcType="VARCHAR" />
-    <result column="province_id" property="provinceId" jdbcType="INTEGER" />
-    <result column="city_id" property="cityId" jdbcType="INTEGER" />
-    <result column="district_id" property="districtId" jdbcType="INTEGER" />
-    <result column="detail_address" property="detailAddress" jdbcType="VARCHAR" />
-    <result column="phone_country_code" property="phoneCountryCode" jdbcType="VARCHAR" />
-    <result column="phone_district_code" property="phoneDistrictCode" jdbcType="VARCHAR" />
-    <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR" />
-    <result column="email" property="email" jdbcType="VARCHAR" />
-    <result column="investment_institution_id" property="investmentInstitutionId" jdbcType="INTEGER" />
-    <result column="longitude" property="longitude" jdbcType="DECIMAL" />
-    <result column="latitude" property="latitude" jdbcType="DECIMAL" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="town" jdbcType="VARCHAR" property="town" />
+    <result column="province_id" jdbcType="INTEGER" property="provinceId" />
+    <result column="city_id" jdbcType="INTEGER" property="cityId" />
+    <result column="district_id" jdbcType="INTEGER" property="districtId" />
+    <result column="detail_address" jdbcType="VARCHAR" property="detailAddress" />
+    <result column="phone_country_code" jdbcType="VARCHAR" property="phoneCountryCode" />
+    <result column="phone_district_code" jdbcType="VARCHAR" property="phoneDistrictCode" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="bp_email" jdbcType="VARCHAR" property="bpEmail" />
+    <result column="investment_institution_id" jdbcType="INTEGER" property="investmentInstitutionId" />
+    <result column="longitude" jdbcType="DECIMAL" property="longitude" />
+    <result column="latitude" jdbcType="DECIMAL" property="latitude" />
   </resultMap>
+
   
 <!--     <select id="findAllById" parameterType="Integer" resultMap="BaseResultMap">
   	select id,town,province_id,city_id,detail_address,phone_country_code,phone_district_code,phone_number from investment_institutions_address_part

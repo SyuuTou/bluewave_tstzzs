@@ -8,6 +8,8 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ImageHandlerDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
+import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto2;
+import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionAdminMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressPartMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
@@ -18,9 +20,13 @@ import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddress;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsSegmentation;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsStage;
 import com.lhjl.tzzs.proxy.model.MetaProjectStage;
 import com.lhjl.tzzs.proxy.model.MetaSegmentation;
+import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
+import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import net.coobird.thumbnailator.Thumbnails;
@@ -32,6 +38,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -41,7 +48,7 @@ import java.util.*;
 import java.util.List;
 
 @Service
-public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutionsService{
+public class InvestmentInstitutionsServiceImpl extends GenericService implements InvestmentInstitutionsService{
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(InvestmentInstitutionsServiceImpl.class);
 
     @Autowired
@@ -67,7 +74,16 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
     
     @Autowired
     private InvestmentInstitutionsAddressPartMapper investmentInstitutionsAddressPartMapper;
-
+    
+    @Autowired
+    private InvestmentInstitutionAdminMapper investmentInstitutionAdminMapper;
+    
+    @Autowired
+    private UserLoginService userLoginService;
+    
+    
+    
+    
     @Override
     public CommonDto<InvestmentInstitutionComplexOutputDto> getInvestmentInstitutionsComlexInfo(Map<String,Integer> body){
         CommonDto<InvestmentInstitutionComplexOutputDto> result =  new CommonDto<>();
@@ -393,5 +409,145 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
 		result.setStatus(200);
 		
 		return result;
+	}
+	@Transactional
+	@Override
+	public CommonDto<Boolean> updateInvestmentInstitution(InvestmentInstitutionsDto2 body) {
+		//此处必须要获得机构ID才行
+		CommonDto<Boolean> result =new CommonDto<Boolean>();
+		//抽离出一个机构对象
+		InvestmentInstitutions ii=new InvestmentInstitutions();
+		//下面是给定了一个假的主键信息*******************************************
+		ii.setId(1);
+		
+		ii.setLogo(body.getLogo());
+		ii.setShortName(body.getShortName());
+		ii.setFullName(body.getFullName());
+		ii.setKenelCase(body.getKenelCase());
+		ii.setComment(body.getComment());
+		ii.setHomeUrl(body.getHomeUrl());
+		ii.setTotalFundScale(body.getTotalFundScale());
+		ii.setRmbFundScale(body.getRmbFundScale());
+		ii.setDollarFundScale(body.getDollarFundScale());
+		ii.setRmbInvestAmountMin(body.getRmbInvestAmountMin());
+		ii.setRmbInvestAmountMax(body.getRmbInvestAmountMax());
+		ii.setDollarInvestAmountMax(body.getDollarInvestAmountMax());
+		ii.setDollarInvestAmountMin(body.getDollarInvestAmountMin());
+		ii.setInvestmentIdea(body.getInvestmentIdea());
+		ii.setProductRequirement(body.getProductRequirement());
+		ii.setRecruitmentRequirement(body.getRecruitmentRequirement());
+		
+		//抽离出一个地址分部对象
+		//根据机构id获得相应的总部地址id
+		InvestmentInstitutionsAddress headquarters=new InvestmentInstitutionsAddress();
+		headquarters.setTown(body.getTown());
+		headquarters.setDetailAddress(body.getDetailAddress());
+		headquarters.setEmail(body.getEmail());
+		headquarters.setBpEmail(body.getBpEmail());
+		headquarters.setLongitude(body.getLongitude());
+		headquarters.setLatitude(body.getLatitude());
+		
+		//如果该管理员存在指定的机构,一般来说是已经存在的 ，所以执行以下的更新操作
+		if(true) {
+			
+		//获取地址分部的列表信息
+		List<InvestmentInstitutionsAddressPart> investmentInstitutionsAddressParts = body.getInvestmentInstitutionsAddressParts();
+		//对数据做进一步的处理，增加主键信息
+		List<InvestmentInstitutionsAddressPart> updateObj=new ArrayList<>();
+		for(InvestmentInstitutionsAddressPart temp:investmentInstitutionsAddressParts) {
+			//下面做的假数据，增加机构id所对应的主键信息
+			temp.setId(1);
+			updateObj.add(temp);
+		}
+		
+		
+		//执行相应的更新操作
+//		investmentInstitutionsMapper.updateByPrimaryKeySelective(record)
+//		investmentInstitutionsAddressMapper.insertList(recordList);
+//		InvestmentInstitutionsAddressPartMapper.insert
+		}else {
+			
+		}
+		
+		
+		return null;
+	}
+	
+	/**
+	 * 根据token以及appid获取机构id
+	 * @param token
+	 * @param appid
+	 * @return
+	 */
+	private Integer getiiId(String token,Integer appid) {
+		Integer userId = userLoginService.getUserIdByToken(token, appid);
+		Integer iiId= investmentInstitutionAdminMapper.findInvestmentInstitionIdByUserId(userId);
+		return iiId;
+	}
+	
+	
+	@Override
+	public CommonDto<InvestmentInstitutionsDto2> echoinstiinfo(String token, Integer appid) {
+		Integer iiId = this.getiiId(token, appid);
+		
+		CommonDto<InvestmentInstitutionsDto2> result = new CommonDto<InvestmentInstitutionsDto2>();
+		
+		InvestmentInstitutionsDto2 formBody = new InvestmentInstitutionsDto2();
+		//如果该用户没有相关的机构
+		if(iiId==null) {
+			
+			result.setData(formBody);
+			result.setStatus(200);
+			result.setMessage("不存在相关的机构");
+		}else {
+			//获取机构的相关信息
+			InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(iiId);
+			
+			//获取机构总部的地址信息
+			InvestmentInstitutionsAddress headquarters=new InvestmentInstitutionsAddress();
+			headquarters.setInvestmentInstitutionId(iiId);
+			headquarters = investmentInstitutionsAddressMapper.selectOne(headquarters);
+			//获取机构分部的地址信息
+			InvestmentInstitutionsAddressPart part=new InvestmentInstitutionsAddressPart();
+			part.setInvestmentInstitutionId(iiId);
+			List<InvestmentInstitutionsAddressPart> parts = investmentInstitutionsAddressPartMapper.select(part);
+			//获取机构的领域信息
+			InvestmentInstitutionsStage stage = new  InvestmentInstitutionsStage();
+			stage.setInvestmentInstitutionId(iiId);
+			List<InvestmentInstitutionsStage> stages = investmentInstitutionsStageMapper.select(stage);
+			//获取机构的阶段信息
+			InvestmentInstitutionsSegmentation investmentInstitutionsSegmentation = new InvestmentInstitutionsSegmentation();
+			investmentInstitutionsSegmentation.setInvestmentInstitutionsId(iiId);
+			List<InvestmentInstitutionsSegmentation> Segmentations = investmentInstitutionsSegmentationMapper.select(investmentInstitutionsSegmentation);
+			if(ii != null) {
+				formBody.setLogo(ii.getLogo());
+				formBody.setShortName(ii.getShortName());
+				formBody.setFullName(ii.getFullName());
+				formBody.setKenelCase(ii.getKenelCase());
+				formBody.setComment(ii.getComment());
+				formBody.setHomeUrl(ii.getHomeUrl());
+				formBody.setTotalFundScale(ii.getTotalFundScale());
+				formBody.setRmbFundScale(ii.getRmbFundScale());
+				formBody.setDollarFundScale(ii.getDollarFundScale());
+				formBody.setRmbInvestAmountMin(ii.getRmbInvestAmountMin());
+				formBody.setRmbInvestAmountMax(ii.getRmbInvestAmountMax());
+				formBody.setDollarInvestAmountMax(ii.getDollarInvestAmountMax());
+				formBody.setDollarInvestAmountMin(ii.getDollarInvestAmountMin());
+			}
+			if(headquarters != null) {
+				formBody.setTown(headquarters.getTown());
+				formBody.setDetailAddress(headquarters.getDetailAddress());
+				formBody.setEmail(headquarters.getEmail());
+				formBody.setBpEmail(headquarters.getBpEmail());
+				formBody.setLongitude(headquarters.getLongitude());
+				formBody.setLatitude(headquarters.getLatitude());
+			}
+			//设置相关的领域以及阶段信息
+			
+			result.setData(formBody);
+			result.setStatus(200);
+			result.setMessage("success");
+		}
+				return result;
 	}
 }

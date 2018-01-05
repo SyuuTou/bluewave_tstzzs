@@ -6,4 +6,8 @@ import org.slf4j.LoggerFactory;
 public abstract class GenericService {
 
     protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
+    
+//    protected bodyDtoConvertToObject(Common) {
+//    	
+//    }
 }

@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -11,37 +12,21 @@ public class InvestmentInstitutions {
     private Integer id;
 
     /**
+     * logoURl
+     */
+    private String logo;
+
+    /**
      * 机构简称
      */
     @Column(name = "short_name")
     private String shortName;
 
     /**
-     * 机构备注
+     * 机构工商注册名称_新增
      */
-    private String commet;
-
-    /**
-     * 创建时间
-     */
-    @Column(name = "create_time")
-    private Date createTime;
-
-    /**
-     * 机构类型：1: 50机构，0: 非50机构
-     */
-    private Integer type;
-
-    /**
-     * logoURl
-     */
-    private String logo;
-
-    /**
-     * 案例网址
-     */
-    @Column(name = "case_url")
-    private String caseUrl;
+    @Column(name = "full_name")
+    private String fullName;
 
     /**
      * 一句话介绍
@@ -55,6 +40,40 @@ public class InvestmentInstitutions {
     private String comment;
 
     /**
+     * 官网地址
+     */
+    @Column(name = "home_url")
+    private String homeUrl;
+
+    /**
+     * 机构备注
+     */
+    private String commet;
+
+    /**
+     * 唯一key
+     */
+    @Column(name = "key_words")
+    private String keyWords;
+
+    /**
+     * 创建时间
+     */
+    @Column(name = "create_time")
+    private Date createTime;
+
+    /**
+     * 机构类型：1: 50机构，0: 非50机构
+     */
+    private Integer type;
+
+    /**
+     * 案例网址
+     */
+    @Column(name = "case_url")
+    private String caseUrl;
+
+    /**
      * 所在城市
      */
     private String city;
@@ -65,7 +84,7 @@ public class InvestmentInstitutions {
     private String stage;
 
     /**
-     * 客户代表
+     * 客户代表_修改了数据类型
      */
     private String representative;
 
@@ -81,19 +100,71 @@ public class InvestmentInstitutions {
     @Column(name = "approval_time")
     private Date approvalTime;
 
-    /**
-     * 官网地址
-     */
-    @Column(name = "home_url")
-    private String homeUrl;
-
     private Integer yn;
 
     private Integer sort;
 
     private Integer count;
 
-    private String keyWords;
+    /**
+     * 总基金管理规模
+     */
+    @Column(name = "total_fund_scale")
+    private BigDecimal totalFundScale;
+
+    /**
+     * 人民币基金管理规模
+     */
+    @Column(name = "rmb_fund_scale")
+    private BigDecimal rmbFundScale;
+
+    /**
+     * 美元基金管理规模
+     */
+    @Column(name = "dollar_fund_scale")
+    private BigDecimal dollarFundScale;
+
+    /**
+     * 人民币区间开始
+     */
+    @Column(name = "rmb_invest_amount_min")
+    private BigDecimal rmbInvestAmountMin;
+
+    /**
+     * 人民币区间结束
+     */
+    @Column(name = "rmb_invest_amount_max")
+    private BigDecimal rmbInvestAmountMax;
+
+    /**
+     * 美元区间开始
+     */
+    @Column(name = "dollar_invest_amount_min")
+    private BigDecimal dollarInvestAmountMin;
+
+    /**
+     * 美元区间结束
+     */
+    @Column(name = "dollar_invest_amount_max")
+    private BigDecimal dollarInvestAmountMax;
+
+    /**
+     * 投资理念_新增
+     */
+    @Column(name = "investment_idea")
+    private String investmentIdea;
+
+    /**
+     * 项目需求_新增
+     */
+    @Column(name = "product_requirement")
+    private String productRequirement;
+
+    /**
+     * 招聘需求_新增
+     */
+    @Column(name = "recruitment_requirement")
+    private String recruitmentRequirement;
 
     /**
      * @return ID
@@ -107,78 +178,6 @@ public class InvestmentInstitutions {
      */
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    /**
-     * 获取机构简称
-     *
-     * @return short_name - 机构简称
-     */
-    public String getShortName() {
-        return shortName;
-    }
-
-    /**
-     * 设置机构简称
-     *
-     * @param shortName 机构简称
-     */
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
-
-    /**
-     * 获取机构备注
-     *
-     * @return commet - 机构备注
-     */
-    public String getCommet() {
-        return commet;
-    }
-
-    /**
-     * 设置机构备注
-     *
-     * @param commet 机构备注
-     */
-    public void setCommet(String commet) {
-        this.commet = commet;
-    }
-
-    /**
-     * 获取创建时间
-     *
-     * @return create_time - 创建时间
-     */
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    /**
-     * 设置创建时间
-     *
-     * @param createTime 创建时间
-     */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    /**
-     * 获取机构类型：1: 50机构，0: 非50机构
-     *
-     * @return type - 机构类型：1: 50机构，0: 非50机构
-     */
-    public Integer getType() {
-        return type;
-    }
-
-    /**
-     * 设置机构类型：1: 50机构，0: 非50机构
-     *
-     * @param type 机构类型：1: 50机构，0: 非50机构
-     */
-    public void setType(Integer type) {
-        this.type = type;
     }
 
     /**
@@ -200,21 +199,39 @@ public class InvestmentInstitutions {
     }
 
     /**
-     * 获取案例网址
+     * 获取机构简称
      *
-     * @return case_url - 案例网址
+     * @return short_name - 机构简称
      */
-    public String getCaseUrl() {
-        return caseUrl;
+    public String getShortName() {
+        return shortName;
     }
 
     /**
-     * 设置案例网址
+     * 设置机构简称
      *
-     * @param caseUrl 案例网址
+     * @param shortName 机构简称
      */
-    public void setCaseUrl(String caseUrl) {
-        this.caseUrl = caseUrl;
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
+
+    /**
+     * 获取机构工商注册名称_新增
+     *
+     * @return full_name - 机构工商注册名称_新增
+     */
+    public String getFullName() {
+        return fullName;
+    }
+
+    /**
+     * 设置机构工商注册名称_新增
+     *
+     * @param fullName 机构工商注册名称_新增
+     */
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     /**
@@ -254,6 +271,114 @@ public class InvestmentInstitutions {
     }
 
     /**
+     * 获取官网地址
+     *
+     * @return home_url - 官网地址
+     */
+    public String getHomeUrl() {
+        return homeUrl;
+    }
+
+    /**
+     * 设置官网地址
+     *
+     * @param homeUrl 官网地址
+     */
+    public void setHomeUrl(String homeUrl) {
+        this.homeUrl = homeUrl;
+    }
+
+    /**
+     * 获取机构备注
+     *
+     * @return commet - 机构备注
+     */
+    public String getCommet() {
+        return commet;
+    }
+
+    /**
+     * 设置机构备注
+     *
+     * @param commet 机构备注
+     */
+    public void setCommet(String commet) {
+        this.commet = commet;
+    }
+
+    /**
+     * 获取唯一key
+     *
+     * @return key_words - 唯一key
+     */
+    public String getKeyWords() {
+        return keyWords;
+    }
+
+    /**
+     * 设置唯一key
+     *
+     * @param keyWords 唯一key
+     */
+    public void setKeyWords(String keyWords) {
+        this.keyWords = keyWords;
+    }
+
+    /**
+     * 获取创建时间
+     *
+     * @return create_time - 创建时间
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * 设置创建时间
+     *
+     * @param createTime 创建时间
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    /**
+     * 获取机构类型：1: 50机构，0: 非50机构
+     *
+     * @return type - 机构类型：1: 50机构，0: 非50机构
+     */
+    public Integer getType() {
+        return type;
+    }
+
+    /**
+     * 设置机构类型：1: 50机构，0: 非50机构
+     *
+     * @param type 机构类型：1: 50机构，0: 非50机构
+     */
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    /**
+     * 获取案例网址
+     *
+     * @return case_url - 案例网址
+     */
+    public String getCaseUrl() {
+        return caseUrl;
+    }
+
+    /**
+     * 设置案例网址
+     *
+     * @param caseUrl 案例网址
+     */
+    public void setCaseUrl(String caseUrl) {
+        this.caseUrl = caseUrl;
+    }
+
+    /**
      * 获取所在城市
      *
      * @return city - 所在城市
@@ -290,18 +415,18 @@ public class InvestmentInstitutions {
     }
 
     /**
-     * 获取客户代表
+     * 获取客户代表_修改了数据类型
      *
-     * @return representative - 客户代表
+     * @return representative - 客户代表_修改了数据类型
      */
     public String getRepresentative() {
         return representative;
     }
 
     /**
-     * 设置客户代表
+     * 设置客户代表_修改了数据类型
      *
-     * @param representative 客户代表
+     * @param representative 客户代表_修改了数据类型
      */
     public void setRepresentative(String representative) {
         this.representative = representative;
@@ -341,24 +466,6 @@ public class InvestmentInstitutions {
      */
     public void setApprovalTime(Date approvalTime) {
         this.approvalTime = approvalTime;
-    }
-
-    /**
-     * 获取官网地址
-     *
-     * @return home_url - 官网地址
-     */
-    public String getHomeUrl() {
-        return homeUrl;
-    }
-
-    /**
-     * 设置官网地址
-     *
-     * @param homeUrl 官网地址
-     */
-    public void setHomeUrl(String homeUrl) {
-        this.homeUrl = homeUrl;
     }
 
     /**
@@ -403,11 +510,199 @@ public class InvestmentInstitutions {
         this.count = count;
     }
 
-    public String getKeyWords() {
-        return keyWords;
+    /**
+     * 获取总基金管理规模
+     *
+     * @return total_fund_scale - 总基金管理规模
+     */
+    public BigDecimal getTotalFundScale() {
+        return totalFundScale;
     }
 
-    public void setKeyWords(String keyWords) {
-        this.keyWords = keyWords;
+    /**
+     * 设置总基金管理规模
+     *
+     * @param totalFundScale 总基金管理规模
+     */
+    public void setTotalFundScale(BigDecimal totalFundScale) {
+        this.totalFundScale = totalFundScale;
     }
+
+    /**
+     * 获取人民币基金管理规模
+     *
+     * @return rmb_fund_scale - 人民币基金管理规模
+     */
+    public BigDecimal getRmbFundScale() {
+        return rmbFundScale;
+    }
+
+    /**
+     * 设置人民币基金管理规模
+     *
+     * @param rmbFundScale 人民币基金管理规模
+     */
+    public void setRmbFundScale(BigDecimal rmbFundScale) {
+        this.rmbFundScale = rmbFundScale;
+    }
+
+    /**
+     * 获取美元基金管理规模
+     *
+     * @return dollar_fund_scale - 美元基金管理规模
+     */
+    public BigDecimal getDollarFundScale() {
+        return dollarFundScale;
+    }
+
+    /**
+     * 设置美元基金管理规模
+     *
+     * @param dollarFundScale 美元基金管理规模
+     */
+    public void setDollarFundScale(BigDecimal dollarFundScale) {
+        this.dollarFundScale = dollarFundScale;
+    }
+
+    /**
+     * 获取人民币区间开始
+     *
+     * @return rmb_invest_amount_min - 人民币区间开始
+     */
+    public BigDecimal getRmbInvestAmountMin() {
+        return rmbInvestAmountMin;
+    }
+
+    /**
+     * 设置人民币区间开始
+     *
+     * @param rmbInvestAmountMin 人民币区间开始
+     */
+    public void setRmbInvestAmountMin(BigDecimal rmbInvestAmountMin) {
+        this.rmbInvestAmountMin = rmbInvestAmountMin;
+    }
+
+    /**
+     * 获取人民币区间结束
+     *
+     * @return rmb_invest_amount_max - 人民币区间结束
+     */
+    public BigDecimal getRmbInvestAmountMax() {
+        return rmbInvestAmountMax;
+    }
+
+    /**
+     * 设置人民币区间结束
+     *
+     * @param rmbInvestAmountMax 人民币区间结束
+     */
+    public void setRmbInvestAmountMax(BigDecimal rmbInvestAmountMax) {
+        this.rmbInvestAmountMax = rmbInvestAmountMax;
+    }
+
+    /**
+     * 获取美元区间开始
+     *
+     * @return dollar_invest_amount_min - 美元区间开始
+     */
+    public BigDecimal getDollarInvestAmountMin() {
+        return dollarInvestAmountMin;
+    }
+
+    /**
+     * 设置美元区间开始
+     *
+     * @param dollarInvestAmountMin 美元区间开始
+     */
+    public void setDollarInvestAmountMin(BigDecimal dollarInvestAmountMin) {
+        this.dollarInvestAmountMin = dollarInvestAmountMin;
+    }
+
+    /**
+     * 获取美元区间结束
+     *
+     * @return dollar_invest_amount_max - 美元区间结束
+     */
+    public BigDecimal getDollarInvestAmountMax() {
+        return dollarInvestAmountMax;
+    }
+
+    /**
+     * 设置美元区间结束
+     *
+     * @param dollarInvestAmountMax 美元区间结束
+     */
+    public void setDollarInvestAmountMax(BigDecimal dollarInvestAmountMax) {
+        this.dollarInvestAmountMax = dollarInvestAmountMax;
+    }
+
+    /**
+     * 获取投资理念_新增
+     *
+     * @return investment_idea - 投资理念_新增
+     */
+    public String getInvestmentIdea() {
+        return investmentIdea;
+    }
+
+    /**
+     * 设置投资理念_新增
+     *
+     * @param investmentIdea 投资理念_新增
+     */
+    public void setInvestmentIdea(String investmentIdea) {
+        this.investmentIdea = investmentIdea;
+    }
+
+    /**
+     * 获取项目需求_新增
+     *
+     * @return product_requirement - 项目需求_新增
+     */
+    public String getProductRequirement() {
+        return productRequirement;
+    }
+
+    /**
+     * 设置项目需求_新增
+     *
+     * @param productRequirement 项目需求_新增
+     */
+    public void setProductRequirement(String productRequirement) {
+        this.productRequirement = productRequirement;
+    }
+
+    /**
+     * 获取招聘需求_新增
+     *
+     * @return recruitment_requirement - 招聘需求_新增
+     */
+    public String getRecruitmentRequirement() {
+        return recruitmentRequirement;
+    }
+
+    /**
+     * 设置招聘需求_新增
+     *
+     * @param recruitmentRequirement 招聘需求_新增
+     */
+    public void setRecruitmentRequirement(String recruitmentRequirement) {
+        this.recruitmentRequirement = recruitmentRequirement;
+    }
+
+	@Override
+	public String toString() {
+		return "InvestmentInstitutions [id=" + id + ", logo=" + logo + ", shortName=" + shortName + ", fullName="
+				+ fullName + ", kenelCase=" + kenelCase + ", comment=" + comment + ", homeUrl=" + homeUrl + ", commet="
+				+ commet + ", keyWords=" + keyWords + ", createTime=" + createTime + ", type=" + type + ", caseUrl="
+				+ caseUrl + ", city=" + city + ", stage=" + stage + ", representative=" + representative
+				+ ", approvalStatus=" + approvalStatus + ", approvalTime=" + approvalTime + ", yn=" + yn + ", sort="
+				+ sort + ", count=" + count + ", totalFundScale=" + totalFundScale + ", rmbFundScale=" + rmbFundScale
+				+ ", dollarFundScale=" + dollarFundScale + ", rmbInvestAmountMin=" + rmbInvestAmountMin
+				+ ", rmbInvestAmountMax=" + rmbInvestAmountMax + ", dollarInvestAmountMin=" + dollarInvestAmountMin
+				+ ", dollarInvestAmountMax=" + dollarInvestAmountMax + ", investmentIdea=" + investmentIdea
+				+ ", productRequirement=" + productRequirement + ", recruitmentRequirement=" + recruitmentRequirement
+				+ "]";
+	}
+    
 }

@@ -4,13 +4,17 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto2;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
 import com.lhjl.tzzs.proxy.model.MetaProjectStage;
 import com.lhjl.tzzs.proxy.model.MetaSegmentation;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
+import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +30,7 @@ public class InvestmentInstitutionsController extends GenericController {
 
     @Resource
     private InvestmentInstitutionsService investmentInstitutionsService;
+    
 
     /**
      * 根据机构id获取机构信息的接口
@@ -70,31 +75,50 @@ public class InvestmentInstitutionsController extends GenericController {
         return result;
     }
     /**
-     * 增加投资机构信息
+     * 回显机构信息的数据,
+     *   如果没有相关的机构，则返回空数据
+     *   如果存在相关的机构，则直接回显
+     * @return
+     */
+    @GetMapping("/v{appid}/echoinstiinfo")
+    public CommonDto<InvestmentInstitutionsDto2> echoinstiinfo(String token,@PathVariable Integer appid){
+    	CommonDto<InvestmentInstitutionsDto2> result =new CommonDto<>();
+    	try {
+    		result = investmentInstitutionsService.echoinstiinfo(token, appid);
+    	}catch(Exception e){
+    		log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+    	}
+    	return result;
+    }
+    /**
+     * 更新投资机构的相关信息
      * @param investmentInstitumentId
      * @return
      */
-    @PostMapping("saveinvestmentinstitution")
-    public Boolean saveInvestmentInstitution(@RequestBody InvestmentInstitutionsDto2 body){
+    @PostMapping("/v{appid}/saveinstiinfo")
+    public CommonDto<Boolean> saveInvestmentInstitution(@PathVariable Integer appid,@RequestBody InvestmentInstitutionsDto2 body){
+    	//获取用户id
+//    	Integer userId = userLoginService.getUserIdByToken("we", appid);
+    	//根据用户id获取机构id
+//    	Integer iiId = investmentInstitutionsService.getInvestmentInstitionIdByUserId(1);
+//    	System.err.println(iiId);
     	
+    	this.log.error(appid+"*****");
     	CommonDto<Boolean> result=new CommonDto<>();
-    	result.setData(null);
-    	result.setStatus(200);
-    	result.setMessage("success");
     	
-    	this.LOGGER.error("***~~~~");
-    	System.err.println(body);
-      /*  try {
-            result =  investmentInstitutionsService.getInvestmentInstitutionsComlexInfo(investmentInstitumentId);
-
+        /*try {
+            result =  investmentInstitutionsService.updateInvestmentInstitution(body);
+            
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
-            result.setData(null);
+            result.setData(false);
         }*/
-
-        return true;
+        return result;
     }
     
     /**

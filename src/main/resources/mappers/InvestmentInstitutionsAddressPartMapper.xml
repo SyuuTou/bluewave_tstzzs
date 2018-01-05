@@ -1,21 +1,23 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressPartMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressPartMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="investment_institution_id" property="investmentInstitutionId" jdbcType="INTEGER" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="town" property="town" jdbcType="VARCHAR" />
-    <result column="detail_address" property="detailAddress" jdbcType="VARCHAR" />
-    <result column="phone_country_code" property="phoneCountryCode" jdbcType="VARCHAR" />
-    <result column="phone_district_code" property="phoneDistrictCode" jdbcType="VARCHAR" />
-    <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="investment_institution_id" jdbcType="INTEGER" property="investmentInstitutionId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="town" jdbcType="VARCHAR" property="town" />
+    <result column="detail_address" jdbcType="VARCHAR" property="detailAddress" />
+    <result column="phone_country_code" jdbcType="VARCHAR" property="phoneCountryCode" />
+    <result column="phone_district_code" jdbcType="VARCHAR" property="phoneDistrictCode" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="longitude" jdbcType="DECIMAL" property="longitude" />
+    <result column="latitude" jdbcType="DECIMAL" property="latitude" />
   </resultMap>
   <select id="findAllById" parameterType="Integer" resultMap="BaseResultMap">
-  	select id,investment_institution_id,name,town,detail_address,phone_country_code,phone_district_code,phone_number from investment_institutions_address_part
+  	select id,investment_institution_id,name,town,detail_address,phone_country_code,phone_district_code,phone_number,longitude,latitude from investment_institutions_address_part
   	where id = #{investmentInstitutionId}
   </select>
 </mapper>

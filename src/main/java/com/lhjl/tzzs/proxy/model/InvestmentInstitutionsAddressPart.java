@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.model;
 
+import java.math.BigDecimal;
 import javax.persistence.*;
 
 @Table(name = "investment_institutions_address_part")
@@ -47,6 +48,10 @@ public class InvestmentInstitutionsAddressPart {
      */
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    private BigDecimal longitude;
+
+    private BigDecimal latitude;
 
     /**
      * @return id
@@ -188,11 +193,31 @@ public class InvestmentInstitutionsAddressPart {
         this.phoneNumber = phoneNumber;
     }
 
-	@Override
-	public String toString() {
-		return "InvestmentInstitutionsAddressPart [id=" + id + ", investmentInstitutionId=" + investmentInstitutionId
-				+ ", name=" + name + ", town=" + town + ", detailAddress=" + detailAddress + ", phoneCountryCode="
-				+ phoneCountryCode + ", phoneDistrictCode=" + phoneDistrictCode + ", phoneNumber=" + phoneNumber + "]";
-	}
-    
+    /**
+     * @return longitude
+     */
+    public BigDecimal getLongitude() {
+        return longitude;
+    }
+
+    /**
+     * @param longitude
+     */
+    public void setLongitude(BigDecimal longitude) {
+        this.longitude = longitude;
+    }
+
+    /**
+     * @return latitude
+     */
+    public BigDecimal getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * @param latitude
+     */
+    public void setLatitude(BigDecimal latitude) {
+        this.latitude = latitude;
+    }
 }

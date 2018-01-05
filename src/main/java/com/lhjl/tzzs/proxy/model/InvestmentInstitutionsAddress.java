@@ -62,6 +62,12 @@ public class InvestmentInstitutionsAddress {
     private String email;
 
     /**
+     * bpemail
+     */
+    @Column(name = "bp_email")
+    private String bpEmail;
+
+    /**
      * 机构id
      */
     @Column(name = "investment_institution_id")
@@ -251,6 +257,24 @@ public class InvestmentInstitutionsAddress {
      */
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    /**
+     * 获取bpemail
+     *
+     * @return bp_email - bpemail
+     */
+    public String getBpEmail() {
+        return bpEmail;
+    }
+
+    /**
+     * 设置bpemail
+     *
+     * @param bpEmail bpemail
+     */
+    public void setBpEmail(String bpEmail) {
+        this.bpEmail = bpEmail;
     }
 
     /**
