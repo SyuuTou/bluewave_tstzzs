@@ -23,7 +23,7 @@
     <result column="create_id" property="createId" jdbcType="INTEGER" />
   </resultMap>
   <select id="getTeamMemberListByType" resultMap="BaseResultMap">
-    select * from idatavc.investment_institution_team
+    select * from investment_institution_team
     where investment_institution_id =#{institutionId}
     and work_yn = 1
     and hide_yn = 0
