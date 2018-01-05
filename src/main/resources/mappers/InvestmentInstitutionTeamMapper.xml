@@ -22,4 +22,12 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_id" property="createId" jdbcType="INTEGER" />
   </resultMap>
+  <select id="getTeamMemberListByType" resultMap="BaseResultMap">
+    select * from idatavc.investment_institution_team
+    where investment_institution_id =#{institutionId}
+    and work_yn = 1
+    and hide_yn = 0
+    and meta_iit_type_id = #{metaType}
+    order by weight
+  </select>
 </mapper>

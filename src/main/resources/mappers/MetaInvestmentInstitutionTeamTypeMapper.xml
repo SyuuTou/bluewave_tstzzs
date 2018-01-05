@@ -9,4 +9,12 @@
     <result column="type_name" property="typeName" jdbcType="VARCHAR" />
     <result column="sort" property="sort" jdbcType="INTEGER" />
   </resultMap>
+  <select id="selectTeamTypeByInstitutionId" resultMap="BaseResultMap">
+    select meiity.* from investment_institution_team iit left join meta_investment_institution_team_type meiity on iit.meta_iit_type_id = meiity.id
+    where iit.investment_institution_id = #{institutionId}
+    and work_yn = 1
+    and hide_yn = 0
+    group by meiity.type_name
+    order by meiity.sort
+  </select>
 </mapper>
