@@ -519,6 +519,7 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 			InvestmentInstitutionsSegmentation investmentInstitutionsSegmentation = new InvestmentInstitutionsSegmentation();
 			investmentInstitutionsSegmentation.setInvestmentInstitutionsId(iiId);
 			List<InvestmentInstitutionsSegmentation> Segmentations = investmentInstitutionsSegmentationMapper.select(investmentInstitutionsSegmentation);
+			
 			if(ii != null) {
 				formBody.setLogo(ii.getLogo());
 				formBody.setShortName(ii.getShortName());
@@ -534,6 +535,7 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 				formBody.setDollarInvestAmountMax(ii.getDollarInvestAmountMax());
 				formBody.setDollarInvestAmountMin(ii.getDollarInvestAmountMin());
 			}
+			
 			if(headquarters != null) {
 				formBody.setTown(headquarters.getTown());
 				formBody.setDetailAddress(headquarters.getDetailAddress());
@@ -542,7 +544,16 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 				formBody.setLongitude(headquarters.getLongitude());
 				formBody.setLatitude(headquarters.getLatitude());
 			}
-			//设置相关的领域以及阶段信息
+			//设置相关的领域以及阶段信息(将list转换为一个Integer)
+			Integer[] tempStage = null;
+//			stages.toArray();
+			if(stages != null && stages.size() != 0) {
+				tempStage = new Integer[stages.size()];
+				for(InvestmentInstitutionsStage temp : stages) {
+//					tempStage
+				}
+			}
+//			Segmentations
 			
 			result.setData(formBody);
 			result.setStatus(200);
