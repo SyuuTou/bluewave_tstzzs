@@ -1055,6 +1055,9 @@ public class ProjectsServiceImpl implements ProjectsService {
         projectComplexOutputDto.setProjectLogo(logo);
         projectComplexOutputDto.setProjectShortName(projects.getShortName());
         projectComplexOutputDto.setSegmentation(fieldEdit);
+        if (projects.getCity() == null){
+            projects.setCity("");
+        }
         projectComplexOutputDto.setCity(projects.getCity());
         projectComplexOutputDto.setRound(financingStage);
         projectComplexOutputDto.setProjectType(projectType);
