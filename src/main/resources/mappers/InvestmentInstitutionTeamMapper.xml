@@ -1,48 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionTeamMapper">
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionTeam">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="picture" jdbcType="VARCHAR" property="picture" />
-    <result column="meta_iit_type_id" jdbcType="INTEGER" property="metaIitTypeId" />
-    <result column="actual_name" jdbcType="VARCHAR" property="actualName" />
-    <result column="company_duties" jdbcType="VARCHAR" property="companyDuties" />
-    <result column="member_desc" jdbcType="VARCHAR" property="memberDesc" />
-    <result column="honor" jdbcType="VARCHAR" property="honor" />
-    <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="wechat" jdbcType="VARCHAR" property="wechat" />
-    <result column="work_yn" jdbcType="INTEGER" property="workYn" />
-    <result column="weight" jdbcType="INTEGER" property="weight" />
-    <result column="hide_yn" jdbcType="INTEGER" property="hideYn" />
-    <result column="investment_institution_id" jdbcType="INTEGER" property="investmentInstitutionId" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="create_id" jdbcType="INTEGER" property="createId" />
-  </resultMap>
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionTeam">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="picture" jdbcType="VARCHAR" property="picture" />
-    <result column="meta_iit_type_id" jdbcType="INTEGER" property="metaIitTypeId" />
-    <result column="actual_name" jdbcType="VARCHAR" property="actualName" />
-    <result column="company_duties" jdbcType="VARCHAR" property="companyDuties" />
-    <result column="member_desc" jdbcType="VARCHAR" property="memberDesc" />
-    <result column="honor" jdbcType="VARCHAR" property="honor" />
-    <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="wechat" jdbcType="VARCHAR" property="wechat" />
-    <result column="work_yn" jdbcType="INTEGER" property="workYn" />
-    <result column="weight" jdbcType="INTEGER" property="weight" />
-    <result column="hide_yn" jdbcType="INTEGER" property="hideYn" />
-    <result column="investment_institution_id" jdbcType="INTEGER" property="investmentInstitutionId" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="create_id" jdbcType="INTEGER" property="createId" />
-  </resultMap>
+  
   <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionTeam">
     <!--
       WARNING - @mbg.generated

@@ -125,7 +125,7 @@ public class InvestmentInstitutionsDto2 {
     private BigDecimal latitude;
     
     /** 
-     * 以下属于公司分部数组的信息
+     * 以下属于公司分部List的信息
      * 
      */
     private List<InvestmentInstitutionsAddressPart> investmentInstitutionsAddressParts;

@@ -28,6 +28,8 @@ import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
+import com.lhjl.tzzs.proxy.utils.TypeConvertUtil;
+
 import me.chanjar.weixin.common.exception.WxErrorException;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Position;
@@ -518,7 +520,7 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 			//获取机构的阶段信息
 			InvestmentInstitutionsSegmentation investmentInstitutionsSegmentation = new InvestmentInstitutionsSegmentation();
 			investmentInstitutionsSegmentation.setInvestmentInstitutionsId(iiId);
-			List<InvestmentInstitutionsSegmentation> Segmentations = investmentInstitutionsSegmentationMapper.select(investmentInstitutionsSegmentation);
+			List<InvestmentInstitutionsSegmentation> segmentations = investmentInstitutionsSegmentationMapper.select(investmentInstitutionsSegmentation);
 			
 			if(ii != null) {
 				formBody.setLogo(ii.getLogo());
@@ -544,16 +546,33 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 				formBody.setLongitude(headquarters.getLongitude());
 				formBody.setLatitude(headquarters.getLatitude());
 			}
-			//设置相关的领域以及阶段信息(将list转换为一个Integer)
-			Integer[] tempStage = null;
-//			stages.toArray();
+			//设置相关的阶段信息(将list转换为一个Integer)
+			List<Integer> staList=new ArrayList<>();
 			if(stages != null && stages.size() != 0) {
-				tempStage = new Integer[stages.size()];
-				for(InvestmentInstitutionsStage temp : stages) {
-//					tempStage
+				Iterator<InvestmentInstitutionsStage> ite = stages.iterator();
+				while(ite.hasNext()) {
+					staList.add(ite.next().getMetaProjectStageId());
 				}
 			}
-//			Segmentations
+			
+			Integer[] stageArr = new Integer[staList.size()];
+			stageArr = staList.toArray(stageArr);
+			formBody.setStages(stageArr);
+			
+			//设置相关的领域信息
+			List<Integer> segmList=new ArrayList<>();
+			if(segmentations != null && segmentations.size() != 0) {
+				Iterator<InvestmentInstitutionsSegmentation> ite = segmentations.iterator();
+				while(ite.hasNext()) {
+					segmList.add(ite.next().getMetaSegmentationId());
+				}
+			}
+			
+			Integer[] segmArray = new Integer[segmList.size()];
+			segmArray = segmList.toArray(segmArray);
+			formBody.setSegmentations(segmArray);
+			//设置相关的地址分部信息
+			formBody.setInvestmentInstitutionsAddressParts(parts);
 			
 			result.setData(formBody);
 			result.setStatus(200);
