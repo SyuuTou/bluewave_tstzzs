@@ -243,7 +243,11 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
 
             map.put("institutionDesc",investmentInstitutions.getComment());
         }else {
-            map.put("institutionDesc", investmentInstitutions.getKenelCase());
+            String kenelCase= "";
+            if (investmentInstitutions.getKenelCase() != null ){
+                kenelCase = investmentInstitutions.getKenelCase();
+            }
+            map.put("institutionDesc", kenelCase);
         }
         map.put("institutionSegmentation",segmentList);
         map.put("institutionStage",stageList);

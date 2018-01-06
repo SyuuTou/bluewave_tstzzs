@@ -234,6 +234,8 @@
         ) iip
         GROUP BY  iip.investment_institutions_id
         ORDER BY iip.financing_time DESC) u  ON u.investment_institutions_id =ii.id
+        WHERE ii.short_name is not null
+        AND ii.short_name != ""
         ORDER BY u.financing_time DESC
         limit #{startPage},#{pageSize}
     </select>
