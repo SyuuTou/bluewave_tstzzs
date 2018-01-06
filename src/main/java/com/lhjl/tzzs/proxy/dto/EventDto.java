@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.lhjl.tzzs.proxy.model.MetaColumn;
 
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ public class EventDto {
     private Integer startIndex;
     private Integer endIndex;
     private Date dateTime;
+    private List<MetaColumn> columnList;
 
 
     public String getProjectLevel() {
@@ -109,5 +111,11 @@ public class EventDto {
         this.toUser = toUser;
     }
 
+    public List<MetaColumn> getColumnList() {
+        return columnList;
+    }
 
+    public void setColumnList(List<MetaColumn> columnList) {
+        this.columnList = columnList;
+    }
 }

@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.controller.bluewave;
 
 
+import com.lhjl.tzzs.proxy.controller.weixin.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.bluewave.ReportReqBody;
 import com.lhjl.tzzs.proxy.model.MetaColumn;
@@ -17,9 +18,8 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
-public class ReportController {
+public class ReportController extends GenericController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReportController.class);
 
     @Resource
     private ColumnService columnService;
@@ -35,7 +35,7 @@ public class ReportController {
         try {
             result = columnService.queryAll();
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            this.logger.error(e.getMessage(),e.fillInStackTrace());
             result = new CommonDto<>();
             result.setData(null);
             result.setStatus(500);
@@ -54,6 +54,21 @@ public class ReportController {
         return result;
     }
 
+    @PostMapping("columns/add")
+    public CommonDto<String> columnSave(@RequestBody MetaColumn column){
+        CommonDto<String> result = null;
+
+        try {
+            result = columnService.save(column);
+        } catch (Exception e) {
+            this.logger.error(e.getMessage(),e.fillInStackTrace());
+            result = new CommonDto<>();
+            result.setStatus(500);
+            result.setMessage("服务器繁忙，请售后再试。");
+        }
+
+        return result;
+    }
 
     @GetMapping("segmentations")
     public CommonDto<List<MetaSegmentation>> segmentationQuery(){
@@ -62,7 +77,7 @@ public class ReportController {
         try {
             result = segmentationService.queryAll();
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            this.logger.error(e.getMessage(),e.fillInStackTrace());
             result = new CommonDto<>();
             result.setData(null);
             result.setStatus(500);
@@ -79,7 +94,7 @@ public class ReportController {
         try {
             result = reportService.queryReport(reqBody);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            this.logger.error(e.getMessage(),e.fillInStackTrace());
             result = new CommonDto<>();
             result.setStatus(500);
             result.setMessage("服务器繁忙，请售后再试。");
@@ -96,7 +111,7 @@ public class ReportController {
         try {
             result = reportService.getReportById(id);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            this.logger.error(e.getMessage(),e.fillInStackTrace());
             result = new CommonDto<>();
             result.setStatus(500);
             result.setMessage("服务器繁忙，请售后再试。");
@@ -113,7 +128,7 @@ public class ReportController {
         try {
             result = reportService.saveOrUpdate(reqBody);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            this.logger.error(e.getMessage(),e.fillInStackTrace());
             result = new CommonDto<>();
             result.setStatus(500);
             result.setMessage("服务器繁忙，请售后再试。");

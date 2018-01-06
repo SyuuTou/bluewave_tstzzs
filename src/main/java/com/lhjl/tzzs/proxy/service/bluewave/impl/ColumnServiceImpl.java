@@ -1,15 +1,22 @@
 package com.lhjl.tzzs.proxy.service.bluewave.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.EventDto;
 import com.lhjl.tzzs.proxy.mapper.MetaColumnMapper;
 import com.lhjl.tzzs.proxy.model.MetaColumn;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.bluewave.ColumnService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,12 +42,23 @@ public class ColumnServiceImpl extends GenericService implements ColumnService {
     public CommonDto<String> saveOrUpdate(MetaColumn column) {
 
         Integer num = null;
+        Integer id = null;
         if (null == column.getId()){
-            num = columnMapper.insert(column);
+            id = columnMapper.insertSelective(column);
+
         }else {
             num = columnMapper.updateByPrimaryKeySelective(column);
         }
 
         return new CommonDto<>(String.valueOf(num),"success",200);
     }
+
+    @Override
+    public CommonDto<String> save(MetaColumn column) {
+        Integer id = columnMapper.insertSelective(column);
+
+        return new CommonDto<>(String.valueOf(id),"success",200);
+    }
+
+
 }

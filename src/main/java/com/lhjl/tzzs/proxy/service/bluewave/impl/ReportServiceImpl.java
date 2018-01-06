@@ -4,22 +4,28 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageRowBounds;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.CommonTotal;
+import com.lhjl.tzzs.proxy.dto.EventDto;
 import com.lhjl.tzzs.proxy.dto.bluewave.ReportReqBody;
 import com.lhjl.tzzs.proxy.mapper.MetaColumnMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportColumnMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportMapper;
-import com.lhjl.tzzs.proxy.model.Report;
-import com.lhjl.tzzs.proxy.model.ReportColumn;
-import com.lhjl.tzzs.proxy.model.ReportLabel;
-import com.lhjl.tzzs.proxy.model.ReportSegmentation;
+import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.bluewave.*;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,6 +40,13 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     private ReportSegmentationService segmentationService;
     @Autowired
     private ReportLabelService labelService;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Value("${event.trigger.url}")
+    private String eventUrl;
+
 
     @Transactional(readOnly = true)
     @Override
@@ -98,11 +111,12 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         Integer num = null;
         if (null == report.getId()){
             num = reportMapper.insert(report);
+            this.sendNewsEvent(num,reqBody.getColumns());
         }else{
             num = reportMapper.updateByPrimaryKeySelective(report);
         }
 
-        List<Integer> columns = reqBody.getColumns();
+        List<MetaColumn> columns = reqBody.getColumns();
         List<Integer> segmentations = reqBody.getSegmentations();
         List<String> labels = reqBody.getReportLabels();
 
@@ -110,8 +124,8 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         metaColumn.setReportId(report.getId());
 
         columnService.deleteAll(report.getId());
-        for (Integer column : columns){
-            metaColumn.setColumnId(column);
+        for (MetaColumn column : columns){
+            metaColumn.setColumnId(column.getId());
             columnService.save(metaColumn);
         }
 
@@ -138,5 +152,19 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         result.setData(String.valueOf(num));
 
         return result;
+    }
+
+    private void sendNewsEvent(Integer projectId, List<MetaColumn> columnList) {
+        EventDto eventDto = new EventDto();
+        List<Integer> projectIds = new ArrayList<>();
+        projectIds.add(projectId);
+        eventDto.setProjectIds(projectIds);
+        eventDto.setColumnList(columnList);
+        eventDto.setEventType("NEWS");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<EventDto> entity = new HttpEntity<>(eventDto, headers);
+        HttpEntity<CommonDto<String>> investors =  restTemplate.exchange(eventUrl+"/trigger/event", HttpMethod.POST,entity,new ParameterizedTypeReference<CommonDto<String>>(){} );
     }
 }
