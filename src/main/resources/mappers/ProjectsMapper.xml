@@ -691,6 +691,7 @@
 
         <if test="financingRecently != '' and financingRecently != null">
             and pp.project_source is not null
+            and pp.yn = 1
         </if>
         <!--and pfl.financing_time between #{beginTime} and #{endTime}-->
 
