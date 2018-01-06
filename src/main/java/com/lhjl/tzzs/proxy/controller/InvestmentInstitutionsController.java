@@ -125,8 +125,8 @@ public class InvestmentInstitutionsController extends GenericController {
      * 获取所有的投资阶段信息--zd
      * @return
      */
-    @GetMapping("get/invest_step")
-    public CommonDto<List<MetaProjectStage>> getAllInvestementStages(){
+    @GetMapping("/v{appid}/invest_step")
+    public CommonDto<List<MetaProjectStage>> getAllInvestementStages(@PathVariable Integer appid){
     	CommonDto<List<MetaProjectStage>> result=new CommonDto<>();
     	
         try {
@@ -144,8 +144,8 @@ public class InvestmentInstitutionsController extends GenericController {
      * 获取所有的投资领域信息--zd
      * @return
      */
-    @GetMapping("get/invest_field")
-    public CommonDto<List<MetaSegmentation>> getAllInvestementFields(){
+    @GetMapping("/v{appid}/invest_field")
+    public CommonDto<List<MetaSegmentation>> getAllInvestementFields(@PathVariable Integer appid){
     	CommonDto<List<MetaSegmentation>> result=new CommonDto<>();
     	
         try {
