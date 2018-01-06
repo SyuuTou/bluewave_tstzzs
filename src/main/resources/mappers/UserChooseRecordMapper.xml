@@ -27,9 +27,11 @@
   </select>
   <select id="getUserElegantLogList" resultType="java.util.HashMap">
     select * from (
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.actual_name,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status
+    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
+    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
     from user_choose_record ucr
     left join users u on ucr.user_id = u.ID
+    right join users_weixin uw on u.ID = uw.user_id
     left join meta_scene ms on ucr.scene_key = ms.`key`
     left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
     where ucr.log_type = 1
@@ -54,9 +56,11 @@
 
     union
 
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.actual_name,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status
+    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
+    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
     from user_choose_record ucr
     left join users u on ucr.user_id = u.ID
+    right join users_weixin uw on u.ID = uw.user_id
     left join meta_scene ms on ucr.scene_key = ms.`key`
     left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
     where ucr.log_type = 1
@@ -81,9 +85,11 @@
 
     union
 
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.actual_name,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status
+    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
+    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
     from user_choose_record ucr
     left join users u on ucr.user_id = u.ID
+    right join users_weixin uw on u.ID = uw.user_id
     left join meta_scene ms on ucr.scene_key = ms.`key`
     left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
     where ucr.log_type = 1
@@ -108,9 +114,11 @@
 
     union
 
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.actual_name,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status
+    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
+    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
     from user_choose_record ucr
     left join users u on ucr.user_id = u.ID
+    right join users_weixin uw on u.ID = uw.user_id
     left join meta_scene ms on ucr.scene_key = ms.`key`
     left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
     where ucr.log_type = 1
@@ -141,9 +149,11 @@
 
   <select id="getUserElegantLogListCount" resultType="INTEGER">
     select count(*) from (
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.actual_name,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status
+    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
+    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
     from user_choose_record ucr
     left join users u on ucr.user_id = u.ID
+    right join users_weixin uw on u.ID = uw.user_id
     left join meta_scene ms on ucr.scene_key = ms.`key`
     left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
     where ucr.log_type = 1
@@ -168,9 +178,11 @@
 
     union
 
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.actual_name,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status
+    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
+    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
     from user_choose_record ucr
     left join users u on ucr.user_id = u.ID
+    right join users_weixin uw on u.ID = uw.user_id
     left join meta_scene ms on ucr.scene_key = ms.`key`
     left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
     where ucr.log_type = 1
@@ -195,9 +207,11 @@
 
     union
 
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.actual_name,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status
+    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
+    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
     from user_choose_record ucr
     left join users u on ucr.user_id = u.ID
+    right join users_weixin uw on u.ID = uw.user_id
     left join meta_scene ms on ucr.scene_key = ms.`key`
     left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
     where ucr.log_type = 1
@@ -222,9 +236,11 @@
 
     union
 
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.actual_name,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status
+    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
+    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
     from user_choose_record ucr
     left join users u on ucr.user_id = u.ID
+    right join users_weixin uw on u.ID = uw.user_id
     left join meta_scene ms on ucr.scene_key = ms.`key`
     left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
     where ucr.log_type = 1

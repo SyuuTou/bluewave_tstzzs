@@ -239,11 +239,15 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
         if (investmentInstitutions.getKenelCase() == null){
             investmentInstitutions.setKenelCase("");
         }
-        if (StringUtils.isEmpty(investmentInstitutions.getKenelCase())){
+        if (investmentInstitutions.getKenelCase() != null){
 
-            map.put("institutionDesc",investmentInstitutions.getComment());
+            map.put("institutionDesc",investmentInstitutions.getKenelCase());
         }else {
-            map.put("institutionDesc", investmentInstitutions.getKenelCase());
+            String kenelCase= "";
+            if (investmentInstitutions.getComment() != null ){
+                kenelCase = investmentInstitutions.getComment();
+            }
+            map.put("institutionDesc", kenelCase);
         }
         map.put("institutionSegmentation",segmentList);
         map.put("institutionStage",stageList);
