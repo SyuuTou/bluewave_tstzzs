@@ -652,9 +652,9 @@
         case WHEN d.`status` = 1 then 1 else 0 END `status`,
         case when a.kernel_desc is null or a.kernel_desc ="" then (case when a.commet is null then "" else a.commet end) else a.kernel_desc end kernel_desc
         from(
-        select pp.id, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.city,pp.segmentation segmentation_name,pp.project_source,pp.evaluation_recommend,pp.stage
+        select pp.id, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.yn,pp.city,pp.segmentation segmentation_name,pp.project_source,pp.evaluation_recommend,pp.stage
         from
-        (select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,p.project_source,p.segmentation,pfl.stage,pfl.financing_time from project_financing_log pfl
+        (select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.yn,p.evaluation_recommend,p.project_source,p.segmentation,pfl.stage,pfl.financing_time from project_financing_log pfl
         left join projects p on pfl.project_id = p.id
         <where>
             <if test="beginTime != '' and beginTime != null and endTime != '' and endTime != ''">
@@ -692,6 +692,7 @@
 
         <if test="financingRecently != '' and financingRecently != null">
             and pp.project_source is not null
+            and pp.yn = 1
         </if>
         <!--and pfl.financing_time between #{beginTime} and #{endTime}-->
 
