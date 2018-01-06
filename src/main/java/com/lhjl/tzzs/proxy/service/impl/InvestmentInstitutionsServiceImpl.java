@@ -236,9 +236,6 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
         }
 
         //组装返回数据
-        if (investmentInstitutions.getKenelCase() == null){
-            investmentInstitutions.setKenelCase("");
-        }
         if (investmentInstitutions.getKenelCase() != null){
 
             map.put("institutionDesc",investmentInstitutions.getKenelCase());
