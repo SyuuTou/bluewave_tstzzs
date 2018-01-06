@@ -243,5 +243,7 @@
         ORDER BY u.financing_time DESC
         limit #{startPage},#{pageSize}
     </select>
-  
+  	<select id="getLastInsertId" resultType="Integer">
+  		SELECT LAST_INSERT_ID()
+  	</select>
 </mapper>

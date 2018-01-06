@@ -84,6 +84,7 @@ public class InvestmentInstitutionsController extends GenericController {
     public CommonDto<InvestmentInstitutionsDto2> echoinstiinfo(String token,@PathVariable Integer appid){
     	CommonDto<InvestmentInstitutionsDto2> result =new CommonDto<>();
     	try {
+    		
     		result = investmentInstitutionsService.echoinstiinfo(token, appid);
     	}catch(Exception e){
     		log.error(e.getMessage(),e.fillInStackTrace());
@@ -94,31 +95,28 @@ public class InvestmentInstitutionsController extends GenericController {
     	return result;
     }
     /**
-     * 更新投资机构的相关信息
+     * 点击保存按钮的实现接口
+     * 	如果存在相关的机构信息 则执行更新操作
+     * 	如果不存在相关的机构信息，则执行插入操作
      * @param investmentInstitumentId
      * @return
      */
     @PostMapping("/v{appid}/saveinstiinfo")
     public CommonDto<Boolean> saveInvestmentInstitution(@PathVariable Integer appid,@RequestBody InvestmentInstitutionsDto2 body){
-    	//获取用户id
-//    	Integer userId = userLoginService.getUserIdByToken("we", appid);
-    	//根据用户id获取机构id
-//    	Integer iiId = investmentInstitutionsService.getInvestmentInstitionIdByUserId(1);
-//    	System.err.println(iiId);
+    	CommonDto<Boolean> result =new CommonDto<>();
     	
-    	this.log.error(appid+"*****");
-    	CommonDto<Boolean> result=new CommonDto<>();
+    	this.LOGGER.error("appid------"+appid);
+    	this.LOGGER.error("token---------"+body.getToken());
     	
-        /*try {
-            result =  investmentInstitutionsService.updateInvestmentInstitution(body);
-            
-        }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+    	try {
+    		result = investmentInstitutionsService.updataInvesInfo(appid,body);
+    	}catch(Exception e){
+    		log.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
-            result.setData(false);
-        }*/
-        return result;
+            result.setData(null);
+    	}
+    	return result;
     }
     
     /**

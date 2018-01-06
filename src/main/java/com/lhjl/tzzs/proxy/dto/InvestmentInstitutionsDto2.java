@@ -12,6 +12,12 @@ import java.util.List;
  */
 public class InvestmentInstitutionsDto2 {
 	/**
+	 * 新增-zd
+	 * 传输过来的数据可能包含token，用于确定唯一的用户id
+	 */
+	private String token;
+
+	/**
      * 机构logo
      */
 	private String logo;
@@ -99,14 +105,16 @@ public class InvestmentInstitutionsDto2 {
     /** 以下属于公司总部地址信息
      * 所在城市
      */
-    private String Town;
+    private String city;
     
     /**
      * 详细地址
      */
     private String detailAddress;
     
-    /**
+  
+
+	/**
      * 公司邮箱
      */
     private String email;
@@ -129,6 +137,21 @@ public class InvestmentInstitutionsDto2 {
      * 
      */
     private List<InvestmentInstitutionsAddressPart> investmentInstitutionsAddressParts;
+    
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+    public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
 
 	public String getLogo() {
 		return logo;
@@ -281,13 +304,7 @@ public class InvestmentInstitutionsDto2 {
 		this.recruitmentRequirement = recruitmentRequirement;
 	}
 
-	public String getTown() {
-		return Town;
-	}
 
-	public void setTown(String town) {
-		Town = town;
-	}
 
 	public String getDetailAddress() {
 		return detailAddress;
@@ -338,20 +355,7 @@ public class InvestmentInstitutionsDto2 {
 		this.investmentInstitutionsAddressParts = investmentInstitutionsAddressParts;
 	}
 
-	@Override
-	public String toString() {
-		return "InvestmentInstitutionsDto2 [logo=" + logo + ", shortName=" + shortName + ", fullName=" + fullName
-				+ ", kenelCase=" + kenelCase + ", stages=" + Arrays.toString(stages) + ", segmentations="
-				+ Arrays.toString(segmentations) + ", newSegmentations=" + Arrays.toString(newSegmentations)
-				+ ", homeUrl=" + homeUrl + ", totalFundScale=" + totalFundScale + ", rmbFundScale=" + rmbFundScale
-				+ ", dollarFundScale=" + dollarFundScale + ", rmbInvestAmountMin=" + rmbInvestAmountMin
-				+ ", rmbInvestAmountMax=" + rmbInvestAmountMax + ", dollarInvestAmountMin=" + dollarInvestAmountMin
-				+ ", dollarInvestAmountMax=" + dollarInvestAmountMax + ", investmentIdea=" + investmentIdea
-				+ ", productRequirement=" + productRequirement + ", recruitmentRequirement=" + recruitmentRequirement
-				+ ", Town=" + Town + ", detailAddress=" + detailAddress + ", email=" + email + ", bpEmail=" + bpEmail
-				+ ", longitude=" + longitude + ", latitude=" + latitude + ", investmentInstitutionsAddressParts="
-				+ investmentInstitutionsAddressParts + "]";
-	}
+
 
 	
     

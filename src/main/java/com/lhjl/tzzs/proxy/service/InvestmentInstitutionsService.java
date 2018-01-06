@@ -65,12 +65,6 @@ public interface InvestmentInstitutionsService {
     CommonDto<Map<String,Object>> findFliterInfo(Integer institutionId);
 
     InputStream imageHandler(ImageHandlerDto reqDto);
-    /**
-     * 
-     * @param body传递过来的表单封装体
-     * @return 返回成功标志位
-     */
-	CommonDto<Boolean> updateInvestmentInstitution(InvestmentInstitutionsDto2 body);
 	/**
 	 * 回显机构信息表单的详细数据
 	 * @param token
@@ -78,6 +72,13 @@ public interface InvestmentInstitutionsService {
 	 * @return
 	 */
 	CommonDto<InvestmentInstitutionsDto2> echoinstiinfo(String token,Integer appid);
+	/**
+	 * 执行相关机构的更新操作
+	 * @param appid 地址传递过来的appid
+	 * @param body 传递过来的表单封装体，包含token
+	 * @return
+	 */
+	CommonDto<Boolean> updataInvesInfo(Integer appid,InvestmentInstitutionsDto2 body);
 	
 	
 	

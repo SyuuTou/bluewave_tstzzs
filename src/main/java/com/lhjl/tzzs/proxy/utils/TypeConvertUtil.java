@@ -25,9 +25,8 @@ public class TypeConvertUtil {
 		list.add(1);
 		list.add(2);
 		list.add(2);
-		Integer[] arr=new Integer[list.size()];
-		
-		arr= list.toArray(arr);
-		System.out.println(Arrays.toString(arr));
+		list.forEach((e)->{
+			System.out.println(e);
+		});
 	}
 }
