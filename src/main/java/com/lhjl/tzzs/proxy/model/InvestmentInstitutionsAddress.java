@@ -330,4 +330,14 @@ public class InvestmentInstitutionsAddress {
     public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
     }
+
+	@Override
+	public String toString() {
+		return "InvestmentInstitutionsAddress [id=" + id + ", town=" + town + ", provinceId=" + provinceId + ", cityId="
+				+ cityId + ", districtId=" + districtId + ", detailAddress=" + detailAddress + ", phoneCountryCode="
+				+ phoneCountryCode + ", phoneDistrictCode=" + phoneDistrictCode + ", phoneNumber=" + phoneNumber
+				+ ", email=" + email + ", bpEmail=" + bpEmail + ", investmentInstitutionId=" + investmentInstitutionId
+				+ ", longitude=" + longitude + ", latitude=" + latitude + "]";
+	}
+    
 }

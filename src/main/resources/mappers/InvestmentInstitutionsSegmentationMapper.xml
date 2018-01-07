@@ -23,4 +23,12 @@
     group by pfl.financing_time_year
     order by pfl.financing_time_year desc
   </select>
+  
+    <!-- 批量插入 -->
+  <insert id="addBatch" parameterType="java.util.List">
+  insert into investment_institutions_segmentation(meta_segmentation_id,investment_institutions_id) values
+  <foreach collection="list" item="item" index="index" separator=",">
+  (#{item.metaSegmentationId},#{item.investmentInstitutionsId})
+  </foreach>
+  </insert>
 </mapper>

@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.mapper;
 
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsSegmentation;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsStage;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,4 +24,13 @@ public interface InvestmentInstitutionsSegmentationMapper extends OwnerMapper<In
      * @return
      */
     List<Map<String,Object>> findYear(@Param("institutionId") Integer institutionId);
+    
+    /**
+     * 批量增加
+     * @param body
+     * @return
+     */
+    Boolean addBatch(List<InvestmentInstitutionsSegmentation> list);
+    
+    
 }
