@@ -9,4 +9,6 @@ public interface ColumnService {
     CommonDto<List<MetaColumn>> queryAll();
 
     CommonDto<String> saveOrUpdate(MetaColumn column);
+
+    CommonDto<String> save(MetaColumn column);
 }

@@ -33,6 +33,9 @@ public class ProjectResDto {
      */
     private Integer status;
 
+    /**项目logo*/
+    private String projectLogo;
+
 
 
 
@@ -133,4 +136,11 @@ public class ProjectResDto {
         this.status = status;
     }
 
+    public String getProjectLogo() {
+        return projectLogo;
+    }
+
+    public void setProjectLogo(String projectLogo) {
+        this.projectLogo = projectLogo;
+    }
 }

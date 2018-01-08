@@ -1,5 +1,7 @@
 package com.lhjl.tzzs.proxy.dto.bluewave;
 
+import com.lhjl.tzzs.proxy.model.MetaColumn;
+
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +12,7 @@ public class ReportReqBody {
      * 标题
      */
     private String title;
+
 
     /**
      * 副标题，摘要
@@ -71,12 +74,14 @@ public class ReportReqBody {
      */
     private String creater;
 
-    private List<Integer> columns;
+    private List<MetaColumn> columns;
     private List<Integer> segmentations;
     private List<String> reportLabels;
 
     private Integer pageSize = 10;
     private Integer pageNo;
+
+
 
     public Integer getPageSize() {
         return pageSize;
@@ -206,11 +211,11 @@ public class ReportReqBody {
         this.creater = creater;
     }
 
-    public List<Integer> getColumns() {
+    public List<MetaColumn> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<Integer> columns) {
+    public void setColumns(List<MetaColumn> columns) {
         this.columns = columns;
     }
 

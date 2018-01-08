@@ -524,6 +524,7 @@
         <result column="followNum" jdbcType="INTEGER" property="followNum" />
         <result column="interviewNum" jdbcType="INTEGER" property="interviewNum" />
         <result column="yn" jdbcType="INTEGER" property="yn" />
+        <result column="project_logo" jdbcType="VARCHAR" property="projectLogo" />
     </resultMap>
 
     <select id="projectFilter" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
@@ -645,16 +646,16 @@
 
     <select id="projectFilterTwo" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
         select a.id as projectId,
-        a.short_name,a.full_name,a.city,a.segmentation_name,a.evaluation_recommend,a.stage,
+        a.short_name,a.full_name,a.city,a.segmentation_name,a.evaluation_recommend,a.stage,a.project_logo,
         case WHEN b.followNum = null then 0 ELSE b.followNum END followNum,
         case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
         case WHEN b.followNum = null OR b.followNum = 0 then 0 ELSE 1 END yn,
         case WHEN d.`status` = 1 then 1 else 0 END `status`,
         case when a.kernel_desc is null or a.kernel_desc ="" then (case when a.commet is null then "" else a.commet end) else a.kernel_desc end kernel_desc
         from(
-        select pp.id, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.yn,pp.city,pp.segmentation segmentation_name,pp.project_source,pp.evaluation_recommend,pp.stage
+        select pp.id,pp.project_logo, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.yn,pp.city,pp.segmentation segmentation_name,pp.project_source,pp.evaluation_recommend,pp.stage
         from
-        (select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.yn,p.evaluation_recommend,p.project_source,p.segmentation,pfl.stage,pfl.financing_time from project_financing_log pfl
+        (select p.id,p.project_logo, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.yn,p.evaluation_recommend,p.project_source,p.segmentation,pfl.stage,pfl.financing_time from project_financing_log pfl
         left join projects p on pfl.project_id = p.id
         <where>
             <if test="beginTime != '' and beginTime != null and endTime != '' and endTime != ''">
