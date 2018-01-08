@@ -193,15 +193,12 @@
         SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.count,ii.sort FROM
         investment_institutions ii
         WHERE  1=1
-        <!--<if test=" types !='' and types != null">
-            AND ii.type IN
-            <foreach close=")" collection="types" index="index" item="item" open="(" separator=",">#{item}</foreach>
-        </if>-->
+
         <if test=" workArray2 !='' and workArray2 != null">
             AND ii.id IN
             <foreach close=")" collection="workArray2" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
-        AND ii.logo IS NOT NULL AND ii.logo != '' AND ii.count IS NOT NULL
+
         GROUP BY ii.short_name
         ORDER BY ii.sort
     </select>
