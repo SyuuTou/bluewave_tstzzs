@@ -190,7 +190,10 @@
          ORDER BY  associated_time DESC
     </select>
     <select id="findRecommendAll"   resultMap="newDtoMap">
-        SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.count,ii.sort FROM
+        SELECT ii.id, ii.short_name,ii.create_time,ii.type
+        ,case when ii.logo is null or ii.logo = "" then "http://img.idatavc.com/static/logo/jg_default.png" else ii.logo end logo,
+        case when ii.kenel_case is null then (case when ii.`comment` is null then "" else ii.`comment` end ) else ii.kenel_case end kenel_case,
+        case when ii.count is null then 0 else ii.count end count,ii.sort FROM
         investment_institutions ii
         WHERE  1=1
 
