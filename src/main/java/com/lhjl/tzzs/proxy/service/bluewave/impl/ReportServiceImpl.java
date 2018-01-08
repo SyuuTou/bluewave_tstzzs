@@ -108,10 +108,11 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         report.setSubTitle(reqBody.getSubTitle());
         report.setTitle(reqBody.getTitle());
         report.setWeightingFactor(reqBody.getWeightingFactor());
+        report.setCreater(reqBody.getCreater());
         Integer num = null;
         if (null == report.getId()){
             num = reportMapper.insert(report);
-            this.sendNewsEvent(num,reqBody.getColumns());
+            this.sendNewsEvent(reqBody.getCreater(),num,reqBody.getColumns());
         }else{
             num = reportMapper.updateByPrimaryKeySelective(report);
         }
@@ -154,10 +155,11 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         return result;
     }
 
-    private void sendNewsEvent(Integer projectId, List<MetaColumn> columnList) {
+    private void sendNewsEvent(String creater, Integer projectId, List<MetaColumn> columnList) {
         EventDto eventDto = new EventDto();
         List<Integer> projectIds = new ArrayList<>();
         projectIds.add(projectId);
+        eventDto.setFromUser(creater);
         eventDto.setProjectIds(projectIds);
         eventDto.setColumnList(columnList);
         eventDto.setEventType("NEWS");
