@@ -302,4 +302,13 @@ public class Advertising {
     public void setAppid(Integer appid) {
         this.appid = appid;
     }
+
+	@Override
+	public String toString() {
+		return "Advertising [id=" + id + ", advertisingPosistionId=" + advertisingPosistionId + ", title=" + title
+				+ ", picture=" + picture + ", beginTime=" + beginTime + ", endTime=" + endTime + ", url=" + url
+				+ ", sort=" + sort + ", hides=" + hides + ", editStatus=" + editStatus + ", createTime=" + createTime
+				+ ", yn=" + yn + ", appid=" + appid + "]";
+	}
+    
 }
