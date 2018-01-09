@@ -1,37 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper">
-    <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutions">
-        <!--
-          WARNING - @mbg.generated
-        -->
-        <id column="ID" jdbcType="INTEGER" property="id" />
-        <result column="short_name" jdbcType="VARCHAR" property="shortName" />
-        <result column="commet" jdbcType="VARCHAR" property="commet" />
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-        <result column="type" jdbcType="INTEGER" property="type" />
-        <result column="logo" jdbcType="VARCHAR" property="logo" />
-        <result column="case_url" jdbcType="VARCHAR" property="caseUrl" />
-        <result column="kenel_case" jdbcType="VARCHAR" property="kenelCase" />
-        <result column="comment" jdbcType="VARCHAR" property="comment" />
-        <result column="city" jdbcType="VARCHAR" property="city" />
-        <result column="stage" jdbcType="VARCHAR" property="stage" />
-        <result column="representative" jdbcType="VARCHAR" property="representative" />
-        <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
-        <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
-        <result column="home_url" jdbcType="VARCHAR" property="homeUrl" />
-        <result column="yn" jdbcType="INTEGER" property="yn" />
-        <result column="sort" jdbcType="INTEGER" property="sort" />
-        <result column="count" jdbcType="INTEGER" property="count" />
-        <result column="home_url" jdbcType="VARCHAR" property="homeUrl" />
-        <result column="yn" jdbcType="INTEGER" property="yn" />
-        <result column="sort" jdbcType="INTEGER" property="sort" />
-        <result column="count" jdbcType="INTEGER" property="count" />
-        <result column="key_words" jdbcType="INTEGER" property="keyWords" />
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutions">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+    <result column="kenel_case" jdbcType="VARCHAR" property="kenelCase" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="home_url" jdbcType="VARCHAR" property="homeUrl" />
+    <result column="commet" jdbcType="VARCHAR" property="commet" />
+    <result column="key_words" jdbcType="VARCHAR" property="keyWords" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="case_url" jdbcType="VARCHAR" property="caseUrl" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="stage" jdbcType="VARCHAR" property="stage" />
+    <result column="representative" jdbcType="VARCHAR" property="representative" />
+    <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
+    <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="total_fund_scale" jdbcType="DECIMAL" property="totalFundScale" />
+    <result column="rmb_fund_scale" jdbcType="DECIMAL" property="rmbFundScale" />
+    <result column="dollar_fund_scale" jdbcType="DECIMAL" property="dollarFundScale" />
+    <result column="rmb_invest_amount_min" jdbcType="DECIMAL" property="rmbInvestAmountMin" />
+    <result column="rmb_invest_amount_max" jdbcType="DECIMAL" property="rmbInvestAmountMax" />
+    <result column="dollar_invest_amount_min" jdbcType="DECIMAL" property="dollarInvestAmountMin" />
+    <result column="dollar_invest_amount_max" jdbcType="DECIMAL" property="dollarInvestAmountMax" />
+    <result column="investment_idea" jdbcType="VARCHAR" property="investmentIdea" />
+    <result column="product_requirement" jdbcType="VARCHAR" property="productRequirement" />
+    <result column="recruitment_requirement" jdbcType="VARCHAR" property="recruitmentRequirement" />
+  </resultMap>
 
-    </resultMap>
-
-    <resultMap id="BaseResultMapNew" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsNew">
+  <resultMap id="BaseResultMapNew" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsNew">
 
         <id column="ID" jdbcType="INTEGER" property="id" />
         <result column="short_name" jdbcType="VARCHAR" property="shortName" />
@@ -239,4 +245,7 @@
         ORDER BY u.financing_time DESC
         limit #{startPage},#{pageSize}
     </select>
+  	<select id="getLastInsertId" resultType="Integer">
+  		SELECT LAST_INSERT_ID()
+  	</select>
 </mapper>

@@ -3,34 +3,27 @@ package com.lhjl.tzzs.proxy.model;
 import java.math.BigDecimal;
 import javax.persistence.*;
 
-@Table(name = "investment_institutions_address")
-public class InvestmentInstitutionsAddress {
+@Table(name = "investment_institutions_address_part")
+public class InvestmentInstitutionsAddressPart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /**
+     * 机构id
+     */
+    @Column(name = "investment_institution_id")
+    private Integer investmentInstitutionId;
+
+    /**
+     * 分部名称
+     */
+    private String name;
+
+    /**
      * 所在城市
      */
     private String town;
-
-    /**
-     * 省份id
-     */
-    @Column(name = "province_id")
-    private Integer provinceId;
-
-    /**
-     * 城市id
-     */
-    @Column(name = "city_id")
-    private Integer cityId;
-
-    /**
-     * 区id
-     */
-    @Column(name = "district_id")
-    private Integer districtId;
 
     /**
      * 详细地址
@@ -56,31 +49,8 @@ public class InvestmentInstitutionsAddress {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    /**
-     * 邮箱
-     */
-    private String email;
-
-    /**
-     * bpemail
-     */
-    @Column(name = "bp_email")
-    private String bpEmail;
-
-    /**
-     * 机构id
-     */
-    @Column(name = "investment_institution_id")
-    private Integer investmentInstitutionId;
-
-    /**
-     * 经度坐标
-     */
     private BigDecimal longitude;
 
-    /**
-     * 纬度坐标
-     */
     private BigDecimal latitude;
 
     /**
@@ -95,6 +65,42 @@ public class InvestmentInstitutionsAddress {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    /**
+     * 获取机构id
+     *
+     * @return investment_institution_id - 机构id
+     */
+    public Integer getInvestmentInstitutionId() {
+        return investmentInstitutionId;
+    }
+
+    /**
+     * 设置机构id
+     *
+     * @param investmentInstitutionId 机构id
+     */
+    public void setInvestmentInstitutionId(Integer investmentInstitutionId) {
+        this.investmentInstitutionId = investmentInstitutionId;
+    }
+
+    /**
+     * 获取分部名称
+     *
+     * @return name - 分部名称
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * 设置分部名称
+     *
+     * @param name 分部名称
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -113,60 +119,6 @@ public class InvestmentInstitutionsAddress {
      */
     public void setTown(String town) {
         this.town = town;
-    }
-
-    /**
-     * 获取省份id
-     *
-     * @return province_id - 省份id
-     */
-    public Integer getProvinceId() {
-        return provinceId;
-    }
-
-    /**
-     * 设置省份id
-     *
-     * @param provinceId 省份id
-     */
-    public void setProvinceId(Integer provinceId) {
-        this.provinceId = provinceId;
-    }
-
-    /**
-     * 获取城市id
-     *
-     * @return city_id - 城市id
-     */
-    public Integer getCityId() {
-        return cityId;
-    }
-
-    /**
-     * 设置城市id
-     *
-     * @param cityId 城市id
-     */
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
-    }
-
-    /**
-     * 获取区id
-     *
-     * @return district_id - 区id
-     */
-    public Integer getDistrictId() {
-        return districtId;
-    }
-
-    /**
-     * 设置区id
-     *
-     * @param districtId 区id
-     */
-    public void setDistrictId(Integer districtId) {
-        this.districtId = districtId;
     }
 
     /**
@@ -242,90 +194,28 @@ public class InvestmentInstitutionsAddress {
     }
 
     /**
-     * 获取邮箱
-     *
-     * @return email - 邮箱
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * 设置邮箱
-     *
-     * @param email 邮箱
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * 获取bpemail
-     *
-     * @return bp_email - bpemail
-     */
-    public String getBpEmail() {
-        return bpEmail;
-    }
-
-    /**
-     * 设置bpemail
-     *
-     * @param bpEmail bpemail
-     */
-    public void setBpEmail(String bpEmail) {
-        this.bpEmail = bpEmail;
-    }
-
-    /**
-     * 获取机构id
-     *
-     * @return investment_institution_id - 机构id
-     */
-    public Integer getInvestmentInstitutionId() {
-        return investmentInstitutionId;
-    }
-
-    /**
-     * 设置机构id
-     *
-     * @param investmentInstitutionId 机构id
-     */
-    public void setInvestmentInstitutionId(Integer investmentInstitutionId) {
-        this.investmentInstitutionId = investmentInstitutionId;
-    }
-
-    /**
-     * 获取经度坐标
-     *
-     * @return longitude - 经度坐标
+     * @return longitude
      */
     public BigDecimal getLongitude() {
         return longitude;
     }
 
     /**
-     * 设置经度坐标
-     *
-     * @param longitude 经度坐标
+     * @param longitude
      */
     public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
     }
 
     /**
-     * 获取纬度坐标
-     *
-     * @return latitude - 纬度坐标
+     * @return latitude
      */
     public BigDecimal getLatitude() {
         return latitude;
     }
 
     /**
-     * 设置纬度坐标
-     *
-     * @param latitude 纬度坐标
+     * @param latitude
      */
     public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
@@ -333,10 +223,9 @@ public class InvestmentInstitutionsAddress {
 
 	@Override
 	public String toString() {
-		return "InvestmentInstitutionsAddress [id=" + id + ", town=" + town + ", provinceId=" + provinceId + ", cityId="
-				+ cityId + ", districtId=" + districtId + ", detailAddress=" + detailAddress + ", phoneCountryCode="
+		return "InvestmentInstitutionsAddressPart [id=" + id + ", investmentInstitutionId=" + investmentInstitutionId
+				+ ", name=" + name + ", town=" + town + ", detailAddress=" + detailAddress + ", phoneCountryCode="
 				+ phoneCountryCode + ", phoneDistrictCode=" + phoneDistrictCode + ", phoneNumber=" + phoneNumber
-				+ ", email=" + email + ", bpEmail=" + bpEmail + ", investmentInstitutionId=" + investmentInstitutionId
 				+ ", longitude=" + longitude + ", latitude=" + latitude + "]";
 	}
     

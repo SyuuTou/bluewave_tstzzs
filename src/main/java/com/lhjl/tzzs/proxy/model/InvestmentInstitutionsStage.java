@@ -53,4 +53,11 @@ public class InvestmentInstitutionsStage {
     public void setInvestmentInstitutionId(Integer investmentInstitutionId) {
         this.investmentInstitutionId = investmentInstitutionId;
     }
+
+	@Override
+	public String toString() {
+		return "InvestmentInstitutionsStage [metaProjectStageId=" + metaProjectStageId + ", investmentInstitutionId="
+				+ investmentInstitutionId + "]";
+	}
+    
 }

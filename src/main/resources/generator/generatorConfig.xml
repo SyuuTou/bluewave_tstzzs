@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <properties resource="application-dev.properties"/>
+    <properties resource="application-dev-t.properties"/>
 
     <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
         <property name="beginningDelimiter" value="`"/>
@@ -27,13 +27,13 @@
         <javaClientGenerator targetPackage="com.lhjl.tzzs.proxy.mapper" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <table tableName="meta_column">
-            <!--mysql 配置-->
+      <!--   <table tableName="meta_column">
+            mysql 配置
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-            <!--oracle 配置-->
-            <!--<generatedKey column="id" sqlStatement="select SEQ_{1}.nextval from dual" identity="false" type="pre"/>-->
-        </table>
-        <table tableName="meta_segmentation">
+            oracle 配置
+            <generatedKey column="id" sqlStatement="select SEQ_{1}.nextval from dual" identity="false" type="pre"/>
+        </table> -->
+        <table tableName="investment_institutions_label">
             <!--mysql 配置-->
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
             <!--oracle 配置-->

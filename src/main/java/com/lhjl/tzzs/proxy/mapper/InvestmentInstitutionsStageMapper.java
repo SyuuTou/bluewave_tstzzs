@@ -8,11 +8,18 @@ import java.util.List;
 import java.util.Map;
 
 public interface InvestmentInstitutionsStageMapper extends OwnerMapper<InvestmentInstitutionsStage> {
-
+	
     /**
      * 根据机构id获取机构阶段
      * @param institutionId
      * @return
      */
     List<Map<String,Object>> findInstitutionStage(@Param("institutionId") Integer institutionId);
+    
+    /**
+     * 批量增加
+     * @param body
+     * @return
+     */
+    Boolean addBatch(List<InvestmentInstitutionsStage> list);
 }

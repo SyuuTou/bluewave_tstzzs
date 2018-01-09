@@ -13,4 +13,13 @@
     left join meta_project_stage mps on iis.meta_project_stage_id = mps.id
     where iis.investment_institution_id =#{institutionId};
   </select>
+  <!-- 批量插入 -->
+  <insert id="addBatch" parameterType="java.util.List">
+  insert into investment_institutions_stage(meta_project_stage_id,investment_institution_id) values
+  <foreach collection="list" item="item" index="index" separator=",">
+  (#{item.metaProjectStageId},#{item.investmentInstitutionId})
+  </foreach>
+  </insert>
+  
+  
 </mapper>

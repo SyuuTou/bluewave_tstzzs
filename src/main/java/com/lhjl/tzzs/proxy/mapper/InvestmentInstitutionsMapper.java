@@ -38,4 +38,9 @@ public interface InvestmentInstitutionsMapper extends OwnerMapper<InvestmentInst
      * @return
      */
     List<InvestmentInstitutionsDto> findRecentlyActiveInstitution(@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
+    /**
+     * 获取增加完之后的自增长id
+     * @return
+     */
+    Integer getLastInsertId();
 }

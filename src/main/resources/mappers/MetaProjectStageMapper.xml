@@ -9,6 +9,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="weighting_factor" property="weightingFactor" jdbcType="INTEGER" />
   </resultMap>
+  
   <select id="findMetaProjectStageByName" resultType="INTEGER">
     select id from meta_project_stage
     where 1=1
@@ -17,4 +18,9 @@
       <foreach collection="stages" close=")" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
   </select>
+  
+  <select id="findAll" resultMap="BaseResultMap">
+    select id,name,weighting_factor from meta_project_stage
+  </select>
+  
 </mapper>

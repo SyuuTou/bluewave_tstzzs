@@ -8,14 +8,30 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ImageHandlerDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
+import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto2;
+import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionAdminMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressMapper;
+import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressPartMapper;
+import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsLabelMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsSegmentationMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsStageMapper;
+import com.lhjl.tzzs.proxy.mapper.MetaProjectStageMapper;
+import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddress;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsLabel;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsSegmentation;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsStage;
+import com.lhjl.tzzs.proxy.model.MetaProjectStage;
+import com.lhjl.tzzs.proxy.model.MetaSegmentation;
+import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
+import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
+import com.lhjl.tzzs.proxy.utils.TypeConvertUtil;
+
 import me.chanjar.weixin.common.exception.WxErrorException;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Position;
@@ -26,6 +42,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -35,7 +52,7 @@ import java.util.*;
 import java.util.List;
 
 @Service
-public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutionsService{
+public class InvestmentInstitutionsServiceImpl extends GenericService implements InvestmentInstitutionsService{
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(InvestmentInstitutionsServiceImpl.class);
 
     @Autowired
@@ -49,10 +66,31 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
 
     @Autowired
     private InvestmentInstitutionsAddressMapper investmentInstitutionsAddressMapper;
-
+    
     @Autowired
     private WxMaService qrcodeService;
-
+    
+    @Autowired
+    private MetaProjectStageMapper metaProjectStageMapper;
+    
+    @Autowired
+    private MetaSegmentationMapper metaSegmentationMapper;
+    
+    @Autowired
+    private InvestmentInstitutionsAddressPartMapper investmentInstitutionsAddressPartMapper;
+    
+    @Autowired
+    private InvestmentInstitutionAdminMapper investmentInstitutionAdminMapper;
+    
+    @Autowired
+    private UserLoginService userLoginService;
+    
+    @Autowired
+    private InvestmentInstitutionsLabelMapper investmentInstitutionsLabelMapper;
+    
+    
+    
+    
     @Override
     public CommonDto<InvestmentInstitutionComplexOutputDto> getInvestmentInstitutionsComlexInfo(Map<String,Integer> body){
         CommonDto<InvestmentInstitutionComplexOutputDto> result =  new CommonDto<>();
@@ -154,7 +192,6 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
             result.setMessage("机构id不能为空");
             result.setStatus(502);
             result.setData(null);
-
             return result;
         }
 
@@ -344,4 +381,395 @@ public class InvestmentInstitutionsServiceImpl implements InvestmentInstitutions
 
         return new ByteArrayInputStream(os.toByteArray());
     }
+
+	@Override
+	public CommonDto<List<MetaProjectStage>> listInvestementStages() {
+		CommonDto<List<MetaProjectStage>> result= new CommonDto<>();
+		
+		List<MetaProjectStage> stages = metaProjectStageMapper.findAll();
+		result.setData(stages);
+		result.setMessage("success");
+		result.setStatus(200);
+		
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<MetaSegmentation>> listInvestementFields() {
+		CommonDto<List<MetaSegmentation>> result=new CommonDto<>();
+		
+		List<MetaSegmentation> segs = metaSegmentationMapper.findAll();
+		 result.setData(segs);
+		 result.setMessage("success");
+		 result.setStatus(200);
+		 
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<InvestmentInstitutionsAddressPart>> listAllAddressPartsById(Integer investmentInstitutionId) {
+		CommonDto<List<InvestmentInstitutionsAddressPart>> result=new CommonDto<>();
+		
+		List<InvestmentInstitutionsAddressPart> addrParts = investmentInstitutionsAddressPartMapper.findAllById(investmentInstitutionId);
+		result.setData(addrParts);
+		result.setMessage("success");
+		result.setStatus(200);
+		
+		return result;
+	}
+	/**
+	 * 根据token以及appid获取机构id
+	 * @param token
+	 * @param appid
+	 * @return
+	 */
+	private Integer getiiId(String token,Integer appid) {
+		Integer userId = userLoginService.getUserIdByToken(token, appid);
+		Integer iiId= investmentInstitutionAdminMapper.findInvestmentInstitionIdByUserId(userId);
+		return iiId;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService#updataInvesInfo(java.lang.Integer, com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto2)
+	 */
+	@Transactional
+	@Override
+	public CommonDto<Boolean> updataInvesInfo(Integer appid,InvestmentInstitutionsDto2 body) {
+		
+		//此处必须要获得机构ID才行
+//		Integer iiId = this.getiiId(body.getToken(), appid);
+		Integer iiId = 1;
+		
+		CommonDto<Boolean> result =new CommonDto<Boolean>();
+		
+		//进行机构信息的提取
+		InvestmentInstitutions ii=new InvestmentInstitutions();
+		
+		ii.setLogo(body.getLogo());
+		ii.setShortName(body.getShortName());
+		ii.setFullName(body.getFullName());
+		ii.setKenelCase(body.getKenelCase());
+		ii.setComment(body.getComment());
+		ii.setHomeUrl(body.getHomeUrl());
+		ii.setTotalFundScale(body.getTotalFundScale());
+		ii.setRmbFundScale(body.getRmbFundScale());
+		ii.setDollarFundScale(body.getDollarFundScale());
+		ii.setRmbInvestAmountMin(body.getRmbInvestAmountMin());
+		ii.setRmbInvestAmountMax(body.getRmbInvestAmountMax());
+		ii.setDollarInvestAmountMax(body.getDollarInvestAmountMax());
+		ii.setDollarInvestAmountMin(body.getDollarInvestAmountMin());
+		ii.setInvestmentIdea(body.getInvestmentIdea());
+		ii.setProductRequirement(body.getProductRequirement());
+		ii.setRecruitmentRequirement(body.getRecruitmentRequirement());
+		ii.setCreateTime(new Date());
+		
+		//自定义领域信息的提取
+		String[] newSegmentations = body.getNewSegmentations();
+		
+		//实现领域机构关系信息的提取
+		Integer[] segmentations = body.getSegmentations();
+		
+		//实现阶段机构信息的提取
+		Integer[] stages = body.getStages();
+		
+		//实现机构总部信息的提取
+		InvestmentInstitutionsAddress head =new InvestmentInstitutionsAddress();
+		head.setTown(body.getCity());
+		head.setDetailAddress(body.getDetailAddress());
+		head.setEmail(body.getEmail());
+		head.setBpEmail(body.getBpEmail());
+		
+		//实现机构分部信息的提取
+		List<InvestmentInstitutionsAddressPart> parts = body.getInvestmentInstitutionsAddressParts();
+
+		//下面进行插入操作
+		if(investmentInstitutionsMapper.selectByPrimaryKey(iiId) == null) {
+			
+			//进行机构信息的增加
+			//自增长Id
+			int updateLines = investmentInstitutionsMapper.insertSelective(ii);
+			Integer autoGrowId = investmentInstitutionsMapper.getLastInsertId();
+			this.LOGGER.error("**********autoGrowId*********" + autoGrowId+"**********updateLines*********" + updateLines);
+			
+			//实现机构自定义领域数据的增加
+			int diySegInserts;
+			if(newSegmentations != null) {
+				List<InvestmentInstitutionsLabel> iiLables =new ArrayList<>();
+				for(String temp:newSegmentations) {
+					InvestmentInstitutionsLabel iiLable=new InvestmentInstitutionsLabel();
+					iiLable.setInvestmentInstitutionsId(autoGrowId);
+					iiLable.setLabelName(temp);
+					iiLables.add(iiLable);
+				}
+				diySegInserts = investmentInstitutionsLabelMapper.insertList(iiLables);
+			}else {
+				diySegInserts = investmentInstitutionsLabelMapper.insertList(null);
+			}
+			this.LOGGER.error("**********diySegInserts*********" + diySegInserts);
+			
+			//实现领域机构关系表的增加
+			List<InvestmentInstitutionsSegmentation> iiSegList=null;
+			if(segmentations != null) {
+				iiSegList=new ArrayList<>();
+				for(Integer temp:segmentations) {
+					InvestmentInstitutionsSegmentation iiSeg=new InvestmentInstitutionsSegmentation();
+					iiSeg.setMetaSegmentationId(temp);
+					iiSeg.setInvestmentInstitutionsId(autoGrowId);
+					iiSegList.add(iiSeg);
+				}
+			}
+			
+			Boolean segsFlag=investmentInstitutionsSegmentationMapper.addBatch(iiSegList);
+			this.LOGGER.error("**********segsFlag*********" + segsFlag);
+			
+			//实现阶段机构关系表的增加
+			
+			List<InvestmentInstitutionsStage> iiStageList=null;
+			if(stages != null) {
+				iiStageList=new ArrayList<>();
+				for(Integer temp:stages) {
+					InvestmentInstitutionsStage iiStage=new InvestmentInstitutionsStage();
+					iiStage.setMetaProjectStageId(temp);
+					iiStage.setInvestmentInstitutionId(autoGrowId);
+					iiStageList.add(iiStage);
+				}
+			}
+			
+			Boolean stasFlag=investmentInstitutionsStageMapper.addBatch(iiStageList);
+			this.LOGGER.error("**********stasFlag*********" + stasFlag);
+			
+			//实现机构总部的增加
+			Integer addrUpdate = investmentInstitutionsAddressMapper.insertSelective(head);
+			
+			//实现机构分部的增加
+			List<InvestmentInstitutionsAddressPart> handleAfterParts = null;
+			if(parts != null) {
+				handleAfterParts = new ArrayList<>();
+				for(InvestmentInstitutionsAddressPart temp:parts) {
+					temp.setInvestmentInstitutionId(autoGrowId);
+					handleAfterParts.add(temp);
+				}
+			}
+			int partsInserts = investmentInstitutionsAddressPartMapper.insertList(handleAfterParts);
+			
+			if(autoGrowId>=0 && diySegInserts>=0 && segsFlag==true && stasFlag==true && addrUpdate>=0 && partsInserts>=0) {
+				result.setData(true);
+				result.setMessage("数据增加成功");
+				result.setStatus(200);
+		}
+	}else {  //下面进行更新操作 
+		
+		//下面进行机构相关信息的更新
+		ii.setId(iiId);
+		investmentInstitutionsMapper.updateByPrimaryKeySelective(ii);
+		
+		//自定义领域信息的更新
+		if(newSegmentations != null) {
+			List<InvestmentInstitutionsLabel> iiLables =new ArrayList<>();
+			for(String temp:newSegmentations) {
+				InvestmentInstitutionsLabel iiLable=new InvestmentInstitutionsLabel();
+				iiLable.setInvestmentInstitutionsId(iiId);
+				iiLable.setLabelName(temp);
+				iiLables.add(iiLable);
+			}
+			
+			InvestmentInstitutionsLabel delEntity=new InvestmentInstitutionsLabel();
+			delEntity.setInvestmentInstitutionsId(iiId);
+			investmentInstitutionsLabelMapper.delete(delEntity);
+				
+			//进行标签数据的重新增加
+			investmentInstitutionsLabelMapper.insertList(iiLables);
+			
+		}else {
+		}
+		
+		//实现领域机构关系表的更新
+		List<InvestmentInstitutionsSegmentation> iiSegList=null;
+		if(segmentations != null) {
+			iiSegList=new ArrayList<>();
+			for(Integer temp:segmentations) {
+				InvestmentInstitutionsSegmentation iiSeg=new InvestmentInstitutionsSegmentation();
+				iiSeg.setMetaSegmentationId(temp);
+				iiSeg.setInvestmentInstitutionsId(iiId);
+				iiSegList.add(iiSeg);
+			}
+		}
+		
+		//实现关系的删除
+		InvestmentInstitutionsSegmentation segDelEntity=new InvestmentInstitutionsSegmentation();
+		segDelEntity.setInvestmentInstitutionsId(iiId);
+		investmentInstitutionsSegmentationMapper.delete(segDelEntity);
+		//进行关系的新增
+		Boolean segsFlag=investmentInstitutionsSegmentationMapper.addBatch(iiSegList);
+		this.LOGGER.error("**********segsFlag*********" + segsFlag);
+		
+		//实现阶段机构关系表的更新
+		
+		List<InvestmentInstitutionsStage> iiStageList=null;
+		if(stages != null) {
+			iiStageList=new ArrayList<>();
+			for(Integer temp:stages) {
+				InvestmentInstitutionsStage iiStage=new InvestmentInstitutionsStage();
+				iiStage.setMetaProjectStageId(temp);
+				iiStage.setInvestmentInstitutionId(iiId);
+				iiStageList.add(iiStage);
+			}
+		}
+		//实现关系的删除
+		InvestmentInstitutionsStage staDelEntity=new InvestmentInstitutionsStage();
+		staDelEntity.setInvestmentInstitutionId(iiId);
+		investmentInstitutionsStageMapper.delete(staDelEntity);
+		//进行关系的新增
+		Boolean stasFlag=investmentInstitutionsStageMapper.addBatch(iiStageList);
+		this.LOGGER.error("**********stasFlag*********" + stasFlag);
+		
+		//实现机构总部的更新
+		InvestmentInstitutionsAddress addrUpdateEntity=new InvestmentInstitutionsAddress();
+		addrUpdateEntity.setInvestmentInstitutionId(iiId);
+		
+		addrUpdateEntity =investmentInstitutionsAddressMapper.selectOne(addrUpdateEntity);
+		head.setId(addrUpdateEntity.getId());
+		head.setInvestmentInstitutionId(iiId);
+		
+		InvestmentInstitutionsAddress preUpdateAddr=head;
+		investmentInstitutionsAddressMapper.updateByPrimaryKey(preUpdateAddr);
+		
+//		实现机构分部的更新
+		List<InvestmentInstitutionsAddressPart> handleAfterParts = null;
+		if(parts != null) {
+			handleAfterParts = new ArrayList<>();
+			for(InvestmentInstitutionsAddressPart temp:parts) {
+				temp.setInvestmentInstitutionId(iiId);
+				handleAfterParts.add(temp);
+			}
+		}
+//		进行分部信息的删除
+		InvestmentInstitutionsAddressPart delEntity=new InvestmentInstitutionsAddressPart();
+		delEntity.setInvestmentInstitutionId(iiId);
+		investmentInstitutionsAddressPartMapper.delete(delEntity);
+		//进行分部信息的重新增加
+		investmentInstitutionsAddressPartMapper.insertList(handleAfterParts);
+		
+		result.setData(true);
+		result.setMessage("数据更新成功");
+		result.setStatus(200);
+	}
+		return result;
+}
+	
+	@Override
+	public CommonDto<InvestmentInstitutionsDto2> echoinstiinfo(String token, Integer appid) {
+//		Integer iiId = this.getiiId(token, appid);
+		//下面是做出来的假数据
+		Integer iiId = 1;
+		
+		CommonDto<InvestmentInstitutionsDto2> result = new CommonDto<InvestmentInstitutionsDto2>();
+		
+		InvestmentInstitutionsDto2 formBody =null;
+		//如果该用户没有相关的机构
+		if(iiId==null) {
+			result.setData(formBody);
+			result.setStatus(200);
+			result.setMessage("不存在相关的机构");
+		}else {
+			formBody=new InvestmentInstitutionsDto2();
+			//获取机构的相关信息
+			InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(iiId);
+			
+			//获取机构总部的地址信息
+			InvestmentInstitutionsAddress headquarters=new InvestmentInstitutionsAddress();
+			headquarters.setInvestmentInstitutionId(iiId);
+			headquarters = investmentInstitutionsAddressMapper.selectOne(headquarters);
+			//获取机构分部的地址信息
+			InvestmentInstitutionsAddressPart part=new InvestmentInstitutionsAddressPart();
+			part.setInvestmentInstitutionId(iiId);
+			List<InvestmentInstitutionsAddressPart> parts = investmentInstitutionsAddressPartMapper.select(part);
+			//获取机构的领域信息
+			InvestmentInstitutionsStage stage = new  InvestmentInstitutionsStage();
+			stage.setInvestmentInstitutionId(iiId);
+			List<InvestmentInstitutionsStage> stages = investmentInstitutionsStageMapper.select(stage);
+			//获取机构相关的自定义领域信息
+			InvestmentInstitutionsLabel iiLable = new InvestmentInstitutionsLabel();
+			iiLable.setInvestmentInstitutionsId(iiId);
+			List<InvestmentInstitutionsLabel> iiLabels = investmentInstitutionsLabelMapper.select(iiLable);
+			//获取机构的阶段信息
+			InvestmentInstitutionsSegmentation investmentInstitutionsSegmentation = new InvestmentInstitutionsSegmentation();
+			investmentInstitutionsSegmentation.setInvestmentInstitutionsId(iiId);
+			List<InvestmentInstitutionsSegmentation> segmentations = investmentInstitutionsSegmentationMapper.select(investmentInstitutionsSegmentation);
+			
+			if(ii != null) {
+				formBody.setLogo(ii.getLogo());
+				formBody.setShortName(ii.getShortName());
+				formBody.setFullName(ii.getFullName());
+				formBody.setKenelCase(ii.getKenelCase());
+				formBody.setComment(ii.getComment());
+				formBody.setHomeUrl(ii.getHomeUrl());
+				formBody.setTotalFundScale(ii.getTotalFundScale());
+				formBody.setRmbFundScale(ii.getRmbFundScale());
+				formBody.setDollarFundScale(ii.getDollarFundScale());
+				formBody.setRmbInvestAmountMin(ii.getRmbInvestAmountMin());
+				formBody.setRmbInvestAmountMax(ii.getRmbInvestAmountMax());
+				formBody.setDollarInvestAmountMax(ii.getDollarInvestAmountMax());
+				formBody.setDollarInvestAmountMin(ii.getDollarInvestAmountMin());
+			}
+			//设置总部的相关信息
+			if(headquarters != null) {
+				formBody.setCity(headquarters.getTown());
+				formBody.setDetailAddress(headquarters.getDetailAddress());
+				formBody.setEmail(headquarters.getEmail());
+				formBody.setBpEmail(headquarters.getBpEmail());
+				formBody.setLongitude(headquarters.getLongitude());
+				formBody.setLatitude(headquarters.getLatitude());
+			}
+			//设置机构自定义领域的相关信息
+			String[] arrLabels=null;
+			if(iiLabels!=null) {
+				List<String> labels =new ArrayList<>();
+				iiLabels.forEach((e)->{
+					labels.add(e.getLabelName());
+				});
+				
+				arrLabels=new String[iiLabels.size()];
+				arrLabels = labels.toArray(arrLabels);
+				
+				formBody.setNewSegmentations(arrLabels);
+			}else {
+				formBody.setNewSegmentations(arrLabels);
+			}
+			
+			//设置相关的阶段信息(将list转换为一个Integer)
+			List<Integer> staList=new ArrayList<>();
+			if(stages != null && stages.size() != 0) {
+				Iterator<InvestmentInstitutionsStage> ite = stages.iterator();
+				while(ite.hasNext()) {
+					staList.add(ite.next().getMetaProjectStageId());
+				}
+			}
+			
+			Integer[] stageArr = new Integer[staList.size()];
+			stageArr = staList.toArray(stageArr);
+			formBody.setStages(stageArr);
+			
+			//设置相关的领域信息
+			List<Integer> segmList=new ArrayList<>();
+			if(segmentations != null && segmentations.size() != 0) {
+				Iterator<InvestmentInstitutionsSegmentation> ite = segmentations.iterator();
+				while(ite.hasNext()) {
+					segmList.add(ite.next().getMetaSegmentationId());
+				}
+			}
+			
+			Integer[] segmArray = new Integer[segmList.size()];
+			segmArray = segmList.toArray(segmArray);
+			formBody.setSegmentations(segmArray);
+			//设置相关的地址分部信息
+			formBody.setInvestmentInstitutionsAddressParts(parts);
+			
+			result.setData(formBody);
+			result.setStatus(200);
+			result.setMessage("success");
+		}
+				return result;
+	}
+
 }

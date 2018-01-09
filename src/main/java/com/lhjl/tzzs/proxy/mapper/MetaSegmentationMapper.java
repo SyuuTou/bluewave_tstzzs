@@ -8,4 +8,11 @@ import java.util.List;
 
 public interface MetaSegmentationMapper extends OwnerMapper<MetaSegmentation> {
     List<Integer> findMetaSegmentationBySegmentation(@Param("domains") String[] domains);
+    
+    /**
+     * 获取所有的领域对象
+     * @return list存储
+     */
+    List<MetaSegmentation> findAll();
+    
 }
