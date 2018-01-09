@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class AdvertisingController {
@@ -38,5 +39,23 @@ public class AdvertisingController {
      }
 
      return result;
+    }
+
+    @PostMapping("get/advertising/admin/list")
+    public CommonDto<Map<String,Object>> getAdvertisingAdminList(@RequestBody AdvertisingInputDto body){
+
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        try {
+            result = advertisingService.getAdvertisingAdminList(body);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+            result.setStatus(502);
+        }
+
+
+        return result;
     }
 }

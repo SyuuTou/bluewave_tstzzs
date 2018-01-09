@@ -8,16 +8,23 @@ import com.lhjl.tzzs.proxy.model.Advertising;
 import com.lhjl.tzzs.proxy.service.AdvertisingService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class AdertisingServiceImpl implements AdvertisingService{
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(AdertisingServiceImpl.class);
+
+    @Value("${pageNum}")
+    private Integer defalutPageNum;
+
+    @Value("${pageSize}")
+    private Integer defalutPageSize;
 
     @Autowired
     private AdvertisingMapper advertisingMapper;
@@ -34,34 +41,156 @@ public class AdertisingServiceImpl implements AdvertisingService{
 
         CommonDto<List<AdvertisingOutputDto>> result  = new CommonDto<>();
         List<AdvertisingOutputDto> list = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        List<Advertising> advertisingList  = advertisingMapper.findAdvertisingList(body.getEditStatus(),body.getHides(),body.getAppId(),body.getPositionId(),body.getStartTime(),body.getEndTime(),body.getTimeYn());
+        if (body.getHides() == null){
+            body.setHides("1");
+        }
+
+        String[] hides = body.getHides().split(",");
+
+
+        Integer pageNum = defalutPageNum;
+        if (body.getPageNum() != null){
+            pageNum = body.getPageNum();
+        }
+        Integer pageSize = defalutPageSize;
+        if (body.getPageSize() != null){
+            pageSize = body.getPageSize();
+        }
+
+        Integer startPage = (pageNum-1)*pageSize;
+
+        if (body.getBeginTimeSort() == null && body.getEndTime() == null && body.getOrderSort() == null){
+            body.setOrderSort(1);
+            body.setOrderSortDesc(1);
+        }
+
+        List<Map<String,Object>> advertisingList  = advertisingMapper.findAdvertisingList(body.getEditStatus(),hides,body.getAppId(),
+                body.getPositionId(),body.getStartTime(),body.getEndTime(),body.getTimeYn(),body.getBeginTimeSort(),
+                body.getBeginTimeSortDesc(),body.getOrderSort(),body.getOrderSortDesc(),body.getEndTimeSort(),body.getEndTimeSortDesc(),
+                startPage,pageSize);
+
 
         if (advertisingList.size() > 0){
-            for (Advertising a:advertisingList){
+            for (Map<String,Object> a:advertisingList){
                 AdvertisingOutputDto advertisingOutputDto = new AdvertisingOutputDto();
-                advertisingOutputDto.setId(a.getId());
+                advertisingOutputDto.setId((Integer) a.get("id"));
                 String picture = "";
-                if (a.getPicture() != null){
-                    picture = a.getPicture();
+                if (a.get("picture") != null){
+                    picture = (String) a.get("picture");
                 }
                 advertisingOutputDto.setPicture(picture);
                 String url = "";
-                if (a.getUrl() != null){
-                    url = a.getUrl();
+                if (a.get("url") != null){
+                    url =(String) a.get("url");
                 }
                 advertisingOutputDto.setUrl(url);
                 String title = "";
-                if (a.getTitle() != null){
-                    title = a.getTitle();
+                if (a.get("title") != null){
+                    title = (String) a.get("title");
                 }
                 advertisingOutputDto.setTitle(title);
+
+                String position = "";
+                if (a.get("position_name") != null){
+                    position = (String) a.get("position_name");
+                }
+                advertisingOutputDto.setPosition(position);
+
+                Integer sort = 0;
+                if (a.get("sort") != null){
+                    sort = (Integer) a.get("sort");
+                }
+                advertisingOutputDto.setSort(sort);
+
+                String begainTime = "";
+                if (a.get("begin_time") != null){
+                    try {
+                        begainTime = sdf.format((Date) a.get("begin_time"));
+                    }catch (Exception e){
+                        result.setStatus(502);
+                        result.setData(null);
+                        result.setMessage("格式化时间出错");
+
+                        return result;
+                    }
+                }
+                advertisingOutputDto.setBeginTime(begainTime);
+
+                String endTime = "";
+                if (a.get("end_time") != null){
+                    try {
+                        endTime = sdf.format((Date) a.get("end_time"));
+                    }catch (Exception e){
+                        result.setStatus(502);
+                        result.setData(null);
+                        result.setMessage("格式化时间出错");
+
+                        return result;
+                    }
+                }
+                advertisingOutputDto.setEndTime(endTime);
+
+                String hide = "";
+                if (a.get("hides") != null){
+                    hide = (String)a.get("hides");
+                }
+                advertisingOutputDto.setHides(hide);
+
 
                 list.add(advertisingOutputDto);
             }
         }
 
         result.setData(list);
+        result.setStatus(200);
+        result.setMessage("success");
+
+        return result;
+    }
+
+    /**
+     * 后台获取广告列表的接口
+     * @param body
+     * @return
+     */
+    @Override
+    public CommonDto<Map<String, Object>> getAdvertisingAdminList(AdvertisingInputDto body) {
+        CommonDto<Map<String, Object>> result  = new CommonDto<>();
+        Map<String,Object> map = new HashMap<>();
+        CommonDto<List<AdvertisingOutputDto>> jieguo = getAdvertisingList(body);
+
+        List<AdvertisingOutputDto> jieguoList = jieguo.getData();
+        map.put("advertisingList",jieguoList);
+
+        if (body.getHides() == null){
+            body.setHides("1");
+        }
+
+        String[] hides = body.getHides().split(",");
+
+
+        Integer pageNum = defalutPageNum;
+        if (body.getPageNum() != null){
+            pageNum = body.getPageNum();
+        }
+        Integer pageSize = defalutPageSize;
+        if (body.getPageSize() != null){
+            pageSize = body.getPageSize();
+        }
+        Integer startPage = (pageNum-1)*pageSize;
+
+        Integer allcount = advertisingMapper.findAdvertisingListCount(body.getEditStatus(),hides,body.getAppId(),
+                body.getPositionId(),body.getStartTime(),body.getEndTime(),body.getTimeYn(),body.getBeginTimeSort(),
+                body.getBeginTimeSortDesc(),body.getOrderSort(),body.getOrderSortDesc(),body.getEndTimeSort(),body.getEndTimeSortDesc(),
+                startPage,pageSize);
+
+        map.put("currentPage",pageNum);
+        map.put("total",allcount);
+        map.put("pageSize",pageSize);
+
+        result.setData(map);
         result.setStatus(200);
         result.setMessage("success");
 
