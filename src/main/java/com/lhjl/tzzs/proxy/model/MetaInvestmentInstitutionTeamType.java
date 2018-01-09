@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package com.lhjl.tzzs.proxy.model;
 
 import javax.persistence.*;
