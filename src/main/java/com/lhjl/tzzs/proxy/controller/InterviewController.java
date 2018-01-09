@@ -120,7 +120,7 @@ public class InterviewController extends GenericController{
     	return result;
     }
     /**
-     * 回显约谈记录的详细相关信息-zd********************
+     * 回显约谈记录的详细相关信息-zd
      * @param id 约谈id
      * @param projectId 项目id
      * @param appid
