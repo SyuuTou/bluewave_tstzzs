@@ -18,5 +18,8 @@
     group by education_experience
     order by cnt desc
   </select>
-
+	<select id="findFoundersEducationsByUserId" parameterType="Integer" resultType="String">
+		select education_experience from founders_education where founder_ID =(select ID from founders
+		where user_id =#{userId})
+	</select>
 </mapper>

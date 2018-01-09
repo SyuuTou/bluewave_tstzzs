@@ -10,4 +10,10 @@ import java.util.List;
 public interface FoundersWorkMapper extends OwnerMapper<FoundersWork> {
 
     List<FoundersWork> findFounderWorkIntelligent(@Param("inputsWords") String inputsWords, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
+    /**
+     * 根据用户id获取工作经历信息
+     * @param userId
+     * @return
+     */
+    List<String> findFoundersWorksByUserId(@Param("userId") Integer userId);
 }

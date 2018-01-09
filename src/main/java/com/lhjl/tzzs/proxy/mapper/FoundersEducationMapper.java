@@ -16,4 +16,11 @@ public interface FoundersEducationMapper extends OwnerMapper<FoundersEducation> 
      * @return
      */
     List<FoundersEducation> findFounderEducationIntelligent(@Param("inputsWords") String inputsWords,@Param("pageNum") Integer pageNum,@Param("pageSize") Integer pageSize);
+    
+    /**
+     * 根据用户Id获取教育经历信息
+     * @param userId
+     * @return
+     */
+    List<String> findFoundersEducationsByUserId(@Param("userId") Integer userId);
 }

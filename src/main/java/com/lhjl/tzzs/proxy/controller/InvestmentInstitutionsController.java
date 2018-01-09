@@ -132,7 +132,7 @@ public class InvestmentInstitutionsController extends GenericController {
 
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());
-            result.setMessage("服务器端发生错误");
+            result.setMessage("服务器端发生 ");
             result.setStatus(502);
             result.setData(null);
         }

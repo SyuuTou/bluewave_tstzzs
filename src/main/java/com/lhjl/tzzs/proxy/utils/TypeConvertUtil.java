@@ -21,12 +21,15 @@ public class TypeConvertUtil {
 	} 
 	
 	public static void main(String[] args) {
-		List<Integer> list=new ArrayList<>();
-		list.add(1);
-		list.add(2);
-		list.add(2);
-		list.forEach((e)->{
-			System.out.println(e);
-		});
+//		List<Integer> list=new ArrayList<>();
+//		list.add(1);
+//		list.add(2);
+//		list.add(2);
+//		list.forEach((e)->{
+//			System.out.println(e);
+//		});
+		Integer a=1;
+		int b=1;
+		System.out.println(a==b);
 	}
 }

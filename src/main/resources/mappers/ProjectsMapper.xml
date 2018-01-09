@@ -572,7 +572,6 @@
         <if test="keyWords != '' and keyWords != null ">
             AND (pp.short_name like "%"#{keyWords}"%" or pp.full_name like "%"#{keyWords}"%" or pp.kernel_desc like "%"#{keyWords}"%" )
         </if>
-
         group by pp.short_name
         order by pp.evaluation_recommend desc
         limit #{offset},#{pageSize}
