@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.AdvertisingDto.AdvertisingInputDto;
 import com.lhjl.tzzs.proxy.dto.AdvertisingDto.AdvertisingOutputDto;
+import com.lhjl.tzzs.proxy.dto.AdvertisingInsertDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.mapper.AdvertisingMapper;
 import com.lhjl.tzzs.proxy.model.Advertising;
@@ -14,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class AdertisingServiceImpl implements AdvertisingService{
@@ -196,4 +200,43 @@ public class AdertisingServiceImpl implements AdvertisingService{
 
         return result;
     }
+
+
+	@Override
+	public CommonDto<Boolean> add(Integer appid,AdvertisingInsertDto body) {
+		CommonDto<Boolean> result = new CommonDto<Boolean>();
+		try {
+			Advertising adv =null;
+			if(body !=null) {
+				adv =new Advertising();
+
+				SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				//设置关联的小程序id
+				adv.setAppid(body.getAppid());
+				adv.setBeginTime(sdf.parse(body.getBeginTime()));
+				adv.setEndTime(sdf.parse(body.getEndTime()));
+				adv.setCreateTime(new Date());
+				adv.setYn(1);
+				adv.setAdvertisingPosistionId(body.getAdvertisingPosistionId());
+				adv.setHides(body.getHides());
+				adv.setUrl(body.getUrl());
+				adv.setSort(body.getSort());
+				adv.setTitle(body.getTitle());
+				adv.setPicture(body.getPicture());
+				adv.setEditStatus(1);
+
+			}
+
+			if(advertisingMapper.insert(adv) ==1) {
+				result.setData(true);
+				result.setMessage("数据插入成功");
+				result.setStatus(200);
+			}
+		}catch(Exception e) {
+			result.setData(false);
+			result.setMessage("数据插入失败");
+			result.setStatus(500);
+		}
+		return result;
+	}
 }
