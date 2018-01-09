@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import com.lhjl.tzzs.proxy.dto.EventDto;
+import com.lhjl.tzzs.proxy.dto.InterviewCommentDto;
+import com.lhjl.tzzs.proxy.dto.InterviewDetailsOutputDto;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InterviewDto;
+import com.lhjl.tzzs.proxy.dto.InterviewListInputDto;
 import com.lhjl.tzzs.proxy.model.Interview;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.service.FollowService;
@@ -47,11 +50,11 @@ import redis.clients.jedis.Jedis;
  *
  */
 @RestController
-public class InterviewController {
+public class InterviewController extends GenericController{
     private static final Logger log = LoggerFactory.getLogger(FinancingController.class);
     @Resource
     private InterviewService interviewService;
-    
+  
     @Resource
     private FollowService followService;
 
@@ -78,6 +81,88 @@ public class InterviewController {
     	                 @ApiImplicitParam(paramType = "body", dataType = "Integer", name = "projects", value = "项目ID", required = true),
     	                 @ApiImplicitParam(paramType = "body", dataType = "Integer", name = "yn", value = "当前项目的状态值", required = true)
     	})
+    /**
+     * 进行约谈记录跟进状态的更新-zd
+     * @param interviewId
+     * @param status
+     * @param appid
+     * @return
+     */
+    @GetMapping("/v{appid}/update/status")
+    public CommonDto<Boolean> updateStatus(Integer id,Integer status,@PathVariable Integer appid){
+    	CommonDto<Boolean> result=new CommonDto<>();
+    	try {
+    		result=interviewService.updateStatus(id,status,appid);
+    	}catch(Exception e) {
+    		result.setData(false);
+    		result.setMessage("服务器内部错误");
+    		result.setStatus(500);
+    	}
+    	return result;
+    }
+    /**
+     * 进行约谈记录批注的添加
+     * @param appid
+     * @param interviewId
+     * @return
+     */
+    @PostMapping("/v{appid}/add/interviewcomment")
+    public CommonDto<Boolean> addInterviewComment(@PathVariable Integer appid,@RequestBody InterviewCommentDto body){
+    	this.log.error(appid+"**"+body);
+    	CommonDto<Boolean> result=new CommonDto<Boolean>();
+    	try {
+    		result = interviewService.addComent(appid,body);
+    	}catch(Exception e) {
+    		result.setData(null);
+    		result.setMessage("服务器内部错误");
+    		result.setStatus(500);
+    	}
+    	return result;
+    }
+    /**
+     * 回显约谈记录的详细相关信息-zd********************
+     * @param id 约谈id
+     * @param projectId 项目id
+     * @param appid
+     * @return
+     */
+    @GetMapping("/v{appid}/echo/interviewinfo")
+    //http://localhost:9090/v1/echo/interviewinfo?id=1&projectShortName=玩秘
+    public CommonDto<InterviewDetailsOutputDto> echoInterviewInfo(Integer id,String projectShortName,@PathVariable Integer appid){
+    	CommonDto<InterviewDetailsOutputDto> result=new CommonDto<InterviewDetailsOutputDto>();
+    	try {
+    		result = interviewService.echoInterviewInfo(id,projectShortName,appid);
+    	}catch(Exception e) {
+    		this.log.error(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("服务器内部错误");
+    		result.setStatus(500);
+    	}
+    	return result;
+    }
+
+    
+    
+    /**
+     * 约谈记录信息列表显示-zd
+     * @return
+     */
+    @PostMapping("/v{appid}/list/interview")  
+    public CommonDto<Map<String,Object>> echoInterviewList(@PathVariable("appid") Integer appid,@RequestBody InterviewListInputDto body){
+    	CommonDto<Map<String,Object>> result= new CommonDto<Map<String,Object>>();
+    	try {
+//    		System.err.println(body);
+            result= interviewService.getInterviewList(body);
+        }catch (Exception e){
+        	LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+        }
+
+        return result;
+    }
     @PostMapping("interview/save")
     public CommonDto<String> insertInterview(@RequestBody InterviewDto  body){
     	String desc =body.getDesc();
@@ -94,6 +179,7 @@ public class InterviewController {
 		/*Jedis jedis = jedisCommonService.getJedis();
 		String userid = jedis.get("userid");
 		interview.setUsersId(Integer.valueOf(userid));*/
+        
         //测试数据
         CommonDto<String> result = new CommonDto<String>();
         try {

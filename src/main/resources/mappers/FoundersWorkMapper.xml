@@ -18,4 +18,9 @@
     group by work_experience
     order by cnt desc
   </select>
+  <select id="findFoundersWorksByUserId" parameterType="Integer" resultType="String">
+		select work_experience from founders_work where founder_ID =(select ID from founders
+		where user_id =#{userId})
+	</select>
+  
 </mapper>

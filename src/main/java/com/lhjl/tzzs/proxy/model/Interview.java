@@ -14,6 +14,7 @@ public class Interview {
 
     /**
      * 约谈状态：0未读，1已读
+     * 0待处理;1未联系;2已联系;3未对接;4已对接;5已放弃
      */
     @Column(name ="`status`")
     private Integer status;
@@ -41,6 +42,19 @@ public class Interview {
      */
     @Column(name = "create_time")
     private Date createTime;
+    
+    @Column(name = "comment")
+    private String comment;
+    
+    
+    
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
 	public Integer getId() {
 		return id;
