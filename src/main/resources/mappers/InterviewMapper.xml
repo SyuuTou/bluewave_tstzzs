@@ -76,7 +76,7 @@
 				or p.short_name like "%"#{keyWords}"%" or i.desc like "%"#{keyWords}"%" or i.comment like "%"#{keyWords}"%")
         	</if>
         	<if test="followStatus != null and followStatus != ''">
-                AND i.status = #{followStatus}
+                AND i.status = #{followStatus}  
         	</if>
 	</select>
 </mapper>
