@@ -58,7 +58,7 @@
         </if>
         <if test="followStatus != null and followStatus != ''">
                 AND i.status = #{followStatus}
-        </if>
+        </if>  
         <if test="order != null and order != ''">
         		order by i.create_time ${order}
         </if>
