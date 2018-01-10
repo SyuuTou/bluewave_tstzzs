@@ -70,11 +70,13 @@
 		from users u 
 		inner join interview i on i.user_id =u.uuid
 		inner join projects p on i.projects_id=p.ID
-		<where>
+		where 1 =1
 			<if test="keyWords != null and keyWords != ''">
                 AND (u.actual_name like "%"#{keyWords}"%" or u.company_name like "%"#{keyWords}"%" or u.company_duties like "%"#{keyWords}"%"
 				or p.short_name like "%"#{keyWords}"%" or i.desc like "%"#{keyWords}"%" or i.comment like "%"#{keyWords}"%")
         	</if>
-		</where>
+        	<if test="followStatus != null and followStatus != ''">
+                AND i.status = #{followStatus}
+        	</if>
 	</select>
 </mapper>
