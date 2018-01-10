@@ -284,74 +284,24 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
         userToken = userTokenMapper.selectOne(userToken);
         List<InvestmentInstitutionsDto> list = investmentInstitutionsMapper.findInvestmentallNew("-1", beginNum, pageSize,beginTime,endTime);
 
-        //zyy 20171211注释
+        if (list.size() > 0){
+            for (InvestmentInstitutionsDto iid:list){
+                if (iid.getLogo() == null){
+                    iid.setLogo("http://img.idatavc.com/static/logo/jg_default.png");
+                }
 
-//        for(InvestmentInstitutionsDto d : list) {
-//            //带回是否投递的状态
-//            ProjectSendLogs projectSendLogs = new ProjectSendLogs();
-//            projectSendLogs.setUserid(userToken.getUserId());
-//            List<ProjectSendLogs> logsList = projectSendLogsMapper.select(projectSendLogs);
-//            List<Integer> a = new LinkedList<Integer>();
-//            //查询项目投递过的记录
-//            Integer[] workArray1 = null;
-//            for (ProjectSendLogs c : logsList) {
-//                a.add(c.getId());
-//                workArray1 = new Integer[a.size()];
-//                workArray1 = a.toArray(workArray1);
-//            }
-//            if (workArray1 != null) {
-//                //根据记录id查找出机构的id
-//                List<Integer> list3 = investmentInstitutionsMapper.serachSendProjectId(workArray1);
-//                List<Integer> b = new LinkedList<Integer>();
-//                Integer[] workArray2 = null;
-//                for (Integer c : list3) {
-//                    b.add(c);
-//                    workArray2 = new Integer[b.size()];
-//                    workArray2 = b.toArray(workArray2);
-//                }
-//                d.setSendyn(false);
-//                for (int e : workArray2) {
-//                    if (e == d.getId()) {
-//                        d.setSendyn(true);
-//                    }
-//                }
-//                 InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
-//                    List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
-//                    if(list1.size()>0){
-//                        List<String> e = new LinkedList<String>();
-//                        String[] workArray3 = null;
-//                        for (InvestmentInstitutionInformation c : list1) {
-//                            e.add(c.getShortName());
-//                            workArray3 = new String[e.size()];
-//                            workArray3 = e.toArray(workArray3);
-//                        }
-//                        for (String f : workArray3) {
-//                            if (f.equals(d.getShortName())) {
-//                                d.setSendyn(true);
-//                            }
-//                        }
-//                    }
-//            } else {
-//                d.setSendyn(false);
-//                 InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
-//                    List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
-//                    if(list1.size()>0){
-//                        List<String> e = new LinkedList<String>();
-//                        String[] workArray3 = null;
-//                        for (InvestmentInstitutionInformation c : list1) {
-//                            e.add(c.getShortName());
-//                            workArray3 = new String[e.size()];
-//                            workArray3 = e.toArray(workArray3);
-//                        }
-//                        for (String f : workArray3) {
-//                            if (f.equals(d.getShortName())) {
-//                                d.setSendyn(true);
-//                            }
-//                        }
-//                    }
-//
-//            }
-//        }
+                String kenerlCase = "";
+                if (iid.getKenelCase() == null){
+                    if (iid.getComment() != null){
+                        kenerlCase = iid.getComment();
+                    }
+                }else {
+                    kenerlCase = iid.getKenelCase();
+                }
+
+                iid.setCommet(kenerlCase);
+            }
+        }
 
         Integer userId = userExistJudgmentService.getUserId(token);
         if (userId == -1){
