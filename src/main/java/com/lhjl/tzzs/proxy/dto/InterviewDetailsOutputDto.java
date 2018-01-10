@@ -44,7 +44,10 @@ public class InterviewDetailsOutputDto {
 	private String commet;
 	//约谈内容
 	private String interviewDesc;
-	
+	//批注
+	private String comment;
+	//跟进状态
+	private Integer followStatus;
 	
 	
 	public Integer getId() {
@@ -161,15 +164,29 @@ public class InterviewDetailsOutputDto {
 	public void setInterviewDesc(String interviewDesc) {
 		this.interviewDesc = interviewDesc;
 	}
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+	public Integer getFollowStatus() {
+		return followStatus;
+	}
+	public void setFollowStatus(Integer followStatus) {
+		this.followStatus = followStatus;
+	}
 	@Override
 	public String toString() {
-		return "InterviewDetailsOutputDto [actualName=" + actualName + ", companyName=" + companyName + ", phonenumber="
-				+ phonenumber + ", companyDuties=" + companyDuties + ", wechat=" + wechat + ", email=" + email
-				+ ", city=" + city + ", industry=" + industry + ", educationExperience=" + educationExperience
-				+ ", identityType=" + identityType + ", workExperience=" + workExperience + ", userDesc=" + userDesc
-				+ ", companyDesc=" + companyDesc + ", demand=" + demand + ", workCard=" + workCard + ", shortName="
-				+ shortName + ", commet=" + commet + ", interviewDesc=" + interviewDesc + "]";
+		return "InterviewDetailsOutputDto [id=" + id + ", actualName=" + actualName + ", companyName=" + companyName
+				+ ", phonenumber=" + phonenumber + ", companyDuties=" + companyDuties + ", wechat=" + wechat
+				+ ", email=" + email + ", city=" + city + ", industry=" + industry + ", educationExperience="
+				+ educationExperience + ", identityType=" + identityType + ", workExperience=" + workExperience
+				+ ", userDesc=" + userDesc + ", companyDesc=" + companyDesc + ", demand=" + demand + ", workCard="
+				+ workCard + ", shortName=" + shortName + ", commet=" + commet + ", interviewDesc=" + interviewDesc
+				+ ", comment=" + comment + ", followStatus=" + followStatus + "]";
 	}
+
 	
 	
 	

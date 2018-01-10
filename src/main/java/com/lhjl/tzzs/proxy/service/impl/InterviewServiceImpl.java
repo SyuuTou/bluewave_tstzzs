@@ -214,6 +214,8 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 			Interview interviewRecord = interviewMapper.selectByPrimaryKey(id);
 			if(interviewRecord!=null) {
 				outputDto.setInterviewDesc(interviewRecord.getDesc());
+				outputDto.setComment(interviewRecord.getComment());
+				outputDto.setFollowStatus(interviewRecord.getStatus());
 			}
 			
 			result.setData(outputDto);
