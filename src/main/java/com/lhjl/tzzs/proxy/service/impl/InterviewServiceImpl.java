@@ -143,7 +143,7 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 		}catch(Exception e) {
 			e.printStackTrace();
 			result.setData(false);
-			result.setStatus(200);
+			result.setStatus(500);
 			result.setMessage("数据更新失败");
 		}
 		return result;
