@@ -47,7 +47,7 @@ public class AdvertisingController {
      * 广告位的增加
      * @param body
      * @return
-     */
+     */  
     @PostMapping("/v{appid}/add/advertise")
     public CommonDto<Boolean> getAdvertisingList(@PathVariable Integer appid,@RequestBody AdvertisingInsertDto body){
 
