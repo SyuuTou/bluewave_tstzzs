@@ -43,4 +43,19 @@ public interface InvestmentInstitutionsMapper extends OwnerMapper<InvestmentInst
      * @return
      */
     Integer getLastInsertId();
+
+    /**
+     * 筛选机构的方法
+     * @param startPage 开始数量
+     * @param pageSize 每页显示数量
+     * @param domains 领域
+     * @param stages 阶段
+     * @param types 类型
+     * @return
+     */
+    List<InvestmentInstitutions> filterInvestmentInstitution(@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize,
+                                                             @Param("domains") String[] domains,@Param("stages") String[] stages,
+                                                             @Param("types") Integer types);
+
+    List<Integer> selectUserApprovalInstitution(@Param("userId") Integer userId);
 }

@@ -6,13 +6,16 @@ import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.EvaluateService;
+import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.service.ScreenAndSearchInstitutionService;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -20,6 +23,12 @@ import java.util.*;
  */
 @Service
 public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchInstitutionService {
+
+    @Value("${pageNum}")
+    private Integer defalutPageNum;
+
+    @Value("${pageSize}")
+    private Integer getDefalutPageSize;
 
     @Autowired
     private InvestmentInstitutionsMapper investmentInstitutionsMapper;
@@ -52,6 +61,9 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
 
     @Autowired
     private MetaProjectStageMapper metaProjectStageMapper;
+
+    @Resource
+    private UserLoginService userLoginService;
 
 
     /**
@@ -636,6 +648,127 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
             result.setMessage("用户token为空");
         }
         result.setData(list);
+        return result;
+    }
+
+    /**
+     * 机构筛选新接口
+     * @param body
+     * @return
+     */
+    @Override
+    public CommonDto<List<InvestmentInstitutionsDto>> screnInstitutionAllNew(SaveScreenDto body) {
+        CommonDto<List<InvestmentInstitutionsDto>> result = new CommonDto<>();
+        List<InvestmentInstitutionsDto> list = new ArrayList<>();
+
+        if (body.getToken() == null || "".equals(body.getToken()) || "undefined".equals(body.getToken())){
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("用户token不能为空");
+
+            return result;
+        }
+
+        Integer userId = userLoginService.getUserIdByToken(body.getToken(),1);
+
+        String domain = "";//领域
+        if (body.getDomain() != null){
+            domain = body.getDomain();
+        }
+        Integer investmentType = null; //机构类型
+        if (body.getInvestmentType() != null){
+            if ("50指数机构".equals(body.getInvestmentType())){
+                investmentType = 1;
+            }else {
+                investmentType = 0;
+            }
+        }
+
+        String stage = "";
+        if (body.getStage() != null){
+            stage = body.getStage();
+        }
+
+        Integer pageNum = defalutPageNum;
+        if (body.getPageNum() != null){
+            pageNum = body.getPageNum();
+        }
+
+        Integer pageSize = getDefalutPageSize;
+        if (body.getPageSize() != null){
+            pageSize = body.getPageSize();
+        }
+        String[] domains = {};
+        if (domain != ""){
+             domains = domain.split(",");
+        }
+
+        String[] stages = {};
+        if (stage != ""){
+            stages = stage.split(",");
+        }
+
+        Integer types = investmentType;
+
+        Integer startPage = (pageNum -1)*pageSize;
+
+        if (stages.length < 1){
+            stages = null;
+        }
+
+        if (domains.length < 1){
+            domains = null;
+        }
+
+        List<InvestmentInstitutions> investmentInstitutionsList = investmentInstitutionsMapper.filterInvestmentInstitution(startPage,pageSize,domains,stages,types);
+
+        List<Integer> institutionIds = investmentInstitutionsMapper.selectUserApprovalInstitution(userId);
+
+        if (investmentInstitutionsList.size() > 0){
+            for (InvestmentInstitutions iis :investmentInstitutionsList){
+                InvestmentInstitutionsDto investmentInstitutionsDto = new InvestmentInstitutionsDto();
+                investmentInstitutionsDto.setId(iis.getId());
+                investmentInstitutionsDto.setLogo(iis.getLogo());
+                investmentInstitutionsDto.setShortName(iis.getShortName());
+                investmentInstitutionsDto.setCommet(iis.getCommet());
+                investmentInstitutionsDto.setCreateTime(iis.getCreateTime());
+                investmentInstitutionsDto.setType(iis.getType());
+                investmentInstitutionsDto.setCaseUrl(iis.getCaseUrl());
+                investmentInstitutionsDto.setKenelCase(iis.getKenelCase());
+                investmentInstitutionsDto.setCommet(iis.getCommet());
+                investmentInstitutionsDto.setCity(iis.getCity());
+                investmentInstitutionsDto.setStage(iis.getStage());
+                investmentInstitutionsDto.setRepresentative(iis.getRepresentative());
+                investmentInstitutionsDto.setApprovalStatus(iis.getApprovalStatus());
+                investmentInstitutionsDto.setHomeUrl(iis.getHomeUrl());
+                investmentInstitutionsDto.setYn(iis.getYn());
+                investmentInstitutionsDto.setSort(iis.getSort());
+                investmentInstitutionsDto.setCount(iis.getCount());
+                if (institutionIds.size() > 0){
+                    int a = 0;
+                    for (Integer ii :institutionIds){
+                        if (String.valueOf(iis.getId()).equals(String.valueOf(ii))){
+                         a++;
+                        }
+                    }
+                    if (a >0){
+                        investmentInstitutionsDto.setSendyn(true);
+                    }else {
+                        investmentInstitutionsDto.setSendyn(false);
+                    }
+                }else {
+                    investmentInstitutionsDto.setSendyn(false);
+                }
+
+                list.add(investmentInstitutionsDto);
+            }
+        }
+
+
+        result.setData(list);
+        result.setMessage("success");
+        result.setStatus(200);
+
         return result;
     }
 

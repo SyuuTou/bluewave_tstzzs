@@ -17,4 +17,11 @@ public interface ScreenAndSearchInstitutionService {
     CommonDto<Map<String, Object>> screenInstitution(String token);
     CommonDto<String>  savescreenInstitution(SaveScreenDto body);
     CommonDto<List<InvestmentInstitutionsDto>> screenInstitutionAll(SaveScreenDto body);
+
+    /**机构筛选新接口
+     *
+     * @param body
+     * @return
+     */
+    CommonDto<List<InvestmentInstitutionsDto>> screnInstitutionAllNew(SaveScreenDto body);
 }

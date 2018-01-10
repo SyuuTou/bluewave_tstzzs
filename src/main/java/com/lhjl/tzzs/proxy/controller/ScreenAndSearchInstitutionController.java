@@ -195,7 +195,7 @@ public class ScreenAndSearchInstitutionController {
 
         try {
             //初始化分页信息
-            result = screenAndSearchInstitutionService.screenInstitutionAll(body);
+            result = screenAndSearchInstitutionService.screnInstitutionAllNew(body);
             if (result.getStatus() == null) {
                 result.setStatus(200);
                 result.setMessage("success");

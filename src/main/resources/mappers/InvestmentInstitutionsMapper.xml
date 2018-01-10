@@ -248,4 +248,39 @@
   	<select id="getLastInsertId" resultType="Integer">
   		SELECT LAST_INSERT_ID()
   	</select>
+    <select id="filterInvestmentInstitution" resultMap="BaseResultMap">
+        SELECT ii.* FROM investment_institutions ii
+        <if test="domains != null and domains !=''">
+            left join investment_institutions_segmentation iis on ii.ID = iis.investment_institutions_id
+            left join meta_segmentation ms on iis.meta_segmentation_id = ms.id
+        </if>
+       <if test="stages != null and stages != ''">
+           left join investment_institutions_stage iist on ii.id = iist.investment_institution_id
+           left join meta_project_stage mps on iist.meta_project_stage_id = mps.id
+       </if>
+        where 1=1
+        <if test="domains != null and domains !=''">
+            and ms.`name` in
+            <foreach close=")" collection="domains" index="index" item="item" open="(" separator=",">#{item}</foreach>
+        </if>
+        <if test="stages != null and stages !=''">
+            and mps.`name` in
+            <foreach close=")" collection="stages" index="index" item="item" open="(" separator=",">#{item}</foreach>
+        </if>
+        <if test="types != null and types !=''">
+            and ii.types = #{types}
+        </if>
+        group by ii.short_name
+        order by ii.count desc
+        limit #{startPage},#{pageSize}
+    </select>
+
+    <select id="selectUserApprovalInstitution" resultType="java.lang.Integer">
+        SELECT ii.id FROM idatavc.project_financing_investment_institution_relationship pfiir
+        left join project_send_logs psl on pfiir.project_send_log_id = psl.id
+        left join investment_institutions ii on pfiir.investment_institution_id = ii.id
+        where userid = #{userId}
+        group by short_name
+        order by ii.id;
+    </select>
 </mapper>
