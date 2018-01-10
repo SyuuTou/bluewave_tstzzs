@@ -120,52 +120,13 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 
 				return result;
 			}
-			/*if (StringUtil.isEmpty(fullName)){
-				result.setStatus(50001);
-				result.setMessage("请填写投资全称");
-				result.setData(null);
-
-				return result;
-			}
-            if (StringUtil.isEmpty(oneIntroduction)){
-            result.setStatus(50001);
-            result.setMessage("请填写一句话介绍");
-            result.setData(null);
-
-           return result;
-        }
-               
-            if (StringUtil.isEmpty(domanin)){
-				result.setStatus(50001);
-				result.setMessage("请填写所属细分领域");
-				result.setData(null);
-
-				return result;
-			}
-			if (StringUtil.isEmpty(city)){
-				result.setStatus(50001);
-				result.setMessage("请填写地域");
-				result.setData(null);
-
-				return result;
-			}
-			if (StringUtil.isEmpty(stage)){
-				result.setStatus(50001);
-				result.setMessage("请填写投资轮次");
-				result.setData(null);
-
-				return result;
-			}*/
 
 			if (StringUtil.isEmpty(token)){
 				result.setStatus(50001);
 				result.setMessage("缺少用户id");
 			}
 			
-			/*if (StringUtil.isEmpty(jianjie)){
-				result.setStatus(50001);
-				result.setMessage("请填写简介");
-			}*/
+
 
 				UserToken userToken = new UserToken();
 		        userToken.setToken(token);
@@ -228,6 +189,11 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 					result.setMessage("用户token不存在");
 
 				}
+
+				result.setMessage("success");
+				result.setStatus(200);
+				result.setData(shortName);
+
 			return result;
 		}
 
