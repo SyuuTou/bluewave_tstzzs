@@ -79,7 +79,6 @@ public class AdvertisingController {
             result.setStatus(502);
         }
 
-
         return result;
     }
 }

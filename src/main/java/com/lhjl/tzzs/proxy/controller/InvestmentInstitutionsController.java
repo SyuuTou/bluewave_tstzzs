@@ -31,28 +31,6 @@ public class InvestmentInstitutionsController extends GenericController {
     @Resource
     private InvestmentInstitutionsService investmentInstitutionsService;
     
-
-    /**
-     * 根据机构id获取机构信息的接口
-     * @param body
-     * @return
-     */
- /*   @PostMapping("get/investmentinstitutons/complexinfo")
-    public CommonDto<InvestmentInstitutionComplexOutputDto> getInvestmentInstitutionsComplexinfo(@RequestBody Map<String,Integer> body){
-        CommonDto<InvestmentInstitutionComplexOutputDto> result = new CommonDto<>();
-
-        try {
-            result =  investmentInstitutionsService.getInvestmentInstitutionsComlexInfo(body);
-
-        }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
-            result.setMessage("服务器端发生错误");
-            result.setStatus(502);
-            result.setData(null);
-        }
-
-        return result;
-    }*/
     /**
      * 根据机构id获取机构信息的接口
      * @param body
@@ -94,6 +72,7 @@ public class InvestmentInstitutionsController extends GenericController {
     	}
     	return result;
     }
+    
     /**
      * 点击保存按钮的实现接口
      * 	如果存在相关的机构信息 则执行更新操作
@@ -101,15 +80,15 @@ public class InvestmentInstitutionsController extends GenericController {
      * @param investmentInstitumentId
      * @return
      */
-    @PostMapping("/v{appid}/saveinstiinfo")
-    public CommonDto<Boolean> saveInvestmentInstitution(@PathVariable Integer appid,@RequestBody InvestmentInstitutionsDto2 body){
+    @PostMapping("/v{appid}/institution")
+    public CommonDto<Boolean> institutionSaveOrUpdate(@PathVariable Integer appid,@RequestBody InvestmentInstitutionsDto2 body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	
-    	this.LOGGER.error("appid------"+appid);
-    	this.LOGGER.error("token---------"+body.getToken());
+    	System.err.println("appid------"+appid);
+    	System.err.println("token---------"+body.getToken());
     	
     	try {
-    		result = investmentInstitutionsService.updataInvesInfo(appid,body);
+    		result = investmentInstitutionsService.saveOrUpdate(appid,body);
     	}catch(Exception e){
     		log.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");

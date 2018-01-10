@@ -8,7 +8,7 @@ public class InterviewListOutputDto {
 	 */
 	private Integer id;
 	/**
-	 * 真是姓名
+	 * 真实姓名
 	 */
 	private String actualName;
 	/**

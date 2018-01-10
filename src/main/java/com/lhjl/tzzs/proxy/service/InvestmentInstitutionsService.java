@@ -78,7 +78,7 @@ public interface InvestmentInstitutionsService {
 	 * @param body 传递过来的表单封装体，包含token
 	 * @return
 	 */
-	CommonDto<Boolean> updataInvesInfo(Integer appid,InvestmentInstitutionsDto2 body);
+	CommonDto<Boolean> saveOrUpdate(Integer appid,InvestmentInstitutionsDto2 body);
 	
 	
 	
