@@ -121,7 +121,7 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 				
 				result.setData(true);
 				result.setMessage("数据更新成功");
-				result.setStatus(500);
+				result.setStatus(200);
 			}catch(Exception e) {
 				result.setData(false);
 				result.setMessage("数据更新失败");
@@ -141,8 +141,9 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 			result.setStatus(200);
 			result.setMessage("数据更新成功");
 		}catch(Exception e) {
+			e.printStackTrace();
 			result.setData(false);
-			result.setStatus(200);
+			result.setStatus(500);
 			result.setMessage("数据更新失败");
 		}
 		return result;
@@ -162,7 +163,7 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 		
 		if(interview != null) {
 			//实例化一个Users对象 用于作为查找条件
-			Users user = new Users();
+			Users user = new Users(); 
 			user.setUuid(interview.getUserId());
 			//根据UUID查询数据库中的唯一一条user对象
 			user=usersMapper.selectOne(user);
