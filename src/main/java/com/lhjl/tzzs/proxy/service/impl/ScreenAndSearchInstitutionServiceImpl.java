@@ -734,7 +734,17 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                 investmentInstitutionsDto.setCreateTime(iis.getCreateTime());
                 investmentInstitutionsDto.setType(iis.getType());
                 investmentInstitutionsDto.setCaseUrl(iis.getCaseUrl());
-                investmentInstitutionsDto.setKenelCase(iis.getKenelCase());
+                String kenelCase = "";
+                if (iis.getKenelCase() == null){
+                    if (iis.getComment() != null){
+                        kenelCase = iis.getComment();
+                    }
+
+                }else {
+                    kenelCase = iis.getKenelCase();
+                }
+
+                investmentInstitutionsDto.setKenelCase(kenelCase);
                 investmentInstitutionsDto.setCommet(iis.getCommet());
                 investmentInstitutionsDto.setCity(iis.getCity());
                 investmentInstitutionsDto.setStage(iis.getStage());
