@@ -299,7 +299,7 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
                     kenerlCase = iid.getKenelCase();
                 }
 
-                iid.setCommet(kenerlCase);
+                iid.setKenelCase(kenerlCase);
             }
         }
 
