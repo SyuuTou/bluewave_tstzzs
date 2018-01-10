@@ -142,6 +142,11 @@ public class AdertisingServiceImpl implements AdvertisingService{
                 }
                 advertisingOutputDto.setHides(hide);
 
+                String appName = "";
+                if (a.get("app_name") != null){
+                    appName =(String) a.get("app_name");
+                }
+                advertisingOutputDto.setAppName(appName);
 
                 list.add(advertisingOutputDto);
             }
