@@ -181,7 +181,7 @@
     </select>
 
     <select id="findInvestmentallNew" resultMap="newDtoMap">
-        SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.count,ii.sort
+        SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,ii.count,ii.sort
         FROM investment_institutions ii
         where ii.count is not null
         <!--WHERE  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null-->
