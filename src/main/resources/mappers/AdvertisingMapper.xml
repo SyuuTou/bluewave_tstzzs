@@ -20,7 +20,7 @@
     <result column="appid" property="appid" jdbcType="INTEGER" />
   </resultMap>
   <select id="findAdvertisingList" resultType="java.util.HashMap">
-    SELECT a.id,ma.position_name,a.title,a.sort,a.begin_time,a.end_time,a.url,
+    SELECT a.id,ma.position_name,a.title,a.sort,a.begin_time,a.end_time,a.url,a.picture,
     case when a.hides = 1 then "否" else "是" end hides
     FROM advertising a
     left join meta_advertising_position ma on a.advertising_posistion_id = ma.id
@@ -68,7 +68,7 @@
 
   <select id="findAdvertisingListCount" resultType="java.lang.Integer">
     select count(*) as ct from(
-    SELECT a.id,ma.position_name,a.title,a.sort,a.begin_time,a.end_time,a.url,
+    SELECT a.id,ma.position_name,a.title,a.sort,a.begin_time,a.end_time,a.url,a.picture,
     case when a.hides = 1 then "否" else "是" end hides
     FROM advertising a
     left join meta_advertising_position ma on a.advertising_posistion_id = ma.id
