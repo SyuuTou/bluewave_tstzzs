@@ -20,7 +20,7 @@ public interface InterviewMapper extends OwnerMapper<Interview> {
 	 * @param status
 	 * @return
 	 */
-	Integer updateStatusByInterviewId(Integer interviewId, Integer status);
+	Integer updateStatusByInterviewId(@Param("interviewId") Integer interviewId, @Param("status")Integer status);
 	
 	/**
 	 * 根据id查询单条记录
