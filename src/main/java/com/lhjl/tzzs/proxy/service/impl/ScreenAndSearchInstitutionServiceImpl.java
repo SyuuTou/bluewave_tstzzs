@@ -728,7 +728,11 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
             for (InvestmentInstitutions iis :investmentInstitutionsList){
                 InvestmentInstitutionsDto investmentInstitutionsDto = new InvestmentInstitutionsDto();
                 investmentInstitutionsDto.setId(iis.getId());
-                investmentInstitutionsDto.setLogo(iis.getLogo());
+                String logo = "http://img.idatavc.com/static/logo/jg_default.png";
+                if (iis.getLogo() != null){
+                    logo = iis.getLogo();
+                }
+                investmentInstitutionsDto.setLogo(logo);
                 investmentInstitutionsDto.setShortName(iis.getShortName());
                 investmentInstitutionsDto.setCommet(iis.getCommet());
                 investmentInstitutionsDto.setCreateTime(iis.getCreateTime());
