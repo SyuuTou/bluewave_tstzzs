@@ -201,7 +201,7 @@ public class AdertisingServiceImpl implements AdvertisingService{
         return result;
     }
 
-
+    @Transactional
 	@Override
 	public CommonDto<Boolean> add(Integer appid,AdvertisingInsertDto body) {
 		CommonDto<Boolean> result = new CommonDto<Boolean>();
