@@ -488,7 +488,7 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 			//进行机构信息的增加
 			//自增长Id
 			int updateLines = investmentInstitutionsMapper.insertSelective(ii);
-			Integer autoGrowId = investmentInstitutionsMapper.getLastInsertId();
+			Integer autoGrowId = ii.getId();// investmentInstitutionsMapper.getLastInsertId();
 			this.LOGGER.error("**********autoGrowId*********" + autoGrowId+"**********updateLines*********" + updateLines);
 			
 			//实现机构自定义领域数据的增加
