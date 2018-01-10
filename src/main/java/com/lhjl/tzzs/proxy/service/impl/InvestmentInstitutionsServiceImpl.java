@@ -434,7 +434,7 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 	 */
 	@Transactional
 	@Override
-	public CommonDto<Boolean> updataInvesInfo(Integer appid,InvestmentInstitutionsDto2 body) {
+	public CommonDto<Boolean> saveOrUpdate(Integer appid,InvestmentInstitutionsDto2 body) {
 		
 		//此处必须要获得机构ID才行
 //		Integer iiId = this.getiiId(body.getToken(), appid);

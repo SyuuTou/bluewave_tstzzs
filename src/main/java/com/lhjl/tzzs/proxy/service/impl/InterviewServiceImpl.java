@@ -37,10 +37,10 @@ import com.lhjl.tzzs.proxy.service.InterviewService;
  */
 @Service
 public class InterviewServiceImpl extends GenericService implements InterviewService {
-	@Value("${pageNum}")
+	@Value("${pageSize}")
 	private Integer pageSizeDefault;
 	
-	@Value("${pageSize}")
+	@Value("${pageNum}")
 	private Integer pageNumDefault;
 	
     @Resource
@@ -251,8 +251,8 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 		        //查询出的所有的行数
 		        Long total = interviewMapper.getInterviewListCount(body);
 		        
-		        System.err.println("total****"+total);
-		        System.err.println("interviewList****"+interviewList);
+//		        System.err.println("total****"+total);
+//		        System.err.println("interviewList****"+interviewList);
 		        
 		        map.put("list", interviewList);
 		        map.put("total", total);
