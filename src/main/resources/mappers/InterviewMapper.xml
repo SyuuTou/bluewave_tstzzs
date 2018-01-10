@@ -25,7 +25,7 @@
     <result column="shortName" jdbcType="VARCHAR" property="shortName" />
     <result column="descs" jdbcType="VARCHAR" property="desc" />
     <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="status" jdbcType="INTEGER" property="followStatus" />
+    <result column="followStatus" jdbcType="INTEGER" property="followStatus" />
     <result column="comment" jdbcType="VARCHAR" property="comment" />
   </resultMap>
   
