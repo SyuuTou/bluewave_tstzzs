@@ -43,7 +43,7 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 	@Value("${pageNum}")
 	private Integer pageNumDefault;
 	
-    @Resource
+    @Resource 
     private InterviewMapper interviewMapper;
     
     @Resource
