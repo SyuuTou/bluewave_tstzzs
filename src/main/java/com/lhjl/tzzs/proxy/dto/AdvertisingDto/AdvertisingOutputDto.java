@@ -34,6 +34,9 @@ public class AdvertisingOutputDto {
      */
     private Integer id;
 
+    /**应用名称*/
+    private String appName;
+
     public String getTitle() {
         return title;
     }
@@ -104,5 +107,13 @@ public class AdvertisingOutputDto {
 
     public void setHides(String hides) {
         this.hides = hides;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 }

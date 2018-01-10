@@ -20,45 +20,46 @@
     <result column="appid" property="appid" jdbcType="INTEGER" />
   </resultMap>
   <select id="findAdvertisingList" resultType="java.util.HashMap">
-    SELECT a.id,ma.position_name,a.title,a.sort,a.begin_time,a.end_time,a.url,a.picture,
+    SELECT a.id,ma.position_name,a.title,a.sort,a.begin_time,a.end_time,a.url,a.picture,map.app_name,
     case when a.hides = 1 then "否" else "是" end hides
     FROM advertising a
     left join meta_advertising_position ma on a.advertising_posistion_id = ma.id
-    where yn = 1
+    left join meta_app map on a.appid = map.id
+    where a.yn = 1
     <if test="editStatus != null and editStatus !=''">
-      and edit_status = #{editStatus}
+      and a.edit_status = #{editStatus}
     </if>
     <if test="hides != null and hides !=''">
-      and hides in
+      and a.hides in
       <foreach close=")" collection="hides" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
     <if test="appId != null and appId != ''">
-      and appid = #{appId}
+      and a.appid = #{appId}
     </if>
     <if test="startTime !=null and startTime !=''">
-      and begin_time between #{startTime} and #{endTime}
+      and a.begin_time between #{startTime} and #{endTime}
     </if>
     <if test="timeYn != null and timeYn !=''">
-      and begin_time &lt; now()
-      and end_time &gt; now()
+      and a.begin_time &lt; now()
+      and a.end_time &gt; now()
     </if>
     <if test="positionId != null and positionId!=''">
-      and advertising_posistion_id = #{positionId}
+      and a.advertising_posistion_id = #{positionId}
     </if>
     <if test="orderSort != null and orderSort !=''">
-      order by sort
+      order by a.sort
       <if test="orderSortDesc != null and orderSortDesc != ''">
         desc
       </if>
     </if>
     <if test="beginTimeSort != null and beginTimeSort !=''">
-      order by begin_time
+      order by a.begin_time
       <if test="beginTimeSortDesc != null and beginTimeSortDesc != ''">
         desc
       </if>
     </if>
     <if test="endTimeSort != null and endTimeSort !=''">
-      order by end_time
+      order by a.end_time
       <if test="endTimeSortDesc != null and endTimeSortDesc != ''">
         desc
       </if>
@@ -68,48 +69,49 @@
 
   <select id="findAdvertisingListCount" resultType="java.lang.Integer">
     select count(*) as ct from(
-    SELECT a.id,ma.position_name,a.title,a.sort,a.begin_time,a.end_time,a.url,a.picture,
+    SELECT a.id,ma.position_name,a.title,a.sort,a.begin_time,a.end_time,a.url,a.picture,map.app_name,
     case when a.hides = 1 then "否" else "是" end hides
     FROM advertising a
     left join meta_advertising_position ma on a.advertising_posistion_id = ma.id
-    where yn = 1
+    left join meta_app map on a.appid = map.id
+    where a.yn = 1
     <if test="editStatus != null and editStatus !=''">
-      and edit_status = #{editStatus}
+      and a.edit_status = #{editStatus}
     </if>
     <if test="hides != null and hides !=''">
-      and hides in
+      and a.hides in
       <foreach close=")" collection="hides" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
     <if test="appId != null and appId != ''">
-      and appid = #{appId}
+      and a.appid = #{appId}
     </if>
     <if test="startTime !=null and startTime !=''">
-      and begin_time between #{startTime} and #{endTime}
+      and a.begin_time between #{startTime} and #{endTime}
     </if>
     <if test="timeYn != null and timeYn !=''">
-      and begin_time &lt; now()
-      and end_time &gt; now()
+      and a.begin_time &lt; now()
+      and a.end_time &gt; now()
     </if>
     <if test="positionId != null and positionId!=''">
-      and advertising_posistion_id = #{positionId}
+      and a.advertising_posistion_id = #{positionId}
     </if>
     <if test="orderSort != null and orderSort !=''">
-      order by sort
+      order by a.sort
       <if test="orderSortDesc != null and orderSortDesc != ''">
         desc
       </if>
     </if>
     <if test="beginTimeSort != null and beginTimeSort !=''">
-      order by begin_time
+      order by a.begin_time
       <if test="beginTimeSortDesc != null and beginTimeSortDesc != ''">
         desc
       </if>
     </if>
     <if test="endTimeSort != null and endTimeSort !=''">
-      order by end_time
+      order by a.end_time
       <if test="endTimeSortDesc != null and endTimeSortDesc != ''">
         desc
       </if>
-    </if>) a
+    </if>) ac
   </select>
 </mapper>
