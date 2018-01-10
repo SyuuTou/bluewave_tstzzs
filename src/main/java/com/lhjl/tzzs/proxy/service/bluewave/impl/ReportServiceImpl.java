@@ -1,14 +1,10 @@
 package com.lhjl.tzzs.proxy.service.bluewave.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageRowBounds;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.CommonTotal;
 import com.lhjl.tzzs.proxy.dto.EventDto;
 import com.lhjl.tzzs.proxy.dto.bluewave.ReportReqBody;
-import com.lhjl.tzzs.proxy.mapper.MetaColumnMapper;
-import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
-import com.lhjl.tzzs.proxy.mapper.ReportColumnMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportMapper;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
