@@ -65,7 +65,7 @@ public class AdertisingServiceImpl implements AdvertisingService{
 
         Integer startPage = (pageNum-1)*pageSize;
 
-        if (body.getBeginTimeSort() == null && body.getEndTime() == null && body.getOrderSort() == null){
+        if (body.getBeginTimeSort() == null && body.getEndTimeSort() == null && body.getOrderSort() == null){
             body.setOrderSort(1);
             body.setOrderSortDesc(1);
         }
