@@ -138,7 +138,7 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 		
 		CommonDto<Boolean> result=new CommonDto<>();
 		try {
-			if(reqBody != null) {
+			if(reqBody != null) {  
 				interviewMapper.updateStatusByInterviewId(reqBody.getId(),reqBody.getStatus());
 				result.setData(true);
 				result.setStatus(200);
