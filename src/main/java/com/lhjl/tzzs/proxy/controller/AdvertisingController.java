@@ -2,10 +2,12 @@ package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.AdvertisingDto.AdvertisingInputDto;
 import com.lhjl.tzzs.proxy.dto.AdvertisingDto.AdvertisingOutputDto;
+import com.lhjl.tzzs.proxy.model.Advertising;
 import com.lhjl.tzzs.proxy.dto.AdvertisingInsertDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.service.AdvertisingService;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +24,21 @@ public class AdvertisingController {
     @Resource
     private AdvertisingService advertisingService;
     
-    
+    /**
+     * 获取应用下指定的广告位元数据
+     */
+//    @GetMapping("/v{appid}/echo/meta/advertising")
+//    public CommenDto<List<Advertising>> getAdvertisingMeta
+//    /**
+//     * 获取该条广告的详细信息
+//     * @param appid
+//     * @param id 该条广告的唯一标志
+//     * @return
+//     */
+//    @GetMapping("/v{appid}/echo/advertising")
+//    public CommonDto<Advertising> getAdvertisingMeta(@PathVariable Integer appid,Integer id){
+//    	
+//    }
     /**
      * 获取广告列表接口
      * @param body
@@ -52,7 +68,7 @@ public class AdvertisingController {
     public CommonDto<Boolean> getAdvertisingList(@PathVariable Integer appid,@RequestBody AdvertisingInsertDto body){
 
      CommonDto<Boolean> result = new CommonDto<>();
-
+     
      try {
         result = advertisingService.add(appid,body);
      }catch (Exception e){
