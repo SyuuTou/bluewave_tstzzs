@@ -606,4 +606,16 @@ public class Users {
     public void setMetaAppId(Integer metaAppId) {
         this.metaAppId = metaAppId;
     }
+
+	@Override
+	public String toString() {
+		return "Users [id=" + id + ", uuid=" + uuid + ", createTime=" + createTime + ", status=" + status + ", level="
+				+ level + ", beginTime=" + beginTime + ", endTime=" + endTime + ", headpic=" + headpic + ", actualName="
+				+ actualName + ", city=" + city + ", desc=" + desc + ", email=" + email + ", wechat=" + wechat
+				+ ", phonenumber=" + phonenumber + ", password=" + password + ", identityType=" + identityType
+				+ ", companyName=" + companyName + ", companyDuties=" + companyDuties + ", companyDesc=" + companyDesc
+				+ ", demand=" + demand + ", headpicReal=" + headpicReal + ", industry=" + industry + ", workCard="
+				+ workCard + ", idType=" + idType + ", unionid=" + unionid + ", metaAppId=" + metaAppId + "]";
+	}
+    
 }

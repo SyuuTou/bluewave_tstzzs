@@ -129,6 +129,7 @@ public class InterviewController extends GenericController{
     @GetMapping("/v{appid}/echo/interviewinfo")
     //http://localhost:9090/v1/echo/interviewinfo?id=1&projectShortName=玩秘
     public CommonDto<InterviewDetailsOutputDto> echoInterviewInfo(Integer id,String projectShortName,@PathVariable Integer appid){
+    	System.err.println(id+"************"+projectShortName);
     	CommonDto<InterviewDetailsOutputDto> result=new CommonDto<InterviewDetailsOutputDto>();
     	try {
     		result = interviewService.echoInterviewInfo(id,projectShortName,appid);
