@@ -27,11 +27,11 @@ public interface AdvertisingService {
     CommonDto<Map<String,Object>> getAdvertisingAdminList(AdvertisingInputDto body);
 
     /**
-     * 实现广告信息的增加
+     * 实现广告信息的增加或者更新操作
      * @param body
      * @return 返回成功与否的标志
      */
-	CommonDto<Boolean> add(Integer appid,AdvertisingInsertDto body);
+	CommonDto<Boolean> advSaveOrUpdate(Integer appid,AdvertisingInsertDto body);
 	
 	/**
 	 * 获取相应appid为3的所有广告位元数据

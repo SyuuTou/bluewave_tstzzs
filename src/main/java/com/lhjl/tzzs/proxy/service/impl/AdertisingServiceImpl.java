@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.ArrayList;
@@ -213,40 +214,56 @@ public class AdertisingServiceImpl implements AdvertisingService{
 
     @Transactional
 	@Override
-	public CommonDto<Boolean> add(Integer appid,AdvertisingInsertDto body) {
+	public CommonDto<Boolean> advSaveOrUpdate(Integer appid,AdvertisingInsertDto body){
 		CommonDto<Boolean> result = new CommonDto<Boolean>();
-		try {
 			Advertising adv =null;
-			if(body !=null) {
+			if(body != null) {
+				
 				adv =new Advertising();
-
+				
 				SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				//前端访问的时候会传递关联的应用id
-				adv.setAppid(appid);
-				adv.setBeginTime(sdf.parse(body.getBeginTime()));
-				adv.setEndTime(sdf.parse(body.getEndTime()));
-				adv.setCreateTime(new Date());
-				adv.setYn(1);
+				
+				adv.setId(body.getId());
 				adv.setAdvertisingPosistionId(body.getAdvertisingPosistionId());
-				adv.setHides(body.getHides());
-				adv.setUrl(body.getUrl());
-				adv.setSort(body.getSort());
 				adv.setTitle(body.getTitle());
 				adv.setPicture(body.getPicture());
-				adv.setEditStatus(1);
-
+				try {
+					adv.setBeginTime(sdf.parse(body.getBeginTime()));
+					adv.setEndTime(sdf.parse(body.getEndTime()));
+				}catch(Exception e) {
+					e.printStackTrace();
+					
+					result.setData(false);
+					result.setMessage("数据格式不争取");
+					result.setStatus(400);
+					
+					return result;
+				}
+				adv.setUrl(body.getUrl());
+				adv.setSort(body.getSort());
+				adv.setHides(body.getHides());
+				adv.setAppid(appid);
+				//增加
+				if(body.getId() == null) {
+					adv.setEditStatus(1);
+					adv.setCreateTime(new Date());
+					adv.setYn(1);
+					
+					advertisingMapper.insert(adv);
+					
+					result.setData(true);
+					result.setMessage("数据插入成功");
+					result.setStatus(200);
+					//更新
+				}else {
+					advertisingMapper.updateByPrimaryKeySelective(adv);
+				}
+			}else{
+				result.setData(false);
+				result.setMessage("数据请求错误");
+				result.setStatus(400);
 			}
-
-			if(advertisingMapper.insert(adv) ==1) {
-				result.setData(true);
-				result.setMessage("数据插入成功");
-				result.setStatus(200);
-			}
-		}catch(Exception e) {
-			result.setData(false);
-			result.setMessage("数据插入失败");
-			result.setStatus(500);
-		}
 		return result;
 	}
 

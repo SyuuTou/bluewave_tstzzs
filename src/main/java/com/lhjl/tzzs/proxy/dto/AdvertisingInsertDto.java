@@ -2,6 +2,10 @@ package com.lhjl.tzzs.proxy.dto;
 
 public class AdvertisingInsertDto {
 	/**
+	 * 广告的唯一标志
+	 */
+	private Integer id;
+	/**
 	 * 广告位id
 	 */
 	private Integer advertisingPosistionId;
@@ -34,6 +38,12 @@ public class AdvertisingInsertDto {
 	 */
 	private Integer hides;
 	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public Integer getAdvertisingPosistionId() {
 		return advertisingPosistionId;
 	}
@@ -84,10 +94,11 @@ public class AdvertisingInsertDto {
 	}
 	@Override
 	public String toString() {
-		return "AdvertisingInsertDto [advertisingPosistionId=" + advertisingPosistionId + ", title=" + title
-				+ ", picture=" + picture + ", beginTime=" + beginTime + ", endTime=" + endTime + ", url=" + url
+		return "AdvertisingInsertDto [id=" + id + ", advertisingPosistionId=" + advertisingPosistionId + ", title="
+				+ title + ", picture=" + picture + ", beginTime=" + beginTime + ", endTime=" + endTime + ", url=" + url
 				+ ", sort=" + sort + ", hides=" + hides + "]";
 	}
+
 	
 	
 }

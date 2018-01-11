@@ -96,12 +96,12 @@ public class AdvertisingController {
      * @return
      */  
     @PostMapping("/v{appid}/add/advertise")
-    public CommonDto<Boolean> getAdvertisingList(@PathVariable("appid") Integer appid,@RequestBody AdvertisingInsertDto body){
+    public CommonDto<Boolean> advSaveOrUpdate(@PathVariable("appid") Integer appid,@RequestBody AdvertisingInsertDto body){
 
      CommonDto<Boolean> result = new CommonDto<>();
      
      try {
-        result = advertisingService.add(appid,body);
+        result = advertisingService.advSaveOrUpdate(appid,body);
      }catch (Exception e){
          log.error(e.getMessage(),e.fillInStackTrace());
          result.setData(null);
