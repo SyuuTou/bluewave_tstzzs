@@ -245,7 +245,7 @@ public class AdertisingServiceImpl implements AdvertisingService{
 				adv.setHides(body.getHides());
 				adv.setAppid(appid);
 				//增加
-				if(body.getId() == null) {
+				if(adv.getId() == null) {
 					adv.setEditStatus(1);
 					adv.setCreateTime(new Date());
 					adv.setYn(1);
