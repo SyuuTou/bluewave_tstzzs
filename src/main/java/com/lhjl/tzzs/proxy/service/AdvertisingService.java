@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service;
 import com.lhjl.tzzs.proxy.dto.AdvertisingDto.AdvertisingInputDto;
 import com.lhjl.tzzs.proxy.dto.AdvertisingDto.AdvertisingOutputDto;
 import com.lhjl.tzzs.proxy.model.Advertising;
+import com.lhjl.tzzs.proxy.model.MetaAdvertisingPosition;
 import com.lhjl.tzzs.proxy.dto.AdvertisingInsertDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 
@@ -31,4 +32,10 @@ public interface AdvertisingService {
      * @return 返回成功与否的标志
      */
 	CommonDto<Boolean> add(Integer appid,AdvertisingInsertDto body);
+	
+	/**
+	 * 获取相应appid为3的所有广告位元数据
+	 * @return
+	 */
+	CommonDto<List<MetaAdvertisingPosition>> getMeta(Integer appid);
 }
