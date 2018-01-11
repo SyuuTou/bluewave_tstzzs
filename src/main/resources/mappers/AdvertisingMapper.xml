@@ -26,6 +26,7 @@
     left join meta_advertising_position ma on a.advertising_posistion_id = ma.id
     left join meta_app map on a.appid = map.id
     where a.yn = 1
+    a.appid = 3
     <if test="editStatus != null and editStatus !=''">
       and a.edit_status = #{editStatus}
     </if>
