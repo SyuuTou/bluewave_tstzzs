@@ -2,10 +2,6 @@ package com.lhjl.tzzs.proxy.dto;
 
 public class AdvertisingInsertDto {
 	/**
-	 * 小程序id
-	 */
-	private Integer appid;
-	/**
 	 * 广告位id
 	 */
 	private Integer advertisingPosistionId;
@@ -38,12 +34,6 @@ public class AdvertisingInsertDto {
 	 */
 	private Integer hides;
 	
-	public Integer getAppid() {
-		return appid;
-	}
-	public void setAppid(Integer appid) {
-		this.appid = appid;
-	}
 	public Integer getAdvertisingPosistionId() {
 		return advertisingPosistionId;
 	}
@@ -98,5 +88,6 @@ public class AdvertisingInsertDto {
 				+ ", picture=" + picture + ", beginTime=" + beginTime + ", endTime=" + endTime + ", url=" + url
 				+ ", sort=" + sort + ", hides=" + hides + "]";
 	}
+	
 	
 }

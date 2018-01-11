@@ -171,7 +171,7 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 			System.err.println(user);
 			
 			if (user != null) {
-				outputDto.setActualName(user.getActualName());;
+				outputDto.setActualName(user.getActualName());
 				outputDto.setCompanyName(user.getCompanyDesc());
 				outputDto.setPhonenumber(user.getPhonenumber());
 				outputDto.setCompanyDuties(user.getCompanyDuties());
@@ -214,6 +214,8 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 			Interview interviewRecord = interviewMapper.selectByPrimaryKey(id);
 			if(interviewRecord!=null) {
 				outputDto.setInterviewDesc(interviewRecord.getDesc());
+				outputDto.setComment(interviewRecord.getComment());
+				outputDto.setFollowStatus(interviewRecord.getStatus());
 			}
 			
 			result.setData(outputDto);
