@@ -29,7 +29,7 @@ public class AdvertisingController {
      * 获取appid为3的指定的广告位元数据
      */
     @GetMapping("/v{appid}/echo/meta/advertising")
-    public CommonDto<List<MetaAdvertisingPosition>> getAdvertisingMeta(@PathVariable Integer appid){
+    public CommonDto<List<MetaAdvertisingPosition>> getAdvertisingMeta(@PathVariable("appid") Integer appid){
     	 CommonDto<List<MetaAdvertisingPosition>> result = new CommonDto<>();
          try {
             result=advertisingService.getMeta(appid);
@@ -48,7 +48,7 @@ public class AdvertisingController {
      * @return
      */
     @GetMapping("v{appid}/info/single/advertising")
-    public CommonDto<Advertising> getSingleAdvertisingInfo(@PathVariable Integer appid,Integer id) {
+    public CommonDto<Advertising> getSingleAdvertisingInfo(@PathVariable("appid") Integer appid,Integer id) {
     	CommonDto<Advertising> result = new CommonDto<>();
         try {
            result=advertisingService.getAdvertisingInfoById(appid,id);
@@ -96,7 +96,7 @@ public class AdvertisingController {
      * @return
      */  
     @PostMapping("/v{appid}/add/advertise")
-    public CommonDto<Boolean> getAdvertisingList(@PathVariable Integer appid,@RequestBody AdvertisingInsertDto body){
+    public CommonDto<Boolean> getAdvertisingList(@PathVariable("appid") Integer appid,@RequestBody AdvertisingInsertDto body){
 
      CommonDto<Boolean> result = new CommonDto<>();
      

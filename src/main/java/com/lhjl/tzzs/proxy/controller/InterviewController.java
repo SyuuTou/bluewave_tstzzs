@@ -92,7 +92,7 @@ public class InterviewController extends GenericController{
      */
     @PutMapping("/v{appid}/update/status")
 //    Integer id,Integer status
-    public CommonDto<Boolean> updateStatus(@RequestBody UpdateModifyInputDto reqBody,@PathVariable Integer appid){
+    public CommonDto<Boolean> updateStatus(@RequestBody UpdateModifyInputDto reqBody,@PathVariable("appid") Integer appid){
     	CommonDto<Boolean> result=new CommonDto<>();
     	try {
     		result=interviewService.updateStatus(reqBody,appid);
@@ -110,7 +110,7 @@ public class InterviewController extends GenericController{
      * @return
      */
     @PostMapping("/v{appid}/add/interviewcomment")
-    public CommonDto<Boolean> addInterviewComment(@PathVariable Integer appid,@RequestBody InterviewCommentDto body){
+    public CommonDto<Boolean> addInterviewComment(@PathVariable("appid") Integer appid,@RequestBody InterviewCommentDto body){
     	this.log.error(appid+"**"+body);
     	CommonDto<Boolean> result=new CommonDto<Boolean>();
     	try {
@@ -131,7 +131,7 @@ public class InterviewController extends GenericController{
      */
     @GetMapping("/v{appid}/echo/interviewinfo")
     //http://localhost:9090/v1/echo/interviewinfo?id=1&projectShortName=玩秘
-    public CommonDto<InterviewDetailsOutputDto> echoInterviewInfo(Integer id,String projectShortName,@PathVariable Integer appid){
+    public CommonDto<InterviewDetailsOutputDto> echoInterviewInfo(Integer id,String projectShortName,@PathVariable("appid") Integer appid){
     	System.err.println(id+"************"+projectShortName);
     	CommonDto<InterviewDetailsOutputDto> result=new CommonDto<InterviewDetailsOutputDto>();
     	try {

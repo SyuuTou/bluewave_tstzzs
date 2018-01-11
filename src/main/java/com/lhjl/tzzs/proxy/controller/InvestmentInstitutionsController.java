@@ -59,7 +59,7 @@ public class InvestmentInstitutionsController extends GenericController {
      * @return
      */
     @GetMapping("/v{appid}/echoinstiinfo")
-    public CommonDto<InvestmentInstitutionsDto2> echoinstiinfo(String token,@PathVariable Integer appid){
+    public CommonDto<InvestmentInstitutionsDto2> echoinstiinfo(String token,@PathVariable("appid") Integer appid){
     	CommonDto<InvestmentInstitutionsDto2> result =new CommonDto<>();
     	try {
     		
@@ -81,7 +81,7 @@ public class InvestmentInstitutionsController extends GenericController {
      * @return
      */
     @PostMapping("/v{appid}/institution")
-    public CommonDto<Boolean> institutionSaveOrUpdate(@PathVariable Integer appid,@RequestBody InvestmentInstitutionsDto2 body){
+    public CommonDto<Boolean> institutionSaveOrUpdate(@PathVariable("appid") Integer appid,@RequestBody InvestmentInstitutionsDto2 body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	
     	System.err.println("appid------"+appid);
@@ -103,7 +103,7 @@ public class InvestmentInstitutionsController extends GenericController {
      * @return
      */
     @GetMapping("/v{appid}/invest_step")
-    public CommonDto<List<MetaProjectStage>> getAllInvestementStages(@PathVariable Integer appid){
+    public CommonDto<List<MetaProjectStage>> getAllInvestementStages(@PathVariable("appid") Integer appid){
     	CommonDto<List<MetaProjectStage>> result=new CommonDto<>();
     	
         try {
@@ -122,7 +122,7 @@ public class InvestmentInstitutionsController extends GenericController {
      * @return
      */
     @GetMapping("/v{appid}/invest_field")
-    public CommonDto<List<MetaSegmentation>> getAllInvestementFields(@PathVariable Integer appid){
+    public CommonDto<List<MetaSegmentation>> getAllInvestementFields(@PathVariable("appid") Integer appid){
     	CommonDto<List<MetaSegmentation>> result=new CommonDto<>();
     	
         try {
