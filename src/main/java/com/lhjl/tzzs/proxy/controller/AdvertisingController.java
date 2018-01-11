@@ -2,7 +2,6 @@ package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.AdvertisingDto.AdvertisingInputDto;
 import com.lhjl.tzzs.proxy.dto.AdvertisingDto.AdvertisingOutputDto;
-import com.lhjl.tzzs.proxy.model.Advertising;
 import com.lhjl.tzzs.proxy.dto.AdvertisingInsertDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.service.AdvertisingService;
@@ -22,7 +21,8 @@ public class AdvertisingController {
 
     @Resource
     private AdvertisingService advertisingService;
-
+    
+    
     /**
      * 获取广告列表接口
      * @param body

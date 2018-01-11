@@ -171,7 +171,7 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 			System.err.println(user);
 			
 			if (user != null) {
-				outputDto.setActualName(user.getActualName());;
+				outputDto.setActualName(user.getActualName());
 				outputDto.setCompanyName(user.getCompanyDesc());
 				outputDto.setPhonenumber(user.getPhonenumber());
 				outputDto.setCompanyDuties(user.getCompanyDuties());
