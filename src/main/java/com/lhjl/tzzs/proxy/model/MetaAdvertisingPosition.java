@@ -17,7 +17,7 @@ public class MetaAdvertisingPosition {
     /**
      * 机构定制小程序统一为3，其他的是对应的应用id
      */
-    private String appid;
+    private Integer appid;
 
     /**
      * @return id
@@ -56,7 +56,7 @@ public class MetaAdvertisingPosition {
      *
      * @return appid - 机构定制小程序统一为3，其他的是对应的应用id
      */
-    public String getAppid() {
+    public Integer getAppid() {
         return appid;
     }
 
@@ -65,7 +65,7 @@ public class MetaAdvertisingPosition {
      *
      * @param appid 机构定制小程序统一为3，其他的是对应的应用id
      */
-    public void setAppid(String appid) {
+    public void setAppid(Integer appid) {
         this.appid = appid;
     }
 }

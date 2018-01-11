@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.controller;
 import com.lhjl.tzzs.proxy.dto.AdvertisingDto.AdvertisingInputDto;
 import com.lhjl.tzzs.proxy.dto.AdvertisingDto.AdvertisingOutputDto;
 import com.lhjl.tzzs.proxy.model.Advertising;
+import com.lhjl.tzzs.proxy.model.MetaAdvertisingPosition;
 import com.lhjl.tzzs.proxy.dto.AdvertisingInsertDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.service.AdvertisingService;
@@ -25,16 +26,46 @@ public class AdvertisingController {
     private AdvertisingService advertisingService;
     
     /**
-     * 获取应用下指定的广告位元数据
+     * 获取appid为3的指定的广告位元数据
      */
-//    @GetMapping("/v{appid}/echo/meta/advertising")
-//    public CommenDto<List<Advertising>> getAdvertisingMeta
-//    /**
-//     * 获取该条广告的详细信息
-//     * @param appid
-//     * @param id 该条广告的唯一标志
-//     * @return
-//     */
+    @GetMapping("/v{appid}/echo/meta/advertising")
+    public CommonDto<List<MetaAdvertisingPosition>> getAdvertisingMeta(@PathVariable Integer appid){
+    	 CommonDto<List<MetaAdvertisingPosition>> result = new CommonDto<>();
+         try {
+            result=advertisingService.getMeta(appid);
+         }catch (Exception e){
+             log.error(e.getMessage(),e.fillInStackTrace());
+             result.setData(null);
+             result.setMessage("服务器端发生错误");
+             result.setStatus(502);
+         }
+         return result;
+    }
+    /**
+     * 获取指定广告位id的详细信息
+     * @param appid
+     * @param id
+     * @return
+     */
+    @GetMapping("v{appid}/info/single/advertising")
+    public CommonDto<Advertising> getSingleAdvertisingInfo(@PathVariable Integer appid,Integer id) {
+    	CommonDto<Advertising> result = new CommonDto<>();
+        try {
+           result=advertisingService.getAdvertisingInfoById(appid,id);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+        }
+        return result;
+    }
+    /**
+     * 获取该条广告的详细信息
+     * @param appid
+     * @param id 该条广告的唯一标志
+     * @return
+     */
 //    @GetMapping("/v{appid}/echo/advertising")
 //    public CommonDto<Advertising> getAdvertisingMeta(@PathVariable Integer appid,Integer id){
 //    	

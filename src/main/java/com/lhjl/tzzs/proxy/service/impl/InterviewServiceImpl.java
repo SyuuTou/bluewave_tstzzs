@@ -191,36 +191,47 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 			if(user !=null) {
 				userPrimaryKey = user.getId();
 			}
-			
+			System.err.println(userPrimaryKey+"*****userPrimaryKey******");
 			//获取用户的教育经历以及工作经历
 			List<String> userEducations = foundersEducationMapper.findFoundersEducationsByUserId(userPrimaryKey);
 			if (userEducations != null) {
 				outputDto.setEducationExperience(userEducations);
 			}
-			
+			System.err.println(userEducations+"****userEducations******");
 			List<String> userWorks = foundersWorkMapper.findFoundersWorksByUserId(userPrimaryKey);
 			if(userWorks != null) {
 				outputDto.setWorkExperience(userWorks);
 			}
+			System.err.println(userWorks+"****userWorks******");
 			//获取项目的相关信息
 			Projects pro = new Projects();
 			pro.setShortName(projectShortName);
-			pro=projectsMapper.selectOne(pro);
-			if(pro !=null) {
-				outputDto.setShortName(pro.getShortName());
-				outputDto.setCommet(pro.getCommet());
+			
+			try {
+				pro=projectsMapper.selectOne(pro);
+				if(pro !=null) {
+					outputDto.setShortName(pro.getShortName());
+					outputDto.setCommet(pro.getCommet());
+				}
+				
+				Interview interviewRecord = interviewMapper.selectByPrimaryKey(id);
+				if(interviewRecord!=null) {
+					outputDto.setInterviewDesc(interviewRecord.getDesc());
+					outputDto.setComment(interviewRecord.getComment());
+					outputDto.setFollowStatus(interviewRecord.getStatus());
+				}
+				
+				result.setData(outputDto);
+				result.setMessage("数据查询成功");
+				result.setStatus(200);
+				
+			}catch(Exception e) {
+				this.LOGGER.info(e.getMessage(), e.fillInStackTrace());
+				result.setData(null);
+				result.setMessage("数据库项目简称不唯一");
+				result.setStatus(500);
 			}
 			
-			Interview interviewRecord = interviewMapper.selectByPrimaryKey(id);
-			if(interviewRecord!=null) {
-				outputDto.setInterviewDesc(interviewRecord.getDesc());
-				outputDto.setComment(interviewRecord.getComment());
-				outputDto.setFollowStatus(interviewRecord.getStatus());
-			}
-			
-			result.setData(outputDto);
-			result.setMessage("数据查询成功");
-			result.setStatus(200);
 		}else {
 			result.setData(null);
 			result.setMessage("数据查询失败");

@@ -5,7 +5,9 @@ import com.lhjl.tzzs.proxy.dto.AdvertisingDto.AdvertisingOutputDto;
 import com.lhjl.tzzs.proxy.dto.AdvertisingInsertDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.mapper.AdvertisingMapper;
+import com.lhjl.tzzs.proxy.mapper.MetaAdvertisingPositionMapper;
 import com.lhjl.tzzs.proxy.model.Advertising;
+import com.lhjl.tzzs.proxy.model.MetaAdvertisingPosition;
 import com.lhjl.tzzs.proxy.service.AdvertisingService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class AdertisingServiceImpl implements AdvertisingService{
 
     @Autowired
     private AdvertisingMapper advertisingMapper;
+    
+    @Autowired
+    private MetaAdvertisingPositionMapper metaAdvertisingPositionMapper;
 
 
     /**
@@ -242,6 +247,34 @@ public class AdertisingServiceImpl implements AdvertisingService{
 			result.setMessage("数据插入失败");
 			result.setStatus(500);
 		}
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<MetaAdvertisingPosition>> getMeta(Integer appid) {
+		CommonDto<List<MetaAdvertisingPosition>> result =new CommonDto<>();
+		
+		MetaAdvertisingPosition map =new MetaAdvertisingPosition();
+		map.setAppid(3);
+		List<MetaAdvertisingPosition> maps = metaAdvertisingPositionMapper.select(map);
+		
+		result.setData(maps);
+		result.setMessage("success");
+		result.setStatus(200);
+		
+		return result;
+	}
+
+	@Override
+	public CommonDto<Advertising> getAdvertisingInfoById(Integer appid, Integer id) {
+		CommonDto<Advertising> result =new CommonDto<>();
+		
+		Advertising advertising = advertisingMapper.selectByPrimaryKey(id);
+		
+		result.setData(advertising);
+		result.setMessage("success");
+		result.setStatus(200);
+		
 		return result;
 	}
 }
