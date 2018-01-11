@@ -95,7 +95,7 @@ public class AdvertisingController {
      * @param body
      * @return
      */  
-    @PostMapping("/v{appid}/add/advertise")
+    @PostMapping("/v{appid}/saveOrUpdate/advertise")
     public CommonDto<Boolean> advSaveOrUpdate(@PathVariable("appid") Integer appid,@RequestBody AdvertisingInsertDto body){
  
      CommonDto<Boolean> result = new CommonDto<>();
