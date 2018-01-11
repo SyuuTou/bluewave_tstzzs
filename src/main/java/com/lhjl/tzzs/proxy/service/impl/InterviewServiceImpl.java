@@ -206,22 +206,32 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 			//获取项目的相关信息
 			Projects pro = new Projects();
 			pro.setShortName(projectShortName);
-			pro=projectsMapper.selectOne(pro);
-			if(pro !=null) {
-				outputDto.setShortName(pro.getShortName());
-				outputDto.setCommet(pro.getCommet());
+			
+			try {
+				pro=projectsMapper.selectOne(pro);
+				if(pro !=null) {
+					outputDto.setShortName(pro.getShortName());
+					outputDto.setCommet(pro.getCommet());
+				}
+				
+				Interview interviewRecord = interviewMapper.selectByPrimaryKey(id);
+				if(interviewRecord!=null) {
+					outputDto.setInterviewDesc(interviewRecord.getDesc());
+					outputDto.setComment(interviewRecord.getComment());
+					outputDto.setFollowStatus(interviewRecord.getStatus());
+				}
+				
+				result.setData(outputDto);
+				result.setMessage("数据查询成功");
+				result.setStatus(200);
+				
+			}catch(Exception e) {
+				this.LOGGER.info(e.getMessage(), e.fillInStackTrace());
+				result.setData(null);
+				result.setMessage("数据库项目简称不唯一");
+				result.setStatus(500);
 			}
 			
-			Interview interviewRecord = interviewMapper.selectByPrimaryKey(id);
-			if(interviewRecord!=null) {
-				outputDto.setInterviewDesc(interviewRecord.getDesc());
-				outputDto.setComment(interviewRecord.getComment());
-				outputDto.setFollowStatus(interviewRecord.getStatus());
-			}
-			
-			result.setData(outputDto);
-			result.setMessage("数据查询成功");
-			result.setStatus(200);
 		}else {
 			result.setData(null);
 			result.setMessage("数据查询失败");

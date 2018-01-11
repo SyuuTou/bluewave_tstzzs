@@ -264,4 +264,17 @@ public class AdertisingServiceImpl implements AdvertisingService{
 		
 		return result;
 	}
+
+	@Override
+	public CommonDto<Advertising> getAdvertisingInfoById(Integer appid, Integer id) {
+		CommonDto<Advertising> result =new CommonDto<>();
+		
+		Advertising advertising = advertisingMapper.selectByPrimaryKey(id);
+		
+		result.setData(advertising);
+		result.setMessage("success");
+		result.setStatus(200);
+		
+		return result;
+	}
 }

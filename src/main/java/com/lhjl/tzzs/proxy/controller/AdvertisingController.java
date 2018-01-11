@@ -42,6 +42,25 @@ public class AdvertisingController {
          return result;
     }
     /**
+     * 获取指定广告位id的详细信息
+     * @param appid
+     * @param id
+     * @return
+     */
+    @GetMapping("v{appid}/info/single/advertising")
+    public CommonDto<Advertising> getSingleAdvertisingInfo(@PathVariable Integer appid,Integer id) {
+    	CommonDto<Advertising> result = new CommonDto<>();
+        try {
+           result=advertisingService.getAdvertisingInfoById(appid,id);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+        }
+        return result;
+    }
+    /**
      * 获取该条广告的详细信息
      * @param appid
      * @param id 该条广告的唯一标志

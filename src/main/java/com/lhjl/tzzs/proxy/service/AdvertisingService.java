@@ -38,4 +38,11 @@ public interface AdvertisingService {
 	 * @return
 	 */
 	CommonDto<List<MetaAdvertisingPosition>> getMeta(Integer appid);
+	/**
+	 * 根据广告id获取广告的详细信息
+	 * @param appid
+	 * @param id 广告id
+	 * @return
+	 */
+	CommonDto<Advertising> getAdvertisingInfoById(Integer appid, Integer id);
 }
