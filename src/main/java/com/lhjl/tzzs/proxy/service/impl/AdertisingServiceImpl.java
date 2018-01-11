@@ -216,8 +216,8 @@ public class AdertisingServiceImpl implements AdvertisingService{
 				adv =new Advertising();
 
 				SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				//设置关联的小程序id
-				adv.setAppid(body.getAppid());
+				//前端访问的时候会传递关联的应用id
+				adv.setAppid(appid);
 				adv.setBeginTime(sdf.parse(body.getBeginTime()));
 				adv.setEndTime(sdf.parse(body.getEndTime()));
 				adv.setCreateTime(new Date());
