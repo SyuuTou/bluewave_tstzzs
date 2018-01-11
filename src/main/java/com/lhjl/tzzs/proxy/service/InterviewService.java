@@ -8,6 +8,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InterviewCommentDto;
 import com.lhjl.tzzs.proxy.dto.InterviewDetailsOutputDto;
 import com.lhjl.tzzs.proxy.dto.InterviewListInputDto;
+import com.lhjl.tzzs.proxy.dto.UpdateModifyInputDto;
 import com.lhjl.tzzs.proxy.model.Interview;
 
 /**
@@ -30,7 +31,7 @@ public interface InterviewService {
      * @param status
      * @param appid 待使用
      */
-    CommonDto<Boolean> updateStatus(Integer interviewId, Integer status, Integer appid);
+    CommonDto<Boolean> updateStatus(UpdateModifyInputDto reqBody, Integer appid);
     
     /**
      * 回显约谈记录相关的详细信息

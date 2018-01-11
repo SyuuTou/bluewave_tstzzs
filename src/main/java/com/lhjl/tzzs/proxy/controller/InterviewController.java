@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InterviewDto;
 import com.lhjl.tzzs.proxy.dto.InterviewListInputDto;
+import com.lhjl.tzzs.proxy.dto.UpdateModifyInputDto;
 import com.lhjl.tzzs.proxy.model.Interview;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.service.FollowService;
@@ -90,10 +91,11 @@ public class InterviewController extends GenericController{
      * @return
      */
     @PutMapping("/v{appid}/update/status")
-    public CommonDto<Boolean> updateStatus(Integer id,Integer status,@PathVariable Integer appid){
+//    Integer id,Integer status
+    public CommonDto<Boolean> updateStatus(@RequestBody UpdateModifyInputDto reqBody,@PathVariable Integer appid){
     	CommonDto<Boolean> result=new CommonDto<>();
     	try {
-    		result=interviewService.updateStatus(id,status,appid);
+    		result=interviewService.updateStatus(reqBody,appid);
     	}catch(Exception e) {
     		result.setData(false);
     		result.setMessage("服务器内部错误");

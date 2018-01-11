@@ -16,6 +16,7 @@ import com.lhjl.tzzs.proxy.dto.InterviewCommentDto;
 import com.lhjl.tzzs.proxy.dto.InterviewDetailsOutputDto;
 import com.lhjl.tzzs.proxy.dto.InterviewListInputDto;
 import com.lhjl.tzzs.proxy.dto.InterviewListOutputDto;
+import com.lhjl.tzzs.proxy.dto.UpdateModifyInputDto;
 import com.lhjl.tzzs.proxy.mapper.FollowMapper;
 import com.lhjl.tzzs.proxy.mapper.FoundersEducationMapper;
 import com.lhjl.tzzs.proxy.mapper.FoundersMapper;
@@ -130,16 +131,19 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 		}
 		return result;
 	}
+	
 	@Transactional
 	@Override
-	public CommonDto<Boolean> updateStatus(Integer id, Integer status, Integer appid) {
+	public CommonDto<Boolean> updateStatus(UpdateModifyInputDto reqBody, Integer appid) {
 		
 		CommonDto<Boolean> result=new CommonDto<>();
 		try {
-			interviewMapper.updateStatusByInterviewId(id,status);
-			result.setData(true);
-			result.setStatus(200);
-			result.setMessage("数据更新成功");
+			if(reqBody != null) {
+				interviewMapper.updateStatusByInterviewId(reqBody.getId(),reqBody.getStatus());
+				result.setData(true);
+				result.setStatus(200);
+				result.setMessage("数据更新成功");
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 			result.setData(false);
