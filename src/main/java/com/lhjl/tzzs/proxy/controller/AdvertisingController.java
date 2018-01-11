@@ -44,7 +44,7 @@ public class AdvertisingController {
      return result;
     }
     /**
-     * 广告位的增加
+     * 指定appid广告信息的增加
      * @param body
      * @return
      */  
