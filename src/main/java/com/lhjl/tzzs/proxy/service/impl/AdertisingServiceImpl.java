@@ -258,6 +258,9 @@ public class AdertisingServiceImpl implements AdvertisingService{
 					//更新
 				}else {
 					advertisingMapper.updateByPrimaryKeySelective(adv);
+					result.setData(true);
+					result.setMessage("数据更新成功");
+					result.setStatus(200);
 				}
 			}else{
 				result.setData(false);
