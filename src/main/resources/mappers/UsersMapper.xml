@@ -31,8 +31,8 @@
     <result column="id_type" jdbcType="VARCHAR" property="idType" />
     <result column="unionid" jdbcType="VARCHAR" property="unionid" />
     <result column="meta_app_id" jdbcType="INTEGER" property="metaAppId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  
 <!--  测试用zd-->
 <select id="findUserById" parameterType="INTEGER" resultMap="BaseResultMap">
     SELECT * FROM users WHERE ID=#{userId}
@@ -80,5 +80,136 @@
     right join user_token t on u.ID = t.user_id
     left join users_weixin w on t.user_id = w.user_id
     where t.token = #{token}
+  </select>
+  <select id="findAdminList" resultType="java.util.HashMap">
+    select aa.id,
+    case when aa.actual_name is not null then aa.actual_name else
+    (case when aa.nick_name is not null then aa.nick_name else "" end) end realnaem,
+    aa.company_name,aa.company_duties,aa.phonenumber,mit.type_name as identity_type,
+    i.investors_type,aa.create_time,cc.end_time,mul.`name`,aa.update_time
+    from
+    (SELECT u.id,u.actual_name,uw.nick_name,u.company_name,u.company_duties,u.phonenumber,u.identity_type,u.create_time,u.update_time
+    FROM users u
+    right join users_weixin uw on u.id = uw.user_id
+    where (u.actual_name is not null
+    or uw.nick_name is not null )
+    and 1=1
+    <if test="searchWord != null and  searchWord != ''">
+      and (u.actual_name like CONCAT("%",CONCAT(#{searchWord}),"%")
+          or u.company_name like CONCAT("%",CONCAT(#{searchWord}),"%")
+          or u.company_duties like CONCAT("%",CONCAT(#{searchWord}),"%")
+          or u.phonenumber like CONCAT("%",CONCAT(#{searchWord}),"%"))
+    </if>
+    <if test="identityType != null and identityType !=''">
+      and u.identity_type = #{identityType}
+    </if>
+    <if test="begainTime != null and begainTime !=''">
+      and u.create_time between #{begainTime} and #{endTime}
+    </if>
+    ) aa
+    left join investors i on aa.id = i.user_id
+    left join
+    (select * from
+        (select * from user_level_relation
+        order by end_time desc) cc
+      where cc.user_id is not null
+      and cc.yn = 1
+      group by cc.user_id
+    ) cc on aa.id = cc.user_id
+    left join meta_user_level mul on cc.level_id = mul.id
+    left join meta_identity_type mit on (aa.identity_type+1) = mit.id
+    where aa.id is not null
+    <if test="investorType != null and investorType !=''">
+      and i.investors_type =#{investorType}
+    </if>
+    <if test="userLevelType != null and userLevelType != ''">
+      and cc.level_id = #{userLevelType}
+    </if>
+    group by aa.id
+    <if test="registerTimeOrder != null and registerTimeOrder !=''">
+      order by aa.create_time
+      <if test="registerTimeOrderDesc != null and registerTimeOrderDesc !=''">
+        desc
+      </if>
+    </if>
+    <if test="updateTimeOrder != null and updateTimeOrder !=''">
+      order by aa.update_time
+      <if test="updateTimeOrder != null and updateTimeOrder !=''">
+        desc
+      </if>
+    </if>
+    <if test="userLevelEndTimeOrder != null and userLevelEndTimeOrder !=''">
+      order by cc.end_time
+      <if test="userLevelEndTimeOrderDesc != null and userLevelEndTimeOrderDesc !=''">
+        desc
+      </if>
+    </if>
+    limit #{startPage},#{pageSize}
+  </select>
+
+  <select id="findAdminListAllCount" resultType="java.lang.Integer">
+    select count(*) ct from (
+    select aa.id,
+    case when aa.actual_name is not null then aa.actual_name else
+    (case when aa.nick_name is not null then aa.nick_name else "" end) end realnaem,
+    aa.company_name,aa.company_duties,aa.phonenumber,mit.type_name as identity_type,
+    i.investors_type,aa.create_time,cc.end_time,mul.`name`,aa.update_time
+    from
+    (SELECT u.id,u.actual_name,uw.nick_name,u.company_name,u.company_duties,u.phonenumber,u.identity_type,u.create_time,u.update_time
+    FROM users u
+    right join users_weixin uw on u.id = uw.user_id
+    where (u.actual_name is not null
+    or uw.nick_name is not null )
+    and 1=1
+    <if test="searchWord != null and  searchWord != ''">
+      and (u.actual_name like CONCAT("%",CONCAT(#{searchWord}),"%")
+      or u.company_name like CONCAT("%",CONCAT(#{searchWord}),"%")
+      or u.company_duties like CONCAT("%",CONCAT(#{searchWord}),"%")
+      or u.phonenumber like CONCAT("%",CONCAT(#{searchWord}),"%"))
+    </if>
+    <if test="identityType != null and identityType !=''">
+      and u.identity_type = #{identityType}
+    </if>
+    <if test="begainTime != null and begainTime !=''">
+      and u.create_time between #{begainTime} and #{endTime}
+    </if>
+    ) aa
+    left join investors i on aa.id = i.user_id
+    left join
+    (select * from
+    (select * from user_level_relation
+    order by end_time desc) cc
+    where cc.user_id is not null
+    and cc.yn = 1
+    group by cc.user_id
+    ) cc on aa.id = cc.user_id
+    left join meta_user_level mul on cc.level_id = mul.id
+    left join meta_identity_type mit on (aa.identity_type+1) = mit.id
+    where aa.id is not null
+    <if test="investorType != null and investorType !=''">
+      and i.investors_type =#{investorType}
+    </if>
+    <if test="userLevelType != null and userLevelType != ''">
+      and cc.level_id = #{userLevelType}
+    </if>
+    group by aa.id
+    <if test="registerTimeOrder != null and registerTimeOrder !=''">
+      order by aa.create_time
+      <if test="registerTimeOrderDesc != null and registerTimeOrderDesc !=''">
+        desc
+      </if>
+    </if>
+    <if test="updateTimeOrder != null and updateTimeOrder !=''">
+      order by aa.update_time
+      <if test="updateTimeOrder != null and updateTimeOrder !=''">
+        desc
+      </if>
+    </if>
+    <if test="userLevelEndTimeOrder != null and userLevelEndTimeOrder !=''">
+      order by cc.end_time
+      <if test="userLevelEndTimeOrderDesc != null and userLevelEndTimeOrderDesc !=''">
+        desc
+      </if>
+    </if>) abc
   </select>
 </mapper>

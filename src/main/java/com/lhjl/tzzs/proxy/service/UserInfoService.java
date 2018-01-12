@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.service;
 
+import com.lhjl.tzzs.proxy.dto.AdminUserListInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.dto.UserChooseLogDto.UserElegantServiceInputDto;
@@ -39,6 +40,13 @@ public interface UserInfoService {
      * @return
      */
     CommonDto<List<Map<String,Object>>> getUserList(Integer pageNum, Integer pageSize);
+
+    /**
+     * 管理员获取用户
+     * @param body
+     * @return
+     */
+    CommonDto<Map<String,Object>> adminGetUserList(AdminUserListInputDto body);
 
     /**
      * 获取用户可用formid

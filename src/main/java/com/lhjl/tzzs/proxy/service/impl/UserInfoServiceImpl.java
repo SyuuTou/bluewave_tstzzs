@@ -1,5 +1,7 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
+import com.lhjl.tzzs.proxy.dto.AdminUserListInputDto;
+import com.lhjl.tzzs.proxy.dto.AdminUserListOutputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.dto.UserChooseLogDto.UserElegantServiceInputDto;
@@ -242,6 +244,121 @@ public class UserInfoServiceImpl implements UserInfoService{
         result.setMessage("success");
         result.setData(list);
 
+
+        return result;
+    }
+
+    /**
+     * 管理员获取用户
+     * @param body
+     * @return
+     */
+    @Override
+    public CommonDto<Map<String, Object>> adminGetUserList(AdminUserListInputDto body) {
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> map = new HashMap<>();
+        List<AdminUserListOutputDto> list = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        if (body.getPageNum() == null){
+            body.setPageNum(pageNumDefault);
+        }
+
+        if (body.getPageSize() == null){
+            body.setPageSize(pageSizeDefault);
+        }
+
+        Integer startPage = (body.getPageNum() -1) * body.getPageSize();
+
+        List<Map<String,Object>> userList = usersMapper.findAdminList(body.getSearchWord(),body.getIdentityType(),
+                body.getBegainTime(),body.getEndTime(),body.getInvestorType(),body.getUserLevelType(),body.getRegisterTimeOrder(),
+                body.getRegisterTimeOrderDesc(),body.getUpdateTimeOrder(),body.getUpdateTimeOrderDesc(),body.getUserLevelEndTimeOrder(),
+                body.getUserLevelEndTimeOrderDesc(),startPage,body.getPageSize());
+
+        if (userList.size() > 0){
+            for (Map<String,Object> m :userList){
+                AdminUserListOutputDto adminUserListOutputDto = new AdminUserListOutputDto();
+                adminUserListOutputDto.setId((Integer) m.get("id"));
+                String name = "";
+                if (m.get("realnaem") != null){
+                    name = (String)m.get("realnaem");
+                }
+                adminUserListOutputDto.setName(name);
+                String companyName = "";
+                if (m.get("company_name") != null){
+                    companyName = (String)m.get("company_name");
+                }
+                adminUserListOutputDto.setCompanyName(companyName);
+                String companyDuties = "";
+                if (m.get("company_duties") != null){
+                    companyDuties =(String) m.get("company_duties");
+                }
+                adminUserListOutputDto.setCompanyDuties(companyDuties);
+                String phoneNum = "";
+                if (m.get("phonenumber") != null){
+                    phoneNum = (String) m.get("phonenumber");
+                }
+                adminUserListOutputDto.setPhonenumber(phoneNum);
+                String identityType = "";
+                if (m.get("identity_type") != null){
+                    identityType = (String)m.get("identity_type");
+                }
+                adminUserListOutputDto.setIdentityType(identityType);
+                String userLevelType = "";
+                if (m.get("name") != null){
+                    userLevelType = (String)m.get("name");
+                }
+                adminUserListOutputDto.setUserLevelType(userLevelType);
+                Integer investorType = -1;
+                if (m.get("investors_type") != null){
+                    investorType = (Integer)m.get("investors_type");
+                }
+                String investorTypeString = "";
+                switch (investorType){
+                    case 0:investorTypeString = "个人投资人";
+                    break;
+                    case 1:investorTypeString = "机构投资人";
+                    break;
+                    case 2:investorTypeString = "VIP投资人";
+                    break;
+                }
+                adminUserListOutputDto.setInvestorType(investorTypeString);
+                String createTimeString = "";
+                if (m.get("create_time") != null){
+                    Date creatTime = (Date)m.get("create_time");
+                    createTimeString = sdf.format(creatTime);
+                }
+                adminUserListOutputDto.setRegisterTime(createTimeString);
+                String userLevelString = "";
+                if (m.get("end_time") != null){
+                    Date endTime = (Date)m.get("end_time");
+                    userLevelString = sdf.format(endTime);
+                }
+                adminUserListOutputDto.setUserLevelEndTime(userLevelString);
+                String updateTimeString = "";
+                if (m.get("update_time") != null){
+                    Date updateTime = (Date)m.get("update_time");
+                    updateTimeString = sdf.format(updateTime);
+                }
+                adminUserListOutputDto.setUpdateTime(updateTimeString);
+
+                list.add(adminUserListOutputDto);
+            }
+        }
+
+        Integer totalAmount = usersMapper.findAdminListAllCount(body.getSearchWord(),body.getIdentityType(),
+                body.getBegainTime(),body.getEndTime(),body.getInvestorType(),body.getUserLevelType(),body.getRegisterTimeOrder(),
+                body.getRegisterTimeOrderDesc(),body.getUpdateTimeOrder(),body.getUpdateTimeOrderDesc(),body.getUserLevelEndTimeOrder(),
+                body.getUserLevelEndTimeOrderDesc(),startPage,body.getPageSize());
+
+        map.put("userList",list);
+        map.put("currentPage",body.getPageNum());
+        map.put("total",totalAmount);
+        map.put("pageSize",body.getPageSize());
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(map);
 
         return result;
     }

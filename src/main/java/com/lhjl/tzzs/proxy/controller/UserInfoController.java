@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.controller;
 
+import com.lhjl.tzzs.proxy.dto.AdminUserListInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.dto.UserChooseLogDto.UserElegantServiceInputDto;
@@ -66,6 +67,26 @@ public class UserInfoController {
         return result;
     }
 
+    /**
+     * 后台获取用户列表的接口
+     * @param body
+     * @return
+     */
+    @PostMapping("admin/get/user/list")
+    public CommonDto<Map<String,Object>> adminGetUserList(@RequestBody AdminUserListInputDto body){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        try {
+            result = userInfoService.adminGetUserList(body);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+        }
+
+        return result;
+    }
 
     /**
      * 获取用户可用formid
