@@ -104,8 +104,8 @@ public class ReportController extends GenericController {
 
     }
 
-    @GetMapping("report/id")
-    public CommonDto<Report> reportById(Integer id){
+    @GetMapping("report/{id}")
+    public CommonDto<Report> reportById(@PathVariable Integer id){
         CommonDto<Report> result = null;
 
         try {

@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -109,6 +110,9 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
     @Override
     public CommonDto<String> ctuisongsecond(ProjectsSendDto params, int userId) {
         CommonDto<String> result = new CommonDto<>();
+
+
+
         if (params.getXmid().length() > 0) {
                 ProjectFinancingInvestmentInstitutionRelationship p = new ProjectFinancingInvestmentInstitutionRelationship();
                 p.setProjectSendLogId(Integer.parseInt(params.getXmid()));
@@ -422,7 +426,9 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                     oldProjectFinancingApproval.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
                                     oldProjectFinancingApproval.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
                                     oldProjectFinancingApproval.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
-                                    oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                    if(null != params.getTuisongxiangmubiao7sellingsha() && StringUtils.isNotEmpty(params.getTuisongxiangmubiao7sellingsha())){
+                                        oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                    }
                                     projectFinancingApprovalMapper.updateByPrimaryKey(oldProjectFinancingApproval);
                                 } else {
                                     ProjectFinancingApproval projectFinancingApproval1 = new ProjectFinancingApproval();
@@ -434,7 +440,10 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                     projectFinancingApproval1.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
                                     projectFinancingApproval1.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
                                     projectFinancingApproval1.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
-                                    projectFinancingApproval1.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                    if(null != params.getTuisongxiangmubiao7sellingsha() && StringUtils.isNotEmpty(params.getTuisongxiangmubiao7sellingsha())){
+                                        projectFinancingApproval1.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                    }
+//                                    projectFinancingApproval1.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
                                     projectFinancingApprovalMapper.insert(projectFinancingApproval1);
                                 }
                                 int foundersId = 0;
@@ -664,7 +673,10 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                         oldProjectFinancingApproval.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
                                         oldProjectFinancingApproval.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
                                         oldProjectFinancingApproval.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
-                                        oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                        if(null != params.getTuisongxiangmubiao7sellingsha() && StringUtils.isNotEmpty(params.getTuisongxiangmubiao7sellingsha())){
+                                            oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                        }
+//                                        oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
                                         projectFinancingApprovalMapper.updateByPrimaryKey(oldProjectFinancingApproval);
                                     } else {
                                         ProjectFinancingApproval projectFinancingApproval = new ProjectFinancingApproval();
@@ -676,7 +688,10 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                         projectFinancingApproval.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
                                         projectFinancingApproval.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
                                         projectFinancingApproval.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
-                                        projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                        if(null != params.getTuisongxiangmubiao7sellingsha() && StringUtils.isNotEmpty(params.getTuisongxiangmubiao7sellingsha())){
+                                            projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                        }
+//                                        projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
                                         projectFinancingApprovalMapper.insert(projectFinancingApproval);
                                         //更新投递项目-机构关系表
                                         //插入
@@ -922,7 +937,10 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                     oldProjectFinancingApproval.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
                                     oldProjectFinancingApproval.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
                                     oldProjectFinancingApproval.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
-                                    oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                    if(null != params.getTuisongxiangmubiao7sellingsha() && StringUtils.isNotEmpty(params.getTuisongxiangmubiao7sellingsha())){
+                                        oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                    }
+//                                    oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
                                     projectFinancingApprovalMapper.updateByPrimaryKey(oldProjectFinancingApproval);
                                 } else {
                                     ProjectFinancingApproval projectFinancingApproval = new ProjectFinancingApproval();
@@ -934,7 +952,10 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                     projectFinancingApproval.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
                                     projectFinancingApproval.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
                                     projectFinancingApproval.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
-                                    projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                    if(null != params.getTuisongxiangmubiao7sellingsha() && StringUtils.isNotEmpty(params.getTuisongxiangmubiao7sellingsha())){
+                                        projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                    }
+//                                    projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
                                     projectFinancingApprovalMapper.insert(projectFinancingApproval);
                                     //更新投递项目-机构关系表
                                     //插入
@@ -1199,7 +1220,10 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 oldProjectFinancingApproval.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
                                 oldProjectFinancingApproval.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
                                 oldProjectFinancingApproval.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
-                                oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                if(null != params.getTuisongxiangmubiao7sellingsha() && StringUtils.isNotEmpty(params.getTuisongxiangmubiao7sellingsha())){
+                                    oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                }
+//                                oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
                                 projectFinancingApprovalMapper.updateByPrimaryKey(oldProjectFinancingApproval);
                             } else {
                                 ProjectFinancingApproval projectFinancingApproval = new ProjectFinancingApproval();
@@ -1211,7 +1235,10 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                                 projectFinancingApproval.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
                                 projectFinancingApproval.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
                                 projectFinancingApproval.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
-                                projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                if(null != params.getTuisongxiangmubiao7sellingsha() && StringUtils.isNotEmpty(params.getTuisongxiangmubiao7sellingsha())){
+                                    projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                                }
+//                                projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
                                 projectFinancingApprovalMapper.insert(projectFinancingApproval);
                                 //更新投递项目-机构关系表
                                 //插入
@@ -1459,7 +1486,10 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                             oldProjectFinancingApproval.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
                             oldProjectFinancingApproval.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
                             oldProjectFinancingApproval.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
-                            oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                            if(null != params.getTuisongxiangmubiao7sellingsha() && StringUtils.isNotEmpty(params.getTuisongxiangmubiao7sellingsha())){
+                                oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                            }
+//                            oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
                             projectFinancingApprovalMapper.updateByPrimaryKey(oldProjectFinancingApproval);
                         } else {
                             ProjectFinancingApproval projectFinancingApproval = new ProjectFinancingApproval();
@@ -1471,7 +1501,10 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                             projectFinancingApproval.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
                             projectFinancingApproval.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
                             projectFinancingApproval.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
-                            projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                            if(null != params.getTuisongxiangmubiao7sellingsha() && StringUtils.isNotEmpty(params.getTuisongxiangmubiao7sellingsha())){
+                                projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                            }
+//                            projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
                             projectFinancingApprovalMapper.insert(projectFinancingApproval);
                             //更新投递项目-机构关系表
                             //插入
@@ -1668,7 +1701,10 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                             oldProjectFinancingApproval.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
                             oldProjectFinancingApproval.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
                             oldProjectFinancingApproval.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
-                            oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                            if(null != params.getTuisongxiangmubiao7sellingsha() && StringUtils.isNotEmpty(params.getTuisongxiangmubiao7sellingsha())){
+                                oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                            }
+//                            oldProjectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
                             projectFinancingApprovalMapper.updateByPrimaryKey(oldProjectFinancingApproval);
                         } else {
                             ProjectFinancingApproval projectFinancingApproval = new ProjectFinancingApproval();
@@ -1680,7 +1716,10 @@ public class ProjectsSendServiceImpl implements ProjectsSendService{
                             projectFinancingApproval.setFinancingRounds(params.getTuisongxiangmubiao7roundoffin());
                             projectFinancingApproval.setFinancingAmount(new BigDecimal(params.getTuisongxiangmubiao7financinga()));
                             projectFinancingApproval.setFinancingCurrency(Integer.parseInt(params.getTuisongxiangmubiao7financingu()));
-                            projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                            if(null != params.getTuisongxiangmubiao7sellingsha() && StringUtils.isNotEmpty(params.getTuisongxiangmubiao7sellingsha())){
+                                projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
+                            }
+//                            projectFinancingApproval.setTransferShares(new BigDecimal(params.getTuisongxiangmubiao7sellingsha()));
                             projectFinancingApprovalMapper.insert(projectFinancingApproval);
                             //更新投递项目-机构关系表
                             //插入
