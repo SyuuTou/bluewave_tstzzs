@@ -220,4 +220,25 @@ public class InvestorsApprovalConroller {
 
 		return result;
 	}
+
+	/**
+	 * 新后台用户审核接口
+	 * @param body
+	 * @return
+	 */
+	@PostMapping("admin/special/approval")
+	public CommonDto<String> adminSpecialApproval(@RequestBody InvestorSpecialApprovalDto body){
+		CommonDto<String> result = new CommonDto<>();
+
+		try {
+			result = investorsApprovalService.adminSpecialApproval(body);
+		}catch (Exception e){
+			log.error(e.getMessage(),e.fillInStackTrace());
+			result.setData(null);
+			result.setStatus(502);
+			result.setMessage("服务器端发生错误");
+		}
+
+		return result;
+	}
 }

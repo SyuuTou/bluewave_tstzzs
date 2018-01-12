@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -7,20 +8,22 @@ import javax.annotation.Resource;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaTemplateMessage;
-import com.lhjl.tzzs.proxy.dto.InvestorsApprovalActionDto;
-import com.lhjl.tzzs.proxy.dto.InvestorsApprovalDto;
+import com.github.binarywang.wxpay.bean.result.WxPayBaseResult;
+import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
+import com.lhjl.tzzs.proxy.service.UserInfoService;
+import com.lhjl.tzzs.proxy.service.UserIntegralsService;
 import com.lhjl.tzzs.proxy.service.UserLevelService;
 import me.chanjar.weixin.common.exception.WxErrorException;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.TouZiDto;
 import com.lhjl.tzzs.proxy.service.InvestorsApprovalService;
 import tk.mybatis.mapper.entity.Example;
 
@@ -57,7 +60,83 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 	@Autowired
 	private InvestmentInstitutionsMapper investmentInstitutionsMapper;
-    
+
+	@Resource
+	private UserInfoService userInfoService;
+
+	@Resource
+	private UserIntegralsService userIntegralsService;
+
+	@Autowired
+	private UserLevelRelationMapper userLevelRelationMapper;
+
+	/**
+	 * 新后台用户列表审核接口
+	 * @param body
+	 * @return
+	 */
+	@Override
+	public CommonDto<String> adminSpecialApproval(InvestorSpecialApprovalDto body) {
+		CommonDto<String> result = new CommonDto<>();
+		if (body.getUserId() == null){
+			result.setMessage("用户id不能为空");
+			result.setStatus(502);
+			result.setData(null);
+
+			return result;
+		}
+
+		if (body.getInvestorType() == null && body.getUserLevel() == null){
+			result.setMessage("审核状态不能为空");
+			result.setStatus(502);
+			result.setData(null);
+
+			return result;
+		}
+
+		if (StringUtils.isAnyBlank(body.getComanyDuties(),body.getCompanyName(),body.getUserName())){
+			result.setMessage("用户姓名，公司职务，公司名称不能为空");
+			result.setStatus(502);
+			result.setData(null);
+
+			return result;
+		}
+
+		// 审核投资人
+		CommonDto<String> approvalResult = adimSpecialApproval(body);
+		if (approvalResult.getStatus() != 200){
+			result = approvalResult;
+
+			return result;
+		}
+
+		// 如果管理员选择升级会员等级的时候，升级会员
+		if (body.getUserLevel() != null){
+			CommonDto<String> upLevelResult = updateSpecailLevel(body.getUserLevel(),body.getUserId());
+			if (upLevelResult.getStatus() != 200){
+				result = upLevelResult;
+
+				return result;
+			}
+		}
+
+		// 发模板消息
+		CommonDto<String> resultResult =  userInfoService.getUserFormid(body.getUserId());
+		if (resultResult.getStatus() == 200){
+			CommonDto<String> sendResult = sendTemplate(body.getUserId(),body.getInvestorType(),resultResult.getData());
+			if (sendResult.getStatus() == 200){
+				userInfoService.setUserFormid(resultResult.getData());
+			}
+		}
+
+
+		result.setData(null);
+		result.setStatus(200);
+		result.setMessage("success");
+
+		return result;
+	}
+
 	/**
 	 * 认证投资人信息记录
 	 */
@@ -1087,5 +1166,155 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 			}
 		}
+	}
+
+	/**
+	 * 特殊审核用户信息的接口
+	 * @param body
+	 * @return
+	 */
+	@Transactional
+	public CommonDto<String> adimSpecialApproval(InvestorSpecialApprovalDto body){
+		CommonDto<String> result = new CommonDto<>();
+		Date now = new Date();
+
+		if (body.getUserId() == null){
+			result.setStatus(502);
+			result.setMessage("用户id不能为空");
+			result.setData(null);
+
+			return result;
+		}
+
+		if (StringUtils.isEmpty(body.getCompanyName())){
+			result.setMessage("用户公司名称不能为空");
+			result.setData(null);
+			result.setStatus(502);
+
+			return result;
+		}
+		//获取机构id
+		Integer jgid = getInstitutionIdByCompanyName(body.getCompanyName());
+		if (jgid == -1){
+			result.setMessage("获取机构id时出错");
+			result.setStatus(502);
+			result.setData(null);
+
+			return result;
+		}
+
+
+		Integer userId = body.getUserId();
+		if (body.getInvestorType() != null){
+			if (body.getInvestorType() < 2){
+				//查投资人信息是否存在
+				Investors investors = new Investors();
+				investors.setUserId(userId);
+
+				Investors investorsForSearch = investorsMapper.selectOne(investors);
+
+				//更新or创建投资人信息
+				Investors investorsForInsert = new Investors();
+
+				investorsForInsert.setUserId(userId);
+				investorsForInsert.setApprovalStatus(1);
+
+				investorsForInsert.setInvestorsType(body.getInvestorType());
+				investorsForInsert.setApprovalTime(now);
+				investorsForInsert.setName(body.getUserName());
+				investorsForInsert.setPosition(body.getCompanyName());
+				investorsForInsert.setYn(1);
+				investorsForInsert.setInvestmentInstitutionsId(jgid);
+				if (investorsForSearch != null){
+					investorsForInsert.setId(investorsForSearch.getId());
+
+					investorsMapper.updateByPrimaryKeySelective(investorsForInsert);
+				}else {
+					investorsForInsert.setCreateTime(now);
+
+					investorsMapper.insertSelective(investorsForInsert);
+				}
+			}
+		}
+
+		//更新用户表的信息
+		Users users =new Users();
+		users.setActualName(body.getUserName());
+		users.setCompanyName(body.getCompanyName());
+		users.setCompanyDuties(body.getComanyDuties());
+		users.setId(userId);
+
+		usersMapper.updateByPrimaryKeySelective(users);
+
+		//设置投资人认证为已审核
+		setInvestmentApprovalStatus(userId,1);
+
+		result.setStatus(200);
+		result.setData(null);
+		result.setMessage("success");
+
+		return result;
+	}
+
+	/**
+	 * 特殊用户等级提升接口
+	 * @param userLevelId
+	 * @param userId
+	 * @return
+	 */
+	@Transactional
+	public CommonDto<String> updateSpecailLevel(Integer userLevelId,Integer userId){
+		CommonDto<String> result = new CommonDto<>();
+		Date now = new Date();
+
+		if (userLevelId == null){
+			result.setMessage("用户等级id不能为空");
+			result.setData(null);
+			result.setStatus(502);
+
+			return result;
+		}
+		if (userId == null){
+			result.setStatus(502);
+			result.setData(null);
+			result.setMessage("用户id不能为空");
+
+			return result;
+		}
+
+		//找到原来的数据并将其设置成无效的
+		Example ulrExample = new Example(UserLevelRelation.class);
+		ulrExample.and().andEqualTo("userId",userId).andEqualTo("yn",1);
+
+		List<UserLevelRelation> userLevelRelationList = userLevelRelationMapper.selectByExample(ulrExample);
+		if (userLevelRelationList.size() > 0){
+			for (UserLevelRelation ul:userLevelRelationList){
+				ul.setYn(0);
+				userLevelRelationMapper.updateByPrimaryKeySelective(ul);
+			}
+		}
+		//计算失效时间
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(DateTime.now().toDate());
+		calendar.add(Calendar.DAY_OF_YEAR, 365);
+		Date end = calendar.getTime();
+
+		//新建一条用户等级记录
+		UserLevelRelation userLevelRelation  = new UserLevelRelation();
+		userLevelRelation.setUserId(userId);
+		userLevelRelation.setLevelId(userLevelId);
+		userLevelRelation.setBeginTime(now);
+		userLevelRelation.setCreateTime(now);
+		userLevelRelation.setEndTime(end);
+		userLevelRelation.setStatus(1);
+		userLevelRelation.setYn(1);
+
+		userLevelRelationMapper.insertSelective(userLevelRelation);
+
+		result.setMessage("success");
+		result.setData(null);
+		result.setStatus(200);
+
+		return result;
 	}
 }

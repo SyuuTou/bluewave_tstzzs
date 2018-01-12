@@ -4,13 +4,17 @@ import java.util.List;
 import java.util.Map;
 
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.InvestorsApprovalActionDto;
-import com.lhjl.tzzs.proxy.dto.InvestorsApprovalDto;
-import com.lhjl.tzzs.proxy.dto.TouZiDto;
+import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.model.InvestorsApprovalNew;
 
 public interface InvestorsApprovalService {
+
+	/**
+	 * 新后台用户列表审核接口
+	 * @param body
+	 * @return
+	 */
+	CommonDto<String> adminSpecialApproval(InvestorSpecialApprovalDto body);
 	/**
 	 * 保存认证信息
 	 * @param params
