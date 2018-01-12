@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.dto.AdminUserListInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.dto.UserChooseLogDto.UserElegantServiceInputDto;
+import com.lhjl.tzzs.proxy.model.MetaUserLevel;
 import com.lhjl.tzzs.proxy.model.Users;
 
 import java.util.List;
@@ -103,4 +104,6 @@ public interface UserInfoService {
      * @return
      */
     CommonDto<String> setElegantServiceLogStatus(Integer logId);
+
+    CommonDto<List<MetaUserLevel>> getMetaUserLevel();
 }

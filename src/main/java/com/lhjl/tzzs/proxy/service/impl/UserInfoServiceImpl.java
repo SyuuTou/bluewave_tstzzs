@@ -55,6 +55,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 
     @Autowired
     private AdminContactLogMapper adminContactLogMapper;
+
+    @Autowired
+    private MetaUserLevelMapper metaUserLevelMapper;
     
 
    	
@@ -844,6 +847,27 @@ public class UserInfoServiceImpl implements UserInfoService{
         result.setStatus(200);
         result.setMessage("success");
         result.setData(null);
+
+        return result;
+    }
+
+    /**
+     * 获取会员等级元数据信息的接口
+     * @return
+     */
+    @Override
+    public CommonDto<List<MetaUserLevel>> getMetaUserLevel() {
+
+        CommonDto<List<MetaUserLevel>> result = new CommonDto<>();
+        List<MetaUserLevel> levels = new ArrayList<>();
+        List<MetaUserLevel> levelList = metaUserLevelMapper.selectAll();
+        if (levelList.size() > 0){
+            levels = levelList;
+        }
+
+        result.setData(levels);
+        result.setStatus(200);
+        result.setMessage("success");
 
         return result;
     }

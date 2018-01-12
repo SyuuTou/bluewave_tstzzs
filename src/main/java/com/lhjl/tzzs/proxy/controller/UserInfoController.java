@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.dto.AdminUserListInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.dto.UserChooseLogDto.UserElegantServiceInputDto;
+import com.lhjl.tzzs.proxy.model.MetaUserLevel;
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
@@ -208,6 +209,26 @@ public class UserInfoController {
             result.setData(null);
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
+        }
+
+        return result;
+    }
+
+    /**
+     * 获取用户等级元数据表信息的接口
+     * @return
+     */
+    @GetMapping("get/meta/userlevel")
+    public CommonDto<List<MetaUserLevel>> getMetaUserLevel(){
+        CommonDto<List<MetaUserLevel>> result = new CommonDto<>();
+
+        try {
+            result= userInfoService.getMetaUserLevel();
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("success");
+            result.setStatus(200);
+            result.setData(null);
         }
 
         return result;
