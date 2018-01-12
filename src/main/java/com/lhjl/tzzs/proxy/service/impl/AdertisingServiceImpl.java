@@ -54,7 +54,7 @@ public class AdertisingServiceImpl implements AdvertisingService{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         if (body.getHides() == null){
-            body.setHides("1");
+            body.setHides("0,1");
         }
 
         String[] hides = body.getHides().split(",");
