@@ -48,7 +48,7 @@ public class InvestmentInstitutionsController extends GenericController {
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
             result.setData(null);
-        }
+        }  
 
         return result;
     }
