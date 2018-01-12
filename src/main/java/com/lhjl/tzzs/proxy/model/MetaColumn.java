@@ -14,6 +14,9 @@ public class MetaColumn {
      */
     private String name;
 
+    @Column(name = "event_key")
+    private String eventKey;
+
     /**
      * 排序
      */
@@ -65,6 +68,20 @@ public class MetaColumn {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * @return event_key
+     */
+    public String getEventKey() {
+        return eventKey;
+    }
+
+    /**
+     * @param eventKey
+     */
+    public void setEventKey(String eventKey) {
+        this.eventKey = eventKey;
     }
 
     /**
