@@ -436,15 +436,11 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 	@Override
 	public CommonDto<Boolean> saveOrUpdate(Integer appid,InvestmentInstitutionsDto2 body) {
 		
-		//此处必须要获得机构ID才行
-//		Integer iiId = this.getiiId(body.getToken(), appid);
-		Integer iiId = 1;
-		
 		CommonDto<Boolean> result =new CommonDto<Boolean>();
-		
 		//进行机构信息的提取
 		InvestmentInstitutions ii=new InvestmentInstitutions();
 		
+		ii.setId(body.getId());  //取得机构id 根据此值判断进行增加或者更新
 		ii.setLogo(body.getLogo());
 		ii.setShortName(body.getShortName());
 		ii.setFullName(body.getFullName());
@@ -465,12 +461,11 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 		
 		//自定义领域信息的提取
 		String[] newSegmentations = body.getNewSegmentations();
-		
 		//实现领域机构关系信息的提取
 		Integer[] segmentations = body.getSegmentations();
-		
 		//实现阶段机构信息的提取
 		Integer[] stages = body.getStages();
+		
 		
 		//实现机构总部信息的提取
 		InvestmentInstitutionsAddress head =new InvestmentInstitutionsAddress();
@@ -482,14 +477,14 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 		//实现机构分部信息的提取
 		List<InvestmentInstitutionsAddressPart> parts = body.getInvestmentInstitutionsAddressParts();
 
-		//下面进行插入操作
-		if(investmentInstitutionsMapper.selectByPrimaryKey(iiId) == null) {
-			
-			//进行机构信息的增加
+		//下面进行机构信息的增加
+		if(ii.getId() == null) {
+			System.err.println("<<<<<<");
 			//自增长Id
 			int updateLines = investmentInstitutionsMapper.insertSelective(ii);
-			Integer autoGrowId = ii.getId();// investmentInstitutionsMapper.getLastInsertId();
-			this.LOGGER.error("**********autoGrowId*********" + autoGrowId+"**********updateLines*********" + updateLines);
+			// investmentInstitutionsMapper.getLastInsertId();
+			Integer autoGrowId = ii.getId();
+			System.err.println("**********autoGrowId*********" + autoGrowId);
 			
 			//实现机构自定义领域数据的增加
 			int diySegInserts;
@@ -505,7 +500,6 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 			}else {
 				diySegInserts = investmentInstitutionsLabelMapper.insertList(null);
 			}
-			this.LOGGER.error("**********diySegInserts*********" + diySegInserts);
 			
 			//实现领域机构关系表的增加
 			List<InvestmentInstitutionsSegmentation> iiSegList=null;
@@ -520,7 +514,6 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 			}
 			
 			Boolean segsFlag=investmentInstitutionsSegmentationMapper.addBatch(iiSegList);
-			this.LOGGER.error("**********segsFlag*********" + segsFlag);
 			
 			//实现阶段机构关系表的增加
 			
@@ -534,9 +527,9 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 					iiStageList.add(iiStage);
 				}
 			}
-			
-			Boolean stasFlag=investmentInstitutionsStageMapper.addBatch(iiStageList);
-			this.LOGGER.error("**********stasFlag*********" + stasFlag);
+			iiStageList.forEach((e)->{
+				investmentInstitutionsStageMapper.insert(e);
+			});
 			
 			//实现机构总部的增加
 			Integer addrUpdate = investmentInstitutionsAddressMapper.insertSelective(head);
@@ -552,33 +545,29 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 			}
 			int partsInserts = investmentInstitutionsAddressPartMapper.insertList(handleAfterParts);
 			
-			if(autoGrowId>=0 && diySegInserts>=0 && segsFlag==true && stasFlag==true && addrUpdate>=0 && partsInserts>=0) {
 				result.setData(true);
 				result.setMessage("数据增加成功");
 				result.setStatus(200);
-		}
+				
 	}else {  //下面进行更新操作 
-		
-		//下面进行机构相关信息的更新
-		ii.setId(iiId);
-		investmentInstitutionsMapper.updateByPrimaryKeySelective(ii);
+		int line = investmentInstitutionsMapper.updateByPrimaryKeySelective(ii);
 		
 		//自定义领域信息的更新
 		if(newSegmentations != null) {
 			List<InvestmentInstitutionsLabel> iiLables =new ArrayList<>();
 			for(String temp:newSegmentations) {
 				InvestmentInstitutionsLabel iiLable=new InvestmentInstitutionsLabel();
-				iiLable.setInvestmentInstitutionsId(iiId);
+				iiLable.setInvestmentInstitutionsId(ii.getId());
 				iiLable.setLabelName(temp);
 				iiLables.add(iiLable);
 			}
 			
 			InvestmentInstitutionsLabel delEntity=new InvestmentInstitutionsLabel();
-			delEntity.setInvestmentInstitutionsId(iiId);
+			delEntity.setInvestmentInstitutionsId(ii.getId());
 			investmentInstitutionsLabelMapper.delete(delEntity);
 				
 			//进行标签数据的重新增加
-			investmentInstitutionsLabelMapper.insertList(iiLables);
+			int line2 = investmentInstitutionsLabelMapper.insertList(iiLables);
 			
 		}else {
 		}
@@ -590,65 +579,63 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 			for(Integer temp:segmentations) {
 				InvestmentInstitutionsSegmentation iiSeg=new InvestmentInstitutionsSegmentation();
 				iiSeg.setMetaSegmentationId(temp);
-				iiSeg.setInvestmentInstitutionsId(iiId);
+				iiSeg.setInvestmentInstitutionsId(ii.getId());
 				iiSegList.add(iiSeg);
 			}
 		}
 		
 		//实现关系的删除
 		InvestmentInstitutionsSegmentation segDelEntity=new InvestmentInstitutionsSegmentation();
-		segDelEntity.setInvestmentInstitutionsId(iiId);
+		segDelEntity.setInvestmentInstitutionsId(ii.getId());
 		investmentInstitutionsSegmentationMapper.delete(segDelEntity);
 		//进行关系的新增
 		Boolean segsFlag=investmentInstitutionsSegmentationMapper.addBatch(iiSegList);
-		this.LOGGER.error("**********segsFlag*********" + segsFlag);
 		
 		//实现阶段机构关系表的更新
-		
 		List<InvestmentInstitutionsStage> iiStageList=null;
 		if(stages != null) {
 			iiStageList=new ArrayList<>();
 			for(Integer temp:stages) {
 				InvestmentInstitutionsStage iiStage=new InvestmentInstitutionsStage();
 				iiStage.setMetaProjectStageId(temp);
-				iiStage.setInvestmentInstitutionId(iiId);
+				iiStage.setInvestmentInstitutionId(ii.getId());
 				iiStageList.add(iiStage);
 			}
 		}
+		
 		//实现关系的删除
 		InvestmentInstitutionsStage staDelEntity=new InvestmentInstitutionsStage();
-		staDelEntity.setInvestmentInstitutionId(iiId);
+		staDelEntity.setInvestmentInstitutionId(ii.getId());
 		investmentInstitutionsStageMapper.delete(staDelEntity);
 		//进行关系的新增
 		Boolean stasFlag=investmentInstitutionsStageMapper.addBatch(iiStageList);
-		this.LOGGER.error("**********stasFlag*********" + stasFlag);
 		
 		//实现机构总部的更新
 		InvestmentInstitutionsAddress addrUpdateEntity=new InvestmentInstitutionsAddress();
-		addrUpdateEntity.setInvestmentInstitutionId(iiId);
+		addrUpdateEntity.setInvestmentInstitutionId(ii.getId());
 		
 		addrUpdateEntity =investmentInstitutionsAddressMapper.selectOne(addrUpdateEntity);
 		head.setId(addrUpdateEntity.getId());
-		head.setInvestmentInstitutionId(iiId);
+		head.setInvestmentInstitutionId(ii.getId());
 		
 		InvestmentInstitutionsAddress preUpdateAddr=head;
-		investmentInstitutionsAddressMapper.updateByPrimaryKey(preUpdateAddr);
+		int line3 = investmentInstitutionsAddressMapper.updateByPrimaryKey(preUpdateAddr);
 		
-//		实现机构分部的更新
+//		机构分部信息更新
 		List<InvestmentInstitutionsAddressPart> handleAfterParts = null;
 		if(parts != null) {
 			handleAfterParts = new ArrayList<>();
 			for(InvestmentInstitutionsAddressPart temp:parts) {
-				temp.setInvestmentInstitutionId(iiId);
+				temp.setInvestmentInstitutionId(ii.getId());
 				handleAfterParts.add(temp);
 			}
 		}
 //		进行分部信息的删除
 		InvestmentInstitutionsAddressPart delEntity=new InvestmentInstitutionsAddressPart();
-		delEntity.setInvestmentInstitutionId(iiId);
+		delEntity.setInvestmentInstitutionId(ii.getId());
 		investmentInstitutionsAddressPartMapper.delete(delEntity);
 		//进行分部信息的重新增加
-		investmentInstitutionsAddressPartMapper.insertList(handleAfterParts);
+		int linefenbu = investmentInstitutionsAddressPartMapper.insertList(handleAfterParts);
 		
 		result.setData(true);
 		result.setMessage("数据更新成功");
@@ -658,43 +645,33 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 }
 	
 	@Override
-	public CommonDto<InvestmentInstitutionsDto2> echoinstiinfo(String token, Integer appid) {
-//		Integer iiId = this.getiiId(token, appid);
-		//下面是做出来的假数据
-		Integer iiId = 1;
+	public CommonDto<InvestmentInstitutionsDto2> echoinstiinfo(Integer id, Integer appid) {
 		
 		CommonDto<InvestmentInstitutionsDto2> result = new CommonDto<InvestmentInstitutionsDto2>();
-		
 		InvestmentInstitutionsDto2 formBody =null;
-		//如果该用户没有相关的机构
-		if(iiId==null) {
-			result.setData(formBody);
-			result.setStatus(200);
-			result.setMessage("不存在相关的机构");
-		}else {
 			formBody=new InvestmentInstitutionsDto2();
 			//获取机构的相关信息
-			InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(iiId);
+			InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(id);
 			
 			//获取机构总部的地址信息
 			InvestmentInstitutionsAddress headquarters=new InvestmentInstitutionsAddress();
-			headquarters.setInvestmentInstitutionId(iiId);
+			headquarters.setInvestmentInstitutionId(id);
 			headquarters = investmentInstitutionsAddressMapper.selectOne(headquarters);
 			//获取机构分部的地址信息
 			InvestmentInstitutionsAddressPart part=new InvestmentInstitutionsAddressPart();
-			part.setInvestmentInstitutionId(iiId);
+			part.setInvestmentInstitutionId(id);
 			List<InvestmentInstitutionsAddressPart> parts = investmentInstitutionsAddressPartMapper.select(part);
 			//获取机构的领域信息
 			InvestmentInstitutionsStage stage = new  InvestmentInstitutionsStage();
-			stage.setInvestmentInstitutionId(iiId);
+			stage.setInvestmentInstitutionId(id);
 			List<InvestmentInstitutionsStage> stages = investmentInstitutionsStageMapper.select(stage);
 			//获取机构相关的自定义领域信息
 			InvestmentInstitutionsLabel iiLable = new InvestmentInstitutionsLabel();
-			iiLable.setInvestmentInstitutionsId(iiId);
+			iiLable.setInvestmentInstitutionsId(id);
 			List<InvestmentInstitutionsLabel> iiLabels = investmentInstitutionsLabelMapper.select(iiLable);
 			//获取机构的阶段信息
 			InvestmentInstitutionsSegmentation investmentInstitutionsSegmentation = new InvestmentInstitutionsSegmentation();
-			investmentInstitutionsSegmentation.setInvestmentInstitutionsId(iiId);
+			investmentInstitutionsSegmentation.setInvestmentInstitutionsId(id);
 			List<InvestmentInstitutionsSegmentation> segmentations = investmentInstitutionsSegmentationMapper.select(investmentInstitutionsSegmentation);
 			
 			if(ii != null) {
@@ -762,14 +739,15 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 			Integer[] segmArray = new Integer[segmList.size()];
 			segmArray = segmList.toArray(segmArray);
 			formBody.setSegmentations(segmArray);
+			
 			//设置相关的地址分部信息
 			formBody.setInvestmentInstitutionsAddressParts(parts);
 			
 			result.setData(formBody);
 			result.setStatus(200);
 			result.setMessage("success");
-		}
-				return result;
+			
+			return result;
 	}
 
 }

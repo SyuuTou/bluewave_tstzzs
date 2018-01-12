@@ -71,7 +71,7 @@ public interface InvestmentInstitutionsService {
 	 * @param appid
 	 * @return
 	 */
-	CommonDto<InvestmentInstitutionsDto2> echoinstiinfo(String token,Integer appid);
+	CommonDto<InvestmentInstitutionsDto2> echoinstiinfo(Integer id,Integer appid);
 	/**
 	 * 执行相关机构的更新操作
 	 * @param appid 地址传递过来的appid
