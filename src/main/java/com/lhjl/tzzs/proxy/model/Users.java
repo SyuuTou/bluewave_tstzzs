@@ -148,6 +148,12 @@ public class Users {
     private Integer metaAppId;
 
     /**
+     * 更新时间
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
+
+    /**
      * @return ID
      */
     public Integer getId() {
@@ -607,6 +613,24 @@ public class Users {
         this.metaAppId = metaAppId;
     }
 
+    /**
+     * 获取更新时间
+     *
+     * @return update_time - 更新时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param updateTime 更新时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
 	@Override
 	public String toString() {
 		return "Users [id=" + id + ", uuid=" + uuid + ", createTime=" + createTime + ", status=" + status + ", level="
@@ -617,5 +641,4 @@ public class Users {
 				+ ", demand=" + demand + ", headpicReal=" + headpicReal + ", industry=" + industry + ", workCard="
 				+ workCard + ", idType=" + idType + ", unionid=" + unionid + ", metaAppId=" + metaAppId + "]";
 	}
-    
 }
