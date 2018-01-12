@@ -56,14 +56,15 @@ public class InvestmentInstitutionsController extends GenericController {
      * 回显机构信息的数据,
      *   如果没有相关的机构，则返回空数据
      *   如果存在相关的机构，则直接回显
+     * @Param id 作为机构id
      * @return
      */
     @GetMapping("/v{appid}/echoinstiinfo")
-    public CommonDto<InvestmentInstitutionsDto2> echoinstiinfo(String token,@PathVariable("appid") Integer appid){
+    public CommonDto<InvestmentInstitutionsDto2> echoinstiinfo(Integer id,@PathVariable("appid") Integer appid){
     	CommonDto<InvestmentInstitutionsDto2> result =new CommonDto<>();
     	try {
     		
-    		result = investmentInstitutionsService.echoinstiinfo(token, appid);
+    		result = investmentInstitutionsService.echoinstiinfo(id, appid);
     	}catch(Exception e){
     		log.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
@@ -80,13 +81,10 @@ public class InvestmentInstitutionsController extends GenericController {
      * @param investmentInstitumentId
      * @return
      */
-    @PostMapping("/v{appid}/institution")
+    @PostMapping("/v{appid}/institution/saveOrUpdate")
     public CommonDto<Boolean> institutionSaveOrUpdate(@PathVariable("appid") Integer appid,@RequestBody InvestmentInstitutionsDto2 body){
     	CommonDto<Boolean> result =new CommonDto<>();
-    	
-    	System.err.println("appid------"+appid);
-    	System.err.println("token---------"+body.getToken());
-    	
+    	System.err.println(appid);
     	try {
     		result = investmentInstitutionsService.saveOrUpdate(appid,body);
     	}catch(Exception e){
@@ -95,7 +93,7 @@ public class InvestmentInstitutionsController extends GenericController {
             result.setStatus(502);
             result.setData(null);
     	}
-    	return result;
+    	return result;  
     }
     
     /**

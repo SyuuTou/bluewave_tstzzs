@@ -12,6 +12,10 @@ import java.util.List;
  */
 public class InvestmentInstitutionsDto2 {
 	/**
+	 * 机构Id
+	 */
+	private Integer id;
+	/**
 	 * 新增-zd
 	 * 传输过来的数据可能包含token，用于确定唯一的用户id
 	 */
@@ -138,6 +142,15 @@ public class InvestmentInstitutionsDto2 {
      */
     private List<InvestmentInstitutionsAddressPart> investmentInstitutionsAddressParts;
     
+    
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public String getToken() {
 		return token;
 	}
@@ -355,7 +368,23 @@ public class InvestmentInstitutionsDto2 {
 		this.investmentInstitutionsAddressParts = investmentInstitutionsAddressParts;
 	}
 
+	@Override
+	public String toString() {
+		return "InvestmentInstitutionsDto2 [id=" + id + ", token=" + token + ", logo=" + logo + ", shortName="
+				+ shortName + ", fullName=" + fullName + ", kenelCase=" + kenelCase + ", comment=" + comment
+				+ ", stages=" + Arrays.toString(stages) + ", segmentations=" + Arrays.toString(segmentations)
+				+ ", newSegmentations=" + Arrays.toString(newSegmentations) + ", homeUrl=" + homeUrl
+				+ ", totalFundScale=" + totalFundScale + ", rmbFundScale=" + rmbFundScale + ", dollarFundScale="
+				+ dollarFundScale + ", rmbInvestAmountMin=" + rmbInvestAmountMin + ", rmbInvestAmountMax="
+				+ rmbInvestAmountMax + ", dollarInvestAmountMin=" + dollarInvestAmountMin + ", dollarInvestAmountMax="
+				+ dollarInvestAmountMax + ", investmentIdea=" + investmentIdea + ", productRequirement="
+				+ productRequirement + ", recruitmentRequirement=" + recruitmentRequirement + ", city=" + city
+				+ ", detailAddress=" + detailAddress + ", email=" + email + ", bpEmail=" + bpEmail + ", longitude="
+				+ longitude + ", latitude=" + latitude + ", investmentInstitutionsAddressParts="
+				+ investmentInstitutionsAddressParts + "]";
+	}
 
+	
 
 	
     
