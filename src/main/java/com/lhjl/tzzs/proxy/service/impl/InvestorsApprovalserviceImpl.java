@@ -555,6 +555,10 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		if (body.getPageSize() == null){
 			body.setPageSize(defaultPageSize);
 		}
+		if(body.getApprovalTimeOrder() == null){
+			body.setApprovalTimeOrder(1);
+			body.setApprovalTimeOrderDesc(1);
+		}
 
 		Integer startPage = (body.getPageNum() -1)*body.getPageSize();
 
