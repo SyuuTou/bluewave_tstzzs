@@ -130,10 +130,19 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		// 发模板消息
 		CommonDto<String> resultResult =  userInfoService.getUserFormid(body.getUserId());
 		if (resultResult.getStatus() == 200){
-			CommonDto<String> sendResult = sendTemplate(body.getUserId(),body.getInvestorType(),resultResult.getData());
-			if (sendResult.getStatus() == 200){
-				userInfoService.setUserFormid(resultResult.getData());
+			Integer status = 0;
+			if (body.getInvestorType() == 0){
+				status = 3;
+			}else if (body.getInvestorType() == 1){
+				status = 4;
 			}
+			if (status > 0){
+				CommonDto<String> sendResult = sendTemplate(body.getUserId(),status,resultResult.getData());
+				if (sendResult.getStatus() == 200){
+					userInfoService.setUserFormid(resultResult.getData());
+				}
+			}
+
 		}
 
 
@@ -805,6 +814,108 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		result.setMessage("审核操作成功");
 		return result;
 	}
+
+	/**
+	 * 后台审核操作接口(新)
+	 * @param body 请求对象
+	 * @return
+	 */
+	@Override
+	public CommonDto<String> adminApproval(InvestorSpecialApprovalDto body) {
+		CommonDto<String> result = new CommonDto<>();
+		Date now = new Date();
+		if (body.getId() == null){
+			result.setStatus(502);
+			result.setData(null);
+			result.setMessage("申请记录id不能为空");
+
+			return result;
+		}
+
+		if (body.getInvestorType() == null){
+			result.setStatus(502);
+			result.setData(null);
+			result.setMessage("审核类型不能空");
+
+			return result;
+		}
+		if(StringUtils.isAnyBlank(body.getUserName(),body.getCompanyName(),body.getComanyDuties())){
+			result.setMessage("认证说明，真实姓名，公司职位，公司名称不能为空");
+			result.setData(null);
+			result.setStatus(502);
+
+			return result;
+		}
+
+		if (body.getSupplementaryExplanation() == null){
+			body.setSupplementaryExplanation("");
+		}
+		// 更新申请表
+		InvestorsApproval investorsApproval  = new InvestorsApproval();
+		investorsApproval.setId(body.getId());
+		investorsApproval.setSupplementaryExplanation(body.getSupplementaryExplanation());
+		investorsApproval.setApprovalResult(body.getInvestorType());
+		investorsApproval.setReviewTime(now);
+
+		investorsApprovalMapper.updateByPrimaryKeySelective(investorsApproval);
+
+		// 创建投资人表
+			//获得机构id
+		Integer jgid = getInvestmentInstitutionId(body.getId());
+		if (jgid == -1){
+			result.setData(null);
+			result.setStatus(502);
+			result.setMessage("没有找到申请记录");
+
+			return result;
+		}
+
+		Integer userId = investorsApproval.getUserid();
+
+		Investors investors = new Investors();
+		investors.setUserId(investorsApproval.getUserid());
+		investors = investorsMapper.selectOne(investors);
+
+		Investors investorsForInsert = new Investors();
+		investorsForInsert.setUserId(userId);
+		investorsForInsert.setApprovalStatus(1);
+
+		investorsForInsert.setInvestorsType(body.getInvestorType());
+		investorsForInsert.setApprovalTime(now);
+		investorsForInsert.setName(body.getUserName());
+		investorsForInsert.setPosition(body.getCompanyName());
+		investorsForInsert.setYn(1);
+		investorsForInsert.setInvestmentInstitutionsId(jgid);
+		if (investors != null){
+			investorsForInsert.setId(investors.getId());
+
+			investorsMapper.updateByPrimaryKeySelective(investorsForInsert);
+		}else {
+			investorsForInsert.setCreateTime(now);
+
+			investorsMapper.insertSelective(investorsForInsert);
+		}
+
+		// 发模板消息
+
+		String formId = investorsApproval.getFormId();
+		Integer status = 0;
+		if (body.getInvestorType() == 0){
+			status = 3;
+		}else if (body.getInvestorType() == 1){
+			status = 4;
+		}
+		if (status > 0){
+			sendTemplate(userId,status,formId);
+		}
+
+		result.setStatus(200);
+		result.setData(null);
+		result.setMessage("success");
+
+		return result;
+	}
+
 
 	/**
 	 * 根据提交审核信息获取机构id,私有方法

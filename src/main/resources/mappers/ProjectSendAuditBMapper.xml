@@ -23,4 +23,29 @@
     order by create_time desc
     limit 0,1;
   </select>
+
+  <resultMap id="AdutiList" type="com.lhjl.tzzs.proxy.dto.ProjectSendAuditBListDto" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="actual_name" property="actualName" jdbcType="VARCHAR" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
+    <result column="prepare_id" property="prepareId" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="searchProjectSendAuditBList" resultMap="AdutiList">
+    SELECT psab.id,u.ID as uid,u.actual_name,psb.short_name,psb.create_time,psab.audit_status,psab.prepare_id
+    FROM project_send_audit_b psab
+    left join users u on psab.user_id = u.ID
+    left join project_send_b psb on psab.project_send_b_id = psb.id
+    where psab.appid = #{appid}
+    <if test="shortName != null and shortName !=''">
+      and psb.short_name like CONCAT('%',#{shortName},'%')
+    </if>
+    order by psab.create_time desc
+    limit #{startPage},#{pageSize}
+  </select>
 </mapper>

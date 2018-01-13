@@ -58,6 +58,13 @@ public interface InvestorsApprovalService {
 	CommonDto<String> approval(InvestorsApprovalActionDto body);
 
 	/**
+	 * 后台审核操作接口(新)
+	 * @param body
+	 * @return
+	 */
+	CommonDto<String> adminApproval(InvestorSpecialApprovalDto body);
+
+	/**
 	 * 获取工作名片
 	 * @param approvalId 投资审核记录ID
 	 * @return

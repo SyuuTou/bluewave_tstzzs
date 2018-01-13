@@ -1,6 +1,9 @@
 package com.lhjl.tzzs.proxy.dto;
 
 public class InvestorSpecialApprovalDto {
+    /**申请记录id*/
+    private Integer id;
+
     /**用户id*/
     private Integer userId;
 
@@ -24,6 +27,14 @@ public class InvestorSpecialApprovalDto {
 
     /**公司职位*/
     private String comanyDuties;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getUserId() {
         return userId;

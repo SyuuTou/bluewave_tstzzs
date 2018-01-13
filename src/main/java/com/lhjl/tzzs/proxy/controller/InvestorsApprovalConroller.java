@@ -184,6 +184,22 @@ public class InvestorsApprovalConroller {
 		}
 		return result;
 	}
+	@PostMapping("admin/approval")
+	public CommonDto<String> adminApproval(@RequestBody InvestorSpecialApprovalDto body){
+		CommonDto<String> result = new CommonDto<>();
+		try {
+			investorsApprovalService.adminApproval(body);
+		}catch (Exception e){
+			log.error(e.getMessage(),e.fillInStackTrace());
+
+			result.setMessage("服务器端发生错误");
+			result.setData(null);
+			result.setStatus(502);
+		}
+
+		return result;
+
+	}
 
 	/**
 	 * 获取工作名片
