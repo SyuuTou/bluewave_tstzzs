@@ -12,6 +12,9 @@ public class ProjectSendInvestorDto {
     /**股份占比*/
     private BigDecimal shareRatio;
 
+    /**机构id*/
+    private Integer investmentInstitutionId;
+
     public Integer getProjectFinancingHistoryId() {
         return projectFinancingHistoryId;
     }
@@ -34,5 +37,13 @@ public class ProjectSendInvestorDto {
 
     public void setShareRatio(BigDecimal shareRatio) {
         this.shareRatio = shareRatio;
+    }
+
+    public Integer getInvestmentInstitutionId() {
+        return investmentInstitutionId;
+    }
+
+    public void setInvestmentInstitutionId(Integer investmentInstitutionId) {
+        this.investmentInstitutionId = investmentInstitutionId;
     }
 }
