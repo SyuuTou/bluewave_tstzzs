@@ -146,6 +146,28 @@ public class InvestorsApprovalConroller {
 	}
 
 	/**
+	 * 获取投资审核信息(后台调用)(新)
+	 * @param body
+	 * @return
+	 */
+	@PostMapping("admin/findinvestorsapproval")
+	public CommonDto<Map<String,Object>> adminFindApprovals(InvestorsApprovalInputDto body){
+		CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+		try {
+			result = investorsApprovalService.adminFindApprovals(body);
+		}catch (Exception e){
+			log.error(e.getMessage(),e.fillInStackTrace());
+			result.setStatus(502);
+			result.setData(null);
+			result.setMessage("服务器端发生错误");
+
+			return result;
+		}
+
+		return result;
+	}
+	/**
 	 * 后台审核操作接口
 	 * @param body 请求对象
 	 * @return
