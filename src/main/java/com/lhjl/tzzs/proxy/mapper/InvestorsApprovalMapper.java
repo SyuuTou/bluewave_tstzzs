@@ -20,5 +20,8 @@ public interface InvestorsApprovalMapper extends OwnerMapper<InvestorsApproval> 
 											  @Param("approvalResult") Integer[] approvalResult,@Param("approvalTimeOrder") Integer approvalTimeOrder,
 											  @Param("approvalTimeOrderDesc") Integer approvalTimeOrderDesc,@Param("startPage") Integer startPage,
 											  @Param("pageSize") Integer pageSize);
-
+	Integer findApprovalListCount(@Param("searchWord") String searchWord,@Param("investorsType") Integer[] investorsType,
+							 @Param("approvalResult") Integer[] approvalResult,@Param("approvalTimeOrder") Integer approvalTimeOrder,
+							 @Param("approvalTimeOrderDesc") Integer approvalTimeOrderDesc,@Param("startPage") Integer startPage,
+							 @Param("pageSize") Integer pageSize);
 }

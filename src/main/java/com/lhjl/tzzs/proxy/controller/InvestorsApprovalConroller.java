@@ -151,7 +151,7 @@ public class InvestorsApprovalConroller {
 	 * @return
 	 */
 	@PostMapping("admin/findinvestorsapproval")
-	public CommonDto<Map<String,Object>> adminFindApprovals(InvestorsApprovalInputDto body){
+	public CommonDto<Map<String,Object>> adminFindApprovals(@RequestBody InvestorsApprovalInputDto body){
 		CommonDto<Map<String,Object>> result = new CommonDto<>();
 
 		try {
