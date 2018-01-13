@@ -13,6 +13,9 @@ public class InvestorSpecialApprovalDto {
     /**用户等级*/
     private Integer userLevel;
 
+    /**补充说明(200字符)*/
+    private String supplementaryExplanation;
+
     /**用户名称*/
     private String userName;
 
@@ -76,5 +79,13 @@ public class InvestorSpecialApprovalDto {
 
     public void setComanyDuties(String comanyDuties) {
         this.comanyDuties = comanyDuties;
+    }
+
+    public String getSupplementaryExplanation() {
+        return supplementaryExplanation;
+    }
+
+    public void setSupplementaryExplanation(String supplementaryExplanation) {
+        this.supplementaryExplanation = supplementaryExplanation;
     }
 }

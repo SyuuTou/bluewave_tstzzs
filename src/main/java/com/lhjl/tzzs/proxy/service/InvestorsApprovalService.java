@@ -44,6 +44,13 @@ public interface InvestorsApprovalService {
 	CommonDto<List<InvestorsApprovalNew>> findApprovals(InvestorsApprovalDto body);
 
 	/**
+	 * 获取投资审核信息列表（新）
+	 * @param body
+	 * @return
+	 */
+	CommonDto<Map<String,Object>> adminFindApprovals(InvestorsApprovalInputDto body);
+
+	/**
 	 * 后台审核操作接口
 	 * @param body 请求对象
 	 * @return

@@ -21,6 +21,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,12 @@ import tk.mybatis.mapper.entity.Example;
 public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 	private static final Logger log = LoggerFactory.getLogger(InvestorsApprovalService.class);
+
+	@Value("${pageNum}")
+	private Integer defaultPageNum;
+
+	@Value("${pageSize}")
+	private Integer defaultPageSize;
 
 	@Resource
 	private InvestorsApprovalMapper investorsApprovalMapper;
@@ -495,6 +502,127 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		result.setStatus(200);
 		result.setMessage("获取投资审核信息成功");
 		result.setData(dataNew);
+		return result;
+	}
+
+	/**
+	 * 获取投资审核信息列表（新）
+	 * @param body
+	 * @return
+	 */
+	@Override
+	public CommonDto<Map<String, Object>> adminFindApprovals(InvestorsApprovalInputDto body) {
+		CommonDto<Map<String,Object>> result =  new CommonDto<>();
+		Map<String,Object> map = new HashMap<>();
+		List<InvestorsApprovalOutputDto> list = new ArrayList<>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm");
+
+		if (body.getSearchWord() == null){
+			body.setSearchWord("");
+		}
+
+		//list转array
+		Integer[] investorsType ={};
+		if (body.getInvestorType() != null){
+			Integer[] investorsTypes = new Integer[body.getInvestorType().size()];
+			for (int i = 0;i<body.getInvestorType().size();i++){
+				investorsTypes[i]  = body.getInvestorType().get(i);
+			}
+			investorsType = investorsTypes;
+		}
+		//list转array
+		Integer[] approvalResult={};
+		if (body.getAduitStatus() != null){
+			Integer[] approvalResults = new Integer[body.getAduitStatus().size()];
+			for (int j = 0;j<body.getAduitStatus().size(); j++){
+				approvalResults[j] = body.getAduitStatus().get(j);
+			}
+			approvalResult = approvalResults;
+		}
+
+		if (body.getPageNum() == null){
+			body.setPageNum(defaultPageNum);
+		}
+		if (body.getPageSize() == null){
+			body.setPageSize(defaultPageSize);
+		}
+
+		Integer startPage = (body.getPageNum() -1)*body.getPageSize();
+
+		List<Map<String,Object>> approvalList = investorsApprovalMapper.findApprovalList(body.getSearchWord(),investorsType,approvalResult,
+				body.getApprovalTimeOrder(),body.getApprovalTimeOrderDesc(),startPage,body.getPageSize());
+
+
+		if (approvalList.size()>0){
+			for (Map<String,Object> m:approvalList){
+				InvestorsApprovalOutputDto investorsApprovalOutputDto = new InvestorsApprovalOutputDto();
+				investorsApprovalOutputDto.setId((Integer)m.get("id"));
+				investorsApprovalOutputDto.setUserId((Integer)m.get("userId"));
+				String company = "";
+				if (m.get("company") != null){
+					company = (String)m.get("company");
+				}
+				investorsApprovalOutputDto.setCompany(company);
+				String companyDuties = "";
+				if (m.get("companyDuties") != null){
+					companyDuties = (String)m.get("companyDuties");
+				}
+				investorsApprovalOutputDto.setCompanyDuties(companyDuties);
+				String phoneNum = "";
+				if (m.get("phonenumber") != null){
+					phoneNum = (String)m.get("phonenumber");
+				}
+				investorsApprovalOutputDto.setPhoneNum(phoneNum);
+				investorsApprovalOutputDto.setUserName((String)m.get("approval_username"));
+				String investorType = "";
+				if (m.get("investors_type") != null){
+					investorType = (String)m.get("investors_type");
+				}
+				investorsApprovalOutputDto.setInvestorType(investorType);
+				String description ="";
+				if (m.get("description") != null){
+					description = (String)m.get("description");
+				}
+				investorsApprovalOutputDto.setInvestorDescription(description);
+				String workCard = "";
+				if (m.get("workCard") != null){
+					workCard = (String)m.get("workCard");
+				}
+				investorsApprovalOutputDto.setWorkCard(workCard);
+				String investorCase = "";
+				if (m.get("investorsApprovalcolCase") != null){
+					investorCase = (String)m.get("investorsApprovalcolCase");
+				}
+				investorsApprovalOutputDto.setInvestCase(investorCase);
+				String createTime = "";
+				if (m.get("createTime") != null){
+					Date createTimed = (Date)m.get("createTime");
+					createTime = sdf.format(createTimed);
+				}
+				investorsApprovalOutputDto.setApprovalTime(createTime);
+				Integer approvalStatus = null;
+				String approvalStatusString = "";
+				if (m.get("approvalResult") != null){
+					approvalStatus = (Integer)m.get("approvalResult");
+				}else {
+					approvalStatus = 0;
+				}
+				switch (approvalStatus){
+					case 0:approvalStatusString = "待审核";
+					break;
+					case 1:approvalStatusString = "";
+				}
+
+
+			}
+		}
+
+		map.put("approvalList",approvalList);
+
+		result.setMessage("success");
+		result.setData(map);
+		result.setStatus(200);
+
 		return result;
 	}
 
@@ -1045,7 +1173,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		}
 
 		//设置投资人认证为已审核
-		setInvestmentApprovalStatus(userId,status);
+		setInvestmentApprovalStatus(userId,status,"");
 
 		result.setData(null);
 		result.setStatus(200);
@@ -1059,7 +1187,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	 * @param status 审核状态
 	 * @return
 	 */
-	private CommonDto<String> setInvestmentApprovalStatus(Integer userId,Integer status){
+	private CommonDto<String> setInvestmentApprovalStatus(Integer userId,Integer status,String description){
 		CommonDto<String> result = new CommonDto<>();
 		Date now = new Date();
 
@@ -1072,6 +1200,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		if (investorsApprovalList.size() > 0){
 			InvestorsApproval investorsApprovalForUpdate = new InvestorsApproval();
 			investorsApprovalForUpdate.setId(investorsApprovalList.get(0).getId());
+			if (description != null && description != ""){
+				investorsApprovalForUpdate.setDescription(description);
+			}
 			investorsApprovalForUpdate.setApprovalResult(status);
 			investorsApprovalForUpdate.setReviewTime(now);
 
@@ -1247,8 +1378,19 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		usersMapper.updateByPrimaryKeySelective(users);
 
 		//设置投资人认证为已审核
-		setInvestmentApprovalStatus(userId,1);
+		if (body.getInvestorType() != null) {
+			Integer status = 0;
+			if (body.getInvestorType() == 0){
+				status =3;
+			}else if (body.getInvestorType() == 1){
+				status =4;
+			}
+			if (body.getSupplementaryExplanation() == null){
+				body.setSupplementaryExplanation("");
+			}
 
+			setInvestmentApprovalStatus(userId, status, body.getSupplementaryExplanation());
+		}
 		result.setStatus(200);
 		result.setData(null);
 		result.setMessage("success");

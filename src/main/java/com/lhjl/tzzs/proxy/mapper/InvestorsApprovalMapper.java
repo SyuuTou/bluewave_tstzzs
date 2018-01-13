@@ -16,4 +16,9 @@ public interface InvestorsApprovalMapper extends OwnerMapper<InvestorsApproval> 
 										 @Param("time")String time, @Param("beginNum")Integer beginNum, @Param("pageSize")Integer pageSize);
 	List<ProjectInvestmentDto> findApprovalName(@Param("shortName") String shortName);
 
+	List<Map<String,Object>> findApprovalList(@Param("searchWord") String searchWord,@Param("investorsType") Integer[] investorsType,
+											  @Param("approvalResult") Integer[] approvalResult,@Param("approvalTimeOrder") Integer approvalTimeOrder,
+											  @Param("approvalTimeOrderDesc") Integer approvalTimeOrderDesc,@Param("startPage") Integer startPage,
+											  @Param("pageSize") Integer pageSize);
+
 }

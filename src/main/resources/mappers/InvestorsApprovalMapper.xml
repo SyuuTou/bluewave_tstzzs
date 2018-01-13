@@ -55,4 +55,35 @@
   GROUP BY userid
   ORDER BY create_time DESC
   </select>
+  <select id="findApprovalList" resultType="java.util.HashMap">
+    SELECT ia.id,ia.userid,ia.company,ia.company_duties,u.phonenumber,ia.approval_username,
+    case when ia.investors_type is null then "" else
+    (case when ia.investors_type = 0 then "个人投资人" else (case when ia.investors_type = 1 then "机构投资人" else "VIP投资人" end) end)
+    end investors_type,
+    ia.description,ia.work_card,ia.investors_approvalcol_case,ia.create_time,ia.approval_result
+    FROM investors_approval ia
+    left join users u on ia.userid = u.ID
+    left join users_weixin uw on ia.userid = uw.user_id
+    where
+    1=1
+    <if test="searchWord != null and searchWord !=''">
+     and (ia.approval_username like CONCAT("%",CONCAT(#{searchWord},"%"))  or ia.company like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or ia.company_duties like CONCAT("%",CONCAT(#{searchWord},"%")) or u.phonenumber like CONCAT("%",CONCAT(#{searchWord},"%")))
+    </if>
+    <if test="investorsType != null and investorsType.length > 0">
+      and ia.investors_type in
+      <foreach close=")" collection="investorsType" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+    <if test="approvalResult != null and approvalResult.length > 0">
+      and ia.approval_result in
+      <foreach close=")" collection="approvalResult" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+    <if test="approvalTimeOrder != null and approvalTimeOrder !=''">
+      order by ia.create_time
+      <if test="approvalTimeOrderDesc != null and approvalTimeOrderDesc !=''">
+        desc
+      </if>
+    </if>
+    limit #{startPage},#{pageSize};
+  </select>
 </mapper>
