@@ -1068,6 +1068,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             projectSendAuditBForInsert.setAuditStatus(0);
             projectSendAuditBForInsert.setUserId(userid);
             projectSendAuditBForInsert.setCreateTime(now);
+            projectSendAuditBForInsert.setProjectSource(1);
 
             projectSendAuditBMapper.insertSelective(projectSendAuditBForInsert);
         }

@@ -57,6 +57,12 @@ public class ProjectSendAuditB {
     private Integer appid;
 
     /**
+     * 项目来源，1表示创业者提交
+     */
+    @Column(name = "project_source")
+    private Integer projectSource;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -212,5 +218,23 @@ public class ProjectSendAuditB {
      */
     public void setAppid(Integer appid) {
         this.appid = appid;
+    }
+
+    /**
+     * 获取项目来源，1表示创业者提交
+     *
+     * @return project_source - 项目来源，1表示创业者提交
+     */
+    public Integer getProjectSource() {
+        return projectSource;
+    }
+
+    /**
+     * 设置项目来源，1表示创业者提交
+     *
+     * @param projectSource 项目来源，1表示创业者提交
+     */
+    public void setProjectSource(Integer projectSource) {
+        this.projectSource = projectSource;
     }
 }

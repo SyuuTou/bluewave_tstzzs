@@ -1,19 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectSendAuditBMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectSendAuditB" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectSendAuditBMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectSendAuditB">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="project_send_b_id" property="projectSendBId" jdbcType="INTEGER" />
-    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
-    <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
-    <result column="audit_admin" property="auditAdmin" jdbcType="VARCHAR" />
-    <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="prepare_id" property="prepareId" jdbcType="INTEGER" />
-    <result column="appid" property="appid" jdbcType="INTEGER" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="project_send_b_id" jdbcType="INTEGER" property="projectSendBId" />
+    <result column="audit_status" jdbcType="INTEGER" property="auditStatus" />
+    <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
+    <result column="audit_admin" jdbcType="VARCHAR" property="auditAdmin" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="prepare_id" jdbcType="INTEGER" property="prepareId" />
+    <result column="appid" jdbcType="INTEGER" property="appid" />
+    <result column="project_source" jdbcType="INTEGER" property="projectSource" />
   </resultMap>
   <select id="searchProjectSendAuditB" resultMap="BaseResultMap">
     SELECT * FROM project_send_audit_b
@@ -24,17 +25,17 @@
     limit 0,1;
   </select>
 
-  <resultMap id="AdutiList" type="com.lhjl.tzzs.proxy.dto.ProjectSendAuditBListDto" >
+  <resultMap id="AdutiList" type="com.lhjl.tzzs.proxy.dto.ProjectSendAuditBListDto">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="uid" property="uid" jdbcType="INTEGER" />
-    <result column="actual_name" property="actualName" jdbcType="VARCHAR" />
-    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
-    <result column="prepare_id" property="prepareId" jdbcType="INTEGER" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="actual_name" jdbcType="VARCHAR" property="actualName" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="audit_status" jdbcType="INTEGER" property="auditStatus" />
+    <result column="prepare_id" jdbcType="INTEGER" property="prepareId" />
   </resultMap>
   <select id="searchProjectSendAuditBList" resultMap="AdutiList">
     SELECT psab.id,u.ID as uid,u.actual_name,psb.short_name,psb.create_time,psab.audit_status,psab.prepare_id
