@@ -277,7 +277,7 @@
     </select>
 
     <select id="selectUserApprovalInstitution" resultType="java.lang.Integer">
-        SELECT ii.id FROM idatavc.project_financing_investment_institution_relationship pfiir
+        SELECT ii.id FROM project_financing_investment_institution_relationship pfiir
         left join project_send_logs psl on pfiir.project_send_log_id = psl.id
         left join investment_institutions ii on pfiir.investment_institution_id = ii.id
         where userid = #{userId}
