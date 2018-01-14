@@ -117,16 +117,31 @@ public class ProjectFinancingLog {
     private Integer totalAmountStatus;
 
     /**
-     * 融资用途
-     */
-    @Column(name = "project_financing_useful")
-    private String projectFinancingUseful;
-
-    /**
      * 保存年份的冗余字段
      */
     @Column(name = "financing_time_year")
     private String financingTimeYear;
+
+    @Column(name = "project_financing_useful")
+    private String projectFinancingUseful;
+
+    /**
+     * 编号，流水号
+     */
+    @Column(name = "serial_number")
+    private Integer serialNumber;
+
+    /**
+     * 数据来源类型表id
+     */
+    @Column(name = "data_soruce_type_id")
+    private Integer dataSoruceTypeId;
+
+    /**
+     * 更新时间
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
 
     /**
      * @return ID
@@ -491,24 +506,6 @@ public class ProjectFinancingLog {
     }
 
     /**
-     * 获取融资用途
-     *
-     * @return project_financing_useful - 融资用途
-     */
-    public String getProjectFinancingUseful() {
-        return projectFinancingUseful;
-    }
-
-    /**
-     * 设置融资用途
-     *
-     * @param projectFinancingUseful 融资用途
-     */
-    public void setProjectFinancingUseful(String projectFinancingUseful) {
-        this.projectFinancingUseful = projectFinancingUseful;
-    }
-
-    /**
      * 获取保存年份的冗余字段
      *
      * @return financing_time_year - 保存年份的冗余字段
@@ -524,5 +521,73 @@ public class ProjectFinancingLog {
      */
     public void setFinancingTimeYear(String financingTimeYear) {
         this.financingTimeYear = financingTimeYear;
+    }
+
+    /**
+     * @return project_financing_useful
+     */
+    public String getProjectFinancingUseful() {
+        return projectFinancingUseful;
+    }
+
+    /**
+     * @param projectFinancingUseful
+     */
+    public void setProjectFinancingUseful(String projectFinancingUseful) {
+        this.projectFinancingUseful = projectFinancingUseful;
+    }
+
+    /**
+     * 获取编号，流水号
+     *
+     * @return serial_number - 编号，流水号
+     */
+    public Integer getSerialNumber() {
+        return serialNumber;
+    }
+
+    /**
+     * 设置编号，流水号
+     *
+     * @param serialNumber 编号，流水号
+     */
+    public void setSerialNumber(Integer serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    /**
+     * 获取数据来源类型表id
+     *
+     * @return data_soruce_type_id - 数据来源类型表id
+     */
+    public Integer getDataSoruceTypeId() {
+        return dataSoruceTypeId;
+    }
+
+    /**
+     * 设置数据来源类型表id
+     *
+     * @param dataSoruceTypeId 数据来源类型表id
+     */
+    public void setDataSoruceTypeId(Integer dataSoruceTypeId) {
+        this.dataSoruceTypeId = dataSoruceTypeId;
+    }
+
+    /**
+     * 获取更新时间
+     *
+     * @return update_time - 更新时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param updateTime 更新时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

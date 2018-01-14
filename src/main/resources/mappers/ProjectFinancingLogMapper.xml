@@ -26,8 +26,11 @@
     <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
     <result column="amount_status" jdbcType="INTEGER" property="amountStatus" />
     <result column="total_amount_status" jdbcType="INTEGER" property="totalAmountStatus" />
-    <result column="project_financing_useful" jdbcType="VARCHAR" property="projectFinancingUseful" />
     <result column="financing_time_year" jdbcType="VARCHAR" property="financingTimeYear" />
+    <result column="project_financing_useful" jdbcType="VARCHAR" property="projectFinancingUseful" />
+    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
+    <result column="data_soruce_type_id" jdbcType="INTEGER" property="dataSoruceTypeId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
 
   <select id="selectProjectFinancingLogList" parameterType="Integer" resultMap="BaseResultMap">
