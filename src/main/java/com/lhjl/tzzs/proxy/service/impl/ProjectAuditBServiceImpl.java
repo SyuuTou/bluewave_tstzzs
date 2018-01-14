@@ -94,6 +94,9 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
         List<Map<String,Object>> projectSendList = projectSendAuditBMapper.adminGetProjectSendList(body.getSearchWord(),body.getBegainTime(),
                 body.getEndTime(),body.getProjetcSource(),body.getCreatTimeOrder(),body.getCreatTimeOrderDesc(),body.getAuditTimeOrder(),
                 body.getAuditTimeOrderDesc(),startPage,body.getPageSize());
+        Integer totalCount = projectSendAuditBMapper.adminGetProjectSendListCount(body.getSearchWord(),body.getBegainTime(),
+                body.getEndTime(),body.getProjetcSource(),body.getCreatTimeOrder(),body.getCreatTimeOrderDesc(),body.getAuditTimeOrder(),
+                body.getAuditTimeOrderDesc(),startPage,body.getPageSize());
 
         if (projectSendList.size() > 0){
             for (Map<String,Object> m:projectSendList){
@@ -204,7 +207,12 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
             }
         }
 
+
+
         map.put("list",list);
+        map.put("currentPage",body.getPageNum());
+        map.put("total",totalCount);
+        map.put("pageSize",body.getPageSize());
 
         result.setData(map);
         result.setMessage("success");
