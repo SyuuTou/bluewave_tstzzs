@@ -18,8 +18,14 @@ public interface InvestmentInstitutionsStageMapper extends OwnerMapper<Investmen
     
     /**
      * 批量增加
-     * @param body
      * @return
      */
     Boolean addBatch(List<InvestmentInstitutionsStage> list);
+
+    /**
+     * 根据机构id获取机构阶段和数量
+     * @param institutionId
+     * @return
+     */
+    List<Map<String,Object>> findInstitutionStageCount(@Param("institutionId") Integer institutionId);
 }

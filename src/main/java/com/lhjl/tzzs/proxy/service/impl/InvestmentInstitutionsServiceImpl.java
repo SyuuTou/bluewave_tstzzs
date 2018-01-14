@@ -224,7 +224,7 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 
         //获取机构的关注阶段
         List<Map<String,Object>> stageList = new ArrayList<>();
-        stageList = investmentInstitutionsStageMapper.findInstitutionStage(institutionId);
+        stageList = investmentInstitutionsStageMapper.findInstitutionStageCount(institutionId);
 
         //获取机构的城市、地址、邮箱、电话
         Example iiaExample = new Example(InvestmentInstitutionsAddress.class);
