@@ -49,4 +49,45 @@
     order by psab.create_time desc
     limit #{startPage},#{pageSize}
   </select>
+
+  <select id="adminGetProjectSendList" resultType="java.util.HashMap">
+    SELECT psab.id,psab.project_source,psb.short_name,psb.full_name,psb.kernel_desc,
+    psb.city,u.actual_name,u.company_name,u.company_duties,u.phonenumber,aprl.rating_stage,psb.create_time,psab.audit_status,psab.audit_time,
+    ps.segmentation_name
+    FROM project_send_audit_b psab
+    left join project_send_b psb on psab.project_send_b_id = psb.id
+    left join users u on psab.user_id = u.ID
+    left join projects p on psb.short_name =p.short_name
+    left join admin_project_rating_log aprl on p.id = aprl.project_id
+    left join (SELECT project_send_b_id,group_concat(segmentation_name) as segmentation_name FROM idatavc.project_send_segmentation_b
+    group by project_send_b_id) ps on psb.id = ps.project_send_b_id
+    where 1=1
+    <if test="searchWord != null and searchWord !=''">
+      and
+      (ps.segmentation_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or psb.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or psb.full_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or psb.kernel_desc like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or u.actual_name like CONCAT("%",CONCAT(#{searchWord},"%")))
+    </if>
+    <if test="begainTime !=null and begainTime !=''">
+       and psb.create_time between #{begainTime} and #{endTime}
+    </if>
+    <if test="projetcSource != null and projetcSource != ''">
+      and psab.project_source =#{projetcSource}
+    </if>
+    <if test="creatTimeOrder != null and creatTimeOrder != ''">
+      order by psab.create_time
+      <if test="creatTimeOrderDesc != null and creatTimeOrderDesc !=''">
+        desc
+      </if>
+    </if>
+    <if test="auditTimeOrder != null  and auditTimeOrder != ''">
+      order by psab.audit_time
+      <if test="auditTimeOrderDesc != null and auditTimeOrderDesc != ''">
+        desc
+      </if>
+    </if>
+    limit #{startPage},#{pageSize}
+  </select>
 </mapper>

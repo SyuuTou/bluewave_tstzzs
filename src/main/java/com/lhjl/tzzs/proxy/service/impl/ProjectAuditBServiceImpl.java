@@ -12,10 +12,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ProjectAuditBServiceImpl implements ProjectAuditBService{
@@ -67,33 +64,151 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
 
     /**
      * 读取项目审核列表接口
-     * @param shortName
-     * @param pageNum
-     * @param pageSize
      * @return
      */
     @Override
-    public CommonDto<List<Map<String, Object>>> getProjectSendList(String shortName, Integer pageNum, Integer pageSize,Integer appid) {
-        CommonDto<List<Map<String,Object>>> result =  new CommonDto<>();
+    public CommonDto<Map<String, Object>> getProjectSendList(ProjectSendBAdminListInputDto body,Integer appid) {
+        CommonDto<Map<String,Object>> result =  new CommonDto<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm");
+        Map<String,Object> map = new HashMap<>();
+        List<ProjectSendBAdminListOutputDto> list = new ArrayList<>();
 
-        if (pageNum == null ){
-            pageNum = defalutPageNum;
+        if (body.getSearchWord() == null){
+            body.setSearchWord("");
         }
 
-        if (pageSize == null ){
-            pageSize = defalutPageSize;
+        if (body.getPageNum() == null){
+            body.setPageNum(defalutPageNum);
+        }
+        if (body.getPageSize() == null){
+            body.setPageSize(defalutPageSize);
         }
 
-        Integer startPage = (pageNum-1)*pageSize;
+        if (body.getCreatTimeOrder() == null && body.getAuditTimeOrder() == null){
+            body.setCreatTimeOrder(1);
+            body.setCreatTimeOrderDesc(1);
+        }
 
-        List<ProjectSendAuditBListDto> projectSendAuditBListDtoList = projectSendAuditBMapper.searchProjectSendAuditBList(shortName,startPage,pageSize,appid);
-        if (projectSendAuditBListDtoList.size() > 0){
-            for (ProjectSendAuditBListDto psab:projectSendAuditBListDtoList){
+        Integer startPage = (body.getPageNum() -1 )*body.getPageSize();
 
+        List<Map<String,Object>> projectSendList = projectSendAuditBMapper.adminGetProjectSendList(body.getSearchWord(),body.getBegainTime(),
+                body.getEndTime(),body.getProjetcSource(),body.getCreatTimeOrder(),body.getCreatTimeOrderDesc(),body.getAuditTimeOrder(),
+                body.getAuditTimeOrderDesc(),startPage,body.getPageSize());
+
+        if (projectSendList.size() > 0){
+            for (Map<String,Object> m:projectSendList){
+                ProjectSendBAdminListOutputDto projectSendBAdminListOutputDto = new ProjectSendBAdminListOutputDto();
+                projectSendBAdminListOutputDto.setId((Integer) m.get("id"));
+                String projectSoruce = "";
+                Integer projectSoruceInt = 1;
+                if (m.get("project_source") != null){
+                    projectSoruceInt = (Integer)m.get("project_source");
+                }
+                switch (projectSoruceInt){
+                    case 1:projectSoruce = "创业者提交";
+                    break;
+                }
+                projectSendBAdminListOutputDto.setProjectSource(projectSoruce);
+                String projectShortName = "";
+                if (m.get("short_name") != null){
+                    projectShortName = (String) m.get("short_name");
+                }
+                projectSendBAdminListOutputDto.setProjectShortName(projectShortName);
+                String projectFullName = "";
+                if (m.get("full_name") != null){
+                    projectFullName = (String)m.get("full_name");
+                }
+                projectSendBAdminListOutputDto.setProjectFullName(projectFullName);
+                String kernelDesc = "";
+                if (m.get("kernel_desc") != null){
+                    kernelDesc = (String)m.get("kernel_desc");
+                }
+                projectSendBAdminListOutputDto.setKernelDesc(kernelDesc);
+                String segmentation = "";
+                if (m.get("segmentation_name") != null){
+                    segmentation = (String)m.get("segmentation_name");
+                }
+                projectSendBAdminListOutputDto.setSegmentationName(segmentation);
+                String city = "";
+                if (m.get("city") != null){
+                    city = (String) m.get("city");
+                }
+                projectSendBAdminListOutputDto.setCity(city);
+                String userName = "";
+                if (m.get("actual_name") != null){
+                    userName = (String)m.get("actual_name");
+                }
+                projectSendBAdminListOutputDto.setUserName(userName);
+                String companyName ="";
+                if (m.get("company_name") != null){
+                    companyName = (String)m.get("company_name");
+                }
+                projectSendBAdminListOutputDto.setCompanyName(companyName);
+                String companyDuties = "";
+                if (m.get("company_duties") != null){
+                    companyDuties = (String)m.get("company_duties");
+                }
+                projectSendBAdminListOutputDto.setCompanyDuties(companyDuties);
+                String phoneNum = "";
+                if (m.get("phonenumber") != null){
+                    phoneNum = (String)m.get("phonenumber");
+                }
+                projectSendBAdminListOutputDto.setPhonenumber(phoneNum);
+                String projectLevel = "";
+                Integer projectLevelInt = 111;
+                if (m.get("rating_stage") != null){
+                    projectLevelInt = (Integer)m.get("rating_stage");
+                }
+                switch (projectLevelInt){
+                    case 0:projectLevel = "D级";
+                    break;
+                    case 1:projectLevel = "C级";
+                        break;
+                    case 2:projectLevel = "B级";
+                        break;
+                    case 3:projectLevel = "A级";
+                        break;
+                    case 4:projectLevel = "S级";
+                        break;
+                    default:projectLevel = "";
+                }
+                projectSendBAdminListOutputDto.setProjectLevel(projectLevel);
+                String createTime = "";
+                if (m.get("create_time") != null){
+                    Date createTimeD = (Date)m.get("create_time");
+                    createTime = sdf.format(createTimeD);
+                }
+                projectSendBAdminListOutputDto.setCreatTime(createTime);
+                String auditStatus = "";
+                Integer auditStatusInt = 0;
+                if (m.get("audit_status") != null){
+                    auditStatusInt = (Integer)m.get("audit_status");
+                }
+                switch (auditStatusInt){
+                    case 0:auditStatus = "待审核";
+                    break;
+                    case 1:auditStatus = "审核通过";
+                    break;
+                    case 2:auditStatus = "审核未通过";
+                    break;
+                }
+                projectSendBAdminListOutputDto.setAuditStatus(auditStatus);
+                String auditTime = "";
+                if (m.get("audit_time") != null){
+                    Date auditTimeD = (Date)m.get("audit_time");
+                    auditTime = sdf.format(auditTimeD);
+                }
+                projectSendBAdminListOutputDto.setAuditTime(auditTime);
+
+                list.add(projectSendBAdminListOutputDto);
             }
         }
 
+        map.put("list",list);
+
+        result.setData(map);
         result.setMessage("success");
+        result.setStatus(200);
 
         return result;
     }
