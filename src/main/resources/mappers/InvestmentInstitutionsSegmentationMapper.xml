@@ -31,4 +31,16 @@
   (#{item.metaSegmentationId},#{item.investmentInstitutionsId})
   </foreach>
   </insert>
+
+  <select id="selectSegmentationCount" resultType="java.util.HashMap">
+    select ps.segmentation_name,ms.segmentation_logo ,count(*) ct
+    from investment_institutions_project iip
+    left join project_financing_log pfl on iip.project_id = pfl.id
+    left join projects p on pfl.project_id = p.id
+    right join project_segmentation ps on p.id = ps.project_id
+    left join meta_segmentation ms on ps.segmentation_name = ms.name
+    where iip.investment_institutions_id = #{institutionId}
+    group by ps.segmentation_name
+    order by ct desc
+  </select>
 </mapper>

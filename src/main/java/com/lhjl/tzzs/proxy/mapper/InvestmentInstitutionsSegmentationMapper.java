@@ -31,6 +31,7 @@ public interface InvestmentInstitutionsSegmentationMapper extends OwnerMapper<In
      * @return
      */
     Boolean addBatch(List<InvestmentInstitutionsSegmentation> list);
-    
+
+    List<Map<String,Object>> selectSegmentationCount(@Param("institutionId") Integer institutionId);
     
 }

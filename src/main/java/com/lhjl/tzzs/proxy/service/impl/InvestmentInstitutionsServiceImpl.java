@@ -209,7 +209,7 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 
         //获取机构的关注领域
         List<Map<String,Object>> segmentList = new ArrayList<>();
-        segmentList = investmentInstitutionsSegmentationMapper.findSegment(institutionId);
+        segmentList = investmentInstitutionsSegmentationMapper.selectSegmentationCount(institutionId);
         for (Map<String,Object> m:segmentList){
             if (m.get("name") == null ){
                 m.put("name","");
