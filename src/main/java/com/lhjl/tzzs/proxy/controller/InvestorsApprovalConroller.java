@@ -184,6 +184,12 @@ public class InvestorsApprovalConroller {
 		}
 		return result;
 	}
+
+	/**
+	 * 后台审核操作接口(新)
+	 * @param body
+	 * @return
+	 */
 	@PostMapping("admin/approval")
 	public CommonDto<String> adminApproval(@RequestBody InvestorSpecialApprovalDto body){
 		CommonDto<String> result = new CommonDto<>();
