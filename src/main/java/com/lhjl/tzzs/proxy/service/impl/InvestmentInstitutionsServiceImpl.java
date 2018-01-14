@@ -211,9 +211,11 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
         List<Map<String,Object>> segmentList = new ArrayList<>();
         segmentList = investmentInstitutionsSegmentationMapper.selectSegmentationCount(institutionId);
         for (Map<String,Object> m:segmentList){
-            if (m.get("name") == null ){
-                m.put("name","");
+            String name = "";
+            if (m.get("segmentation_name") != null){
+                name = (String)m.get("segmentation_name");
             }
+           m.put("name",name);
 
             if (m.get("segmentation_logo") == null){
                 m.put("segmentation_logo","http://img.idatavc.com/static/seg/jiaoyu.png");
