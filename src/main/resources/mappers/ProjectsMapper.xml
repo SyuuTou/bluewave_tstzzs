@@ -90,16 +90,9 @@
 		<if test="ratingStage !=null and ratingStage != ''">
 			and aprl.ratingStage = #{ratingStage}
 		</if>
-		<choose>
-			<when test="stage !=null and stage != '' and stage != 'on'.toString()">
-				and statemp.stage = #{stage}
-			</when>
-			<when test="stage =='on'.toString() ">
-				and statemp.stage is null
-			</when>
-			<otherwise>
-			</otherwise>
-		</choose>
+		<if test="stage !=null and stage != ''">
+			and statemp.stage = #{stage}
+		</if>
 		<if test="followStatus !=null and followStatus != ''">
 			and followStatus = #{followStatus}
 		</if>
@@ -110,10 +103,7 @@
     </select>
     
     <select id="findSplitCount" resultType="Long" parameterType="com.lhjl.tzzs.proxy.dto.ProjectsListInputDto">
-     select p.ID,p.serial_number,p.short_name,p.kernel_desc,p.city,p.project_source,aprl.rating_stage,
-		statemp.stage,followtemp.focuscount,interviewtemp.interviewcount,proviewtemp.viewcount, pfs.meta_follow_status_id followstatus,
-		p.create_time,p.update_time
-		from projects p
+     select count(*) from projects p
 		left join admin_project_rating_log aprl on p.ID = aprl.project_id 
 		left join (select projects_id ,count(*) focuscount from follow group by projects_id) followtemp on p.ID = followtemp.projects_id
 		left join (select projects_id ,count(*) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
@@ -138,16 +128,6 @@
 		<if test="ratingStage !=null and ratingStage != ''">
 			and aprl.ratingStage = #{ratingStage}
 		</if>
-		<choose>
-			<when test="stage !=null and stage != '' and stage != 'on'.toString()">
-				and statemp.stage = #{stage}
-			</when>
-			<when test="stage =='on'.toString() ">
-				and statemp.stage is null
-			</when>
-			<otherwise>
-			</otherwise>
-		</choose>
 		<if test="stage !=null and stage != ''">
 			and statemp.stage = #{stage}
 		</if>

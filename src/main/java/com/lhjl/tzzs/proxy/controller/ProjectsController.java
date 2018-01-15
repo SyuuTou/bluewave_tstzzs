@@ -59,6 +59,8 @@ public class ProjectsController extends GenericController{
     	try {
     		result=projectsService.listProInfos(appid,body);
     	}catch(Exception e) {
+    		this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
     		result.setData(null);
     		result.setMessage("fail");
     		result.setStatus(500);
