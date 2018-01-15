@@ -36,6 +36,7 @@ public class ProjectsListOutputDto {
 	private Integer ratingStage;
 	/**
 	 * 融资状态
+	 * 改值返回为null字段的时候表示正在融A轮
 	 */
 	private String stage;
 	/**

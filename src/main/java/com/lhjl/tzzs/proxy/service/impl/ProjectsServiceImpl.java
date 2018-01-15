@@ -1095,10 +1095,11 @@ public class ProjectsServiceImpl implements ProjectsService {
 		}
 		body.setStart((long)(body.getCurrentPage()-1) * body.getPageSize());
 		
-		List<ProjectsListOutputDto> list = projectsMapper.findSplit();
+		List<ProjectsListOutputDto> list = projectsMapper.findSplit(body);
+		Long total = projectsMapper.findSplitCount(body);
 		
-//		map.put("data", list);
-//		map.put("total", total);
+		map.put("data", list);
+		map.put("total", total);
 		map.put("currentPage",body.getCurrentPage());
 		map.put("pageSize", body.getPageSize());
 		
