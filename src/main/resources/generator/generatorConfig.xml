@@ -29,7 +29,7 @@
 
        <!--  <table tableName="meta_app">
             mysql 配置
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>  
             oracle 配置
             <generatedKey column="id" sqlStatement="select SEQ_{1}.nextval from dual" identity="false" type="pre"/>
         </table> -->
