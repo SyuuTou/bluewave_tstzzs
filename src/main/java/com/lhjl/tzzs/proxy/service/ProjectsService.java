@@ -75,4 +75,11 @@ public interface ProjectsService {
      * @return
      */
     CommonDto<ProjectComplexOutputDto> getProjectComplexInfo(Map<String,Integer> body);
+    /**
+     * 天使投资指数后台的项目列表
+     * @param appid
+     * @param body
+     * @return
+     */
+	CommonDto<Map<String, Object>> listProInfos(Integer appid, ProjectsListInputDto body);
 }

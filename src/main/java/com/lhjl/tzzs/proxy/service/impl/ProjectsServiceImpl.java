@@ -35,7 +35,13 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Value("${statistics.endTime}")
     private String endTime;
-
+    
+    @Value("${pageNum}")
+    private Integer pageNumDefault;
+    
+    @Value("${pageSize}")
+    private Integer pageSizeDefault;
+    
     @Resource
     private ProjectsMapper projectsMapper;
     @Resource
@@ -1075,4 +1081,31 @@ public class ProjectsServiceImpl implements ProjectsService {
 
         return result;
     }
+
+	@Override
+	public CommonDto<Map<String, Object>> listProInfos(Integer appid, ProjectsListInputDto body) {
+		CommonDto<Map<String, Object>> result=new CommonDto<Map<String, Object>>();
+		Map<String,Object> map =new HashMap<>();
+		
+		if(body.getCurrentPage()==null) {
+			body.setCurrentPage(pageNumDefault);
+		}
+		if(body.getPageSize()==null) {
+			body.setPageSize(pageSizeDefault);
+		}
+		body.setStart((long)(body.getCurrentPage()-1) * body.getPageSize());
+		
+		List<ProjectsListOutputDto> list = projectsMapper.findSplit();
+		
+//		map.put("data", list);
+//		map.put("total", total);
+		map.put("currentPage",body.getCurrentPage());
+		map.put("pageSize", body.getPageSize());
+		
+		result.setData(map);
+		result.setMessage("success");
+		result.setStatus(200);
+		
+		return result;
+	}
 }

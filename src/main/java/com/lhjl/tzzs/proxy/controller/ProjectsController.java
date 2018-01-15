@@ -34,7 +34,7 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 @RestController
-public class ProjectsController {
+public class ProjectsController extends GenericController{
 
     private static final Logger log = LoggerFactory.getLogger(ProjectsController.class);
 
@@ -46,7 +46,25 @@ public class ProjectsController {
 
     @Value("${pageSize}")
     private String defaultPageSize;
-
+    
+    /**
+     * 天使投资指数的项目列表
+     * @param appid
+     * @param body
+     * @return
+     */
+    @PostMapping("/v{appid}/list/projects")
+    public CommonDto<Map<String, Object>> listProject(@Param("appid") Integer appid,@RequestBody ProjectsListInputDto body){
+    	CommonDto<Map<String, Object>> result=new CommonDto<>();
+    	try {
+    		result=projectsService.listProInfos(appid,body);
+    	}catch(Exception e) {
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+    	}
+    	return result;
+    }
     /**
      * 查询我关注项目
      * @return

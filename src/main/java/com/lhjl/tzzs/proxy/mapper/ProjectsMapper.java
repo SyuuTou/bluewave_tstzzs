@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.mapper;
 import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.dto.ProjectReqDto;
 import com.lhjl.tzzs.proxy.dto.ProjectResDto;
+import com.lhjl.tzzs.proxy.dto.ProjectsListOutputDto;
 import com.lhjl.tzzs.proxy.dto.XiangsiDto;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
@@ -111,6 +112,11 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
     List<Map<String,Object>> relatedInvestmentInstitution(ProjectReqDto reqDto);
 
     List<HistogramList> projectSearchStatistics(ProjectReqDto reqDto);
+    /**
+     * 项目列表的实现
+     * @return
+     */
+	List<ProjectsListOutputDto> findSplit();
 }
 
 

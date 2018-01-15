@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -166,6 +167,15 @@ CHANGE COLUMN `project_type` `project_type` INT(11) NULL DEFAULT NULL COMMENT '�
 
     @Column(name = "city_count_min")
     private Integer cityCountMin;
+
+    @Column(name = "total_amount")
+    private BigDecimal totalAmount;
+
+    /**
+     * 更新时间
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
 
     /**
      * @return ID
@@ -723,19 +733,35 @@ CHANGE COLUMN `project_type` `project_type` INT(11) NULL DEFAULT NULL COMMENT '�
         this.cityCountMin = cityCountMin;
     }
 
-	@Override
-	public String toString() {
-		return "Projects [id=" + id + ", serialNumber=" + serialNumber + ", shortName=" + shortName + ", fullName="
-				+ fullName + ", kernelDesc=" + kernelDesc + ", commet=" + commet + ", url=" + url + ", establishedTime="
-				+ establishedTime + ", segmentation=" + segmentation + ", itemLabel=" + itemLabel + ", address="
-				+ address + ", territory=" + territory + ", createTime=" + createTime + ", continent=" + continent
-				+ ", country=" + country + ", province=" + province + ", city=" + city + ", region=" + region
-				+ ", investmentInstitutionsId=" + investmentInstitutionsId + ", approvalStatus=" + approvalStatus
-				+ ", approvalTime=" + approvalTime + ", yn=" + yn + ", userid=" + userid + ", kernelDescStatus="
-				+ kernelDescStatus + ", cityCount=" + cityCount + ", evaluationRecommend=" + evaluationRecommend
-				+ ", projectType=" + projectType + ", projectSource=" + projectSource + ", projectLogo=" + projectLogo
-				+ ", projectInvestmentHighlights=" + projectInvestmentHighlights + ", cityCountMax=" + cityCountMax
-				+ ", cityCountMin=" + cityCountMin + "]";
-	}
-    
+    /**
+     * @return total_amount
+     */
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    /**
+     * @param totalAmount
+     */
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    /**
+     * 获取更新时间
+     *
+     * @return update_time - 更新时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param updateTime 更新时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 }
