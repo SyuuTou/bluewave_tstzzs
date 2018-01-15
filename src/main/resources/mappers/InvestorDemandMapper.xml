@@ -11,10 +11,16 @@
     <result column="demand" jdbcType="VARCHAR" property="demand" />
     <result column="investment_amount_low" jdbcType="DECIMAL" property="investmentAmountLow" />
     <result column="investment_amount_high" jdbcType="DECIMAL" property="investmentAmountHigh" />
+    <result column="investment_amount_low_dollars" jdbcType="DECIMAL" property="investmentAmountLowDollars" />
+    <result column="investment_amount_high_dollars" jdbcType="DECIMAL" property="investmentAmountHighDollars" />
     <result column="recently_concerned_subdivision_circuit" jdbcType="VARCHAR" property="recentlyConcernedSubdivisionCircuit" />
     <result column="concerned_founders_characteristic" jdbcType="VARCHAR" property="concernedFoundersCharacteristic" />
     <result column="industry" jdbcType="VARCHAR" property="industry" />
     <result column="financing_stage" jdbcType="VARCHAR" property="financingStage" />
     <result column="creat_time" jdbcType="TIMESTAMP" property="creatTime" />
+    <result column="future" jdbcType="VARCHAR" property="future" />
+    <result column="weights" jdbcType="INTEGER" property="weights" />
+    <result column="hide_yn" jdbcType="INTEGER" property="hideYn" />
+    <result column="appid" jdbcType="INTEGER" property="appid" />
   </resultMap>
 </mapper>
