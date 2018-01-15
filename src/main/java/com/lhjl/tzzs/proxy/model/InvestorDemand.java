@@ -38,6 +38,12 @@ public class InvestorDemand {
     @Column(name = "investment_amount_high")
     private BigDecimal investmentAmountHigh;
 
+    @Column(name = "investment_amount_low_dollars")
+    private BigDecimal investmentAmountLowDollars;
+
+    @Column(name = "investment_amount_high_dollars")
+    private BigDecimal investmentAmountHighDollars;
+
     /**
      * 最近关注细分赛道
      */
@@ -66,6 +72,22 @@ public class InvestorDemand {
      */
     @Column(name = "creat_time")
     private Date creatTime;
+
+    /**
+     * 2018展望
+     */
+    private String future;
+
+    /**
+     * 权重
+     */
+    private Integer weights;
+
+    /**
+     * 是否隐藏
+     */
+    @Column(name = "hide_yn")
+    private Integer hideYn;
 
     /**
      * @return id
@@ -172,6 +194,34 @@ public class InvestorDemand {
     }
 
     /**
+     * @return investment_amount_low_dollars
+     */
+    public BigDecimal getInvestmentAmountLowDollars() {
+        return investmentAmountLowDollars;
+    }
+
+    /**
+     * @param investmentAmountLowDollars
+     */
+    public void setInvestmentAmountLowDollars(BigDecimal investmentAmountLowDollars) {
+        this.investmentAmountLowDollars = investmentAmountLowDollars;
+    }
+
+    /**
+     * @return investment_amount_high_dollars
+     */
+    public BigDecimal getInvestmentAmountHighDollars() {
+        return investmentAmountHighDollars;
+    }
+
+    /**
+     * @param investmentAmountHighDollars
+     */
+    public void setInvestmentAmountHighDollars(BigDecimal investmentAmountHighDollars) {
+        this.investmentAmountHighDollars = investmentAmountHighDollars;
+    }
+
+    /**
      * 获取最近关注细分赛道
      *
      * @return recently_concerned_subdivision_circuit - 最近关注细分赛道
@@ -259,5 +309,59 @@ public class InvestorDemand {
      */
     public void setCreatTime(Date creatTime) {
         this.creatTime = creatTime;
+    }
+
+    /**
+     * 获取2018展望
+     *
+     * @return future - 2018展望
+     */
+    public String getFuture() {
+        return future;
+    }
+
+    /**
+     * 设置2018展望
+     *
+     * @param future 2018展望
+     */
+    public void setFuture(String future) {
+        this.future = future;
+    }
+
+    /**
+     * 获取权重
+     *
+     * @return weights - 权重
+     */
+    public Integer getWeights() {
+        return weights;
+    }
+
+    /**
+     * 设置权重
+     *
+     * @param weights 权重
+     */
+    public void setWeights(Integer weights) {
+        this.weights = weights;
+    }
+
+    /**
+     * 获取是否隐藏
+     *
+     * @return hide_yn - 是否隐藏
+     */
+    public Integer getHideYn() {
+        return hideYn;
+    }
+
+    /**
+     * 设置是否隐藏
+     *
+     * @param hideYn 是否隐藏
+     */
+    public void setHideYn(Integer hideYn) {
+        this.hideYn = hideYn;
     }
 }
