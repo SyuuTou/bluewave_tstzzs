@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.mapper;
 import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.dto.ProjectReqDto;
 import com.lhjl.tzzs.proxy.dto.ProjectResDto;
+import com.lhjl.tzzs.proxy.dto.ProjectsListInputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectsListOutputDto;
 import com.lhjl.tzzs.proxy.dto.XiangsiDto;
 import com.lhjl.tzzs.proxy.model.Projects;
@@ -116,7 +117,12 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
      * 项目列表的实现
      * @return
      */
-	List<ProjectsListOutputDto> findSplit();
+	List<ProjectsListOutputDto> findSplit(ProjectsListInputDto body);
+	/**
+	 * 获取是否经过模糊查询后的数据总数
+	 * @return
+	 */
+	Long findSplitCount(ProjectsListInputDto body);
 }
 
 
