@@ -90,6 +90,11 @@ public class InvestorDemand {
     private Integer hideYn;
 
     /**
+     * 应用id
+     */
+    private Integer appid;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -363,5 +368,23 @@ public class InvestorDemand {
      */
     public void setHideYn(Integer hideYn) {
         this.hideYn = hideYn;
+    }
+
+    /**
+     * 获取应用id
+     *
+     * @return appid - 应用id
+     */
+    public Integer getAppid() {
+        return appid;
+    }
+
+    /**
+     * 设置应用id
+     *
+     * @param appid 应用id
+     */
+    public void setAppid(Integer appid) {
+        this.appid = appid;
     }
 }

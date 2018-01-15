@@ -21,5 +21,6 @@
     <result column="future" jdbcType="VARCHAR" property="future" />
     <result column="weights" jdbcType="INTEGER" property="weights" />
     <result column="hide_yn" jdbcType="INTEGER" property="hideYn" />
+    <result column="appid" jdbcType="INTEGER" property="appid" />
   </resultMap>
 </mapper>
