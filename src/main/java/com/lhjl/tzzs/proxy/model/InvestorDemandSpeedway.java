@@ -20,6 +20,11 @@ public class InvestorDemandSpeedway {
     private Integer investorDemandId;
 
     /**
+     * 应用id
+     */
+    private Integer appid;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -67,5 +72,23 @@ public class InvestorDemandSpeedway {
      */
     public void setInvestorDemandId(Integer investorDemandId) {
         this.investorDemandId = investorDemandId;
+    }
+
+    /**
+     * 获取应用id
+     *
+     * @return appid - 应用id
+     */
+    public Integer getAppid() {
+        return appid;
+    }
+
+    /**
+     * 设置应用id
+     *
+     * @param appid 应用id
+     */
+    public void setAppid(Integer appid) {
+        this.appid = appid;
     }
 }
