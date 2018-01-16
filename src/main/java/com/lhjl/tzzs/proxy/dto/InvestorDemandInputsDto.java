@@ -49,6 +49,10 @@ public class InvestorDemandInputsDto {
     /**录入类型（前台录入不用管，后台录入传1）*/
     private Integer saveType;
 
+    /**审核结果*/
+    private Integer demandStatus;
+
+
     public List<String> getSegmentation() {
         return segmentation;
     }
@@ -167,5 +171,13 @@ public class InvestorDemandInputsDto {
 
     public void setPhonenumber(String phonenumber) {
         this.phonenumber = phonenumber;
+    }
+
+    public Integer getDemandStatus() {
+        return demandStatus;
+    }
+
+    public void setDemandStatus(Integer demandStatus) {
+        this.demandStatus = demandStatus;
     }
 }

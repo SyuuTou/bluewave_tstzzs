@@ -427,12 +427,20 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
 
                 return result;
             }
+            if (body.getDemandStatus() == null){
+                result.setMessage("请输入当前风向标的状态");
+                result.setStatus(502);
+                result.setData(null);
+
+                return result;
+            }
 
             investorDemand.setUserName(body.getUserName());
             investorDemand.setCompanyDuties(body.getCompanyDuties());
             investorDemand.setCompanyName(body.getCompanyName());
             investorDemand.setPhonenumber(body.getPhonenumber());
             investorDemand.setUpdateTime(now);
+            investorDemand.setDemandStatus(body.getDemandStatus());
 
             Users users = new Users();
             users.setId(userId);
