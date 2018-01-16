@@ -82,4 +82,11 @@ public interface ProjectsService {
      * @return
      */
 	CommonDto<Map<String, Object>> listProInfos(Integer appid, ProjectsListInputDto body);
+	/**
+	 * 更新项目的跟进状态
+	 * @param appid
+	 * @param body
+	 * @return
+	 */
+	CommonDto<Boolean> updateFollowStatus(Integer appid, ProjectsUpdateInputDto body);
 }

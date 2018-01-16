@@ -82,8 +82,12 @@ public class ProjectsServiceImpl implements ProjectsService {
     @Autowired
     private ProjectAdministratorMapper projectAdministratorMapper;
 
-    @Resource
+    @Autowired
     private UsersMapper usersMapper;
+    @Autowired
+    private MetaFollowStatusMapper metaFollowStatusMapper;
+    @Autowired
+    private ProjectFollowStatusMapper projectFollowStatusMapper;
 
     /**
      * 查询我关注的项目
@@ -1114,6 +1118,27 @@ public class ProjectsServiceImpl implements ProjectsService {
 		result.setMessage("success");
 		result.setStatus(200);
 		
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> updateFollowStatus(Integer appid, ProjectsUpdateInputDto body) {
+		CommonDto<Boolean> result  =  new CommonDto<>();
+		ProjectFollowStatus pfs=new ProjectFollowStatus();
+		pfs.setProjectId(body.getId());
+		try {
+			pfs = projectFollowStatusMapper.selectOne(pfs);
+		}catch(Exception e) {
+			result.setData(null);
+			result.setMessage("项目的跟进状态不存在唯一值");
+			result.setStatus(400);
+			return result;
+		}
+		pfs.setMetaFollowStatusId(body.getStatus());
+		
+		result.setData(projectFollowStatusMapper.updateByPrimaryKeySelective(pfs)==1?true:false);
+		result.setMessage("success");
+		result.setStatus(200);
 		return result;
 	}
 }
