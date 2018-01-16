@@ -7,6 +7,7 @@ import com.lhjl.tzzs.proxy.service.EvaluateService;
 import com.lhjl.tzzs.proxy.service.InvestorsDemandService;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +44,9 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
 
     @Autowired
     private InvestorDemandStageMapper investorDemandStageMapper;
+
+    @Autowired
+    private UsersMapper usersMapper;
 
     //投资阶段
     private static final String[] ROUNDNAME = {"种子轮","天使轮","Pre-A轮","A轮","B轮","C轮","Pre-IPO轮","战略投资","并购"};
@@ -405,6 +409,29 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         investorDemand.setFuture(body.getFuture());
         investorDemand.setDemandStatus(3);//默认不完整
         investorDemand.setAppid(appid);
+
+        if (body.getSaveType() != null && body.getSaveType() == 1){
+            if (StringUtils.isAnyBlank(body.getCompanyDuties(),body.getCompanyName(),body.getUserName())){
+                result.setMessage("用户名称，公司名称，公司职位其中任何一个都不能为空");
+                result.setStatus(502);
+                result.setData(null);
+
+                return result;
+            }
+
+            investorDemand.setUserName(body.getUserName());
+            investorDemand.setCompanyDuties(body.getCompanyDuties());
+            investorDemand.setCompanyName(body.getCompanyName());
+            investorDemand.setUpdateTime(now);
+
+            Users users = new Users();
+            users.setId(userId);
+            users.setActualName(body.getUserName());
+            users.setCompanyName(body.getCompanyName());
+            users.setCompanyDuties(body.getCompanyDuties());
+
+            usersMapper.updateByPrimaryKeySelective(users);
+        }
 
         //查找原来是否有数据
         Example idExample = new Example(InvestorDemand.class);

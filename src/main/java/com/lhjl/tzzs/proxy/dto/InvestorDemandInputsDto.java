@@ -34,6 +34,18 @@ public class InvestorDemandInputsDto {
     /**用户token*/
     private String token;
 
+    /**用户真实姓名*/
+    private String userName;
+
+    /**公司名称*/
+    private String companyName;
+
+    /**公司职位*/
+    private String companyDuties;
+
+    /**录入类型（前台录入不用管，后台录入传1）*/
+    private Integer saveType;
+
     public List<String> getSegmentation() {
         return segmentation;
     }
@@ -112,5 +124,37 @@ public class InvestorDemandInputsDto {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCompanyDuties() {
+        return companyDuties;
+    }
+
+    public void setCompanyDuties(String companyDuties) {
+        this.companyDuties = companyDuties;
+    }
+
+    public Integer getSaveType() {
+        return saveType;
+    }
+
+    public void setSaveType(Integer saveType) {
+        this.saveType = saveType;
     }
 }
