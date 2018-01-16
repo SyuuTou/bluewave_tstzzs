@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.model.Users;
@@ -88,6 +89,44 @@ public class ProjectsController extends GenericController{
     		result.setStatus(500);
     	}
     	return result;
+    }
+    /**
+     * 读取项目跟进状态元数据
+     * @return
+     */
+    @GetMapping("/v{appid}/source/status")
+    public CommonDto<List<MetaFollowStatus>> getStatusSource(@PathVariable Integer appid ){
+    	CommonDto<List<MetaFollowStatus>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getFollowStatusSource(appid);
+    	}catch(Exception e) {
+    		this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+    	}
+    	return result;
+    	
+    }
+    /**
+     * 读取项目来源元数据
+     * @return
+     */
+    @GetMapping("/v{appid}/source/projects")
+    public CommonDto<List<MetaDataSourceType>> getProjectsSource(@PathVariable Integer appid ){
+    	CommonDto<List<MetaDataSourceType>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getProjectsSource(appid);
+    	}catch(Exception e) {
+    		this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+    	}
+    	return result;
+    	
     }
     /**
      * 查询我关注项目

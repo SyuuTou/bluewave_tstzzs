@@ -88,6 +88,8 @@ public class ProjectsServiceImpl implements ProjectsService {
     private MetaFollowStatusMapper metaFollowStatusMapper;
     @Autowired
     private ProjectFollowStatusMapper projectFollowStatusMapper;
+    @Autowired
+    private MetaDataSourceTypeMapper metaDataSourceTypeMapper;
 
     /**
      * 查询我关注的项目
@@ -1137,6 +1139,26 @@ public class ProjectsServiceImpl implements ProjectsService {
 		pfs.setMetaFollowStatusId(body.getStatus());
 		
 		result.setData(projectFollowStatusMapper.updateByPrimaryKeySelective(pfs)==1?true:false);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<MetaFollowStatus>> getFollowStatusSource(Integer appid) {
+		CommonDto<List<MetaFollowStatus>> result=new CommonDto<List<MetaFollowStatus>>();
+		
+		result.setData(metaFollowStatusMapper.selectAll());
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<MetaDataSourceType>> getProjectsSource(Integer appid) {
+		CommonDto<List<MetaDataSourceType>> result=new CommonDto<>();
+		
+		result.setData(metaDataSourceTypeMapper.selectAll());
 		result.setMessage("success");
 		result.setStatus(200);
 		return result;

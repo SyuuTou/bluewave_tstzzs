@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
+import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
 
 
 /**
@@ -89,4 +91,16 @@ public interface ProjectsService {
 	 * @return
 	 */
 	CommonDto<Boolean> updateFollowStatus(Integer appid, ProjectsUpdateInputDto body);
+	/**
+	 * 获取项目跟进状态元数据
+	 * @param appid
+	 * @return
+	 */
+	CommonDto<List<MetaFollowStatus>> getFollowStatusSource(Integer appid);
+	/**
+	 * 获取项目来源的元数据
+	 * @param appid
+	 * @return
+	 */
+	CommonDto<List<MetaDataSourceType>> getProjectsSource(Integer appid);
 }
