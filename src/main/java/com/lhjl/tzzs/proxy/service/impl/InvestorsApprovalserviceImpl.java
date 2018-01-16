@@ -915,7 +915,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 		// 发模板消息
 
-		String formId = investorsApproval.getFormId();
+		String formId = investorsApprovalMapper.selectByPrimaryKey(body.getId()).getFormId();
 		Integer status = 0;
 		if (body.getInvestorType() == 0){
 			status = 3;
