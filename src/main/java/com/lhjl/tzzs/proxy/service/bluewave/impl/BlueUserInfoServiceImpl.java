@@ -563,7 +563,7 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
 
         Founders founders = new Founders();
         founders.setUserId(userId);
-        founders.setYn(1);
+//        founders.setYn(1);
 
         List<Founders> foundersList = foundersMapper.select(founders);
         if (foundersList.size() > 0){
