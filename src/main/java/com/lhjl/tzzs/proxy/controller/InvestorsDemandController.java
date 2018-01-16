@@ -1,9 +1,6 @@
 package com.lhjl.tzzs.proxy.controller;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.InvestorDemandInputsDto;
-import com.lhjl.tzzs.proxy.dto.InvestorDemandListInputDto;
-import com.lhjl.tzzs.proxy.dto.InvestorsDemandDto;
+import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.service.InvestorsDemandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,7 +127,12 @@ public class InvestorsDemandController {
         return result;
     }
 
-
+    /**
+     * 获取用户投资需求是否填写完毕的接口（新）
+     * @param token
+     * @param appid
+     * @return
+     */
     @GetMapping("/v{appid}/get/completeyn")
     public CommonDto<Map<String,Object>> getDemandCompleteYn(String token,@PathVariable Integer appid){
         CommonDto<Map<String,Object>> result = new CommonDto<>();
@@ -143,6 +145,28 @@ public class InvestorsDemandController {
             result.setData(null);
             result.setMessage("服务器端发生错误");
         }
+        return result;
+    }
+
+    /**
+     * 融资需求信息回显接口/投资风向标
+     * @param token
+     * @param appid
+     * @return
+     */
+    @GetMapping("/v{appid}/get/investors/demand")
+    public CommonDto<InvestorDemandListOutputDto> getInvestorsDemandById(String token,@PathVariable Integer appid){
+        CommonDto<InvestorDemandListOutputDto> result  = new CommonDto<>();
+
+        try {
+            result = investorsDemandService.getInvestorsDemand(token,appid);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+
         return result;
     }
 }

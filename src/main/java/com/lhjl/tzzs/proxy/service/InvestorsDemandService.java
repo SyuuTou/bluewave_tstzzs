@@ -1,9 +1,6 @@
 package com.lhjl.tzzs.proxy.service;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.InvestorDemandInputsDto;
-import com.lhjl.tzzs.proxy.dto.InvestorDemandListInputDto;
-import com.lhjl.tzzs.proxy.dto.InvestorsDemandDto;
+import com.lhjl.tzzs.proxy.dto.*;
 
 import java.util.Map;
 
@@ -50,4 +47,12 @@ public interface InvestorsDemandService {
      * @return
      */
     CommonDto<Map<String,Object>> getDemandCompeteYn(String token,Integer appid);
+
+    /**
+     * 融资需求信息回显接口/投资风向标
+     * @param token
+     * @param appid
+     * @return
+     */
+    CommonDto<InvestorDemandListOutputDto> getInvestorsDemand(String token,Integer appid);
 }
