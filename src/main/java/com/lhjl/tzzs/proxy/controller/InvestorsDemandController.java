@@ -1,14 +1,12 @@
 package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.InvestorDemandInputsDto;
 import com.lhjl.tzzs.proxy.dto.InvestorsDemandDto;
 import com.lhjl.tzzs.proxy.service.InvestorsDemandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -84,6 +82,27 @@ public class InvestorsDemandController {
             result.setMessage("服务器发生错误");
             result.setStatus(502);
             logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
+
+    /**
+     * 创建投资风向标/融资需求的接口
+     * @param body
+     * @param appid
+     * @return
+     */
+    @PostMapping("/v{appid}/create/investors/demand")
+    public CommonDto<String> createInvestorsDemand(@RequestBody InvestorDemandInputsDto body, @PathVariable Integer appid){
+        CommonDto<String> result = new CommonDto<>();
+
+        try {
+            result = investorsDemandService.createInvestorsDemand(body, appid);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+            result.setStatus(502);
         }
         return result;
     }

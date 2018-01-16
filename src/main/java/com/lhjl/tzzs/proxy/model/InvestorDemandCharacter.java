@@ -11,6 +11,7 @@ public class InvestorDemandCharacter {
     /**
      * 特质
      */
+    @Column(name = "`character`")
     private String character;
 
     /**
