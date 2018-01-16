@@ -403,6 +403,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
             investorDemand.setInvestmentAmountLowDollars(body.getInvestmentAmountLowDollars());
         }
         investorDemand.setFuture(body.getFuture());
+        investorDemand.setHideYn(3);//默认不完整
         investorDemand.setAppid(appid);
 
         //查找原来是否有数据
@@ -497,6 +498,21 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         result.setStatus(200);
         result.setData(null);
         result.setMessage("success");
+
+        return result;
+    }
+
+    /**
+     * 获取投资风向标/融资需求列表
+     * @param body
+     * @param appid
+     * @return
+     */
+    @Override
+    public CommonDto<Map<String, Object>> getInvestorDemand(InvestorDemandListInputDto body, Integer appid) {
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> map = new HashMap<>();
+
 
         return result;
     }
