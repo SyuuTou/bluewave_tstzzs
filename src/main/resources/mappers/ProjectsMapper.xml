@@ -86,10 +86,11 @@
 		<if test="projectSource !=null and projectSource != ''">
 			and p.projectSource = #{projectSource}
 		</if>
-		<!--  -->
+		<!-- 项目等级 -->
 		<if test="ratingStage !=null and ratingStage != ''">
 			and aprl.ratingStage = #{ratingStage}
 		</if>
+		<!-- 融资状态 -->
 		<if test="stage !=null and stage != ''">
 			and statemp.stage = #{stage}
 		</if>

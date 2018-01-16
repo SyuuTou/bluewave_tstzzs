@@ -2,7 +2,10 @@ package com.lhjl.tzzs.proxy.dto;
 
 public class ProjectsListInputDto {
 	/**
-	 * 排序的字段
+	 * 需要进行排序的列的字段
+	 * 关注量：focuscount
+	 * 约谈量：interviewcount
+	 * 浏览量：viewcount
 	 */
 	private String column;
 	/**
