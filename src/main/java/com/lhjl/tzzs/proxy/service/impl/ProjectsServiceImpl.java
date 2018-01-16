@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lhjl.tzzs.proxy.service.ProjectsService;
 import tk.mybatis.mapper.entity.Example;
@@ -1081,7 +1082,8 @@ public class ProjectsServiceImpl implements ProjectsService {
 
         return result;
     }
-
+    
+    @Transactional(readOnly = true) 
 	@Override
 	public CommonDto<Map<String, Object>> listProInfos(Integer appid, ProjectsListInputDto body) {
 		CommonDto<Map<String, Object>> result=new CommonDto<Map<String, Object>>();
@@ -1096,7 +1098,12 @@ public class ProjectsServiceImpl implements ProjectsService {
 		body.setStart((long)(body.getCurrentPage()-1) * body.getPageSize());
 		
 		List<ProjectsListOutputDto> list = projectsMapper.findSplit(body);
+		
+		System.err.println(list.size()+"**size");
+		
 		Long total = projectsMapper.findSplitCount(body);
+		
+		System.err.println(total+"total****");
 		
 		map.put("data", list);
 		map.put("total", total);
