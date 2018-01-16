@@ -101,6 +101,29 @@ public class InvestorDemand {
     private Date updateTime;
 
     /**
+     * 公司名称
+     */
+    @Column(name = "company_name")
+    private String companyName;
+
+    /**
+     * 公司职务
+     */
+    @Column(name = "company_duties")
+    private String companyDuties;
+
+    /**
+     * 用户姓名
+     */
+    @Column(name = "user_name")
+    private String userName;
+
+    /**
+     * 手机号码
+     */
+    private String phonenumber;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -410,5 +433,77 @@ public class InvestorDemand {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取公司名称
+     *
+     * @return company_name - 公司名称
+     */
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    /**
+     * 设置公司名称
+     *
+     * @param companyName 公司名称
+     */
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    /**
+     * 获取公司职务
+     *
+     * @return company_duties - 公司职务
+     */
+    public String getCompanyDuties() {
+        return companyDuties;
+    }
+
+    /**
+     * 设置公司职务
+     *
+     * @param companyDuties 公司职务
+     */
+    public void setCompanyDuties(String companyDuties) {
+        this.companyDuties = companyDuties;
+    }
+
+    /**
+     * 获取用户姓名
+     *
+     * @return user_name - 用户姓名
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * 设置用户姓名
+     *
+     * @param userName 用户姓名
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /**
+     * 获取手机号码
+     *
+     * @return phonenumber - 手机号码
+     */
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    /**
+     * 设置手机号码
+     *
+     * @param phonenumber 手机号码
+     */
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
     }
 }

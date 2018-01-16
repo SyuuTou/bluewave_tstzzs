@@ -23,5 +23,9 @@
     <result column="demand_status" jdbcType="INTEGER" property="demandStatus" />
     <result column="appid" jdbcType="INTEGER" property="appid" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_duties" jdbcType="VARCHAR" property="companyDuties" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
   </resultMap>
 </mapper>
