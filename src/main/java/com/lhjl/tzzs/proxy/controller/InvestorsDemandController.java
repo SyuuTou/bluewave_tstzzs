@@ -107,12 +107,19 @@ public class InvestorsDemandController {
         }
         return result;
     }
+
+    /**
+     * 获取投资风向标/融资需求的接口
+     * @param body
+     * @param appid
+     * @return
+     */
     @PostMapping("/v{appid}/get/investors/demandlist")
     public CommonDto<Map<String,Object>> getInvestorsDemandList(@RequestBody InvestorDemandListInputDto body,@PathVariable Integer appid){
         CommonDto<Map<String,Object>> result = new CommonDto<>();
 
         try {
-
+            result = investorsDemandService.getInvestorDemand(body, appid);
         }catch (Exception e){
             logger.error(e.getMessage(),e.fillInStackTrace());
             result.setData(null);

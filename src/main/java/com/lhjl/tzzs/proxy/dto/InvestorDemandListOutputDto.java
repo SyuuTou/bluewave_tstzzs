@@ -8,6 +8,9 @@ public class InvestorDemandListOutputDto {
     /**融资需求id*/
     private Integer id;
 
+    /**用户真实姓名*/
+    private String userName;
+
     /**公司职位*/
     private String companyDuties;
 
@@ -56,6 +59,14 @@ public class InvestorDemandListOutputDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getCompanyDuties() {

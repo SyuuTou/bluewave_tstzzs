@@ -9,12 +9,14 @@ import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -22,6 +24,12 @@ import java.util.*;
  */
 @Service
 public class InvestorsDemandServiceImpl implements InvestorsDemandService{
+
+    @Value("${pageNum}")
+    private Integer defaultPageNum;
+
+    @Value("${pageSize}")
+    private Integer defaultPageSize;
 
     @Resource
     private CommonUserService commonUserService;
@@ -410,6 +418,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         investorDemand.setDemandStatus(3);//默认不完整
         investorDemand.setAppid(appid);
 
+        //存储用户信息
         if (body.getSaveType() != null && body.getSaveType() == 1){
             if (StringUtils.isAnyBlank(body.getCompanyDuties(),body.getCompanyName(),body.getUserName())){
                 result.setMessage("用户名称，公司名称，公司职位其中任何一个都不能为空");
@@ -422,6 +431,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
             investorDemand.setUserName(body.getUserName());
             investorDemand.setCompanyDuties(body.getCompanyDuties());
             investorDemand.setCompanyName(body.getCompanyName());
+            investorDemand.setPhonenumber(body.getPhonenumber());
             investorDemand.setUpdateTime(now);
 
             Users users = new Users();
@@ -431,6 +441,20 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
             users.setCompanyDuties(body.getCompanyDuties());
 
             usersMapper.updateByPrimaryKeySelective(users);
+        }else {
+            Users usersInfo  = usersMapper.selectByPrimaryKey(userId);
+            if (usersInfo.getCompanyName() != null){
+                investorDemand.setCompanyName(usersInfo.getCompanyName());
+            }
+            if (usersInfo.getCompanyDuties() != null){
+                investorDemand.setCompanyDuties(usersInfo.getCompanyDuties());
+            }
+            if (usersInfo.getActualName() != null){
+                investorDemand.setUserName(usersInfo.getActualName());
+            }
+            if (usersInfo.getPhonenumber() != null){
+                investorDemand.setPhonenumber(usersInfo.getPhonenumber());
+            }
         }
 
         //查找原来是否有数据
@@ -539,6 +563,128 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
     public CommonDto<Map<String, Object>> getInvestorDemand(InvestorDemandListInputDto body, Integer appid) {
         CommonDto<Map<String,Object>> result = new CommonDto<>();
         Map<String,Object> map = new HashMap<>();
+        List<InvestorDemandListOutputDto> list  = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        if (body.getPageNum() == null){
+            body.setPageNum(defaultPageNum);
+        }
+
+        if (body.getPageSize() == null){
+            body.setPageSize(defaultPageSize);
+        }
+
+        Integer startPage = (body.getPageNum() -1)*body.getPageSize();
+
+        List<Map<String,Object>> inverstorDemandList = investorDemandMapper.getInvestorDemandList(startPage,body.getPageSize());
+        if (inverstorDemandList.size() > 0){
+            for (Map<String,Object> inverstorMap:inverstorDemandList){
+                InvestorDemandListOutputDto investorDemandListOutputDto = new InvestorDemandListOutputDto();
+                investorDemandListOutputDto.setId((Integer)inverstorMap.get("id"));
+                String userName = "";
+                if (inverstorMap.get("user_name") != null){
+                    userName = (String)inverstorMap.get("user_name");
+                }
+                investorDemandListOutputDto.setUserName(userName);
+                String companyName = "";
+                if (inverstorMap.get("company_name") != null){
+                    companyName = (String)inverstorMap.get("company_name");
+                }
+                investorDemandListOutputDto.setCompanyName(companyName);
+                String companyDuties = "";
+                if (inverstorMap.get("company_duties") != null){
+                    companyDuties = (String) inverstorMap.get("company_duties");
+                }
+                investorDemandListOutputDto.setCompanyDuties(companyDuties);
+                String phonenumber = "";
+                if (inverstorMap.get("phonenumber") != null){
+                    phonenumber = (String)inverstorMap.get("phonenumber");
+                }
+                investorDemandListOutputDto.setPhoneNum(phonenumber);
+                List<String> segmentation = new ArrayList<>();
+                if (inverstorMap.get("segmentation") != null){
+                   String segmentationString = (String)inverstorMap.get("segmentation");
+                   segmentation = Arrays.asList(segmentationString.split(","));
+                }
+                investorDemandListOutputDto.setSegmentation(segmentation);
+                List<String> speedway = new ArrayList<>();
+                if (inverstorMap.get("speedway") != null){
+                    String speedwayString = (String)inverstorMap.get("speedway");
+                    speedway = Arrays.asList(speedwayString.split(","));
+                }
+                investorDemandListOutputDto.setSpeedWay(speedway);
+                List<String> stage = new ArrayList<>();
+                if (inverstorMap.get("stage") != null){
+                   String stageString = (String)inverstorMap.get("stage");
+                   stage = Arrays.asList(stageString.split(","));
+                }
+                investorDemandListOutputDto.setStage(stage);
+                BigDecimal investmentAmountLow = BigDecimal.ZERO;
+                if (inverstorMap.get("investment_amount_low") != null){
+                    investmentAmountLow = (BigDecimal)inverstorMap.get("investment_amount_low");
+                }
+                investorDemandListOutputDto.setInvestmentAmountLow(investmentAmountLow);
+                BigDecimal investmentAmountHigh = BigDecimal.ZERO;
+                if (inverstorMap.get("investment_amount_high") != null){
+                    investmentAmountHigh = (BigDecimal)inverstorMap.get("investment_amount_high");
+                }
+                investorDemandListOutputDto.setInvestmentAmountHigh(investmentAmountHigh);
+                BigDecimal investmentAmountLowDollars = BigDecimal.ZERO;
+                if (inverstorMap.get("investment_amount_low_dollars") != null){
+                    investmentAmountLowDollars = (BigDecimal)inverstorMap.get("investment_amount_low_dollars");
+                }
+                investorDemandListOutputDto.setInvestmentAmountLowDollars(investmentAmountLowDollars);
+                BigDecimal investmentAmountHighDollars = BigDecimal.ZERO;
+                if (inverstorMap.get("investment_amount_high_dollars") != null){
+                    investmentAmountHighDollars = (BigDecimal)inverstorMap.get("investment_amount_high_dollars");
+                }
+                investorDemandListOutputDto.setInvestmentAmountHighDollars(investmentAmountHighDollars);
+                List<String> userCharacter = new ArrayList<>();
+                if (inverstorMap.get("user_character") != null){
+                    String userCharacterString = (String)inverstorMap.get("user_character");
+                    userCharacter = Arrays.asList(userCharacterString.split(","));
+                }
+                investorDemandListOutputDto.setCharacter(userCharacter);
+                String future = "";
+                if (inverstorMap.get("future") != null){
+                    future = (String)inverstorMap.get("future");
+                }
+                investorDemandListOutputDto.setFuture(future);
+                String demandStatus = "";
+                Integer demandInteger = 3;
+                if (inverstorMap.get("demand_status") != null){
+                    demandInteger  = (Integer) inverstorMap.get("demand_status");
+                }
+                switch (demandInteger){
+                    case 0:demandStatus="";
+                    break;
+                    case 1:demandStatus = "精选";
+                    break;
+                    case 2:demandStatus = "资料完整";
+                    break;
+                    case 3:demandStatus = "资料未完整";
+                }
+                investorDemandListOutputDto.setStatus(demandStatus);
+                String updateTime = "";
+                if (inverstorMap.get("update_time") != null){
+                    Date updateTimeD = (Date)inverstorMap.get("update_time");
+                    updateTime = sdf.format(updateTimeD);
+                }
+                investorDemandListOutputDto.setUpdateTime(updateTime);
+
+                list.add(investorDemandListOutputDto);
+            }
+        }
+        Integer allcount = investorDemandMapper.getInvestorDemandListCount(startPage,body.getPageSize());
+
+        map.put("currentPage",body.getPageNum());
+        map.put("total",allcount);
+        map.put("pageSize",body.getPageSize());
+        map.put("list",list);
+
+        result.setData(map);
+        result.setStatus(200);
+        result.setMessage("success");
 
 
         return result;

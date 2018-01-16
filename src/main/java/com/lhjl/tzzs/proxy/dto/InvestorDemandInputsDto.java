@@ -43,6 +43,9 @@ public class InvestorDemandInputsDto {
     /**公司职位*/
     private String companyDuties;
 
+    /**用户手机号*/
+    private String phonenumber;
+
     /**录入类型（前台录入不用管，后台录入传1）*/
     private Integer saveType;
 
@@ -156,5 +159,13 @@ public class InvestorDemandInputsDto {
 
     public void setSaveType(Integer saveType) {
         this.saveType = saveType;
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
     }
 }
