@@ -84,15 +84,21 @@ public class InvestorDemand {
     private Integer weights;
 
     /**
-     * 是否隐藏
+     * 状态，1表示精选，2表示资料完整，3资料未完整
      */
-    @Column(name = "hide_yn")
-    private Integer hideYn;
+    @Column(name = "demand_status")
+    private Integer demandStatus;
 
     /**
      * 应用id
      */
     private Integer appid;
+
+    /**
+     * 更新时间
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
 
     /**
      * @return id
@@ -353,21 +359,21 @@ public class InvestorDemand {
     }
 
     /**
-     * 获取是否隐藏
+     * 获取状态，1表示精选，2表示资料完整，3资料未完整
      *
-     * @return hide_yn - 是否隐藏
+     * @return demand_status - 状态，1表示精选，2表示资料完整，3资料未完整
      */
-    public Integer getHideYn() {
-        return hideYn;
+    public Integer getDemandStatus() {
+        return demandStatus;
     }
 
     /**
-     * 设置是否隐藏
+     * 设置状态，1表示精选，2表示资料完整，3资料未完整
      *
-     * @param hideYn 是否隐藏
+     * @param demandStatus 状态，1表示精选，2表示资料完整，3资料未完整
      */
-    public void setHideYn(Integer hideYn) {
-        this.hideYn = hideYn;
+    public void setDemandStatus(Integer demandStatus) {
+        this.demandStatus = demandStatus;
     }
 
     /**
@@ -386,5 +392,23 @@ public class InvestorDemand {
      */
     public void setAppid(Integer appid) {
         this.appid = appid;
+    }
+
+    /**
+     * 获取更新时间
+     *
+     * @return update_time - 更新时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param updateTime 更新时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

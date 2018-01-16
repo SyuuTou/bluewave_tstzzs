@@ -20,7 +20,8 @@
     <result column="creat_time" jdbcType="TIMESTAMP" property="creatTime" />
     <result column="future" jdbcType="VARCHAR" property="future" />
     <result column="weights" jdbcType="INTEGER" property="weights" />
-    <result column="hide_yn" jdbcType="INTEGER" property="hideYn" />
+    <result column="demand_status" jdbcType="INTEGER" property="demandStatus" />
     <result column="appid" jdbcType="INTEGER" property="appid" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
 </mapper>
