@@ -697,4 +697,63 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
 
         return result;
     }
+
+    /**
+     * 获取是否填写完毕的接口
+     * @param token
+     * @return
+     */
+    @Override
+    public CommonDto<Map<String, Object>> getDemandCompeteYn(String token,Integer appid) {
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> map = new HashMap<>();
+        Date now = new Date();
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        if (token == null || "".equals(token)){
+            result.setMessage("用户token不能为空");
+            result.setData(null);
+            result.setStatus(502);
+
+            return result;
+        }
+
+        Integer userId = userLoginService.getUserIdByToken(token,appid);
+        if (userId == -1){
+            result.setMessage("用户token非法");
+            result.setData(null);
+            result.setStatus(502);
+
+            return result;
+        }
+
+        Integer completeYn = 0;
+        Integer oldYn = 0;
+
+        Map<String,Object> userDemand = investorDemandMapper.selectDemandByUserId(userId,appid);
+        if(userDemand != null){
+            if (userDemand.get("segmentation") != null){
+                completeYn = 1;
+            }
+            if (userDemand.get("creat_time") != null){
+                Date createTime = (Date)userDemand.get("creat_time");
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(createTime);
+                calendar.add(Calendar.DAY_OF_MONTH, 3);
+                Date createTimeAfter = calendar.getTime();
+
+                if (now.getTime() > createTimeAfter.getTime()){
+                    oldYn =1;
+                }
+            }
+        }
+        map.put("completeYn",completeYn);
+        map.put("oldYn",oldYn);
+
+        result.setData(map);
+        result.setStatus(200);
+        result.setMessage("success");
+
+        return result;
+    }
 }

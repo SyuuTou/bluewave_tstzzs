@@ -75,4 +75,26 @@
     order by b.creat_time desc
     ) abc
   </select>
+
+  <select id="selectDemandByUserId" resultType="java.util.HashMap">
+    SELECT iid.id,ids.segmentation,idsw.speedway,a.stage,iid.investment_amount_low,iid.investment_amount_high,
+    iid.investment_amount_low_dollars,iid.investment_amount_high_dollars,idc.user_character,
+    iid.future,iid.demand_status,iid.update_time,iid.demand_status,iid.creat_time
+    FROM investor_demand iid
+    left join
+    (SELECT investor_demand_id,group_concat(`character`) as user_character FROM investor_demand_character
+    group by investor_demand_id) idc on iid.id = idc.investor_demand_id
+    left join
+    (SELECT investor_demand_id,group_concat(segmentation) segmentation FROM investor_demand_segmentation
+    group by investor_demand_id) ids on iid.id = ids.investor_demand_id
+    left join
+    (SELECT investor_demand_id,group_concat(speedway) speedway FROM investor_demand_speedway
+    group by investor_demand_id) idsw on iid.id = idsw.investor_demand_id
+    left join
+    (SELECT investor_demand_id,group_concat(mps.`name`) stage FROM investor_demand_stage idse
+    left join meta_project_stage mps on idse.meta_project_stage_id = mps.id
+    group by investor_demand_id) a on iid.id = a.investor_demand_id
+    where iid.userid = #{userId}
+    and iid.appid = #{appid}
+  </select>
 </mapper>

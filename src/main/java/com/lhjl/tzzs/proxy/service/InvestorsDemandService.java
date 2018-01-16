@@ -42,4 +42,12 @@ public interface InvestorsDemandService {
      * @return
      */
     CommonDto<Map<String,Object>> getInvestorDemand(InvestorDemandListInputDto body,Integer appid);
+
+    /**
+     * 获取是否填写完毕状态的接口
+     * @param token
+     * @param appid
+     * @return
+     */
+    CommonDto<Map<String,Object>> getDemandCompeteYn(String token,Integer appid);
 }

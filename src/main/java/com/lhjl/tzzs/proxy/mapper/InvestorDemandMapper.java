@@ -24,4 +24,12 @@ public interface InvestorDemandMapper extends OwnerMapper<InvestorDemand> {
      * @return
      */
     Integer getInvestorDemandListCount(@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
+
+    /**
+     * 根据用户id获取用户融资需求信息
+     * @param userId
+     * @param appid
+     * @return
+     */
+    Map<String,Object> selectDemandByUserId(@Param("userId") Integer userId,@Param("appid") Integer appid);
 }

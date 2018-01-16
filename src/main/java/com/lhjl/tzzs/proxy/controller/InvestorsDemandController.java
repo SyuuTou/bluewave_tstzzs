@@ -129,4 +129,20 @@ public class InvestorsDemandController {
 
         return result;
     }
+
+
+    @GetMapping("/v{appid}/get/completeyn")
+    public CommonDto<Map<String,Object>> getDemandCompleteYn(String token,@PathVariable Integer appid){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        try {
+            result = investorsDemandService.getDemandCompeteYn(token, appid);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+        }
+        return result;
+    }
 }
