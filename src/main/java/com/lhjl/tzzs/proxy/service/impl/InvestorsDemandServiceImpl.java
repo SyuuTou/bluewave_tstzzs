@@ -403,7 +403,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
             investorDemand.setInvestmentAmountLowDollars(body.getInvestmentAmountLowDollars());
         }
         investorDemand.setFuture(body.getFuture());
-        investorDemand.setHideYn(3);//默认不完整
+        investorDemand.setDemandStatus(3);//默认不完整
         investorDemand.setAppid(appid);
 
         //查找原来是否有数据
