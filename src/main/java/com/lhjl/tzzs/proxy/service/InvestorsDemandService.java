@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestorDemandInputsDto;
+import com.lhjl.tzzs.proxy.dto.InvestorDemandListInputDto;
 import com.lhjl.tzzs.proxy.dto.InvestorsDemandDto;
 
 import java.util.Map;
@@ -33,4 +34,12 @@ public interface InvestorsDemandService {
      * @return
      */
     CommonDto<String> createInvestorsDemand(InvestorDemandInputsDto body,Integer appid);
+
+    /**
+     * 获取投资风向标/融资需求列表
+     * @param body
+     * @param appid
+     * @return
+     */
+    CommonDto<Map<String,Object>> getInvestorDemand(InvestorDemandListInputDto body,Integer appid);
 }

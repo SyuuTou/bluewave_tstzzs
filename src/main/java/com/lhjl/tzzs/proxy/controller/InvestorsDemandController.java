@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestorDemandInputsDto;
+import com.lhjl.tzzs.proxy.dto.InvestorDemandListInputDto;
 import com.lhjl.tzzs.proxy.dto.InvestorsDemandDto;
 import com.lhjl.tzzs.proxy.service.InvestorsDemandService;
 import org.slf4j.Logger;
@@ -104,6 +105,21 @@ public class InvestorsDemandController {
             result.setData(null);
             result.setStatus(502);
         }
+        return result;
+    }
+    @PostMapping("/v{appid}/get/investors/demandlist")
+    public CommonDto<Map<String,Object>> getInvestorsDemandList(@RequestBody InvestorDemandListInputDto body,@PathVariable Integer appid){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        try {
+
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+        }
+
         return result;
     }
 }
