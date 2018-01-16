@@ -13,7 +13,7 @@ public interface ElegantServiceMapper extends OwnerMapper<ElegantService> {
      * 获取精选活动列表
      * @return
      */
-    List<Map<String,Object>> findElegantServiceList();
+    List<Map<String,Object>> findElegantServiceList(@Param("recommendYn") Integer recommendYn,@Param("createTimeOrder") Integer createTimeOrder,@Param("sortOrder") Integer sortOrder);
 
     /**
      * 根据服务id获取服务详情

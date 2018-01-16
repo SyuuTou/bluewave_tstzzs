@@ -17,7 +17,7 @@ public interface ElegantServiceService {
      * 获取精选活动列表的接口
      * @return
      */
-    CommonDto<List<Map<String,Object>>> findElegantServiceList();
+    CommonDto<List<Map<String,Object>>> findElegantServiceList(Integer recommendYn,Integer createTimeOrder);
 
     /**
      * 根据服务id获取服务详情的接口
