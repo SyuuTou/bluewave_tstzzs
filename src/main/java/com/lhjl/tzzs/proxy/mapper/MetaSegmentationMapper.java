@@ -5,6 +5,7 @@ import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MetaSegmentationMapper extends OwnerMapper<MetaSegmentation> {
     List<Integer> findMetaSegmentationBySegmentation(@Param("domains") String[] domains);
@@ -14,5 +15,8 @@ public interface MetaSegmentationMapper extends OwnerMapper<MetaSegmentation> {
      * @return list存储
      */
     List<MetaSegmentation> findAll();
-    
+
+    List<Map<String,Object>> findInstitutionTop(@Param("institutionId") Integer institutionId);
+
+    List<Map<String,Object>> findUserFocusSegmentation(@Param("institutionId") Integer institutionId);
 }
