@@ -16,4 +16,33 @@ public interface ProjectFinancingLogMapper extends OwnerMapper<ProjectFinancingL
      * @return
      */
 	List<String> fetchFinancingStatus();
+
+    /**
+     * 项目融资历史查询
+     * @param searchWord
+     * @param begainTime
+     * @param endTime
+     * @param dataSource
+     * @param stage
+     * @param currency
+     * @param creatTimeOrder
+     * @param creatTimeOrderDesc
+     * @param updateTimeOrder
+     * @param updateTimeOrderDesc
+     * @param startPage
+     * @param pageSize
+     * @return
+     */
+    List<Map<String,Object>> getProjectFinancingLogList(@Param("searchWord") String searchWord,@Param("begainTime") String begainTime,
+                                                        @Param("endTime") String endTime,@Param("dataSource") Integer[] dataSource,
+                                                        @Param("stage") String[] stage,@Param("currency") Integer[] currency,
+                                                        @Param("creatTimeOrder") Integer creatTimeOrder,@Param("creatTimeOrderDesc") Integer creatTimeOrderDesc,
+                                                        @Param("updateTimeOrder") Integer updateTimeOrder,@Param("updateTimeOrderDesc") Integer updateTimeOrderDesc,
+                                                        @Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
+    Integer getProjectFinancingLogListCount(@Param("searchWord") String searchWord,@Param("begainTime") String begainTime,
+                                                        @Param("endTime") String endTime,@Param("dataSource") Integer[] dataSource,
+                                                        @Param("stage") String[] stage,@Param("currency") Integer[] currency,
+                                                        @Param("creatTimeOrder") Integer creatTimeOrder,@Param("creatTimeOrderDesc") Integer creatTimeOrderDesc,
+                                                        @Param("updateTimeOrder") Integer updateTimeOrder,@Param("updateTimeOrderDesc") Integer updateTimeOrderDesc,
+                                                        @Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
 }
