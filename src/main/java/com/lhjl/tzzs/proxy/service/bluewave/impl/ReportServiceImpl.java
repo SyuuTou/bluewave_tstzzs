@@ -46,7 +46,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 
     @Transactional(readOnly = true)
     @Override
-    public CommonDto<List<Report>> queryReport(ReportReqBody reqBody) {
+    public CommonDto<List<Report>> queryReport(Integer appId, ReportReqBody reqBody) {
 
         CommonTotal<List<Report>> result = new CommonTotal<>();
 
@@ -79,7 +79,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 
     @Transactional(readOnly = true)
     @Override
-    public CommonDto<Report> getReportById(Integer id) {
+    public CommonDto<Report> getReportById(Integer appId, Integer id) {
         CommonDto<Report> result = new CommonDto<>();
         result.setData(reportMapper.selectByPrimaryKey(id));
         result.setStatus(200);
@@ -89,7 +89,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 
     @Transactional
     @Override
-    public CommonDto<String> saveOrUpdate(ReportReqBody reqBody) {
+    public CommonDto<String> saveOrUpdate(Integer appId, ReportReqBody reqBody) {
        
     	
     	CommonDto<String> result = new CommonDto<>();
