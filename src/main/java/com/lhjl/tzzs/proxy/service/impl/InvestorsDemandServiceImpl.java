@@ -298,14 +298,24 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
     public CommonDto<String> createInvestorsDemand(InvestorDemandInputsDto body, Integer appid) {
         CommonDto<String> result  = new CommonDto<>();
         Date now = new Date();
+        if (body.getSaveType() != null && body.getSaveType() ==1){
+            if (body.getUserId() == null){
+                result.setStatus(502);
+                result.setMessage("用户id不能为空");
+                result.setData(null);
 
-        if (body.getToken() == null){
-            result.setStatus(502);
-            result.setData(null);
-            result.setMessage("用户token不能为空");
+                return result;
+            }
+        }else {
+            if (body.getToken() == null){
+                result.setStatus(502);
+                result.setData(null);
+                result.setMessage("用户token不能为空");
 
-            return result;
+                return result;
+            }
         }
+
 
         if (body.getCharacter() == null || body.getCharacter().size() < 1){
             result.setMessage("请填写关注创始人特质");
@@ -354,8 +364,12 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
 
             return result;
         }
-
-        Integer userId = userLoginService.getUserIdByToken(body.getToken(),appid);
+        Integer userId = -1;
+        if (body.getSaveType() != null && body.getSaveType() ==1){
+            userId = body.getUserId();
+        }else {
+            userId = userLoginService.getUserIdByToken(body.getToken(),appid);
+        }
         if (userId == -1){
             result.setStatus(502);
             result.setData(null);
@@ -581,10 +595,24 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         if (body.getPageSize() == null){
             body.setPageSize(defaultPageSize);
         }
+        Integer isUser = null;
+        Integer[] status = {};
+        if (body.getIsAdmin() == null || body.getIsAdmin() != 1){
+            isUser = 1;
+        }else {
+            if (body.getStatus() != null){
+                Integer[] statusI = new Integer[body.getStatus().size()];
+                for (int i = 0; i<body.getStatus().size();i++){
+                    statusI[i] = body.getStatus().get(i);
+                }
+                status = statusI;
+            }
+        }
 
         Integer startPage = (body.getPageNum() -1)*body.getPageSize();
 
-        List<Map<String,Object>> inverstorDemandList = investorDemandMapper.getInvestorDemandList(startPage,body.getPageSize());
+        List<Map<String,Object>> inverstorDemandList = investorDemandMapper.getInvestorDemandList(startPage,
+                body.getPageSize(),status,isUser,appid);
         if (inverstorDemandList.size() > 0){
             for (Map<String,Object> inverstorMap:inverstorDemandList){
                 InvestorDemandListOutputDto investorDemandListOutputDto = new InvestorDemandListOutputDto();
@@ -594,6 +622,11 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
                     userName = (String)inverstorMap.get("user_name");
                 }
                 investorDemandListOutputDto.setUserName(userName);
+                String headpic = "";
+                if (inverstorMap.get("headpic") != null){
+                    headpic = (String)inverstorMap.get("headpic");
+                }
+                investorDemandListOutputDto.setHeadpic(headpic);
                 String companyName = "";
                 if (inverstorMap.get("company_name") != null){
                     companyName = (String)inverstorMap.get("company_name");
@@ -683,7 +716,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
                 list.add(investorDemandListOutputDto);
             }
         }
-        Integer allcount = investorDemandMapper.getInvestorDemandListCount(startPage,body.getPageSize());
+        Integer allcount = investorDemandMapper.getInvestorDemandListCount(startPage,body.getPageSize(),status,isUser,appid);
 
         map.put("currentPage",body.getPageNum());
         map.put("total",allcount);
