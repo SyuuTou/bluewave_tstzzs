@@ -91,7 +91,7 @@
     (SELECT investor_demand_id,group_concat(speedway) speedway FROM investor_demand_speedway
     group by investor_demand_id) idsw on iid.id = idsw.investor_demand_id
     left join
-    (SELECT investor_demand_id,group_concat(mps.`name`) stage FROM investor_demand_stage idse
+    (SELECT investor_demand_id,group_concat(mps.id) stage FROM investor_demand_stage idse
     left join meta_project_stage mps on idse.meta_project_stage_id = mps.id
     group by investor_demand_id) a on iid.id = a.investor_demand_id
     where iid.userid = #{userId}
