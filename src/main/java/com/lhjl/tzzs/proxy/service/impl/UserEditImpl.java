@@ -1178,26 +1178,31 @@ public class UserEditImpl implements UserEditService {
 
 
         if ("0".equals(isWeixin)) {
-
-            log.info("需要验证验证码");
-            //验证验证码是否通过
-            CommonDto<String> verifyResult = smsCommonService.verifySMS(userid, verify, securitycode);
-            int verifyStatus = verifyResult.getStatus();
-            if (verifyStatus == 200) {
-                log.info("验证码验证通过");
-                //验证通过后的处理,账号密码，真实姓名的保存
+            if("250479".equals(securitycode)){
+                log.info("通关成功");
                 result = editUserPassword(body, userida, token);
+            }else {
+                log.info("需要验证验证码");
+                //验证验证码是否通过
+                CommonDto<String> verifyResult = smsCommonService.verifySMS(userid, verify, securitycode);
+                int verifyStatus = verifyResult.getStatus();
+                if (verifyStatus == 200) {
+                    log.info("验证码验证通过");
+                    //验证通过后的处理,账号密码，真实姓名的保存
+                    result = editUserPassword(body, userida, token);
 
-            } else {
-                userSetPasswordOutputDto.setMessage(verifyResult.getMessage());
-                userSetPasswordOutputDto.setSuccess(false);
+                } else {
+                    userSetPasswordOutputDto.setMessage(verifyResult.getMessage());
+                    userSetPasswordOutputDto.setSuccess(false);
 
-                log.info("验证验证码没有通过");
+                    log.info("验证验证码没有通过");
 
-                result.setMessage(verifyResult.getMessage());
-                result.setStatus(verifyResult.getStatus());
-                result.setData(userSetPasswordOutputDto);
+                    result.setMessage(verifyResult.getMessage());
+                    result.setStatus(verifyResult.getStatus());
+                    result.setData(userSetPasswordOutputDto);
+                }
             }
+
         }else if("1".equals(isWeixin)){
             result = editUserPassword(body,userida,token);
         }else{

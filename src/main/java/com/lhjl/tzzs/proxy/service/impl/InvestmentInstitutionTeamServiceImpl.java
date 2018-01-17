@@ -71,6 +71,8 @@ public class InvestmentInstitutionTeamServiceImpl implements InvestmentInstituti
                             iit.setActualName("");
                         }
                         investmentInstitutionTeamMemberDto.setActualName(iit.getActualName());
+
+                        investmentInstitutionTeamMemberDto.setId(iit.getId());
                         if (iit.getCompanyDuties() == null){
                             iit.setCompanyDuties("");
                         }

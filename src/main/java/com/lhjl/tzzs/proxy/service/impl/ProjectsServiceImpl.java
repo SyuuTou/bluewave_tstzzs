@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lhjl.tzzs.proxy.service.ProjectsService;
 import tk.mybatis.mapper.entity.Example;
@@ -35,7 +36,13 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Value("${statistics.endTime}")
     private String endTime;
-
+    
+    @Value("${pageNum}")
+    private Integer pageNumDefault;
+    
+    @Value("${pageSize}")
+    private Integer pageSizeDefault;
+    
     @Resource
     private ProjectsMapper projectsMapper;
     @Resource
@@ -75,8 +82,16 @@ public class ProjectsServiceImpl implements ProjectsService {
     @Autowired
     private ProjectAdministratorMapper projectAdministratorMapper;
 
-    @Resource
+    @Autowired
     private UsersMapper usersMapper;
+    @Autowired
+    private MetaFollowStatusMapper metaFollowStatusMapper;
+    @Autowired
+    private ProjectFollowStatusMapper projectFollowStatusMapper;
+    @Autowired
+    private MetaDataSourceTypeMapper metaDataSourceTypeMapper;
+    @Autowired
+    private AdminProjectRatingLogMapper adminProjectRatingLogMapper;
 
     /**
      * 查询我关注的项目
@@ -1075,4 +1090,101 @@ public class ProjectsServiceImpl implements ProjectsService {
 
         return result;
     }
+    
+    @Transactional(readOnly = true) 
+	@Override
+	public CommonDto<Map<String, Object>> listProInfos(Integer appid, ProjectsListInputDto body) {
+		CommonDto<Map<String, Object>> result=new CommonDto<Map<String, Object>>();
+		Map<String,Object> map =new HashMap<>();
+		
+		if(body.getCurrentPage()==null) {
+			body.setCurrentPage(pageNumDefault);
+		}
+		if(body.getPageSize()==null) {
+			body.setPageSize(pageSizeDefault);
+		}
+		body.setStart((long)(body.getCurrentPage()-1) * body.getPageSize());
+		
+		List<ProjectsListOutputDto> list = projectsMapper.findSplit(body);
+		
+		System.err.println(list.size()+"**size");
+		
+		Long total = projectsMapper.findSplitCount(body);
+		
+		System.err.println(total+"total****");
+		
+		map.put("data", list);
+		map.put("total", total);
+		map.put("currentPage",body.getCurrentPage());
+		map.put("pageSize", body.getPageSize());
+		
+		result.setData(map);
+		result.setMessage("success");
+		result.setStatus(200);
+		
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> updateFollowStatus(Integer appid, ProjectsUpdateInputDto body) {
+		CommonDto<Boolean> result  =  new CommonDto<>();
+		ProjectFollowStatus pfs=new ProjectFollowStatus();
+		pfs.setProjectId(body.getId());
+		try {
+			pfs = projectFollowStatusMapper.selectOne(pfs);
+		}catch(Exception e) {
+			result.setData(null);
+			result.setMessage("项目的跟进状态不存在唯一值");
+			result.setStatus(400);
+			return result;
+		}
+		pfs.setMetaFollowStatusId(body.getStatus());
+		
+		result.setData(projectFollowStatusMapper.updateByPrimaryKeySelective(pfs)==1?true:false);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<MetaFollowStatus>> getFollowStatusSource(Integer appid) {
+		CommonDto<List<MetaFollowStatus>> result=new CommonDto<List<MetaFollowStatus>>();
+		
+		result.setData(metaFollowStatusMapper.selectAll());
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<MetaDataSourceType>> getProjectsSource(Integer appid) {
+		CommonDto<List<MetaDataSourceType>> result=new CommonDto<>();
+		
+		result.setData(metaDataSourceTypeMapper.selectAll());
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<AdminProjectRatingLog>> getProjectsRatingStages(Integer appid) {
+		CommonDto<List<AdminProjectRatingLog>> result=new CommonDto<>();
+		
+		result.setData(adminProjectRatingLogMapper.selectAll());
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<String>> getFinancingStatus(Integer appid) {
+		CommonDto<List<String>> result =new CommonDto<>();
+		System.err.println("*****");
+		List<String> list=projectFinancingLogMapper.fetchFinancingStatus();
+		System.err.println(list+"********");
+		result.setData(list);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
 }

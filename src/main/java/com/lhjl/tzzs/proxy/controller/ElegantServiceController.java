@@ -32,11 +32,11 @@ public class ElegantServiceController {
      * @return
      */
     @GetMapping("elegantservice/list")
-    public CommonDto<List<Map<String,Object>>> getElegantServiceList(){
+    public CommonDto<List<Map<String,Object>>> getElegantServiceList(Integer recommendYn,Integer createTimeOrder){
         CommonDto<List<Map<String,Object>>> result = new CommonDto<>();
 
         try {
-            result = elegantServiceService.findElegantServiceList();
+            result = elegantServiceService.findElegantServiceList(recommendYn,createTimeOrder);
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());
             result.setData(null);

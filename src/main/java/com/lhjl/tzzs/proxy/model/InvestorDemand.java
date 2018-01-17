@@ -38,6 +38,12 @@ public class InvestorDemand {
     @Column(name = "investment_amount_high")
     private BigDecimal investmentAmountHigh;
 
+    @Column(name = "investment_amount_low_dollars")
+    private BigDecimal investmentAmountLowDollars;
+
+    @Column(name = "investment_amount_high_dollars")
+    private BigDecimal investmentAmountHighDollars;
+
     /**
      * 最近关注细分赛道
      */
@@ -66,6 +72,56 @@ public class InvestorDemand {
      */
     @Column(name = "creat_time")
     private Date creatTime;
+
+    /**
+     * 2018展望
+     */
+    private String future;
+
+    /**
+     * 权重
+     */
+    private Integer weights;
+
+    /**
+     * 状态，1表示精选，2表示资料完整，3资料未完整
+     */
+    @Column(name = "demand_status")
+    private Integer demandStatus;
+
+    /**
+     * 应用id
+     */
+    private Integer appid;
+
+    /**
+     * 更新时间
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
+
+    /**
+     * 公司名称
+     */
+    @Column(name = "company_name")
+    private String companyName;
+
+    /**
+     * 公司职务
+     */
+    @Column(name = "company_duties")
+    private String companyDuties;
+
+    /**
+     * 用户姓名
+     */
+    @Column(name = "user_name")
+    private String userName;
+
+    /**
+     * 手机号码
+     */
+    private String phonenumber;
 
     /**
      * @return id
@@ -172,6 +228,34 @@ public class InvestorDemand {
     }
 
     /**
+     * @return investment_amount_low_dollars
+     */
+    public BigDecimal getInvestmentAmountLowDollars() {
+        return investmentAmountLowDollars;
+    }
+
+    /**
+     * @param investmentAmountLowDollars
+     */
+    public void setInvestmentAmountLowDollars(BigDecimal investmentAmountLowDollars) {
+        this.investmentAmountLowDollars = investmentAmountLowDollars;
+    }
+
+    /**
+     * @return investment_amount_high_dollars
+     */
+    public BigDecimal getInvestmentAmountHighDollars() {
+        return investmentAmountHighDollars;
+    }
+
+    /**
+     * @param investmentAmountHighDollars
+     */
+    public void setInvestmentAmountHighDollars(BigDecimal investmentAmountHighDollars) {
+        this.investmentAmountHighDollars = investmentAmountHighDollars;
+    }
+
+    /**
      * 获取最近关注细分赛道
      *
      * @return recently_concerned_subdivision_circuit - 最近关注细分赛道
@@ -259,5 +343,167 @@ public class InvestorDemand {
      */
     public void setCreatTime(Date creatTime) {
         this.creatTime = creatTime;
+    }
+
+    /**
+     * 获取2018展望
+     *
+     * @return future - 2018展望
+     */
+    public String getFuture() {
+        return future;
+    }
+
+    /**
+     * 设置2018展望
+     *
+     * @param future 2018展望
+     */
+    public void setFuture(String future) {
+        this.future = future;
+    }
+
+    /**
+     * 获取权重
+     *
+     * @return weights - 权重
+     */
+    public Integer getWeights() {
+        return weights;
+    }
+
+    /**
+     * 设置权重
+     *
+     * @param weights 权重
+     */
+    public void setWeights(Integer weights) {
+        this.weights = weights;
+    }
+
+    /**
+     * 获取状态，1表示精选，2表示资料完整，3资料未完整
+     *
+     * @return demand_status - 状态，1表示精选，2表示资料完整，3资料未完整
+     */
+    public Integer getDemandStatus() {
+        return demandStatus;
+    }
+
+    /**
+     * 设置状态，1表示精选，2表示资料完整，3资料未完整
+     *
+     * @param demandStatus 状态，1表示精选，2表示资料完整，3资料未完整
+     */
+    public void setDemandStatus(Integer demandStatus) {
+        this.demandStatus = demandStatus;
+    }
+
+    /**
+     * 获取应用id
+     *
+     * @return appid - 应用id
+     */
+    public Integer getAppid() {
+        return appid;
+    }
+
+    /**
+     * 设置应用id
+     *
+     * @param appid 应用id
+     */
+    public void setAppid(Integer appid) {
+        this.appid = appid;
+    }
+
+    /**
+     * 获取更新时间
+     *
+     * @return update_time - 更新时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param updateTime 更新时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取公司名称
+     *
+     * @return company_name - 公司名称
+     */
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    /**
+     * 设置公司名称
+     *
+     * @param companyName 公司名称
+     */
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    /**
+     * 获取公司职务
+     *
+     * @return company_duties - 公司职务
+     */
+    public String getCompanyDuties() {
+        return companyDuties;
+    }
+
+    /**
+     * 设置公司职务
+     *
+     * @param companyDuties 公司职务
+     */
+    public void setCompanyDuties(String companyDuties) {
+        this.companyDuties = companyDuties;
+    }
+
+    /**
+     * 获取用户姓名
+     *
+     * @return user_name - 用户姓名
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * 设置用户姓名
+     *
+     * @param userName 用户姓名
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /**
+     * 获取手机号码
+     *
+     * @return phonenumber - 手机号码
+     */
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    /**
+     * 设置手机号码
+     *
+     * @param phonenumber 手机号码
+     */
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
     }
 }

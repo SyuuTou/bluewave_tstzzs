@@ -31,4 +31,15 @@
   (#{item.metaSegmentationId},#{item.investmentInstitutionsId})
   </foreach>
   </insert>
+
+  <select id="selectSegmentationCount" resultType="java.util.HashMap">
+    SELECT c.segmentation_name,ms.segmentation_logo,COUNT(*) ct FROM(
+    SELECT * FROM project_segmentation WHERE project_id IN(
+    SELECT id FROM projects WHERE id IN
+    ( SELECT project_id FROM project_financing_log WHERE id IN(
+    SELECT  project_id FROM investment_institutions_project WHERE  investment_institutions_id = #{institutionId}))) ) c
+    LEFT JOIN meta_segmentation ms ON c.segmentation_name = ms.name
+    GROUP BY c.segmentation_name
+    order by ct desc
+  </select>
 </mapper>

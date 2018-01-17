@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
+import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
+import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
 
 
 /**
@@ -75,4 +78,41 @@ public interface ProjectsService {
      * @return
      */
     CommonDto<ProjectComplexOutputDto> getProjectComplexInfo(Map<String,Integer> body);
+    /**
+     * 天使投资指数后台的项目列表
+     * @param appid
+     * @param body
+     * @return
+     */
+	CommonDto<Map<String, Object>> listProInfos(Integer appid, ProjectsListInputDto body);
+	/**
+	 * 更新项目的跟进状态
+	 * @param appid
+	 * @param body
+	 * @return
+	 */
+	CommonDto<Boolean> updateFollowStatus(Integer appid, ProjectsUpdateInputDto body);
+	/**
+	 * 获取项目跟进状态元数据
+	 * @param appid
+	 * @return
+	 */
+	CommonDto<List<MetaFollowStatus>> getFollowStatusSource(Integer appid);
+	/**
+	 * 获取项目来源的元数据
+	 * @param appid
+	 * @return
+	 */
+	CommonDto<List<MetaDataSourceType>> getProjectsSource(Integer appid);
+	/**
+	 * 获取项目等级元数据
+	 * @param appid
+	 * @return
+	 */
+	CommonDto<List<AdminProjectRatingLog>> getProjectsRatingStages(Integer appid);
+	/**
+	 * 获取项目的融资状态
+	 * @param appid
+	 */
+	CommonDto<List<String>> getFinancingStatus(Integer appid);
 }

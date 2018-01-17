@@ -20,6 +20,13 @@
   (#{item.metaProjectStageId},#{item.investmentInstitutionId})
   </foreach>
   </insert>
-  
+  <select id="findInstitutionStageCount" resultType="java.util.Map">
+    select mps.`name`,count(*) ct from investment_institutions_project iip
+    left join project_financing_log pfl on iip.project_id = pfl.id
+    left join meta_project_stage mps on pfl.stage = mps.`name`
+    where iip.investment_institutions_id = #{institutionId}
+    group by pfl.stage
+    order by mps.id
+  </select>
   
 </mapper>

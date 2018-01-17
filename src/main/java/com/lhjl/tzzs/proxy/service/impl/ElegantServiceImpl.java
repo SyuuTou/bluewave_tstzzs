@@ -66,13 +66,18 @@ public class ElegantServiceImpl implements ElegantServiceService{
      * @return
      */
     @Override
-    public CommonDto<List<Map<String, Object>>> findElegantServiceList() {
+    public CommonDto<List<Map<String, Object>>> findElegantServiceList(Integer recommendYn,Integer createTimeOrder) {
         CommonDto<List<Map<String,Object>>> result  = new CommonDto<>();
         Date now = new Date();
 
         List<Map<String,Object>> list = new ArrayList<>();
 
-        List<Map<String,Object>> elegantServiceList = elegantServiceMapper.findElegantServiceList();
+        Integer sortOrder = null;
+        if (createTimeOrder == null){
+            sortOrder = 1;
+        }
+
+        List<Map<String,Object>> elegantServiceList = elegantServiceMapper.findElegantServiceList(recommendYn,createTimeOrder,sortOrder);
         if (elegantServiceList.size() > 0){
             for (Map<String,Object> m:elegantServiceList){
 

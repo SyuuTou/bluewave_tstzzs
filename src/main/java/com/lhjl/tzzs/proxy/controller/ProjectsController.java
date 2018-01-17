@@ -18,9 +18,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
+import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
+import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
@@ -34,7 +38,7 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 @RestController
-public class ProjectsController {
+public class ProjectsController extends GenericController{
 
     private static final Logger log = LoggerFactory.getLogger(ProjectsController.class);
 
@@ -46,7 +50,123 @@ public class ProjectsController {
 
     @Value("${pageSize}")
     private String defaultPageSize;
-
+    /**
+     * 获取融资状态的所有数据
+     * @param appid
+     * @return
+     */
+    @GetMapping("/v{appid}/list/financingstatus")
+    public CommonDto<List<String>> getFinancingStatu(@PathVariable Integer appid){
+    	CommonDto<List<String>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getFinancingStatus(appid);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 天使投资指数的项目列表
+     * @param appid
+     * @param body
+     * @return
+     */
+    @PostMapping("/v{appid}/list/projects")
+    public CommonDto<Map<String, Object>> listProject(@PathVariable("appid") Integer appid,@RequestBody ProjectsListInputDto body){
+    	CommonDto<Map<String, Object>> result=new CommonDto<>();
+    	try {
+    		result=projectsService.listProInfos(appid,body);
+    	}catch(Exception e) {
+    		this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+    	}
+    	return result;
+    }
+    /**
+     * 更新项目的跟进状态
+     * @param appid
+     * @param body 项目的id以及项目的更新状态
+     * @return
+     */
+    @PutMapping("/v{appid}/update/projects/status")
+    public CommonDto<Boolean> updateFollowStatus(@PathVariable("appid") Integer appid,@RequestBody ProjectsUpdateInputDto body){
+    	CommonDto<Boolean> result = new CommonDto<>();
+    	try {
+    		result=projectsService.updateFollowStatus(appid,body);
+    	}catch(Exception e) {
+    		this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+    	}
+    	return result;
+    }
+    /**
+     * 读取项目跟进状态元数据
+     * @return
+     */
+    @GetMapping("/v{appid}/source/status")
+    public CommonDto<List<MetaFollowStatus>> getStatusSource(@PathVariable Integer appid ){
+    	CommonDto<List<MetaFollowStatus>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getFollowStatusSource(appid);
+    	}catch(Exception e) {
+    		this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+    	}
+    	return result;
+    	
+    }
+    /**
+     * 读取项目来源元数据
+     * @return
+     */
+    @GetMapping("/v{appid}/source/projects")
+    public CommonDto<List<MetaDataSourceType>> getProjectsSource(@PathVariable Integer appid ){
+    	CommonDto<List<MetaDataSourceType>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getProjectsSource(appid);
+    	}catch(Exception e) {
+    		this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+    	}
+    	return result;
+    	
+    }
+    /**
+     * 获取项目等级的元数据
+     * @param appid
+     * @return
+     */
+ /*   @GetMapping("/v{appid}/ratingstage/projects")
+    public CommonDto<List<AdminProjectRatingLog>> getProjectsRatingStage(@PathVariable Integer appid ){
+    	CommonDto<List<AdminProjectRatingLog>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getProjectsRatingStages(appid);
+    	}catch(Exception e) {
+    		this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+    	}
+    	return result;
+    	
+    }*/
     /**
      * 查询我关注项目
      * @return

@@ -194,7 +194,7 @@ public class InvestorsApprovalConroller {
 	public CommonDto<String> adminApproval(@RequestBody InvestorSpecialApprovalDto body){
 		CommonDto<String> result = new CommonDto<>();
 		try {
-			investorsApprovalService.adminApproval(body);
+			result= investorsApprovalService.adminApproval(body);
 		}catch (Exception e){
 			log.error(e.getMessage(),e.fillInStackTrace());
 

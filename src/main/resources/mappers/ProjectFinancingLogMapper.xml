@@ -29,17 +29,123 @@
     <result column="project_financing_useful" jdbcType="VARCHAR" property="projectFinancingUseful" />
     <result column="financing_time_year" jdbcType="VARCHAR" property="financingTimeYear" />
   </resultMap>
-
+	
+	<select id="fetchFinancingStatus" resultType="String">
+		select distinct(stage) from project_financing_log where stage is not null and stage !=""
+    </select>
+	  
   <select id="selectProjectFinancingLogList" parameterType="Integer" resultMap="BaseResultMap">
-    select  a.* from( select * from project_financing_log where project_id =  #{projectId} and `status`= #{projectStatus}
-    order by financing_time) a
-    group by a.stage
-    order by a.financing_time desc
+    select * from project_financing_log where project_id = #{projectId} and `status`= #{projectStatus}
+    group by stage
+    order by financing_time desc
   </select>
   <select id="selectInvestors" resultType="String">
-    select ii.short_name from investment_institutions_project iip
+    select ii.short_name from idatavc.investment_institutions_project iip
     left join investment_institutions ii on iip.investment_institutions_id = ii.ID
     where project_id = #{pflid}
     limit 0,3
+  </select>
+  <select id="getProjectFinancingLogList" resultType="java.util.HashMap">
+    SELECT pfl.serial_number,mdst.type_name,ii.id as investment_institution_id,ii.short_name as institution_name,
+    p.id as project_id,p.short_name as project_name,ps.segmentation_name,pfl.stage,pfl.amount,pfl.currency,
+    pfl.share_divest,pfl.valuation,pfl.total_amount,pfl.pr_amount,pfl.financing_time,pfl.Investment_institutions_list,
+    pfl.proportion_list,pfl.create_time,pfl.update_time
+    FROM project_financing_log pfl
+    left join meta_data_source_type mdst on pfl.data_soruce_type_id = mdst.id
+    left join investment_institutions_project iip on pfl.id = iip.project_id
+    left join investment_institutions ii on iip.investment_institutions_id = ii.id
+    left join projects p on pfl.project_id = p.id
+    left join
+    (select project_id,group_concat(segmentation_name) segmentation_name from project_segmentation group by project_id) ps
+    on p.id = ps.project_id
+    where 1=1
+    <if test="searchWord != null and searchWord !=''">
+      and
+      (ii.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or p.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or ps.segmentation_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or pfl.stage like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or pfl.Investment_institutions_list like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or pfl.proportion_list like CONCAT("%",CONCAT(#{searchWord},"%")))
+    </if>
+    <if test="begainTime != null and begainTime != ''">
+      and
+      (pfl.create_time between #{begainTime} and #{endTime}
+      or pfl.update_time between #{begainTime} and #{endTime})
+    </if>
+    <if test="stage != null and stage.length > 0">
+      and pfl.stage in ${stage}
+    </if>
+    <if test="currency != null and currency.length >0">
+      and pfl.currency in ${currency}
+    </if>
+    <if test="dataSource != null and dataSource.length > 0">
+      and pfl.data_soruce_type_id in ${dataSource}}
+    </if>
+    <if test="creatTimeOrder != null and creatTimeOrder !=''">
+      order by pfl.create_time
+      <if test="creatTimeOrderDesc != null and creatTimeOrderDesc !=''">
+        desc
+      </if>
+    </if>
+    <if test="updateTimeOrder != null and updateTimeOrder !=''">
+      order by pfl.update_time
+      <if test="updateTimeOrderDesc != null and updateTimeOrderDesc !=''">
+        desc
+      </if>
+    </if>
+    limit #{startPage},#{pageSize};
+  </select>
+  <select id="getProjectFinancingLogListCount" resultType="java.lang.Integer">
+    select count(*) ct from (
+    SELECT pfl.serial_number,mdst.type_name,ii.id as investment_institution_id,ii.short_name as institution_name,
+    p.id as project_id,p.short_name as project_name,ps.segmentation_name,pfl.stage,pfl.amount,pfl.currency,
+    pfl.share_divest,pfl.valuation,pfl.total_amount,pfl.pr_amount,pfl.financing_time,pfl.Investment_institutions_list,
+    pfl.proportion_list,pfl.create_time,pfl.update_time
+    FROM project_financing_log pfl
+    left join meta_data_source_type mdst on pfl.data_soruce_type_id = mdst.id
+    left join investment_institutions_project iip on pfl.id = iip.project_id
+    left join investment_institutions ii on iip.investment_institutions_id = ii.id
+    left join projects p on pfl.project_id = p.id
+    left join
+    (select project_id,group_concat(segmentation_name) segmentation_name from project_segmentation group by project_id) ps
+    on p.id = ps.project_id
+    where 1=1
+    <if test="searchWord != null and searchWord !=''">
+      and
+      (ii.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or p.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or ps.segmentation_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or pfl.stage like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or pfl.Investment_institutions_list like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or pfl.proportion_list like CONCAT("%",CONCAT(#{searchWord},"%")))
+    </if>
+    <if test="begainTime != null and begainTime != ''">
+      and
+      (pfl.create_time between #{begainTime} and #{endTime}
+      or pfl.update_time between #{begainTime} and #{endTime})
+    </if>
+    <if test="stage != null and stage.length > 0">
+      and pfl.stage in ${stage}
+    </if>
+    <if test="currency != null and currency.length >0">
+      and pfl.currency in ${currency}
+    </if>
+    <if test="dataSource != null and dataSource.length > 0">
+      and pfl.data_soruce_type_id in ${dataSource}}
+    </if>
+    <if test="creatTimeOrder != null and creatTimeOrder !=''">
+      order by pfl.create_time
+      <if test="creatTimeOrderDesc != null and creatTimeOrderDesc !=''">
+        desc
+      </if>
+    </if>
+    <if test="updateTimeOrder != null and updateTimeOrder !=''">
+      order by pfl.update_time
+      <if test="updateTimeOrderDesc != null and updateTimeOrderDesc !=''">
+        desc
+      </if>
+    </if>
+   ) abc
   </select>
 </mapper>

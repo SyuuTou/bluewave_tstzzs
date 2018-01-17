@@ -858,7 +858,13 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		InvestorsApproval investorsApproval  = new InvestorsApproval();
 		investorsApproval.setId(body.getId());
 		investorsApproval.setSupplementaryExplanation(body.getSupplementaryExplanation());
-		investorsApproval.setApprovalResult(body.getInvestorType());
+		Integer investorAuditType = 0;
+		if (body.getInvestorType() == 1 ){
+			investorAuditType = 4;
+		}else if(body.getInvestorType() == 0){
+			investorAuditType = 3;
+		}
+		investorsApproval.setApprovalResult(investorAuditType);
 		investorsApproval.setReviewTime(now);
 
 		investorsApprovalMapper.updateByPrimaryKeySelective(investorsApproval);
@@ -874,10 +880,17 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			return result;
 		}
 
-		Integer userId = investorsApproval.getUserid();
+		Integer userId = body.getUserId();
+		if (userId == null){
+			result.setMessage("用户id不能为空");
+			result.setData(null);
+			result.setStatus(502);
+
+			return result;
+		}
 
 		Investors investors = new Investors();
-		investors.setUserId(investorsApproval.getUserid());
+		investors.setUserId(userId);
 		investors = investorsMapper.selectOne(investors);
 
 		Investors investorsForInsert = new Investors();
@@ -902,14 +915,14 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 		// 发模板消息
 
-		String formId = investorsApproval.getFormId();
+		String formId = investorsApprovalMapper.selectByPrimaryKey(body.getId()).getFormId();
 		Integer status = 0;
 		if (body.getInvestorType() == 0){
 			status = 3;
 		}else if (body.getInvestorType() == 1){
 			status = 4;
 		}
-		if (status > 0){
+		if (status > 0 && formId != null){
 			sendTemplate(userId,status,formId);
 		}
 
