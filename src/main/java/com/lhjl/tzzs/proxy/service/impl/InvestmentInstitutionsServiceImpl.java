@@ -222,6 +222,9 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
             }
         }
 
+        //todo 最近关注领域
+        CommonDto<List<MetaSegmentation>> filedResult=getRencentlyFiled(institutionId);
+
         //获取机构的关注阶段
         List<Map<String,Object>> stageList = new ArrayList<>();
         stageList = investmentInstitutionsStageMapper.findInstitutionStageCount(institutionId);
@@ -752,4 +755,37 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 			return result;
 	}
 
+
+	private CommonDto<List<MetaSegmentation>> getRencentlyFiled(Integer institutionId){
+	    CommonDto<List<MetaSegmentation>> result = new CommonDto<>();
+
+        List<Map<String,Object>> metaSegmentations = metaSegmentationMapper.findInstitutionTop(institutionId);
+        List<Map<String,Object>> metaSegmentationList = metaSegmentationMapper.findUserFocusSegmentation(institutionId);
+
+        //先计算加上数量
+        if (metaSegmentations.size()>0 && metaSegmentationList.size()>0){
+            for (int i = 0;i<metaSegmentations.size();i++){
+                String topSegmentation = (String) metaSegmentations.get(i).get("name");
+                Integer count  = metaSegmentations.size() - i;
+                for (int j = 0;j< metaSegmentationList.size();j++){
+                    String userSegmentation = (String) metaSegmentationList.get(j).get("name");
+                    Integer userCount = new Integer(metaSegmentationList.get(j).get("cot").toString());
+                    if (topSegmentation.equals(userSegmentation)){
+                        count = count +userCount;
+                    }
+                }
+                metaSegmentations.get(i).put("count",count);
+            }
+        }
+
+        //合并所以领域
+
+
+
+        result.setMessage("success");
+        result.setStatus(200);
+        result.setData(null);
+
+	    return result;
+    }
 }

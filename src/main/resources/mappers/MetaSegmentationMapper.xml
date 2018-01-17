@@ -24,4 +24,26 @@
   <select id="findAll" resultMap="BaseResultMap">
   	select id,name,segmentation_logo,yn,create_time,creater from meta_segmentation
   </select>
+
+  <select id="findInstitutionTop" resultType="java.util.HashMap">
+    SELECT mps.id,mps.`name`,mps.segmentation_logo,count(*) ct FROM investment_institutions_project iip
+    left join project_financing_log pfl on iip.project_id = pfl.id
+    left join projects p on pfl.project_id = p.id
+    right join project_segmentation ps on p.id = ps.project_id
+    left join meta_segmentation mps on ps.segmentation_name = mps.`name`
+    where iip.investment_institutions_id = #{institutionId}
+    and pfl.financing_time between "2017-01-01" and "2017-12-31"
+    group by ps.segmentation_name
+    order by ct desc
+    limit 0,9
+  </select>
+  
+  <select id="findUserFocusSegmentation" resultType="java.util.HashMap">
+    SELECT ms.id,ms.`name`,ms.segmentation_logo,count(*) cot FROM investors inr
+    left join investor_demand id on inr.user_id = id.userid
+    right join investor_demand_segmentation ids on id.id = ids.investor_demand_id
+    left join meta_segmentation ms on ids.segmentation = ms.`name`
+    where investment_institutions_id = #{institutionId}
+    group by ids.segmentation
+  </select>
 </mapper>
