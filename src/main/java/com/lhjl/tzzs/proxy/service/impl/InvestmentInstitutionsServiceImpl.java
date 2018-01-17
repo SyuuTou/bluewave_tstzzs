@@ -836,7 +836,7 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 	    Integer count = 0;
 	    for (Map<String, Object> map : metaSegmentationList){
 	        if (map.get("name").toString().equals(name)){
-                count = Integer.valueOf(map.get("ct").toString()) ;
+                count = Integer.valueOf(map.get("cot").toString()) ;
                 break;
             }
         }
