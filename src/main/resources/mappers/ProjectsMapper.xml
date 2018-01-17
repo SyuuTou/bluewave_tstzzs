@@ -66,75 +66,74 @@
 		p.create_time,p.update_time
 		from projects p
 		left join admin_project_rating_log aprl on p.ID = aprl.project_id 
-		left join (select projects_id ,count(*) focuscount from follow group by projects_id) followtemp on p.ID = followtemp.projects_id
+		left join (select projects_id ,count(*) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
 		left join (select projects_id ,count(*) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
-		left join (select project_id ,count(*) viewcount from project_views group by project_id) proviewtemp on p.ID = proviewtemp.project_id
-		left join (select project_id ,stage from project_financing_log pfl inner join(
-				select project_id proid ,max(financing_time) from project_financing_log 
-				group by project_id
-			) temp where pfl.project_id=temp.proid
-			) statemp on p.ID = statemp.project_id
+		left join (select project_id ,count(*) viewcount from project_views  where yn =1 group by project_id) proviewtemp on p.ID = proviewtemp.project_id
+		right join (SELECT * FROM project_financing_log
+				    WHERE financing_time BETWEEN '2017-01-01' AND '2017-12-31'
+				    AND stage IN ('种子轮' , '天使轮', 'Pre-A轮')
+				    order by financing_time  desc
+    				) statemp on p.ID = statemp.project_id
 		left join project_follow_status pfs on p.ID = pfs.project_id
 		where 1=1 
 		<if test="keyword !=null and keyword != ''">
 			 and (p.short_name like "%"#{keyword}"%" or p.kernel_desc like "%"#{keyword}"%" or
 			 p.city like "%"#{keyword}"%" or p.project_source like "%"#{keyword}"%")
 		</if>
-		<if test="city !=null and city != ''">
-			and p.city = #{city}
-		</if>
 		<if test="projectSource !=null and projectSource != ''">
-			and p.projectSource = #{projectSource}
+			and p.project_source = #{projectSource}
 		</if>
 		<!-- 项目等级 -->
 		<if test="ratingStage !=null and ratingStage != ''">
-			and aprl.ratingStage = #{ratingStage}
+			and aprl.rating_stage = #{ratingStage}
 		</if>
 		<!-- 融资状态 -->
 		<if test="stage !=null and stage != ''">
 			and statemp.stage = #{stage}
 		</if>
 		<if test="followStatus !=null and followStatus != ''">
-			and followStatus = #{followStatus}
+			and pfs.meta_follow_status_id = #{followStatus}
 		</if>
-		<if test="column !=null and column != ''">
-			order by p.${column} ${order}
+		GROUP BY p.short_name
+		<if test="column !=null and column != '' and order != null and order != ''">
+			order by ${column} ${order}
 		</if>
 		limit #{start},#{pageSize}
     </select>
     
     <select id="findSplitCount" resultType="Long" parameterType="com.lhjl.tzzs.proxy.dto.ProjectsListInputDto">
-     select count(*) from projects p
+     	select count(*) from (select count(*) from projects p
 		left join admin_project_rating_log aprl on p.ID = aprl.project_id 
-		left join (select projects_id ,count(*) focuscount from follow group by projects_id) followtemp on p.ID = followtemp.projects_id
+		left join (select projects_id ,count(*) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
 		left join (select projects_id ,count(*) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
-		left join (select project_id ,count(*) viewcount from project_views group by project_id) proviewtemp on p.ID = proviewtemp.project_id
-		left join (select project_id ,stage from project_financing_log pfl inner join(
-				select project_id proid ,max(financing_time) from project_financing_log 
-				group by project_id
-			) temp where pfl.project_id=temp.proid
-			) statemp on p.ID = statemp.project_id
+		left join (select project_id ,count(*) viewcount from project_views  where yn =1 group by project_id) proviewtemp on p.ID = proviewtemp.project_id
+		right join (SELECT * FROM project_financing_log
+				    WHERE financing_time BETWEEN '2017-01-01' AND '2017-12-31'
+				    AND stage IN ('种子轮' , '天使轮', 'Pre-A轮')
+				    order by financing_time  desc
+    				) statemp on p.ID = statemp.project_id
 		left join project_follow_status pfs on p.ID = pfs.project_id
 		where 1=1
 		<if test="keyword !=null and keyword != ''">
 			 and (p.short_name like "%"#{keyword}"%" or p.kernel_desc like "%"#{keyword}"%" or
 			 p.city like "%"#{keyword}"%" or p.project_source like "%"#{keyword}"%")
 		</if>
-		<if test="city !=null and city != ''">
+		<!-- <if test="city !=null and city != ''">
 			and p.city = #{city}
-		</if>
+		</if> -->
 		<if test="projectSource !=null and projectSource != ''">
-			and p.projectSource = #{projectSource}
+			and p.project_source = #{projectSource}
 		</if>
 		<if test="ratingStage !=null and ratingStage != ''">
-			and aprl.ratingStage = #{ratingStage}
+			and aprl.rating_stage = #{ratingStage}
 		</if>
 		<if test="stage !=null and stage != ''">
 			and statemp.stage = #{stage}
 		</if>
 		<if test="followStatus !=null and followStatus != ''">
-			and followStatus = #{followStatus}
+			and pfs.meta_follow_status_id = #{followStatus}
 		</if>
+		GROUP BY p.short_name ) temp
     </select>
     
     <select id="findProjectByUserId" resultType="java.util.HashMap">

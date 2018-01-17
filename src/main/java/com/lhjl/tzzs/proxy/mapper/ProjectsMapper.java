@@ -120,7 +120,8 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
 	List<ProjectsListOutputDto> findSplit(ProjectsListInputDto body);
 	/**
 	 * 获取是否经过模糊查询后的数据总数
-	 * @return
+	 * 经过模糊搜索之后仍然需要进行分组
+	 * @return 返回的是最后经过分组之后的组数
 	 */
 	Long findSplitCount(ProjectsListInputDto body);
 }
