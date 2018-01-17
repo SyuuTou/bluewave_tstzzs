@@ -1175,4 +1175,16 @@ public class ProjectsServiceImpl implements ProjectsService {
 		result.setStatus(200);
 		return result;
 	}
+
+	@Override
+	public CommonDto<List<String>> getFinancingStatus(Integer appid) {
+		CommonDto<List<String>> result =new CommonDto<>();
+		System.err.println("*****");
+		List<String> list=projectFinancingLogMapper.fetchFinancingStatus();
+		System.err.println(list+"********");
+		result.setData(list);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
 }

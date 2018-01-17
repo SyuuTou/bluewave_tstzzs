@@ -1,6 +1,9 @@
 package com.lhjl.tzzs.proxy.dto;
 
 public class InvestmentInstitutionTeamMemberDto {
+
+    /**成员id*/
+    private Integer id;
     /**高清图片*/
     private String picture;
 
@@ -9,6 +12,14 @@ public class InvestmentInstitutionTeamMemberDto {
 
     /**担任职务*/
     private String companyDuties;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getPicture() {
         return picture;

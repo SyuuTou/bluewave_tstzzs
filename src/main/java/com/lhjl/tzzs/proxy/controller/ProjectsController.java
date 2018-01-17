@@ -50,7 +50,25 @@ public class ProjectsController extends GenericController{
 
     @Value("${pageSize}")
     private String defaultPageSize;
-    
+    /**
+     * 获取融资状态的所有数据
+     * @param appid
+     * @return
+     */
+    @GetMapping("/v{appid}/list/financingstatus")
+    public CommonDto<List<String>> getFinancingStatu(@PathVariable Integer appid){
+    	CommonDto<List<String>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getFinancingStatus(appid);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
     /**
      * 天使投资指数的项目列表
      * @param appid

@@ -52,6 +52,9 @@ public class InvestorDemandInputsDto {
     /**审核结果*/
     private Integer demandStatus;
 
+    /**用户id*/
+    private Integer userId;
+
 
     public List<String> getSegmentation() {
         return segmentation;
@@ -179,5 +182,13 @@ public class InvestorDemandInputsDto {
 
     public void setDemandStatus(Integer demandStatus) {
         this.demandStatus = demandStatus;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

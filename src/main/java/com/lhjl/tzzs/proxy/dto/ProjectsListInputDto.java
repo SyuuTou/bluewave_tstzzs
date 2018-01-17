@@ -8,7 +8,7 @@ public class ProjectsListInputDto {
 	 * 浏览量：viewcount
 	 */
 	private String column;
-	/**
+	/**  
 	 * 排序的方式
 	 * asc  desc
 	 */
@@ -25,7 +25,7 @@ public class ProjectsListInputDto {
 	/**
 	 * 城市的查询条件
 	 */
-	private String city;
+//	private String city;
 	/**
 	 * 项目来源的查询条件
 	 */
@@ -83,12 +83,12 @@ public class ProjectsListInputDto {
 	public void setStart(Long start) {
 		this.start = start;
 	}
-	public String getCity() {
-		return city;
-	}
-	public void setCity(String city) {
-		this.city = city;
-	}
+//	public String getCity() {
+//		return city;
+//	}
+//	public void setCity(String city) {
+//		this.city = city;
+//	}
 	public String getProjectSource() {
 		return projectSource;
 	}
@@ -117,10 +117,8 @@ public class ProjectsListInputDto {
 	@Override
 	public String toString() {
 		return "ProjectsListInputDto [column=" + column + ", order=" + order + ", keyword=" + keyword + ", currentPage="
-				+ currentPage + ", pageSize=" + pageSize + ", start=" + start + ", city=" + city + ", projectSource="
-				+ projectSource + ", ratingStage=" + ratingStage + ", stage=" + stage + ", followStatus=" + followStatus
-				+ "]";
+				+ currentPage + ", pageSize=" + pageSize + ", start=" + start + ", projectSource=" + projectSource
+				+ ", ratingStage=" + ratingStage + ", stage=" + stage + ", followStatus=" + followStatus + "]";
 	}
-	
-	
 }
+

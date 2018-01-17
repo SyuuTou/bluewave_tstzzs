@@ -15,7 +15,9 @@ public interface InvestorDemandMapper extends OwnerMapper<InvestorDemand> {
      * @param pageSize
      * @return
      */
-    List<Map<String,Object>> getInvestorDemandList(@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
+    List<Map<String,Object>> getInvestorDemandList(@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize,
+                                                   @Param("status") Integer[] status,@Param("isUser") Integer isUser,
+                                                   @Param("appid") Integer appid);
 
     /**
      * 获取总数量
@@ -23,7 +25,9 @@ public interface InvestorDemandMapper extends OwnerMapper<InvestorDemand> {
      * @param pageSize
      * @return
      */
-    Integer getInvestorDemandListCount(@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
+    Integer getInvestorDemandListCount(@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize,
+                                       @Param("status") Integer[] status,@Param("isUser") Integer isUser,
+                                       @Param("appid") Integer appid);
 
     /**
      * 根据用户id获取用户融资需求信息

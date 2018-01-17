@@ -93,6 +93,9 @@ public class InvestmentInstitutionTeam {
     @Column(name = "create_id")
     private Integer createId;
 
+    @Column(name = "investment_case")
+    private String investmentCase;
+
     /**
      * @return id
      */
@@ -375,5 +378,19 @@ public class InvestmentInstitutionTeam {
      */
     public void setCreateId(Integer createId) {
         this.createId = createId;
+    }
+
+    /**
+     * @return investment_case
+     */
+    public String getInvestmentCase() {
+        return investmentCase;
+    }
+
+    /**
+     * @param investmentCase
+     */
+    public void setInvestmentCase(String investmentCase) {
+        this.investmentCase = investmentCase;
     }
 }
