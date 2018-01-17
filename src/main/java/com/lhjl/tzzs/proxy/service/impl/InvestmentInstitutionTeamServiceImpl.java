@@ -159,7 +159,7 @@ public class InvestmentInstitutionTeamServiceImpl implements InvestmentInstituti
 
         result.setData(teamMemberDetailOutpuyDto);
         result.setStatus(200);
-        result.setMessage("sucess");
+        result.setMessage("success");
         return result;
 
     }
