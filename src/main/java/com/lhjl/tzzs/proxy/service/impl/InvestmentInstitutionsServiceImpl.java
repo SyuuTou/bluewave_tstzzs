@@ -222,7 +222,7 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
             }
         }
 
-        //todo 最近关注领域
+        // 最近关注领域
         CommonDto<List<MetaSegmentation>> filedResult=getRencentlyFiled(institutionId);
         List<MetaSegmentation> recentlyFild = new ArrayList<>();
         if (filedResult.getStatus() == 200){
