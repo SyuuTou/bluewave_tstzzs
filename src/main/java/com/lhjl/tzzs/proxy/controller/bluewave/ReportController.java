@@ -28,12 +28,12 @@ public class ReportController extends GenericController {
     @Resource
     private ReportService reportService;
 
-    @GetMapping("columns")
-    public CommonDto<List<MetaColumn>> columnQuery(){
+    @GetMapping("/v{appid}/columns")
+    public CommonDto<List<MetaColumn>> columnQuery(@PathVariable("appid") Integer appId ){
         CommonDto<List<MetaColumn>> result = null;
 
         try {
-            result = columnService.queryAll();
+            result = columnService.queryAll(appId);
         } catch (Exception e) {
             this.logger.error(e.getMessage(),e.fillInStackTrace());
             result = new CommonDto<>();
@@ -45,21 +45,21 @@ public class ReportController extends GenericController {
         return result;
     }
 
-    @PostMapping("columns")
-    public CommonDto<String> columnSaveOrUpdate(@RequestBody MetaColumn column){
+    @PostMapping("/v{appid}/columns")
+    public CommonDto<String> columnSaveOrUpdate(@PathVariable("appid") Integer appId ,@RequestBody MetaColumn column){
         CommonDto<String> result = null;
 
-        result = columnService.saveOrUpdate(column);
+        result = columnService.saveOrUpdate(appId,column);
 
         return result;
     }
 
-    @PostMapping("columns/add")
-    public CommonDto<String> columnSave(@RequestBody MetaColumn column){
+    @PostMapping("/v{appid}/columns/add")
+    public CommonDto<String> columnSave(@PathVariable("appid") Integer appId ,@RequestBody MetaColumn column){
         CommonDto<String> result = null;
 
         try {
-            result = columnService.save(column);
+            result = columnService.save(appId,column);
         } catch (Exception e) {
             this.logger.error(e.getMessage(),e.fillInStackTrace());
             result = new CommonDto<>();
@@ -70,12 +70,12 @@ public class ReportController extends GenericController {
         return result;
     }
 
-    @GetMapping("segmentations")
-    public CommonDto<List<MetaSegmentation>> segmentationQuery(){
+    @GetMapping("/v{appid}/segmentations")
+    public CommonDto<List<MetaSegmentation>> segmentationQuery(@PathVariable("appid") Integer appId ){
         CommonDto<List<MetaSegmentation>> result = null;
 
         try {
-            result = segmentationService.queryAll();
+            result = segmentationService.queryAll(appId);
         } catch (Exception e) {
             this.logger.error(e.getMessage(),e.fillInStackTrace());
             result = new CommonDto<>();
@@ -87,12 +87,12 @@ public class ReportController extends GenericController {
         return result;
     }
 
-    @PostMapping("report/list")
-    public CommonDto<List<Report>> reportList(@RequestBody ReportReqBody reqBody){
+    @PostMapping("/v{appid}/report/list")
+    public CommonDto<List<Report>> reportList(@PathVariable("appid") Integer appId ,@RequestBody ReportReqBody reqBody){
         CommonDto<List<Report>> result = null;
 
         try {
-            result = reportService.queryReport(reqBody);
+            result = reportService.queryReport(appId,reqBody);
         } catch (Exception e) {
             this.logger.error(e.getMessage(),e.fillInStackTrace());
             result = new CommonDto<>();
@@ -104,12 +104,12 @@ public class ReportController extends GenericController {
 
     }
 
-    @GetMapping("report/{id}")
-    public CommonDto<Report> reportById(@PathVariable Integer id){
+    @GetMapping("/v{appid}/report/{id}")
+    public CommonDto<Report> reportById(@PathVariable("appid") Integer appId ,@PathVariable("id") Integer id){
         CommonDto<Report> result = null;
 
         try {
-            result = reportService.getReportById(id);
+            result = reportService.getReportById(appId,id);
         } catch (Exception e) {
             this.logger.error(e.getMessage(),e.fillInStackTrace());
             result = new CommonDto<>();
@@ -120,13 +120,13 @@ public class ReportController extends GenericController {
         return result;
     }
 
-    @PutMapping("report")
-    public CommonDto<String> reportSaveOrUpdate(@RequestBody ReportReqBody reqBody ){
+    @PutMapping("/v{appid}/report")
+    public CommonDto<String> reportSaveOrUpdate(@PathVariable("appid") Integer appId ,@RequestBody ReportReqBody reqBody ){
 
         CommonDto<String> result = null;
 
         try {
-            result = reportService.saveOrUpdate(reqBody);
+            result = reportService.saveOrUpdate(appId,reqBody);
         } catch (Exception e) {
             this.logger.error(e.getMessage(),e.fillInStackTrace());
             result = new CommonDto<>();

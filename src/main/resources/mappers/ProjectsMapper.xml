@@ -69,12 +69,12 @@
 		left join (select projects_id ,count(*) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
 		left join (select projects_id ,count(*) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
 		left join (select project_id ,count(*) viewcount from project_views  where yn =1 group by project_id) proviewtemp on p.ID = proviewtemp.project_id
+		left join project_follow_status pfs on p.ID = pfs.project_id
 		right join (SELECT * FROM project_financing_log
 				    WHERE financing_time BETWEEN '2017-01-01' AND '2017-12-31'
 				    AND stage IN ('种子轮' , '天使轮', 'Pre-A轮')
 				    order by financing_time  desc
     				) statemp on p.ID = statemp.project_id
-		left join project_follow_status pfs on p.ID = pfs.project_id
 		where 1=1 
 		<if test="keyword !=null and keyword != ''">
 			 and (p.short_name like "%"#{keyword}"%" or p.kernel_desc like "%"#{keyword}"%" or
@@ -107,12 +107,12 @@
 		left join (select projects_id ,count(*) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
 		left join (select projects_id ,count(*) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
 		left join (select project_id ,count(*) viewcount from project_views  where yn =1 group by project_id) proviewtemp on p.ID = proviewtemp.project_id
+		left join project_follow_status pfs on p.ID = pfs.project_id
 		right join (SELECT * FROM project_financing_log
 				    WHERE financing_time BETWEEN '2017-01-01' AND '2017-12-31'
 				    AND stage IN ('种子轮' , '天使轮', 'Pre-A轮')
 				    order by financing_time  desc
     				) statemp on p.ID = statemp.project_id
-		left join project_follow_status pfs on p.ID = pfs.project_id
 		where 1=1
 		<if test="keyword !=null and keyword != ''">
 			 and (p.short_name like "%"#{keyword}"%" or p.kernel_desc like "%"#{keyword}"%" or

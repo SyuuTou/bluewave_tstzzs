@@ -25,7 +25,7 @@ public class ProjectsListOutputDto {
 	private String city;
 	/**
 	 * 项目来源
-	 * 0表示创始人提交，1表示投资人提交
+	 * 0表示创始人提交，1表示投资人提交，2,3,4等等有多个项目来源
 	 */
 	private Integer projectSource;
 	

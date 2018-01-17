@@ -2,9 +2,11 @@ package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionTeamDto;
+import com.lhjl.tzzs.proxy.dto.TeamManageDto.TeamMemberDetailOutpuyDto;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionTeamService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -26,6 +28,25 @@ public class InvestmentInstitutionTeamController extends GenericService{
             result.setMessage("服务器端发生错误");
         }
 
+        return result;
+    }
+
+    /**
+     * 获取指定成员的详细信息
+     * @param memberId
+     * @return
+     */
+    @GetMapping("getmemberinfo")
+    public CommonDto<TeamMemberDetailOutpuyDto> getTeamMemberInfo(Integer memberId) {
+        CommonDto<TeamMemberDetailOutpuyDto> result = new CommonDto<>();
+        try {
+            result=investmentInstitutionTeamService.getInfoByMemberId(memberId);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+        }
         return result;
     }
 }

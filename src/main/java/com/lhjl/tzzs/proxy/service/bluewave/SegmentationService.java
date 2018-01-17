@@ -6,6 +6,6 @@ import com.lhjl.tzzs.proxy.model.MetaSegmentation;
 import java.util.List;
 
 public interface SegmentationService {
-    CommonDto<List<MetaSegmentation>> queryAll();
+    CommonDto<List<MetaSegmentation>> queryAll(Integer appId);
 
 }

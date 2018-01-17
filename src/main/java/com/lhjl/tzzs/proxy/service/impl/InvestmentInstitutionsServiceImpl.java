@@ -791,7 +791,7 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
             }
 
         }
-        
+
         //数据排序
         Collections.sort(segmentations, new Comparator<Map<String, Object>>() {
             @Override
