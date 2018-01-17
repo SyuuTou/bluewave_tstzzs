@@ -224,6 +224,10 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 
         //todo 最近关注领域
         CommonDto<List<MetaSegmentation>> filedResult=getRencentlyFiled(institutionId);
+        List<MetaSegmentation> recentlyFild = new ArrayList<>();
+        if (filedResult.getStatus() == 200){
+            recentlyFild = filedResult.getData();
+        }
 
         //获取机构的关注阶段
         List<Map<String,Object>> stageList = new ArrayList<>();
@@ -293,6 +297,7 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
         map.put("address",listiia);
         map.put("institutionLogo",investmentInstitutions.getLogo());
         map.put("institutionName",investmentInstitutions.getShortName());
+        map.put("recentlyFiled",recentlyFild);
 
         result.setStatus(200);
         result.setData(map);
@@ -758,25 +763,12 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 
 	private CommonDto<List<MetaSegmentation>> getRencentlyFiled(Integer institutionId){
 	    CommonDto<List<MetaSegmentation>> result = new CommonDto<>();
+	    List<MetaSegmentation> list = new ArrayList<>();
 
         List<Map<String,Object>> metaSegmentations = metaSegmentationMapper.findInstitutionTop(institutionId);
         List<Map<String,Object>> metaSegmentationList = metaSegmentationMapper.findUserFocusSegmentation(institutionId);
 
-        //先计算加上数量
-//        if (metaSegmentations.size()>0 && metaSegmentationList.size()>0){
-//            for (int i = 0;i<metaSegmentations.size();i++){
-//                String topSegmentation = (String) metaSegmentations.get(i).get("name");
-//                Integer count  = metaSegmentations.size() - i;
-//                for (int j = 0;j< metaSegmentationList.size();j++){
-//                    String userSegmentation = (String) metaSegmentationList.get(j).get("name");
-//                    Integer userCount = new Integer(metaSegmentationList.get(j).get("cot").toString());
-//                    if (topSegmentation.equals(userSegmentation)){
-//                        count = count +userCount;
-//                    }
-//                }
-//                metaSegmentations.get(i).put("count",count);
-//            }
-//        }
+        List<Map<String, Object>> segmentations = new ArrayList<>();
 
         //初始化top9 和 机构投资人关注领域数量
         Integer num = 9;
@@ -784,9 +776,9 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
             map.put("count",fetchFocusSegmentationCount(map.get("name").toString(), metaSegmentationList, num));
 
             num--;
+            segmentations.add(map);
         }
 
-        List<Map<String, Object>> segmentations = new ArrayList<>();
 
         //合并关注领域不在机构关注top9里面的领域
         Map<String, Object> temp = null;
@@ -796,8 +788,6 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
             if (null == temp){
                 map.put("count",map.get("cot"));
                 segmentations.add(map);
-            }else {
-                segmentations.add(map);
             }
 
         }
@@ -806,16 +796,26 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
         Collections.sort(segmentations, new Comparator<Map<String, Object>>() {
             @Override
             public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-                return Integer.valueOf(o1.get("count").toString()) - Integer.valueOf(o2.get("count").toString());
+                return Integer.valueOf(o2.get("count").toString()) - Integer.valueOf(o1.get("count").toString()) ;
             }
         });
 
-        //合并所以领域
+        //整理数据返回
+        if(segmentations.size()>0){
+            for (Map<String, Object> m:segmentations){
+                MetaSegmentation metaSegmentation = new MetaSegmentation();
+                metaSegmentation.setName((String)m.get("name"));
+                metaSegmentation.setId((Integer)m.get("id"));
+                metaSegmentation.setSegmentationLogo((String)m.get("segmentation_logo"));
+
+                list.add(metaSegmentation);
+            }
+        }
 
 
         result.setMessage("success");
         result.setStatus(200);
-        result.setData(null);
+        result.setData(list);
 
 	    return result;
     }
