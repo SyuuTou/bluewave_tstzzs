@@ -7,9 +7,9 @@ import com.lhjl.tzzs.proxy.model.Report;
 import java.util.List;
 
 public interface ReportService {
-    CommonDto<List<Report>> queryReport(ReportReqBody reqBody);
+    CommonDto<List<Report>> queryReport(Integer appId, ReportReqBody reqBody);
 
-    CommonDto<Report> getReportById(Integer id);
+    CommonDto<Report> getReportById(Integer appId, Integer id);
 
-    CommonDto<String> saveOrUpdate(ReportReqBody reqBody);
+    CommonDto<String> saveOrUpdate(Integer appId, ReportReqBody reqBody);
 }
