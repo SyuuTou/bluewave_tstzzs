@@ -90,6 +90,8 @@ public class ProjectsServiceImpl implements ProjectsService {
     private ProjectFollowStatusMapper projectFollowStatusMapper;
     @Autowired
     private MetaDataSourceTypeMapper metaDataSourceTypeMapper;
+    @Autowired
+    private AdminProjectRatingLogMapper adminProjectRatingLogMapper;
 
     /**
      * 查询我关注的项目
@@ -1159,6 +1161,16 @@ public class ProjectsServiceImpl implements ProjectsService {
 		CommonDto<List<MetaDataSourceType>> result=new CommonDto<>();
 		
 		result.setData(metaDataSourceTypeMapper.selectAll());
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<AdminProjectRatingLog>> getProjectsRatingStages(Integer appid) {
+		CommonDto<List<AdminProjectRatingLog>> result=new CommonDto<>();
+		
+		result.setData(adminProjectRatingLogMapper.selectAll());
 		result.setMessage("success");
 		result.setStatus(200);
 		return result;

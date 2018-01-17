@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
 import com.lhjl.tzzs.proxy.model.Projects;
@@ -128,6 +129,26 @@ public class ProjectsController extends GenericController{
     	return result;
     	
     }
+    /**
+     * 获取项目等级的元数据
+     * @param appid
+     * @return
+     */
+ /*   @GetMapping("/v{appid}/ratingstage/projects")
+    public CommonDto<List<AdminProjectRatingLog>> getProjectsRatingStage(@PathVariable Integer appid ){
+    	CommonDto<List<AdminProjectRatingLog>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getProjectsRatingStages(appid);
+    	}catch(Exception e) {
+    		this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+    	}
+    	return result;
+    	
+    }*/
     /**
      * 查询我关注项目
      * @return
