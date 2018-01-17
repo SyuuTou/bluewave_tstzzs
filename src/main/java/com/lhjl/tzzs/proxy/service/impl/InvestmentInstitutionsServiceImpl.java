@@ -763,23 +763,54 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
         List<Map<String,Object>> metaSegmentationList = metaSegmentationMapper.findUserFocusSegmentation(institutionId);
 
         //先计算加上数量
-        if (metaSegmentations.size()>0 && metaSegmentationList.size()>0){
-            for (int i = 0;i<metaSegmentations.size();i++){
-                String topSegmentation = (String) metaSegmentations.get(i).get("name");
-                Integer count  = metaSegmentations.size() - i;
-                for (int j = 0;j< metaSegmentationList.size();j++){
-                    String userSegmentation = (String) metaSegmentationList.get(j).get("name");
-                    Integer userCount = new Integer(metaSegmentationList.get(j).get("cot").toString());
-                    if (topSegmentation.equals(userSegmentation)){
-                        count = count +userCount;
-                    }
-                }
-                metaSegmentations.get(i).put("count",count);
-            }
+//        if (metaSegmentations.size()>0 && metaSegmentationList.size()>0){
+//            for (int i = 0;i<metaSegmentations.size();i++){
+//                String topSegmentation = (String) metaSegmentations.get(i).get("name");
+//                Integer count  = metaSegmentations.size() - i;
+//                for (int j = 0;j< metaSegmentationList.size();j++){
+//                    String userSegmentation = (String) metaSegmentationList.get(j).get("name");
+//                    Integer userCount = new Integer(metaSegmentationList.get(j).get("cot").toString());
+//                    if (topSegmentation.equals(userSegmentation)){
+//                        count = count +userCount;
+//                    }
+//                }
+//                metaSegmentations.get(i).put("count",count);
+//            }
+//        }
+
+        //初始化top9 和 机构投资人关注领域数量
+        Integer num = 9;
+        for (Map<String, Object> map : metaSegmentations){
+            map.put("count",fetchFocusSegmentationCount(map.get("name").toString(), metaSegmentationList, num));
+
+            num--;
         }
 
-        //合并所以领域
+        List<Map<String, Object>> segmentations = new ArrayList<>();
 
+        //合并关注领域不在机构关注top9里面的领域
+        Map<String, Object> temp = null;
+        for (Map<String, Object> map : metaSegmentationList){
+
+            temp = findSegmentationName(metaSegmentations, map.get("name").toString());
+            if (null == temp){
+                map.put("count",map.get("cot"));
+                segmentations.add(map);
+            }else {
+                segmentations.add(map);
+            }
+
+        }
+        
+        //数据排序
+        Collections.sort(segmentations, new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                return Integer.valueOf(o1.get("count").toString()) - Integer.valueOf(o2.get("count").toString());
+            }
+        });
+
+        //合并所以领域
 
 
         result.setMessage("success");
@@ -788,4 +819,29 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 
 	    return result;
     }
+
+    private Map<String, Object> findSegmentationName(List<Map<String, Object>> metaSegmentations, String name) {
+        Map<String , Object> temp = null;
+	    for (Map<String, Object> map : metaSegmentations){
+	        if (name.equals(map.get("name").toString())){
+	            temp = map;
+	            break;
+            }
+        }
+
+	    return temp;
+    }
+
+    private Integer fetchFocusSegmentationCount(String name, List<Map<String, Object>> metaSegmentationList, Integer num) {
+	    Integer count = 0;
+	    for (Map<String, Object> map : metaSegmentationList){
+	        if (map.get("name").toString().equals(name)){
+                count = Integer.valueOf(map.get("ct").toString()) ;
+                break;
+            }
+        }
+        return count + num;
+    }
+
+
 }
