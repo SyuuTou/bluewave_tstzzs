@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
 
@@ -103,4 +104,10 @@ public interface ProjectsService {
 	 * @return
 	 */
 	CommonDto<List<MetaDataSourceType>> getProjectsSource(Integer appid);
+	/**
+	 * 获取项目等级元数据
+	 * @param appid
+	 * @return
+	 */
+	CommonDto<List<AdminProjectRatingLog>> getProjectsRatingStages(Integer appid);
 }
