@@ -110,4 +110,9 @@ public interface ProjectsService {
 	 * @return
 	 */
 	CommonDto<List<AdminProjectRatingLog>> getProjectsRatingStages(Integer appid);
+	/**
+	 * 获取项目的融资状态
+	 * @param appid
+	 */
+	CommonDto<List<String>> getFinancingStatus(Integer appid);
 }

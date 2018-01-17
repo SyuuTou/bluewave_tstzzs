@@ -11,4 +11,9 @@ import java.util.Map;
 public interface ProjectFinancingLogMapper extends OwnerMapper<ProjectFinancingLog> {
     List<ProjectFinancingLog> selectProjectFinancingLogList(@Param("projectId") Integer projectId,@Param("projectStatus") Integer projectStatus);
     List<String> selectInvestors(@Param("pflid") Integer pflid);
+    /**
+     * 获取所有的融资状态
+     * @return
+     */
+	List<String> fetchFinancingStatus();
 }
