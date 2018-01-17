@@ -8,6 +8,9 @@ public class InvestorDemandListOutputDto {
     /**融资需求id*/
     private Integer id;
 
+    /**用户id*/
+    private Integer userid;
+
     /**用户头像*/
     private String headpic;
 
@@ -62,6 +65,14 @@ public class InvestorDemandListOutputDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
     }
 
     public String getHeadpic() {

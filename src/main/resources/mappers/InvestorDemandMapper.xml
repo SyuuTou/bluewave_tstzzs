@@ -29,7 +29,7 @@
     <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
   </resultMap>
   <select id="getInvestorDemandList" resultType="java.util.HashMap">
-    SELECT b.id,b.user_name,
+    SELECT b.id,b.user_name,b.userid,
     case when u.headpic is null then (case when u.headpic_real is null then "" else u.headpic_real end) else u.headpic end headpic,
     b.company_name,b.company_duties,b.phonenumber,
     ids.segmentation,idsw.speedway,a.stage,b.investment_amount_low,b.investment_amount_high,
@@ -67,7 +67,7 @@
   </select>
   <select id="getInvestorDemandListCount" resultType="java.lang.Integer">
     Select count(*) ct from(
-    SELECT b.id,b.user_name,
+    SELECT b.id,b.user_name,b.userid,
     case when u.headpic is null then (case when u.headpic_real is null then "" else u.headpic_real end) else u.headpic end headpic,
     b.company_name,b.company_duties,b.phonenumber,
     ids.segmentation,idsw.speedway,a.stage,b.investment_amount_low,b.investment_amount_high,
