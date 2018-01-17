@@ -3,16 +3,16 @@ package com.lhjl.tzzs.proxy.service.impl;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionTeamDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionTeamMemberDto;
-import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionTeamMapper;
-import com.lhjl.tzzs.proxy.mapper.MetaInvestmentInstitutionTeamTypeMapper;
-import com.lhjl.tzzs.proxy.model.InvestmentInstitutionTeam;
-import com.lhjl.tzzs.proxy.model.MetaInvestmentInstitutionTeamType;
+import com.lhjl.tzzs.proxy.dto.TeamManageDto.TeamMemberDetailOutpuyDto;
+import com.lhjl.tzzs.proxy.mapper.*;
+import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionTeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class InvestmentInstitutionTeamServiceImpl implements InvestmentInstitutionTeamService {
@@ -23,7 +23,20 @@ public class InvestmentInstitutionTeamServiceImpl implements InvestmentInstituti
     @Autowired
     private InvestmentInstitutionTeamMapper investmentInstitutionTeamMapper;
 
+    @Autowired
+    private InvestmentInstitutionsMapper investmentInstitutionsMapper;
 
+    @Autowired
+    private InvestmentInstitutionsAddressMapper investmentInstitutionsAddressMapper;
+
+    @Autowired
+    private InvestorDemandMapper investorDemandMapper;
+
+    @Autowired
+    private InvestmentInstitutionsMemberEducationMapper investmentInstitutionsMemberEducationMapper;
+
+    @Autowired
+    private InvestmentInstitutionsMemberWorkMapper investmentInstitutionsMemberWorkMapper;
     /**
      * 获取机构团队成员的接口
      * @param institutionId 机构id
@@ -83,5 +96,69 @@ public class InvestmentInstitutionTeamServiceImpl implements InvestmentInstituti
         result.setStatus(200);
 
         return result;
+    }
+
+    @Override
+    public CommonDto<TeamMemberDetailOutpuyDto> getInfoByMemberId(Integer memberId) {
+        CommonDto<TeamMemberDetailOutpuyDto> result = new CommonDto<>();
+        TeamMemberDetailOutpuyDto teamMemberDetailOutpuyDto = new TeamMemberDetailOutpuyDto();
+
+        InvestmentInstitutionTeam investmentInstitutionTeam = new InvestmentInstitutionTeam();
+        investmentInstitutionTeam.setId(memberId);
+        InvestmentInstitutionTeam investmentInstitutionTeam1 =  investmentInstitutionTeamMapper.selectByPrimaryKey(investmentInstitutionTeam);
+
+        InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
+        investmentInstitutions.setId(investmentInstitutionTeam1.getInvestmentInstitutionId());
+        InvestmentInstitutions investmentInstitutions1 = investmentInstitutionsMapper.selectByPrimaryKey(investmentInstitutions);
+
+        InvestmentInstitutionsAddress investmentInstitutionsAddress = new InvestmentInstitutionsAddress();
+        investmentInstitutionsAddress.setId(investmentInstitutionTeam1.getInvestmentInstitutionId());
+        InvestmentInstitutionsAddress investmentInstitutionsAddress1 = investmentInstitutionsAddressMapper.selectByPrimaryKey(investmentInstitutionsAddress);
+
+        InvestorDemand investorDemand = new InvestorDemand();
+        investorDemand.setId(investmentInstitutionTeam1.getId());
+        InvestorDemand investorDemand1 = investorDemandMapper.selectByPrimaryKey(investorDemand);
+
+        InvestmentInstitutionsMemberWork investmentInstitutionsMemberWork = new InvestmentInstitutionsMemberWork();
+        investmentInstitutionsMemberWork.setMemberId(investmentInstitutionTeam1.getId());
+        List<InvestmentInstitutionsMemberWork> investmentInstitutionsMemberWorkList = investmentInstitutionsMemberWorkMapper.select(investmentInstitutionsMemberWork);
+        List<String> investmentInstitutionsMemberWorks = new ArrayList<>();
+        investmentInstitutionsMemberWorkList.forEach( work -> {
+            investmentInstitutionsMemberWorks.add(work.getWorkExperience());
+        });
+
+        String[] investmentInstitutionsMemberWorkArr = new String[investmentInstitutionsMemberWorks.size()];
+        investmentInstitutionsMemberWorks.toArray(investmentInstitutionsMemberWorkArr);
+
+        InvestmentInstitutionsMemberEducation investmentInstitutionsMemberEducation = new InvestmentInstitutionsMemberEducation();
+        investmentInstitutionsMemberEducation.setMemberId(investmentInstitutionTeam1.getId());
+        List<InvestmentInstitutionsMemberEducation> investmentInstitutionsMemberEducationList = investmentInstitutionsMemberEducationMapper.select(investmentInstitutionsMemberEducation);
+
+        List<String> investmentInstitutionsMemberEducations = new ArrayList<>();
+        investmentInstitutionsMemberEducationList.forEach( education -> {
+            investmentInstitutionsMemberEducations.add(education.getEducationExperience());
+        });
+
+        String[] investmentInstitutionsMemberEducationArr = new String[investmentInstitutionsMemberEducations.size()];
+        investmentInstitutionsMemberEducations.toArray(investmentInstitutionsMemberEducationArr);
+
+        teamMemberDetailOutpuyDto.setName(investmentInstitutionTeam1.getActualName());
+        teamMemberDetailOutpuyDto.setJobTitle(investmentInstitutionTeam1.getCompanyDuties());
+        teamMemberDetailOutpuyDto.setEmail(investmentInstitutionTeam1.getEmail());
+        teamMemberDetailOutpuyDto.setPicture(investmentInstitutionTeam1.getPicture());
+        teamMemberDetailOutpuyDto.setIntroduction(investmentInstitutionTeam1.getMemberDesc());
+        teamMemberDetailOutpuyDto.setInstitutionName(investmentInstitutions1.getShortName());
+        teamMemberDetailOutpuyDto.setInstitutionAddress(investmentInstitutionsAddress1.getDetailAddress());
+        teamMemberDetailOutpuyDto.setInvestmentCase(investmentInstitutionTeam1.getInvestmentCase());
+        teamMemberDetailOutpuyDto.setInvestmentStage(investorDemand1.getFinancingStage());
+        teamMemberDetailOutpuyDto.setInvestmentPerferDomain(investorDemand1.getIndustry());
+        teamMemberDetailOutpuyDto.setWorkExperience(investmentInstitutionsMemberWorkArr);
+        teamMemberDetailOutpuyDto.setEducationExperience(investmentInstitutionsMemberEducationArr);
+
+        result.setData(teamMemberDetailOutpuyDto);
+        result.setStatus(200);
+        result.setMessage("sucess");
+        return result;
+
     }
 }
