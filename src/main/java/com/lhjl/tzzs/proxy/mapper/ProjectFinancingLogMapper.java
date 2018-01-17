@@ -11,7 +11,6 @@ import java.util.Map;
 public interface ProjectFinancingLogMapper extends OwnerMapper<ProjectFinancingLog> {
     List<ProjectFinancingLog> selectProjectFinancingLogList(@Param("projectId") Integer projectId,@Param("projectStatus") Integer projectStatus);
     List<String> selectInvestors(@Param("pflid") Integer pflid);
-
     /**
      * 项目融资历史查询
      * @param searchWord
@@ -40,4 +39,9 @@ public interface ProjectFinancingLogMapper extends OwnerMapper<ProjectFinancingL
                                                         @Param("creatTimeOrder") Integer creatTimeOrder,@Param("creatTimeOrderDesc") Integer creatTimeOrderDesc,
                                                         @Param("updateTimeOrder") Integer updateTimeOrder,@Param("updateTimeOrderDesc") Integer updateTimeOrderDesc,
                                                         @Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
+    /**
+     * 获取所有的融资状态
+     * @return
+     */
+	List<String> fetchFinancingStatus();
 }
