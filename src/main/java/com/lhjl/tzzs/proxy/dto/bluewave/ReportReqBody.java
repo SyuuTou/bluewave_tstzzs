@@ -234,4 +234,15 @@ public class ReportReqBody {
     public void setReportLabels(List<String> reportLabels) {
         this.reportLabels = reportLabels;
     }
+
+	@Override
+	public String toString() {
+		return "ReportReqBody [id=" + id + ", title=" + title + ", subTitle=" + subTitle + ", content=" + content
+				+ ", comments=" + comments + ", coverUrl=" + coverUrl + ", fromRul=" + fromRul + ", sourceTextUrl="
+				+ sourceTextUrl + ", weightingFactor=" + weightingFactor + ", status=" + status + ", yn=" + yn
+				+ ", createTime=" + createTime + ", updateTime=" + updateTime + ", creater=" + creater + ", columns="
+				+ columns + ", segmentations=" + segmentations + ", reportLabels=" + reportLabels + ", pageSize="
+				+ pageSize + ", pageNo=" + pageNo + "]";
+	}
+    
 }
