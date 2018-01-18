@@ -143,7 +143,7 @@ public class ReportController extends GenericController {
             this.logger.error(e.getMessage(),e.fillInStackTrace());
             result = new CommonDto<>();
             result.setStatus(500);
-            result.setMessage("服务器繁忙，请售后再试。");
+            result.setMessage("服务器繁忙，请稍后再试。");
         }
 
         return result;

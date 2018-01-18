@@ -131,8 +131,8 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         result.setMessage("success");
         result.setStatus(200);
         result.setTotal(rowBounds.getTotal());
-
   
+        
         return result;
     }
 
