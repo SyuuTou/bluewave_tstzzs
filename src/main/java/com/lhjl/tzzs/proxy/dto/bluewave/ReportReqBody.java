@@ -80,8 +80,10 @@ public class ReportReqBody {
 
     private Integer pageSize = 10;
     private Integer pageNo;
-
-
+    /**
+     * 作者
+     */
+    private String author;
 
     public Integer getPageSize() {
         return pageSize;
@@ -235,6 +237,14 @@ public class ReportReqBody {
         this.reportLabels = reportLabels;
     }
 
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
 	@Override
 	public String toString() {
 		return "ReportReqBody [id=" + id + ", title=" + title + ", subTitle=" + subTitle + ", content=" + content
@@ -242,7 +252,8 @@ public class ReportReqBody {
 				+ sourceTextUrl + ", weightingFactor=" + weightingFactor + ", status=" + status + ", yn=" + yn
 				+ ", createTime=" + createTime + ", updateTime=" + updateTime + ", creater=" + creater + ", columns="
 				+ columns + ", segmentations=" + segmentations + ", reportLabels=" + reportLabels + ", pageSize="
-				+ pageSize + ", pageNo=" + pageNo + "]";
+				+ pageSize + ", pageNo=" + pageNo + ", author=" + author + "]";
 	}
+
     
 }

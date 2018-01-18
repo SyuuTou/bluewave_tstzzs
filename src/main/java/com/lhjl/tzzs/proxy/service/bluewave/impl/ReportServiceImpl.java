@@ -5,7 +5,10 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.CommonTotal;
 import com.lhjl.tzzs.proxy.dto.EventDto;
 import com.lhjl.tzzs.proxy.dto.bluewave.ReportReqBody;
+import com.lhjl.tzzs.proxy.mapper.ReportColumnMapper;
+import com.lhjl.tzzs.proxy.mapper.ReportLabelMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportMapper;
+import com.lhjl.tzzs.proxy.mapper.ReportSegmentationMapper;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.bluewave.*;
@@ -23,7 +26,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
 
 @Service
 public class ReportServiceImpl extends GenericService implements ReportService {
@@ -37,9 +44,18 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     private ReportSegmentationService segmentationService;
     @Autowired
     private ReportLabelService labelService;
+    @Resource
+    private UserLoginService userLoginService;
 
     @Autowired
     private RestTemplate restTemplate;
+    
+    @Autowired
+    private ReportColumnMapper reportColumnMapper;
+    @Autowired
+    private ReportSegmentationMapper reportSegmentationMapper;
+    @Autowired
+    private ReportLabelMapper reportLabelMapper;
 
     @Value("${event.trigger.url}")
     private String eventUrl;
@@ -47,9 +63,9 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 
     @Transactional(readOnly = true)
     @Override
-    public CommonDto<List<Report>> queryReport(Integer appId, ReportReqBody reqBody) {
-
-        CommonTotal<List<Report>> result = new CommonTotal<>();
+    public CommonDto<List<Map<String,Object>>> queryReport(Integer appId, ReportReqBody reqBody) {
+    	
+        CommonTotal<List<Map<String,Object>>> result = new CommonTotal<>();
 
         Report report = new Report();
         report.setComments(reqBody.getComments());
@@ -63,18 +79,60 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         report.setSubTitle(reqBody.getSubTitle());
         report.setTitle(reqBody.getTitle());
         report.setWeightingFactor(reqBody.getWeightingFactor());
-
+        report.setAuthor(reqBody.getAuthor());
+        
         int offset = (reqBody.getPageNo() - 1) * reqBody.getPageSize();
         int limit = reqBody.getPageSize();
 
         PageRowBounds rowBounds = new PageRowBounds(offset, limit);
         List<Report> list = reportMapper.selectByRowBounds(report, new RowBounds(offset, limit));
-        result.setData(list);
+        
+        List<Map<String,Object>> lists=new ArrayList<>();
+        for(Report tmp:list) {
+        	Map<String,Object> map=new HashMap<>();
+        	Integer releaseId = tmp.getId();
+        	map.put("report", tmp);
+        	
+        	ReportColumn rc =new ReportColumn();
+        	rc.setReportId(releaseId);
+        	List<ReportColumn> ReportColumns = reportColumnMapper.select(rc);
+        	List<Integer> columns=new ArrayList<>();
+        	if(ReportColumns!=null) {
+        		ReportColumns.forEach((e)->{
+            		columns.add(e.getColumnId());
+            	});
+        	}
+        	map.put("columns", columns);
+        	
+        	ReportSegmentation rs =new ReportSegmentation();
+        	rs.setReportId(releaseId);
+        	List<ReportSegmentation> ReportSegmentations = reportSegmentationMapper.select(rs);
+        	List<Integer> segmentations=new ArrayList<>();
+        	if(ReportSegmentations!=null) {
+        		ReportSegmentations.forEach((e)->{
+        			segmentations.add(e.getSegmentationId());
+            	});
+        	}
+        	map.put("segmentations", segmentations);
+        	
+        	ReportLabel rl=new ReportLabel();
+        	rl.setReportId(releaseId);
+        	List<ReportLabel> ReportLabels = reportLabelMapper.select(rl);
+        	List<String> labels =new ArrayList<>();
+        	if(ReportLabels != null) {
+        		ReportLabels.forEach((e)->{
+        			labels.add(e.getName());
+        		});
+        	}
+        	map.put("lables", labels);
+        	lists.add(map);
+        }
+        result.setData(lists);
         result.setMessage("success");
         result.setStatus(200);
         result.setTotal(rowBounds.getTotal());
 
-
+  
         return result;
     }
 
@@ -108,6 +166,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         report.setTitle(reqBody.getTitle());
         report.setWeightingFactor(reqBody.getWeightingFactor());
         report.setCreater(reqBody.getCreater());
+        report.setYn(reqBody.getYn());
         Integer num = null;
         if (null == report.getId()){
         	report.setCreateTime(new Date());
