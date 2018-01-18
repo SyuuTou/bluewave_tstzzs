@@ -177,7 +177,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     			labels.add(e.getName());
     		});
     	}
-    	map.put("lables", labels);
+    	map.put("labels", labels);
         //*
         
         result.setData(map);
