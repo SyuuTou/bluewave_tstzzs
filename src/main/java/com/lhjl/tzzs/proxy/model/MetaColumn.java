@@ -155,4 +155,11 @@ public class MetaColumn {
     public void setCreater(String creater) {
         this.creater = creater;
     }
+
+	@Override
+	public String toString() {
+		return "MetaColumn [id=" + id + ", name=" + name + ", eventKey=" + eventKey + ", sort=" + sort + ", yn=" + yn
+				+ ", createTime=" + createTime + ", creater=" + creater + "]";
+	}
+    
 }

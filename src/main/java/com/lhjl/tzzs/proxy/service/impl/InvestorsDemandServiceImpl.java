@@ -617,6 +617,9 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
             for (Map<String,Object> inverstorMap:inverstorDemandList){
                 InvestorDemandListOutputDto investorDemandListOutputDto = new InvestorDemandListOutputDto();
                 investorDemandListOutputDto.setId((Integer)inverstorMap.get("id"));
+                if (body.getIsAdmin() != null && body.getIsAdmin() == 1){
+                    investorDemandListOutputDto.setUserid((Integer)inverstorMap.get("userid"));
+                }
                 String userName = "";
                 if (inverstorMap.get("user_name") != null){
                     userName = (String)inverstorMap.get("user_name");

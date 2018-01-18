@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Mapper
@@ -124,6 +125,13 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
 	 * @return 返回的是最后经过分组之后的组数
 	 */
 	Long findSplitCount(ProjectsListInputDto body);
+
+    /**
+     *
+     * @param projectId
+     * @return
+     */
+	Map<String,Object> getLogoAndOtherInfoById(@Param("projectId") Integer projectId);
 }
 
 
