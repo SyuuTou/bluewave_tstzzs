@@ -14,6 +14,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProjectRatingServiceImpl implements ProjectRatingService{
@@ -136,6 +137,42 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
             result.setData(null);
             result.setMessage("项目源类型未知，请检查");
         }
+
+        return result;
+    }
+
+    /**
+     * 读取项目评级信息的接口
+     * @param projectId
+     * @return
+     */
+    @Override
+    public CommonDto<AdminProjectRatingLog> getProjectRatingInfo(Integer projectId) {
+        CommonDto<AdminProjectRatingLog> result =  new CommonDto<>();
+
+        if (projectId == null){
+            result.setMessage("项目id不能为空");
+            result.setData(null);
+            result.setStatus(502);
+
+            return result;
+        }
+        AdminProjectRatingLog resultA = new AdminProjectRatingLog();
+
+        AdminProjectRatingLog adminProjectRatingLogForSearch = new AdminProjectRatingLog();
+        adminProjectRatingLogForSearch.setProjectId(projectId);
+
+        AdminProjectRatingLog adminProjectRatingLog = adminProjectRatingLogMapper.selectOne(adminProjectRatingLogForSearch);
+        if (adminProjectRatingLog == null){
+            resultA.setRatingStage(null);
+            resultA.setRatingDescription("");
+        }else {
+            resultA = adminProjectRatingLog;
+        }
+
+        result.setStatus(200);
+        result.setData(resultA);
+        result.setMessage("success");
 
         return result;
     }

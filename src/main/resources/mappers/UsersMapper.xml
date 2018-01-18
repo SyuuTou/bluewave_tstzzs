@@ -212,4 +212,18 @@
       </if>
     </if>) abc
   </select>
+
+  <select id="userInfoElegantSearch" resultType="java.util.HashMap">
+    SELECT u.id,u.company_name,u.company_duties,
+    case when u.actual_name is null then uw.nick_name else u.actual_name end user_name
+    FROM users u
+    right join users_weixin uw on u.id = uw.user_id
+    where  1=1
+    and (u.actual_name is not null or uw.nick_name is not null)
+    <if test="searchWord != null and searchWord != ''">
+      and (u.actual_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or u.company_name like CONCAT("%",CONCAT(#{searchWord},"%")) or u.company_duties like CONCAT("%",CONCAT(#{searchWord},"%")))
+    </if>
+    limit #{startPage},#{pageSize}
+  </select>
 </mapper>

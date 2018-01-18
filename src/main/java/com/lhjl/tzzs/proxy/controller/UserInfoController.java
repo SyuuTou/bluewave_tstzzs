@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.dto.AdminUserListInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.dto.UserChooseLogDto.UserElegantServiceInputDto;
+import com.lhjl.tzzs.proxy.dto.UserInfoElegantOutputDto;
 import com.lhjl.tzzs.proxy.model.MetaUserLevel;
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
@@ -229,6 +230,27 @@ public class UserInfoController {
             result.setMessage("success");
             result.setStatus(200);
             result.setData(null);
+        }
+
+        return result;
+    }
+
+    /**
+     * 用户信息智能检索
+     * @param searchWord
+     * @return
+     */
+    @GetMapping("userinfo/elegant/search")
+    public CommonDto<List<UserInfoElegantOutputDto>> userInfoElegantSearch(String searchWord,Integer pageNum,Integer pageSize){
+        CommonDto<List<UserInfoElegantOutputDto>> result = new CommonDto<>();
+
+        try {
+            result = userInfoService.userInfoElegantSearch(searchWord,pageNum,pageSize);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
         }
 
         return result;

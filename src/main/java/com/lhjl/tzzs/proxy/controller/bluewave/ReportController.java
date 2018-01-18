@@ -134,16 +134,16 @@ public class ReportController extends GenericController {
      * @return
      */
     @GetMapping("/v{appid}/report/{id}")
-    public CommonDto<Report> reportById(@PathVariable("appid") Integer appId ,@PathVariable("id") Integer id){
-        CommonDto<Report> result = null;
+    public CommonDto<Map<String,Object>> reportById(@PathVariable("appid") Integer appId ,@PathVariable("id") Integer id){
+        CommonDto<Map<String,Object>> result = null;
 
         try {
-            result = reportService.getReportById(appId,id);
+            result = reportService.getReportById(appId,id);  
         } catch (Exception e) {
             this.logger.error(e.getMessage(),e.fillInStackTrace());
             result = new CommonDto<>();
             result.setStatus(500);
-            result.setMessage("服务器繁忙，请售后再试。");
+            result.setMessage("服务器繁忙，请稍后再试。");
         }
 
         return result;
