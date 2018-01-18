@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -109,9 +110,11 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         report.setCreater(reqBody.getCreater());
         Integer num = null;
         if (null == report.getId()){
+        	report.setCreateTime(new Date());
             num = reportMapper.insert(report);
             this.sendNewsEvent(reqBody.getCreater(),num,reqBody.getColumns());
         }else{
+        	report.setUpdateTime(new Date());
             num = reportMapper.updateByPrimaryKeySelective(report);
         }
 

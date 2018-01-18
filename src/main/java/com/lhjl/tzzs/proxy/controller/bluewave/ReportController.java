@@ -155,7 +155,7 @@ public class ReportController extends GenericController {
      */
     @PutMapping("/v{appid}/report")
     public CommonDto<String> reportSaveOrUpdate(@PathVariable("appid") Integer appId ,@RequestBody ReportReqBody reqBody ){
-
+    	System.err.println(reqBody+"***reqBody**");
         CommonDto<String> result = null;
 
         try {
