@@ -138,7 +138,7 @@ public class ReportController extends GenericController {
         CommonDto<Map<String,Object>> result = null;
 
         try {
-            result = reportService.getReportById(appId,id);
+            result = reportService.getReportById(appId,id);  
         } catch (Exception e) {
             this.logger.error(e.getMessage(),e.fillInStackTrace());
             result = new CommonDto<>();
