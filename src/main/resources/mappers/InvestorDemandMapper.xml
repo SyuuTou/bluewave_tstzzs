@@ -104,8 +104,13 @@
   </select>
 
   <select id="selectDemandByUserId" resultType="java.util.HashMap">
-    SELECT iid.id,ids.segmentation,idsw.speedway,a.stage,iid.investment_amount_low,iid.investment_amount_high,
-    iid.investment_amount_low_dollars,iid.investment_amount_high_dollars,idc.user_character,
+    SELECT iid.id,
+    case when ids.segmentation is null then iid.industry else ids.segmentation end segmentation,
+    case when idsw.speedway is null then iid.recently_concerned_subdivision_circuit else idsw.speedway end speedway,
+    case when a.stage is null then iid.financing_stage else a.stage end stage,
+    case when idc.user_character is null then iid.concerned_founders_characteristic else idc.user_character end user_character,
+    iid.investment_amount_low,iid.investment_amount_high,
+    iid.investment_amount_low_dollars,iid.investment_amount_high_dollars,
     iid.future,iid.demand_status,iid.update_time,iid.demand_status,iid.creat_time
     FROM investor_demand iid
     left join
