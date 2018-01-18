@@ -19,4 +19,8 @@ public interface StatisticsMapper  {
     List<HistogramList> financingWorkExperienceDistributed(@Param("jgtype") Integer type, @Param("beginTime") String beginTime, @Param("endTime") String endTime,@Param("froma") Integer froma,@Param("sizea") Integer sizea);
 
     List<HistogramList> financingInvestmentDistributed(@Param("jgtype") Integer type, @Param("beginTime") String beginTime, @Param("endTime") String endTime,@Param("froma") Integer froma,@Param("sizea") Integer sizea);
+
+    List<HistogramList> financingInvestmentCharacteristicDistributed(@Param("jgtype") Integer type, @Param("beginTime") String beginTime, @Param("endTime") String endTime,@Param("froma") Integer froma,@Param("sizea") Integer sizea);
+
+    List<HistogramList> financingInvestmentFocsSegmentationDistributed(@Param("jgtype") Integer type, @Param("beginTime") String beginTime, @Param("endTime") String endTime,@Param("froma") Integer froma,@Param("sizea") Integer sizea);
 }

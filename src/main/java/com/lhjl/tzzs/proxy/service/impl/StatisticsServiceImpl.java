@@ -197,4 +197,44 @@ public class StatisticsServiceImpl implements StatisticsService {
         result.setStatus(200);
         return result;
     }
+
+    @Override
+    public CommonDto<List<HistogramList>> financingInvestmentCharacteristicDistributed(String institutionType, String from, String size) {
+        int from1  = Integer.parseInt(from);
+        int size1 = Integer.parseInt(size);
+
+        int froma = from1*size1;
+        int sizea = size1;
+
+        CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
+        Integer type = null;
+        if (institutionType.equals("50")){
+            type = 1;
+        }
+        List<HistogramList>  histogramLists = statisticsMapper.financingInvestmentCharacteristicDistributed(type,beginTime,endTime,froma,sizea);
+        result.setData(histogramLists);
+        result.setMessage("success");
+        result.setStatus(200);
+        return result;
+    }
+
+    @Override
+    public CommonDto<List<HistogramList>> financingInvestmentSegmentationDistributed(String institutionType, String from, String size) {
+        int from1  = Integer.parseInt(from);
+        int size1 = Integer.parseInt(size);
+
+        int froma = from1*size1;
+        int sizea = size1;
+
+        CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
+        Integer type = null;
+        if (institutionType.equals("50")){
+            type = 1;
+        }
+        List<HistogramList>  histogramLists = statisticsMapper.financingInvestmentFocsSegmentationDistributed(type,beginTime,endTime,froma,sizea);
+        result.setData(histogramLists);
+        result.setMessage("success");
+        result.setStatus(200);
+        return result;
+    }
 }

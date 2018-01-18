@@ -143,4 +143,22 @@
         group by p.city ) a
         order by a.count desc limit #{froma},#{sizea}
     </select>
+
+    <select id="financingInvestmentCharacteristicDistributed" resultMap="histogramResultMap">
+
+        select count(distinct a.userid) x , b.character y from  investor_demand a
+        right join investor_demand_character b on b.investor_demand_id = a.id
+        group by  b.character
+        order by count(distinct a.userid)  desc
+        limit #{froma},#{sizea}
+    </select>
+
+    <select id="financingInvestmentFocsSegmentationDistributed" resultMap="histogramResultMap">
+
+        select count(distinct a.userid) y , b.segmentation x from  investor_demand a
+        right join investor_demand_segmentation b on b.investor_demand_id = a.id
+        group by  b.segmentation
+        order by count(distinct a.userid)  desc
+        limit #{froma},#{sizea}
+    </select>
 </mapper>

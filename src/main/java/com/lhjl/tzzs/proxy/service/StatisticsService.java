@@ -19,4 +19,8 @@ public interface StatisticsService {
     CommonDto<List<HistogramList>> financingWorkExperienceDistributed(String institutionType, String from, String size);
 
     CommonDto<List<HistogramList>> financingInvestmentDistributed(String institutionType, String from, String size);
+
+    CommonDto<List<HistogramList>> financingInvestmentCharacteristicDistributed(String institutionType, String from, String size);
+
+    CommonDto<List<HistogramList>> financingInvestmentSegmentationDistributed(String institutionType, String from, String size);
 }
