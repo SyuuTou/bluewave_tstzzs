@@ -1,23 +1,24 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.ReportMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Report" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ReportMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Report">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="sub_title" property="subTitle" jdbcType="VARCHAR" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="comments" property="comments" jdbcType="VARCHAR" />
-    <result column="cover_url" property="coverUrl" jdbcType="VARCHAR" />
-    <result column="from_rul" property="fromRul" jdbcType="VARCHAR" />
-    <result column="source_text_url" property="sourceTextUrl" jdbcType="VARCHAR" />
-    <result column="weighting_factor" property="weightingFactor" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="yn" property="yn" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="sub_title" jdbcType="VARCHAR" property="subTitle" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="comments" jdbcType="VARCHAR" property="comments" />
+    <result column="cover_url" jdbcType="VARCHAR" property="coverUrl" />
+    <result column="from_rul" jdbcType="VARCHAR" property="fromRul" />
+    <result column="source_text_url" jdbcType="VARCHAR" property="sourceTextUrl" />
+    <result column="weighting_factor" jdbcType="INTEGER" property="weightingFactor" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="creater" jdbcType="VARCHAR" property="creater" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
   </resultMap>
 </mapper>

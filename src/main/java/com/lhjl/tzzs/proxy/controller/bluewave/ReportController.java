@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ReportController extends GenericController {
@@ -111,8 +112,8 @@ public class ReportController extends GenericController {
      * @return
      */
     @PostMapping("/v{appid}/report/list")
-    public CommonDto<List<Report>> reportList(@PathVariable("appid") Integer appId ,@RequestBody ReportReqBody reqBody){
-        CommonDto<List<Report>> result = null;
+    public CommonDto<List<Map<String,Object>>> reportList(@PathVariable("appid") Integer appId ,@RequestBody ReportReqBody reqBody){
+        CommonDto<List<Map<String,Object>>> result = null;
 
         try {
             result = reportService.queryReport(appId,reqBody);
@@ -155,9 +156,9 @@ public class ReportController extends GenericController {
      */
     @PutMapping("/v{appid}/report")
     public CommonDto<String> reportSaveOrUpdate(@PathVariable("appid") Integer appId ,@RequestBody ReportReqBody reqBody ){
-    	System.err.println(reqBody+"***reqBody**");
+//    	System.err.println(reqBody+"***reqBody**");
         CommonDto<String> result = null;
-
+        
         try {
             result = reportService.saveOrUpdate(appId,reqBody);
         } catch (Exception e) {
