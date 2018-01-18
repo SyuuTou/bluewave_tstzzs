@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.model;
 
+import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "project_follow_status")
@@ -19,6 +20,17 @@ public class ProjectFollowStatus {
      */
     @Column(name = "meta_follow_status_id")
     private Integer metaFollowStatusId;
+
+    /**
+     * 备注
+     */
+    private String description;
+
+    /**
+     * 创建时间
+     */
+    @Column(name = "creat_time")
+    private Date creatTime;
 
     /**
      * @return id
@@ -68,5 +80,41 @@ public class ProjectFollowStatus {
      */
     public void setMetaFollowStatusId(Integer metaFollowStatusId) {
         this.metaFollowStatusId = metaFollowStatusId;
+    }
+
+    /**
+     * 获取备注
+     *
+     * @return description - 备注
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * 设置备注
+     *
+     * @param description 备注
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * 获取创建时间
+     *
+     * @return creat_time - 创建时间
+     */
+    public Date getCreatTime() {
+        return creatTime;
+    }
+
+    /**
+     * 设置创建时间
+     *
+     * @param creatTime 创建时间
+     */
+    public void setCreatTime(Date creatTime) {
+        this.creatTime = creatTime;
     }
 }
