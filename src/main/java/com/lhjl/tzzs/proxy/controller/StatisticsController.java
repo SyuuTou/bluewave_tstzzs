@@ -29,7 +29,7 @@ public class StatisticsController {
      * @return
      */
     @GetMapping("financing/{institutionType}/count/distributed")
-    public CommonDto<List<HistogramList>> financing50CountDistributed(@PathVariable String institutionType, @RequestParam(required = false, defaultValue = "0") String from, @RequestParam(required = false, defaultValue = "10") String size) {
+    public CommonDto<List<HistogramList>> financing50CountDistributed(@PathVariable String institutionType, @RequestParam(required = false, defaultValue = "0") String from, @RequestParam(required = false, defaultValue = "12") String size) {
 
         CommonDto<List<HistogramList>> result = null;
 
@@ -53,7 +53,7 @@ public class StatisticsController {
      * @return
      */
     @GetMapping("financing/{institutionType}/amount/distributed")
-    public CommonDto<List<HistogramList>> financing50amountDistributed(@PathVariable String institutionType, @RequestParam(required = false, defaultValue = "0") String from, @RequestParam(required = false, defaultValue = "10") String size) {
+    public CommonDto<List<HistogramList>> financing50amountDistributed(@PathVariable String institutionType, @RequestParam(required = false, defaultValue = "0") String from, @RequestParam(required = false, defaultValue = "12") String size) {
 
         CommonDto<List<HistogramList>> result = null;
 
@@ -186,4 +186,52 @@ public class StatisticsController {
 
         return result;
     }
+
+
+    /**
+     * 热门创始人特质分布
+     *
+     * @return
+     */
+    @GetMapping("financing/{institutionType}/investment/characteristic/distributed")
+    public CommonDto<List<HistogramList>> financing50InvestmentCharacteristicDistributed(@PathVariable  String institutionType,@RequestParam(required = false, defaultValue = "0") String from, @RequestParam(required = false, defaultValue = "10") String size) {
+
+        CommonDto<List<HistogramList>> result = null;
+
+        try {
+            result = statisticsService.financingInvestmentCharacteristicDistributed(institutionType,from, size);
+
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e.fillInStackTrace());
+            result = new CommonDto<List<HistogramList>>();
+            result.setStatus(50001);
+            result.setMessage(e.getMessage());
+        }
+
+        return result;
+    }
+
+    /**
+     * 热门创始人特质分布
+     *
+     * @return
+     */
+    @GetMapping("financing/{institutionType}/investment/segmentation/distributed")
+    public CommonDto<List<HistogramList>> financing50InvestmentSegmentationDistributed(@PathVariable  String institutionType,@RequestParam(required = false, defaultValue = "0") String from, @RequestParam(required = false, defaultValue = "10") String size) {
+
+        CommonDto<List<HistogramList>> result = null;
+
+        try {
+            result = statisticsService.financingInvestmentSegmentationDistributed(institutionType,from, size);
+
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e.fillInStackTrace());
+            result = new CommonDto<List<HistogramList>>();
+            result.setStatus(50001);
+            result.setMessage(e.getMessage());
+        }
+
+        return result;
+    }
+
 }

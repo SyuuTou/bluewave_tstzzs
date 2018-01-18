@@ -69,12 +69,12 @@
 		left join (select projects_id ,count(*) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
 		left join (select projects_id ,count(*) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
 		left join (select project_id ,count(*) viewcount from project_views  where yn =1 group by project_id) proviewtemp on p.ID = proviewtemp.project_id
+		left join project_follow_status pfs on p.ID = pfs.project_id
 		right join (SELECT * FROM project_financing_log
 				    WHERE financing_time BETWEEN '2017-01-01' AND '2017-12-31'
 				    AND stage IN ('种子轮' , '天使轮', 'Pre-A轮')
 				    order by financing_time  desc
     				) statemp on p.ID = statemp.project_id
-		left join project_follow_status pfs on p.ID = pfs.project_id
 		where 1=1 
 		<if test="keyword !=null and keyword != ''">
 			 and (p.short_name like "%"#{keyword}"%" or p.kernel_desc like "%"#{keyword}"%" or
@@ -107,12 +107,12 @@
 		left join (select projects_id ,count(*) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
 		left join (select projects_id ,count(*) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
 		left join (select project_id ,count(*) viewcount from project_views  where yn =1 group by project_id) proviewtemp on p.ID = proviewtemp.project_id
+		left join project_follow_status pfs on p.ID = pfs.project_id
 		right join (SELECT * FROM project_financing_log
 				    WHERE financing_time BETWEEN '2017-01-01' AND '2017-12-31'
 				    AND stage IN ('种子轮' , '天使轮', 'Pre-A轮')
 				    order by financing_time  desc
     				) statemp on p.ID = statemp.project_id
-		left join project_follow_status pfs on p.ID = pfs.project_id
 		where 1=1
 		<if test="keyword !=null and keyword != ''">
 			 and (p.short_name like "%"#{keyword}"%" or p.kernel_desc like "%"#{keyword}"%" or
@@ -565,7 +565,10 @@
         select
         p.id,p.city,p.project_logo,p.kernel_desc,p.commet,p.short_name,p.full_name,pfl.stage,pfl.financing_time,pfl.financing_time_year
         from investment_institutions_project iip
-        left join project_financing_log pfl on pfl.id = iip.project_id
+        left join (select * from(
+        select * from project_financing_log
+        order by financing_time desc) pfl
+        group by pfl.project_id) pfl on pfl.id = iip.project_id
         <if test="segmentationName != null and segmentationName!=''">
             right join project_segmentation ps on pfl.project_id = ps.project_id
         </if>
@@ -586,26 +589,6 @@
         group by p.short_name
         order by pfl.financing_time desc,p.id asc
         limit #{startNum},#{pageSize}
-        <!--select p.id,p.city,p.project_logo,p.kernel_desc,p.short_name,p.full_name,pfl.stage,pfl.financing_time,pfl.financing_time_year from investment_institutions_project iip-->
-        <!--left join projects p on iip.project_id = p.ID-->
-        <!--<if test="segmentationName != null and segmentationName!=''">-->
-        <!--left join project_segmentation ps on ps.project_id = iip.project_id-->
-        <!--</if>-->
-        <!--left join project_financing_log pfl on p.ID = pfl.project_id-->
-        <!--where iip.investment_institutions_id = #{institutionId}-->
-        <!--and p.short_name is not null-->
-        <!--and p.short_name != ""-->
-        <!--<if test="segmentationName != null and segmentationName!=''">-->
-        <!--and ps.segmentation_name in-->
-        <!--<foreach close=")" collection="segmentationName" index="index" item="item" open="(" separator=",">#{item}</foreach>-->
-        <!--</if>-->
-        <!--<if test="financingTime != null and financingTime != ''">-->
-        <!--and pfl.financing_time_year in-->
-        <!--<foreach close=")" collection="financingTime" index="index" item="item" open="(" separator=",">#{item}</foreach>-->
-        <!--</if>-->
-        <!--group by p.short_name-->
-        <!--order by pfl.financing_time desc,p.ID asc-->
-        <!--limit #{startNum},#{pageSize}-->
     </select>
 
     <resultMap id="projectFilterMap" type="com.lhjl.tzzs.proxy.dto.ProjectResDto">
@@ -905,5 +888,23 @@
         GROUP BY ${statisticsType}
         ORDER BY x desc
         limit #{offset},#{pageSize}
+    </select>
+    
+    <select id="getLogoAndOtherInfoById" resultType="java.util.HashMap">
+        SELECT  p.id,p.short_name,p.project_logo,aprl.rating_stage,mfs.status_name,pau.admin_name
+        FROM projects p
+        left join admin_project_rating_log aprl on p.ID = aprl.project_id
+        left join project_follow_status pfs on p.ID = pfs.project_id
+        left join meta_follow_status mfs on pfs.meta_follow_status_id = mfs.id
+        left join (select pa.projects_id,group_concat(au.admin_name) admin_name from(
+        select *
+        from project_administrator
+        group by projects_id,user_id
+        order by id ) pa
+        left join (select u.id,case when u.actual_name is null then uw.nick_name else u.actual_name end admin_name
+        from users u
+        left join users_weixin uw on u.id = uw.user_id) au on pa.user_id = au.id
+        group by projects_id)pau on p.id = pau.projects_id
+        where p.id = #{projectId}
     </select>
 </mapper>

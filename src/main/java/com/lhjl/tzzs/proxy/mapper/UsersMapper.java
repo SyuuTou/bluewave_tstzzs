@@ -49,4 +49,6 @@ public interface UsersMapper extends OwnerMapper<Users> {
 								  @Param("updateTimeOrderDesc") Integer updateTimeOrderDesc,@Param("userLevelEndTimeOrder") Integer userLevelEndTimeOrder,
 								  @Param("userLevelEndTimeOrderDesc") Integer userLevelEndTimeOrderDesc,
 								  @Param("startPage") Integer startPage, @Param("pageSize") Integer pageSize);
+	List<Map<String,Object>> userInfoElegantSearch(@Param("searchWord") String searchWord,@Param("startPage") Integer startPage,
+												   @Param("pageSize") Integer pageSize);
 }

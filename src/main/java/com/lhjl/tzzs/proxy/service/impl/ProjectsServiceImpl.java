@@ -1138,9 +1138,16 @@ public class ProjectsServiceImpl implements ProjectsService {
 			result.setStatus(400);
 			return result;
 		}
-		pfs.setMetaFollowStatusId(body.getStatus());
-		
-		result.setData(projectFollowStatusMapper.updateByPrimaryKeySelective(pfs)==1?true:false);
+		if(pfs != null) { //执行更新
+			pfs.setMetaFollowStatusId(body.getStatus());
+			projectFollowStatusMapper.updateByPrimaryKeySelective(pfs);
+		}else {//执行插入
+			ProjectFollowStatus pfss=new ProjectFollowStatus();
+			pfss.setProjectId(body.getId());
+			pfss.setMetaFollowStatusId(body.getStatus());
+			projectFollowStatusMapper.insertSelective(pfss);
+		}
+		result.setData(true);
 		result.setMessage("success");
 		result.setStatus(200);
 		return result;

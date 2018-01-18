@@ -19,7 +19,7 @@
         project_financing_log pfl  left join projects  p on pfl.project_id = p.id
         left join investment_institutions ii on p.investment_institutions_id = ii.id
         where pfl.financing_time between #{beginTime} and #{endTime}
-        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.project_type = 0
+        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.country = '中国'
         <if test="jgtype != null">
             and ii.type = #{jgtype}
         </if>
@@ -39,7 +39,7 @@
         select p.full_name,pfl.${flag} amount,max(pfl.financing_time) financing_time from project_financing_log pfl  left join projects  p on pfl.project_id = p.id
         left join investment_institutions ii on p.investment_institutions_id = ii.id where pfl.amount > 0
         and pfl.financing_time between #{beginTime} and #{endTime}
-        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.project_type = 0
+        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.country = '中国'
         <if test="jgtype != null">
             and ii.type = #{jgtype}
         </if>
@@ -59,7 +59,7 @@
         left join investment_institutions ii on p.investment_institutions_id = ii.id
         where pfl.financing_time between
         #{beginTime} and #{endTime}
-        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.project_type = 0
+        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.country = '中国'
 
         <if test="jgtype != null">
             and ii.type = #{jgtype}
@@ -78,7 +78,7 @@
         left join investment_institutions ii on p.investment_institutions_id = ii.id
         where pfl.financing_time between #{beginTime}
         and #{endTime}
-        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.project_type = 0
+        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.country = '中国'
         and p.city is not null
         <if test="jgtype != null">
             and ii.type = #{jgtype}
@@ -96,7 +96,7 @@
         right join founders_education fe on fe.founder_id = f.id and fe.education_experience != ''
         where pfl.financing_time between
         #{beginTime} and #{endTime}
-        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and mf.project_type = 0
+        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and mf.country = '中国'
         and fe.education_experience != ''
         <if test="jgtype != null">
             and ii.type = #{jgtype}
@@ -115,7 +115,7 @@
 
         right join founders_work fw on fw.founder_id = f.id where pfl.financing_time between
         #{beginTime} and #{endTime}
-        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and mf.project_type = 0
+        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and mf.country = '中国'
         and fw.work_experience != ''
         <if test="jgtype != null">
             and ii.type = #{jgtype}
@@ -134,7 +134,7 @@
         left join investment_institutions ii on p.investment_institutions_id = ii.id
         where pfl.financing_time between #{beginTime}
         and #{endTime}
-        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.project_type = 0
+        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.country = '中国'
         and p.city is not null
         <if test="jgtype != null">
             and ii.type = #{jgtype}
@@ -142,5 +142,23 @@
 
         group by p.city ) a
         order by a.count desc limit #{froma},#{sizea}
+    </select>
+
+    <select id="financingInvestmentCharacteristicDistributed" resultMap="histogramResultMap">
+
+        select count(distinct a.userid) x , b.character y from  investor_demand a
+        right join investor_demand_character b on b.investor_demand_id = a.id
+        group by  b.character
+        order by count(distinct a.userid)  desc
+        limit #{froma},#{sizea}
+    </select>
+
+    <select id="financingInvestmentFocsSegmentationDistributed" resultMap="histogramResultMap">
+
+        select count(distinct a.userid) y , b.segmentation x from  investor_demand a
+        right join investor_demand_segmentation b on b.investor_demand_id = a.id
+        group by  b.segmentation
+        order by count(distinct a.userid)  desc
+        limit #{froma},#{sizea}
     </select>
 </mapper>

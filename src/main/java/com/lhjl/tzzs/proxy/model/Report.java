@@ -1,7 +1,6 @@
 package com.lhjl.tzzs.proxy.model;
 
 import java.util.Date;
-import java.util.List;
 import javax.persistence.*;
 
 public class Report {
@@ -81,36 +80,7 @@ public class Report {
      */
     private String creater;
 
-    @Transient
-    private List<MetaColumn> columns;
-    @Transient
-    private List<MetaSegmentation> segmentations;
-    @Transient
-    private List<ReportLabel> reportLabels;
-
-    public List<MetaColumn> getColumns() {
-        return columns;
-    }
-
-    public void setColumns(List<MetaColumn> columns) {
-        this.columns = columns;
-    }
-
-    public List<MetaSegmentation> getSegmentations() {
-        return segmentations;
-    }
-
-    public void setSegmentations(List<MetaSegmentation> segmentations) {
-        this.segmentations = segmentations;
-    }
-
-    public List<ReportLabel> getReportLabels() {
-        return reportLabels;
-    }
-
-    public void setReportLabels(List<ReportLabel> reportLabels) {
-        this.reportLabels = reportLabels;
-    }
+    private String author;
 
     /**
      * @return id
@@ -358,5 +328,19 @@ public class Report {
      */
     public void setCreater(String creater) {
         this.creater = creater;
+    }
+
+    /**
+     * @return author
+     */
+    public String getAuthor() {
+        return author;
+    }
+
+    /**
+     * @param author
+     */
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

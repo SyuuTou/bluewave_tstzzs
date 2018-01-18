@@ -1,9 +1,6 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import com.lhjl.tzzs.proxy.dto.AdminUserListInputDto;
-import com.lhjl.tzzs.proxy.dto.AdminUserListOutputDto;
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
+import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.dto.UserChooseLogDto.UserElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
@@ -868,6 +865,57 @@ public class UserInfoServiceImpl implements UserInfoService{
         result.setData(levels);
         result.setStatus(200);
         result.setMessage("success");
+
+        return result;
+    }
+
+    /**
+     * 用户信息智能检索
+     * @param searchWord
+     * @return
+     */
+    @Override
+    public CommonDto<List<UserInfoElegantOutputDto>> userInfoElegantSearch(String searchWord,Integer pageNum,Integer pageSize) {
+        CommonDto<List<UserInfoElegantOutputDto>> result = new CommonDto<>();
+        List<UserInfoElegantOutputDto> list =new ArrayList<>();
+        if (pageNum == null){
+            pageNum =pageNumDefault;
+        }
+        if (pageSize == null){
+            pageSize =pageSizeDefault;
+        }
+
+        Integer startPage = (pageNum-1)*pageSize;
+        List<Map<String,Object>> userList = usersMapper.userInfoElegantSearch(searchWord, startPage, pageSize);
+
+        if (userList.size() > 0){
+            for (Map<String,Object> map:userList){
+                UserInfoElegantOutputDto userInfoElegantOutputDto = new UserInfoElegantOutputDto();
+
+                userInfoElegantOutputDto.setId((Integer)map.get("id"));
+                String userName = "";
+                if (map.get("user_name") != null){
+                    userName = (String)map.get("user_name");
+                }
+                userInfoElegantOutputDto.setUserName(userName);
+                String companyName = "";
+                if (map.get("company_name") != null){
+                    companyName = (String)map.get("company_name");
+                }
+                userInfoElegantOutputDto.setComanyName(companyName);
+                String companyDuties = "";
+                if (map.get("company_duties") != null){
+                    companyDuties = (String)map.get("company_duties");
+                }
+                userInfoElegantOutputDto.setCompanyDuties(companyDuties);
+
+                list.add(userInfoElegantOutputDto);
+            }
+        }
+
+        result.setData(list);
+        result.setMessage("success");
+        result.setStatus(200);
 
         return result;
     }

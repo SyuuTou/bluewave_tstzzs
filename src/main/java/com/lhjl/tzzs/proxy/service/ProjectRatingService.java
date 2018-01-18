@@ -4,7 +4,9 @@ package com.lhjl.tzzs.proxy.service;
 import com.lhjl.tzzs.proxy.dto.AdminCreatProjectDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectRatingDto;
+import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
 
+import java.util.Map;
 
 
 public interface ProjectRatingService {
@@ -17,4 +19,11 @@ public interface ProjectRatingService {
      * @return
      */
     CommonDto<AdminCreatProjectDto> adminCreateEvent(Integer sourceId,Integer idType);
+
+    /**
+     * 读取项目评级信息的接口
+     * @param projectId
+     * @return
+     */
+    CommonDto<AdminProjectRatingLog> getProjectRatingInfo(Integer projectId);
 }

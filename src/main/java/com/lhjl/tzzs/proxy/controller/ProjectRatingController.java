@@ -3,14 +3,14 @@ package com.lhjl.tzzs.proxy.controller;
 import com.lhjl.tzzs.proxy.dto.AdminCreatProjectDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectRatingDto;
+import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
 import com.lhjl.tzzs.proxy.service.ProjectRatingService;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 
 @RestController
@@ -20,7 +20,14 @@ public class ProjectRatingController {
     @Resource
     private ProjectRatingService projectRatingService;
 
-    //@PostMapping("admin/project/rating")
+    /**
+     *
+     * @param projectId
+     * @param ratingStage(0表示D级,1表示C级,2表示B级,3表示A级,4表示S级)
+     * @param ratingDiscription
+     * @param ratingAdminName
+     * @return
+     */
     @GetMapping("admin/project/rating")
     public CommonDto<String> projectRatingLevel(Integer projectId,Integer ratingStage,String ratingDiscription,String ratingAdminName){
         CommonDto<String> result = new CommonDto<>();
@@ -60,6 +67,22 @@ public class ProjectRatingController {
             result.setData(null);
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
+        }
+
+        return result;
+    }
+
+    @GetMapping("admin/get/project/rating")
+    public CommonDto<AdminProjectRatingLog> adminGetProjectRating(Integer projectId){
+        CommonDto<AdminProjectRatingLog> result = new CommonDto<>();
+
+        try {
+            result = projectRatingService.getProjectRatingInfo(projectId);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
         }
 
         return result;
