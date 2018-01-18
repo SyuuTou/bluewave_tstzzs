@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.dto.AdminUserListInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdministratorOutputDto;
 import com.lhjl.tzzs.proxy.dto.UserChooseLogDto.UserElegantServiceInputDto;
+import com.lhjl.tzzs.proxy.dto.UserInfoElegantOutputDto;
 import com.lhjl.tzzs.proxy.model.MetaUserLevel;
 import com.lhjl.tzzs.proxy.model.Users;
 
@@ -106,4 +107,11 @@ public interface UserInfoService {
     CommonDto<String> setElegantServiceLogStatus(Integer logId);
 
     CommonDto<List<MetaUserLevel>> getMetaUserLevel();
+
+    /**
+     * 用户信息智能检索
+     * @param searchWord
+     * @return
+     */
+    CommonDto<List<UserInfoElegantOutputDto>> userInfoElegantSearch(String searchWord,Integer pageNum,Integer pageSize);
 }
