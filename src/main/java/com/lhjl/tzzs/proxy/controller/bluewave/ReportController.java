@@ -134,8 +134,8 @@ public class ReportController extends GenericController {
      * @return
      */
     @GetMapping("/v{appid}/report/{id}")
-    public CommonDto<Report> reportById(@PathVariable("appid") Integer appId ,@PathVariable("id") Integer id){
-        CommonDto<Report> result = null;
+    public CommonDto<Map<String,Object>> reportById(@PathVariable("appid") Integer appId ,@PathVariable("id") Integer id){
+        CommonDto<Map<String,Object>> result = null;
 
         try {
             result = reportService.getReportById(appId,id);
