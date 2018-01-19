@@ -241,10 +241,12 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     	//设置相关的项目信息
     	ReportCompanyLabel rcl=new ReportCompanyLabel();
     	rcl.setReportId(reportId);
+    	//取得ReportCompanyLabel的多个映射实体
     	List<ReportCompanyLabel> reportCompanyLabels = reportCompanyLabelMapper.select(rcl);
     	List<String> companyLabels =new ArrayList<>();
-//    	System.err.println(reportCompanyLabels+"reportCompanyLabels****");
-    	
+    	/**
+    	 * 项目的相关信息
+    	 */
     	List<ProInfoDto> proInfoList = new ArrayList<>();
     	if(reportCompanyLabels != null) {
     		
@@ -257,7 +259,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         		pro.setShortName(e);
         		try { //根据简称搜索唯一的一条项目信息
         			pro = projectsMapper.selectOne(pro);
-        			System.err.println(pro);
+        			System.err.println(pro+"****pro");
         		}catch(Exception ex) {
         			this.LOGGER.info(ex.getMessage(), ex.fillInStackTrace());
         			result.setData(null);
@@ -266,8 +268,10 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 //        			return result;
         		}
         		//根据该项目信息获取该项目的相关  简称、 logo、 地域 、 一句话简介、 轮次 、领域  
-        		ProInfoDto projectsSimpleInfo = projectsMapper.getProjectsSimpleInfos(pro.getId());
-        		proInfoList.add(projectsSimpleInfo);
+        		if(pro != null) {
+        			ProInfoDto projectsSimpleInfo = projectsMapper.getProjectsSimpleInfos(pro.getId());
+            		proInfoList.add(projectsSimpleInfo);  
+        		}
         	});
     	}
     	
@@ -300,6 +304,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         report.setWeightingFactor(reqBody.getWeightingFactor());
         report.setCreater(reqBody.getCreater());
         report.setYn(reqBody.getYn());
+        report.setSubTitle(reqBody.getSubTitle());
         report.setAuthor(reqBody.getAuthor());
         Integer num = null;
         if (null == report.getId()){
@@ -310,7 +315,6 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         	report.setUpdateTime(new Date());
             num = reportMapper.updateByPrimaryKeySelective(report);
         }
-
         List<MetaColumn> columns = reqBody.getColumns();
         List<Integer> segmentations = reqBody.getSegmentations();
         List<String> labels = reqBody.getReportLabels();
@@ -336,7 +340,6 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 
         ReportSegmentation reportSegmentation = new ReportSegmentation();
         reportSegmentation.setReportId(report.getId());
-
         segmentationService.deleteAll(report.getId());
         for (Integer segmentation : segmentations){
             reportSegmentation.setSegmentationId(segmentation);
@@ -351,7 +354,6 @@ public class ReportServiceImpl extends GenericService implements ReportService {
             reportLabel.setName(lablel);
             labelService.save(reportLabel);
         }
-
         result.setMessage("success");
         result.setStatus(200);
         result.setData(String.valueOf(num));
