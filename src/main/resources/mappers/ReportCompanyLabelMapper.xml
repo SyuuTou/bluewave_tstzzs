@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ReportCompanyLabelMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ReportCompanyLabel" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="report_id" property="reportId" jdbcType="INTEGER" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>
