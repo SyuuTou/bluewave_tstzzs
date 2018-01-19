@@ -5,7 +5,10 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.CommonTotal;
 import com.lhjl.tzzs.proxy.dto.EventDto;
 import com.lhjl.tzzs.proxy.dto.bluewave.ReportReqBody;
+import com.lhjl.tzzs.proxy.mapper.MetaColumnMapper;
+import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportColumnMapper;
+import com.lhjl.tzzs.proxy.mapper.ReportCompanyLabelMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportLabelMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportSegmentationMapper;
@@ -56,6 +59,13 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     private ReportSegmentationMapper reportSegmentationMapper;
     @Autowired
     private ReportLabelMapper reportLabelMapper;
+    
+    @Autowired
+    private MetaColumnMapper metaColumnMapper;
+    @Autowired
+    private MetaSegmentationMapper metaSegmentationMapper;
+    @Autowired
+    private ReportCompanyLabelMapper reportCompanyLabelMapper;
 
     @Value("${event.trigger.url}")
     private String eventUrl;
@@ -80,13 +90,23 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         report.setTitle(reqBody.getTitle());
         report.setWeightingFactor(reqBody.getWeightingFactor());
         report.setAuthor(reqBody.getAuthor());
+//        System.err.println(report+"*****report");
         
         int offset = (reqBody.getPageNo() - 1) * reqBody.getPageSize();
         int limit = reqBody.getPageSize();
-
+        List<Report>  list = null;
         PageRowBounds rowBounds = new PageRowBounds(offset, limit);
-        List<Report> list = reportMapper.selectByRowBounds(report, new RowBounds(offset, limit));
-        
+        if (reqBody.getColumnId()!=null) {
+        	list = new ArrayList<Report>();
+        	ReportColumn queryReportColumn = new ReportColumn();
+        	queryReportColumn.setColumnId(reqBody.getColumnId());
+        	List<ReportColumn> reportColumns = reportColumnMapper.selectByRowBounds(queryReportColumn, rowBounds);
+        	for(ReportColumn rc : reportColumns) {
+        		list.add(reportMapper.selectByPrimaryKey(rc.getReportId()));
+        	}
+        }else {
+        	list = reportMapper.selectByRowBounds(report, rowBounds);
+        }
         List<Map<String,Object>> lists=new ArrayList<>();
         for(Report tmp:list) {
         	Map<String,Object> map=new HashMap<>();
@@ -145,7 +165,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         Report report = reportMapper.selectByPrimaryKey(id);
         Integer reportId = report.getId();
         map.put("report", report);
-        //获取report的相关附属信息
+//        获取report的相关附属信息
         ReportColumn rc =new ReportColumn();
     	rc.setReportId(reportId);
     	List<ReportColumn> ReportColumns = reportColumnMapper.select(rc);
@@ -156,7 +176,36 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         	});
     	}
     	map.put("columns", columns);
-    	
+//        ReportColumn rc =new ReportColumn();
+//    	rc.setReportId(reportId);
+//    	List<ReportColumn> rcs = reportColumnMapper.select(rc);
+//    	
+//    	List<MetaColumn> metaColumns = new ArrayList<>();
+//    	if(rcs != null) {
+//    		rcs.forEach((e)->{
+//    			MetaColumn mc=new MetaColumn();
+//    			mc.setId(e.getColumnId());
+//    			MetaColumn metaColumn = metaColumnMapper.selectOne(mc);
+//    			metaColumns.add(metaColumn);
+//        	});
+//    	}
+//    	report.setColumns(metaColumns);
+//**************************
+//    	ReportSegmentation  rs=new ReportSegmentation();
+//    	rs.setReportId(reportId);
+//    	List<ReportSegmentation> rss = reportSegmentationMapper.select(rs);
+//    	
+//    	List<MetaSegmentation> metaSegmentations = new ArrayList<>();
+//    	if(rss != null) {
+//    		rss.forEach((e)->{
+//    			MetaSegmentation ms=new MetaSegmentation();
+//    			ms.setId(e.getSegmentationId());
+//    			MetaSegmentation metaSegmentation = metaSegmentationMapper.selectOne(ms);
+//    			metaSegmentations.add(metaSegmentation);
+//        	});
+//    	}
+//    	report.setSegmentations(metaSegmentations);
+//    	
     	ReportSegmentation rs =new ReportSegmentation();
     	rs.setReportId(reportId);
     	List<ReportSegmentation> ReportSegmentations = reportSegmentationMapper.select(rs);
@@ -167,6 +216,11 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         	});
     	}
     	map.put("segmentations", segmentations);
+//**************************** 
+//    	ReportLabel rl=new ReportLabel();
+//    	rl.setReportId(reportId);
+//    	List<ReportLabel> reportLabels = reportLabelMapper.select(rl);
+//    	report.setReportLabels(reportLabels);
     	
     	ReportLabel rl=new ReportLabel();
     	rl.setReportId(reportId);
@@ -177,8 +231,18 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     			labels.add(e.getName());
     		});
     	}
-    	map.put("labels", labels);  
-        //*
+    	map.put("labels", labels);
+    	
+    	ReportCompanyLabel rcl=new ReportCompanyLabel();
+    	rcl.setReportId(reportId);
+    	List<ReportCompanyLabel> reportCompanyLabels = reportCompanyLabelMapper.select(rcl);
+    	List<String> companyLabels =new ArrayList<>();
+    	if(reportCompanyLabels != null) {
+    		reportCompanyLabels.forEach((e)->{
+    			companyLabels.add(e.getCompanyName());
+    		});
+    	}
+    	map.put("companyLabels", companyLabels);
         
         result.setData(map);
         result.setStatus(200);
@@ -207,6 +271,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         report.setWeightingFactor(reqBody.getWeightingFactor());
         report.setCreater(reqBody.getCreater());
         report.setYn(reqBody.getYn());
+        report.setAuthor(reqBody.getAuthor());
         Integer num = null;
         if (null == report.getId()){
         	report.setCreateTime(new Date());
@@ -220,7 +285,17 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         List<MetaColumn> columns = reqBody.getColumns();
         List<Integer> segmentations = reqBody.getSegmentations();
         List<String> labels = reqBody.getReportLabels();
-
+        List<String> reportCompanyLabels = reqBody.getReportCompanyLabels();
+        
+        //进行关联公司标签的删除插入
+        ReportCompanyLabel rcl=new ReportCompanyLabel();
+        rcl.setReportId(report.getId());
+        reportCompanyLabelMapper.delete(rcl);
+        reportCompanyLabels.forEach((e)->{
+        	rcl.setCompanyName(e);
+        	reportCompanyLabelMapper.insertSelective(rcl);
+        });
+        
        ReportColumn metaColumn =new ReportColumn();
         metaColumn.setReportId(report.getId());
 

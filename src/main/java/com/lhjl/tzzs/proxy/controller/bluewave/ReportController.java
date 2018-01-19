@@ -149,14 +149,13 @@ public class ReportController extends GenericController {
         return result;
     }
     /**
-     * 
+     * report的保存和更新
      * @param appId
      * @param reqBody
      * @return
      */
     @PutMapping("/v{appid}/report")
     public CommonDto<String> reportSaveOrUpdate(@PathVariable("appid") Integer appId ,@RequestBody ReportReqBody reqBody ){
-//    	System.err.println(reqBody+"***reqBody**");
         CommonDto<String> result = null;
         
         try {
