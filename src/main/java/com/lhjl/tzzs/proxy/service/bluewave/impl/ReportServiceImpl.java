@@ -270,7 +270,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         		//根据该项目信息获取该项目的相关  简称、 logo、 地域 、 一句话简介、 轮次 、领域  
         		if(pro != null) {
         			ProInfoDto projectsSimpleInfo = projectsMapper.getProjectsSimpleInfos(pro.getId());
-            		proInfoList.add(projectsSimpleInfo);
+            		proInfoList.add(projectsSimpleInfo);  
         		}
         	});
     	}
