@@ -145,18 +145,17 @@ public class ReportController extends GenericController {
             result.setStatus(500);
             result.setMessage("服务器繁忙，请稍后再试。");
         }
-
         return result;
     }
     /**
-     * 
+     * report的保存和更新
      * @param appId
      * @param reqBody
      * @return
      */
     @PutMapping("/v{appid}/report")
     public CommonDto<String> reportSaveOrUpdate(@PathVariable("appid") Integer appId ,@RequestBody ReportReqBody reqBody ){
-//    	System.err.println(reqBody+"***reqBody**");
+    	System.err.println(reqBody+"***reqBody***");
         CommonDto<String> result = null;
         
         try {

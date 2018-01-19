@@ -1,6 +1,8 @@
 package com.lhjl.tzzs.proxy.model;
 
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.*;
 
 public class Report {
@@ -79,9 +81,44 @@ public class Report {
      * 创建者
      */
     private String creater;
-
+    /**
+     * 作者
+     */
     private String author;
+    
+    /**
+     * report的附属属性
+     */
+    @Transient
+    private List<MetaColumn> columns;
+    @Transient
+    private List<MetaSegmentation> segmentations;
+    @Transient
+    private List<ReportLabel> reportLabels;
+    
+    public List<MetaColumn> getColumns() {
+        return columns;
+    }
 
+    public void setColumns(List<MetaColumn> columns) {
+        this.columns = columns;
+    }
+
+    public List<MetaSegmentation> getSegmentations() {
+        return segmentations;
+    }
+
+    public void setSegmentations(List<MetaSegmentation> segmentations) {
+        this.segmentations = segmentations;
+    }
+
+    public List<ReportLabel> getReportLabels() {
+        return reportLabels;
+    }
+
+    public void setReportLabels(List<ReportLabel> reportLabels) {
+        this.reportLabels = reportLabels;
+    }
     /**
      * @return id
      */
@@ -343,4 +380,15 @@ public class Report {
     public void setAuthor(String author) {
         this.author = author;
     }
+
+	@Override
+	public String toString() {
+		return "Report [id=" + id + ", title=" + title + ", subTitle=" + subTitle + ", content=" + content
+				+ ", comments=" + comments + ", coverUrl=" + coverUrl + ", fromRul=" + fromRul + ", sourceTextUrl="
+				+ sourceTextUrl + ", weightingFactor=" + weightingFactor + ", status=" + status + ", yn=" + yn
+				+ ", createTime=" + createTime + ", updateTime=" + updateTime + ", creater=" + creater + ", author="
+				+ author + ", columns=" + columns + ", segmentations=" + segmentations + ", reportLabels="
+				+ reportLabels + "]";
+	}
+    
 }

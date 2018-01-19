@@ -178,6 +178,24 @@ CHANGE COLUMN `project_type` `project_type` INT(11) NULL DEFAULT NULL COMMENT '�
     private Date updateTime;
 
     /**
+     * 公司邮箱
+     */
+    @Column(name = "company_email")
+    private String companyEmail;
+
+    /**
+     * 公司hr邮箱
+     */
+    @Column(name = "company_hr_email")
+    private String companyHrEmail;
+
+    /**
+     * 是否对外投资，1表示是，0表示不是
+     */
+    @Column(name = "foreign_investment_yn")
+    private Integer foreignInvestmentYn;
+
+    /**
      * @return ID
      */
     public Integer getId() {
@@ -763,5 +781,59 @@ CHANGE COLUMN `project_type` `project_type` INT(11) NULL DEFAULT NULL COMMENT '�
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取公司邮箱
+     *
+     * @return company_email - 公司邮箱
+     */
+    public String getCompanyEmail() {
+        return companyEmail;
+    }
+
+    /**
+     * 设置公司邮箱
+     *
+     * @param companyEmail 公司邮箱
+     */
+    public void setCompanyEmail(String companyEmail) {
+        this.companyEmail = companyEmail;
+    }
+
+    /**
+     * 获取公司hr邮箱
+     *
+     * @return company_hr_email - 公司hr邮箱
+     */
+    public String getCompanyHrEmail() {
+        return companyHrEmail;
+    }
+
+    /**
+     * 设置公司hr邮箱
+     *
+     * @param companyHrEmail 公司hr邮箱
+     */
+    public void setCompanyHrEmail(String companyHrEmail) {
+        this.companyHrEmail = companyHrEmail;
+    }
+
+    /**
+     * 获取是否对外投资，1表示是，0表示不是
+     *
+     * @return foreign_investment_yn - 是否对外投资，1表示是，0表示不是
+     */
+    public Integer getForeignInvestmentYn() {
+        return foreignInvestmentYn;
+    }
+
+    /**
+     * 设置是否对外投资，1表示是，0表示不是
+     *
+     * @param foreignInvestmentYn 是否对外投资，1表示是，0表示不是
+     */
+    public void setForeignInvestmentYn(Integer foreignInvestmentYn) {
+        this.foreignInvestmentYn = foreignInvestmentYn;
     }
 }

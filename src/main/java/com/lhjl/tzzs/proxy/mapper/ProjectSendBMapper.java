@@ -16,4 +16,11 @@ public interface ProjectSendBMapper extends OwnerMapper<ProjectSendB> {
      * @return
      */
     int copyProjectSendB(ProjectSendSearchDto projectSendSearchDto);
+
+    /**
+     * 获取用户提交机构id列表
+     * @param userId
+     * @return
+     */
+    List<Integer> getUserSendInstitutionId(@Param("userId") Integer userId);
 }

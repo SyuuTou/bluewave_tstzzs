@@ -118,4 +118,13 @@ public class EventDto {
     public void setColumnList(List<MetaColumn> columnList) {
         this.columnList = columnList;
     }
+
+	@Override
+	public String toString() {
+		return "EventDto [eventName=" + eventName + ", eventType=" + eventType + ", fromUser=" + fromUser + ", toUser="
+				+ toUser + ", projectIds=" + projectIds + ", projectLevel=" + projectLevel
+				+ ", investmentInstitutionsIds=" + investmentInstitutionsIds + ", message=" + message + ", startIndex="
+				+ startIndex + ", endIndex=" + endIndex + ", dateTime=" + dateTime + ", columnList=" + columnList + "]";
+	}
+    
 }
