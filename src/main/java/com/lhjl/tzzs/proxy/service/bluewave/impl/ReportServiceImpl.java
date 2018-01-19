@@ -8,6 +8,7 @@ import com.lhjl.tzzs.proxy.dto.bluewave.ReportReqBody;
 import com.lhjl.tzzs.proxy.mapper.MetaColumnMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportColumnMapper;
+import com.lhjl.tzzs.proxy.mapper.ReportCompanyLabelMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportLabelMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportSegmentationMapper;
@@ -63,6 +64,8 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     private MetaColumnMapper metaColumnMapper;
     @Autowired
     private MetaSegmentationMapper metaSegmentationMapper;
+    @Autowired
+    private ReportCompanyLabelMapper reportCompanyLabelMapper;
 
     @Value("${event.trigger.url}")
     private String eventUrl;
@@ -261,7 +264,17 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         List<MetaColumn> columns = reqBody.getColumns();
         List<Integer> segmentations = reqBody.getSegmentations();
         List<String> labels = reqBody.getReportLabels();
-
+        List<String> reportCompanyLabels = reqBody.getReportCompanyLabels();
+        
+        //进行关联公司标签的删除插入
+        ReportCompanyLabel rcl=new ReportCompanyLabel();
+        rcl.setReportId(report.getId());
+        reportCompanyLabelMapper.delete(rcl);
+        reportCompanyLabels.forEach((e)->{
+        	rcl.setCompanyName(e);
+        	reportCompanyLabelMapper.insertSelective(rcl);
+        });
+        
        ReportColumn metaColumn =new ReportColumn();
         metaColumn.setReportId(report.getId());
 

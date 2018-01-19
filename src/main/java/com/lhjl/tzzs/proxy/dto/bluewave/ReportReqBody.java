@@ -77,6 +77,7 @@ public class ReportReqBody {
     private List<MetaColumn> columns;
     private List<Integer> segmentations;
     private List<String> reportLabels;
+    private List<String> reportCompanyLabels;
 
     private Integer pageSize = 10;
     private Integer pageNo;
@@ -84,8 +85,17 @@ public class ReportReqBody {
      * 作者
      */
     private String author;
+    
+    
+    public List<String> getReportCompanyLabels() {
+		return reportCompanyLabels;
+	}
 
-    public Integer getPageSize() {
+	public void setReportCompanyLabels(List<String> reportCompanyLabels) {
+		this.reportCompanyLabels = reportCompanyLabels;
+	}
+
+	public Integer getPageSize() {
         return pageSize;
     }
 
@@ -251,9 +261,9 @@ public class ReportReqBody {
 				+ ", comments=" + comments + ", coverUrl=" + coverUrl + ", fromRul=" + fromRul + ", sourceTextUrl="
 				+ sourceTextUrl + ", weightingFactor=" + weightingFactor + ", status=" + status + ", yn=" + yn
 				+ ", createTime=" + createTime + ", updateTime=" + updateTime + ", creater=" + creater + ", columns="
-				+ columns + ", segmentations=" + segmentations + ", reportLabels=" + reportLabels + ", pageSize="
-				+ pageSize + ", pageNo=" + pageNo + ", author=" + author + "]";
+				+ columns + ", segmentations=" + segmentations + ", reportLabels=" + reportLabels
+				+ ", reportCompanyLabels=" + reportCompanyLabels + ", pageSize=" + pageSize + ", pageNo=" + pageNo
+				+ ", author=" + author + "]";
 	}
-
-    
+	
 }
