@@ -380,4 +380,15 @@ public class Report {
     public void setAuthor(String author) {
         this.author = author;
     }
+
+	@Override
+	public String toString() {
+		return "Report [id=" + id + ", title=" + title + ", subTitle=" + subTitle + ", content=" + content
+				+ ", comments=" + comments + ", coverUrl=" + coverUrl + ", fromRul=" + fromRul + ", sourceTextUrl="
+				+ sourceTextUrl + ", weightingFactor=" + weightingFactor + ", status=" + status + ", yn=" + yn
+				+ ", createTime=" + createTime + ", updateTime=" + updateTime + ", creater=" + creater + ", author="
+				+ author + ", columns=" + columns + ", segmentations=" + segmentations + ", reportLabels="
+				+ reportLabels + "]";
+	}
+    
 }

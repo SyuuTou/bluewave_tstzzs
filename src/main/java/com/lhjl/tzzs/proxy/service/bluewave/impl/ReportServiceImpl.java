@@ -90,6 +90,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         report.setTitle(reqBody.getTitle());
         report.setWeightingFactor(reqBody.getWeightingFactor());
         report.setAuthor(reqBody.getAuthor());
+//        System.err.println(report+"*****report");
         
         int offset = (reqBody.getPageNo() - 1) * reqBody.getPageSize();
         int limit = reqBody.getPageSize();
@@ -104,9 +105,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         		list.add(reportMapper.selectByPrimaryKey(rc.getReportId()));
         	}
         }else {
-        
-       
-        list = reportMapper.selectByRowBounds(report, rowBounds);
+        	list = reportMapper.selectByRowBounds(report, rowBounds);
         }
         List<Map<String,Object>> lists=new ArrayList<>();
         for(Report tmp:list) {
