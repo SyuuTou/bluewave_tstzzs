@@ -221,7 +221,18 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     			labels.add(e.getName());
     		});
     	}
-    	map.put("labels", labels);  
+    	map.put("labels", labels);
+    	
+    	ReportCompanyLabel rcl=new ReportCompanyLabel();
+    	rcl.setReportId(reportId);
+    	List<ReportCompanyLabel> reportCompanyLabels = reportCompanyLabelMapper.select(rcl);
+    	List<String> companyLabels =new ArrayList<>();
+    	if(reportCompanyLabels != null) {
+    		reportCompanyLabels.forEach((e)->{
+    			companyLabels.add(e.getCompanyName());
+    		});
+    	}
+    	map.put("companyLabels", companyLabels);
         
         result.setData(map);
         result.setStatus(200);
