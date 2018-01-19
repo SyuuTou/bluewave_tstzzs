@@ -937,4 +937,23 @@
         group by projects_id)pau on p.id = pau.projects_id
         where p.id = #{projectId}
     </select>
+    <select id="getBaseInfoById" resultType="java.util.HashMap">
+        SELECT
+        p.id,p.full_name,p.kernel_desc,p.url,p.item_label,cpn.competitive_products_name,ps.segmentation_name,
+        p.established_time,p.company_email,p.city,p.company_hr_email,p.address,
+        case when p.foreign_investment_yn = 1 then "是" else "否" end foreign_investment_yn
+        FROM
+        projects p
+        LEFT JOIN
+        (SELECT project_id,GROUP_CONCAT(competitive_products_name) competitive_products_name
+        FROM
+        project_competitive_products
+        GROUP BY project_id) cpn ON p.id = cpn.project_id
+        LEFT JOIN
+        (SELECT project_id,GROUP_CONCAT(segmentation_name) segmentation_name
+        FROM
+        project_segmentation
+        GROUP BY project_id) ps ON p.id = ps.project_id
+        where p.id = #{projectId}
+    </select>
 </mapper>
