@@ -10,6 +10,7 @@ import com.lhjl.tzzs.proxy.model.ProjectSendLogs;
 import com.lhjl.tzzs.proxy.model.UserToken;
 import com.lhjl.tzzs.proxy.service.InvesmentInformationService;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -277,28 +278,57 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
 	@Override
 	public CommonDto<List<InvestmentInstitutionsDto>> findRecommendCreater(String token) {
 		 CommonDto<List<InvestmentInstitutionsDto>> result = new CommonDto<List<InvestmentInstitutionsDto>>();
+
+		 if (StringUtils.isAnyBlank(token)){
+		     result.setMessage("token不能为空");
+		     result.setData(null);
+		     result.setStatus(502);
+
+		     return result;
+         }
+
+		 Integer userId = userExistJudgmentService.getUserId(token);
+		 if(userId == -1){
+		     result.setStatus(502);
+		     result.setData(null);
+		     result.setMessage("用户token无效");
+
+		     return result;
+         }
+
         List<InvestmentInstitutionsDto> list =new ArrayList<>();
 		 UserToken userToken = new UserToken();
 	        userToken.setToken(token);
 	        userToken = userTokenMapper.selectOne(userToken);
 	        if(userToken !=null){
+
+	            //获取新版本逻辑机构ids
+                List<Integer> iids = projectSendBMapper.getUserSendInstitutionId(userId);
+
                 ProjectSendLogs projectSendLogs = new ProjectSendLogs();
                 projectSendLogs.setUserid(userToken.getUserId());
                 List<ProjectSendLogs> logsList = projectSendLogsMapper.select(projectSendLogs);
-                if(logsList.size()>0) {
-                    //查询项目投递过的记录
-                    List<Integer> a = new LinkedList<Integer>();
-                    Integer[] workArray1 = null;
-                    for (ProjectSendLogs c : logsList) {
-                        a.add(c.getId());
-                        workArray1 = new Integer[a.size()];
-                        workArray1 = a.toArray(workArray1);
+                if(logsList.size()>0 || iids.size()>0) {
+
+                    List<Integer> listaa = new ArrayList<>();
+                    if (logsList.size() > 0){
+                        //查询项目投递过的记录
+                        List<Integer> a = new LinkedList<Integer>();
+                        Integer[] workArray1 = null;
+                        for (ProjectSendLogs c : logsList) {
+                            a.add(c.getId());
+                            workArray1 = new Integer[a.size()];
+                            workArray1 = a.toArray(workArray1);
+                        }
+                        //根据记录id查找出机构的id
+                        List<Integer> list3 = investmentInstitutionsMapper.deliverySendProjectId(workArray1);
+                        listaa.addAll(list3);
                     }
-                    //根据记录id查找出机构的id
-                    List<Integer> list3 = investmentInstitutionsMapper.deliverySendProjectId(workArray1);
+                    listaa.addAll(iids);
+
                     List<Integer> b = new LinkedList<Integer>();
                     Integer[] workArray2 = null;
-                    for (Integer c : list3) {
+                    for (Integer c : listaa) {
                         b.add(c);
                         workArray2 = new Integer[b.size()];
                         workArray2 = b.toArray(workArray2);
