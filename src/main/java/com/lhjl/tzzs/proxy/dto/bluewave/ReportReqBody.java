@@ -73,7 +73,9 @@ public class ReportReqBody {
      * 创建者
      */
     private String creater;
-    
+    /**
+     * 栏目id
+     */
     private Integer columnId;
 
     private List<MetaColumn> columns;

@@ -4,9 +4,11 @@ import com.github.pagehelper.PageRowBounds;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.CommonTotal;
 import com.lhjl.tzzs.proxy.dto.EventDto;
+import com.lhjl.tzzs.proxy.dto.ProInfoDto;
 import com.lhjl.tzzs.proxy.dto.bluewave.ReportReqBody;
 import com.lhjl.tzzs.proxy.mapper.MetaColumnMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
+import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportColumnMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportCompanyLabelMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportLabelMapper;
@@ -66,6 +68,8 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     private MetaSegmentationMapper metaSegmentationMapper;
     @Autowired
     private ReportCompanyLabelMapper reportCompanyLabelMapper;
+    @Autowired
+    private ProjectsMapper projectsMapper;
 
     @Value("${event.trigger.url}")
     private String eventUrl;
@@ -107,6 +111,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         }else {
         	list = reportMapper.selectByRowBounds(report, rowBounds);
         }
+        
         List<Map<String,Object>> lists=new ArrayList<>();
         for(Report tmp:list) {
         	Map<String,Object> map=new HashMap<>();
@@ -233,17 +238,41 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     	}
     	map.put("labels", labels);
     	
+    	//设置相关的项目信息
     	ReportCompanyLabel rcl=new ReportCompanyLabel();
     	rcl.setReportId(reportId);
     	List<ReportCompanyLabel> reportCompanyLabels = reportCompanyLabelMapper.select(rcl);
     	List<String> companyLabels =new ArrayList<>();
+//    	System.err.println(reportCompanyLabels+"reportCompanyLabels****");
+    	
+    	List<ProInfoDto> proInfoList = new ArrayList<>();
     	if(reportCompanyLabels != null) {
+    		
     		reportCompanyLabels.forEach((e)->{
-    			companyLabels.add(e.getCompanyName());
-    		});
+        		companyLabels.add(e.getCompanyName());
+        	});
+        	//companyLabels表示的是该report关联的额所有的项目的简称
+        	companyLabels.forEach((e)->{
+        		Projects pro=new Projects();
+        		pro.setShortName(e);
+        		try { //根据简称搜索唯一的一条项目信息
+        			pro = projectsMapper.selectOne(pro);
+        			System.err.println(pro);
+        		}catch(Exception ex) {
+        			this.LOGGER.info(ex.getMessage(), ex.fillInStackTrace());
+        			result.setData(null);
+        			result.setMessage("公司的简称不唯一");
+        			result.setStatus(500);
+//        			return result;
+        		}
+        		//根据该项目信息获取该项目的相关  简称、 logo、 地域 、 一句话简介、 轮次 、领域  
+        		ProInfoDto projectsSimpleInfo = projectsMapper.getProjectsSimpleInfos(pro.getId());
+        		proInfoList.add(projectsSimpleInfo);
+        	});
     	}
-    	map.put("companyLabels", companyLabels);
-        
+    	
+    	map.put("proInfos", proInfoList);
+    	
         result.setData(map);
         result.setStatus(200);
         result.setMessage("success");

@@ -51,4 +51,10 @@ public class ReportCompanyLabel {
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
+
+	@Override
+	public String toString() {
+		return "ReportCompanyLabel [reportId=" + reportId + ", companyName=" + companyName + "]";
+	}
+    
 }

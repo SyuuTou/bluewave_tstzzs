@@ -62,6 +62,33 @@
   	<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   	<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  
+  <resultMap id="ProjectsSimpleInfosMap" type="com.lhjl.tzzs.proxy.dto.ProInfoDto">
+  	<result column="ID" jdbcType="INTEGER" property="id" />
+  	<result column="short_name" jdbcType="VARCHAR" property="shortName" />
+  	<result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc" />
+  	<result column="segmentation" jdbcType="VARCHAR" property="segmentation" />
+  	<result column="project_logo" jdbcType="VARCHAR" property="projectLogo" />
+  	<result column="city" jdbcType="VARCHAR" property="city" />
+  	<result column="stage" jdbcType="INTEGER" property="stage" />
+  </resultMap>
+  
+  <select id="getProjectsSimpleInfos" resultMap="ProjectsSimpleInfosMap" parameterType="Integer">
+  	SELECT p.ID,p.short_name,p.kernel_desc,p.segmentation,p.project_logo,p.city,case when a.approval_status = 1 then concat('正在融',a.stage) else a.stage end stage
+	FROM
+	    (SELECT 
+	        * 
+	    FROM
+	        project_financing_log
+	    WHERE
+	        financing_time BETWEEN '2017-01-01' AND '2017-12-31'
+	            AND stage IN ('种子轮' , '天使轮', 'Pre-A轮')
+	            order by financing_time desc 
+	    ) a 
+    LEFT JOIN projects p ON a.project_id = p.ID 
+    where p.ID =#{projectId}
+	GROUP BY p.short_name
+  </select>
     <!-- 用户关注的项目 -->
 	<select id="findSplit" parameterType="com.lhjl.tzzs.proxy.dto.ProjectsListInputDto" resultMap="ProjectsListOutputDtoMap">
      select p.ID,p.serial_number,p.short_name,p.kernel_desc,p.city,p.project_source,aprl.rating_stage,
