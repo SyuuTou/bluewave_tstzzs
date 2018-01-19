@@ -11,42 +11,32 @@
 
     <select id="financingCountDistributed" resultMap="histogramResultMap">
 
-        select count x, financing_time y from (
-        select count(distinct b.serial_number) count,
-        date_format(b.financing_time,'%Y-%m') financing_time
-        from (
-        select p.full_name,sum(pfl.amount) amount,max(pfl.financing_time) financing_time,max(p.serial_number) serial_number from
-        project_financing_log pfl  left join projects  p on pfl.project_id = p.id
-        left join investment_institutions ii on p.investment_institutions_id = ii.id
-        where pfl.financing_time between #{beginTime} and #{endTime}
-        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.country = '中国'
+        select count(a.short_name) x ,date_format(a.financing_time,'%Y-%m') y from (
+select p.short_name,pfl.stage,pfl.financing_time from project_financing_log pfl left join projects p on pfl.project_id = p.id
+right join investment_institutions_project iip on iip.project_id = pfl.id
+left join investment_institutions ii on iip.investment_institutions_id = ii.id
+where pfl.financing_time between #{beginTime} and #{endTime} and  pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.country = '中国'
         <if test="jgtype != null">
             and ii.type = #{jgtype}
         </if>
-
-        group by p.full_name ) b
-
-        group by date_format(b.financing_time,'%Y-%m')
-        ) a order by a.financing_time limit #{froma},#{sizea}
+group by p.short_name, pfl.stage
+) a group by date_format(a.financing_time,'%Y-%m')
 
     </select>
 
 
     <select id="financingAmountDistributed" resultMap="histogramResultMap">
 
-        select amount x, financing_time y from (
-        select sum(a.amount) amount, date_format(a.financing_time,'%Y-%m') financing_time from (
-        select p.full_name,pfl.${flag} amount,max(pfl.financing_time) financing_time from project_financing_log pfl  left join projects  p on pfl.project_id = p.id
-        left join investment_institutions ii on p.investment_institutions_id = ii.id where pfl.amount > 0
-        and pfl.financing_time between #{beginTime} and #{endTime}
-        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.country = '中国'
+        select sum(a.amount) x ,date_format(a.financing_time,'%Y-%m') y from (
+        select p.short_name,pfl.stage,pfl.financing_time,pfl.amount from project_financing_log pfl left join projects p on pfl.project_id = p.id
+        right join investment_institutions_project iip on iip.project_id = pfl.id
+        left join investment_institutions ii on iip.investment_institutions_id = ii.id
+        where pfl.financing_time between #{beginTime} and #{endTime} and  pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.country = '中国'
         <if test="jgtype != null">
             and ii.type = #{jgtype}
         </if>
-
-        group by p.full_name ) a
-        group by date_format(a.financing_time,'%Y-%m')
-        ) b order by b.financing_time limit #{froma},#{sizea}
+        group by p.short_name, pfl.stage
+        ) a group by date_format(a.financing_time,'%Y-%m')
 
     </select>
 
