@@ -145,7 +145,6 @@ public class ReportController extends GenericController {
             result.setStatus(500);
             result.setMessage("服务器繁忙，请稍后再试。");
         }
-
         return result;
     }
     /**
