@@ -20,7 +20,7 @@ public class ProInfoDto {
 	/**
 	 * 项目领域
 	 */
-	private String segmentation;
+	private String segmentation;  
 	/**
 	 * 项目logo
 	 */
