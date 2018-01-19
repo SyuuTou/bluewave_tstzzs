@@ -145,83 +145,82 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 
     @Transactional(readOnly = true)
     @Override
-    public CommonDto<Report> getReportById(Integer appId, Integer id) {
-        CommonDto<Report> result = new CommonDto<>();
-//        Map<String,Object> map=new HashMap<>();
+    public CommonDto<Map<String,Object>> getReportById(Integer appId, Integer id) {
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+        Map<String,Object> map=new HashMap<>();
         
         Report report = reportMapper.selectByPrimaryKey(id);
         Integer reportId = report.getId();
-//        map.put("report", report);
-        //获取report的相关附属信息
-//        ReportColumn rc =new ReportColumn();
-//    	rc.setReportId(reportId);
-//    	List<ReportColumn> ReportColumns = reportColumnMapper.select(rc);
-//    	List<Integer> columns=new ArrayList<>();
-//    	if(ReportColumns!=null) {
-//    		ReportColumns.forEach((e)->{
-//        		columns.add(e.getColumnId());
-//        	});
-//    	}
-//    	map.put("columns", columns);
+        map.put("report", report);
+//        获取report的相关附属信息
         ReportColumn rc =new ReportColumn();
     	rc.setReportId(reportId);
-    	List<ReportColumn> rcs = reportColumnMapper.select(rc);
-    	
-    	List<MetaColumn> metaColumns = new ArrayList<>();
-    	if(rcs != null) {
-    		rcs.forEach((e)->{
-    			MetaColumn mc=new MetaColumn();
-    			mc.setId(e.getColumnId());
-    			MetaColumn metaColumn = metaColumnMapper.selectOne(mc);
-    			metaColumns.add(metaColumn);
+    	List<ReportColumn> ReportColumns = reportColumnMapper.select(rc);
+    	List<Integer> columns=new ArrayList<>();
+    	if(ReportColumns!=null) {
+    		ReportColumns.forEach((e)->{
+        		columns.add(e.getColumnId());
         	});
     	}
-    	report.setColumns(metaColumns);
-//**************************
-    	ReportSegmentation  rs=new ReportSegmentation();
-    	rs.setReportId(reportId);
-    	List<ReportSegmentation> rss = reportSegmentationMapper.select(rs);
-    	
-    	List<MetaSegmentation> metaSegmentations = new ArrayList<>();
-    	if(rss != null) {
-    		rss.forEach((e)->{
-    			MetaSegmentation ms=new MetaSegmentation();
-    			ms.setId(e.getSegmentationId());
-    			MetaSegmentation metaSegmentation = metaSegmentationMapper.selectOne(ms);
-    			metaSegmentations.add(metaSegmentation);
-        	});
-    	}
-    	report.setSegmentations(metaSegmentations);
+    	map.put("columns", columns);
+//        ReportColumn rc =new ReportColumn();
+//    	rc.setReportId(reportId);
+//    	List<ReportColumn> rcs = reportColumnMapper.select(rc);
 //    	
-//    	ReportSegmentation rs =new ReportSegmentation();
-//    	rs.setReportId(reportId);
-//    	List<ReportSegmentation> ReportSegmentations = reportSegmentationMapper.select(rs);
-//    	List<Integer> segmentations=new ArrayList<>();
-//    	if(ReportSegmentations!=null) {
-//    		ReportSegmentations.forEach((e)->{
-//    			segmentations.add(e.getSegmentationId());
+//    	List<MetaColumn> metaColumns = new ArrayList<>();
+//    	if(rcs != null) {
+//    		rcs.forEach((e)->{
+//    			MetaColumn mc=new MetaColumn();
+//    			mc.setId(e.getColumnId());
+//    			MetaColumn metaColumn = metaColumnMapper.selectOne(mc);
+//    			metaColumns.add(metaColumn);
 //        	});
 //    	}
-//    	map.put("segmentations", segmentations);
+//    	report.setColumns(metaColumns);
+//**************************
+//    	ReportSegmentation  rs=new ReportSegmentation();
+//    	rs.setReportId(reportId);
+//    	List<ReportSegmentation> rss = reportSegmentationMapper.select(rs);
+//    	
+//    	List<MetaSegmentation> metaSegmentations = new ArrayList<>();
+//    	if(rss != null) {
+//    		rss.forEach((e)->{
+//    			MetaSegmentation ms=new MetaSegmentation();
+//    			ms.setId(e.getSegmentationId());
+//    			MetaSegmentation metaSegmentation = metaSegmentationMapper.selectOne(ms);
+//    			metaSegmentations.add(metaSegmentation);
+//        	});
+//    	}
+//    	report.setSegmentations(metaSegmentations);
+//    	
+    	ReportSegmentation rs =new ReportSegmentation();
+    	rs.setReportId(reportId);
+    	List<ReportSegmentation> ReportSegmentations = reportSegmentationMapper.select(rs);
+    	List<Integer> segmentations=new ArrayList<>();
+    	if(ReportSegmentations!=null) {
+    		ReportSegmentations.forEach((e)->{
+    			segmentations.add(e.getSegmentationId());
+        	});
+    	}
+    	map.put("segmentations", segmentations);
 //**************************** 
-    	ReportLabel rl=new ReportLabel();
-    	rl.setReportId(reportId);
-    	List<ReportLabel> reportLabels = reportLabelMapper.select(rl);
-    	report.setReportLabels(reportLabels);
-    	
 //    	ReportLabel rl=new ReportLabel();
 //    	rl.setReportId(reportId);
-//    	List<ReportLabel> ReportLabels = reportLabelMapper.select(rl);
-//    	List<String> labels =new ArrayList<>();
-//    	if(ReportLabels != null) {
-//    		ReportLabels.forEach((e)->{
-//    			labels.add(e.getName());
-//    		});
-//    	}
-//    	map.put("labels", labels);  
-        //*
+//    	List<ReportLabel> reportLabels = reportLabelMapper.select(rl);
+//    	report.setReportLabels(reportLabels);
+    	
+    	ReportLabel rl=new ReportLabel();
+    	rl.setReportId(reportId);
+    	List<ReportLabel> ReportLabels = reportLabelMapper.select(rl);
+    	List<String> labels =new ArrayList<>();
+    	if(ReportLabels != null) {
+    		ReportLabels.forEach((e)->{
+    			labels.add(e.getName());
+    		});
+    	}
+    	map.put("labels", labels);  
         
-        result.setData(report);
+        result.setData(map);
         result.setStatus(200);
         result.setMessage("success");
         return result;
