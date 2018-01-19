@@ -247,6 +247,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         report.setWeightingFactor(reqBody.getWeightingFactor());
         report.setCreater(reqBody.getCreater());
         report.setYn(reqBody.getYn());
+        report.setAuthor(reqBody.getAuthor());
         Integer num = null;
         if (null == report.getId()){
         	report.setCreateTime(new Date());
