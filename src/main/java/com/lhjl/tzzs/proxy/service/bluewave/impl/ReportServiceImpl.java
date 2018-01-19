@@ -93,10 +93,21 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         
         int offset = (reqBody.getPageNo() - 1) * reqBody.getPageSize();
         int limit = reqBody.getPageSize();
-
+        List<Report>  list = null;
         PageRowBounds rowBounds = new PageRowBounds(offset, limit);
-        List<Report> list = reportMapper.selectByRowBounds(report, new RowBounds(offset, limit));
+        if (reqBody.getColumnId()!=null) {
+        	list = new ArrayList<Report>();
+        	ReportColumn queryReportColumn = new ReportColumn();
+        	queryReportColumn.setColumnId(reqBody.getColumnId());
+        	List<ReportColumn> reportColumns = reportColumnMapper.selectByRowBounds(queryReportColumn, rowBounds);
+        	for(ReportColumn rc : reportColumns) {
+        		list.add(reportMapper.selectByPrimaryKey(rc.getReportId()));
+        	}
+        }else {
         
+       
+        list = reportMapper.selectByRowBounds(report, rowBounds);
+        }
         List<Map<String,Object>> lists=new ArrayList<>();
         for(Report tmp:list) {
         	Map<String,Object> map=new HashMap<>();

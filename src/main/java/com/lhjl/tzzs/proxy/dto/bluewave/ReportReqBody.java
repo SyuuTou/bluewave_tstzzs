@@ -73,6 +73,8 @@ public class ReportReqBody {
      * 创建者
      */
     private String creater;
+    
+    private Integer columnId;
 
     private List<MetaColumn> columns;
     private List<Integer> segmentations;
@@ -87,7 +89,15 @@ public class ReportReqBody {
     private String author;
     
     
-    public List<String> getReportCompanyLabels() {
+    public Integer getColumnId() {
+		return columnId;
+	}
+
+	public void setColumnId(Integer columnId) {
+		this.columnId = columnId;
+	}
+
+	public List<String> getReportCompanyLabels() {
 		return reportCompanyLabels;
 	}
 
