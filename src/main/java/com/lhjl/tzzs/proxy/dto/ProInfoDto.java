@@ -1,5 +1,10 @@
 package com.lhjl.tzzs.proxy.dto;
 
+/**
+ * report相关的项目信息
+ * @author IdataVC
+ *
+ */
 public class ProInfoDto {
 	/**
 	 * 项目id
