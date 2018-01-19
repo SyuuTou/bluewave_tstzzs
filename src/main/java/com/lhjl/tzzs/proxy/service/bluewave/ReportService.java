@@ -10,7 +10,7 @@ import java.util.Map;
 public interface ReportService {
     CommonDto<List<Map<String,Object>>> queryReport(Integer appId, ReportReqBody reqBody);
 
-    CommonDto<Map<String,Object>> getReportById(Integer appId, Integer id);
+    CommonDto<Report> getReportById(Integer appId, Integer id);
 
     CommonDto<String> saveOrUpdate(Integer appId, ReportReqBody reqBody);
 }
