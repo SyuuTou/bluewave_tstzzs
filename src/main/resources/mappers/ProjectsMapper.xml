@@ -39,6 +39,9 @@
     <result column="city_count_min" jdbcType="INTEGER" property="cityCountMin" />
     <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="company_email" jdbcType="VARCHAR" property="companyEmail" />
+    <result column="company_hr_email" jdbcType="VARCHAR" property="companyHrEmail" />
+    <result column="foreign_investment_yn" jdbcType="INTEGER" property="foreignInvestmentYn" />
   </resultMap>
   
   <resultMap id="ProjectsListOutputDtoMap" type="com.lhjl.tzzs.proxy.dto.ProjectsListOutputDto">
@@ -87,7 +90,7 @@
 	GROUP BY p.short_name
   </select>
     <!-- 用户关注的项目 -->
-	<select id="findSplit" resultMap="ProjectsListOutputDtoMap" parameterType="com.lhjl.tzzs.proxy.dto.ProjectsListInputDto">
+	<select id="findSplit" parameterType="com.lhjl.tzzs.proxy.dto.ProjectsListInputDto" resultMap="ProjectsListOutputDtoMap">
      select p.ID,p.serial_number,p.short_name,p.kernel_desc,p.city,p.project_source,aprl.rating_stage,
 		statemp.stage,followtemp.focuscount,interviewtemp.interviewcount,proviewtemp.viewcount, pfs.meta_follow_status_id followstatus,
 		p.create_time,p.update_time
@@ -128,7 +131,7 @@
 		limit #{start},#{pageSize}
     </select>
     
-    <select id="findSplitCount" resultType="Long" parameterType="com.lhjl.tzzs.proxy.dto.ProjectsListInputDto">
+    <select id="findSplitCount" parameterType="com.lhjl.tzzs.proxy.dto.ProjectsListInputDto" resultType="Long">
      	select count(*) from (select count(*) from projects p
 		left join admin_project_rating_log aprl on p.ID = aprl.project_id 
 		left join (select projects_id ,count(*) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
