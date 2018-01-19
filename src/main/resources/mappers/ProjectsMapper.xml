@@ -81,8 +81,8 @@
 	    FROM
 	        project_financing_log
 	    WHERE
-	        financing_time BETWEEN '2017-01-01' AND '2017-12-31'
-	            AND stage IN ('种子轮' , '天使轮', 'Pre-A轮')
+	        financing_time BETWEEN '2017-01-01' AND '2017-12-31' 
+	            AND stage IN ('种子轮' , '天使轮', 'Pre-A轮') 
 	            order by financing_time desc 
 	    ) a 
     LEFT JOIN projects p ON a.project_id = p.ID 
