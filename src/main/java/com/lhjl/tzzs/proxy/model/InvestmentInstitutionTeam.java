@@ -97,6 +97,23 @@ public class InvestmentInstitutionTeam {
     private String investmentCase;
 
     /**
+     * 投资阶段
+     */
+    @Column(name = "investment_stage")
+    private String investmentStage;
+
+    /**
+     * 投资领域
+     */
+    @Column(name = "investment_segmentation")
+    private String investmentSegmentation;
+
+    /**
+     * 城市
+     */
+    private String city;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -392,5 +409,59 @@ public class InvestmentInstitutionTeam {
      */
     public void setInvestmentCase(String investmentCase) {
         this.investmentCase = investmentCase;
+    }
+
+    /**
+     * 获取投资阶段
+     *
+     * @return investment_stage - 投资阶段
+     */
+    public String getInvestmentStage() {
+        return investmentStage;
+    }
+
+    /**
+     * 设置投资阶段
+     *
+     * @param investmentStage 投资阶段
+     */
+    public void setInvestmentStage(String investmentStage) {
+        this.investmentStage = investmentStage;
+    }
+
+    /**
+     * 获取投资领域
+     *
+     * @return investment_segmentation - 投资领域
+     */
+    public String getInvestmentSegmentation() {
+        return investmentSegmentation;
+    }
+
+    /**
+     * 设置投资领域
+     *
+     * @param investmentSegmentation 投资领域
+     */
+    public void setInvestmentSegmentation(String investmentSegmentation) {
+        this.investmentSegmentation = investmentSegmentation;
+    }
+
+    /**
+     * 获取城市
+     *
+     * @return city - 城市
+     */
+    public String getCity() {
+        return city;
+    }
+
+    /**
+     * 设置城市
+     *
+     * @param city 城市
+     */
+    public void setCity(String city) {
+        this.city = city;
     }
 }
