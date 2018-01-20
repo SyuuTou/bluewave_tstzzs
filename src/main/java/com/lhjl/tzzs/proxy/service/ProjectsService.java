@@ -155,4 +155,11 @@ public interface ProjectsService {
 	 * @return
 	 */
 	CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLodId);
+	/**
+     * 移除项目的融资历史单阶段对应的投资机构信息
+     * @param appid
+     * @param id  investment_institutions_project表中的主键id
+     * @return
+     */
+	CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer id);
 }

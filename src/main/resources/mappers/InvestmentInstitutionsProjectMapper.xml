@@ -15,4 +15,7 @@
     <result column="accounting_date" jdbcType="TIMESTAMP" property="accountingDate" />
     <result column="yn" jdbcType="INTEGER" property="yn" />
   </resultMap>
+  <update id="updateDelStatus" parameterType="Integer">
+  	update investment_institutions_project set yn = 1 where project_id=#{id}; 
+ </update>
 </mapper>

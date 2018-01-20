@@ -1395,6 +1395,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		CommonDto<List<InvestmentInstitutionsProject>> result =new CommonDto<>();
 		InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
 		iip.setProjectId(financingLodId);
+		//设置有效标志为有效
+		iip.setYn(0);
 		List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
 		//融资历史记录的详细信息进行进一步的输出格式化
 		if(iips !=null) {  
@@ -1402,8 +1404,18 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 				InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(temp.getInvestmentInstitutionsId()); 
 				temp.setInvestmentShortName(ii.getShortName());
 			}
-		}
+		}  
 		result.setData(iips);
+        result.setStatus(200);
+        result.setMessage("success");
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer id) {
+		CommonDto<Boolean> result=new CommonDto<>();
+		investmentInstitutionsProjectMapper.updateDelStatus(id);
+		result.setData(true);
         result.setStatus(200);
         result.setMessage("success");
 		return result;
