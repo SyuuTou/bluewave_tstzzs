@@ -58,8 +58,8 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @GetMapping("/v{appid}/singlefinancinglogDetails")
-    public CommonDto<Boolean> financinglogDetails(@PathVariable Integer appid,Integer financingLodId){
-    	CommonDto<Boolean> result =new CommonDto<>();
+    public CommonDto<List<InvestmentInstitutionsProject>> financinglogDetails(@PathVariable("appid") Integer appid,Integer financingLodId){
+    	CommonDto<List<InvestmentInstitutionsProject>> result =new CommonDto<>();
     	try {
     		result=projectsService.getFinancingLogDetails(appid,financingLodId);
 	    }catch(Exception e) {
@@ -79,7 +79,7 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @PutMapping("/v{appid}/updatefinancingloginfo")
-    public CommonDto<Boolean> updateFinancingLogInfo(@PathVariable Integer appid,@RequestBody ProjectFinancingLog body){
+    public CommonDto<Boolean> updateFinancingLogInfo(@PathVariable("appid") Integer appid,@RequestBody ProjectFinancingLog body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
     		result=projectsService.updateFinancingLog(appid,body);
@@ -100,7 +100,7 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @GetMapping("/v{appid}/financinglogs")
-    public CommonDto<List<ProjectFinancingLog>> getFinancingLogs(@PathVariable Integer appid,Integer projectId){
+    public CommonDto<List<ProjectFinancingLog>> getFinancingLogs(@PathVariable("appid") Integer appid,Integer projectId){
     	CommonDto<List<ProjectFinancingLog>> result =new CommonDto<>();
     	try {
     		result=projectsService.getFinancingLogs(appid,projectId);
@@ -120,8 +120,7 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @PutMapping("/v{appid}/removefinancinglog")
-    public CommonDto<Boolean> removeFinancingLogById(@PathVariable Integer appid,@RequestBody FinancingLogDelInputDto body){
-    	System.err.println(body+"******");
+    public CommonDto<Boolean> removeFinancingLogById(@PathVariable("appid") Integer appid,@RequestBody FinancingLogDelInputDto body){
     	CommonDto<Boolean> result=new CommonDto<>();
     	try {
     		result=projectsService.removeFinancingLogById(appid,body);
@@ -139,7 +138,7 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @GetMapping("/v{appid}/list/financingstatus")
-    public CommonDto<List<String>> getFinancingStatu(@PathVariable Integer appid){
+    public CommonDto<List<String>> getFinancingStatu(@PathVariable("appid") Integer appid){
     	CommonDto<List<String>> result =new CommonDto<>();
     	try {
     		result=projectsService.getFinancingStatus(appid);

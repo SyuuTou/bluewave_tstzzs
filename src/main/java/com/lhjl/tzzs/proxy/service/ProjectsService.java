@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsProject;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
@@ -153,5 +154,5 @@ public interface ProjectsService {
 	 * @param financingLodId 融资历史记录的id
 	 * @return
 	 */
-	CommonDto<Boolean> getFinancingLogDetails(Integer appid, Integer financingLodId);
+	CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLodId);
 }

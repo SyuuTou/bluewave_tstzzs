@@ -1391,10 +1391,19 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<Boolean> getFinancingLogDetails(Integer appid, Integer financingLodId) {
-		CommonDto<Boolean> result =new CommonDto<Boolean>();
-		
-		result.setData(true);
+	public CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLodId) {
+		CommonDto<List<InvestmentInstitutionsProject>> result =new CommonDto<>();
+		InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
+		iip.setProjectId(financingLodId);
+		List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
+		//融资历史记录的详细信息进行进一步的输出格式化
+		if(iips !=null) {  
+			for(InvestmentInstitutionsProject temp:iips) {
+				InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(temp.getInvestmentInstitutionsId()); 
+				temp.setInvestmentShortName(ii.getShortName());
+			}
+		}
+		result.setData(iips);
         result.setStatus(200);
         result.setMessage("success");
 		return result;

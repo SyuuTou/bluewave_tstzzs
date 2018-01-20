@@ -56,8 +56,21 @@ public class InvestmentInstitutionsProject {
      * 删除标志:0代表有效；1代表无效
      */
     private Integer yn;
-
     /**
+     * 投资机构简称
+     */
+    @Transient
+    private String investmentShortName;
+    
+    public String getInvestmentShortName() {
+		return investmentShortName;
+	}
+
+	public void setInvestmentShortName(String investmentShortName) {
+		this.investmentShortName = investmentShortName;
+	}
+
+	/**
      * 获取项目ID
      *
      * @return project_id - 项目ID
@@ -218,4 +231,14 @@ public class InvestmentInstitutionsProject {
     public void setYn(Integer yn) {
         this.yn = yn;
     }
+
+	@Override
+	public String toString() {
+		return "InvestmentInstitutionsProject [projectId=" + projectId + ", investmentInstitutionsId="
+				+ investmentInstitutionsId + ", investmentDesc=" + investmentDesc + ", status=" + status
+				+ ", investmentAmount=" + investmentAmount + ", currency=" + currency + ", stockShare=" + stockShare
+				+ ", accountingDate=" + accountingDate + ", yn=" + yn + ", investmentShortName=" + investmentShortName
+				+ "]";
+	}
+    
 }
