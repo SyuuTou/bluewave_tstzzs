@@ -18,6 +18,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
 import tk.mybatis.mapper.entity.Example;
 
@@ -27,7 +28,7 @@ import tk.mybatis.mapper.entity.Example;
  * @author lmy
  */
 @Service
-public class ProjectsServiceImpl implements ProjectsService {
+public class ProjectsServiceImpl extends GenericService implements ProjectsService {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(ProjectsServiceImpl.class);
 
@@ -1263,7 +1264,8 @@ public class ProjectsServiceImpl implements ProjectsService {
 		result.setStatus(200);
 		return result;
 	}
-
+	
+	@Transactional
 	@Override
 	public CommonDto<Boolean> removeFinancingLogById(Integer appid, FinancingLogDelInputDto body) {
 		CommonDto<Boolean> result=new CommonDto<Boolean>();
@@ -1278,12 +1280,6 @@ public class ProjectsServiceImpl implements ProjectsService {
 		return result;
 	}
 
-    /**
-     * 根据项目id获取项目跟进状态的接口
-     * @param projectId
-     * @param appid
-     * @return
-     */
     @Override
     public CommonDto<ProjectFollowStatus> getFollowStatus(Integer projectId, Integer appid) {
         CommonDto<ProjectFollowStatus> result = new CommonDto<>();
@@ -1313,40 +1309,53 @@ public class ProjectsServiceImpl implements ProjectsService {
 
         return result;
     }
-
+    
+    @Transactional
 	@Override
 	public CommonDto<Boolean> updateFinancingLog(Integer appid, ProjectFinancingLog body) {
 		CommonDto<Boolean> result =new CommonDto<>();
+		try {
+			Date financingTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(body.getFinancingStr());
+			body.setFinancingTime(financingTime);
+		}catch(Exception e) {
+			result.setData(false);
+	        result.setStatus(500);
+	        result.setMessage("日期格式解析错误");
+	        return result;
+		}
 		projectFinancingLogMapper.updateByPrimaryKeySelective(body);
 		
 		//获取该融资历史信息的相关的投资方的相关信息
 		List<String> shortNames = body.getInstitutionsShortNames();
-		if((shortNames != null) || (shortNames.size()==0)) {
+		if((shortNames != null) && (shortNames.size()!=0)) {
 			//收集该融资历史同机构的相关信息
-			List<Integer> logRelativeInstitutions=null;
+			List<Integer> logRelativeInstitutions=new ArrayList<>();
 			
 			for(String tmp:shortNames) {
 				InvestmentInstitutions ii=new InvestmentInstitutions();
 				ii.setShortName(tmp);
 				//作为查询结果的实体判断
-				InvestmentInstitutions selectedInsti=null;
 				try {
 					ii = investmentInstitutionsMapper.selectOne(ii);
 					if(ii != null) {//取得该机构的id
-						logRelativeInstitutions.add(selectedInsti.getId());
-					}else {//创建该机构
-						ii.setShortName(tmp);
-						investmentInstitutionsMapper.insertSelective(ii);
-						//获取自增长id
 						logRelativeInstitutions.add(ii.getId());
+					}else {//创建该机构
+						InvestmentInstitutions createIi=new InvestmentInstitutions();
+						createIi.setShortName(tmp);
+						investmentInstitutionsMapper.insert(createIi);
+						//获取自增长id
+						logRelativeInstitutions.add(createIi.getId());
 					}
 				}catch(Exception e) {
+					this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+					
 					result.setData(false);
 			        result.setStatus(500);
 			        result.setMessage("机构的简称不唯一，数据存在错误");
 			        return result;
 				}
 			}
+			System.err.println(logRelativeInstitutions+"***logRelativeInstitutions");
 			//统一设置该融资历史信息同机构的关联关系
 			if((logRelativeInstitutions != null) && (logRelativeInstitutions.size()!=0)) {
 				InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();

@@ -159,8 +159,22 @@ public class ProjectFinancingLog {
 	 */
 	@Transient
 	private List<String> institutionsShortNames;
+	/**
+	 * 融资时间字符串
+	 */
+	@Transient
+	private String financingStr;
 	
-    public List<String> getInstitutionsShortNames() {
+	
+    public String getFinancingStr() {
+		return financingStr;
+	}
+
+	public void setFinancingStr(String financingStr) {
+		this.financingStr = financingStr;
+	}
+
+	public List<String> getInstitutionsShortNames() {
 		return institutionsShortNames;
 	}
 
@@ -654,9 +668,7 @@ public class ProjectFinancingLog {
 				+ totalAmountStatus + ", financingTimeYear=" + financingTimeYear + ", projectFinancingUseful="
 				+ projectFinancingUseful + ", serialNumber=" + serialNumber + ", dataSoruceTypeId=" + dataSoruceTypeId
 				+ ", updateTime=" + updateTime + ", yn=" + yn + ", institutions=" + institutions
-				+ ", institutionsShortNames=" + institutionsShortNames + "]";
+				+ ", institutionsShortNames=" + institutionsShortNames + ", financingStr=" + financingStr + "]";
 	}
 
-
-    
 }

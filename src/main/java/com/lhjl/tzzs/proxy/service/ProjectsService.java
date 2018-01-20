@@ -133,7 +133,6 @@ public interface ProjectsService {
 	 */
 	CommonDto<Boolean> removeFinancingLogById(Integer appid, FinancingLogDelInputDto body);
 
-
 	/**
 	 * 根据项目id获取项目跟进状态的接口
 	 * @param projectId
