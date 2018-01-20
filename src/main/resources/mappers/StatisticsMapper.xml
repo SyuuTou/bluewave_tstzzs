@@ -45,7 +45,7 @@
             and ii.type = #{jgtype}
         </if>
 
-        GROUP BY p_name) a GROUP BY    date_format(a.financing_time,'%m')
+        GROUP BY p_name,pf.stage) a GROUP BY    date_format(a.financing_time,'%m')
 
     </select>
 
