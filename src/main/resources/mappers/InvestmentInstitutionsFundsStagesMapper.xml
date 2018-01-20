@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsFundsStagesMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsFundsStages" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsFundsStagesMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsFundsStages">
     <!--
       WARNING - @mbg.generated
     -->
-    <result column="investment_institutions_funds_id" property="investmentInstitutionsFundsId" jdbcType="INTEGER" />
-    <result column="stage_id" property="stageId" jdbcType="INTEGER" />
+    <result column="investment_institutions_funds_id" jdbcType="INTEGER" property="investmentInstitutionsFundsId" />
+    <result column="stage_id" jdbcType="INTEGER" property="stageId" />
   </resultMap>
 </mapper>

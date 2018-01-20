@@ -173,4 +173,5 @@ public class ReportComment {
     public void setNum(Integer num) {
         this.num = num;
     }
+
 }

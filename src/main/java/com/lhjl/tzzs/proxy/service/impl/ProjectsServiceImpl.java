@@ -18,6 +18,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
 import tk.mybatis.mapper.entity.Example;
 
@@ -27,7 +28,7 @@ import tk.mybatis.mapper.entity.Example;
  * @author lmy
  */
 @Service
-public class ProjectsServiceImpl implements ProjectsService {
+public class ProjectsServiceImpl extends GenericService implements ProjectsService {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(ProjectsServiceImpl.class);
 
@@ -92,6 +93,8 @@ public class ProjectsServiceImpl implements ProjectsService {
     private MetaDataSourceTypeMapper metaDataSourceTypeMapper;
     @Autowired
     private AdminProjectRatingLogMapper adminProjectRatingLogMapper;
+    @Autowired
+    private InvestmentInstitutionsProjectMapper investmentInstitutionsProjectMapper;
 
     /**
      * 查询我关注的项目
@@ -1128,6 +1131,23 @@ public class ProjectsServiceImpl implements ProjectsService {
 	@Override
 	public CommonDto<Boolean> updateFollowStatus(Integer appid, ProjectsUpdateInputDto body) {
 		CommonDto<Boolean> result  =  new CommonDto<>();
+		Date now = new Date();
+
+		if (body.getId() == null){
+		    result.setMessage("项目的id不能为空");
+		    result.setStatus(502);
+		    result.setData(null);
+
+		    return result;
+        }
+
+        if (body.getStatus() == null){
+		    result.setMessage("项目跟进状态不能为空");
+		    result.setData(null);
+		    result.setStatus(502);
+		    return result;
+        }
+
 		ProjectFollowStatus pfs=new ProjectFollowStatus();
 		pfs.setProjectId(body.getId());
 		try {
@@ -1140,13 +1160,21 @@ public class ProjectsServiceImpl implements ProjectsService {
 		}
 		if(pfs != null) { //执行更新
 			pfs.setMetaFollowStatusId(body.getStatus());
-			projectFollowStatusMapper.updateByPrimaryKeySelective(pfs);
+			if (body.getDescription() != null){
+			    pfs.setDescription(body.getDescription());
+            }
+            projectFollowStatusMapper.updateByPrimaryKeySelective(pfs);
 		}else {//执行插入
 			ProjectFollowStatus pfss=new ProjectFollowStatus();
 			pfss.setProjectId(body.getId());
 			pfss.setMetaFollowStatusId(body.getStatus());
+			if (body.getDescription() != null){
+			    pfss.setDescription(body.getDescription());
+            }
+            pfss.setCreatTime(now);
 			projectFollowStatusMapper.insertSelective(pfss);
 		}
+
 		result.setData(true);
 		result.setMessage("success");
 		result.setStatus(200);
@@ -1192,6 +1220,173 @@ public class ProjectsServiceImpl implements ProjectsService {
 		result.setData(list);
 		result.setMessage("success");
 		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<ProjectFinancingLog>> getFinancingLogs(Integer appid, Integer projectId) {
+		CommonDto<List<ProjectFinancingLog>> result =new CommonDto<>();
+		
+		ProjectFinancingLog pfl=new ProjectFinancingLog();
+		pfl.setProjectId(projectId);
+		pfl.setYn(0);
+		//获取所有的融资历史记录
+		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.select(pfl);
+		
+		if(pfls != null) {
+			pfls.forEach((e)->{
+				//获取融资阶段的id
+				Integer financingLogId = e.getId();
+				InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
+				iip.setProjectId(financingLogId);
+				//查询关系表中相关的投资方的相关信息
+				List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
+				
+				//用于获取所有的机构信息
+				List<InvestmentInstitutions> investmentInstitutions=new ArrayList<>();
+//				List<String> institutionShortNames=new ArrayList<>();
+				if(iips != null) {
+					for(InvestmentInstitutionsProject obj:iips) {
+						//根据机构id获取机构的相关信息
+						InvestmentInstitutions instiOne = investmentInstitutionsMapper.selectByPrimaryKey(obj.getInvestmentInstitutionsId());
+						if(instiOne != null) {
+							investmentInstitutions.add(instiOne);
+//							institutionShortNames.add(instiOne.getShortName());
+						}
+					}
+				}
+				e.setInstitutions(investmentInstitutions);
+			});
+		}
+		
+		result.setData(pfls);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+	
+	@Transactional
+	@Override
+	public CommonDto<Boolean> removeFinancingLogById(Integer appid, FinancingLogDelInputDto body) {
+		CommonDto<Boolean> result=new CommonDto<Boolean>();
+		ProjectFinancingLog pfl=new ProjectFinancingLog();
+		pfl.setId(body.getLogId());
+		pfl.setYn(body.getDelStatus());
+		projectFinancingLogMapper.updateByPrimaryKeySelective(pfl);
+		
+		result.setData(true);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+    @Override
+    public CommonDto<ProjectFollowStatus> getFollowStatus(Integer projectId, Integer appid) {
+        CommonDto<ProjectFollowStatus> result = new CommonDto<>();
+
+        if (projectId == null){
+            result.setMessage("项目id不能为空");
+            result.setData(null);
+            result.setStatus(502);
+
+            return result;
+        }
+        ProjectFollowStatus projectFollowStatus = new ProjectFollowStatus();
+        projectFollowStatus.setDescription("");
+        projectFollowStatus.setMetaFollowStatusId(null);
+
+        ProjectFollowStatus projectFollowStatusForSearch = new ProjectFollowStatus();
+        projectFollowStatusForSearch.setProjectId(projectId);
+        List<ProjectFollowStatus> projectFollowStatusList = projectFollowStatusMapper.select(projectFollowStatusForSearch);
+        if (projectFollowStatusList.size() > 0){
+            projectFollowStatus.setDescription(projectFollowStatusList.get(0).getDescription());
+            projectFollowStatus.setMetaFollowStatusId(projectFollowStatusList.get(0).getMetaFollowStatusId());
+        }
+
+        result.setData(projectFollowStatus);
+        result.setStatus(200);
+        result.setMessage("success");
+
+        return result;
+    }
+    
+    @Transactional
+	@Override
+	public CommonDto<Boolean> updateFinancingLog(Integer appid, ProjectFinancingLog body) {
+		CommonDto<Boolean> result =new CommonDto<>();
+		//对body进行数据格式化处理
+		try {
+			Date financingTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(body.getFinancingStr());
+			body.setFinancingTime(financingTime);
+		}catch(Exception e) {
+			result.setData(false);
+	        result.setStatus(500);
+	        result.setMessage("日期格式解析错误");
+	        return result;
+		}
+		//保存在融资历史保存或者更新后的主键id
+		Integer afterUpdateLogId=null;
+		if(body.getId() !=null) { //执行相关的更新操作
+			projectFinancingLogMapper.updateByPrimaryKeySelective(body);
+			afterUpdateLogId=body.getId();
+		}else {//执行相关的插入操作,增加的话肯定会传递一个projectId作为body的属性
+			projectFinancingLogMapper.insertSelective(body);
+			afterUpdateLogId=body.getId();
+		}
+		//获取该融资历史信息的相关的投资方的相关信息
+		List<String> shortNames = body.getInstitutionsShortNames();
+		if((shortNames != null) && (shortNames.size()!=0)) {
+			//收集该融资历史同机构的相关信息
+			List<Integer> logRelativeInstitutions=new ArrayList<>();
+			
+			for(String tmp:shortNames) {
+				InvestmentInstitutions ii=new InvestmentInstitutions();
+				ii.setShortName(tmp);
+				//作为查询结果的实体判断
+				try { 
+					ii = investmentInstitutionsMapper.selectOne(ii);
+					if(ii != null) {//取得该机构的id
+						logRelativeInstitutions.add(ii.getId());
+					}else {//创建该机构
+						InvestmentInstitutions createIi=new InvestmentInstitutions();
+						createIi.setShortName(tmp);
+						investmentInstitutionsMapper.insert(createIi);
+						//获取自增长id
+						logRelativeInstitutions.add(createIi.getId());
+					}
+				}catch(Exception e) {
+					this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+					
+					result.setData(false);
+			        result.setStatus(500);
+			        result.setMessage("机构的简称不唯一，数据存在错误");
+			        return result;
+				}
+			}
+			//统一设置该融资历史信息同机构的关联关系
+			if((logRelativeInstitutions != null) && (logRelativeInstitutions.size()!=0)) {
+				InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
+				//设置融资历史的id
+				iip.setProjectId(afterUpdateLogId);
+				//删除所有同之前投资机构的关系
+				investmentInstitutionsProjectMapper.delete(iip);
+				logRelativeInstitutions.forEach((e)->{
+					//设置融资历史记录同投资机构的关系
+					iip.setInvestmentInstitutionsId(e);
+					investmentInstitutionsProjectMapper.insert(iip);
+				});
+			}
+		}else {//执行原关联的投资机构的删除操作
+			InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
+			//设置融资历史的id
+			iip.setProjectId(afterUpdateLogId);
+			//删除所有同之前投资机构的关系
+			investmentInstitutionsProjectMapper.delete(iip);  
+		}
+		
+		result.setData(true);
+        result.setStatus(200);
+        result.setMessage("success");
 		return result;
 	}
 }

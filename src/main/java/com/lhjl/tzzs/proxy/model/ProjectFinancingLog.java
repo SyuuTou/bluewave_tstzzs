@@ -2,6 +2,8 @@ package com.lhjl.tzzs.proxy.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.*;
 
 @Table(name = "project_financing_log")
@@ -144,6 +146,51 @@ public class ProjectFinancingLog {
     private Date updateTime;
 
     /**
+     * 删除标志:0代表有效；1代表无效
+     */
+    private Integer yn;
+    /**
+	 * 关联的相关机构
+	 */
+	@Transient
+	private List<InvestmentInstitutions> institutions;
+	/**
+	 * 关联的机构的简称
+	 */
+	@Transient
+	private List<String> institutionsShortNames;
+	/**
+	 * 融资时间字符串
+	 */
+	@Transient
+	private String financingStr;
+	
+	
+    public String getFinancingStr() {
+		return financingStr;
+	}
+
+	public void setFinancingStr(String financingStr) {
+		this.financingStr = financingStr;
+	}
+
+	public List<String> getInstitutionsShortNames() {
+		return institutionsShortNames;
+	}
+
+	public void setInstitutionsShortNames(List<String> institutionsShortNames) {
+		this.institutionsShortNames = institutionsShortNames;
+	}
+
+	public List<InvestmentInstitutions> getInstitutions() {
+		return institutions;
+	}
+
+	public void setInstitutions(List<InvestmentInstitutions> institutions) {
+		this.institutions = institutions;
+	}
+
+	/**
      * @return ID
      */
     public Integer getId() {
@@ -590,4 +637,38 @@ public class ProjectFinancingLog {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+    /**
+     * 获取删除标志:0代表有效；1代表无效
+     *
+     * @return yn - 删除标志:0代表有效；1代表无效
+     */
+    public Integer getYn() {
+        return yn;
+    }
+
+    /**
+     * 设置删除标志:0代表有效；1代表无效
+     *
+     * @param yn 删除标志:0代表有效；1代表无效
+     */
+    public void setYn(Integer yn) {
+        this.yn = yn;
+    }
+
+	@Override
+	public String toString() {
+		return "ProjectFinancingLog [id=" + id + ", projectId=" + projectId + ", financingTime=" + financingTime
+				+ ", stage=" + stage + ", amount=" + amount + ", calculationAmountStatus=" + calculationAmountStatus
+				+ ", currency=" + currency + ", stockRight=" + stockRight + ", prAmount=" + prAmount + ", totalAmount="
+				+ totalAmount + ", rate=" + rate + ", shareDivest=" + shareDivest + ", valuation=" + valuation
+				+ ", investmentInstitutionsList=" + investmentInstitutionsList + ", proportionList=" + proportionList
+				+ ", createTime=" + createTime + ", status=" + status + ", approvalStatus=" + approvalStatus
+				+ ", approvalTime=" + approvalTime + ", amountStatus=" + amountStatus + ", totalAmountStatus="
+				+ totalAmountStatus + ", financingTimeYear=" + financingTimeYear + ", projectFinancingUseful="
+				+ projectFinancingUseful + ", serialNumber=" + serialNumber + ", dataSoruceTypeId=" + dataSoruceTypeId
+				+ ", updateTime=" + updateTime + ", yn=" + yn + ", institutions=" + institutions
+				+ ", institutionsShortNames=" + institutionsShortNames + ", financingStr=" + financingStr + "]";
+	}
+
 }

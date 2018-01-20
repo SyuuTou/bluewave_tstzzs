@@ -14,4 +14,11 @@
     <result column="app_id" property="appId" jdbcType="INTEGER" />
     <result column="num" property="num" jdbcType="INTEGER" />
   </resultMap>
+  <select id="selectReportOrderByCreateTime" resultMap="BaseResultMap">
+    select * from report_comment
+    where app_id= #{appId}
+    and report_id =#{reportId}
+    order by create_time
+    limit #{offset},#{limit}
+  </select>
 </mapper>

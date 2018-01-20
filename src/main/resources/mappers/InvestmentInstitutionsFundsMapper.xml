@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsFundsMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsFunds">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="investment_institutions_id" jdbcType="INTEGER" property="investmentInstitutionsId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="duration" jdbcType="INTEGER" property="duration" />
+    <result column="units" jdbcType="VARCHAR" property="units" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="scale" jdbcType="DECIMAL" property="scale" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+    <result column="intro" jdbcType="VARCHAR" property="intro" />
+    <result column="investment_amount_begin" jdbcType="DECIMAL" property="investmentAmountBegin" />
+    <result column="investment_amount_end" jdbcType="DECIMAL" property="investmentAmountEnd" />
+    <result column="investment_philosophy" jdbcType="VARCHAR" property="investmentPhilosophy" />
+    <result column="funs_addres" jdbcType="VARCHAR" property="funsAddres" />
+  </resultMap>
+
+  <select id="getFundList" resultMap="BaseResultMap">
+    select * from investment_institutions_funds where investment_institutions_id=#{projectId} and yn=0;
+  </select>
+
+  <select id="selectByProjectId" resultMap="BaseResultMap">
+    select * from investment_institutions_funds where investment_institutions_id=#{projectId} and yn=0;
+  </select>
+
+</mapper>

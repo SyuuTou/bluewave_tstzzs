@@ -26,11 +26,16 @@
     <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
     <result column="amount_status" jdbcType="INTEGER" property="amountStatus" />
     <result column="total_amount_status" jdbcType="INTEGER" property="totalAmountStatus" />
-    <result column="project_financing_useful" jdbcType="VARCHAR" property="projectFinancingUseful" />
     <result column="financing_time_year" jdbcType="VARCHAR" property="financingTimeYear" />
+    <result column="project_financing_useful" jdbcType="VARCHAR" property="projectFinancingUseful" />
+    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
+    <result column="data_soruce_type_id" jdbcType="INTEGER" property="dataSoruceTypeId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
   </resultMap>
+  
 	
-	<select id="fetchFinancingStatus" resultType="String">
+	<select id="fetchFinancingStatus" resultType="String">  
 		select distinct(stage) from project_financing_log where stage is not null and stage !=""
     </select>
 	  
@@ -40,7 +45,7 @@
     order by financing_time desc
   </select>
   <select id="selectInvestors" resultType="String">
-    select ii.short_name from idatavc.investment_institutions_project iip
+    select ii.short_name from investment_institutions_project iip
     left join investment_institutions ii on iip.investment_institutions_id = ii.ID
     where project_id = #{pflid}
     limit 0,3
@@ -73,13 +78,13 @@
       (pfl.create_time between #{begainTime} and #{endTime}
       or pfl.update_time between #{begainTime} and #{endTime})
     </if>
-    <if test="stage != null and stage.length > 0">
+    <if test="stage != null and stage.length &gt; 0">
       and pfl.stage in ${stage}
     </if>
-    <if test="currency != null and currency.length >0">
+    <if test="currency != null and currency.length &gt;0">
       and pfl.currency in ${currency}
     </if>
-    <if test="dataSource != null and dataSource.length > 0">
+    <if test="dataSource != null and dataSource.length &gt; 0">
       and pfl.data_soruce_type_id in ${dataSource}}
     </if>
     <if test="creatTimeOrder != null and creatTimeOrder !=''">
@@ -125,13 +130,13 @@
       (pfl.create_time between #{begainTime} and #{endTime}
       or pfl.update_time between #{begainTime} and #{endTime})
     </if>
-    <if test="stage != null and stage.length > 0">
+    <if test="stage != null and stage.length &gt; 0">
       and pfl.stage in ${stage}
     </if>
-    <if test="currency != null and currency.length >0">
+    <if test="currency != null and currency.length &gt;0">
       and pfl.currency in ${currency}
     </if>
-    <if test="dataSource != null and dataSource.length > 0">
+    <if test="dataSource != null and dataSource.length &gt; 0">
       and pfl.data_soruce_type_id in ${dataSource}}
     </if>
     <if test="creatTimeOrder != null and creatTimeOrder !=''">
@@ -147,5 +152,9 @@
       </if>
     </if>
    ) abc
+  </select>
+
+  <select id="selectByProjectId" resultMap="BaseResultMap">
+    select * from project_financing_log where project_id=#{projectId};
   </select>
 </mapper>
