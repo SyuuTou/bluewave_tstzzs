@@ -261,7 +261,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
             if(list2.size()>0){
                 ScreenInvestmentRecord screenInvestmentRecord1=screenInvestmentRecordMapper.serachScreenRecord(screenInvestmentRecord.getUserId());
                 //选择的为50机构
-                if(screenInvestmentRecord1.getInvestmentType() !=null){
+                if(screenInvestmentRecord1.getInvestmentType() == 0){
                     List<LabelList> list1 =new LinkedList<>();
                     LabelList labelList =new LabelList();
                     labelList.setName("50指数机构");
@@ -275,7 +275,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     list1.add(labelList1);
                     map.put("investment_type",list1);
                     map.put("investTypeName","50指数机构");
-                }else{
+                }else if (screenInvestmentRecord1.getInvestmentType() == 1){
                     List<LabelList> list1 =new LinkedList<>();
                     LabelList labelList =new LabelList();
                     labelList.setName("50指数机构");
@@ -285,6 +285,20 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     labelList1.setName("行业指数机构");
                     labelList1.setValue("行业指数机构");
                     labelList1.setChecked(true);
+                    list1.add(labelList);
+                    list1.add(labelList1);
+                    map.put("investment_type",list1);
+                    map.put("investTypeName","行业指数机构");
+                }else {
+                    List<LabelList> list1 =new LinkedList<>();
+                    LabelList labelList =new LabelList();
+                    labelList.setName("50指数机构");
+                    labelList.setValue("50指数机构");
+                    labelList.setChecked(false);
+                    LabelList labelList1 =new LabelList();
+                    labelList1.setName("行业指数机构");
+                    labelList1.setValue("行业指数机构");
+                    labelList1.setChecked(false);
                     list1.add(labelList);
                     list1.add(labelList1);
                     map.put("investment_type",list1);
