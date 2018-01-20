@@ -1389,4 +1389,14 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
         result.setMessage("success");
 		return result;
 	}
+
+	@Override
+	public CommonDto<Boolean> getFinancingLogDetails(Integer appid, Integer financingLodId) {
+		CommonDto<Boolean> result =new CommonDto<Boolean>();
+		
+		result.setData(true);
+        result.setStatus(200);
+        result.setMessage("success");
+		return result;
+	}
 }

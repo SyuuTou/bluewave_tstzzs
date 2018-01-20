@@ -148,10 +148,10 @@ public interface ProjectsService {
 	 */
 	CommonDto<Boolean> updateFinancingLog(Integer appid, ProjectFinancingLog body);
 	/**
-	 * 增加融资历史的记录
+	 * 返回单条融资历史记录的详细信息
 	 * @param appid
-	 * @param body
+	 * @param financingLodId 融资历史记录的id
 	 * @return
 	 */
-	//CommonDto<Boolean> addFinancingLog(Integer appid, ProjectFinancingLog body);
+	CommonDto<Boolean> getFinancingLogDetails(Integer appid, Integer financingLodId);
 }
