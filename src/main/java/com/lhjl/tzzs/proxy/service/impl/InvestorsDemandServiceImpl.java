@@ -3,8 +3,7 @@ package com.lhjl.tzzs.proxy.service.impl;
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
-import com.lhjl.tzzs.proxy.service.EvaluateService;
-import com.lhjl.tzzs.proxy.service.InvestorsDemandService;
+import com.lhjl.tzzs.proxy.service.*;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
 import com.lhjl.tzzs.proxy.utils.DateUtils;
@@ -45,7 +44,22 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
     private UserLoginService userLoginService;
 
     @Autowired
+    private InvestorDemandSegmentationService investorDemandSegmentationService;
+
+    @Autowired
+    private InvestorDemandCharacterService investorDemandCharacterService;
+
+    @Autowired
+    private InvestorDemandSpeedwayService investorDemandSpeedwayService;
+
+    @Autowired
+    private InvestorDemandStageService investorDemandStageService;
+
+    @Autowired
     private InvestorDemandSegmentationMapper investorDemandSegmentationMapper;
+
+    @Autowired
+    private InvestorDemandStageMapper investorDemandStageMapper;
 
     @Autowired
     private InvestorDemandCharacterMapper investorDemandCharacterMapper;
@@ -54,7 +68,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
     private InvestorDemandSpeedwayMapper investorDemandSpeedwayMapper;
 
     @Autowired
-    private InvestorDemandStageMapper investorDemandStageMapper;
+    private MetaProjectStageMapper metaProjectStageMapper;
 
     @Autowired
     private UsersMapper usersMapper;
@@ -85,6 +99,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         if(!StringUtils.isEmpty(body.getIndustryta7tradename())){
             investorDemand.setIndustry(body.getIndustryta7tradename());
         }
+
         if(!StringUtils.isEmpty(body.getTouzi())){
             investorDemand.setFinancingStage(body.getTouzi());
         }
@@ -126,6 +141,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
             }
             investorDemand.setUpdateTime(DateUtils.parse(createTime));//如果不是第一次，就是更新时间
             investorDemandMapper.updateByPrimaryKeySelective(investorDemand);
+
         }else {
             try {
                 createTime = sdf.format(new Date(now));
@@ -135,6 +151,87 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
             investorDemand.setCreatTime(DateUtils.parse(createTime));//如果是第一次插入，为创建时间
             investorDemandMapper.insertSelective(investorDemand);
         }
+
+        investorDemandStageService.deleteAll(investorDemand.getId());
+        List<InvestorDemandStage> investorDemandStageList = new ArrayList<>();
+        if(StringUtils.isEmpty(body.getTouzi())){
+            InvestorDemandStage investorDemandStage1 = new InvestorDemandStage();
+            investorDemandStage1.setInvestorDemandId(investorDemand.getId());
+            investorDemandStage1.setAppid(appId);
+            investorDemandStage1.setMetaProjectStageId(null);
+            investorDemandStageList.add(investorDemandStage1);
+        }else{
+            String[] investDemandStages = body.getTouzi().trim().split(",");
+            for(int i = 0; i<investDemandStages.length; i++){
+                InvestorDemandStage investorDemandStage1 = new InvestorDemandStage();
+                investorDemandStage1.setInvestorDemandId(investorDemand.getId());
+                investorDemandStage1.setAppid(appId);
+                Integer stageId = metaProjectStageMapper.selectIdByStageName(investDemandStages[i]);
+                investorDemandStage1.setMetaProjectStageId(stageId);
+                investorDemandStageList.add(investorDemandStage1);
+            }
+        }
+        Integer investorDemandStageInsertResult = investorDemandStageService.insertList(investorDemandStageList);
+
+        investorDemandSegmentationService.deleteAll(investorDemand.getId());
+        List<InvestorDemandSegmentation> investorDemandSegmentationList = new ArrayList<>();
+        if(StringUtils.isEmpty(body.getIndustryta7tradename())){
+            InvestorDemandSegmentation investorDemandSegmentation1 = new InvestorDemandSegmentation();
+            investorDemandSegmentation1.setInvestorDemandId(investorDemand.getId());
+            investorDemandSegmentation1.setAppid(appId);
+            investorDemandSegmentation1.setSegmentation("");
+            investorDemandSegmentationList.add(investorDemandSegmentation1);
+        }else{
+            String[] investorDemandSegmentations = body.getIndustryta7tradename().trim().split(",");
+            for(int i = 0; i<investorDemandSegmentations.length; i++){
+                InvestorDemandSegmentation investorDemandSegmentation1 = new InvestorDemandSegmentation();
+                investorDemandSegmentation1.setInvestorDemandId(investorDemand.getId());
+                investorDemandSegmentation1.setAppid(appId);
+                investorDemandSegmentation1.setSegmentation(investorDemandSegmentations[i]);
+                investorDemandSegmentationList.add(investorDemandSegmentation1);
+            }
+        }
+        Integer investorDemandSegmentationInsertResult = investorDemandSegmentationService.insertList(investorDemandSegmentationList);
+
+        investorDemandSpeedwayService.deleteAll(investorDemand.getId());
+        List<InvestorDemandSpeedway> investorDemandSpeedwayList = new ArrayList<>();
+        if(StringUtils.isEmpty(body.getUser7recentlyco_noana())){
+            InvestorDemandSpeedway investorDemandSpeedway1 = new InvestorDemandSpeedway();
+            investorDemandSpeedway1.setInvestorDemandId(investorDemand.getId());
+            investorDemandSpeedway1.setAppid(appId);
+            investorDemandSpeedway1.setSpeedway("");
+            investorDemandSpeedwayList.add(investorDemandSpeedway1);
+        }else{
+            String[] investorDemandSpeedways = body.getUser7recentlyco_noana().trim().split(",");
+            for(int i = 0; i<investorDemandSpeedways.length; i++){
+                InvestorDemandSpeedway investorDemandSpeedway1 = new InvestorDemandSpeedway();
+                investorDemandSpeedway1.setInvestorDemandId(investorDemand.getId());
+                investorDemandSpeedway1.setAppid(appId);
+                investorDemandSpeedway1.setSpeedway(investorDemandSpeedways[i]);
+                investorDemandSpeedwayList.add(investorDemandSpeedway1);
+            }
+        }
+        Integer investorDemandSpeedwayInsertResult = investorDemandSpeedwayService.insertList(investorDemandSpeedwayList);
+
+        investorDemandCharacterService.deleteAll(investorDemand.getId());
+        List<InvestorDemandCharacter> investorDemandCharacterList = new ArrayList<>();
+        if(StringUtils.isEmpty(body.getUser7foundertra_noana())){
+            InvestorDemandCharacter investorDemandCharacter1 = new InvestorDemandCharacter();
+            investorDemandCharacter1.setInvestorDemandId(investorDemand.getId());
+            investorDemandCharacter1.setAppid(appId);
+            investorDemandCharacter1.setCharacter("");
+            investorDemandCharacterList.add(investorDemandCharacter1);
+        }else{
+            String[] investorDemandCharacters = body.getUser7foundertra_noana().trim().split(",");
+            for(int i = 0; i<investorDemandCharacters.length; i++){
+                InvestorDemandCharacter investorDemandCharacter1 = new InvestorDemandCharacter();
+                investorDemandCharacter1.setInvestorDemandId(investorDemand.getId());
+                investorDemandCharacter1.setAppid(appId);
+                investorDemandCharacter1.setCharacter(investorDemandCharacters[i]);
+                investorDemandCharacterList.add(investorDemandCharacter1);
+            }
+        }
+        Integer investorDemandCharacterInsertResult = investorDemandCharacterService.insertList(investorDemandCharacterList);
 
         result.setStatus(200);
         result.setMessage("投资偏好记录成功");
@@ -533,7 +630,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         investorDemandSegmentation.setInvestorDemandId(investorDemandId);
         investorDemandSegmentation.setAppid(appid);
 
-        investorDemandSegmentationMapper.delete(investorDemandSegmentation);
+        investorDemandSegmentationService.delete(investorDemandSegmentation);
 
         if (body.getSegmentation().size() > 0){
             for (String s:body.getSegmentation()){
@@ -551,7 +648,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         investorDemandSpeedway.setInvestorDemandId(investorDemandId);
         investorDemandSpeedway.setAppid(appid);
 
-        investorDemandSpeedwayMapper.delete(investorDemandSpeedway);
+        investorDemandSpeedwayService.delete(investorDemandSpeedway);
 
         if (body.getSpeedway().size() > 0){
             for (String s:body.getSpeedway()){
