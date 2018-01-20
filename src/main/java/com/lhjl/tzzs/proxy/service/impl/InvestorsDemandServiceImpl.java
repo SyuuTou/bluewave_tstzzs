@@ -7,6 +7,7 @@ import com.lhjl.tzzs.proxy.service.EvaluateService;
 import com.lhjl.tzzs.proxy.service.InvestorsDemandService;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
+import com.lhjl.tzzs.proxy.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,8 +34,10 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
 
     @Resource
     private CommonUserService commonUserService;
-    @Resource
+
+    @Autowired
     private InvestorDemandMapper investorDemandMapper;
+
     @Resource
     private EvaluateService evaluateService;
 
@@ -63,56 +66,73 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
     private static final String[] SECTION = {"全球","中国","海外","硅谷","华南","华东","华北","西南","北京","上海","广州","深圳","成都","厦门","福州","长沙"
             ,"武汉","西安","大连","天津","杭州","南京","苏州","青岛"};
 
-    /**
-     * 投资偏好记录
-     * @param body 请求对象
-     * @return
-     */
     @Override
-    public CommonDto<String> newulingyu(InvestorsDemandDto body) {
+    public CommonDto<String> newulingyu(Integer appId, InvestorsDemandDto body) {
+
         CommonDto<String> result = new CommonDto<>();
         InvestorDemand investorDemand = new InvestorDemand();
-
+        investorDemand.setAppid(appId);
         int userId = commonUserService.getLocalUserId(body.getToken());
         investorDemand.setUserid(userId);
-        if(body.getIndustryta7tradename() != null && !"".equals(body.getIndustryta7tradename())){
+        Users users = new Users();
+        users.setId(userId);
+        Users users1 = usersMapper.selectByPrimaryKey(users);
+        investorDemand.setCompanyName(users1.getCompanyName());
+        investorDemand.setCompanyDuties(users1.getCompanyDuties());
+        investorDemand.setUserName(users1.getActualName());
+        investorDemand.setPhonenumber(users1.getPhonenumber());
+
+        if(!StringUtils.isEmpty(body.getIndustryta7tradename())){
             investorDemand.setIndustry(body.getIndustryta7tradename());
         }
-        if(body.getTouzi() != null && !"".equals(body.getTouzi())){
+        if(!StringUtils.isEmpty(body.getTouzi())){
             investorDemand.setFinancingStage(body.getTouzi());
         }
-        if(body.getCity() != null && !"".equals(body.getCity())){
+        if(!StringUtils.isEmpty(body.getCity())){
             investorDemand.setCityPreference(body.getCity());
         }
         if(body.getXiaxian() != null && !"".equals(body.getXiaxian())){
             investorDemand.setInvestmentAmountLow(new BigDecimal(body.getXiaxian()));
         }
-        if(body.getShangxian() != null && !"".equals(body.getShangxian())){
+        if(!StringUtils.isEmpty(body.getShangxian())){
             investorDemand.setInvestmentAmountHigh(new BigDecimal(body.getShangxian()));
         }
-        if(body.getUser7recentlyco_noana() != null && !"".equals(body.getUser7recentlyco_noana())){
+        if(!StringUtils.isEmpty(body.getUser7recentlyco_noana())){
             investorDemand.setRecentlyConcernedSubdivisionCircuit(body.getUser7recentlyco_noana());
         }
-        if(body.getUser7foundertra_noana() !=null && !"".equals(body.getUser7foundertra_noana())){
+        if(!StringUtils.isEmpty(body.getUser7foundertra_noana())){
             investorDemand.setConcernedFoundersCharacteristic(body.getUser7foundertra_noana());
         }
-        if(body.getXuqiu() != null && !"".equals(body.getXuqiu())){
+        if(!StringUtils.isEmpty(body.getXuqiu())){
             investorDemand.setDemand(body.getXuqiu());
         }
 
-        investorDemand.setCreatTime(new Date());
-
+        long now = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Example idExample = new Example(InvestorDemand.class);
         idExample.and().andEqualTo("userid",userId);
         idExample.setOrderByClause("creat_time desc");
 
         //Integer investorDemandId = null;
+        String createTime = null;
         List<InvestorDemand> investorDemandList = investorDemandMapper.selectByExample(idExample);
         if (investorDemandList.size() > 0){
             Integer investorDemandId = investorDemandList.get(0).getId();
             investorDemand.setId(investorDemandId);
+            try {
+                createTime = sdf.format(new Date(now));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            investorDemand.setUpdateTime(DateUtils.parse(createTime));//如果不是第一次，就是更新时间
             investorDemandMapper.updateByPrimaryKeySelective(investorDemand);
         }else {
+            try {
+                createTime = sdf.format(new Date(now));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            investorDemand.setCreatTime(DateUtils.parse(createTime));//如果是第一次插入，为创建时间
             investorDemandMapper.insertSelective(investorDemand);
         }
 

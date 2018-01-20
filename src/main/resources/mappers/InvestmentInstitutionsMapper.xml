@@ -173,7 +173,7 @@
     <select id="findInvestment50New" resultMap="newDtoMap">
 
         SELECT
-        COUNT(1) count, c.short_name,c.create_time,c.type,c.logo,c.kenel_case,c.comment
+        COUNT(1) count, c.short_name,c.create_time,c.type,c.logo,c.kenel_case,c.comment,c.id
         FROM
         (SELECT
         ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
@@ -200,7 +200,7 @@
 
     <select id="findInvestmentallNew" resultMap="newDtoMap">
         SELECT
-        COUNT(1) count, c.short_name,c.create_time,c.type,c.logo,c.kenel_case,c.comment
+        COUNT(1) count, c.short_name,c.create_time,c.type,c.logo,c.kenel_case,c.comment,c.id
         FROM
         (SELECT
         ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,

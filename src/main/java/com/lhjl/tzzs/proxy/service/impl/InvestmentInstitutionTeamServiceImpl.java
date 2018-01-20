@@ -117,10 +117,6 @@ public class InvestmentInstitutionTeamServiceImpl implements InvestmentInstituti
         investmentInstitutionsAddress.setId(investmentInstitutionTeam1.getInvestmentInstitutionId());
         InvestmentInstitutionsAddress investmentInstitutionsAddress1 = investmentInstitutionsAddressMapper.selectByPrimaryKey(investmentInstitutionsAddress);
 
-        InvestorDemand investorDemand = new InvestorDemand();
-        investorDemand.setId(investmentInstitutionTeam1.getId());
-        InvestorDemand investorDemand1 = investorDemandMapper.selectByPrimaryKey(investorDemand);
-
         InvestmentInstitutionsMemberWork investmentInstitutionsMemberWork = new InvestmentInstitutionsMemberWork();
         investmentInstitutionsMemberWork.setMemberId(investmentInstitutionTeam1.getId());
         List<InvestmentInstitutionsMemberWork> investmentInstitutionsMemberWorkList = investmentInstitutionsMemberWorkMapper.select(investmentInstitutionsMemberWork);
@@ -137,10 +133,9 @@ public class InvestmentInstitutionTeamServiceImpl implements InvestmentInstituti
         List<InvestmentInstitutionsMemberEducation> investmentInstitutionsMemberEducationList = investmentInstitutionsMemberEducationMapper.select(investmentInstitutionsMemberEducation);
 
         List<String> investmentInstitutionsMemberEducations = new ArrayList<>();
-        investmentInstitutionsMemberEducationList.forEach( education -> {
-            investmentInstitutionsMemberEducations.add(education.getEducationExperience());
+        investmentInstitutionsMemberEducationList.forEach( (InvestmentInstitutionsMemberEducation education) -> {
+                    investmentInstitutionsMemberEducations.add(education.getEducationExperience());
         });
-
         String[] investmentInstitutionsMemberEducationArr = new String[investmentInstitutionsMemberEducations.size()];
         investmentInstitutionsMemberEducations.toArray(investmentInstitutionsMemberEducationArr);
 
@@ -152,15 +147,14 @@ public class InvestmentInstitutionTeamServiceImpl implements InvestmentInstituti
         teamMemberDetailOutpuyDto.setInstitutionName(investmentInstitutions1.getShortName());
         teamMemberDetailOutpuyDto.setInstitutionAddress(investmentInstitutionsAddress1.getDetailAddress());
         teamMemberDetailOutpuyDto.setInvestmentCase(investmentInstitutionTeam1.getInvestmentCase());
-        teamMemberDetailOutpuyDto.setInvestmentStage(investorDemand1.getFinancingStage());
-        teamMemberDetailOutpuyDto.setInvestmentPerferDomain(investorDemand1.getIndustry());
+        teamMemberDetailOutpuyDto.setInvestmentStage(investmentInstitutionTeam1.getInvestmentStage());
+        teamMemberDetailOutpuyDto.setInvestmentPerferDomain(investmentInstitutionTeam1.getInvestmentSegmentation());
         teamMemberDetailOutpuyDto.setWorkExperience(investmentInstitutionsMemberWorkArr);
         teamMemberDetailOutpuyDto.setEducationExperience(investmentInstitutionsMemberEducationArr);
 
-        result.setData(teamMemberDetailOutpuyDto);
-        result.setStatus(200);
         result.setMessage("success");
+        result.setStatus(200);
+        result.setData(teamMemberDetailOutpuyDto);
         return result;
-
     }
 }

@@ -13,7 +13,7 @@ public interface InvestorsDemandService {
      * @param body 请求对象
      * @return
      */
-    CommonDto<String> newulingyu(InvestorsDemandDto body);
+    CommonDto<String> newulingyu(Integer appId, InvestorsDemandDto body);
 
     /**
      * 投资偏好回显
