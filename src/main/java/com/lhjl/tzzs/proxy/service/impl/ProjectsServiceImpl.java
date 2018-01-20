@@ -1404,7 +1404,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 				InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(temp.getInvestmentInstitutionsId()); 
 				temp.setInvestmentShortName(ii.getShortName());
 			}
-		}  
+		}    
 		result.setData(iips);
         result.setStatus(200);
         result.setMessage("success");
