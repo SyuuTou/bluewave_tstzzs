@@ -6,7 +6,6 @@ import com.lhjl.tzzs.proxy.model.ReportCollection;
 import com.lhjl.tzzs.proxy.model.ReportComment;
 import com.lhjl.tzzs.proxy.model.ReportConcern;
 import com.lhjl.tzzs.proxy.service.bluewave.ReportEventService;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

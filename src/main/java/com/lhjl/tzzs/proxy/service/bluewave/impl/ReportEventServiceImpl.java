@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -42,6 +44,7 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
     @Override
     public CommonDto<String> saveReportComment(Integer appId, ReportComment reportComment) {
         reportComment.setAppId(appId);
+        reportComment.setCreateTime(new Date());
         reportCommentMapper.insert(reportComment);
         return new CommonDto<>("ok", "success", 200);
     }
@@ -71,6 +74,8 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
     @Override
     public CommonDto<List<ReportComment>> findReportComment(Integer appId, Integer reportId, Integer pageNo, Integer pageSize) {
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         ReportComment query = new ReportComment();
         query.setAppId(appId);
         query.setReportId(reportId);
@@ -79,7 +84,15 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
 
         PageRowBounds rowBounds = new PageRowBounds(offset, limit);
 
-        List<ReportComment> comments = reportCommentMapper.selectByRowBounds(query, rowBounds);
+        List<ReportComment> comments = reportCommentMapper.selectReportOrderByCreateTime(appId, reportId, pageNo, pageSize);
+        if (comments.size()>0){
+            for (ReportComment rc:comments){
+                if (rc.getCreateTime() != null){
+                    String dateString = sdf.format(rc.getCreateTime());
+                    rc.setDateString(dateString);
+                }
+            }
+        }
 
         return new CommonDto<>(comments,"success", 200);
     }

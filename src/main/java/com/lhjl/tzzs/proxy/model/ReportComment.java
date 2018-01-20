@@ -42,6 +42,9 @@ public class ReportComment {
 
     private Integer num;
 
+    /**创建时间字符串格式*/
+    private String dateString;
+
     /**
      * @return id
      */
@@ -172,5 +175,13 @@ public class ReportComment {
      */
     public void setNum(Integer num) {
         this.num = num;
+    }
+
+    public String getDateString() {
+        return dateString;
+    }
+
+    public void setDateString(String dateString) {
+        this.dateString = dateString;
     }
 }
