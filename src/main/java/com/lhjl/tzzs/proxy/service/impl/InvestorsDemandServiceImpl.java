@@ -265,6 +265,19 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         if(investorDemands.size() > 0){
             investorDemand = investorDemands.get(0);
         }
+        //返回上下限
+        BigDecimal startdoller = BigDecimal.ZERO;
+        BigDecimal enddoller = BigDecimal.ZERO;
+
+        if (investorDemand.getInvestmentAmountLowDollars() != null){
+            startdoller = investorDemand.getInvestmentAmountLowDollars();
+        }
+        if (investorDemand.getInvestmentAmountHighDollars() != null){
+            enddoller = investorDemand.getInvestmentAmountHighDollars();
+        }
+
+        data.put("startdoller",startdoller);
+        data.put("enddoller",enddoller);
 
         //行业领域(send_logs)
         List<LabelList> industrys = hotsdatas.getData().get("industryKey");
@@ -289,20 +302,21 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         data.put("shuzu", demandLabels);
 
         //投资阶段
-        List<Boolean> roundsNames = new ArrayList<>();
-        for(String roundName : ROUNDNAME){
-            roundsNames.add(false);
-        }
-        for(int i = 0; i<ROUNDNAME.length; i++){
-            if(investorDemand != null && investorDemand.getFinancingStage() != null && !"".equals(investorDemand.getFinancingStage())){
-                String[] roundNameArray = investorDemand.getFinancingStage().split(",");
-                for(String string : roundNameArray){
-                    if(string.equals(ROUNDNAME[i])){
-                        roundsNames.set(i, true);
-                    }
-                }
-            }
-        }
+        List<String> roundsNames = new ArrayList<>();
+//        for(String roundName : ROUNDNAME){
+//            roundsNames.add(false);
+//        }
+//        for(int i = 0; i<ROUNDNAME.length; i++){
+//            if(investorDemand != null && investorDemand.getFinancingStage() != null && !"".equals(investorDemand.getFinancingStage())){
+//                String[] roundNameArray = investorDemand.getFinancingStage().split(",");
+//                for(String string : roundNameArray){
+//                    if(string.equals(ROUNDNAME[i])){
+//                        roundsNames.set(i, true);
+//                    }
+//                }
+//            }
+//        }
+        roundsNames = Arrays.asList(investorDemand.getFinancingStage().split(","));
         data.put("a", roundsNames);
 
         //地域偏好
