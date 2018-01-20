@@ -89,7 +89,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
             return result;
         }
 
-        if (body.getShortName() != null || body.getShortName() != ""){
+        if (body.getShortName() == null || body.getShortName() == ""){
             result.setStatus(502);
             result.setData(null);
             result.setMessage("项目简称不能为空");
@@ -103,11 +103,20 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 
         List<Projects> projectsList = projectsMapper.select(projects);
         if (projectsList.size() > 0){
-            result.setMessage("项目名称已存在");
-            result.setData(null);
-            result.setStatus(502);
 
-            return result;
+            Projects projectsForCompare = new Projects();
+            projectsForCompare = projectsMapper.selectByPrimaryKey(body.getProjectId());
+
+            if (String.valueOf(projectsList.get(0).getShortName()).equals(String.valueOf(projectsForCompare.getShortName()))){
+
+            }else {
+
+                result.setMessage("项目名称已存在");
+                result.setData(null);
+                result.setStatus(502);
+
+                return result;
+            }
         }
 
         if (body.getProjectType() != null && body.getProjectType() == 1){
@@ -235,6 +244,11 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
                     foreignInvestmentYn = (String)projectlist.get("foreign_investment_yn");
                 }
                 projectAdminBaseInfoDto.setForeignInvestmentYn(foreignInvestmentYn);
+                String territory = "";
+                if (projectlist.get("territory") != null){
+                    territory= (String)projectlist.get("territory");
+                }
+                projectAdminBaseInfoDto.setTerritory(territory);
             }else {
                projectAdminBaseInfoDto.setFullName("");
                projectAdminBaseInfoDto.setKernelDesc("");
