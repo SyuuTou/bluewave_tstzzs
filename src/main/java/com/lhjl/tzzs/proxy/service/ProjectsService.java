@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsProject;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
@@ -153,5 +154,19 @@ public interface ProjectsService {
 	 * @param financingLodId 融资历史记录的id
 	 * @return
 	 */
-	CommonDto<Boolean> getFinancingLogDetails(Integer appid, Integer financingLodId);
+	CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLodId);
+	/**
+     * 移除项目的融资历史单阶段对应的投资机构信息
+     * @param appid
+     * @param id  investment_institutions_project表中的主键id
+     * @return
+     */
+	CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer id);
+	/**
+	 * 更新融资历史相关的投资机构信息
+	 * @param appid
+	 * @param body 融资历史单阶段对应的投资机构信息
+	 * @return
+	 */
+	CommonDto<Boolean> updateRelativeInvestmentInfo(Integer appid, InvestmentInstitutionsProject body);
 }

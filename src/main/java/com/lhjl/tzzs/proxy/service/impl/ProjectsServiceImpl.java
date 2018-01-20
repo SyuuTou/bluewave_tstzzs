@@ -1391,9 +1391,50 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<Boolean> getFinancingLogDetails(Integer appid, Integer financingLodId) {
-		CommonDto<Boolean> result =new CommonDto<Boolean>();
-		
+	public CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLodId) {
+		CommonDto<List<InvestmentInstitutionsProject>> result =new CommonDto<>();
+		InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
+		iip.setProjectId(financingLodId);
+		//设置有效标志为有效
+		iip.setYn(0);
+		List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
+		//融资历史记录的详细信息进行进一步的输出格式化
+		if(iips !=null) {  
+			for(InvestmentInstitutionsProject temp:iips) {
+				InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(temp.getInvestmentInstitutionsId()); 
+				temp.setInvestmentShortName(ii.getShortName());
+			}
+		}    
+		result.setData(iips);
+        result.setStatus(200);
+        result.setMessage("success");
+		return result;
+	}
+	
+	@Transactional
+	@Override
+	public CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer id) {
+		CommonDto<Boolean> result=new CommonDto<>();
+		investmentInstitutionsProjectMapper.updateDelStatus(id);
+		result.setData(true);
+        result.setStatus(200);
+        result.setMessage("success");
+		return result;
+	}
+	
+	@Transactional
+	@Override
+	public CommonDto<Boolean> updateRelativeInvestmentInfo(Integer appid, InvestmentInstitutionsProject body) {
+		CommonDto<Boolean> result=new CommonDto<>();
+		try {
+			body.setAccountingDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(body.getAccountingDateStr()));
+		}catch(Exception e) {
+			result.setData(false);
+	        result.setStatus(500);
+	        result.setMessage("日期字符串不正确");
+		}
+		System.err.println(body+"body**");
+		investmentInstitutionsProjectMapper.updateLogRelativeInvestmentInfo(body);
 		result.setData(true);
         result.setStatus(200);
         result.setMessage("success");
