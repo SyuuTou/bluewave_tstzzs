@@ -1397,7 +1397,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		iip.setProjectId(financingLodId);
 		List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
 		//融资历史记录的详细信息进行进一步的输出格式化
-		if(iips !=null) {
+		if(iips !=null) {  
 			for(InvestmentInstitutionsProject temp:iips) {
 				InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(temp.getInvestmentInstitutionsId()); 
 				temp.setInvestmentShortName(ii.getShortName());
