@@ -7,6 +7,7 @@ import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
+import com.lhjl.tzzs.proxy.model.ProjectFollowStatus;
 
 
 /**
@@ -115,4 +116,12 @@ public interface ProjectsService {
 	 * @param appid
 	 */
 	CommonDto<List<String>> getFinancingStatus(Integer appid);
+
+	/**
+	 * 根据项目id获取项目跟进状态的接口
+	 * @param projectId
+	 * @param appid
+	 * @return
+	 */
+	CommonDto<ProjectFollowStatus> getFollowStatus(Integer projectId, Integer appid);
 }

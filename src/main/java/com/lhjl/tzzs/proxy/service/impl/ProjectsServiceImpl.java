@@ -1219,4 +1219,40 @@ public class ProjectsServiceImpl implements ProjectsService {
 		result.setStatus(200);
 		return result;
 	}
+
+    /**
+     * 根据项目id获取项目跟进状态的接口
+     * @param projectId
+     * @param appid
+     * @return
+     */
+    @Override
+    public CommonDto<ProjectFollowStatus> getFollowStatus(Integer projectId, Integer appid) {
+        CommonDto<ProjectFollowStatus> result = new CommonDto<>();
+
+        if (projectId == null){
+            result.setMessage("项目id不能为空");
+            result.setData(null);
+            result.setStatus(502);
+
+            return result;
+        }
+        ProjectFollowStatus projectFollowStatus = new ProjectFollowStatus();
+        projectFollowStatus.setDescription("");
+        projectFollowStatus.setMetaFollowStatusId(null);
+
+        ProjectFollowStatus projectFollowStatusForSearch = new ProjectFollowStatus();
+        projectFollowStatusForSearch.setProjectId(projectId);
+        List<ProjectFollowStatus> projectFollowStatusList = projectFollowStatusMapper.select(projectFollowStatusForSearch);
+        if (projectFollowStatusList.size() > 0){
+            projectFollowStatus.setDescription(projectFollowStatusList.get(0).getDescription());
+            projectFollowStatus.setMetaFollowStatusId(projectFollowStatusList.get(0).getMetaFollowStatusId());
+        }
+
+        result.setData(projectFollowStatus);
+        result.setStatus(200);
+        result.setMessage("success");
+
+        return result;
+    }
 }
