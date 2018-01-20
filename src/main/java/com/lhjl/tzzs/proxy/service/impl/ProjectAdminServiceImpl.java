@@ -311,7 +311,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
             projects.setAddress(body.getAddress());
             String itemLabel ="";
             if (body.getItemLabel().size() > 0){
-                itemLabel = Joiner.on(",").join(body.getItemLabel());
+                itemLabel = Joiner.on("、").join(body.getItemLabel());
             }
             projects.setItemLabel(itemLabel);
             projects.setForeignInvestmentYn(body.getForeignInvestmentYn());
