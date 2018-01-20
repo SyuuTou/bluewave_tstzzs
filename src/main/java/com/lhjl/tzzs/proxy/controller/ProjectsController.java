@@ -64,7 +64,7 @@ public class ProjectsController extends GenericController{
     		result=projectsService.getFinancingLogDetails(appid,financingLodId);
 	    }catch(Exception e) {
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
-    		
+    		  
     		result.setData(null);
     		result.setMessage("fail");
     		result.setStatus(500);
