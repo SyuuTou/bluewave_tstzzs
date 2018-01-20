@@ -1128,6 +1128,23 @@ public class ProjectsServiceImpl implements ProjectsService {
 	@Override
 	public CommonDto<Boolean> updateFollowStatus(Integer appid, ProjectsUpdateInputDto body) {
 		CommonDto<Boolean> result  =  new CommonDto<>();
+		Date now = new Date();
+
+		if (body.getId() == null){
+		    result.setMessage("项目的id不能为空");
+		    result.setStatus(502);
+		    result.setData(null);
+
+		    return result;
+        }
+
+        if (body.getStatus() == null){
+		    result.setMessage("项目跟进状态不能为空");
+		    result.setData(null);
+		    result.setStatus(502);
+		    return result;
+        }
+
 		ProjectFollowStatus pfs=new ProjectFollowStatus();
 		pfs.setProjectId(body.getId());
 		try {
@@ -1140,13 +1157,21 @@ public class ProjectsServiceImpl implements ProjectsService {
 		}
 		if(pfs != null) { //执行更新
 			pfs.setMetaFollowStatusId(body.getStatus());
-			projectFollowStatusMapper.updateByPrimaryKeySelective(pfs);
+			if (body.getDescription() != null){
+			    pfs.setDescription(body.getDescription());
+            }
+            projectFollowStatusMapper.updateByPrimaryKeySelective(pfs);
 		}else {//执行插入
 			ProjectFollowStatus pfss=new ProjectFollowStatus();
 			pfss.setProjectId(body.getId());
 			pfss.setMetaFollowStatusId(body.getStatus());
+			if (body.getDescription() != null){
+			    pfss.setDescription(body.getDescription());
+            }
+            pfss.setCreatTime(now);
 			projectFollowStatusMapper.insertSelective(pfss);
 		}
+
 		result.setData(true);
 		result.setMessage("success");
 		result.setStatus(200);
