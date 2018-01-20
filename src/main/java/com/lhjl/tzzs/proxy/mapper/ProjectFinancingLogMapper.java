@@ -44,4 +44,6 @@ public interface ProjectFinancingLogMapper extends OwnerMapper<ProjectFinancingL
      * @return
      */
 	List<String> fetchFinancingStatus();
+
+    ProjectFinancingLog selectByProjectId(@Param("projectId") Integer projectId);
 }

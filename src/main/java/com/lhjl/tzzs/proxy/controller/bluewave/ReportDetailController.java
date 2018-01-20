@@ -2,6 +2,8 @@ package com.lhjl.tzzs.proxy.controller.bluewave;
 
 import com.lhjl.tzzs.proxy.controller.weixin.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ReportCommentDto.ReportCommentInputDto;
+import com.lhjl.tzzs.proxy.dto.ReportCommentDto.ReportCommentOutputDto;
 import com.lhjl.tzzs.proxy.model.ReportCollection;
 import com.lhjl.tzzs.proxy.model.ReportComment;
 import com.lhjl.tzzs.proxy.model.ReportConcern;
@@ -34,15 +36,16 @@ public class ReportDetailController extends GenericController {
     }
 
     @PostMapping("/v{appId}/report/comment")
-    public CommonDto<String> saveReportComment(@PathVariable Integer appId, @RequestBody ReportComment reportComment){
-        CommonDto<String> result = null;
-
+    public CommonDto<String> saveReportComment(@PathVariable Integer appId, @RequestBody ReportCommentInputDto reportCommentInputDto){
+        CommonDto<String> result = new CommonDto<>();
         try {
-            result = reportEventService.saveReportComment(appId, reportComment);
+            result = reportEventService.saveReportComment(appId, reportCommentInputDto);
         } catch (Exception e) {
             e.printStackTrace();
+            result.setStatus(500);
+            result.setMessage("服务端错误");
+            result.setData(null);
         }
-
         return result;
     }
 
@@ -105,8 +108,8 @@ public class ReportDetailController extends GenericController {
     }
 
     @GetMapping("/v{appId}/report/comment/{reportId}")
-    public CommonDto<List<ReportComment>> findReportComment(@PathVariable Integer appId, @PathVariable Integer reportId, Integer pageNo, Integer pageSize){
-        CommonDto<List<ReportComment>> result = null;
+    public CommonDto<List<ReportCommentOutputDto>> findReportComment(@PathVariable Integer appId, @PathVariable Integer reportId, Integer pageNo, Integer pageSize){
+        CommonDto<List<ReportCommentOutputDto>> result = new CommonDto<>();
         if (null == pageSize){
             pageSize = 10;
         }
