@@ -1,11 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsProjectMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsProject" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsProjectMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsProject">
     <!--
       WARNING - @mbg.generated
     -->
-    <result column="project_id" property="projectId" jdbcType="INTEGER" />
-    <result column="investment_institutions_id" property="investmentInstitutionsId" jdbcType="INTEGER" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="investment_institutions_id" jdbcType="INTEGER" property="investmentInstitutionsId" />
+    <result column="investment_desc" jdbcType="INTEGER" property="investmentDesc" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="investment_amount" jdbcType="DECIMAL" property="investmentAmount" />
+    <result column="currency" jdbcType="INTEGER" property="currency" />
+    <result column="stock_share" jdbcType="DECIMAL" property="stockShare" />
+    <result column="accounting_date" jdbcType="INTEGER" property="accountingDate" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
   </resultMap>
 </mapper>

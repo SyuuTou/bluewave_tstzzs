@@ -51,11 +51,17 @@ public class ProjectsController extends GenericController{
     @Value("${pageSize}")
     private String defaultPageSize;
     
-/*    @PostMapping("/v{appid}/addfinancinglog")
-    public CommonDto<Boolean> addFinancingLog(@PathVariable Integer appid,@RequestBody ProjectFinancingLog body){
+    /**
+     * 返回单条融资历史记录的详细信息
+     * @param appid
+     * @param financingLodId 融资历史记录的id
+     * @return
+     */
+    @GetMapping("/v{appid}/singlefinancinglogDetail")
+    public CommonDto<Boolean> financinglogDetails(@PathVariable Integer appid,Integer financingLodId){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result=projectsService.addFinancingLog(appid,body);
+    		result=projectsService.getFinancingLogDetails(appid,financingLodId);
 	    }catch(Exception e) {
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		
@@ -64,7 +70,7 @@ public class ProjectsController extends GenericController{
     		result.setStatus(500);
 	    }
     	return result;
-    }*/
+    }
     
     /**
      * 保存和更新融资历史的相关信息
