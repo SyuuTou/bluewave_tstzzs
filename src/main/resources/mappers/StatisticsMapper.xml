@@ -11,32 +11,41 @@
 
     <select id="financingCountDistributed" resultMap="histogramResultMap">
 
-        select count(a.short_name) x ,date_format(a.financing_time,'%Y-%m') y from (
-select p.short_name,pfl.stage,pfl.financing_time from project_financing_log pfl left join projects p on pfl.project_id = p.id
-right join investment_institutions_project iip on iip.project_id = pfl.id
-left join investment_institutions ii on iip.investment_institutions_id = ii.id
-where pfl.financing_time between #{beginTime} and #{endTime} and  pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.country = '中国'
+
+        select count(1) x, date_format(a.financing_time,'%m') y from (
+        select case when p.full_name is null or p.full_name = '' then p.short_name else p.full_name end p_name, pf.financing_time from project_financing_log  pf
+        left join projects p on pf.project_id = p.id LEFT join investment_institutions_project iip on iip.project_id = pf.id
+        left join investment_institutions ii on iip.investment_institutions_id = ii.id
+        where pf.financing_time between #{beginTime} and #{endTime}  and  pf.stage in ('种子轮','天使轮','Pre-A轮')
+        <if test="jgtype == null">
+        and p.country = '中国'
+        </if>
         <if test="jgtype != null">
             and ii.type = #{jgtype}
         </if>
-group by p.short_name, pfl.stage
-) a group by date_format(a.financing_time,'%Y-%m')
+
+        GROUP BY p_name,pf.stage) a GROUP BY    date_format(a.financing_time,'%m')
 
     </select>
 
 
     <select id="financingAmountDistributed" resultMap="histogramResultMap">
 
-        select sum(a.amount) x ,date_format(a.financing_time,'%Y-%m') y from (
-        select p.short_name,pfl.stage,pfl.financing_time,pfl.amount from project_financing_log pfl left join projects p on pfl.project_id = p.id
-        right join investment_institutions_project iip on iip.project_id = pfl.id
+
+            select sum(a.amount) x, date_format(a.financing_time,'%m') y from (
+            select pf.${flag} amount ,case when p.full_name is null or p.full_name = '' then p.short_name else p.full_name end p_name, pf.financing_time from project_financing_log  pf
+
+        left join projects p on pf.project_id = p.id LEFT join investment_institutions_project iip on iip.project_id = pf.id
         left join investment_institutions ii on iip.investment_institutions_id = ii.id
-        where pfl.financing_time between #{beginTime} and #{endTime} and  pfl.stage in ('种子轮','天使轮','Pre-A轮') and p.country = '中国'
+        where pf.financing_time between #{beginTime} and #{endTime}  and  pf.stage in ('种子轮','天使轮','Pre-A轮')
+        <if test="jgtype == null">
+            and p.country = '中国'
+        </if>
         <if test="jgtype != null">
             and ii.type = #{jgtype}
         </if>
-        group by p.short_name, pfl.stage
-        ) a group by date_format(a.financing_time,'%Y-%m')
+
+        GROUP BY p_name,pf.stage) a GROUP BY    date_format(a.financing_time,'%m')
 
     </select>
 

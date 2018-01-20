@@ -35,7 +35,7 @@ public class ReportDetailController extends GenericController {
     }
 
     @PostMapping("/v{appId}/report/comment")
-    public CommonDto<String> saveReportComment(@PathVariable Integer appId, ReportComment reportComment){
+    public CommonDto<String> saveReportComment(@PathVariable Integer appId, @RequestBody ReportComment reportComment){
         CommonDto<String> result = null;
 
         try {
@@ -49,7 +49,7 @@ public class ReportDetailController extends GenericController {
 
 
     @PutMapping("/v{appId}/report/comment")
-    public CommonDto<String> updateReportComment(@PathVariable Integer appId, ReportComment reportComment){
+    public CommonDto<String> updateReportComment(@PathVariable Integer appId,@RequestBody ReportComment reportComment){
         CommonDto<String> result = null;
 
         try {
@@ -60,8 +60,50 @@ public class ReportDetailController extends GenericController {
 
         return result;
     }
+    @PutMapping("/v{appId}/report/comment/{commentId}/concen")
+    public CommonDto<String> addReportCommentConcen(@PathVariable Integer appId,@PathVariable Long commentId){
 
+        CommonDto<String> result = null;
 
+        try {
+            result = reportEventService.updateReportCommentConcen(appId, commentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
+
+    @DeleteMapping("/v{appId}/report/comment/{commentId}/concen")
+    public CommonDto<String> deleteReportCommentConcen(@PathVariable Integer appId,@PathVariable Long commentId){
+
+        CommonDto<String> result = null;
+
+        try {
+            result = reportEventService.deleteReportCommentConcen(appId, commentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
+
+    @GetMapping("/v{appId}/report/comment/{commentId}/concen")
+    public CommonDto<Integer> getReportCommentConcenNum(@PathVariable Integer appId,@PathVariable Long commentId){
+
+        CommonDto<Integer> result = null;
+
+        try {
+            result = reportEventService.getReportCommentConcenNum(appId, commentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
 
     @GetMapping("/v{appId}/report/comment/{reportId}")
     public CommonDto<List<ReportComment>> findReportComment(@PathVariable Integer appId, @PathVariable Integer reportId, Integer pageNo, Integer pageSize){
@@ -79,7 +121,7 @@ public class ReportDetailController extends GenericController {
     }
 
     @PostMapping("/v{appId}/report/concen")
-    public CommonDto<String> saveReportConcen(@PathVariable Integer appId, ReportConcern reportConcern){
+    public CommonDto<String> saveReportConcen(@PathVariable Integer appId,@RequestBody ReportConcern reportConcern){
         CommonDto<String> result = null;
 
         try {
@@ -92,7 +134,7 @@ public class ReportDetailController extends GenericController {
     }
 
     @PutMapping("/v{appId}/report/concen")
-    public CommonDto<String> updateReportConcen(@PathVariable Integer appId, ReportConcern reportConcern){
+    public CommonDto<String> updateReportConcen(@PathVariable Integer appId, @RequestBody ReportConcern reportConcern){
         CommonDto<String> result = null;
 
         try {

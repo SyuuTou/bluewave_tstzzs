@@ -12,6 +12,7 @@ import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.bluewave.ReportEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,8 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
     @Autowired
     private ReportConcernMapper reportConcernMapper;
 
+
+    @Transactional
     @Override
     public CommonDto<String> saveReportCollection(Integer appId, ReportCollection reqBody) {
 
@@ -35,28 +38,28 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
         reportCollectionMapper.insert(reqBody);
         return new CommonDto<String>("ok","success",200);
     }
-
+    @Transactional
     @Override
     public CommonDto<String> saveReportComment(Integer appId, ReportComment reportComment) {
         reportComment.setAppId(appId);
         reportCommentMapper.insert(reportComment);
         return new CommonDto<>("ok", "success", 200);
     }
-
+    @Transactional
     @Override
     public CommonDto<String> saveReportConcen(Integer appId, ReportConcern reportConcern) {
         reportConcern.setAppId(appId);
         reportConcernMapper.insert(reportConcern);
         return new CommonDto<>("ok","success", 200);
     }
-
+    @Transactional
     @Override
     public CommonDto<String> updateReportComment(Integer appId, ReportComment reportComment) {
          reportComment.setAppId(appId);
          reportCommentMapper.updateByPrimaryKeySelective(reportComment);
         return new CommonDto<>("ok","success",200);
     }
-
+    @Transactional
     @Override
     public CommonDto<String> updateReportConcen(Integer appId, ReportConcern reportConcern) {
 
@@ -90,6 +93,45 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
 
        return new CommonDto<>(reportConcernMapper.selectCount(reportConcern),"success", 200);
 
+    }
+
+    @Transactional
+    @Override
+    public CommonDto<String> updateReportCommentConcen(Integer appId, Long commentId) {
+
+        ReportComment reportComment = reportCommentMapper.selectByPrimaryKey(commentId);
+        Integer num = reportComment.getNum();
+        if (null == num){
+            num = 0;
+        }
+        reportComment.setNum(num+1);
+        reportCommentMapper.updateByPrimaryKey(reportComment);
+        return new CommonDto<>("ok", "success", 200);
+    }
+
+    @Transactional
+    @Override
+    public CommonDto<String> deleteReportCommentConcen(Integer appId, Long commentId) {
+
+        ReportComment reportComment = reportCommentMapper.selectByPrimaryKey(commentId);
+        Integer num = reportComment.getNum();
+        if (null == num){
+            num = 0;
+        }else{
+            num --;
+        }
+        reportComment.setNum(num);
+        reportCommentMapper.updateByPrimaryKey(reportComment);
+        return new CommonDto<>("ok", "success", 200);
+
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public CommonDto<Integer> getReportCommentConcenNum(Integer appId, Long commentId) {
+
+        ReportComment reportComment = reportCommentMapper.selectByPrimaryKey(commentId);
+        return new CommonDto<>(reportComment.getNum(), "success", 200);
     }
 
 
