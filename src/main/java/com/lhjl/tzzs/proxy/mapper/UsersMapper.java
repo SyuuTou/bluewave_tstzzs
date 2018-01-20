@@ -51,4 +51,6 @@ public interface UsersMapper extends OwnerMapper<Users> {
 								  @Param("startPage") Integer startPage, @Param("pageSize") Integer pageSize);
 	List<Map<String,Object>> userInfoElegantSearch(@Param("searchWord") String searchWord,@Param("startPage") Integer startPage,
 												   @Param("pageSize") Integer pageSize);
+
+	List<Map<String,Object>> selectByName(@Param("searchWord") String searchWord);
 }
