@@ -89,7 +89,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
             return result;
         }
 
-        if (body.getShortName() != null || body.getShortName() != ""){
+        if (body.getShortName() == null || body.getShortName() == ""){
             result.setStatus(502);
             result.setData(null);
             result.setMessage("项目简称不能为空");
@@ -235,6 +235,11 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
                     foreignInvestmentYn = (String)projectlist.get("foreign_investment_yn");
                 }
                 projectAdminBaseInfoDto.setForeignInvestmentYn(foreignInvestmentYn);
+                String territory = "";
+                if (projectlist.get("territory") != null){
+                    territory= (String)projectlist.get("territory");
+                }
+                projectAdminBaseInfoDto.setTerritory(territory);
             }else {
                projectAdminBaseInfoDto.setFullName("");
                projectAdminBaseInfoDto.setKernelDesc("");

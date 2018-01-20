@@ -940,7 +940,7 @@
     <select id="getBaseInfoById" resultType="java.util.HashMap">
         SELECT
         p.id,p.full_name,p.kernel_desc,p.url,p.item_label,cpn.competitive_products_name,ps.segmentation_name,
-        p.established_time,p.company_email,p.city,p.company_hr_email,p.address,
+        p.established_time,p.company_email,p.city,p.company_hr_email,p.address,p.territory,
         case when p.foreign_investment_yn = 1 then "是" else "否" end foreign_investment_yn
         FROM
         projects p
