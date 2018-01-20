@@ -154,10 +154,21 @@ public class ProjectFinancingLog {
 	 */
 	@Transient
 	private List<InvestmentInstitutions> institutions;
+	/**
+	 * 关联的机构的简称
+	 */
+	@Transient
+	private List<String> institutionsShortNames;
 	
+    public List<String> getInstitutionsShortNames() {
+		return institutionsShortNames;
+	}
 
+	public void setInstitutionsShortNames(List<String> institutionsShortNames) {
+		this.institutionsShortNames = institutionsShortNames;
+	}
 
-    public List<InvestmentInstitutions> getInstitutions() {
+	public List<InvestmentInstitutions> getInstitutions() {
 		return institutions;
 	}
 
@@ -642,7 +653,10 @@ public class ProjectFinancingLog {
 				+ ", approvalTime=" + approvalTime + ", amountStatus=" + amountStatus + ", totalAmountStatus="
 				+ totalAmountStatus + ", financingTimeYear=" + financingTimeYear + ", projectFinancingUseful="
 				+ projectFinancingUseful + ", serialNumber=" + serialNumber + ", dataSoruceTypeId=" + dataSoruceTypeId
-				+ ", updateTime=" + updateTime + ", yn=" + yn + ", institutions=" + institutions + "]";
+				+ ", updateTime=" + updateTime + ", yn=" + yn + ", institutions=" + institutions
+				+ ", institutionsShortNames=" + institutionsShortNames + "]";
 	}
+
+
     
 }
