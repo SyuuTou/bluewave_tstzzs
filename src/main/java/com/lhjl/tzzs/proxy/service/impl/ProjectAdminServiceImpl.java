@@ -103,11 +103,20 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 
         List<Projects> projectsList = projectsMapper.select(projects);
         if (projectsList.size() > 0){
-            result.setMessage("项目名称已存在");
-            result.setData(null);
-            result.setStatus(502);
 
-            return result;
+            Projects projectsForCompare = new Projects();
+            projectsForCompare = projectsMapper.selectByPrimaryKey(body.getProjectId());
+
+            if (String.valueOf(projectsList.get(0).getShortName()).equals(String.valueOf(projectsForCompare.getShortName()))){
+
+            }else {
+
+                result.setMessage("项目名称已存在");
+                result.setData(null);
+                result.setStatus(502);
+
+                return result;
+            }
         }
 
         if (body.getProjectType() != null && body.getProjectType() == 1){
