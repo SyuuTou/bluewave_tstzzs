@@ -9,12 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
+import com.lhjl.tzzs.proxy.model.*;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,11 +24,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
-import com.lhjl.tzzs.proxy.model.Projects;
-import com.lhjl.tzzs.proxy.model.Users;
+import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
 
 import io.swagger.annotations.ApiImplicitParam;
@@ -50,6 +50,68 @@ public class ProjectsController extends GenericController{
 
     @Value("${pageSize}")
     private String defaultPageSize;
+    
+    /**
+     * 更新融资历史的相关信息
+     * @param appid
+     * @param body 融资历史的请求体
+     * @return
+     */
+    @PutMapping("/v{appid}/updatefinancingloginfo")
+    public CommonDto<Boolean> updateFinancingLogInfo(@PathVariable Integer appid,@RequestBody ProjectFinancingLog body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.updateFinancingLog(appid,body);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    
+    /**
+     * 获取项目的融资历史信息
+     * @param appid
+     * @param projectId
+     * @return
+     */
+    @GetMapping("/v{appid}/financinglogs")
+    public CommonDto<List<ProjectFinancingLog>> getFinancingLogs(@PathVariable Integer appid,Integer projectId){
+    	CommonDto<List<ProjectFinancingLog>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getFinancingLogs(appid,projectId);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 删除融资历史表的单条
+     * @param appid
+     * @param financiingLogId
+     * @return
+     */
+    @PutMapping("/v{appid}/removefinancinglog")
+    public CommonDto<Boolean> removeFinancingLogById(@PathVariable Integer appid,@RequestBody FinancingLogDelInputDto body){
+    	System.err.println(body+"******");
+    	CommonDto<Boolean> result=new CommonDto<>();
+    	try {
+    		result=projectsService.removeFinancingLogById(appid,body);
+    	}catch(Exception e) {
+    		this.LOGGER.info(e.getMessage(), e.fillInStackTrace());
+    		result.setData(false);
+    		result.setMessage("failure");
+    		result.setStatus(500);
+    	}
+    	return result;
+    }
     /**
      * 获取融资状态的所有数据
      * @param appid
@@ -101,13 +163,36 @@ public class ProjectsController extends GenericController{
     	try {
     		result=projectsService.updateFollowStatus(appid,body);
     	}catch(Exception e) {
-    		this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
     		
     		result.setData(null);
     		result.setMessage("fail");
     		result.setStatus(500);
     	}
     	return result;
+    }
+
+    /**
+     * 项目跟进状态回显
+     * @param projectId
+     * @param appid
+     * @return
+     */
+    @GetMapping("/v{appid}/get/projects/status")
+    public CommonDto<ProjectFollowStatus> getProjectsStatus(Integer projectId, @PathVariable Integer appid){
+        CommonDto<ProjectFollowStatus> result = new CommonDto<>();
+
+        try {
+            result = projectsService.getFollowStatus(projectId, appid);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+
+        return result;
     }
     /**
      * 读取项目跟进状态元数据

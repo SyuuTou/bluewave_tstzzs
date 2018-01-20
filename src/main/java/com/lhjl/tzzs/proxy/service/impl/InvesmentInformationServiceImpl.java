@@ -10,6 +10,7 @@ import com.lhjl.tzzs.proxy.model.ProjectSendLogs;
 import com.lhjl.tzzs.proxy.model.UserToken;
 import com.lhjl.tzzs.proxy.service.InvesmentInformationService;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,6 +59,9 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
 
     @Autowired
     private InvestorsMapper investorsMapper;
+
+    @Autowired
+    private ProjectSendBMapper projectSendBMapper;
     /**
      * 获取50机构信息（分页）
      *
@@ -75,82 +79,7 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
         userToken.setToken(token);
         userToken = userTokenMapper.selectOne(userToken);
         List<InvestmentInstitutionsDto> list = invesmentInformationServiceImplUtil.getSearchBase50All(pageNum, pageSize);
-        //判断是否还有查询结果
-//        if(investmentInstitutions.size() <= 0){
-//            result.setStatus(202);
-//            result.setMessage("无查询数据");
-//            return result;
-//        }
 
-       //zyy 20171127 注销
-//        for(InvestmentInstitutionsDto d : list) {
-//            //带回是否投递的状态
-//            ProjectSendLogs projectSendLogs = new ProjectSendLogs();
-//            projectSendLogs.setUserid(userToken.getUserId());
-//            List<ProjectSendLogs> logsList = projectSendLogsMapper.select(projectSendLogs);
-//            List<Integer> a = new LinkedList<Integer>();
-//            Integer[] workArray1 = null;
-//            //查询项目投递过的记录
-//            for (ProjectSendLogs c : logsList) {
-//                a.add(c.getId());
-//                workArray1 = new Integer[a.size()];
-//                workArray1 = a.toArray(workArray1);
-//            }
-//            if (workArray1 != null) {
-//                //根据所有提交项目记录id，查找出对应的机构的id
-//                List<Integer> list3 = investmentInstitutionsMapper.serachSendProjectId(workArray1);
-//                List<Integer> b = new LinkedList<Integer>();
-//                Integer[] workArray2 = null;
-//                for (Integer c : list3) {
-//                    b.add(c);
-//                    workArray2 = new Integer[b.size()];
-//                    workArray2 = b.toArray(workArray2);
-//                }
-//                d.setSendyn(false);
-//                for (int e : workArray2) {
-//                    if (e == d.getId()) {
-//                        d.setSendyn(true);
-//                    }
-//                }
-//                //如果投资人提交数据了，在机构列表处也显示已投
-//                 InvestmentInstitutionInformation investmentInstitutionInformation = new InvestmentInstitutionInformation();
-//                    List<InvestmentInstitutionInformation> list1 = investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
-//                    if(list1.size()>0){
-//                        List<String> e = new LinkedList<String>();
-//                        String[] workArray3 = null;
-//                        for (InvestmentInstitutionInformation c : list1) {
-//                            e.add(c.getShortName());
-//                            workArray3 = new String[e.size()];
-//                            workArray3 = e.toArray(workArray3);
-//                        }
-//                        for (String f : workArray3) {
-//                            if (f.equals(d.getShortName())) {
-//                                d.setSendyn(true);
-//                            }
-//                        }
-//                    }
-//            } else {
-//                d.setSendyn(false);
-//
-//                //如果投资人提交数据了，在机构列表处也显示已投
-//                 InvestmentInstitutionInformation investmentInstitutionInformation =new InvestmentInstitutionInformation();
-//                    List<InvestmentInstitutionInformation> list1=investmentInstitutionInformationMapper.findInformation(userToken.getUserId());
-//                    if(list1.size()>0){
-//                        List<String> e = new LinkedList<String>();
-//                        String[] workArray3 = null;
-//                        for (InvestmentInstitutionInformation c : list1) {
-//                            e.add(c.getShortName());
-//                            workArray3 = new String[e.size()];
-//                            workArray3 = e.toArray(workArray3);
-//                        }
-//                        for (String f : workArray3) {
-//                            if (f.equals(d.getShortName())) {
-//                                d.setSendyn(true);
-//                            }
-//                        }
-//                    }
-//            }
-//        }
         //先查到当前登录人的id
         Integer userId = userExistJudgmentService.getUserId(token);
         if (userId == -1){
@@ -207,13 +136,18 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
             }
         }
 
+        //获取新提交项目逻辑对应的机构id
+        List<Integer> jgnewids = projectSendBMapper.getUserSendInstitutionId(userId);
 
         List<Integer> jgids = new ArrayList<>();
-        //判断是否已经有提交数据
-        if (pslId.size() > 0){
+        //判断老逻辑是否已经有提交数据或者新逻辑是否有提交数据
+        if (pslId.size() > 0 || jgnewids.size() > 0){
             //有的情况 找到对应的投递机构id；
-            jgids = investmentInstitutionsMapper.serachSendProjectIdZ(pslId);
+            if (pslId.size() > 0){
+                jgids = investmentInstitutionsMapper.serachSendProjectIdZ(pslId);
+            }
 
+            jgids.addAll(jgnewids);
             //拿到机构id后给机构列表加上标识
             for (int i=0 ;i < jgids.size();i++){
                 for (InvestmentInstitutionsDto iid: list){
@@ -344,28 +278,57 @@ public class InvesmentInformationServiceImpl  implements InvesmentInformationSer
 	@Override
 	public CommonDto<List<InvestmentInstitutionsDto>> findRecommendCreater(String token) {
 		 CommonDto<List<InvestmentInstitutionsDto>> result = new CommonDto<List<InvestmentInstitutionsDto>>();
+
+		 if (StringUtils.isAnyBlank(token)){
+		     result.setMessage("token不能为空");
+		     result.setData(null);
+		     result.setStatus(502);
+
+		     return result;
+         }
+
+		 Integer userId = userExistJudgmentService.getUserId(token);
+		 if(userId == -1){
+		     result.setStatus(502);
+		     result.setData(null);
+		     result.setMessage("用户token无效");
+
+		     return result;
+         }
+
         List<InvestmentInstitutionsDto> list =new ArrayList<>();
 		 UserToken userToken = new UserToken();
 	        userToken.setToken(token);
 	        userToken = userTokenMapper.selectOne(userToken);
 	        if(userToken !=null){
+
+	            //获取新版本逻辑机构ids
+                List<Integer> iids = projectSendBMapper.getUserSendInstitutionId(userId);
+
                 ProjectSendLogs projectSendLogs = new ProjectSendLogs();
                 projectSendLogs.setUserid(userToken.getUserId());
                 List<ProjectSendLogs> logsList = projectSendLogsMapper.select(projectSendLogs);
-                if(logsList.size()>0) {
-                    //查询项目投递过的记录
-                    List<Integer> a = new LinkedList<Integer>();
-                    Integer[] workArray1 = null;
-                    for (ProjectSendLogs c : logsList) {
-                        a.add(c.getId());
-                        workArray1 = new Integer[a.size()];
-                        workArray1 = a.toArray(workArray1);
+                if(logsList.size()>0 || iids.size()>0) {
+
+                    List<Integer> listaa = new ArrayList<>();
+                    if (logsList.size() > 0){
+                        //查询项目投递过的记录
+                        List<Integer> a = new LinkedList<Integer>();
+                        Integer[] workArray1 = null;
+                        for (ProjectSendLogs c : logsList) {
+                            a.add(c.getId());
+                            workArray1 = new Integer[a.size()];
+                            workArray1 = a.toArray(workArray1);
+                        }
+                        //根据记录id查找出机构的id
+                        List<Integer> list3 = investmentInstitutionsMapper.deliverySendProjectId(workArray1);
+                        listaa.addAll(list3);
                     }
-                    //根据记录id查找出机构的id
-                    List<Integer> list3 = investmentInstitutionsMapper.deliverySendProjectId(workArray1);
+                    listaa.addAll(iids);
+
                     List<Integer> b = new LinkedList<Integer>();
                     Integer[] workArray2 = null;
-                    for (Integer c : list3) {
+                    for (Integer c : listaa) {
                         b.add(c);
                         workArray2 = new Integer[b.size()];
                         workArray2 = b.toArray(workArray2);

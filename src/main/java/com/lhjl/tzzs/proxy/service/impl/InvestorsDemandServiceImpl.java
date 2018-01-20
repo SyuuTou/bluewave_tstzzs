@@ -102,7 +102,19 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
 
         investorDemand.setCreatTime(new Date());
 
-        investorDemandMapper.insert(investorDemand);
+        Example idExample = new Example(InvestorDemand.class);
+        idExample.and().andEqualTo("userid",userId);
+        idExample.setOrderByClause("creat_time desc");
+
+        //Integer investorDemandId = null;
+        List<InvestorDemand> investorDemandList = investorDemandMapper.selectByExample(idExample);
+        if (investorDemandList.size() > 0){
+            Integer investorDemandId = investorDemandList.get(0).getId();
+            investorDemand.setId(investorDemandId);
+            investorDemandMapper.updateByPrimaryKeySelective(investorDemand);
+        }else {
+            investorDemandMapper.insertSelective(investorDemand);
+        }
 
         result.setStatus(200);
         result.setMessage("投资偏好记录成功");

@@ -35,4 +35,11 @@
       select last_insert_id() as id
     </selectKey>
   </insert>
+
+  <select id="getUserSendInstitutionId" resultType="java.lang.Integer">
+    SELECT psib.investment_institution_id FROM idatavc.project_send_audit_b psab
+    right join project_send_institution_b psib on psab.project_send_b_id = psib.project_send_b_id
+    where psab.user_id = #{userId}
+    group by psib.investment_institution_id;
+  </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.mapper;
 
 import com.lhjl.tzzs.proxy.dto.HistogramList;
+import com.lhjl.tzzs.proxy.dto.ProInfoDto;
 import com.lhjl.tzzs.proxy.dto.ProjectReqDto;
 import com.lhjl.tzzs.proxy.dto.ProjectResDto;
 import com.lhjl.tzzs.proxy.dto.ProjectsListInputDto;
@@ -13,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Mapper
@@ -132,6 +132,14 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
      * @return
      */
 	Map<String,Object> getLogoAndOtherInfoById(@Param("projectId") Integer projectId);
+
+	Map<String,Object> getBaseInfoById(@Param("projectId") Integer projectId);
+	/**
+	 * 获取项目的简单相关信息
+	 * @param projectId
+	 * @return
+	 */
+	ProInfoDto getProjectsSimpleInfos(@Param("projectId")Integer projectId);
 }
 
 

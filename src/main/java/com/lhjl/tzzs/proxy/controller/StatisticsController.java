@@ -26,7 +26,7 @@ public class StatisticsController {
      * 每月投资数量分布
      *
      * @param institutionType 机构类型（50和NONE）
-     * @return
+     * @returnfinancing/none/count/distributed
      */
     @GetMapping("financing/{institutionType}/count/distributed")
     public CommonDto<List<HistogramList>> financing50CountDistributed(@PathVariable String institutionType, @RequestParam(required = false, defaultValue = "0") String from, @RequestParam(required = false, defaultValue = "12") String size) {
