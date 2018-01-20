@@ -171,21 +171,56 @@
     </select>
 
     <select id="findInvestment50New" resultMap="newDtoMap">
-        SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.count,ii.sort
-        FROM investment_institutions ii
-        WHERE ii.type = 1 AND  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null
-        ORDER BY ii.sort
+
+        SELECT
+        COUNT(1) count, c.short_name,c.create_time,c.type,c.logo,c.kenel_case,c.comment
+        FROM
+        (SELECT
+        ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
+        CASE
+        WHEN p.full_name IS NULL OR p.full_name = '' THEN p.short_name
+        ELSE p.full_name
+        END p_name,
+        pf.financing_time
+        FROM
+        project_financing_log pf
+        LEFT JOIN projects p ON pf.project_id = p.id
+        LEFT JOIN investment_institutions_project iip ON iip.project_id = pf.id
+        LEFT JOIN investment_institutions ii ON iip.investment_institutions_id = ii.id
+        WHERE
+        pf.financing_time BETWEEN  #{beginTime} and #{endTime}
+        AND pf.stage IN ('种子轮' , '天使轮', 'Pre-A轮')
+        AND ii.type = 1
+        GROUP BY p_name , pf.stage) c  where c.short_name != ''  and c.short_name is not null
+        GROUP BY c.short_name          ORDER BY count desc
         <if test="beginNum != null and pageSize != null">
             LIMIT #{beginNum},#{pageSize}
         </if>
     </select>
 
     <select id="findInvestmentallNew" resultMap="newDtoMap">
-        SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,ii.count,ii.sort
-        FROM investment_institutions ii
-        where ii.count is not null
-        <!--WHERE  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null-->
-        ORDER BY ii.sort
+        SELECT
+        COUNT(1) count, c.short_name,c.create_time,c.type,c.logo,c.kenel_case,c.comment
+        FROM
+        (SELECT
+        ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
+        CASE
+        WHEN p.full_name IS NULL OR p.full_name = '' THEN p.short_name
+        ELSE p.full_name
+        END p_name,
+        pf.financing_time
+        FROM
+        project_financing_log pf
+        LEFT JOIN projects p ON pf.project_id = p.id
+        LEFT JOIN investment_institutions_project iip ON iip.project_id = pf.id
+        LEFT JOIN investment_institutions ii ON iip.investment_institutions_id = ii.id
+        WHERE
+        pf.financing_time BETWEEN  #{beginTime} and #{endTime}
+        AND pf.stage IN ('种子轮' , '天使轮', 'Pre-A轮')
+        AND ii.type = 1
+        AND p.country = '中国'
+        GROUP BY p_name , pf.stage) c  where c.short_name != ''  and c.short_name is not null
+        GROUP BY c.short_name          ORDER BY count desc
         <if test="beginNum != null and pageSize != null">
             LIMIT #{beginNum},#{pageSize}
         </if>
