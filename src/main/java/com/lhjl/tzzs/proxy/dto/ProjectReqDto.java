@@ -23,7 +23,7 @@ public class ProjectReqDto {
     /** 融资时间 */
     private String financingTime;
 
-    private Integer pageNo;
+    private Integer pageNo = 1;
     private Integer pageSize = 10;
 
     private String beginTime;

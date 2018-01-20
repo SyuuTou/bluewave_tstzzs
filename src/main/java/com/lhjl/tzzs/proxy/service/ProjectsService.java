@@ -147,4 +147,11 @@ public interface ProjectsService {
 	 * @return
 	 */
 	CommonDto<Boolean> updateFinancingLog(Integer appid, ProjectFinancingLog body);
+	/**
+	 * 返回单条融资历史记录的详细信息
+	 * @param appid
+	 * @param financingLodId 融资历史记录的id
+	 * @return
+	 */
+	CommonDto<Boolean> getFinancingLogDetails(Integer appid, Integer financingLodId);
 }

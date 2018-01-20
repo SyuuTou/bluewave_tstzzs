@@ -52,7 +52,28 @@ public class ProjectsController extends GenericController{
     private String defaultPageSize;
     
     /**
-     * 更新融资历史的相关信息
+     * 返回单条融资历史记录的详细信息
+     * @param appid
+     * @param financingLodId 融资历史记录的id
+     * @return
+     */
+    @GetMapping("/v{appid}/singlefinancinglogDetails")
+    public CommonDto<Boolean> financinglogDetails(@PathVariable Integer appid,Integer financingLodId){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getFinancingLogDetails(appid,financingLodId);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		  
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    
+    /**
+     * 保存和更新融资历史的相关信息
      * @param appid
      * @param body 融资历史的请求体
      * @return
