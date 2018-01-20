@@ -8,5 +8,5 @@
     <result column="investment_institutions_funds_id" jdbcType="INTEGER" property="investmentInstitutionsFundsId" />
     <result column="label_name" jdbcType="VARCHAR" property="labelName" />
   </resultMap>
-  
+
 </mapper>

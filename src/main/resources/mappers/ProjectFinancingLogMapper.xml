@@ -153,4 +153,8 @@
     </if>
    ) abc
   </select>
+
+  <select id="selectByProjectId" resultMap="BaseResultMap">
+    select * from project_financing_log where project_id=#{projectId};
+  </select>
 </mapper>

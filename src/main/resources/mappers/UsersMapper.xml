@@ -226,4 +226,11 @@
     </if>
     limit #{startPage},#{pageSize}
   </select>
+
+  <select id="selectByName" resultMap="BaseResultMap">
+    select u.actual_name, u.company_name, u.company_duties from users u where 1=1
+    <if test="searchWord !=null and searchWord !=''">
+      and actual_name like concat(concat("%",#{searchWord}),"%")
+    </if>
+  </select>
 </mapper>
