@@ -162,4 +162,11 @@ public interface ProjectsService {
      * @return
      */
 	CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer id);
+	/**
+	 * 更新融资历史相关的投资机构信息
+	 * @param appid
+	 * @param body 融资历史单阶段对应的投资机构信息
+	 * @return
+	 */
+	CommonDto<Boolean> updateRelativeInvestmentInfo(Integer appid, InvestmentInstitutionsProject body);
 }

@@ -18,4 +18,15 @@
   <update id="updateDelStatus" parameterType="Integer">
   	update investment_institutions_project set yn = 1 where project_id=#{id}; 
  </update>
+ <update id="updateLogRelativeInvestmentInfo" parameterType="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsProject">
+  	update investment_institutions_project set 
+  	investment_institutions_id = #{investmentInstitutionsId},
+  	investment_desc =#{investmentDesc},
+  	status=#{status},
+  	investment_amount=#{investmentAmount},
+  	currency=#{currency},
+  	stock_share=#{stockShare},
+  	accounting_date=#{accountingDate}
+  	where project_id=#{projectId}; 
+ </update>
 </mapper>

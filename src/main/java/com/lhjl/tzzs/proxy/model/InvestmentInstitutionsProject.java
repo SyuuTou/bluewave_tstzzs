@@ -61,8 +61,22 @@ public class InvestmentInstitutionsProject {
      */
     @Transient
     private String investmentShortName;
+    /**
+     * 前端传递过来的时间字符串
+     */
+    @Transient
+    private String accountingDateStr;
     
-    public String getInvestmentShortName() {
+    
+    public String getAccountingDateStr() {
+		return accountingDateStr;
+	}
+
+	public void setAccountingDateStr(String accountingDateStr) {
+		this.accountingDateStr = accountingDateStr;
+	}
+
+	public String getInvestmentShortName() {
 		return investmentShortName;
 	}
 
@@ -238,7 +252,6 @@ public class InvestmentInstitutionsProject {
 				+ investmentInstitutionsId + ", investmentDesc=" + investmentDesc + ", status=" + status
 				+ ", investmentAmount=" + investmentAmount + ", currency=" + currency + ", stockShare=" + stockShare
 				+ ", accountingDate=" + accountingDate + ", yn=" + yn + ", investmentShortName=" + investmentShortName
-				+ "]";
+				+ ", accountingDateStr=" + accountingDateStr + "]";
 	}
-    
 }

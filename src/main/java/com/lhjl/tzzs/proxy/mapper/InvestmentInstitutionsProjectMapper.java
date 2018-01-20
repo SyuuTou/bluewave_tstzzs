@@ -12,4 +12,10 @@ public interface InvestmentInstitutionsProjectMapper extends OwnerMapper<Investm
 	 * @return
 	 */
 	Boolean updateDelStatus(@Param("id") Integer id);
+	
+	/**
+	 * 更新相关的信息
+	 * @param body
+	 */
+	Boolean updateLogRelativeInvestmentInfo(InvestmentInstitutionsProject body);
 }

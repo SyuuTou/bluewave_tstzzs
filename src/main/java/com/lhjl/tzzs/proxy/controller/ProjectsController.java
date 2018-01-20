@@ -50,6 +50,27 @@ public class ProjectsController extends GenericController{
 
     @Value("${pageSize}")
     private String defaultPageSize;
+    
+    /**
+	 * 更新融资历史相关的投资机构信息
+	 * @param appid
+	 * @param body 融资历史单阶段对应的投资机构信息
+	 * @return
+	 */
+    @PutMapping("/v{appid}/editrelativeincest")
+    public CommonDto<Boolean> editRelativeInvestmentInfo(@PathVariable("appid") Integer appid,@RequestBody InvestmentInstitutionsProject body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.updateRelativeInvestmentInfo(appid,body);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		  
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
     /**
      * 移除项目的融资历史单阶段对应的投资机构信息
      * @param appid
