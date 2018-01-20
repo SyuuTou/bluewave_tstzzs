@@ -1243,11 +1243,15 @@ public class ProjectsServiceImpl implements ProjectsService {
 				
 				//用于获取所有的机构信息
 				List<InvestmentInstitutions> investmentInstitutions=new ArrayList<>();
+//				List<String> institutionShortNames=new ArrayList<>();
 				if(iips != null) {
 					for(InvestmentInstitutionsProject obj:iips) {
 						//根据机构id获取机构的相关信息
 						InvestmentInstitutions instiOne = investmentInstitutionsMapper.selectByPrimaryKey(obj.getInvestmentInstitutionsId());
-						investmentInstitutions.add(instiOne);
+						if(instiOne != null) {
+							investmentInstitutions.add(instiOne);
+//							institutionShortNames.add(instiOne.getShortName());
+						}
 					}
 				}
 				e.setInstitutions(investmentInstitutions);
@@ -1309,4 +1313,64 @@ public class ProjectsServiceImpl implements ProjectsService {
 
         return result;
     }
+
+	@Override
+	public CommonDto<Boolean> updateFinancingLog(Integer appid, ProjectFinancingLog body) {
+		CommonDto<Boolean> result =new CommonDto<>();
+		projectFinancingLogMapper.updateByPrimaryKeySelective(body);
+		
+		//获取该融资历史信息的相关的投资方的相关信息
+		List<String> shortNames = body.getInstitutionsShortNames();
+		if((shortNames != null) || (shortNames.size()==0)) {
+			//收集该融资历史同机构的相关信息
+			List<Integer> logRelativeInstitutions=null;
+			
+			for(String tmp:shortNames) {
+				InvestmentInstitutions ii=new InvestmentInstitutions();
+				ii.setShortName(tmp);
+				//作为查询结果的实体判断
+				InvestmentInstitutions selectedInsti=null;
+				try {
+					ii = investmentInstitutionsMapper.selectOne(ii);
+					if(ii != null) {//取得该机构的id
+						logRelativeInstitutions.add(selectedInsti.getId());
+					}else {//创建该机构
+						ii.setShortName(tmp);
+						investmentInstitutionsMapper.insertSelective(ii);
+						//获取自增长id
+						logRelativeInstitutions.add(ii.getId());
+					}
+				}catch(Exception e) {
+					result.setData(false);
+			        result.setStatus(500);
+			        result.setMessage("机构的简称不唯一，数据存在错误");
+			        return result;
+				}
+			}
+			//统一设置该融资历史信息同机构的关联关系
+			if((logRelativeInstitutions != null) && (logRelativeInstitutions.size()!=0)) {
+				InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
+				//设置融资历史的id
+				iip.setProjectId(body.getId());
+				//删除所有同之前投资机构的关系
+				investmentInstitutionsProjectMapper.delete(iip);
+				logRelativeInstitutions.forEach((e)->{
+					//设置融资历史记录同投资机构的关系
+					iip.setInvestmentInstitutionsId(e);
+					investmentInstitutionsProjectMapper.insert(iip);
+				});
+			}
+		}else {//执行原关联的投资机构的删除操作
+			InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
+			//设置融资历史的id
+			iip.setProjectId(body.getId());
+			//删除所有同之前投资机构的关系
+			investmentInstitutionsProjectMapper.delete(iip);
+		}
+		
+		result.setData(true);
+        result.setStatus(200);
+        result.setMessage("success");
+		return result;
+	}
 }

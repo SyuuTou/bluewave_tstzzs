@@ -24,12 +24,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
-import com.lhjl.tzzs.proxy.model.Projects;
-import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
 
 import io.swagger.annotations.ApiImplicitParam;
@@ -53,6 +50,27 @@ public class ProjectsController extends GenericController{
 
     @Value("${pageSize}")
     private String defaultPageSize;
+    
+    /**
+     * 更新融资历史的相关信息
+     * @param appid
+     * @param body 融资历史的请求体
+     * @return
+     */
+    @PutMapping("/v{appid}/updatefinancingloginfo")
+    public CommonDto<Boolean> updateFinancingLogInfo(@PathVariable Integer appid,@RequestBody ProjectFinancingLog body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.updateFinancingLog(appid,body);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
     
     /**
      * 获取项目的融资历史信息

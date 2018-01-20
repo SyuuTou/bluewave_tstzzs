@@ -141,4 +141,11 @@ public interface ProjectsService {
 	 * @return
 	 */
 	CommonDto<ProjectFollowStatus> getFollowStatus(Integer projectId, Integer appid);
+	/**
+	 * 更新融资历史的信息
+	 * @param appid
+	 * @param body
+	 * @return
+	 */
+	CommonDto<Boolean> updateFinancingLog(Integer appid, ProjectFinancingLog body);
 }
