@@ -14,6 +14,9 @@ public class UserInfoElegantOutputDto {
     /**公司名称*/
     private String comanyName;
 
+    /**手机号码*/
+    private String phonenumber;
+
     public String getUserName() {
         return userName;
     }
@@ -44,5 +47,13 @@ public class UserInfoElegantOutputDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
     }
 }
