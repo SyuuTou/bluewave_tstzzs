@@ -7,12 +7,12 @@
     -->
     <result column="project_id" jdbcType="INTEGER" property="projectId" />
     <result column="investment_institutions_id" jdbcType="INTEGER" property="investmentInstitutionsId" />
-    <result column="investment_desc" jdbcType="INTEGER" property="investmentDesc" />
+    <result column="investment_desc" jdbcType="VARCHAR" property="investmentDesc" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="investment_amount" jdbcType="DECIMAL" property="investmentAmount" />
     <result column="currency" jdbcType="INTEGER" property="currency" />
     <result column="stock_share" jdbcType="DECIMAL" property="stockShare" />
-    <result column="accounting_date" jdbcType="INTEGER" property="accountingDate" />
+    <result column="accounting_date" jdbcType="TIMESTAMP" property="accountingDate" />
     <result column="yn" jdbcType="INTEGER" property="yn" />
   </resultMap>
 </mapper>

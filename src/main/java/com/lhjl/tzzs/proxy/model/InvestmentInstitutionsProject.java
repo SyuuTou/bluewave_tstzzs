@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "investment_institutions_project")
@@ -21,7 +22,7 @@ public class InvestmentInstitutionsProject {
      * 投资方备注
      */
     @Column(name = "investment_desc")
-    private Integer investmentDesc;
+    private String investmentDesc;
 
     /**
      * 是否领投方,0代表否；1代表是
@@ -49,7 +50,7 @@ public class InvestmentInstitutionsProject {
      * 投资到账时间
      */
     @Column(name = "accounting_date")
-    private Integer accountingDate;
+    private Date accountingDate;
 
     /**
      * 删除标志:0代表有效；1代表无效
@@ -97,7 +98,7 @@ public class InvestmentInstitutionsProject {
      *
      * @return investment_desc - 投资方备注
      */
-    public Integer getInvestmentDesc() {
+    public String getInvestmentDesc() {
         return investmentDesc;
     }
 
@@ -106,7 +107,7 @@ public class InvestmentInstitutionsProject {
      *
      * @param investmentDesc 投资方备注
      */
-    public void setInvestmentDesc(Integer investmentDesc) {
+    public void setInvestmentDesc(String investmentDesc) {
         this.investmentDesc = investmentDesc;
     }
 
@@ -187,7 +188,7 @@ public class InvestmentInstitutionsProject {
      *
      * @return accounting_date - 投资到账时间
      */
-    public Integer getAccountingDate() {
+    public Date getAccountingDate() {
         return accountingDate;
     }
 
@@ -196,7 +197,7 @@ public class InvestmentInstitutionsProject {
      *
      * @param accountingDate 投资到账时间
      */
-    public void setAccountingDate(Integer accountingDate) {
+    public void setAccountingDate(Date accountingDate) {
         this.accountingDate = accountingDate;
     }
 

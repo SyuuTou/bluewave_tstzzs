@@ -57,7 +57,7 @@ public class ProjectsController extends GenericController{
      * @param financingLodId 融资历史记录的id
      * @return
      */
-    @GetMapping("/v{appid}/singlefinancinglogDetail")
+    @GetMapping("/v{appid}/singlefinancinglogDetails")
     public CommonDto<Boolean> financinglogDetails(@PathVariable Integer appid,Integer financingLodId){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
