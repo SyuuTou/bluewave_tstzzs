@@ -50,7 +50,26 @@ public class ProjectsController extends GenericController{
 
     @Value("${pageSize}")
     private String defaultPageSize;
-    
+    /**
+     * 移除项目的融资历史单阶段对应的投资机构信息
+     * @param appid
+     * @param id  investment_institutions_project表中的主键id
+     * @return
+     */
+    @DeleteMapping("/v{appid}/removesingleinvest")
+    public CommonDto<Boolean> removeSingleInvestment(@PathVariable("appid") Integer appid,Integer id){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.removeSingleInvestment(appid,id);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		  
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
     /**
      * 返回单条融资历史记录的详细信息
      * @param appid
