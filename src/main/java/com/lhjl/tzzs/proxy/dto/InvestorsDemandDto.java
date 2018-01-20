@@ -1,5 +1,7 @@
 package com.lhjl.tzzs.proxy.dto;
 
+import java.math.BigDecimal;
+
 /**
  * 投资偏好请求参数
  * Created by 蓝海巨浪 on 2017/10/24.
@@ -29,6 +31,16 @@ public class InvestorsDemandDto {
      * 金额下限
      */
     private String xiaxian;
+
+    /**
+     * 美元开始金额
+     */
+    private BigDecimal startdoller;
+
+    /**
+     * 美元结束金额
+     */
+    private BigDecimal enddoller;
     /**
      * 需求描述
      */
@@ -112,5 +124,21 @@ public class InvestorsDemandDto {
 
     public void setUser7foundertra_noana(String user7foundertra_noana) {
         this.user7foundertra_noana = user7foundertra_noana;
+    }
+
+    public BigDecimal getStartdoller() {
+        return startdoller;
+    }
+
+    public void setStartdoller(BigDecimal startdoller) {
+        this.startdoller = startdoller;
+    }
+
+    public BigDecimal getEnddoller() {
+        return enddoller;
+    }
+
+    public void setEnddoller(BigDecimal enddoller) {
+        this.enddoller = enddoller;
     }
 }

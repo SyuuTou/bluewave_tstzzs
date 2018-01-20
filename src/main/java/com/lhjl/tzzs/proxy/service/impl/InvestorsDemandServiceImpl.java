@@ -112,6 +112,12 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         if(!StringUtils.isEmpty(body.getShangxian())){
             investorDemand.setInvestmentAmountHigh(new BigDecimal(body.getShangxian()));
         }
+        if (body.getStartdoller() != null){
+            investorDemand.setInvestmentAmountLowDollars(body.getStartdoller());
+        }
+        if (body.getEnddoller() != null){
+            investorDemand.setInvestmentAmountHighDollars(body.getEnddoller());
+        }
         if(!StringUtils.isEmpty(body.getUser7recentlyco_noana())){
             investorDemand.setRecentlyConcernedSubdivisionCircuit(body.getUser7recentlyco_noana());
         }
@@ -171,7 +177,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
                 investorDemandStageList.add(investorDemandStage1);
             }
         }
-        Integer investorDemandStageInsertResult = investorDemandStageService.insertList(investorDemandStageList);
+        investorDemandStageService.insertList(investorDemandStageList);
 
         investorDemandSegmentationService.deleteAll(investorDemand.getId());
         List<InvestorDemandSegmentation> investorDemandSegmentationList = new ArrayList<>();
@@ -191,7 +197,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
                 investorDemandSegmentationList.add(investorDemandSegmentation1);
             }
         }
-        Integer investorDemandSegmentationInsertResult = investorDemandSegmentationService.insertList(investorDemandSegmentationList);
+       investorDemandSegmentationService.insertList(investorDemandSegmentationList);
 
         investorDemandSpeedwayService.deleteAll(investorDemand.getId());
         List<InvestorDemandSpeedway> investorDemandSpeedwayList = new ArrayList<>();
@@ -211,7 +217,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
                 investorDemandSpeedwayList.add(investorDemandSpeedway1);
             }
         }
-        Integer investorDemandSpeedwayInsertResult = investorDemandSpeedwayService.insertList(investorDemandSpeedwayList);
+       investorDemandSpeedwayService.insertList(investorDemandSpeedwayList);
 
         investorDemandCharacterService.deleteAll(investorDemand.getId());
         List<InvestorDemandCharacter> investorDemandCharacterList = new ArrayList<>();
@@ -231,7 +237,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
                 investorDemandCharacterList.add(investorDemandCharacter1);
             }
         }
-        Integer investorDemandCharacterInsertResult = investorDemandCharacterService.insertList(investorDemandCharacterList);
+        investorDemandCharacterService.insertList(investorDemandCharacterList);
 
         result.setStatus(200);
         result.setMessage("投资偏好记录成功");
