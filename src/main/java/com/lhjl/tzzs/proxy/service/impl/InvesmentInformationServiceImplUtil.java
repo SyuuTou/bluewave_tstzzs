@@ -25,7 +25,7 @@ public class InvesmentInformationServiceImplUtil {
     @Value("${statistics.endTime}")
     private String endTime;
 
-    @Cacheable(value = "getSearchBase50All", keyGenerator = "wiselyKeyGenerator")
+//    @Cacheable(value = "getSearchBase50All", keyGenerator = "wiselyKeyGenerator")
     //@CacheEvict(value = "getSearchBase50All", allEntries=true)
     public  List<InvestmentInstitutionsDto> getSearchBase50All(Integer pageNum, Integer pageSize) {
         Integer beginNum = (pageNum - 1) * pageSize;
