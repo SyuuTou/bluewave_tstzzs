@@ -147,4 +147,11 @@ public interface ProjectsService {
 	 * @return
 	 */
 	CommonDto<Boolean> updateFinancingLog(Integer appid, ProjectFinancingLog body);
+	/**
+	 * 增加融资历史的记录
+	 * @param appid
+	 * @param body
+	 * @return
+	 */
+	//CommonDto<Boolean> addFinancingLog(Integer appid, ProjectFinancingLog body);
 }

@@ -1314,6 +1314,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	@Override
 	public CommonDto<Boolean> updateFinancingLog(Integer appid, ProjectFinancingLog body) {
 		CommonDto<Boolean> result =new CommonDto<>();
+		//对body进行数据格式化处理
 		try {
 			Date financingTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(body.getFinancingStr());
 			body.setFinancingTime(financingTime);
@@ -1323,8 +1324,15 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	        result.setMessage("日期格式解析错误");
 	        return result;
 		}
-		projectFinancingLogMapper.updateByPrimaryKeySelective(body);
-		
+		//保存在融资历史保存或者更新后的主键id
+		Integer afterUpdateLogId=null;
+		if(body.getId() !=null) { //执行相关的更新操作
+			projectFinancingLogMapper.updateByPrimaryKeySelective(body);
+			afterUpdateLogId=body.getId();
+		}else {//执行相关的插入操作,增加的话肯定会传递一个projectId作为body的属性
+			projectFinancingLogMapper.insertSelective(body);
+			afterUpdateLogId=body.getId();
+		}
 		//获取该融资历史信息的相关的投资方的相关信息
 		List<String> shortNames = body.getInstitutionsShortNames();
 		if((shortNames != null) && (shortNames.size()!=0)) {
@@ -1355,12 +1363,11 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			        return result;
 				}
 			}
-			System.err.println(logRelativeInstitutions+"***logRelativeInstitutions");
 			//统一设置该融资历史信息同机构的关联关系
 			if((logRelativeInstitutions != null) && (logRelativeInstitutions.size()!=0)) {
 				InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
 				//设置融资历史的id
-				iip.setProjectId(body.getId());
+				iip.setProjectId(afterUpdateLogId);
 				//删除所有同之前投资机构的关系
 				investmentInstitutionsProjectMapper.delete(iip);
 				logRelativeInstitutions.forEach((e)->{
@@ -1372,7 +1379,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		}else {//执行原关联的投资机构的删除操作
 			InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
 			//设置融资历史的id
-			iip.setProjectId(body.getId());
+			iip.setProjectId(afterUpdateLogId);
 			//删除所有同之前投资机构的关系
 			investmentInstitutionsProjectMapper.delete(iip);
 		}
