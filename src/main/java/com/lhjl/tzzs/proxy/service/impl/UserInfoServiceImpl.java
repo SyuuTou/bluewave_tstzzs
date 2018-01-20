@@ -908,6 +908,11 @@ public class UserInfoServiceImpl implements UserInfoService{
                     companyDuties = (String)map.get("company_duties");
                 }
                 userInfoElegantOutputDto.setCompanyDuties(companyDuties);
+                String phonenumber = "";
+                if (map.get("phonenumber") != null){
+                    phonenumber = (String)map.get("phonenumber");
+                }
+                userInfoElegantOutputDto.setPhonenumber(phonenumber);
 
                 list.add(userInfoElegantOutputDto);
             }
