@@ -1,9 +1,6 @@
 package com.lhjl.tzzs.proxy.controller;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.ProjectAdminBaseInfoDto;
-import com.lhjl.tzzs.proxy.dto.ProjectAdminLogoInputDto;
-import com.lhjl.tzzs.proxy.dto.ProjectAdminLogoOutputDto;
+import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.service.ProjectAdminService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,6 +75,26 @@ public class ProjectAdminController extends GenericController{
             result.setMessage("服务器端发生错误");
             result.setData(null);
             result.setStatus(502);
+        }
+
+        return result;
+    }
+
+    /**
+     * 更新项目信息的接口
+     * @return
+     */
+    @PostMapping("update/project/baseinfo")
+    public CommonDto<String> updateProjectBaseInfo(@RequestBody ProjectAdminBaseInfoInputDto body){
+        CommonDto<String> result = new CommonDto<>();
+
+        try {
+            result = projectAdminService.updateProjectBaseInfo(body);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
         }
 
         return result;

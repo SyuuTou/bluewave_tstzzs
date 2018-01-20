@@ -8,6 +8,7 @@ import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
+import com.lhjl.tzzs.proxy.model.ProjectFollowStatus;
 
 
 /**
@@ -116,6 +117,7 @@ public interface ProjectsService {
 	 * @param appid
 	 */
 	CommonDto<List<String>> getFinancingStatus(Integer appid);
+
 	/**
 	 * 获取项目的融资历史记录
 	 * @param appid
@@ -130,4 +132,13 @@ public interface ProjectsService {
 	 * @return
 	 */
 	CommonDto<Boolean> removeFinancingLogById(Integer appid, FinancingLogDelInputDto body);
+
+
+	/**
+	 * 根据项目id获取项目跟进状态的接口
+	 * @param projectId
+	 * @param appid
+	 * @return
+	 */
+	CommonDto<ProjectFollowStatus> getFollowStatus(Integer projectId, Integer appid);
 }

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
+import com.lhjl.tzzs.proxy.model.*;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,13 +145,36 @@ public class ProjectsController extends GenericController{
     	try {
     		result=projectsService.updateFollowStatus(appid,body);
     	}catch(Exception e) {
-    		this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
     		
     		result.setData(null);
     		result.setMessage("fail");
     		result.setStatus(500);
     	}
     	return result;
+    }
+
+    /**
+     * 项目跟进状态回显
+     * @param projectId
+     * @param appid
+     * @return
+     */
+    @GetMapping("/v{appid}/get/projects/status")
+    public CommonDto<ProjectFollowStatus> getProjectsStatus(Integer projectId, @PathVariable Integer appid){
+        CommonDto<ProjectFollowStatus> result = new CommonDto<>();
+
+        try {
+            result = projectsService.getFollowStatus(projectId, appid);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+
+        return result;
     }
     /**
      * 读取项目跟进状态元数据

@@ -1,9 +1,6 @@
 package com.lhjl.tzzs.proxy.service;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.ProjectAdminBaseInfoDto;
-import com.lhjl.tzzs.proxy.dto.ProjectAdminLogoInputDto;
-import com.lhjl.tzzs.proxy.dto.ProjectAdminLogoOutputDto;
+import com.lhjl.tzzs.proxy.dto.*;
 
 public interface ProjectAdminService {
     /**
@@ -28,4 +25,11 @@ public interface ProjectAdminService {
      * @return
      */
     CommonDto<ProjectAdminBaseInfoDto> getProjectBaseInfo(Integer projectId, Integer projectType);
+
+    /**
+     * 更新项目基本信息的接口
+     * @param body
+     * @return
+     */
+    CommonDto<String> updateProjectBaseInfo(ProjectAdminBaseInfoInputDto body);
 }
