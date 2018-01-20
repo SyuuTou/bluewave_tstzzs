@@ -92,6 +92,8 @@ public class ProjectsServiceImpl implements ProjectsService {
     private MetaDataSourceTypeMapper metaDataSourceTypeMapper;
     @Autowired
     private AdminProjectRatingLogMapper adminProjectRatingLogMapper;
+    @Autowired
+    private InvestmentInstitutionsProjectMapper investmentInstitutionsProjectMapper;
 
     /**
      * 查询我关注的项目
@@ -1190,6 +1192,58 @@ public class ProjectsServiceImpl implements ProjectsService {
 		List<String> list=projectFinancingLogMapper.fetchFinancingStatus();
 		System.err.println(list+"********");
 		result.setData(list);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<ProjectFinancingLog>> getFinancingLogs(Integer appid, Integer projectId) {
+		CommonDto<List<ProjectFinancingLog>> result =new CommonDto<>();
+		
+		ProjectFinancingLog pfl=new ProjectFinancingLog();
+		pfl.setProjectId(projectId);
+		pfl.setYn(0);
+		//获取所有的融资历史记录
+		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.select(pfl);
+		
+		if(pfls != null) {
+			pfls.forEach((e)->{
+				//获取融资阶段的id
+				Integer financingLogId = e.getId();
+				InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
+				iip.setProjectId(financingLogId);
+				//查询关系表中相关的投资方的相关信息
+				List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
+				
+				//用于获取所有的机构信息
+				List<InvestmentInstitutions> investmentInstitutions=new ArrayList<>();
+				if(iips != null) {
+					for(InvestmentInstitutionsProject obj:iips) {
+						//根据机构id获取机构的相关信息
+						InvestmentInstitutions instiOne = investmentInstitutionsMapper.selectByPrimaryKey(obj.getInvestmentInstitutionsId());
+						investmentInstitutions.add(instiOne);
+					}
+				}
+				e.setInstitutions(investmentInstitutions);
+			});
+		}
+		
+		result.setData(pfls);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> removeFinancingLogById(Integer appid, FinancingLogDelInputDto body) {
+		CommonDto<Boolean> result=new CommonDto<Boolean>();
+		ProjectFinancingLog pfl=new ProjectFinancingLog();
+		pfl.setId(body.getLogId());
+		pfl.setYn(body.getDelStatus());
+		projectFinancingLogMapper.updateByPrimaryKeySelective(pfl);
+		
+		result.setData(true);
 		result.setMessage("success");
 		result.setStatus(200);
 		return result;

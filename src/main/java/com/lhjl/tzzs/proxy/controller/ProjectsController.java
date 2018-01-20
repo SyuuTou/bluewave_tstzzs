@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
+import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
@@ -50,6 +52,47 @@ public class ProjectsController extends GenericController{
 
     @Value("${pageSize}")
     private String defaultPageSize;
+    
+    /**
+     * 获取项目的融资历史信息
+     * @param appid
+     * @param projectId
+     * @return
+     */
+    @GetMapping("/v{appid}/financinglogs")
+    public CommonDto<List<ProjectFinancingLog>> getFinancingLogs(@PathVariable Integer appid,Integer projectId){
+    	CommonDto<List<ProjectFinancingLog>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getFinancingLogs(appid,projectId);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 删除融资历史表的单条
+     * @param appid
+     * @param financiingLogId
+     * @return
+     */
+    @PutMapping("/v{appid}/removefinancinglog")
+    public CommonDto<Boolean> removeFinancingLogById(@PathVariable Integer appid,@RequestBody FinancingLogDelInputDto body){
+    	System.err.println(body+"******");
+    	CommonDto<Boolean> result=new CommonDto<>();
+    	try {
+    		result=projectsService.removeFinancingLogById(appid,body);
+    	}catch(Exception e) {
+    		this.LOGGER.info(e.getMessage(), e.fillInStackTrace());
+    		result.setData(false);
+    		result.setMessage("failure");
+    		result.setStatus(500);
+    	}
+    	return result;
+    }
     /**
      * 获取融资状态的所有数据
      * @param appid
