@@ -1335,7 +1335,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 				InvestmentInstitutions ii=new InvestmentInstitutions();
 				ii.setShortName(tmp);
 				//作为查询结果的实体判断
-				try {
+				try { 
 					ii = investmentInstitutionsMapper.selectOne(ii);
 					if(ii != null) {//取得该机构的id
 						logRelativeInstitutions.add(ii.getId());
