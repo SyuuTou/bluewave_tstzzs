@@ -249,11 +249,16 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 
         List<Integer> reportInstitutionRelations = new ArrayList<>();
         List<String> institutionList = new ArrayList<>();
+        List<Map<String,Object>> institutionMap = new ArrayList<>();
+
         List<ReportInstitutionRelation> reportInstitutionRelationList = reportInstitutionRelationMapper.select(reportInstitutionRelation);
         for (ReportInstitutionRelation rir:reportInstitutionRelationList){
             reportInstitutionRelations.add(rir.getInstitutionId());
             InvestmentInstitutions investmentInstitutions = investmentInstitutionsMapper.selectByPrimaryKey(rir.getInstitutionId());
             institutionList.add(investmentInstitutions.getShortName());
+            Map<String,Object> insMap = new HashMap<>();
+            insMap.put("id",rir.getInstitutionId());
+            insMap.put("name",investmentInstitutions.getShortName());
         }
         map.put("institutionId",reportInstitutionRelations);
         map.put("institutionString",institutionList);
