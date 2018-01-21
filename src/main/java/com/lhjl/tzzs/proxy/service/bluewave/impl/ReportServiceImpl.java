@@ -67,6 +67,9 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     @Autowired
     private ReportInstitutionRelationMapper reportInstitutionRelationMapper;
 
+    @Autowired
+    private InvestmentInstitutionsMapper investmentInstitutionsMapper;
+
     @Value("${event.trigger.url}")
     private String eventUrl;
 
@@ -238,6 +241,22 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     		});
     	}
     	map.put("labels", labels);
+
+    	//设置返回机构id
+        ReportInstitutionRelation reportInstitutionRelation = new ReportInstitutionRelation();
+        reportInstitutionRelation.setReportId(reportId);
+        reportInstitutionRelation.setAppid(appId);
+
+        List<Integer> reportInstitutionRelations = new ArrayList<>();
+        List<String> institutionList = new ArrayList<>();
+        List<ReportInstitutionRelation> reportInstitutionRelationList = reportInstitutionRelationMapper.select(reportInstitutionRelation);
+        for (ReportInstitutionRelation rir:reportInstitutionRelationList){
+            reportInstitutionRelations.add(rir.getInstitutionId());
+            InvestmentInstitutions investmentInstitutions = investmentInstitutionsMapper.selectByPrimaryKey(rir.getInstitutionId());
+            institutionList.add(investmentInstitutions.getShortName());
+        }
+        map.put("institutionId",reportInstitutionRelations);
+        map.put("institutionString",institutionList);
     	
     	//设置相关的项目信息
     	ReportCompanyLabel rcl=new ReportCompanyLabel();
