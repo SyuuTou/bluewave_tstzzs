@@ -75,8 +75,10 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
             reqDto.setEndTime(endTime);
         }
 
-        if (reqDto.getKeyWords().lastIndexOf(",") == reqDto.getKeyWords().length()-1){
-            reqDto.setKeyWords(reqDto.getKeyWords().substring(0,reqDto.getKeyWords().length()-1));
+        if (StringUtils.isNotEmpty(reqDto.getKeyWords())) {
+            if (reqDto.getKeyWords().lastIndexOf(",") == reqDto.getKeyWords().length() - 1) {
+                reqDto.setKeyWords(reqDto.getKeyWords().substring(0, reqDto.getKeyWords().length() - 1));
+            }
         }
 
         reqDto.setOffset((reqDto.getPageNo() - 1) * reqDto.getPageSize());
@@ -120,8 +122,10 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
             reqDto.setEndTime(endTime);
         }
 
-        if (reqDto.getKeyWords().lastIndexOf(",") == reqDto.getKeyWords().length()-1){
-            reqDto.setKeyWords(reqDto.getKeyWords().substring(0,reqDto.getKeyWords().length()-1));
+        if (StringUtils.isNotEmpty(reqDto.getKeyWords())) {
+            if (reqDto.getKeyWords().lastIndexOf(",") == reqDto.getKeyWords().length() - 1) {
+                reqDto.setKeyWords(reqDto.getKeyWords().substring(0, reqDto.getKeyWords().length() - 1));
+            }
         }
         reqDto.setOffset((reqDto.getPageNo() - 1) * reqDto.getPageSize());
         List<ProjectResDto> projectResDtos = new ArrayList<>();
@@ -189,8 +193,10 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
             reqDto.setEndTime(endTime);
         }
 
-        if (reqDto.getKeyWords().lastIndexOf(",") == reqDto.getKeyWords().length()-1){
-            reqDto.setKeyWords(reqDto.getKeyWords().substring(0,reqDto.getKeyWords().length()-1));
+        if (StringUtils.isNotEmpty(reqDto.getKeyWords())) {
+            if (reqDto.getKeyWords().lastIndexOf(",") == reqDto.getKeyWords().length() - 1) {
+                reqDto.setKeyWords(reqDto.getKeyWords().substring(0, reqDto.getKeyWords().length() - 1));
+            }
         }
 
         reqDto.setOffset((reqDto.getPageNo() - 1) * reqDto.getPageSize());
@@ -239,10 +245,11 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
             reqDto.setBeginTime(beginTime);
             reqDto.setEndTime(endTime);
         }
-        if (reqDto.getKeyWords().lastIndexOf(",") == reqDto.getKeyWords().length()-1){
-            reqDto.setKeyWords(reqDto.getKeyWords().substring(0,reqDto.getKeyWords().length()-1));
+        if (StringUtils.isNotEmpty(reqDto.getKeyWords())) {
+            if (reqDto.getKeyWords().lastIndexOf(",") == reqDto.getKeyWords().length() - 1) {
+                reqDto.setKeyWords(reqDto.getKeyWords().substring(0, reqDto.getKeyWords().length() - 1));
+            }
         }
-
         switch (reqDto.getStatisticsType()) {
             case "segmentation":
                 reqDto.setStatisticsType("ps.segmentation_name");
