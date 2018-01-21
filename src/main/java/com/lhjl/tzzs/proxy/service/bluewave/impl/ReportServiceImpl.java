@@ -102,7 +102,12 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         	queryReportColumn.setColumnId(reqBody.getColumnId());
         	List<ReportColumn> reportColumns = reportColumnMapper.selectByRowBounds(queryReportColumn, rowBounds);
         	for(ReportColumn rc : reportColumns) {
-        		list.add(reportMapper.selectByPrimaryKey(rc.getReportId()));
+        	    ReportInstitutionRelation queryInstitutionRelation = new ReportInstitutionRelation();
+        	    queryInstitutionRelation.setReportId(rc.getReportId());
+        	    queryInstitutionRelation.setInstitutionId(reqBody.getInvestmentInstitutionId());
+        	    if (null != reportInstitutionRelationMapper.selectOne(queryInstitutionRelation)) {
+                    list.add(reportMapper.selectByPrimaryKey(rc.getReportId()));
+                }
         	}
         }else {
         	list = reportMapper.selectByRowBounds(report, rowBounds);

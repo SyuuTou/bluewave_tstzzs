@@ -9,6 +9,11 @@ public class ReportReqBody {
     private Integer id;
 
     /**
+     * 读取的时候传入的机构id
+     */
+    private Integer investmentInstitutionId;
+
+    /**
      * 标题
      */
     private String title;
@@ -278,6 +283,14 @@ public class ReportReqBody {
 
     public void setInstitutionId(List<Integer> institutionId) {
         this.institutionId = institutionId;
+    }
+
+    public Integer getInvestmentInstitutionId() {
+        return investmentInstitutionId;
+    }
+
+    public void setInvestmentInstitutionId(Integer investmentInstitutionId) {
+        this.investmentInstitutionId = investmentInstitutionId;
     }
 
     @Override
