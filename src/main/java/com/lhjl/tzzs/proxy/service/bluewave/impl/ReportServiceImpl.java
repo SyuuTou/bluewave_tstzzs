@@ -259,9 +259,12 @@ public class ReportServiceImpl extends GenericService implements ReportService {
             Map<String,Object> insMap = new HashMap<>();
             insMap.put("id",rir.getInstitutionId());
             insMap.put("name",investmentInstitutions.getShortName());
+
+            institutionMap.add(insMap);
         }
         map.put("institutionId",reportInstitutionRelations);
         map.put("institutionString",institutionList);
+        map.put("institutionMap",institutionMap);
     	
     	//设置相关的项目信息
     	ReportCompanyLabel rcl=new ReportCompanyLabel();
