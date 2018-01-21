@@ -238,6 +238,18 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     		});
     	}
     	map.put("labels", labels);
+
+    	//设置返回机构id
+        ReportInstitutionRelation reportInstitutionRelation = new ReportInstitutionRelation();
+        reportInstitutionRelation.setReportId(reportId);
+        reportInstitutionRelation.setAppid(appId);
+
+        List<Integer> reportInstitutionRelations = new ArrayList<>();
+        List<ReportInstitutionRelation> reportInstitutionRelationList = reportInstitutionRelationMapper.select(reportInstitutionRelation);
+        for (ReportInstitutionRelation rir:reportInstitutionRelationList){
+            reportInstitutionRelations.add(rir.getInstitutionId());
+        }
+        map.put("institutionId",reportInstitutionRelations);
     	
     	//设置相关的项目信息
     	ReportCompanyLabel rcl=new ReportCompanyLabel();
