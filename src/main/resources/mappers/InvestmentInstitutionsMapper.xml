@@ -129,6 +129,7 @@
         <if test="shortName != null and shortName !=''">
             and short_name like concat(concat("%",#{shortName}),"%")
         </if>
+        GROUP BY `short_name`
         order by sort desc
         limit #{startPage},#{pageSize}
     </select>
