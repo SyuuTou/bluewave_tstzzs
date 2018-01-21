@@ -21,4 +21,36 @@
     <result column="creater" jdbcType="VARCHAR" property="creater" />
     <result column="author" jdbcType="VARCHAR" property="author" />
   </resultMap>
+  <select id="selectReport" resultMap="BaseResultMap">
+    select r.* from report r
+    right join report_column rc on r.id = rc.report_id
+    left join report_institution_relation rir on r.id = rir.report_id
+    where  1= 1
+    <if test="institutionId != null and institutionId !=''">
+      and rir.institution_id = #{institutionId}
+    </if>
+    <if test="columnId != null and columnId !=''">
+      and column_id =#{columnId}
+    </if>
+    and r.id is not null
+    group by r.id
+    limit #{offset},#{limit}
+  </select>
+  <select id="selectReportCount" resultType="java.lang.Integer">
+    select count(*) ct from (
+    select r.* from report r
+    right join report_column rc on r.id = rc.report_id
+    left join report_institution_relation rir on r.id = rir.report_id
+    where  1= 1
+    <if test="institutionId != null and institutionId !=''">
+      and rir.institution_id = #{institutionId}
+    </if>
+    <if test="columnId != null and columnId !=''">
+      and column_id =#{columnId}
+    </if>
+    and r.id is not null
+    group by r.id
+    )
+   abc
+  </select>
 </mapper>

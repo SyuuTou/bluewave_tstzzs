@@ -101,17 +101,20 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         PageRowBounds rowBounds = new PageRowBounds(offset, limit);
         if (reqBody.getColumnId()!=null) {
         	list = new ArrayList<Report>();
-        	ReportColumn queryReportColumn = new ReportColumn();
-        	queryReportColumn.setColumnId(reqBody.getColumnId());
-        	List<ReportColumn> reportColumns = reportColumnMapper.selectByRowBounds(queryReportColumn, rowBounds);
-        	for(ReportColumn rc : reportColumns) {
-        	    ReportInstitutionRelation queryInstitutionRelation = new ReportInstitutionRelation();
-        	    queryInstitutionRelation.setReportId(rc.getReportId());
-        	    queryInstitutionRelation.setInstitutionId(reqBody.getInvestmentInstitutionId());
-        	    if (null != reportInstitutionRelationMapper.selectOne(queryInstitutionRelation)) {
-                    list.add(reportMapper.selectByPrimaryKey(rc.getReportId()));
-                }
-        	}
+        	list = reportMapper.selectReport(reqBody.getInvestmentInstitutionId(),reqBody.getColumnId(),offset,limit);
+        	Integer allCount = reportMapper.selectReportCount(reqBody.getInvestmentInstitutionId(),reqBody.getColumnId(),offset,limit);
+        	rowBounds.setTotal(Long.valueOf(allCount));
+//        	ReportColumn queryReportColumn = new ReportColumn();
+//        	queryReportColumn.setColumnId(reqBody.getColumnId());
+//        	List<ReportColumn> reportColumns = reportColumnMapper.selectByRowBounds(queryReportColumn, rowBounds);
+//        	for(ReportColumn rc : reportColumns) {
+//        	    ReportInstitutionRelation queryInstitutionRelation = new ReportInstitutionRelation();
+//        	    queryInstitutionRelation.setReportId(rc.getReportId());
+//        	    queryInstitutionRelation.setInstitutionId(reqBody.getInvestmentInstitutionId());
+//        	    if (null != reportInstitutionRelationMapper.selectOne(queryInstitutionRelation)) {
+//                    list.add(reportMapper.selectByPrimaryKey(rc.getReportId()));
+//                }
+//        	}
         }else {
         	list = reportMapper.selectByRowBounds(report, rowBounds);
         }
