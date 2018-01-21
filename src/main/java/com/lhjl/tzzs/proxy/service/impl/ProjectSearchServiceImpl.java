@@ -41,6 +41,8 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
 
         if (StringUtils.isNotEmpty(reqDto.getDataVcType())) {
             reqDto.setDataVcType(reqDto.getDataVcType().replace("50指数机构", "1"));
+            reqDto.setBeginTime(beginTime);
+            reqDto.setEndTime(endTime);
         }
 
         if (StringUtils.isNotEmpty(reqDto.getCity())) {
@@ -72,6 +74,7 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
             reqDto.setBeginTime(beginTime);
             reqDto.setEndTime(endTime);
         }
+
 
 
         reqDto.setOffset((reqDto.getPageNo() - 1) * reqDto.getPageSize());
