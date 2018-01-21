@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionTeamMapper">
-
   <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionTeam">
     <!--
       WARNING - @mbg.generated
@@ -22,7 +21,12 @@
     <result column="investment_institution_id" jdbcType="INTEGER" property="investmentInstitutionId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_id" jdbcType="INTEGER" property="createId" />
+    <result column="investment_case" jdbcType="VARCHAR" property="investmentCase" />
+    <result column="investment_stage" jdbcType="VARCHAR" property="investmentStage" />
+    <result column="investment_segmentation" jdbcType="VARCHAR" property="investmentSegmentation" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
   </resultMap>
+
   <select id="getTeamMemberListByType" resultMap="BaseResultMap">
     select * from investment_institution_team
     where investment_institution_id =#{institutionId}

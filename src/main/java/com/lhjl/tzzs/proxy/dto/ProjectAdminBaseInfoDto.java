@@ -36,6 +36,9 @@ public class ProjectAdminBaseInfoDto {
     /**公司详细地址*/
     private String address;
 
+    /**公司总部*/
+    private String territory;
+
     /**是否对外投资*/
     private String foreignInvestmentYn;
 
@@ -133,5 +136,13 @@ public class ProjectAdminBaseInfoDto {
 
     public void setForeignInvestmentYn(String foreignInvestmentYn) {
         this.foreignInvestmentYn = foreignInvestmentYn;
+    }
+
+    public String getTerritory() {
+        return territory;
+    }
+
+    public void setTerritory(String territory) {
+        this.territory = territory;
     }
 }

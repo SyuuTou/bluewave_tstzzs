@@ -51,20 +51,66 @@ public class ProjectsController extends GenericController{
     @Value("${pageSize}")
     private String defaultPageSize;
     
-/*    @PostMapping("/v{appid}/addfinancinglog")
-    public CommonDto<Boolean> addFinancingLog(@PathVariable Integer appid,@RequestBody ProjectFinancingLog body){
+    /**
+	 * 更新融资历史相关的投资机构信息
+	 * @param appid
+	 * @param body 融资历史单阶段对应的投资机构信息
+	 * @return
+	 */
+    @PutMapping("/v{appid}/editrelativeincest")
+    public CommonDto<Boolean> editRelativeInvestmentInfo(@PathVariable("appid") Integer appid,@RequestBody InvestmentInstitutionsProject body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result=projectsService.addFinancingLog(appid,body);
+    		result=projectsService.updateRelativeInvestmentInfo(appid,body);
 	    }catch(Exception e) {
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
-    		
+    		  
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 移除项目的融资历史单阶段对应的投资机构信息
+     * @param appid
+     * @param id  investment_institutions_project表中的主键id
+     * @return
+     */
+    @DeleteMapping("/v{appid}/removesingleinvest")
+    public CommonDto<Boolean> removeSingleInvestment(@PathVariable("appid") Integer appid,Integer id){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.removeSingleInvestment(appid,id);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		  
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 返回单条融资历史记录的详细信息
+     * @param appid
+     * @param financingLodId 融资历史记录的id
+     * @return
+     */
+    @GetMapping("/v{appid}/singlefinancinglogDetails")
+    public CommonDto<List<InvestmentInstitutionsProject>> financinglogDetails(@PathVariable("appid") Integer appid,Integer financingLodId){
+    	CommonDto<List<InvestmentInstitutionsProject>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getFinancingLogDetails(appid,financingLodId);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		  
     		result.setData(null);
     		result.setMessage("fail");
     		result.setStatus(500);
 	    }
     	return result;
-    }*/
+    }
     
     /**
      * 保存和更新融资历史的相关信息
@@ -73,7 +119,7 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @PutMapping("/v{appid}/updatefinancingloginfo")
-    public CommonDto<Boolean> updateFinancingLogInfo(@PathVariable Integer appid,@RequestBody ProjectFinancingLog body){
+    public CommonDto<Boolean> updateFinancingLogInfo(@PathVariable("appid") Integer appid,@RequestBody ProjectFinancingLog body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
     		result=projectsService.updateFinancingLog(appid,body);
@@ -94,7 +140,7 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @GetMapping("/v{appid}/financinglogs")
-    public CommonDto<List<ProjectFinancingLog>> getFinancingLogs(@PathVariable Integer appid,Integer projectId){
+    public CommonDto<List<ProjectFinancingLog>> getFinancingLogs(@PathVariable("appid") Integer appid,Integer projectId){
     	CommonDto<List<ProjectFinancingLog>> result =new CommonDto<>();
     	try {
     		result=projectsService.getFinancingLogs(appid,projectId);
@@ -114,8 +160,7 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @PutMapping("/v{appid}/removefinancinglog")
-    public CommonDto<Boolean> removeFinancingLogById(@PathVariable Integer appid,@RequestBody FinancingLogDelInputDto body){
-    	System.err.println(body+"******");
+    public CommonDto<Boolean> removeFinancingLogById(@PathVariable("appid") Integer appid,@RequestBody FinancingLogDelInputDto body){
     	CommonDto<Boolean> result=new CommonDto<>();
     	try {
     		result=projectsService.removeFinancingLogById(appid,body);
@@ -133,7 +178,7 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @GetMapping("/v{appid}/list/financingstatus")
-    public CommonDto<List<String>> getFinancingStatu(@PathVariable Integer appid){
+    public CommonDto<List<String>> getFinancingStatu(@PathVariable("appid") Integer appid){
     	CommonDto<List<String>> result =new CommonDto<>();
     	try {
     		result=projectsService.getFinancingStatus(appid);

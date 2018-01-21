@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ProjectAdminBaseInfoInputDto {
     /**项目id*/
-    private Integer projctId;
+    private Integer projectId;
 
     /**项目类型*/
     private Integer projectType;
@@ -48,12 +48,12 @@ public class ProjectAdminBaseInfoInputDto {
     /**是否对外投资(这里要数字)*/
     private Integer foreignInvestmentYn;
 
-    public Integer getProjctId() {
-        return projctId;
+    public Integer getProjectId() {
+        return projectId;
     }
 
-    public void setProjctId(Integer projctId) {
-        this.projctId = projctId;
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
     }
 
     public Integer getProjectType() {

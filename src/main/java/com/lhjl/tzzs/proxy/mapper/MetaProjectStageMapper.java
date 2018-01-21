@@ -13,4 +13,6 @@ public interface MetaProjectStageMapper extends OwnerMapper<MetaProjectStage> {
      * @return list存储
      */
     List<MetaProjectStage> findAll();
+
+    Integer selectIdByStageName(@Param("stageName") String stageName);
 }

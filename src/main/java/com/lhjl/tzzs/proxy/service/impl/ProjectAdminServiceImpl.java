@@ -89,7 +89,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
             return result;
         }
 
-        if (body.getShortName() != null || body.getShortName() != ""){
+        if (body.getShortName() == null || body.getShortName() == ""){
             result.setStatus(502);
             result.setData(null);
             result.setMessage("项目简称不能为空");
@@ -103,11 +103,20 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 
         List<Projects> projectsList = projectsMapper.select(projects);
         if (projectsList.size() > 0){
-            result.setMessage("项目名称已存在");
-            result.setData(null);
-            result.setStatus(502);
 
-            return result;
+            Projects projectsForCompare = new Projects();
+            projectsForCompare = projectsMapper.selectByPrimaryKey(body.getProjectId());
+
+            if (String.valueOf(projectsList.get(0).getShortName()).equals(String.valueOf(projectsForCompare.getShortName()))){
+
+            }else {
+
+                result.setMessage("项目名称已存在");
+                result.setData(null);
+                result.setStatus(502);
+
+                return result;
+            }
         }
 
         if (body.getProjectType() != null && body.getProjectType() == 1){
@@ -235,6 +244,11 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
                     foreignInvestmentYn = (String)projectlist.get("foreign_investment_yn");
                 }
                 projectAdminBaseInfoDto.setForeignInvestmentYn(foreignInvestmentYn);
+                String territory = "";
+                if (projectlist.get("territory") != null){
+                    territory= (String)projectlist.get("territory");
+                }
+                projectAdminBaseInfoDto.setTerritory(territory);
             }else {
                projectAdminBaseInfoDto.setFullName("");
                projectAdminBaseInfoDto.setKernelDesc("");
@@ -272,7 +286,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
         CommonDto<String> result = new CommonDto<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        if (body.getProjctId() == null){
+        if (body.getProjectId() == null){
             result.setMessage("项目id不能为空");
             result.setData(null);
             result.setStatus(502);
@@ -292,7 +306,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 
             //更新项目主体信息
             Projects projects = new Projects();
-            projects.setId(body.getProjctId());
+            projects.setId(body.getProjectId());
             projects.setFullName(body.getFullName());
             projects.setKernelDesc(body.getKernelDesc());
             projects.setUrl(body.getUrl());
@@ -320,7 +334,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 
             //先删除项目的领域
             ProjectSegmentation projectSegmentation = new ProjectSegmentation();
-            projectSegmentation.setProjectId(body.getProjctId());
+            projectSegmentation.setProjectId(body.getProjectId());
 
             projectSegmentationMapper.delete(projectSegmentation);
 
@@ -329,7 +343,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 
                 for (String s:body.getProjectSegmentation()){
                     ProjectSegmentation projectSegmentationForInsert = new ProjectSegmentation();
-                    projectSegmentationForInsert.setProjectId(body.getProjctId());
+                    projectSegmentationForInsert.setProjectId(body.getProjectId());
                     projectSegmentationForInsert.setSegmentationName(s);
 
                     projectSegmentationMapper.insertSelective(projectSegmentationForInsert);
@@ -338,7 +352,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 
             //先删除原来的项目竞品
             ProjectCompetitiveProducts projectCompetitiveProducts = new ProjectCompetitiveProducts();
-            projectCompetitiveProducts.setProjectId(body.getProjctId());
+            projectCompetitiveProducts.setProjectId(body.getProjectId());
 
             projectCompetitiveProductsMapper.delete(projectCompetitiveProducts);
 
@@ -346,7 +360,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
             if (body.getProjectCompetitiveProducts().size() > 0){
                 for (String s:body.getProjectCompetitiveProducts()){
                     ProjectCompetitiveProducts projectCompetitiveProductsForInsert = new ProjectCompetitiveProducts();
-                    projectCompetitiveProductsForInsert.setProjectId(body.getProjctId());
+                    projectCompetitiveProductsForInsert.setProjectId(body.getProjectId());
                     projectCompetitiveProductsForInsert.setCompetitiveProductsName(s);
 
                     projectCompetitiveProductsMapper.insertSelective(projectCompetitiveProductsForInsert);

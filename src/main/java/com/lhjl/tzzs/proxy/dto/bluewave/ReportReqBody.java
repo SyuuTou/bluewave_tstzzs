@@ -89,6 +89,11 @@ public class ReportReqBody {
      * 作者
      */
     private String author;
+
+    /**
+     * 机构id数组
+     */
+    private List<Integer> institutionId;
     
     
     public Integer getColumnId() {
@@ -267,7 +272,15 @@ public class ReportReqBody {
 		this.author = author;
 	}
 
-	@Override
+    public List<Integer> getInstitutionId() {
+        return institutionId;
+    }
+
+    public void setInstitutionId(List<Integer> institutionId) {
+        this.institutionId = institutionId;
+    }
+
+    @Override
 	public String toString() {
 		return "ReportReqBody [id=" + id + ", title=" + title + ", subTitle=" + subTitle + ", content=" + content
 				+ ", comments=" + comments + ", coverUrl=" + coverUrl + ", fromRul=" + fromRul + ", sourceTextUrl="

@@ -45,11 +45,11 @@ public class InvestorsDemandController {
      * @param body 请求对象
      * @return
      */
-    @PostMapping("/rest/user/newulingyu")
-    public CommonDto<String> newulingyu(@RequestBody InvestorsDemandDto body){
+    @PostMapping("/v{appId}/rest/user/newulingyu")
+    public CommonDto<String> newulingyu(@PathVariable Integer appId, @RequestBody InvestorsDemandDto body){
         CommonDto<String> result = new CommonDto<>();
         try{
-            result = investorsDemandService.newulingyu(body);
+            result = investorsDemandService.newulingyu(appId, body);
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("投资偏好回显数据回去异常");
