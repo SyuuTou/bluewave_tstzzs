@@ -269,11 +269,16 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         BigDecimal startdoller = BigDecimal.ZERO;
         BigDecimal enddoller = BigDecimal.ZERO;
 
-        if (investorDemand.getInvestmentAmountLowDollars() != null){
-            startdoller = investorDemand.getInvestmentAmountLowDollars();
-        }
-        if (investorDemand.getInvestmentAmountHighDollars() != null){
-            enddoller = investorDemand.getInvestmentAmountHighDollars();
+        if (investorDemand == null){
+
+        }else {
+            if (investorDemand.getInvestmentAmountLowDollars() != null){
+                startdoller = investorDemand.getInvestmentAmountLowDollars();
+            }
+            if (investorDemand.getInvestmentAmountHighDollars() != null){
+                enddoller = investorDemand.getInvestmentAmountHighDollars();
+            }
+
         }
 
         data.put("startdoller",startdoller);
@@ -316,7 +321,9 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
 //                }
 //            }
 //        }
-        roundsNames = Arrays.asList(investorDemand.getFinancingStage().split(","));
+        if (investorDemand != null){
+            roundsNames = Arrays.asList(investorDemand.getFinancingStage().split(","));
+        }
         data.put("a", roundsNames);
 
         //地域偏好
