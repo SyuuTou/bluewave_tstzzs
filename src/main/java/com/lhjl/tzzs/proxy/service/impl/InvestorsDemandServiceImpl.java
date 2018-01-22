@@ -103,21 +103,25 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         if(!StringUtils.isEmpty(body.getTouzi())){
             investorDemand.setFinancingStage(body.getTouzi());
         }
+
         if(!StringUtils.isEmpty(body.getCity())){
             investorDemand.setCityPreference(body.getCity());
         }
+
         if(body.getXiaxian() != null && !"".equals(body.getXiaxian())){
             investorDemand.setInvestmentAmountLow(new BigDecimal(body.getXiaxian()));
         }
         if(!StringUtils.isEmpty(body.getShangxian())){
             investorDemand.setInvestmentAmountHigh(new BigDecimal(body.getShangxian()));
         }
+
         if(!StringUtils.isEmpty(body.getUser7recentlyco_noana())){
             investorDemand.setRecentlyConcernedSubdivisionCircuit(body.getUser7recentlyco_noana());
         }
         if(!StringUtils.isEmpty(body.getUser7foundertra_noana())){
             investorDemand.setConcernedFoundersCharacteristic(body.getUser7foundertra_noana());
         }
+
         if(!StringUtils.isEmpty(body.getXuqiu())){
             investorDemand.setDemand(body.getXuqiu());
         }
@@ -141,7 +145,6 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
             }
             investorDemand.setUpdateTime(DateUtils.parse(createTime));//如果不是第一次，就是更新时间
             investorDemandMapper.updateByPrimaryKeySelective(investorDemand);
-
         }else {
             try {
                 createTime = sdf.format(new Date(now));
