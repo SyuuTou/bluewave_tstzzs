@@ -1459,7 +1459,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		projectsMapper.updateByPrimaryKeySelective(body);
 		result.setData(true);
 		result.setStatus(200);;
-		result.setMessage("success");
+		result.setMessage("success");  
 		
 		return result;
 	}
