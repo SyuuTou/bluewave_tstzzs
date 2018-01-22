@@ -75,11 +75,11 @@ public class ProjectsController extends GenericController{
     /**
      * 根据id更新公司相关信息(主要用于更新项目简介 以及 投资亮点)
      * @param appid
-     * @param proId
+     * @param proId  
      * @return
      */
-    @PutMapping("/v{appid}/edit/proInfo")
-    public CommonDto<Boolean> editProInfo(@PathVariable Integer appid,@RequestBody Projects body){
+    @PutMapping("/v{appid}/edit/proinfobyid")
+    public CommonDto<Boolean> editProInfoById(@PathVariable Integer appid,@RequestBody Projects body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
     		result=projectsService.updateProInfos(appid,body);
