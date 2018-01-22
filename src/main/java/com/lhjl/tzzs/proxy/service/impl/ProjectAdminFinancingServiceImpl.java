@@ -48,7 +48,7 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
     }
 
     @Override
-    public CommonDto<String> addOrUpdateFinancingLog(Integer projectId, FinancingLogInputDto body) {
+    public CommonDto<String> addOrUpdateFinancingLog(FinancingLogInputDto body) {
         CommonDto<String> result = new CommonDto<>();
         if(null == body){
             result.setStatus(300);
@@ -57,7 +57,7 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
             return result;
         }
         ProjectFinancingLog projectFinancingLog = new ProjectFinancingLog();
-        projectFinancingLog.setProjectId(projectId);
+        projectFinancingLog.setProjectId(body.getProjectId());
         long now = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String createTime = null;

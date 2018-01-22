@@ -22,8 +22,8 @@ public class ProjectAdminFinancingController extends GenericController {
      * @param projectId
      * @return
      */
-    @GetMapping("/{projectId}/getFinancingLog")
-    public CommonDto<FinancingLogOutputDto> getFinancingLog(@PathVariable Integer projectId){
+    @GetMapping("/getFinancingLog")
+    public CommonDto<FinancingLogOutputDto> getFinancingLog(Integer projectId){
 
         CommonDto<FinancingLogOutputDto> result = new CommonDto<>();
         try {
@@ -39,15 +39,14 @@ public class ProjectAdminFinancingController extends GenericController {
 
     /**
      * 增加或更新融资需求
-     * @param projectId
      * @param body
      * @return
      */
-    @PostMapping("/{projectId}/addOrUpdateFinancingLog")
-    public CommonDto<String> addOrUpdateFinancingLog(@PathVariable Integer projectId, @RequestBody FinancingLogInputDto body){
+    @PostMapping("/addOrUpdateFinancingLog")
+    public CommonDto<String> addOrUpdateFinancingLog(@RequestBody FinancingLogInputDto body){
         CommonDto<String> result = new CommonDto<>();
         try {
-            result = projectAdminFinancingService.addOrUpdateFinancingLog(projectId, body);
+            result = projectAdminFinancingService.addOrUpdateFinancingLog(body);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");

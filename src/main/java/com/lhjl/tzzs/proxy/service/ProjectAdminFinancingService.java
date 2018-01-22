@@ -11,5 +11,5 @@ public interface ProjectAdminFinancingService {
 
     CommonDto<FinancingLogOutputDto> getFinancingLog(Integer projectId);
 
-    CommonDto<String> addOrUpdateFinancingLog(Integer projectId, FinancingLogInputDto body);
+    CommonDto<String> addOrUpdateFinancingLog(FinancingLogInputDto body);
 }
