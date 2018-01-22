@@ -131,9 +131,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		CommonDto<String> resultResult =  userInfoService.getUserFormid(body.getUserId());
 		if (resultResult.getStatus() == 200){
 			Integer status = 0;
-			if (body.getInvestorType() == 0){
+			if (null !=body.getInvestorType() && body.getInvestorType() == 0){
 				status = 3;
-			}else if (body.getInvestorType() == 1){
+			}else if (null != body.getInvestorType() &&  body.getInvestorType() == 1){
 				status = 4;
 			}
 			if (status > 0){

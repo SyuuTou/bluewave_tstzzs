@@ -154,7 +154,7 @@
 
     <select id="financingInvestmentFocsSegmentationDistributed" resultMap="histogramResultMap">
 
-        select count(distinct a.userid) y , b.segmentation x from  investor_demand a
+        select count(distinct a.userid) x , b.segmentation y from  investor_demand a
         right join investor_demand_segmentation b on b.investor_demand_id = a.id
         group by  b.segmentation
         order by count(distinct a.userid)  desc

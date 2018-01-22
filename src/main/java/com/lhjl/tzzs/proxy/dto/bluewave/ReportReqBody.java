@@ -9,6 +9,11 @@ public class ReportReqBody {
     private Integer id;
 
     /**
+     * 读取的时候传入的机构id
+     */
+    private Integer investmentInstitutionId;
+
+    /**
      * 标题
      */
     private String title;
@@ -89,6 +94,11 @@ public class ReportReqBody {
      * 作者
      */
     private String author;
+
+    /**
+     * 机构id数组
+     */
+    private List<Integer> institutionId;
     
     
     public Integer getColumnId() {
@@ -267,7 +277,23 @@ public class ReportReqBody {
 		this.author = author;
 	}
 
-	@Override
+    public List<Integer> getInstitutionId() {
+        return institutionId;
+    }
+
+    public void setInstitutionId(List<Integer> institutionId) {
+        this.institutionId = institutionId;
+    }
+
+    public Integer getInvestmentInstitutionId() {
+        return investmentInstitutionId;
+    }
+
+    public void setInvestmentInstitutionId(Integer investmentInstitutionId) {
+        this.investmentInstitutionId = investmentInstitutionId;
+    }
+
+    @Override
 	public String toString() {
 		return "ReportReqBody [id=" + id + ", title=" + title + ", subTitle=" + subTitle + ", content=" + content
 				+ ", comments=" + comments + ", coverUrl=" + coverUrl + ", fromRul=" + fromRul + ", sourceTextUrl="

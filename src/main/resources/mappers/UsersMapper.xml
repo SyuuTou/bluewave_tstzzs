@@ -101,7 +101,7 @@
           or u.phonenumber like CONCAT("%",CONCAT(#{searchWord}),"%"))
     </if>
     <if test="identityType != null and identityType !=''">
-      and u.identity_type = #{identityType}
+      and (u.identity_type+1) = #{identityType}
     </if>
     <if test="begainTime != null and begainTime !=''">
       and u.create_time between #{begainTime} and #{endTime}

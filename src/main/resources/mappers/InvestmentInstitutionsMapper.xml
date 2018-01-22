@@ -109,10 +109,16 @@
     </select>
 
     <select id="findInvestmentall" resultType="java.util.HashMap">
-        SELECT ii.id, ii.short_name shortName,  ii.create_time, ii.type, ii.logo, ii.kenel_case kenelCase, ii.count
-        FROM investment_institutions ii
-        WHERE  ii.logo IS NOT NULL AND ii.logo != '' AND ii.count is not null
-        ORDER BY ii.sort
+        select  ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,d.cont count  from (SELECT c.short_name,SUM(c.cc) cont  from (
+        SELECT a.short_name ,count(DISTINCT(p_name)) cc FROM (
+
+        select  case when p.full_name is null or p.full_name = '' then p.short_name else p.full_name end p_name, pf.`stage` , p.`city` , ii.`short_name`    from project_financing_log  pf
+        left join projects p on pf.project_id = p.id LEFT join investment_institutions_project iip on iip.project_id = pf.id
+        left join investment_institutions ii on iip.investment_institutions_id = ii.id
+        where pf.financing_time between  #{beginTime} and #{endTime}  and  trim(pf.stage) in ('种子轮','天使轮','Pre-A轮') and p.`country` = '中国' AND ii.`short_name` IS NOT NULL AND ii.`short_name` NOT LIKE  '%个人%' and ii.`short_name` not in ('自投','自筹') and ii.`short_name`  NOT LIKE '%天使投资人%'
+        GROUP BY p_name , ii.`short_name`      ) a   GROUP BY a.short_name
+        ) c GROUP BY c.short_name  ORDER BY SUM(c.cc) DESC ) d LEFT JOIN `investment_institutions` ii on d.short_name = ii.`short_name`
+        where ii.`logo` IS NOT NULL
         <if test="beginNum != null and pageSize != null">
             LIMIT #{beginNum},#{pageSize}
         </if>
@@ -123,6 +129,7 @@
         <if test="shortName != null and shortName !=''">
             and short_name like concat(concat("%",#{shortName}),"%")
         </if>
+        GROUP BY `short_name`
         order by sort desc
         limit #{startPage},#{pageSize}
     </select>
@@ -199,28 +206,16 @@
     </select>
 
     <select id="findInvestmentallNew" resultMap="newDtoMap">
-        SELECT
-        COUNT(1) count, c.short_name,c.create_time,c.type,c.logo,c.kenel_case,c.comment,c.id
-        FROM
-        (SELECT
-        ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
-        CASE
-        WHEN p.full_name IS NULL OR p.full_name = '' THEN p.short_name
-        ELSE p.full_name
-        END p_name,
-        pf.financing_time
-        FROM
-        project_financing_log pf
-        LEFT JOIN projects p ON pf.project_id = p.id
-        LEFT JOIN investment_institutions_project iip ON iip.project_id = pf.id
-        LEFT JOIN investment_institutions ii ON iip.investment_institutions_id = ii.id
-        WHERE
-        pf.financing_time BETWEEN  #{beginTime} and #{endTime}
-        AND pf.stage IN ('种子轮' , '天使轮', 'Pre-A轮')
-        AND ii.type = 1
-        AND p.country = '中国'
-        GROUP BY p_name , pf.stage) c  where c.short_name != ''  and c.short_name is not null
-        GROUP BY c.short_name          ORDER BY count desc
+        select  ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,d.cont count  from (SELECT c.short_name,SUM(c.cc) cont  from (
+        SELECT a.short_name ,count(DISTINCT(p_name)) cc FROM (
+
+        select  case when p.full_name is null or p.full_name = '' then p.short_name else p.full_name end p_name, pf.`stage` , p.`city` , ii.`short_name`    from project_financing_log  pf
+        left join projects p on pf.project_id = p.id LEFT join investment_institutions_project iip on iip.project_id = pf.id
+        left join investment_institutions ii on iip.investment_institutions_id = ii.id
+        where pf.financing_time between  #{beginTime} and #{endTime}  and  trim(pf.stage) in ('种子轮','天使轮','Pre-A轮') and p.`country` = '中国' AND ii.`short_name` IS NOT NULL AND ii.`short_name` NOT LIKE  '%个人%' and ii.`short_name` not in ('自投','自筹') and ii.`short_name`  NOT LIKE '%天使投资人%'
+        GROUP BY p_name , ii.`short_name`      ) a   GROUP BY a.short_name
+        ) c GROUP BY c.short_name  ORDER BY SUM(c.cc) DESC ) d LEFT JOIN `investment_institutions` ii on d.short_name = ii.`short_name`
+        where ii.`logo` IS NOT NULL
         <if test="beginNum != null and pageSize != null">
             LIMIT #{beginNum},#{pageSize}
         </if>

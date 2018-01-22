@@ -23,7 +23,7 @@
     select id,name,weighting_factor from meta_project_stage
   </select>
 
-  <select id="selectIdByStageName">
+  <select id="selectIdByStageName" resultType="java.lang.Integer">
     select id from meta_project_stage where `name`=#{stageName};
   </select>
 

@@ -6,14 +6,7 @@ import com.lhjl.tzzs.proxy.dto.CommonTotal;
 import com.lhjl.tzzs.proxy.dto.EventDto;
 import com.lhjl.tzzs.proxy.dto.ProInfoDto;
 import com.lhjl.tzzs.proxy.dto.bluewave.ReportReqBody;
-import com.lhjl.tzzs.proxy.mapper.MetaColumnMapper;
-import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
-import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
-import com.lhjl.tzzs.proxy.mapper.ReportColumnMapper;
-import com.lhjl.tzzs.proxy.mapper.ReportCompanyLabelMapper;
-import com.lhjl.tzzs.proxy.mapper.ReportLabelMapper;
-import com.lhjl.tzzs.proxy.mapper.ReportMapper;
-import com.lhjl.tzzs.proxy.mapper.ReportSegmentationMapper;
+import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.bluewave.*;
@@ -71,6 +64,12 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     @Autowired
     private ProjectsMapper projectsMapper;
 
+    @Autowired
+    private ReportInstitutionRelationMapper reportInstitutionRelationMapper;
+
+    @Autowired
+    private InvestmentInstitutionsMapper investmentInstitutionsMapper;
+
     @Value("${event.trigger.url}")
     private String eventUrl;
 
@@ -102,12 +101,20 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         PageRowBounds rowBounds = new PageRowBounds(offset, limit);
         if (reqBody.getColumnId()!=null) {
         	list = new ArrayList<Report>();
-        	ReportColumn queryReportColumn = new ReportColumn();
-        	queryReportColumn.setColumnId(reqBody.getColumnId());
-        	List<ReportColumn> reportColumns = reportColumnMapper.selectByRowBounds(queryReportColumn, rowBounds);
-        	for(ReportColumn rc : reportColumns) {
-        		list.add(reportMapper.selectByPrimaryKey(rc.getReportId()));
-        	}
+        	list = reportMapper.selectReport(reqBody.getInvestmentInstitutionId(),reqBody.getColumnId(),offset,limit);
+        	Integer allCount = reportMapper.selectReportCount(reqBody.getInvestmentInstitutionId(),reqBody.getColumnId(),offset,limit);
+        	rowBounds.setTotal(Long.valueOf(allCount));
+//        	ReportColumn queryReportColumn = new ReportColumn();
+//        	queryReportColumn.setColumnId(reqBody.getColumnId());
+//        	List<ReportColumn> reportColumns = reportColumnMapper.selectByRowBounds(queryReportColumn, rowBounds);
+//        	for(ReportColumn rc : reportColumns) {
+//        	    ReportInstitutionRelation queryInstitutionRelation = new ReportInstitutionRelation();
+//        	    queryInstitutionRelation.setReportId(rc.getReportId());
+//        	    queryInstitutionRelation.setInstitutionId(reqBody.getInvestmentInstitutionId());
+//        	    if (null != reportInstitutionRelationMapper.selectOne(queryInstitutionRelation)) {
+//                    list.add(reportMapper.selectByPrimaryKey(rc.getReportId()));
+//                }
+//        	}
         }else {
         	list = reportMapper.selectByRowBounds(report, rowBounds);
         }
@@ -237,6 +244,32 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     		});
     	}
     	map.put("labels", labels);
+
+    	//设置返回机构id
+        ReportInstitutionRelation reportInstitutionRelation = new ReportInstitutionRelation();
+        reportInstitutionRelation.setReportId(reportId);
+        reportInstitutionRelation.setAppid(appId);
+
+        List<Integer> reportInstitutionRelations = new ArrayList<>();
+        List<String> institutionList = new ArrayList<>();
+        List<Map<String,Object>> institutionMap = new ArrayList<>();
+
+        List<ReportInstitutionRelation> reportInstitutionRelationList = reportInstitutionRelationMapper.select(reportInstitutionRelation);
+        for (ReportInstitutionRelation rir:reportInstitutionRelationList){
+            reportInstitutionRelations.add(rir.getInstitutionId());
+            InvestmentInstitutions investmentInstitutions = investmentInstitutionsMapper.selectByPrimaryKey(rir.getInstitutionId());
+            if (investmentInstitutions != null){
+                institutionList.add(investmentInstitutions.getShortName());
+                Map<String,Object> insMap = new HashMap<>();
+                insMap.put("id",rir.getInstitutionId());
+                insMap.put("name",investmentInstitutions.getShortName());
+
+                institutionMap.add(insMap);
+            }
+        }
+        map.put("institutionId",reportInstitutionRelations);
+        map.put("institutionString",institutionList);
+        map.put("institutionMap",institutionMap);
     	
     	//设置相关的项目信息
     	ReportCompanyLabel rcl=new ReportCompanyLabel();
@@ -307,12 +340,15 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         report.setSubTitle(reqBody.getSubTitle());
         report.setAuthor(reqBody.getAuthor());
         Integer num = null;
+        Integer reportId = null;
         if (null == report.getId()){
         	report.setCreateTime(new Date());
             num = reportMapper.insert(report);
+            reportId = report.getId();
             this.sendNewsEvent(reqBody.getCreater(),num,reqBody.getColumns());
         }else{
         	report.setUpdateTime(new Date());
+        	reportId = reqBody.getId();
             num = reportMapper.updateByPrimaryKeySelective(report);
         }
         List<MetaColumn> columns = reqBody.getColumns();
@@ -354,6 +390,28 @@ public class ReportServiceImpl extends GenericService implements ReportService {
             reportLabel.setName(lablel);
             labelService.save(reportLabel);
         }
+
+        //插入文章相关机构信息
+        //先删除原理的机构id
+        ReportInstitutionRelation reportInstitutionRelationForDelete = new ReportInstitutionRelation();
+        reportInstitutionRelationForDelete.setAppid(appId);
+        reportInstitutionRelationForDelete.setReportId(report.getId());
+
+        reportInstitutionRelationMapper.delete(reportInstitutionRelationForDelete);
+
+        //插入新的
+        if (reqBody.getInstitutionId() != null && reqBody.getInstitutionId().size() > 0){
+            for (Integer i: reqBody.getInstitutionId()){
+                ReportInstitutionRelation reportInstitutionRelation = new ReportInstitutionRelation();
+                reportInstitutionRelation.setReportId(reportId);
+                reportInstitutionRelation.setAppid(appId);
+                reportInstitutionRelation.setInstitutionId(i);
+
+                reportInstitutionRelationMapper.insertSelective(reportInstitutionRelation);
+            }
+        }
+
+
         result.setMessage("success");
         result.setStatus(200);
         result.setData(String.valueOf(num));

@@ -103,25 +103,27 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         if(!StringUtils.isEmpty(body.getTouzi())){
             investorDemand.setFinancingStage(body.getTouzi());
         }
-
         if(!StringUtils.isEmpty(body.getCity())){
             investorDemand.setCityPreference(body.getCity());
         }
-
         if(body.getXiaxian() != null && !"".equals(body.getXiaxian())){
             investorDemand.setInvestmentAmountLow(new BigDecimal(body.getXiaxian()));
         }
         if(!StringUtils.isEmpty(body.getShangxian())){
             investorDemand.setInvestmentAmountHigh(new BigDecimal(body.getShangxian()));
         }
-
+        if (body.getStartdoller() != null){
+            investorDemand.setInvestmentAmountLowDollars(body.getStartdoller());
+        }
+        if (body.getEnddoller() != null){
+            investorDemand.setInvestmentAmountHighDollars(body.getEnddoller());
+        }
         if(!StringUtils.isEmpty(body.getUser7recentlyco_noana())){
             investorDemand.setRecentlyConcernedSubdivisionCircuit(body.getUser7recentlyco_noana());
         }
         if(!StringUtils.isEmpty(body.getUser7foundertra_noana())){
             investorDemand.setConcernedFoundersCharacteristic(body.getUser7foundertra_noana());
         }
-
         if(!StringUtils.isEmpty(body.getXuqiu())){
             investorDemand.setDemand(body.getXuqiu());
         }
@@ -145,6 +147,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
             }
             investorDemand.setUpdateTime(DateUtils.parse(createTime));//如果不是第一次，就是更新时间
             investorDemandMapper.updateByPrimaryKeySelective(investorDemand);
+
         }else {
             try {
                 createTime = sdf.format(new Date(now));
@@ -174,7 +177,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
                 investorDemandStageList.add(investorDemandStage1);
             }
         }
-        Integer investorDemandStageInsertResult = investorDemandStageService.insertList(investorDemandStageList);
+        investorDemandStageService.insertList(investorDemandStageList);
 
         investorDemandSegmentationService.deleteAll(investorDemand.getId());
         List<InvestorDemandSegmentation> investorDemandSegmentationList = new ArrayList<>();
@@ -194,7 +197,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
                 investorDemandSegmentationList.add(investorDemandSegmentation1);
             }
         }
-        Integer investorDemandSegmentationInsertResult = investorDemandSegmentationService.insertList(investorDemandSegmentationList);
+       investorDemandSegmentationService.insertList(investorDemandSegmentationList);
 
         investorDemandSpeedwayService.deleteAll(investorDemand.getId());
         List<InvestorDemandSpeedway> investorDemandSpeedwayList = new ArrayList<>();
@@ -214,7 +217,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
                 investorDemandSpeedwayList.add(investorDemandSpeedway1);
             }
         }
-        Integer investorDemandSpeedwayInsertResult = investorDemandSpeedwayService.insertList(investorDemandSpeedwayList);
+       investorDemandSpeedwayService.insertList(investorDemandSpeedwayList);
 
         investorDemandCharacterService.deleteAll(investorDemand.getId());
         List<InvestorDemandCharacter> investorDemandCharacterList = new ArrayList<>();
@@ -234,7 +237,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
                 investorDemandCharacterList.add(investorDemandCharacter1);
             }
         }
-        Integer investorDemandCharacterInsertResult = investorDemandCharacterService.insertList(investorDemandCharacterList);
+        investorDemandCharacterService.insertList(investorDemandCharacterList);
 
         result.setStatus(200);
         result.setMessage("投资偏好记录成功");
@@ -262,6 +265,24 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         if(investorDemands.size() > 0){
             investorDemand = investorDemands.get(0);
         }
+        //返回上下限
+        BigDecimal startdoller = BigDecimal.ZERO;
+        BigDecimal enddoller = BigDecimal.ZERO;
+
+        if (investorDemand == null){
+
+        }else {
+            if (investorDemand.getInvestmentAmountLowDollars() != null){
+                startdoller = investorDemand.getInvestmentAmountLowDollars();
+            }
+            if (investorDemand.getInvestmentAmountHighDollars() != null){
+                enddoller = investorDemand.getInvestmentAmountHighDollars();
+            }
+
+        }
+
+        data.put("startdoller",startdoller);
+        data.put("enddoller",enddoller);
 
         //行业领域(send_logs)
         List<LabelList> industrys = hotsdatas.getData().get("industryKey");
@@ -286,19 +307,22 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         data.put("shuzu", demandLabels);
 
         //投资阶段
-        List<Boolean> roundsNames = new ArrayList<>();
-        for(String roundName : ROUNDNAME){
-            roundsNames.add(false);
-        }
-        for(int i = 0; i<ROUNDNAME.length; i++){
-            if(investorDemand != null && investorDemand.getFinancingStage() != null && !"".equals(investorDemand.getFinancingStage())){
-                String[] roundNameArray = investorDemand.getFinancingStage().split(",");
-                for(String string : roundNameArray){
-                    if(string.equals(ROUNDNAME[i])){
-                        roundsNames.set(i, true);
-                    }
-                }
-            }
+        List<String> roundsNames = new ArrayList<>();
+//        for(String roundName : ROUNDNAME){
+//            roundsNames.add(false);
+//        }
+//        for(int i = 0; i<ROUNDNAME.length; i++){
+//            if(investorDemand != null && investorDemand.getFinancingStage() != null && !"".equals(investorDemand.getFinancingStage())){
+//                String[] roundNameArray = investorDemand.getFinancingStage().split(",");
+//                for(String string : roundNameArray){
+//                    if(string.equals(ROUNDNAME[i])){
+//                        roundsNames.set(i, true);
+//                    }
+//                }
+//            }
+//        }
+        if (investorDemand != null){
+            roundsNames = Arrays.asList(investorDemand.getFinancingStage().split(","));
         }
         data.put("a", roundsNames);
 

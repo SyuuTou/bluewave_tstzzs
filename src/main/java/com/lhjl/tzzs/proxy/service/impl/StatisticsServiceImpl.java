@@ -163,7 +163,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         return result;
     }
 
-    @Cacheable(value = "financingInvestmentDistributed",keyGenerator = "wiselyKeyGenerator")
+//    @Cacheable(value = "financingInvestmentDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<HistogramList>> financingInvestmentDistributed(String institutionType, String from, String size) {
 
