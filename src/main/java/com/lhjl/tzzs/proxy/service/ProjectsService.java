@@ -10,6 +10,7 @@ import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.ProjectFollowStatus;
+import com.lhjl.tzzs.proxy.model.Projects;
 
 
 /**
@@ -169,4 +170,20 @@ public interface ProjectsService {
 	 * @return
 	 */
 	CommonDto<Boolean> updateRelativeInvestmentInfo(Integer appid, InvestmentInstitutionsProject body);
+	/**
+     * 回显 公司简介 以及 投资亮点
+     * @param appid
+     * @param proId
+     * @return
+     */
+	CommonDto<Projects> getProInfoById(Integer appid, Integer proId);
+	/**
+     * 更新公司相关信息(主要用于更新项目简介 以及 投资亮点)
+     * @param appid
+     * @param proId
+     * @return
+     */
+	CommonDto<Boolean> updateProInfos(Integer appid, Projects body);
+	
+	
 }

@@ -52,6 +52,49 @@ public class ProjectsController extends GenericController{
     private String defaultPageSize;
     
     /**
+     * 根据id回显 公司全部信息(主要用于获取项目简介 以及 投资亮点)
+     * @param appid
+     * @param proId 项目id
+     * @return
+     */
+    @GetMapping("/v{appid}/echo/proinfobyid")
+    public CommonDto<Projects> echoProInfoById(@PathVariable Integer appid,Integer proId){
+    	CommonDto<Projects> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getProInfoById(appid,proId);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		  
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    
+    /**
+     * 根据id更新公司相关信息(主要用于更新项目简介 以及 投资亮点)
+     * @param appid
+     * @param proId
+     * @return
+     */
+    @PutMapping("/v{appid}/edit/procomment")
+    public CommonDto<Boolean> editProComments(@PathVariable Integer appid,@RequestBody Projects body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.updateProInfos(appid,body);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		  
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    
+    
+    /**
 	 * 更新融资历史相关的投资机构信息
 	 * @param appid
 	 * @param body 融资历史单阶段对应的投资机构信息
