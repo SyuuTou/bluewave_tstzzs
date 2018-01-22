@@ -78,8 +78,8 @@ public class ProjectsController extends GenericController{
      * @param proId
      * @return
      */
-    @PutMapping("/v{appid}/edit/procomment")
-    public CommonDto<Boolean> editProComments(@PathVariable Integer appid,@RequestBody Projects body){
+    @PutMapping("/v{appid}/edit/proInfo")
+    public CommonDto<Boolean> editProInfo(@PathVariable Integer appid,@RequestBody Projects body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
     		result=projectsService.updateProInfos(appid,body);
