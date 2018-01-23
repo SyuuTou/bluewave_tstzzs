@@ -1464,6 +1464,12 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		return result;
 	}
 
+	@Override
+	public CommonDto<List<Object>> listProParts(Integer appid, Integer proType) {
+		
+		return null;
+	}
+
 
 
 }
