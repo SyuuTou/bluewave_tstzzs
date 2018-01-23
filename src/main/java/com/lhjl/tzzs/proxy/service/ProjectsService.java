@@ -188,9 +188,17 @@ public interface ProjectsService {
      * 项目公司的列表信息
      * @param appid 扩展字段
      * @param proType 项目的类别(根据不同的项目类别来列举不同项目的分部信息)
+     * @param proId 项目或者投资机构的id
      * @return
      */
-	CommonDto<List<Object>> listProParts(Integer appid, Integer proType);
+	CommonDto<Object> listProParts(Integer appid, Integer proType,Integer proId);
+	/**
+     * 根据id删除分部信息
+     * @param appid
+     * @param partId 分部id
+     * @return
+     */
+	CommonDto<Boolean> removePartInfoById(Integer appid, Integer partId);
 	
 	
 }

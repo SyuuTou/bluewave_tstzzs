@@ -95,6 +95,10 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
     private AdminProjectRatingLogMapper adminProjectRatingLogMapper;
     @Autowired
     private InvestmentInstitutionsProjectMapper investmentInstitutionsProjectMapper;
+    @Autowired
+    private InvestmentInstitutionsAddressPartMapper investmentInstitutionsAddressPartMapper;
+    @Autowired
+    private InvestmentInstitutionsAddressMapper investmentInstitutionsAddressMapper;
 
     /**
      * 查询我关注的项目
@@ -1463,11 +1467,47 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		
 		return result;
 	}
-
+	@Transactional(readOnly=true)
 	@Override
-	public CommonDto<List<Object>> listProParts(Integer appid, Integer proType) {
+	public CommonDto<Object> listProParts(Integer appid, Integer proType,Integer proId) {
+		CommonDto<Object> result=new CommonDto<>();
+		Object partList = null;
+		if(proType==1) {//1代表产业公司即项目
+			
+		}else if(proType==2) {
+			InvestmentInstitutionsAddressPart iiap=new InvestmentInstitutionsAddressPart();
+			iiap.setInvestmentInstitutionId(proId);
+			//获取该机构的所有分部信息
+			List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.select(iiap);
+			if(list != null) {
+				for(InvestmentInstitutionsAddressPart tmp:list) {
+					InvestmentInstitutionsAddress iia =new InvestmentInstitutionsAddress();
+					iia.setInvestmentInstitutionId(proId);
+					iia = investmentInstitutionsAddressMapper.selectOne(iia);
+					//设置总部邮箱
+					tmp.setHeadQuartersEmail(iia.getEmail());
+				}
+			}
+			partList=list;
+		}
+		result.setData(partList);
+		result.setStatus(200);
+		result.setMessage("success");  
 		
-		return null;
+		return result;
+	}
+	@Transactional
+	@Override
+	public CommonDto<Boolean> removePartInfoById(Integer appid, Integer partId) {
+		CommonDto<Boolean> result =new CommonDto<Boolean>();
+		InvestmentInstitutionsAddressPart iiap =new InvestmentInstitutionsAddressPart();
+		iiap.setId(partId);
+		iiap.setYn(1);
+		investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(iiap);
+		result.setData(true);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
 	}
 
 
