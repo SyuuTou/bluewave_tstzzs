@@ -34,6 +34,7 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
         }
         ProjectFinancingLog projectFinancingLog = projectFinancingLogMapper.selectByProjectId(projectId);
         if(null != projectFinancingLog){
+            financingLogOutputDto.setId(projectFinancingLog.getId());
             financingLogOutputDto.setStage(projectFinancingLog.getStage());
             financingLogOutputDto.setAmount(projectFinancingLog.getAmount());
             financingLogOutputDto.setCurrencyType(projectFinancingLog.getCurrency());
@@ -71,8 +72,9 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
         projectFinancingLog.setStage(body.getStage());
         projectFinancingLog.setProjectFinancingUseful(body.getFinancingApplication());
         projectFinancingLog.setShareDivest(body.getShareDivest());
+        projectFinancingLog.setId(body.getId());
         Integer projectFinancingLogInsertResult = null;
-        if(null == body.getProjectId()){
+        if(null == body.getId()){
             projectFinancingLog.setCreateTime(DateUtils.parse(createTime));
             projectFinancingLogInsertResult = projectFinancingLogMapper.insert(projectFinancingLog);
         }else{
