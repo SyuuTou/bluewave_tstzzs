@@ -56,7 +56,7 @@ public class ProjectsController extends GenericController{
      * @param body
      * @return
      */
-    @PostMapping("/v{appid}/saveorupdate/part")
+    @PostMapping("/v{appid}/saveorupdate/part")  
     /*public CommonDto<Boolean> saveOrUpdate(@PathVariable Integer appid,@RequestBody PartInputDto body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
