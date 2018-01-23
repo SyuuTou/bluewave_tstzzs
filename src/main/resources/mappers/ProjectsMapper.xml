@@ -841,6 +841,7 @@
             ii on iip.investment_institutions_id = ii.id and ii.type in (${dataVcType})) iid on iid.project_id = p.id
         </if>
         where p.short_name is not NULL and p.short_name != '' and p.short_name not in ('个人投资人','天使投资人')
+        and ii.short_name is not null
         <if test="city != '' and city != null">
             and p.city in (${city})
         </if>

@@ -1440,4 +1440,36 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
         result.setMessage("success");
 		return result;
 	}
+
+	@Override
+	public CommonDto<Projects> getProInfoById(Integer appid, Integer proId) {
+		CommonDto<Projects> result=new CommonDto<Projects>();
+		result.setData(projectsMapper.selectByPrimaryKey(proId));
+		result.setStatus(200);;
+		result.setMessage("success");
+		
+		return result;
+	}
+	
+	@Transactional
+	@Override
+	public CommonDto<Boolean> updateProInfos(Integer appid, Projects body) {
+		CommonDto<Boolean> result=new CommonDto<>();
+		
+		projectsMapper.updateByPrimaryKeySelective(body);
+		result.setData(true);
+		result.setStatus(200);;
+		result.setMessage("success");  
+		
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<Object>> listProParts(Integer appid, Integer proType) {
+		
+		return null;
+	}
+
+
+
 }

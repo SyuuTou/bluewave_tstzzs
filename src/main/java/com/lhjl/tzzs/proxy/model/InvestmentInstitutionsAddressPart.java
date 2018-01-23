@@ -54,6 +54,11 @@ public class InvestmentInstitutionsAddressPart {
     private BigDecimal latitude;
 
     /**
+     * 删除标志:0代表有效；1代表无效
+     */
+    private Integer yn;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -221,12 +226,21 @@ public class InvestmentInstitutionsAddressPart {
         this.latitude = latitude;
     }
 
-	@Override
-	public String toString() {
-		return "InvestmentInstitutionsAddressPart [id=" + id + ", investmentInstitutionId=" + investmentInstitutionId
-				+ ", name=" + name + ", town=" + town + ", detailAddress=" + detailAddress + ", phoneCountryCode="
-				+ phoneCountryCode + ", phoneDistrictCode=" + phoneDistrictCode + ", phoneNumber=" + phoneNumber
-				+ ", longitude=" + longitude + ", latitude=" + latitude + "]";
-	}
-    
+    /**
+     * 获取删除标志:0代表有效；1代表无效
+     *
+     * @return yn - 删除标志:0代表有效；1代表无效
+     */
+    public Integer getYn() {
+        return yn;
+    }
+
+    /**
+     * 设置删除标志:0代表有效；1代表无效
+     *
+     * @param yn 删除标志:0代表有效；1代表无效
+     */
+    public void setYn(Integer yn) {
+        this.yn = yn;
+    }
 }

@@ -35,14 +35,14 @@ public class JedisCommonService {
     }
 
     public static void main(String[] args) {
-//        JedisPoolConfig config = new JedisPoolConfig();
-//        config.setMaxIdle(5);
-//        config.setMaxTotal(10);
-//        config.setTestOnBorrow(false);
-//        config.setTestOnReturn(false);
-//
-//        JedisPool pool = new JedisPool(config,"101.200.44.58",6379,3000,"wixbal292dj");
-//        pool.getResource().set("1111","hello world");
-//        System.out.println(pool.getResource().get("1111"));
+        JedisPoolConfig config = new JedisPoolConfig();
+        config.setMaxIdle(5);
+        config.setMaxTotal(10);
+        config.setTestOnBorrow(false);
+        config.setTestOnReturn(false);
+
+        JedisPool pool = new JedisPool(config,"101.200.44.58",6379,3000,"wixbal292dj");
+        pool.getResource().set("1111","hello world");
+        System.out.println(pool.getResource().get("1111"));
     }
 }
