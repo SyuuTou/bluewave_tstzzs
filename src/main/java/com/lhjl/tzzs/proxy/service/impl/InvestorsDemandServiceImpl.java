@@ -645,6 +645,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         if (investorDemandList.size()>0){
             investorDemand.setId(investorDemandList.get(0).getId());
             investorDemandId = investorDemandList.get(0).getId();
+            investorDemand.setCreatTime(now);
             investorDemandMapper.updateByPrimaryKeySelective(investorDemand);
         }else {
             investorDemand.setCreatTime(now);
