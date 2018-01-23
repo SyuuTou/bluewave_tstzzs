@@ -184,6 +184,13 @@ public interface ProjectsService {
      * @return
      */
 	CommonDto<Boolean> updateProInfos(Integer appid, Projects body);
+	/**
+     * 项目公司的列表信息
+     * @param appid 扩展字段
+     * @param proType 项目的类别(根据不同的项目类别来列举不同项目的分部信息)
+     * @return
+     */
+	CommonDto<List<Object>> listProParts(Integer appid, Integer proType);
 	
 	
 }

@@ -15,7 +15,9 @@
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="longitude" jdbcType="DECIMAL" property="longitude" />
     <result column="latitude" jdbcType="DECIMAL" property="latitude" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
   </resultMap>
+  
   <select id="findAllById" parameterType="Integer" resultMap="BaseResultMap">
   	select id,investment_institution_id,name,town,detail_address,phone_country_code,phone_district_code,phone_number,longitude,latitude from investment_institutions_address_part
   	where id = #{investmentInstitutionId}

@@ -52,6 +52,27 @@ public class ProjectsController extends GenericController{
     private String defaultPageSize;
     
     /**
+     * 项目公司的列表信息******业务需求有待明确
+     * @param appid 扩展字段
+     * @param proType 项目的类别(根据不同的项目类别来列举不同项目的分部信息：1代表项目【产业公司】;2代表机构)
+     * @param proId 项目的id,根据该id去不同的项目类别中搜索对应的分部信息
+     * @return
+     */
+    @GetMapping("/v{appid}/list/proparts{proId}")
+    public CommonDto<List<Object>> listProPart(@PathVariable("appid") Integer appid,Integer proType){
+    	CommonDto<List<Object>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.listProParts(appid,proType);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
      * 根据id回显 公司全部信息(主要用于获取项目简介 以及 投资亮点)
      * @param appid
      * @param proId 项目id
