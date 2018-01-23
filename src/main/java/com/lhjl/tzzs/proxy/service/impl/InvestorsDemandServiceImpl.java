@@ -931,7 +931,7 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
                 Date createTime = (Date)userDemand.get("creat_time");
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(createTime);
-                calendar.add(Calendar.DAY_OF_MONTH, 3);
+                calendar.add(Calendar.MONTH, 3);
                 Date createTimeAfter = calendar.getTime();
 
                 if (now.getTime() > createTimeAfter.getTime()){
