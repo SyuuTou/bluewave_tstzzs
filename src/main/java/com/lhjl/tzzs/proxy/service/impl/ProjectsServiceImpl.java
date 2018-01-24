@@ -1223,9 +1223,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	@Override
 	public CommonDto<List<String>> getFinancingStatus(Integer appid) {
 		CommonDto<List<String>> result =new CommonDto<>();
-		System.err.println("*****");
 		List<String> list=projectFinancingLogMapper.fetchFinancingStatus();
-		System.err.println(list+"********");
 		result.setData(list);
 		result.setMessage("success");
 		result.setStatus(200);
@@ -1276,11 +1274,11 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	
 	@Transactional
 	@Override
-	public CommonDto<Boolean> removeFinancingLogById(Integer appid, FinancingLogDelInputDto body) {
+	public CommonDto<Boolean> removeFinancingLogById(Integer appid, Integer id) {
 		CommonDto<Boolean> result=new CommonDto<Boolean>();
 		ProjectFinancingLog pfl=new ProjectFinancingLog();
-		pfl.setId(body.getLogId());
-		pfl.setYn(body.getDelStatus());
+		pfl.setId(id);
+		pfl.setYn(1);
 		projectFinancingLogMapper.updateByPrimaryKeySelective(pfl);
 		
 		result.setData(true);
@@ -1596,7 +1594,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		}
 		return result;
 	}
-
+	@Transactional
 	@Override
 	public CommonDto<Boolean> editRequirementInfo(Integer appid, RecruitmentInfo body) {
 		CommonDto<Boolean> result=new CommonDto<Boolean>();
@@ -1606,7 +1604,4 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		result.setMessage("success");
 		return result;
 	}
-
-
-
 }

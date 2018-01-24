@@ -130,14 +130,14 @@ public interface ProjectsService {
 	 * @param projectId 项目id
 	 * @return
 	 */
-	CommonDto<List<ProjectFinancingLog>> getFinancingLogs(Integer appid, Integer projectId);
+	CommonDto<List<ProjectFinancingLog>> getFinancingLogs(Integer appid, Integer projectId);  
 	/**
 	 * 删除单条的融资历史记录信息
 	 * @param appid
 	 * @param financiingLogId 融资历史记录的标识id
 	 * @return
 	 */
-	CommonDto<Boolean> removeFinancingLogById(Integer appid, FinancingLogDelInputDto body);
+	CommonDto<Boolean> removeFinancingLogById(Integer appid, Integer id);
 
 	/**
 	 * 根据项目id获取项目跟进状态的接口
