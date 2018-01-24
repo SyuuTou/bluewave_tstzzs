@@ -375,8 +375,9 @@ public class ProjectsController extends GenericController{
     	}
     	return result;
     }
+    
     /**
-     * 获取融资状态的所有数据
+     * 获取融资历史表中所有的融资状态
      * @param appid
      * @return
      */

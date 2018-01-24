@@ -12,8 +12,8 @@ public class Recruitment {
     /**
      * 项目ID
      */
-    @Column(name = "project_id")
-    private Integer projectId;
+    @Column(name = "company_id")
+    private Integer companyId;
 
     /**
      * 岗位类型
@@ -126,19 +126,19 @@ public class Recruitment {
     /**
      * 获取项目ID
      *
-     * @return project_id - 项目ID
+     * @return company_id - 项目ID
      */
-    public Integer getProjectId() {
-        return projectId;
+    public Integer getCompanyId() {
+        return companyId;
     }
 
     /**
      * 设置项目ID
      *
-     * @param projectId 项目ID
+     * @param companyId 项目ID
      */
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
     }
 
     /**

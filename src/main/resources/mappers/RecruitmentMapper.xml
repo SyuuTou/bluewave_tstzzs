@@ -6,7 +6,7 @@
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="company_id" jdbcType="INTEGER" property="companyId" />
     <result column="job_type_id" jdbcType="INTEGER" property="jobTypeId" />
     <result column="job_name" jdbcType="VARCHAR" property="jobName" />
     <result column="address_details" jdbcType="VARCHAR" property="addressDetails" />

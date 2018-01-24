@@ -1340,6 +1340,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			projectFinancingLogMapper.insertSelective(body);
 			afterUpdateLogId=body.getId();
 		}
+		
 		//获取该融资历史信息的相关的投资方的相关信息
 		List<String> shortNames = body.getInstitutionsShortNames();
 		if((shortNames != null) && (shortNames.size()!=0)) {
@@ -1567,7 +1568,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	public CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer proId) {
 		CommonDto<List<Recruitment>> result=new CommonDto<>();
 		Recruitment rec=new Recruitment();
-		rec.setProjectId(proId);
+		rec.setCompanyId(proId);
 		
 		result.setData(recruitmentMapper.select(rec));
 		result.setStatus(200);
@@ -1580,7 +1581,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	public CommonDto<RecruitmentInfo> echoRequirementInfo(Integer appid, Integer proId) {
 		CommonDto<RecruitmentInfo> result=new CommonDto<>();
 		RecruitmentInfo reci=new RecruitmentInfo();
-		reci.setProjectId(proId);
+		reci.setCompanyId(proId);
 		try {
 			reci = recruitmentInfoMapper.selectOne(reci);
 			result.setData(reci);
