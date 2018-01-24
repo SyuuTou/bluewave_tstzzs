@@ -130,7 +130,7 @@ public interface ProjectsService {
 	 * @param projectId 项目id
 	 * @return
 	 */
-	CommonDto<List<ProjectFinancingLog>> getFinancingLogs(Integer appid, Integer projectId);
+	CommonDto<List<ProjectFinancingLog>> getFinancingLogs(Integer appid, Integer projectId);  
 	/**
 	 * 删除单条的融资历史记录信息
 	 * @param appid
