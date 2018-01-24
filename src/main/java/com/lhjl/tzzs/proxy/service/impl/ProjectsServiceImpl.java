@@ -101,7 +101,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
     private InvestmentInstitutionsAddressMapper investmentInstitutionsAddressMapper;
     @Autowired
     private MetaJobTypeMapper metaJobTypeMapper;
-
+    @Autowired
+    private RecruitmentMapper recruitmentMapper;
     /**
      * 查询我关注的项目
      *
@@ -1133,7 +1134,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		
 		return result;
 	}
-
+    @Transactional
 	@Override
 	public CommonDto<Boolean> updateFollowStatus(Integer appid, ProjectsUpdateInputDto body) {
 		CommonDto<Boolean> result  =  new CommonDto<>();
@@ -1507,7 +1508,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		result.setStatus(200);
 		return result;
 	}
-
+	@Transactional
 	@Override
 	public CommonDto<Boolean> saveOrUpdayePart(Integer appid, InvestmentInstitutionsAddressPart body) {
 		CommonDto<Boolean> result =new CommonDto<Boolean>();
@@ -1529,6 +1530,49 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		result.setData(metaJobTypeMapper.selectAll());
 		result.setMessage("success");
 		result.setStatus(200);
+		return result;
+	}
+	@Transactional
+	@Override
+	public CommonDto<Boolean> saveOrUpdateRecruitment(Integer appid, Recruitment body) {
+		CommonDto<Boolean> result =new CommonDto<Boolean>();
+		if(body.getId()!=null) {//更新操作,此时用户id要设置到createdUserId中
+			body.setLastUpdateTime(new Date());
+			recruitmentMapper.updateByPrimaryKeySelective(body);
+		}else {//插入操作，此时用户id要设置到updatedUserId中
+			body.setCreateTime(new Date());
+			body.setYn(0);//默认设置为有效
+			recruitmentMapper.insertSelective(body);
+		}
+		result.setData(true);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+	@Transactional
+	@Override
+	public CommonDto<Boolean> removeRecruInfoById(Integer appid, Integer id) {
+		CommonDto<Boolean> result =new CommonDto<Boolean>();
+		Recruitment rec =new Recruitment();
+		rec.setId(id);
+		rec.setYn(1);
+		recruitmentMapper.updateByPrimaryKeySelective(rec);
+		result.setData(true);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer proId) {
+		CommonDto<List<Recruitment>> result=new CommonDto<>();
+		Recruitment rec=new Recruitment();
+		rec.setProjectId(proId);
+		
+		result.setData(recruitmentMapper.select(rec));
+		result.setStatus(200);
+		result.setMessage("success");  
+		
 		return result;
 	}
 

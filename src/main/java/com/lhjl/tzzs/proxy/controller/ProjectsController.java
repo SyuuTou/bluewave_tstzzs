@@ -48,8 +48,68 @@ public class ProjectsController extends GenericController{
     @Value("${pageNum}")  
     private String defaultPageNum;
 
-    @Value("${pageSize}")
+    @Value("${pageSize}")  
     private String defaultPageSize;
+    /**
+     * 招聘信息列表
+     * @param appid
+     * @param proId 项目id
+     * @return
+     */
+    @GetMapping("/v{appid}/list/recruitmentinfo")
+    public CommonDto<List<Recruitment>> listRecruInfo(@PathVariable Integer appid,Integer proId){
+    	CommonDto<List<Recruitment>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.listRecruInfos(appid,proId);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 根据id删除招聘信息
+     * @param appid
+     * @param id 招聘信息id
+     * @return
+     */
+    @DeleteMapping("/v{appid}/del/recruitmentbyid")
+    public CommonDto<Boolean> deleteRecruInfoById(@PathVariable Integer appid,Integer id){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.removeRecruInfoById(appid,id);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 保存或者公司招聘信息
+     * @param appid
+     * @param body 公司的招聘信息
+     * @return
+     */
+    @PostMapping("/v{appid}/saveorupdate/recruitment")  
+    public CommonDto<Boolean> saveOrUpdateRecruitment(@PathVariable Integer appid,@RequestBody Recruitment body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.saveOrUpdateRecruitment(appid,body);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
     /**
      * 获取岗位类型的元数据
      * @param appid
@@ -76,7 +136,7 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @PostMapping("/v{appid}/saveorupdate/part")  
-    public CommonDto<Boolean> saveOrUpdate(@PathVariable Integer appid,@RequestBody InvestmentInstitutionsAddressPart body){
+    public CommonDto<Boolean> saveOrUpdatePart(@PathVariable Integer appid,@RequestBody InvestmentInstitutionsAddressPart body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
     		result=projectsService.saveOrUpdayePart(appid,body);
