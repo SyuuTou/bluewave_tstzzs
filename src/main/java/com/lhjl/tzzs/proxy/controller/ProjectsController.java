@@ -91,7 +91,7 @@ public class ProjectsController extends GenericController{
     	return result;
     }
     /**
-     * 项目分部的列表信息******业务需求有待明确
+     * 项目分部的列表信息
      * @param appid 扩展字段
      * @param proType 项目的类别(根据不同的项目类别来列举不同项目的分部信息：1代表项目【产业公司】;2代表机构)
      * @param proId 项目或者投资机构等的id
