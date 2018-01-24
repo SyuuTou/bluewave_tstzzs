@@ -21,7 +21,8 @@
   </foreach>
   </insert>
   <select id="findInstitutionStageCount" resultType="java.util.Map">
-    select mps.`name`,count(*) ct from investment_institutions_project iip
+    select  case when mps.`name` is null then "未知" else mps.`name` end `name`,count(*) ct
+    from investment_institutions_project iip
     left join project_financing_log pfl on iip.project_id = pfl.id
     left join meta_project_stage mps on pfl.stage = mps.`name`
     where iip.investment_institutions_id = #{institutionId}

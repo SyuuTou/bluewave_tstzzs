@@ -34,6 +34,7 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
         }
         ProjectFinancingLog projectFinancingLog = projectFinancingLogMapper.selectByProjectId(projectId);
         if(null != projectFinancingLog){
+            financingLogOutputDto.setId(projectFinancingLog.getId());
             financingLogOutputDto.setStage(projectFinancingLog.getStage());
             financingLogOutputDto.setAmount(projectFinancingLog.getAmount());
             financingLogOutputDto.setCurrencyType(projectFinancingLog.getCurrency());
@@ -48,7 +49,7 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
     }
 
     @Override
-    public CommonDto<String> addOrUpdateFinancingLog(Integer projectId, FinancingLogInputDto body) {
+    public CommonDto<String> addOrUpdateFinancingLog(FinancingLogInputDto body) {
         CommonDto<String> result = new CommonDto<>();
         if(null == body){
             result.setStatus(300);
@@ -57,7 +58,7 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
             return result;
         }
         ProjectFinancingLog projectFinancingLog = new ProjectFinancingLog();
-        projectFinancingLog.setProjectId(projectId);
+        projectFinancingLog.setProjectId(body.getProjectId());
         long now = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String createTime = null;
@@ -71,8 +72,9 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
         projectFinancingLog.setStage(body.getStage());
         projectFinancingLog.setProjectFinancingUseful(body.getFinancingApplication());
         projectFinancingLog.setShareDivest(body.getShareDivest());
+        projectFinancingLog.setId(body.getId());
         Integer projectFinancingLogInsertResult = null;
-        if(null == body.getProjectId()){
+        if(null == body.getId()){
             projectFinancingLog.setCreateTime(DateUtils.parse(createTime));
             projectFinancingLogInsertResult = projectFinancingLogMapper.insert(projectFinancingLog);
         }else{

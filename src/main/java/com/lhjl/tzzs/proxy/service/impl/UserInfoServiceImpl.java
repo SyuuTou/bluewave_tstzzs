@@ -268,6 +268,11 @@ public class UserInfoServiceImpl implements UserInfoService{
             body.setPageSize(pageSizeDefault);
         }
 
+        if(null == body.getRegisterTimeOrder() && null == body.getUpdateTimeOrder() && null == body.getUserLevelEndTimeOrder()){
+            body.setRegisterTimeOrder(1);
+            body.setRegisterTimeOrderDesc(1);
+        }
+
         Integer startPage = (body.getPageNum() -1) * body.getPageSize();
 
         List<Map<String,Object>> userList = usersMapper.findAdminList(body.getSearchWord(),body.getIdentityType(),

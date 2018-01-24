@@ -259,9 +259,14 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
             List<ScreenInvestmentRecord> list2 = screenInvestmentRecordMapper.select(screenInvestmentRecord);
             //判断是否有数据
             if(list2.size()>0){
-                ScreenInvestmentRecord screenInvestmentRecord1=screenInvestmentRecordMapper.serachScreenRecord(screenInvestmentRecord.getUserId());
+                ScreenInvestmentRecord screenInvestmentRecord1=screenInvestmentRecordMapper.serachScreenRecord(userId);
                 //选择的为50机构
-                if(screenInvestmentRecord1.getInvestmentType() == 0){
+                Integer investmentType = -1;
+                if (screenInvestmentRecord1.getInvestmentType() != null){
+                    investmentType = screenInvestmentRecord1.getInvestmentType();
+                }
+
+                if(investmentType == 0){
                     List<LabelList> list1 =new LinkedList<>();
                     LabelList labelList =new LabelList();
                     labelList.setName("50指数机构");
@@ -275,7 +280,7 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     list1.add(labelList1);
                     map.put("investment_type",list1);
                     map.put("investTypeName","50指数机构");
-                }else if (screenInvestmentRecord1.getInvestmentType() == 1){
+                }else if (investmentType == 1){
                     List<LabelList> list1 =new LinkedList<>();
                     LabelList labelList =new LabelList();
                     labelList.setName("50指数机构");

@@ -95,6 +95,12 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
     private AdminProjectRatingLogMapper adminProjectRatingLogMapper;
     @Autowired
     private InvestmentInstitutionsProjectMapper investmentInstitutionsProjectMapper;
+    @Autowired
+    private InvestmentInstitutionsAddressPartMapper investmentInstitutionsAddressPartMapper;
+    @Autowired
+    private InvestmentInstitutionsAddressMapper investmentInstitutionsAddressMapper;
+    @Autowired
+    private MetaJobTypeMapper metaJobTypeMapper;
 
     /**
      * 查询我关注的项目
@@ -1440,4 +1446,92 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
         result.setMessage("success");
 		return result;
 	}
+
+	@Override
+	public CommonDto<Projects> getProInfoById(Integer appid, Integer proId) {
+		CommonDto<Projects> result=new CommonDto<Projects>();
+		result.setData(projectsMapper.selectByPrimaryKey(proId));
+		result.setStatus(200);;
+		result.setMessage("success");
+		
+		return result;
+	}
+	
+	@Transactional
+	@Override
+	public CommonDto<Boolean> updateProInfos(Integer appid, Projects body) {
+		CommonDto<Boolean> result=new CommonDto<>();
+		
+		projectsMapper.updateByPrimaryKeySelective(body);
+		result.setData(true);
+		result.setStatus(200);;
+		result.setMessage("success");  
+		
+		return result;
+	}
+	@Transactional(readOnly=true)
+	@Override
+	public CommonDto<Object> listProParts(Integer appid, Integer proType,Integer proId) {
+		CommonDto<Object> result=new CommonDto<>();
+//		Object partList = null;
+		InvestmentInstitutionsAddressPart iiap=new InvestmentInstitutionsAddressPart();
+		iiap.setInvestmentInstitutionId(proId);
+		//获取该机构的所有分部信息
+		List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.select(iiap);
+//		if(list != null) {
+//			for(InvestmentInstitutionsAddressPart tmp:list) {
+//				InvestmentInstitutionsAddress iia =new InvestmentInstitutionsAddress();
+//				iia.setInvestmentInstitutionId(proId);
+//				iia = investmentInstitutionsAddressMapper.selectOne(iia);
+//				//设置总部邮箱
+//				tmp.setHeadQuartersEmail(iia.getEmail());
+//			}
+//		}
+//		partList=list;
+		result.setData(list);
+		result.setStatus(200);
+		result.setMessage("success");  
+		
+		return result;
+	}
+	@Transactional
+	@Override
+	public CommonDto<Boolean> removePartInfoById(Integer appid, Integer partId) {
+		CommonDto<Boolean> result =new CommonDto<Boolean>();
+		InvestmentInstitutionsAddressPart iiap =new InvestmentInstitutionsAddressPart();
+		iiap.setId(partId);
+		iiap.setYn(1);
+		investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(iiap);
+		result.setData(true);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> saveOrUpdayePart(Integer appid, InvestmentInstitutionsAddressPart body) {
+		CommonDto<Boolean> result =new CommonDto<Boolean>();
+		if(body.getId()!=null) {//更新操作
+			investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(body);
+		}else {//插入操作
+			investmentInstitutionsAddressPartMapper.insertSelective(body);
+		}
+		result.setData(true);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<MetaJobType>> getMetaJobTypes(Integer appid) {
+		CommonDto<List<MetaJobType>> result =new CommonDto<>();
+		
+		result.setData(metaJobTypeMapper.selectAll());
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+
+
 }

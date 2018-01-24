@@ -45,13 +45,135 @@ public class ProjectsController extends GenericController{
     @Resource
     private ProjectsService projectsService;
 
-    @Value("${pageNum}")
+    @Value("${pageNum}")  
     private String defaultPageNum;
 
     @Value("${pageSize}")
     private String defaultPageSize;
+    /**
+     * 获取岗位类型的元数据
+     * @param appid
+     * @return
+     */
+    @GetMapping("/v{appid}/source/jobtype")  
+    public CommonDto<List<MetaJobType>> getMetaJobTypes(@PathVariable Integer appid){
+    	CommonDto<List<MetaJobType>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getMetaJobTypes(appid);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 保存或者更新公司(投资机构)地址分部的信息
+     * @param appid
+     * @param body
+     * @return
+     */
+    @PostMapping("/v{appid}/saveorupdate/part")  
+    public CommonDto<Boolean> saveOrUpdate(@PathVariable Integer appid,@RequestBody InvestmentInstitutionsAddressPart body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.saveOrUpdayePart(appid,body);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 根据id删除分部信息
+     * @param appid
+     * @param partId 分部id
+     * @return
+     */
+    @DeleteMapping("/v{appid}/delete/part")
+    public CommonDto<Boolean> deletePartInfoById(@PathVariable Integer appid,Integer id){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.removePartInfoById(appid,id);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 项目分部的列表信息
+     * @param appid 扩展字段
+     * @param proType 项目的类别(根据不同的项目类别来列举不同项目的分部信息：1代表项目【产业公司】;2代表机构)
+     * @param proId 项目或者投资机构等的id
+     * @return
+     */
+    @GetMapping("/v{appid}/list/proparts{proId}/protype{proType}")
+    public CommonDto<Object> listProPart(@PathVariable("appid") Integer appid,@PathVariable("proType") Integer proType,@PathVariable("proId") Integer proId){
+    	CommonDto<Object> result =new CommonDto<>();
+    	try {
+    		result=projectsService.listProParts(appid,proType,proId);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(result);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 根据id回显 公司全部信息(主要用于获取项目简介 以及 投资亮点)
+     * @param appid
+     * @param proId 项目id
+     * @return
+     */
+    @GetMapping("/v{appid}/echo/proinfobyid")
+    public CommonDto<Projects> echoProInfoById(@PathVariable Integer appid,Integer proId){
+    	CommonDto<Projects> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getProInfoById(appid,proId);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		  
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
     
     /**
+     * 根据id更新公司相关信息(主要用于更新项目简介 以及 投资亮点)
+     * @param appid
+     * @param proId  
+     * @return
+     */
+    @PutMapping("/v{appid}/edit/proinfobyid")
+    public CommonDto<Boolean> editProInfoById(@PathVariable Integer appid,@RequestBody Projects body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.updateProInfos(appid,body);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		  
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+
+    
+    /**   
 	 * 更新融资历史相关的投资机构信息
 	 * @param appid
 	 * @param body 融资历史单阶段对应的投资机构信息

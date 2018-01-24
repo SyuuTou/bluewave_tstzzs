@@ -5,11 +5,14 @@ import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsProject;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
+import com.lhjl.tzzs.proxy.model.MetaJobType;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.ProjectFollowStatus;
+import com.lhjl.tzzs.proxy.model.Projects;
 
 
 /**
@@ -169,4 +172,48 @@ public interface ProjectsService {
 	 * @return
 	 */
 	CommonDto<Boolean> updateRelativeInvestmentInfo(Integer appid, InvestmentInstitutionsProject body);
+	/**
+     * 回显 公司简介 以及 投资亮点
+     * @param appid
+     * @param proId
+     * @return
+     */
+	CommonDto<Projects> getProInfoById(Integer appid, Integer proId);
+	/**
+     * 更新公司相关信息(主要用于更新项目简介 以及 投资亮点)
+     * @param appid
+     * @param proId
+     * @return
+     */
+	CommonDto<Boolean> updateProInfos(Integer appid, Projects body);
+	/**
+     * 项目公司的列表信息
+     * @param appid 扩展字段
+     * @param proType 项目的类别(根据不同的项目类别来列举不同项目的分部信息)
+     * @param proId 项目或者投资机构的id
+     * @return
+     */
+	CommonDto<Object> listProParts(Integer appid, Integer proType,Integer proId);
+	/**
+     * 根据id删除分部信息
+     * @param appid
+     * @param partId 分部id
+     * @return
+     */
+	CommonDto<Boolean> removePartInfoById(Integer appid, Integer partId);
+	/**
+	 * 保存或者更新地址分部的信息
+	 * @param appid
+	 * @param body
+	 * @return
+	 */
+	CommonDto<Boolean> saveOrUpdayePart(Integer appid, InvestmentInstitutionsAddressPart body);
+	 /**
+     * 获取岗位类型的元数据
+     * @param appid
+     * @return
+     */
+	CommonDto<List<MetaJobType>> getMetaJobTypes(Integer appid);
+	
+	
 }

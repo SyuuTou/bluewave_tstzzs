@@ -7,6 +7,8 @@ import java.math.BigDecimal;
  */
 public class FinancingLogOutputDto {
 
+    private Integer id;
+
     private Integer projectId;
 
     private String stage;
@@ -18,6 +20,14 @@ public class FinancingLogOutputDto {
     private String shareDivest;
 
     private String financingApplication;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getProjectId() {
         return projectId;
