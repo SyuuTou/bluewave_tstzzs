@@ -77,10 +77,10 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @DeleteMapping("/v{appid}/delete/part")
-    public CommonDto<Boolean> deletePartInfoById(@PathVariable Integer appid,Integer partId){
+    public CommonDto<Boolean> deletePartInfoById(@PathVariable Integer appid,Integer id){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result=projectsService.removePartInfoById(appid,partId);
+    		result=projectsService.removePartInfoById(appid,id);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
