@@ -190,6 +190,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             citySum += Integer.valueOf(histogramList.getX());
         }
 
+        if (Integer.valueOf(histogramLists.get(histogramLists.size()-1).getX())+(citySum - sum)> 0)
         histogramLists.get(histogramLists.size()-1).setY("其它");
         histogramLists.get(histogramLists.size()-1).setX(String.valueOf(Integer.valueOf(histogramLists.get(histogramLists.size()-1).getX())+(citySum - sum)));
         result.setData(histogramLists);
