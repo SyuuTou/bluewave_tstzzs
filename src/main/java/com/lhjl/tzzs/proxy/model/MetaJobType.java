@@ -11,7 +11,7 @@ public class MetaJobType {
     /**
      * 类型描述
      */
-    private String describe;
+    private String description;
 
     /**
      * @return id
@@ -30,18 +30,18 @@ public class MetaJobType {
     /**
      * 获取类型描述
      *
-     * @return describe - 类型描述
+     * @return description - 类型描述
      */
-    public String getDescribe() {
-        return describe;
+    public String getDescription() {
+        return description;
     }
 
     /**
      * 设置类型描述
      *
-     * @param describe 类型描述
+     * @param description 类型描述
      */
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

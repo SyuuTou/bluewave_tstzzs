@@ -45,12 +45,30 @@ public class ProjectsController extends GenericController{
     @Resource
     private ProjectsService projectsService;
 
-    @Value("${pageNum}")
+    @Value("${pageNum}")  
     private String defaultPageNum;
 
     @Value("${pageSize}")
     private String defaultPageSize;
-    
+    /**
+     * 获取岗位类型的元数据
+     * @param appid
+     * @return
+     */
+    @GetMapping("/v{appid}/source/jobtype")  
+    public CommonDto<List<MetaJobType>> getMetaJobTypes(@PathVariable Integer appid){
+    	CommonDto<List<MetaJobType>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getMetaJobTypes(appid);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
     /**
      * 保存或者更新公司(投资机构)地址分部的信息
      * @param appid

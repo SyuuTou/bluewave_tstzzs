@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsProject;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
+import com.lhjl.tzzs.proxy.model.MetaJobType;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.ProjectFollowStatus;
 import com.lhjl.tzzs.proxy.model.Projects;
@@ -207,6 +208,12 @@ public interface ProjectsService {
 	 * @return
 	 */
 	CommonDto<Boolean> saveOrUpdayePart(Integer appid, InvestmentInstitutionsAddressPart body);
+	 /**
+     * 获取岗位类型的元数据
+     * @param appid
+     * @return
+     */
+	CommonDto<List<MetaJobType>> getMetaJobTypes(Integer appid);
 	
 	
 }
