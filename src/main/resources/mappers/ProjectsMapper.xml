@@ -662,11 +662,11 @@
              and ps.segmentation_name in (${segmentation})
         </if>
         <if test="edus != '' and edus != null">
-            LEFT join (select f.project_id from founders f right join founders_education fe on fe.founder_ID = f.id
+            right join (select f.project_id from founders f right join founders_education fe on fe.founder_ID = f.id
             where fe.education_experience in (${edus})) ffe on ffe.project_id = pp.id
         </if>
         <if test="works != '' and works != null">
-            LEFT join (select f.project_id from founders f right join founders_work fw on fw.founder_ID = f.id where
+            right join (select f.project_id from founders f right join founders_work fw on fw.founder_ID = f.id where
             fw.work_experience in (${works})) ffw on ffw.project_id = pp.id
         </if>
         <if test="dataVcType != '' and dataVcType != null">
@@ -683,6 +683,7 @@
         <if test="keyWords != '' and keyWords != null ">
             AND (pp.short_name like "%"#{keyWords}"%" or pp.full_name like "%"#{keyWords}"%" or pp.kernel_desc like "%"#{keyWords}"%" )
         </if>
+        and ii.short_name != "-"
         group by pp.short_name
         order by pp.evaluation_recommend desc
         limit #{offset},#{pageSize}
@@ -726,7 +727,7 @@
             fw.work_experience in (${works})) ffw on ffw.project_id = pp.id
         </if>
         <if test="dataVcType != '' and dataVcType != null">
-            right join (select iip.project_id from investment_institutions_project iip left join investment_institutions
+            left join (select iip.project_id from investment_institutions_project iip left join investment_institutions
             ii on iip.investment_institutions_id = ii.id and ii.type in (${dataVcType})) iid on iid.project_id = pp.id
         </if>
         where pp.short_name is not NULL and pp.short_name != ''
@@ -739,7 +740,7 @@
         <if test="keyWords != '' and keyWords != null ">
             AND (pp.short_name like "%"#{keyWords}"%" or pp.full_name like "%"#{keyWords}"%" or pp.kernel_desc like "%"#{keyWords}"%" )
         </if>
-
+        and ii.short_name != "-"
         group by pp.short_name
         <if test="financingOrder != '' and financingOrder != null">
             order by pp.financing_time desc
@@ -784,7 +785,7 @@
             fw.work_experience in (${works})) ffw on ffw.project_id = pp.id
         </if>
         <if test="dataVcType != '' and dataVcType != null">
-            right join (select iip.project_id from investment_institutions_project iip left join investment_institutions
+            left join (select iip.project_id from investment_institutions_project iip left join investment_institutions
             ii on iip.investment_institutions_id = ii.id and ii.type in (${dataVcType})) iid on iid.project_id = pp.id
         </if>
         where pp.short_name is not NULL and pp.short_name != ''
@@ -798,13 +799,12 @@
             AND (pp.short_name like "%"#{keyWords}"%" or pp.full_name like "%"#{keyWords}"%" or pp.kernel_desc like "%"#{keyWords}"%" )
         </if>
 
-
         <if test="financingRecently != '' and financingRecently != null">
             and pp.project_source is not null
             and pp.yn = 1
         </if>
         <!--and pfl.financing_time between #{beginTime} and #{endTime}-->
-
+        and ii.short_name != "-"
         group by pp.short_name
         <if test="financingOrder != '' and financingOrder != null">
             order by pp.financing_time desc
@@ -837,7 +837,7 @@
             fw.work_experience in (${works})) ffw on ffw.project_id = p.id
         </if>
         <if test="dataVcType != '' and dataVcType != null">
-            right join (select iip.project_id from investment_institutions_project iip left join investment_institutions
+            left join (select iip.project_id from investment_institutions_project iip left join investment_institutions
             ii on iip.investment_institutions_id = ii.id and ii.type in (${dataVcType})) iid on iid.project_id = p.id
         </if>
         where p.short_name is not NULL and p.short_name != '' and p.short_name not in ('个人投资人','天使投资人')
@@ -857,6 +857,7 @@
         <if test="beginTime != '' and beginTime != null and endTime != '' and endTime != ''">
             and pfl.financing_time between #{beginTime} and #{endTime}
         </if>
+        and ii.short_name != "-"
         group BY ii.short_name
         order by ct desc
         limit #{offset},#{pageSize}
