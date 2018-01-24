@@ -1471,26 +1471,22 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	@Override
 	public CommonDto<Object> listProParts(Integer appid, Integer proType,Integer proId) {
 		CommonDto<Object> result=new CommonDto<>();
-		Object partList = null;
-		if(proType==1) {//1代表产业公司即项目
-			
-		}else if(proType==2) {
-			InvestmentInstitutionsAddressPart iiap=new InvestmentInstitutionsAddressPart();
-			iiap.setInvestmentInstitutionId(proId);
-			//获取该机构的所有分部信息
-			List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.select(iiap);
-			if(list != null) {
-				for(InvestmentInstitutionsAddressPart tmp:list) {
-					InvestmentInstitutionsAddress iia =new InvestmentInstitutionsAddress();
-					iia.setInvestmentInstitutionId(proId);
-					iia = investmentInstitutionsAddressMapper.selectOne(iia);
-					//设置总部邮箱
-					tmp.setHeadQuartersEmail(iia.getEmail());
-				}
-			}
-			partList=list;
-		}
-		result.setData(partList);
+//		Object partList = null;
+		InvestmentInstitutionsAddressPart iiap=new InvestmentInstitutionsAddressPart();
+		iiap.setInvestmentInstitutionId(proId);
+		//获取该机构的所有分部信息
+		List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.select(iiap);
+//		if(list != null) {
+//			for(InvestmentInstitutionsAddressPart tmp:list) {
+//				InvestmentInstitutionsAddress iia =new InvestmentInstitutionsAddress();
+//				iia.setInvestmentInstitutionId(proId);
+//				iia = investmentInstitutionsAddressMapper.selectOne(iia);
+//				//设置总部邮箱
+//				tmp.setHeadQuartersEmail(iia.getEmail());
+//			}
+//		}
+//		partList=list;
+		result.setData(list);
 		result.setStatus(200);
 		result.setMessage("success");  
 		
@@ -1504,6 +1500,20 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		iiap.setId(partId);
 		iiap.setYn(1);
 		investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(iiap);
+		result.setData(true);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> saveOrUpdayePart(Integer appid, InvestmentInstitutionsAddressPart body) {
+		CommonDto<Boolean> result =new CommonDto<Boolean>();
+		if(body.getId()!=null) {//更新操作
+			investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(body);
+		}else {//插入操作
+			investmentInstitutionsAddressPartMapper.insertSelective(body);
+		}
 		result.setData(true);
 		result.setMessage("success");
 		result.setStatus(200);

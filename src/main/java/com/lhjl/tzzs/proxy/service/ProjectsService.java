@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsProject;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
@@ -199,6 +200,13 @@ public interface ProjectsService {
      * @return
      */
 	CommonDto<Boolean> removePartInfoById(Integer appid, Integer partId);
+	/**
+	 * 保存或者更新地址分部的信息
+	 * @param appid
+	 * @param body
+	 * @return
+	 */
+	CommonDto<Boolean> saveOrUpdayePart(Integer appid, InvestmentInstitutionsAddressPart body);
 	
 	
 }

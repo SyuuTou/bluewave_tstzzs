@@ -49,6 +49,12 @@ public class InvestmentInstitutionsAddressPart {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    /**
+     * 分部独立邮箱
+     */
+    @Column(name = "part_email")
+    private String partEmail;
+
     private BigDecimal longitude;
 
     private BigDecimal latitude;
@@ -58,12 +64,12 @@ public class InvestmentInstitutionsAddressPart {
      */
     private Integer yn;
     /**
-     * 公司邮箱
+     * 公司总部邮箱
      */
     @Transient
     private String headQuartersEmail;
     
-    
+
     public String getHeadQuartersEmail() {
 		return headQuartersEmail;
 	}
@@ -213,6 +219,24 @@ public class InvestmentInstitutionsAddressPart {
     }
 
     /**
+     * 获取分部独立邮箱
+     *
+     * @return part_email - 分部独立邮箱
+     */
+    public String getPartEmail() {
+        return partEmail;
+    }
+
+    /**
+     * 设置分部独立邮箱
+     *
+     * @param partEmail 分部独立邮箱
+     */
+    public void setPartEmail(String partEmail) {
+        this.partEmail = partEmail;
+    }
+
+    /**
      * @return longitude
      */
     public BigDecimal getLongitude() {
@@ -263,8 +287,8 @@ public class InvestmentInstitutionsAddressPart {
 		return "InvestmentInstitutionsAddressPart [id=" + id + ", investmentInstitutionId=" + investmentInstitutionId
 				+ ", name=" + name + ", town=" + town + ", detailAddress=" + detailAddress + ", phoneCountryCode="
 				+ phoneCountryCode + ", phoneDistrictCode=" + phoneDistrictCode + ", phoneNumber=" + phoneNumber
-				+ ", longitude=" + longitude + ", latitude=" + latitude + ", yn=" + yn + ", headQuartersEmail="
-				+ headQuartersEmail + "]";
+				+ ", partEmail=" + partEmail + ", longitude=" + longitude + ", latitude=" + latitude + ", yn=" + yn
+				+ ", headQuartersEmail=" + headQuartersEmail + "]";
 	}
     
 }
