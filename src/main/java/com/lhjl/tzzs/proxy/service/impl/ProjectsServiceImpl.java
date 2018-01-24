@@ -1510,6 +1510,20 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		return result;
 	}
 
+	@Override
+	public CommonDto<Boolean> saveOrUpdayePart(Integer appid, InvestmentInstitutionsAddressPart body) {
+		CommonDto<Boolean> result =new CommonDto<Boolean>();
+		if(body.getId()!=null) {//更新操作
+			investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(body);
+		}else {//插入操作
+			investmentInstitutionsAddressPartMapper.insertSelective(body);
+		}
+		result.setData(true);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
 
 
 }

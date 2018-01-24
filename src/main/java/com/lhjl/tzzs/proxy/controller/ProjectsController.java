@@ -51,16 +51,16 @@ public class ProjectsController extends GenericController{
     @Value("${pageSize}")
     private String defaultPageSize;
     /**
-     * 保存或者更新公司地址分部的信息
+     * 保存或者更新公司(投资机构)地址分部的信息
      * @param appid
      * @param body
      * @return
      */
     @PostMapping("/v{appid}/saveorupdate/part")  
-    /*public CommonDto<Boolean> saveOrUpdate(@PathVariable Integer appid,@RequestBody PartInputDto body){
+    public CommonDto<Boolean> saveOrUpdate(@PathVariable Integer appid,@RequestBody InvestmentInstitutionsAddressPart body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result=projectsService.saveOrUpdayePart(appid,partId);
+    		result=projectsService.saveOrUpdayePart(appid,body);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
@@ -69,7 +69,7 @@ public class ProjectsController extends GenericController{
     		result.setStatus(500);
 	    }
     	return result;
-    }*/
+    }
     /**
      * 根据id删除分部信息
      * @param appid
@@ -91,7 +91,7 @@ public class ProjectsController extends GenericController{
     	return result;
     }
     /**
-     * 项目公司的列表信息******业务需求有待明确
+     * 项目分部的列表信息******业务需求有待明确
      * @param appid 扩展字段
      * @param proType 项目的类别(根据不同的项目类别来列举不同项目的分部信息：1代表项目【产业公司】;2代表机构)
      * @param proId 项目或者投资机构等的id
