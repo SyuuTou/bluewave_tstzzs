@@ -103,6 +103,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
     private MetaJobTypeMapper metaJobTypeMapper;
     @Autowired
     private RecruitmentMapper recruitmentMapper;
+    @Autowired
+    private RecruitmentInfoMapper recruitmentInfoMapper;
     /**
      * 查询我关注的项目
      *
@@ -1573,6 +1575,35 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		result.setStatus(200);
 		result.setMessage("success");  
 		
+		return result;
+	}
+
+	@Override
+	public CommonDto<RecruitmentInfo> echoRequirementInfo(Integer appid, Integer proId) {
+		CommonDto<RecruitmentInfo> result=new CommonDto<>();
+		RecruitmentInfo reci=new RecruitmentInfo();
+		reci.setProjectId(proId);
+		try {
+			reci = recruitmentInfoMapper.selectOne(reci);
+			result.setData(reci);
+			result.setStatus(200);
+			result.setMessage("success"); 
+		}catch(Exception e) {
+			result.setData(null);
+			result.setStatus(200);
+			result.setMessage("项目id不唯一，数据产生错误"); 
+			return result;
+		}
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> editRequirementInfo(Integer appid, RecruitmentInfo body) {
+		CommonDto<Boolean> result=new CommonDto<Boolean>();
+		recruitmentInfoMapper.updateByPrimaryKeySelective(body);
+		result.setData(true);
+		result.setStatus(200);
+		result.setMessage("success");
 		return result;
 	}
 

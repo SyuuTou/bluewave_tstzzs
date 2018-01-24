@@ -50,18 +50,39 @@ public class ProjectsController extends GenericController{
 
     @Value("${pageSize}")  
     private String defaultPageSize;
+    
     /**
-     * 招聘信息列表
+     * 招聘需求信息编辑
+     * @param appid
+     * @param body 招聘需求请求体
+     * @return
+     */
+    @PutMapping("/v{appid}/edit/recruitmentrequirement")
+    public CommonDto<Boolean> editRecruInfo(@PathVariable Integer appid,@RequestBody RecruitmentInfo body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.editRequirementInfo(appid,body);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 招聘需求信息回显
      * @param appid
      * @param proId 项目id
      * @return
      */
-    @GetMapping("/v{appid}/list/recruitmentinfo")
-    public CommonDto<List<Recruitment>> listRecruInfo(@PathVariable Integer appid,Integer proId){
-    	CommonDto<List<Recruitment>> result =new CommonDto<>();
+    @GetMapping("/v{appid}/echo/recruitmentrequirement")
+    public CommonDto<RecruitmentInfo> echoRecruInfo(@PathVariable Integer appid,Integer proId){
+    	CommonDto<RecruitmentInfo> result =new CommonDto<>();
     	try {
-    		result=projectsService.listRecruInfos(appid,proId);
-	    }catch(Exception e) {  
+    		result=projectsService.echoRequirementInfo(appid,proId);
+	    }catch(Exception e) {
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
     		result.setData(null);
@@ -71,9 +92,9 @@ public class ProjectsController extends GenericController{
     	return result;
     }
     /**
-     * 根据id删除招聘信息
+     * 根据id删除招聘职位信息
      * @param appid
-     * @param id 招聘信息id
+     * @param id 招聘职位信息id
      * @return
      */
     @DeleteMapping("/v{appid}/del/recruitmentbyid")
@@ -91,9 +112,9 @@ public class ProjectsController extends GenericController{
     	return result;
     }
     /**
-     * 保存或者公司招聘信息
+     * 保存或者更新公司招聘职位信息
      * @param appid
-     * @param body 公司的招聘信息
+     * @param body 公司的招聘职位信息
      * @return
      */
     @PostMapping("/v{appid}/saveorupdate/recruitment")  

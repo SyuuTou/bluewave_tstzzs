@@ -14,6 +14,7 @@ import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.ProjectFollowStatus;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.model.Recruitment;
+import com.lhjl.tzzs.proxy.model.RecruitmentInfo;
 
 
 /**
@@ -230,12 +231,26 @@ public interface ProjectsService {
      */
 	CommonDto<Boolean> removeRecruInfoById(Integer appid, Integer id);
 	/**
-     * 招聘信息列表
+     * 招聘职位信息列表
      * @param appid
      * @param proId 项目id
      * @return
      */
 	CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer proId);
+	/**
+     * 招聘需求信息回显
+     * @param appid
+     * @param proId 项目id
+     * @return
+     */
+	CommonDto<RecruitmentInfo> echoRequirementInfo(Integer appid, Integer proId);
+	/**
+     * 招聘需求信息编辑
+     * @param appid
+     * @param body 招聘需求请求体
+     * @return
+     */
+	CommonDto<Boolean> editRequirementInfo(Integer appid, RecruitmentInfo body);
 	
 	
 }
