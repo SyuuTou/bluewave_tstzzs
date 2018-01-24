@@ -13,6 +13,7 @@ import com.lhjl.tzzs.proxy.model.MetaJobType;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.ProjectFollowStatus;
 import com.lhjl.tzzs.proxy.model.Projects;
+import com.lhjl.tzzs.proxy.model.Recruitment;
 
 
 /**
@@ -214,6 +215,27 @@ public interface ProjectsService {
      * @return
      */
 	CommonDto<List<MetaJobType>> getMetaJobTypes(Integer appid);
+	/**
+     * 保存或者公司招聘信息
+     * @param appid
+     * @param body 公司的招聘信息
+     * @return
+     */
+	CommonDto<Boolean> saveOrUpdateRecruitment(Integer appid, Recruitment body);
+	/**
+     * 根据id删除招聘信息
+     * @param appid
+     * @param partId 招聘信息id
+     * @return
+     */
+	CommonDto<Boolean> removeRecruInfoById(Integer appid, Integer id);
+	/**
+     * 招聘信息列表
+     * @param appid
+     * @param proId 项目id
+     * @return
+     */
+	CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer proId);
 	
 	
 }

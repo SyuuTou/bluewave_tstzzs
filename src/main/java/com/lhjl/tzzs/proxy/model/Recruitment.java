@@ -30,8 +30,8 @@ public class Recruitment {
     /**
      * 工作地点
      */
-    @Column(name = "job_address")
-    private String jobAddress;
+    @Column(name = "address_details")
+    private String addressDetails;
 
     /**
      * 是否全职：0代表否；1代表是
@@ -87,10 +87,10 @@ public class Recruitment {
     private Date createTime;
 
     /**
-     * 更新时间
+     * 最后一次更新时间
      */
-    @Column(name = "update_time")
-    private Date updateTime;
+    @Column(name = "last_update_time")
+    private Date lastUpdateTime;
 
     /**
      * 创建用户
@@ -180,19 +180,19 @@ public class Recruitment {
     /**
      * 获取工作地点
      *
-     * @return job_address - 工作地点
+     * @return address_details - 工作地点
      */
-    public String getJobAddress() {
-        return jobAddress;
+    public String getAddressDetails() {
+        return addressDetails;
     }
 
     /**
      * 设置工作地点
      *
-     * @param jobAddress 工作地点
+     * @param addressDetails 工作地点
      */
-    public void setJobAddress(String jobAddress) {
-        this.jobAddress = jobAddress;
+    public void setAddressDetails(String addressDetails) {
+        this.addressDetails = addressDetails;
     }
 
     /**
@@ -358,21 +358,21 @@ public class Recruitment {
     }
 
     /**
-     * 获取更新时间
+     * 获取最后一次更新时间
      *
-     * @return update_time - 更新时间
+     * @return last_update_time - 最后一次更新时间
      */
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getLastUpdateTime() {
+        return lastUpdateTime;
     }
 
     /**
-     * 设置更新时间
+     * 设置最后一次更新时间
      *
-     * @param updateTime 更新时间
+     * @param lastUpdateTime 最后一次更新时间
      */
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setLastUpdateTime(Date lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
     }
 
     /**
