@@ -99,6 +99,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
     private InvestmentInstitutionsAddressPartMapper investmentInstitutionsAddressPartMapper;
     @Autowired
     private InvestmentInstitutionsAddressMapper investmentInstitutionsAddressMapper;
+    @Autowired
+    private MetaJobTypeMapper metaJobTypeMapper;
 
     /**
      * 查询我关注的项目
@@ -1515,6 +1517,16 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			investmentInstitutionsAddressPartMapper.insertSelective(body);
 		}
 		result.setData(true);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<MetaJobType>> getMetaJobTypes(Integer appid) {
+		CommonDto<List<MetaJobType>> result =new CommonDto<>();
+		
+		result.setData(metaJobTypeMapper.selectAll());
 		result.setMessage("success");
 		result.setStatus(200);
 		return result;
