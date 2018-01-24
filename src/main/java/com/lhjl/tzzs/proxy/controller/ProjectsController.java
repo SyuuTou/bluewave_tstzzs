@@ -337,7 +337,7 @@ public class ProjectsController extends GenericController{
     }
     
     /**
-     * 获取项目的融资历史信息
+     * 获取项目的融资历史信息列表
      * @param appid
      * @param projectId
      * @return
@@ -359,14 +359,14 @@ public class ProjectsController extends GenericController{
     /**
      * 删除融资历史表的单条
      * @param appid
-     * @param financiingLogId
+     * @param id融资历史表的主键id
      * @return
      */
-    @PutMapping("/v{appid}/removefinancinglog")
-    public CommonDto<Boolean> removeFinancingLogById(@PathVariable("appid") Integer appid,@RequestBody FinancingLogDelInputDto body){
+    @DeleteMapping("/v{appid}/removefinancinglog")
+    public CommonDto<Boolean> removeFinancingLogById(@PathVariable("appid") Integer appid,Integer id){
     	CommonDto<Boolean> result=new CommonDto<>();
     	try {
-    		result=projectsService.removeFinancingLogById(appid,body);
+    		result=projectsService.removeFinancingLogById(appid,id);
     	}catch(Exception e) {
     		this.LOGGER.info(e.getMessage(), e.fillInStackTrace());
     		result.setData(false);

@@ -137,7 +137,7 @@ public interface ProjectsService {
 	 * @param financiingLogId 融资历史记录的标识id
 	 * @return
 	 */
-	CommonDto<Boolean> removeFinancingLogById(Integer appid, FinancingLogDelInputDto body);
+	CommonDto<Boolean> removeFinancingLogById(Integer appid, Integer id);
 
 	/**
 	 * 根据项目id获取项目跟进状态的接口
