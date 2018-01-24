@@ -48,7 +48,7 @@ public class ProjectsController extends GenericController{
     @Value("${pageNum}")  
     private String defaultPageNum;
 
-    @Value("${pageSize}")
+    @Value("${pageSize}")  
     private String defaultPageSize;
     /**
      * 招聘信息列表
