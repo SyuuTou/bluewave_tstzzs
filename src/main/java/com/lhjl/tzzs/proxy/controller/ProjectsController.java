@@ -45,7 +45,7 @@ public class ProjectsController extends GenericController{
     @Resource
     private ProjectsService projectsService;
 
-    @Value("${pageNum}")
+    @Value("${pageNum}")  
     private String defaultPageNum;
 
     @Value("${pageSize}")
