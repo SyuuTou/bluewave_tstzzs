@@ -50,6 +50,7 @@ public class ProjectsController extends GenericController{
 
     @Value("${pageSize}")
     private String defaultPageSize;
+    
     /**
      * 保存或者更新公司(投资机构)地址分部的信息
      * @param appid
