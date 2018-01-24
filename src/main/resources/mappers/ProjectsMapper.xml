@@ -880,16 +880,16 @@
         </if>
 
         <if test="statisticsType == 'ffe.education_experience'.toString()  or works != '' or  works != null">
-            right join (select f.project_id,fe.education_experience from founders f right join founders_education fe on fe.founder_ID = f.id
+            left join (select f.project_id,fe.education_experience from founders f right join founders_education fe on fe.founder_ID = f.id
              ) ffe on ffe.project_id = p.id
         </if>
 
         <if test="statisticsType == 'ffw.work_experience'.toString() or edus != null or edus != ''">
-            right join (select f.project_id,fw.work_experience  from founders f right join founders_work fw on fw.founder_ID = f.id ) ffw on ffw.project_id = p.id
+            left join (select f.project_id,fw.work_experience  from founders f right join founders_work fw on fw.founder_ID = f.id ) ffw on ffw.project_id = p.id
         </if>
 
         <if test="dataVcType != '' and dataVcType != null">
-            right join (select iip.project_id from investment_institutions_project iip left join investment_institutions
+            left join (select iip.project_id from investment_institutions_project iip left join investment_institutions
             ii on iip.investment_institutions_id = ii.id and ii.type in (${dataVcType})) iid on iid.project_id = p.id
         </if>
         <where> p.short_name is not NULL and p.short_name != ''
