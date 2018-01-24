@@ -57,7 +57,7 @@ public class ProjectsController extends GenericController{
      * @param body 招聘需求请求体
      * @return
      */
-    @PutMapping("/v{appid}/edit/recruitmentrequirement")
+    @PutMapping("/v{appid}/edit/recruitmentrequirement")  
     public CommonDto<Boolean> editRecruInfo(@PathVariable Integer appid,@RequestBody RecruitmentInfo body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
