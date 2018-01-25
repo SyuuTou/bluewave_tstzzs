@@ -105,6 +105,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
     private RecruitmentMapper recruitmentMapper;
     @Autowired
     private RecruitmentInfoMapper recruitmentInfoMapper;
+    @Autowired
+    private ProjectProgressMapper projectProgressMapper;
     /**
      * 查询我关注的项目
      *
@@ -1603,6 +1605,58 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		result.setData(true);
 		result.setStatus(200);
 		result.setMessage("success");
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<ProjectProgress>> listProProgress(Integer appid, Integer companyId) {
+		CommonDto<List<ProjectProgress>> result=new CommonDto<>();
+		ProjectProgress pp=new ProjectProgress();
+		pp.setCompanyId(companyId);
+		pp.setYn(0);
+		List<ProjectProgress> pps = projectProgressMapper.select(pp);
+		if(pps!=null) {
+			pps.forEach((e)->{
+				Users user = usersMapper.selectByPrimaryKey(e.getOperationUser());
+				e.setUserName(user.getActualName());
+			});
+		}
+		result.setData(pps);
+		result.setStatus(200);
+		result.setMessage("success");  
+		
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> saveOrUpdateProgressInfo(Integer appid, ProjectProgress body) {
+		CommonDto<Boolean> result=new CommonDto<>();
+		if(body.getId()!=null) {//更新
+			body.setOperationTime(new Date());
+			projectProgressMapper.updateByPrimaryKeySelective(body);
+		}else {//插入
+			body.setOperationTime(new Date());
+			body.setYn(0);
+			projectProgressMapper.insertSelective(body);
+		}
+		
+		result.setData(true);
+		result.setStatus(200);
+		result.setMessage("success");  
+		
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> removeProgressInfoById(Integer appid, Integer id) {
+		CommonDto<Boolean> result=new CommonDto<>();
+		ProjectProgress pp=new ProjectProgress();
+		pp.setId(id);
+		pp.setYn(1);
+		projectProgressMapper.updateByPrimaryKeySelective(pp);
+		result.setData(true);
+		result.setStatus(200);
+		result.setMessage("success"); 
 		return result;
 	}
 }

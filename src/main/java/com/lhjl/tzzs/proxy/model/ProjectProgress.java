@@ -37,8 +37,19 @@ public class ProjectProgress {
      * 删除标志:0代表有效；1代表无效
      */
     private Integer yn;
+    @Transient
+    private String userName;
+    
 
-    /**
+    public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
      * @return id
      */
     public Integer getId() {
@@ -141,4 +152,12 @@ public class ProjectProgress {
     public void setYn(Integer yn) {
         this.yn = yn;
     }
+
+	@Override
+	public String toString() {
+		return "ProjectProgress [id=" + id + ", companyId=" + companyId + ", progressInfo=" + progressInfo
+				+ ", operationUser=" + operationUser + ", operationTime=" + operationTime + ", yn=" + yn + ", userName="
+				+ userName + "]";
+	}
+    
 }
