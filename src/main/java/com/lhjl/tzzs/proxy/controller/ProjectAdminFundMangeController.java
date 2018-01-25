@@ -4,7 +4,6 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectManageDto;
 import com.lhjl.tzzs.proxy.model.MetaInvestType;
 import com.lhjl.tzzs.proxy.service.ProjectAdminManageService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
