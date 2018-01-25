@@ -105,6 +105,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
     private RecruitmentMapper recruitmentMapper;
     @Autowired
     private RecruitmentInfoMapper recruitmentInfoMapper;
+    @Autowired
+    private ProjectProgressMapper projectProgressMapper;
     /**
      * 查询我关注的项目
      *
@@ -1250,19 +1252,20 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 				List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
 				
 				//用于获取所有的机构信息
-				List<InvestmentInstitutions> investmentInstitutions=new ArrayList<>();
-//				List<String> institutionShortNames=new ArrayList<>();
+//				List<InvestmentInstitutions> investmentInstitutions=new ArrayList<>();
+				List<String> institutionShortNames=new ArrayList<>();
 				if(iips != null) {
 					for(InvestmentInstitutionsProject obj:iips) {
 						//根据机构id获取机构的相关信息
 						InvestmentInstitutions instiOne = investmentInstitutionsMapper.selectByPrimaryKey(obj.getInvestmentInstitutionsId());
 						if(instiOne != null) {
-							investmentInstitutions.add(instiOne);
-//							institutionShortNames.add(instiOne.getShortName());
+//							investmentInstitutions.add(instiOne);
+							institutionShortNames.add(instiOne.getShortName());
 						}
 					}
 				}
-				e.setInstitutions(investmentInstitutions);
+//				e.setInstitutions(investmentInstitutions);
+				e.setInstitutionsShortNames(institutionShortNames);
 			});
 		}
 		
@@ -1340,6 +1343,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			projectFinancingLogMapper.insertSelective(body);
 			afterUpdateLogId=body.getId();
 		}
+		
 		//获取该融资历史信息的相关的投资方的相关信息
 		List<String> shortNames = body.getInstitutionsShortNames();
 		if((shortNames != null) && (shortNames.size()!=0)) {
@@ -1567,7 +1571,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	public CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer proId) {
 		CommonDto<List<Recruitment>> result=new CommonDto<>();
 		Recruitment rec=new Recruitment();
-		rec.setProjectId(proId);
+		rec.setCompanyId(proId);
 		
 		result.setData(recruitmentMapper.select(rec));
 		result.setStatus(200);
@@ -1580,7 +1584,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	public CommonDto<RecruitmentInfo> echoRequirementInfo(Integer appid, Integer proId) {
 		CommonDto<RecruitmentInfo> result=new CommonDto<>();
 		RecruitmentInfo reci=new RecruitmentInfo();
-		reci.setProjectId(proId);
+		reci.setCompanyId(proId);
 		try {
 			reci = recruitmentInfoMapper.selectOne(reci);
 			result.setData(reci);
@@ -1602,6 +1606,58 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		result.setData(true);
 		result.setStatus(200);
 		result.setMessage("success");
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<ProjectProgress>> listProProgress(Integer appid, Integer companyId) {
+		CommonDto<List<ProjectProgress>> result=new CommonDto<>();
+		ProjectProgress pp=new ProjectProgress();
+		pp.setCompanyId(companyId);
+		pp.setYn(0);
+		List<ProjectProgress> pps = projectProgressMapper.select(pp);
+		if(pps!=null) {
+			pps.forEach((e)->{
+				Users user = usersMapper.selectByPrimaryKey(e.getOperationUser());
+				e.setUserName(user.getActualName());
+			});
+		}
+		result.setData(pps);
+		result.setStatus(200);
+		result.setMessage("success");  
+		
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> saveOrUpdateProgressInfo(Integer appid, ProjectProgress body) {
+		CommonDto<Boolean> result=new CommonDto<>();
+		if(body.getId()!=null) {//更新
+			body.setOperationTime(new Date());
+			projectProgressMapper.updateByPrimaryKeySelective(body);
+		}else {//插入
+			body.setOperationTime(new Date());
+			body.setYn(0);
+			projectProgressMapper.insertSelective(body);
+		}
+		
+		result.setData(true);
+		result.setStatus(200);
+		result.setMessage("success");  
+		
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> removeProgressInfoById(Integer appid, Integer id) {
+		CommonDto<Boolean> result=new CommonDto<>();
+		ProjectProgress pp=new ProjectProgress();
+		pp.setId(id);
+		pp.setYn(1);
+		projectProgressMapper.updateByPrimaryKeySelective(pp);
+		result.setData(true);
+		result.setStatus(200);
+		result.setMessage("success"); 
 		return result;
 	}
 }

@@ -50,7 +50,66 @@ public class ProjectsController extends GenericController{
 
     @Value("${pageSize}")  
     private String defaultPageSize;
-    
+    /**
+     * 根据id删除进展的信息
+     * @param appid
+     * @param id 进展的id
+     * @return
+     */
+    @DeleteMapping("/v{appid}/del/progressinfobyid")
+    public CommonDto<Boolean> deleteProgressInfoById(@PathVariable Integer appid,Integer id){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.removeProgressInfoById(appid,id);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 增加或者更新公司进展的消息
+     * @param appid
+     * @param body
+     * @return
+     */
+    @PostMapping("/v{appid}/saveorupdate/progress")
+    public CommonDto<Boolean> saveOrUpdateProgressInfo(@PathVariable("appid") Integer appid,@RequestBody ProjectProgress body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.saveOrUpdateProgressInfo(appid,body);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 公司进展列表
+     * @param appid
+     * @param companyId 公司id
+     * @return
+     */
+    @GetMapping("/v{appid}/list/project/progress")
+    public CommonDto<List<ProjectProgress>> listProProgress(@PathVariable("appid") Integer appid,Integer companyId){
+    	CommonDto<List<ProjectProgress>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.listProProgress(appid,companyId);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
     /**
      * 招聘需求信息编辑
      * @param appid
@@ -375,8 +434,9 @@ public class ProjectsController extends GenericController{
     	}
     	return result;
     }
+    
     /**
-     * 获取融资状态的所有数据
+     * 获取融资历史表中所有的融资状态
      * @param appid
      * @return
      */

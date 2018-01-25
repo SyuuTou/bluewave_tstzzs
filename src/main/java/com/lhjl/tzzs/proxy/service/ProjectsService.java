@@ -12,6 +12,7 @@ import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
 import com.lhjl.tzzs.proxy.model.MetaJobType;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.ProjectFollowStatus;
+import com.lhjl.tzzs.proxy.model.ProjectProgress;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.model.Recruitment;
 import com.lhjl.tzzs.proxy.model.RecruitmentInfo;
@@ -251,6 +252,26 @@ public interface ProjectsService {
      * @return
      */
 	CommonDto<Boolean> editRequirementInfo(Integer appid, RecruitmentInfo body);
-	
+	/**
+     * 公司进展列表
+     * @param appid
+     * @param companyId 公司id
+     * @return
+     */
+	CommonDto<List<ProjectProgress>> listProProgress(Integer appid, Integer companyId);
+	/**
+     * 增加公司进展的消息
+     * @param appid
+     * @param body
+     * @return
+     */
+	CommonDto<Boolean> saveOrUpdateProgressInfo(Integer appid, ProjectProgress body);
+	 /**
+     * 根据id删除进展的信息
+     * @param appid
+     * @param id 进展的id
+     * @return
+     */
+	CommonDto<Boolean> removeProgressInfoById(Integer appid, Integer id);
 	
 }
