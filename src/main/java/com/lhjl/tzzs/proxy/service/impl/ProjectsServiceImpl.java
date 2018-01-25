@@ -1252,19 +1252,20 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 				List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
 				
 				//用于获取所有的机构信息
-				List<InvestmentInstitutions> investmentInstitutions=new ArrayList<>();
-//				List<String> institutionShortNames=new ArrayList<>();
+//				List<InvestmentInstitutions> investmentInstitutions=new ArrayList<>();
+				List<String> institutionShortNames=new ArrayList<>();
 				if(iips != null) {
 					for(InvestmentInstitutionsProject obj:iips) {
 						//根据机构id获取机构的相关信息
 						InvestmentInstitutions instiOne = investmentInstitutionsMapper.selectByPrimaryKey(obj.getInvestmentInstitutionsId());
 						if(instiOne != null) {
-							investmentInstitutions.add(instiOne);
-//							institutionShortNames.add(instiOne.getShortName());
+//							investmentInstitutions.add(instiOne);
+							institutionShortNames.add(instiOne.getShortName());
 						}
 					}
 				}
-				e.setInstitutions(investmentInstitutions);
+//				e.setInstitutions(investmentInstitutions);
+				e.setInstitutionsShortNames(institutionShortNames);
 			});
 		}
 		
