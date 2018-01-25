@@ -130,7 +130,6 @@ public interface ProjectsService {
 	/**
 	 * 删除单条的融资历史记录信息
 	 * @param appid
-	 * @param financiingLogId 融资历史记录的标识id
 	 * @return
 	 */
 	CommonDto<Boolean> removeFinancingLogById(Integer appid, FinancingLogDelInputDto body);
@@ -180,7 +179,6 @@ public interface ProjectsService {
 	/**
      * 更新公司相关信息(主要用于更新项目简介 以及 投资亮点)
      * @param appid
-     * @param proId
      * @return
      */
 	CommonDto<Boolean> updateProInfos(Integer appid, Projects body);
@@ -191,6 +189,5 @@ public interface ProjectsService {
      * @return
      */
 	CommonDto<List<Object>> listProParts(Integer appid, Integer proType);
-	
 	
 }

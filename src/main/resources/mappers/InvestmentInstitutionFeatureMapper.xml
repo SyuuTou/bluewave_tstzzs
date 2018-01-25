@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionFeatureMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionFeature">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="investment_philosophy" jdbcType="VARCHAR" property="investmentPhilosophy" />
+    <result column="investment_requirement" jdbcType="VARCHAR" property="investmentRequirement" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+  </resultMap>
+</mapper>
