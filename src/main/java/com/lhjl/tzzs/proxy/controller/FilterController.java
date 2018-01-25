@@ -28,6 +28,8 @@ public class FilterController extends GenericController {
         try {
             result = projectSearchService.projectFilter(reqDto);
         } catch (Exception e) {
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+
             result= new CommonDto<>();
             result.setStatus(500);
             result.setMessage("服务器端发生错误");
