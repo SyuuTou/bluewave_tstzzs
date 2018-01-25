@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
 
 @RestController
 public class InvestorListController {
@@ -17,7 +18,7 @@ public class InvestorListController {
 	 * @return
 	 */
     @PostMapping("/v{appid}/list/investors")
-    public CommonDto<Object> getInvestorsInfo(@PathVariable Integer appid,@RequestBody Object sendsecuritycodeReqBody){
+    public CommonDto<Object> getInvestorsInfo(@PathVariable Integer appid,@RequestBody InvestorListInputDto body){
     	CommonDto<Object> result =new CommonDto<>();
     	try {
     		
