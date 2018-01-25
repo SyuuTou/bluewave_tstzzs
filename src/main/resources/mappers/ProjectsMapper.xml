@@ -683,7 +683,6 @@
         <if test="keyWords != '' and keyWords != null ">
             AND (pp.short_name like "%"#{keyWords}"%" or pp.full_name like "%"#{keyWords}"%" or pp.kernel_desc like "%"#{keyWords}"%" )
         </if>
-        and ii.short_name != "-"
         group by pp.short_name
         order by pp.evaluation_recommend desc
         limit #{offset},#{pageSize}
@@ -740,7 +739,6 @@
         <if test="keyWords != '' and keyWords != null ">
             AND (pp.short_name like "%"#{keyWords}"%" or pp.full_name like "%"#{keyWords}"%" or pp.kernel_desc like "%"#{keyWords}"%" )
         </if>
-        and ii.short_name != "-"
         group by pp.short_name
         <if test="financingOrder != '' and financingOrder != null">
             order by pp.financing_time desc
@@ -804,7 +802,6 @@
             and pp.yn = 1
         </if>
         <!--and pfl.financing_time between #{beginTime} and #{endTime}-->
-        and ii.short_name != "-"
         group by pp.short_name
         <if test="financingOrder != '' and financingOrder != null">
             order by pp.financing_time desc
