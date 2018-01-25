@@ -48,8 +48,13 @@ public class ProjectAdminMangeServiceImpl implements ProjectAdminManageService {
             result.setData(null);
             return result;
         }
-
         InvestmentInstitutionFundManage investmentInstitutionFundManage = investmentInstitutionFundManageService.selectByPrimaryKey(companyId);
+        if(null == investmentInstitutionFundManage){
+            result.setStatus(300);
+            result.setMessage("failed");
+            result.setData(null);
+            return result;
+        }
         projectManageDto.setBpEmail(investmentInstitutionFundManage.getBpEmail());
         projectManageDto.setCompanyId(investmentInstitutionFundManage.getCompanyId());
         projectManageDto.setDollarAmount(investmentInstitutionFundManage.getDollarAmount());

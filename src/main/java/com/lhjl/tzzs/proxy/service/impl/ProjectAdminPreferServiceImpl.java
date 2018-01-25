@@ -49,6 +49,12 @@ public class ProjectAdminPreferServiceImpl implements ProjectAdminPreferService 
         }
 
         InvestmentInstitutionFeature investmentInstitutionFeature = investmentInstitutionFeatureService.selectByPrimaryKey(projectId);
+        if(null == investmentInstitutionFeature){
+            result.setStatus(300);
+            result.setMessage("failed");
+            result.setData(null);
+            return result;
+        }
         projectPreferDto.setProjectId(investmentInstitutionFeature.getCompanyId());
         projectPreferDto.setInvestmengRequirement(investmentInstitutionFeature.getInvestmentRequirement());
         projectPreferDto.setInvestmentPhilosophy(investmentInstitutionFeature.getInvestmentPhilosophy());
