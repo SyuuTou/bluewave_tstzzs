@@ -18,5 +18,4 @@ public class AliOssUtils {
             ossClient.shutdown();
         }
     }
-
 }

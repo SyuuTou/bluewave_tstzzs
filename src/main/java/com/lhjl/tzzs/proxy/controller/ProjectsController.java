@@ -45,28 +45,226 @@ public class ProjectsController extends GenericController{
     @Resource
     private ProjectsService projectsService;
 
-    @Value("${pageNum}")
+    @Value("${pageNum}")  
     private String defaultPageNum;
 
-    @Value("${pageSize}")
+    @Value("${pageSize}")  
     private String defaultPageSize;
-    
     /**
-     * 项目公司的列表信息******业务需求有待明确
-     * @param appid 扩展字段
-     * @param proType 项目的类别(根据不同的项目类别来列举不同项目的分部信息：1代表项目【产业公司】;2代表机构)
-     * @param proId 项目的id,根据该id去不同的项目类别中搜索对应的分部信息
+     * 根据id删除进展的信息
+     * @param appid
+     * @param id 进展的id
      * @return
      */
-    @GetMapping("/v{appid}/list/proparts{proId}")
-    public CommonDto<List<Object>> listProPart(@PathVariable("appid") Integer appid,Integer proType){
-    	CommonDto<List<Object>> result =new CommonDto<>();
+    @DeleteMapping("/v{appid}/del/progressinfobyid")
+    public CommonDto<Boolean> deleteProgressInfoById(@PathVariable Integer appid,Integer id){
+    	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result=projectsService.listProParts(appid,proType);
+    		result=projectsService.removeProgressInfoById(appid,id);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 增加或者更新公司进展的消息
+     * @param appid
+     * @param body
+     * @return
+     */
+    @PostMapping("/v{appid}/saveorupdate/progress")
+    public CommonDto<Boolean> saveOrUpdateProgressInfo(@PathVariable("appid") Integer appid,@RequestBody ProjectProgress body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.saveOrUpdateProgressInfo(appid,body);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 公司进展列表
+     * @param appid
+     * @param companyId 公司id
+     * @return
+     */
+    @GetMapping("/v{appid}/list/project/progress")
+    public CommonDto<List<ProjectProgress>> listProProgress(@PathVariable("appid") Integer appid,Integer companyId){
+    	CommonDto<List<ProjectProgress>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.listProProgress(appid,companyId);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
     		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 招聘需求信息编辑
+     * @param appid
+     * @param body 招聘需求请求体
+     * @return
+     */
+    @PutMapping("/v{appid}/edit/recruitmentrequirement")  
+    public CommonDto<Boolean> editRecruInfo(@PathVariable Integer appid,@RequestBody RecruitmentInfo body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.editRequirementInfo(appid,body);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 招聘需求信息回显
+     * @param appid
+     * @param proId 项目id
+     * @return
+     */
+    @GetMapping("/v{appid}/echo/recruitmentrequirement")
+    public CommonDto<RecruitmentInfo> echoRecruInfo(@PathVariable Integer appid,Integer proId){
+    	CommonDto<RecruitmentInfo> result =new CommonDto<>();
+    	try {
+    		result=projectsService.echoRequirementInfo(appid,proId);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 根据id删除招聘职位信息
+     * @param appid
+     * @param id 招聘职位信息id
+     * @return
+     */
+    @DeleteMapping("/v{appid}/del/recruitmentbyid")
+    public CommonDto<Boolean> deleteRecruInfoById(@PathVariable Integer appid,Integer id){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.removeRecruInfoById(appid,id);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 保存或者更新公司招聘职位信息
+     * @param appid
+     * @param body 公司的招聘职位信息
+     * @return
+     */
+    @PostMapping("/v{appid}/saveorupdate/recruitment")  
+    public CommonDto<Boolean> saveOrUpdateRecruitment(@PathVariable Integer appid,@RequestBody Recruitment body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.saveOrUpdateRecruitment(appid,body);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 获取岗位类型的元数据
+     * @param appid
+     * @return
+     */
+    @GetMapping("/v{appid}/source/jobtype")  
+    public CommonDto<List<MetaJobType>> getMetaJobTypes(@PathVariable Integer appid){
+    	CommonDto<List<MetaJobType>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getMetaJobTypes(appid);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 保存或者更新公司(投资机构)地址分部的信息
+     * @param appid
+     * @param body
+     * @return
+     */
+    @PostMapping("/v{appid}/saveorupdate/part")  
+    public CommonDto<Boolean> saveOrUpdatePart(@PathVariable Integer appid,@RequestBody InvestmentInstitutionsAddressPart body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.saveOrUpdayePart(appid,body);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 根据id删除分部信息
+     * @param appid
+     * @param partId 分部id
+     * @return
+     */
+    @DeleteMapping("/v{appid}/delete/part")
+    public CommonDto<Boolean> deletePartInfoById(@PathVariable Integer appid,Integer id){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result=projectsService.removePartInfoById(appid,id);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 项目分部的列表信息
+     * @param appid 扩展字段
+     * @param proType 项目的类别(根据不同的项目类别来列举不同项目的分部信息：1代表项目【产业公司】;2代表机构)
+     * @param proId 项目或者投资机构等的id
+     * @return
+     */
+    @GetMapping("/v{appid}/list/proparts{proId}/protype{proType}")
+    public CommonDto<Object> listProPart(@PathVariable("appid") Integer appid,@PathVariable("proType") Integer proType,@PathVariable("proId") Integer proId){
+    	CommonDto<Object> result =new CommonDto<>();
+    	try {
+    		result=projectsService.listProParts(appid,proType,proId);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(result);
     		result.setMessage("fail");
     		result.setStatus(500);
 	    }
@@ -198,7 +396,7 @@ public class ProjectsController extends GenericController{
     }
     
     /**
-     * 获取项目的融资历史信息
+     * 获取项目的融资历史信息列表
      * @param appid
      * @param projectId
      * @return
@@ -220,14 +418,14 @@ public class ProjectsController extends GenericController{
     /**
      * 删除融资历史表的单条
      * @param appid
-     * @param financiingLogId
+     * @param id融资历史表的主键id
      * @return
      */
-    @PutMapping("/v{appid}/removefinancinglog")
-    public CommonDto<Boolean> removeFinancingLogById(@PathVariable("appid") Integer appid,@RequestBody FinancingLogDelInputDto body){
+    @DeleteMapping("/v{appid}/removefinancinglog")
+    public CommonDto<Boolean> removeFinancingLogById(@PathVariable("appid") Integer appid,Integer id){
     	CommonDto<Boolean> result=new CommonDto<>();
     	try {
-    		result=projectsService.removeFinancingLogById(appid,body);
+    		result=projectsService.removeFinancingLogById(appid,id);
     	}catch(Exception e) {
     		this.LOGGER.info(e.getMessage(), e.fillInStackTrace());
     		result.setData(false);
@@ -236,8 +434,9 @@ public class ProjectsController extends GenericController{
     	}
     	return result;
     }
+    
     /**
-     * 获取融资状态的所有数据
+     * 获取融资历史表中所有的融资状态
      * @param appid
      * @return
      */

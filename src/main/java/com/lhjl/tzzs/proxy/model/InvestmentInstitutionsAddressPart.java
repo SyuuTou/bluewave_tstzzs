@@ -49,6 +49,12 @@ public class InvestmentInstitutionsAddressPart {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    /**
+     * 分部独立邮箱
+     */
+    @Column(name = "part_email")
+    private String partEmail;
+
     private BigDecimal longitude;
 
     private BigDecimal latitude;
@@ -57,8 +63,22 @@ public class InvestmentInstitutionsAddressPart {
      * 删除标志:0代表有效；1代表无效
      */
     private Integer yn;
-
     /**
+     * 公司总部邮箱
+     */
+    @Transient
+    private String headQuartersEmail;
+    
+
+    public String getHeadQuartersEmail() {
+		return headQuartersEmail;
+	}
+
+	public void setHeadQuartersEmail(String headQuartersEmail) {
+		this.headQuartersEmail = headQuartersEmail;
+	}
+
+	/**
      * @return id
      */
     public Integer getId() {
@@ -199,6 +219,24 @@ public class InvestmentInstitutionsAddressPart {
     }
 
     /**
+     * 获取分部独立邮箱
+     *
+     * @return part_email - 分部独立邮箱
+     */
+    public String getPartEmail() {
+        return partEmail;
+    }
+
+    /**
+     * 设置分部独立邮箱
+     *
+     * @param partEmail 分部独立邮箱
+     */
+    public void setPartEmail(String partEmail) {
+        this.partEmail = partEmail;
+    }
+
+    /**
      * @return longitude
      */
     public BigDecimal getLongitude() {
@@ -243,4 +281,14 @@ public class InvestmentInstitutionsAddressPart {
     public void setYn(Integer yn) {
         this.yn = yn;
     }
+
+	@Override
+	public String toString() {
+		return "InvestmentInstitutionsAddressPart [id=" + id + ", investmentInstitutionId=" + investmentInstitutionId
+				+ ", name=" + name + ", town=" + town + ", detailAddress=" + detailAddress + ", phoneCountryCode="
+				+ phoneCountryCode + ", phoneDistrictCode=" + phoneDistrictCode + ", phoneNumber=" + phoneNumber
+				+ ", partEmail=" + partEmail + ", longitude=" + longitude + ", latitude=" + latitude + ", yn=" + yn
+				+ ", headQuartersEmail=" + headQuartersEmail + "]";
+	}
+    
 }
