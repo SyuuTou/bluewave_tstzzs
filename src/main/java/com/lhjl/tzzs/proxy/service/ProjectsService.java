@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsProject;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
@@ -273,5 +274,12 @@ public interface ProjectsService {
      * @return
      */
 	CommonDto<Boolean> removeProgressInfoById(Integer appid, Integer id);
+	/**
+     * 投资方的智能搜索
+     * @param appid
+     * @param keyword
+     * @return
+     */
+	CommonDto<List<InvestmentInstitutions>> intelligentSearch(Integer appid, String keyword);
 	
 }
