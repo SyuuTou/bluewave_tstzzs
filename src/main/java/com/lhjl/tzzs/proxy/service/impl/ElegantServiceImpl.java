@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceOutputDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceSearchInputDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.ElegantServiceService;
@@ -59,25 +60,54 @@ public class ElegantServiceImpl implements ElegantServiceService{
     @Autowired
     private MetaIdentityTypeMapper metaIdentityTypeMapper;
 
-    @Autowired MetaServiceTypeMapper metaServiceTypeMapper;
+    @Autowired
+    private MetaServiceTypeMapper metaServiceTypeMapper;
 
     /**
      * 获取精选活动列表的接口
      * @return
      */
     @Override
-    public CommonDto<List<Map<String, Object>>> findElegantServiceList(Integer recommendYn,Integer createTimeOrder) {
+    public CommonDto<List<Map<String, Object>>> findElegantServiceList(ElegantServiceSearchInputDto body,Integer appid) {
         CommonDto<List<Map<String,Object>>> result  = new CommonDto<>();
         Date now = new Date();
 
         List<Map<String,Object>> list = new ArrayList<>();
 
         Integer sortOrder = null;
-        if (createTimeOrder == null){
+        if (body.getCreateTimeOrder() == null){
             sortOrder = 1;
         }
 
-        List<Map<String,Object>> elegantServiceList = elegantServiceMapper.findElegantServiceList(recommendYn,createTimeOrder,sortOrder);
+        if (body.getPageNum() == null){
+            body.setPageNum(pageNumDefault);
+        }
+        if (body.getPageSize() == null){
+            body.setPageSize(pageSizeDefault);
+        }
+
+        //转数组
+        Integer[] identityType = {};
+        if (null != body.getIdentityType() && body.getIdentityType().size()>0){
+            Integer[] identityTypeA  = new Integer[body.getIdentityType().size()];
+            for (int i = 0;i<body.getIdentityType().size();i++){
+                identityTypeA[i] = body.getIdentityType().get(i);
+            }
+            identityType = identityTypeA;
+        }
+
+        Integer[] serviceType = {};
+        if (null != body.getServiceType() && body.getServiceType().size()>0){
+            Integer[] serviceTypeA = new Integer[body.getServiceType().size()];
+            for (int i=0;i<body.getServiceType().size();i++){
+                serviceTypeA[i] = body.getServiceType().get(i);
+            }
+            serviceType = serviceTypeA;
+        }
+
+        Integer startPage = (body.getPageNum()-1)*body.getPageSize();
+        List<Map<String,Object>> elegantServiceList = elegantServiceMapper.findElegantServiceList(body.getRecommendYn(),
+                body.getCreateTimeOrder(),sortOrder,appid,identityType,serviceType,body.getSearchWord(),startPage,body.getPageSize());
         if (elegantServiceList.size() > 0){
             for (Map<String,Object> m:elegantServiceList){
 
@@ -139,7 +169,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
      */
     @Transactional
     @Override
-    public CommonDto<String> insertElagantService(ElegantServiceInputDto body) {
+    public CommonDto<String> insertElagantService(ElegantServiceInputDto body,Integer appid) {
         CommonDto<String> result  = new CommonDto<>();
         //先判断参数是否都录入了
         if (body.getServiceName() == null || "".equals(body.getServiceName()) || "undefined".equals(body.getServiceName())){
@@ -300,10 +330,10 @@ public class ElegantServiceImpl implements ElegantServiceService{
         //判断是更新还是新建
         if (body.getElegantServiceId() == null || "".equals(body.getElegantServiceId())){
             //新建
-            result = createElegantService(body);
+            result = createElegantService(body,appid);
         }else {
             //更新
-            result = updateElegantService(body);
+            result = updateElegantService(body,appid);
         }
 
 
@@ -510,7 +540,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
      * @return
      */
     @Override
-    public CommonDto<Map<String,Object>> backstageElegantServiceList(BackstageElegantServiceInputDto body){
+    public CommonDto<Map<String,Object>> backstageElegantServiceList(BackstageElegantServiceInputDto body,Integer appid){
         CommonDto<Map<String,Object>> result = new CommonDto<>();
         Map<String,Object> map = new HashMap<>();
 
@@ -539,7 +569,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
         Integer startPage = (pageNum-1)*pageSize;
 
         //获取服务主要信息
-        List<Map<String,Object>> mapList = elegantServiceMapper.findBackstageElegantServiceList(body.getSearchWord(),beginTime,endTime,startPage,pageSize);
+        List<Map<String,Object>> mapList = elegantServiceMapper.findBackstageElegantServiceList(body.getSearchWord(),appid,beginTime,endTime,startPage,pageSize);
         if (mapList.size()>0){
             for (Map<String,Object> m:mapList){
                 Integer esid = (Integer) m.get("id");
@@ -591,7 +621,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         //获取数据总量
         Integer allCount =0;
-        allCount = elegantServiceMapper.selectCountBySearch(body.getSearchWord(),beginTime,endTime);
+        allCount = elegantServiceMapper.selectCountBySearch(body.getSearchWord(),appid,beginTime,endTime);
 
         //往结果里放数据
         map.put("list",mapList);
@@ -629,7 +659,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
      * @return
      */
     @Transactional
-    public CommonDto<String> createElegantService(ElegantServiceInputDto body){
+    public CommonDto<String> createElegantService(ElegantServiceInputDto body,Integer appid){
         CommonDto<String> result = new CommonDto<>();
         Date now = new Date();
 
@@ -722,6 +752,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantService.setCreateTime(now);
         elegantService.setScenceKey(sceneKey);
         elegantService.setYn(1);//默认是未删除的，有效的
+        elegantService.setAppid(appid);
         elegantService.setWebSwitch(body.getWebSwitch());
 
         elegantServiceMapper.insertSelective(elegantService);
@@ -799,7 +830,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
      * @return
      */
     @Transactional
-    public CommonDto<String> updateElegantService(ElegantServiceInputDto body){
+    public CommonDto<String> updateElegantService(ElegantServiceInputDto body,Integer appid){
         CommonDto<String> result  = new CommonDto<>();
         Date now = new Date();
 
@@ -842,6 +873,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantService.setBackgroundPicture(body.getBackgroundPicture());
         elegantService.setBeginTime(beginTime);
         elegantService.setEndTime(endTime);
+        elegantService.setAppid(appid);
         elegantService.setWebSwitch(body.getWebSwitch());
         elegantService.setRecommendYn(body.getRecommendYn());
         elegantService.setOnOff(body.getOnOff());

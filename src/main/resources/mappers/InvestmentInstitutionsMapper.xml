@@ -230,7 +230,13 @@
         case when ii.count is null then 0 else ii.count end count,ii.sort FROM
         investment_institutions ii
         WHERE  1=1
-
+        and ii.short_name not like "%个人%"
+        and ii.short_name not like "%投资人%"
+        and ii.short_name not like "%自投%"
+        and ii.short_name not like "%自筹%"
+        and ii.short_name not like "%以及%"
+        and ii.short_name not like "%创始人%"
+        AND ii.short_name != ""
         <if test=" workArray2 !='' and workArray2 != null">
             AND ii.id IN
             <foreach close=")" collection="workArray2" index="index" item="item" open="(" separator=",">#{item}</foreach>
@@ -243,6 +249,13 @@
         SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.count,ii.sort FROM
         investment_institutions ii
         WHERE  1=1
+        and ii.short_name not like "%个人%"
+        and ii.short_name not like "%投资人%"
+        and ii.short_name not like "%自投%"
+        and ii.short_name not like "%自筹%"
+        and ii.short_name not like "%以及%"
+        and ii.short_name not like "%创始人%"
+        AND ii.short_name != ""
         <!--<if test=" types !='' and types != null">
             AND ii.type IN
             <foreach close=")" collection="types" index="index" item="item" open="(" separator=",">#{item}</foreach>
@@ -269,6 +282,12 @@
         GROUP BY  iip.investment_institutions_id
         ORDER BY iip.financing_time DESC) u  ON u.investment_institutions_id =ii.id
         WHERE ii.short_name is not null
+        and ii.short_name not like "%个人%"
+        and ii.short_name not like "%投资人%"
+        and ii.short_name not like "%自投%"
+        and ii.short_name not like "%自筹%"
+        and ii.short_name not like "%以及%"
+        and ii.short_name not like "%创始人%"
         AND ii.short_name != ""
         ORDER BY u.financing_time DESC
         limit #{startPage},#{pageSize}
@@ -287,6 +306,13 @@
            left join meta_project_stage mps on iist.meta_project_stage_id = mps.id
        </if>
         where 1=1
+        and ii.short_name not like "%个人%"
+        and ii.short_name not like "%投资人%"
+        and ii.short_name not like "%自投%"
+        and ii.short_name not like "%自筹%"
+        and ii.short_name not like "%以及%"
+        and ii.short_name not like "%创始人%"
+        AND ii.short_name != ""
         <if test="domains != null and domains !=''">
             and ms.`name` in
             <foreach close=")" collection="domains" index="index" item="item" open="(" separator=",">#{item}</foreach>

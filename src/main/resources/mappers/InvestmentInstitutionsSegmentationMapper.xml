@@ -17,7 +17,7 @@
   <select id="findYear" resultType="java.util.HashMap">
     select pfl.financing_time_year from investment_institutions_project iip
     left join projects p on iip.project_id = p.ID
-    left join project_financing_log pfl on iip.project_id = pfl.project_id
+    left join project_financing_log pfl on iip.project_id = pfl.id
     where iip.investment_institutions_id = #{institutionId}
     and pfl.financing_time_year is not null
     group by pfl.financing_time_year

@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceOutputDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceSearchInputDto;
 import com.lhjl.tzzs.proxy.model.MetaIdentityType;
 import com.lhjl.tzzs.proxy.model.MetaServiceType;
 
@@ -17,7 +18,7 @@ public interface ElegantServiceService {
      * 获取精选活动列表的接口
      * @return
      */
-    CommonDto<List<Map<String,Object>>> findElegantServiceList(Integer recommendYn,Integer createTimeOrder);
+    CommonDto<List<Map<String,Object>>> findElegantServiceList(ElegantServiceSearchInputDto body,Integer appid);
 
     /**
      * 根据服务id获取服务详情的接口
@@ -31,7 +32,7 @@ public interface ElegantServiceService {
      * @param body
      * @return
      */
-    CommonDto<String> insertElagantService(ElegantServiceInputDto body);
+    CommonDto<String> insertElagantService(ElegantServiceInputDto body,Integer appid);
 
     /**
      * 获取基础身份类型的接口
@@ -64,5 +65,5 @@ public interface ElegantServiceService {
      * @param body
      * @return
      */
-    CommonDto<Map<String,Object>> backstageElegantServiceList(BackstageElegantServiceInputDto body) throws ParseException;
+    CommonDto<Map<String,Object>> backstageElegantServiceList(BackstageElegantServiceInputDto body,Integer appid);
 }
