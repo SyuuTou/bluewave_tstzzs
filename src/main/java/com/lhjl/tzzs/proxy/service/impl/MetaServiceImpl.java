@@ -6,6 +6,7 @@ import com.lhjl.tzzs.proxy.model.MetaInvestType;
 import com.lhjl.tzzs.proxy.model.MetaSegmentation;
 import com.lhjl.tzzs.proxy.service.MetaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 /**
  * Created by lanhaijulang on 2018/1/25.
  */
+@Service
 public class MetaServiceImpl implements MetaService {
 
     @Autowired
