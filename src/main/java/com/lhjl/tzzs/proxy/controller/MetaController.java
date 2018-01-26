@@ -23,7 +23,7 @@ public class MetaController extends GenericController{
      * @return
      */
     @GetMapping("/getsegmentations")
-    public CommonDto<List<MetaSegmentation>> getInvestType( ){
+    public CommonDto<List<MetaSegmentation>> getSegmentations( ){
         CommonDto<List<MetaSegmentation>> result = new CommonDto<>();
         try {
             result = metaService.getSegmentations();
