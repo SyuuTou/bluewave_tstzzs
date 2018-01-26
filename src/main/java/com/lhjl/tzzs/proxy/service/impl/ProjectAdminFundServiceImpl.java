@@ -4,9 +4,9 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.FundDto.FundInputDto;
 import com.lhjl.tzzs.proxy.dto.FundDto.FundOutputDto;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsFundsMapper;
-import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsFunds;
-import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsFundsSegmentation;
-import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsFundsStages;
+import com.lhjl.tzzs.proxy.mapper.MetaProjectStageMapper;
+import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
+import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsFundsLabelService;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsFundsSegmentationService;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsFundsStagesService;
@@ -29,6 +29,12 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
 
     @Autowired
     private InvestmentInstitutionsFundsMapper investmentInstitutionsFundsMapper;
+
+    @Autowired
+    private MetaProjectStageMapper metaProjectStageMapper;
+
+    @Autowired
+    private MetaSegmentationMapper metaSegmentationMapper;
 
     @Resource
     private InvestmentInstitutionsFundsLabelService investmentInstitutionsFundsLabelService;
@@ -64,15 +70,20 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
                 investmentInstitutionsFundsStages.setInvestmentInstitutionsFundsId(investmentInstitutionsFunds_i.getId());
                 List<InvestmentInstitutionsFundsStages> investmentInstitutionsFundsStagesList = investmentInstitutionsFundsStagesService.select(investmentInstitutionsFundsStages);
                 List<Integer> investmentInstitutionsFundsStagess = new ArrayList<>();
-                Integer[] investmentInstitutionsFundsStagesArr = null;
+                List<String> investmentInstitutionsFundsStageNames = new ArrayList<>();
+                String[] investmentInstitutionsFundsStagesArr = null;
                 if(investmentInstitutionsFundsStagesList == null || investmentInstitutionsFundsStagesList.size() == 0){
                     fundOutputDto.setInvestStages(investmentInstitutionsFundsStagesArr);
                 }else{
                     investmentInstitutionsFundsStagesList.forEach(investmentInstitutionsFundsStages_i -> {
                         investmentInstitutionsFundsStagess.add(investmentInstitutionsFundsStages_i.getStageId());
                     });
-                    investmentInstitutionsFundsStagesArr = new Integer[investmentInstitutionsFundsStagesList.size()];
-                    investmentInstitutionsFundsStagess.toArray(investmentInstitutionsFundsStagesArr);
+                    List<MetaProjectStage> metaProjectStageList = metaProjectStageMapper.selectByStageIds(investmentInstitutionsFundsStagess);
+                    metaProjectStageList.forEach( metaProjectStage -> {
+                        investmentInstitutionsFundsStageNames.add(metaProjectStage.getName());
+                    });
+                    investmentInstitutionsFundsStagesArr = new String[investmentInstitutionsFundsStagesList.size()];
+                    investmentInstitutionsFundsStageNames.toArray(investmentInstitutionsFundsStagesArr);
                     fundOutputDto.setInvestStages(investmentInstitutionsFundsStagesArr);
                 }
 
@@ -80,15 +91,20 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
                 investmentInstitutionsFundsSegmentation.setInvestmentInstitutionsFundsId(investmentInstitutionsFunds_i.getId());
                 List<InvestmentInstitutionsFundsSegmentation> investmentInstitutionsFundsSegmentationList = investmentInstitutionsFundsSegmentationService.select(investmentInstitutionsFundsSegmentation);
                 List<Integer> investmentInstitutionsFundsSegmentations = new ArrayList<>();
-                Integer[] investmentInstitutionsFundsSegmentationArr = null;
+                List<String> investmentInstitutionsFundsSegmentationNames = new ArrayList<>();
+                String[] investmentInstitutionsFundsSegmentationArr = null;
                 if(investmentInstitutionsFundsSegmentationList == null || investmentInstitutionsFundsSegmentationList.size() == 0){
                     fundOutputDto.setInvestStages(investmentInstitutionsFundsSegmentationArr);
                 }else{
                     investmentInstitutionsFundsSegmentationList.forEach(investmentInstitutionsFundsSegmentation_i -> {
                         investmentInstitutionsFundsSegmentations.add(investmentInstitutionsFundsSegmentation_i.getSegmentationId());
                     });
-                    investmentInstitutionsFundsSegmentationArr = new Integer[investmentInstitutionsFundsSegmentationList.size()];
-                    investmentInstitutionsFundsSegmentations.toArray(investmentInstitutionsFundsSegmentationArr);
+                    List<MetaSegmentation> metaSegmentationList = metaSegmentationMapper.selectBySegmentationIds(investmentInstitutionsFundsSegmentations);
+                    metaSegmentationList.forEach(metaSegmentation -> {
+                        investmentInstitutionsFundsSegmentationNames.add(metaSegmentation.getName());
+                    });
+                    investmentInstitutionsFundsSegmentationArr = new String[metaSegmentationList.size()];
+                    investmentInstitutionsFundsSegmentationNames.toArray(investmentInstitutionsFundsSegmentationArr);
                     fundOutputDto.setFocusDomains(investmentInstitutionsFundsSegmentationArr);
                 }
                 fundOutputDtoList.add(fundOutputDto);
@@ -114,20 +130,14 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
         InvestmentInstitutionsFunds investmentInstitutionsFunds = new InvestmentInstitutionsFunds();
         investmentInstitutionsFunds.setInvestmentInstitutionsId(body.getProjectId());
         investmentInstitutionsFunds.setYn(0);
-        long now = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String createTime = null;
-        try {
-            createTime = sdf.format(new Date(now));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        investmentInstitutionsFunds.setCreateTime(DateUtils.parse(createTime));
+        investmentInstitutionsFunds.setCreateTime(DateUtils.parse(body.getEstablishedTime()));
         investmentInstitutionsFunds.setCreator(body.getCreator());
         investmentInstitutionsFunds.setCurrency(body.getCurrencyType());
         investmentInstitutionsFunds.setInvestmentAmountBegin(body.getInvestmentAmountLow());
         investmentInstitutionsFunds.setInvestmentAmountEnd(body.getInvestmentAmountHigh());
         investmentInstitutionsFunds.setDuration(body.getSurvivalPeriod());
+        investmentInstitutionsFunds.setName(body.getShortName());
+        investmentInstitutionsFunds.setFullName(body.getFullName());
 
         Integer fundInsertResult = -1;
 
@@ -137,10 +147,9 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
             fundInsertResult = investmentInstitutionsFundsMapper.updateByPrimaryKey(investmentInstitutionsFunds);
         }
 
-        investmentInstitutionsFundsStagesService.deleteAll(investmentInstitutionsFunds.getId());
-
         Integer fundStageInsertResult = -1;
         List<InvestmentInstitutionsFundsStages> investmentInstitutionsFundsStagesList = new ArrayList<>();
+        investmentInstitutionsFundsStagesService.deleteAll(investmentInstitutionsFunds.getId());
         if(body.getInvestStages().length == 0 || body.getInvestStages() == null){
             InvestmentInstitutionsFundsStages investmentInstitutionsFundsStages = new InvestmentInstitutionsFundsStages();
             investmentInstitutionsFundsStages.setInvestmentInstitutionsFundsId(investmentInstitutionsFunds.getId());
@@ -160,6 +169,7 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
         Integer fundDomainInsertResult = -1;
 
         List<InvestmentInstitutionsFundsSegmentation> investmentInstitutionsFundsSegmentationList = new ArrayList<>();
+        investmentInstitutionsFundsSegmentationService.deleteAll(investmentInstitutionsFunds.getId());
         if(body.getFocusDomains().length == 0 || body.getFocusDomains() == null){
             InvestmentInstitutionsFundsSegmentation investmentInstitutionsFundsSegmentation = new InvestmentInstitutionsFundsSegmentation();
             investmentInstitutionsFundsSegmentation.setInvestmentInstitutionsFundsId(investmentInstitutionsFunds.getId());

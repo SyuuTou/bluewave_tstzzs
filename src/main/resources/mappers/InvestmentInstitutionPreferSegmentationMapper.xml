@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionPreferSegmentationMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionPreferSegmentation" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionPreferSegmentationMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionPreferSegmentation">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="company_id" property="companyId" jdbcType="INTEGER" />
-    <result column="segmentation_prefer_id" property="segmentationPreferId" jdbcType="INTEGER" />
+    <result column="segmentation_prefer_id" jdbcType="INTEGER" property="segmentationPreferId" />
+    <result column="company_id" jdbcType="INTEGER" property="companyId" />
   </resultMap>
 </mapper>

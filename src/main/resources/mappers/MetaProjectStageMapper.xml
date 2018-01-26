@@ -27,4 +27,12 @@
     select id from meta_project_stage where `name`=#{stageName};
   </select>
 
+  <select id="selectByStageIds" parameterType="java.util.List" resultMap="BaseResultMap">
+    select * from meta_project_stage where 1=1
+    <if test="stageIds != null and stageIds!=''">
+      and id exists
+      <foreach close=")" collection="stageIds" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+  </select>
+
 </mapper>

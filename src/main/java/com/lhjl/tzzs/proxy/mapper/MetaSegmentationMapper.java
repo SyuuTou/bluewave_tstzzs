@@ -21,4 +21,8 @@ public interface MetaSegmentationMapper extends OwnerMapper<MetaSegmentation> {
     List<Map<String,Object>> findUserFocusSegmentation(@Param("institutionId") Integer institutionId);
 
     List<MetaSegmentation> selectAll();
+
+    Integer findSegmentationIdByName(@Param("segmentation") String segmentation);
+
+    List<MetaSegmentation> selectBySegmentationIds(@Param("segmentationIds")List<Integer> segmentationIds);
 }
