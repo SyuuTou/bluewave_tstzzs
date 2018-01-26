@@ -15,4 +15,6 @@ public interface MetaProjectStageMapper extends OwnerMapper<MetaProjectStage> {
     List<MetaProjectStage> findAll();
 
     Integer selectIdByStageName(@Param("stageName") String stageName);
+
+    List<MetaProjectStage> selectByStageIds(@Param("stageIds") List<Integer> stageIds);
 }
