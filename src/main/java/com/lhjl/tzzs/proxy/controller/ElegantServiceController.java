@@ -166,12 +166,12 @@ public class ElegantServiceController {
      * @param body
      * @return
      */
-    @PostMapping("backstage/elegantservice/list")
-    public CommonDto<Map<String,Object>> findBackstageElegantServiceList(@RequestBody BackstageElegantServiceInputDto body){
+    @PostMapping("/v{appid}/backstage/elegantservice/list")
+    public CommonDto<Map<String,Object>> findBackstageElegantServiceList(@RequestBody BackstageElegantServiceInputDto body,@PathVariable Integer appid){
         CommonDto<Map<String,Object>> result  = new CommonDto<>();
 
         try {
-            result = elegantServiceService.backstageElegantServiceList(body);
+            result = elegantServiceService.backstageElegantServiceList(body,appid);
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");

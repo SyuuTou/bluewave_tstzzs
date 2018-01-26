@@ -100,6 +100,9 @@
     left join elegant_service_service_type esst on esit.elegant_service_id = esst.elegant_service_id
     left join meta_service_type mst on esit.meta_identity_type_id = mst.id
     where es.yn = 1
+    <if test="appid != null and appid != ''">
+      es.appid = #{appid}
+    </if>
     <if test="beginTime != null and beginTime!=''">
       and  date(es.begin_time)between
 
@@ -174,6 +177,9 @@
     left join elegant_service_service_type esst on esit.elegant_service_id = esst.elegant_service_id
     left join meta_service_type mst on esit.meta_identity_type_id = mst.id
     where es.yn = 1
+    <if test="appid != null and appid != ''">
+      es.appid = #{appid}
+    </if>
     <if test="beginTime != null and beginTime!=''">
       and  date(es.begin_time)between
 

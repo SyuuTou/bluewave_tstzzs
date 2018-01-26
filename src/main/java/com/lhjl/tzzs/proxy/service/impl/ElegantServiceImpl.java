@@ -540,7 +540,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
      * @return
      */
     @Override
-    public CommonDto<Map<String,Object>> backstageElegantServiceList(BackstageElegantServiceInputDto body){
+    public CommonDto<Map<String,Object>> backstageElegantServiceList(BackstageElegantServiceInputDto body,Integer appid){
         CommonDto<Map<String,Object>> result = new CommonDto<>();
         Map<String,Object> map = new HashMap<>();
 
@@ -569,7 +569,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
         Integer startPage = (pageNum-1)*pageSize;
 
         //获取服务主要信息
-        List<Map<String,Object>> mapList = elegantServiceMapper.findBackstageElegantServiceList(body.getSearchWord(),beginTime,endTime,startPage,pageSize);
+        List<Map<String,Object>> mapList = elegantServiceMapper.findBackstageElegantServiceList(body.getSearchWord(),appid,beginTime,endTime,startPage,pageSize);
         if (mapList.size()>0){
             for (Map<String,Object> m:mapList){
                 Integer esid = (Integer) m.get("id");
@@ -621,7 +621,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         //获取数据总量
         Integer allCount =0;
-        allCount = elegantServiceMapper.selectCountBySearch(body.getSearchWord(),beginTime,endTime);
+        allCount = elegantServiceMapper.selectCountBySearch(body.getSearchWord(),appid,beginTime,endTime);
 
         //往结果里放数据
         map.put("list",mapList);

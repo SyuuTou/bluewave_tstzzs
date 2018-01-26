@@ -31,11 +31,13 @@ public interface ElegantServiceMapper extends OwnerMapper<ElegantService> {
     Map<String,Object> findElegantServiceById(@Param("elegantServiceId") Integer elegantServiceId);
 
     List<Map<String,Object>> findBackstageElegantServiceList(@Param("searchWord") String searchWord,
+                                                             @Param("appid") Integer appid,
                                                              @Param("beginTime") String beginTime,
                                                              @Param("endTime") String endTime,
                                                              @Param("startPage") Integer startPage,
                                                              @Param("pageSize") Integer pageSize);
 
     Integer selectCountBySearch(@Param("searchWord") String searchWord,
+                                @Param("appid") Integer appid,
                                 @Param("beginTime") String beginTime,@Param("endTime") String endTime);
 }

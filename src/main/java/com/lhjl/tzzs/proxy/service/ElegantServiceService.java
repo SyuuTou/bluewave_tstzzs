@@ -65,5 +65,5 @@ public interface ElegantServiceService {
      * @param body
      * @return
      */
-    CommonDto<Map<String,Object>> backstageElegantServiceList(BackstageElegantServiceInputDto body) throws ParseException;
+    CommonDto<Map<String,Object>> backstageElegantServiceList(BackstageElegantServiceInputDto body,Integer appid);
 }
