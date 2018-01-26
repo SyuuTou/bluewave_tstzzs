@@ -9,19 +9,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
+import com.lhjl.tzzs.proxy.service.InvestorService;
 
 @RestController
 public class InvestorListController {
+	@Resource 
+	private InvestorService investorService;
+	
 	/**
 	 * 投资人列表
-	 * @param sendsecuritycodeReqBody
+	 * @param appid
+	 * @param body 投资人列表请求体
 	 * @return
 	 */
     @PostMapping("/v{appid}/list/investors")
-    public CommonDto<Object> getInvestorsInfo(@PathVariable Integer appid,@RequestBody InvestorListInputDto body){
+    public CommonDto<Object> listInvestorsInfo(@PathVariable Integer appid,@RequestBody InvestorListInputDto body){
     	CommonDto<Object> result =new CommonDto<>();
     	try {
-    		
+    		investorService.listInvestorsInfos(appid,body);
     	}catch(Exception e) {
     		result.setData(null);
     		result.setMessage("fail");
