@@ -7,9 +7,11 @@ import com.lhjl.tzzs.proxy.dto.ReportCommentDto.ReportCommentOutputDto;
 import com.lhjl.tzzs.proxy.mapper.ReportCollectionMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportCommentMapper;
 import com.lhjl.tzzs.proxy.mapper.ReportConcernMapper;
+import com.lhjl.tzzs.proxy.mapper.UsersMapper;
 import com.lhjl.tzzs.proxy.model.ReportCollection;
 import com.lhjl.tzzs.proxy.model.ReportComment;
 import com.lhjl.tzzs.proxy.model.ReportConcern;
+import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.bluewave.ReportEventService;
 import com.lhjl.tzzs.proxy.utils.DateUtils;
@@ -34,6 +36,9 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
 
     @Autowired
     private ReportConcernMapper reportConcernMapper;
+
+    @Autowired
+    private UsersMapper usersMapper;
 
 
     @Transactional
@@ -113,9 +118,10 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
 
         PageRowBounds rowBounds = new PageRowBounds(offset, limit);
 
-        List<ReportComment> comments = reportCommentMapper.selectReportOrderByCreateTime(appId, reportId, pageNo, pageSize);
+        List<ReportComment> comments = reportCommentMapper.selectReportOrderByCreateTime(appId, reportId, offset, pageSize);
         List<ReportCommentOutputDto> reportCommentOutputDtoList = new ArrayList<>();
         if (null != comments && comments.size()>0){
+
             for(ReportComment reportComment : comments){
                 ReportCommentOutputDto reportCommentOutputDto = new ReportCommentOutputDto();
                 reportCommentOutputDto.setColumnId(reportComment.getColumnId());
@@ -126,9 +132,45 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
                 reportCommentOutputDto.setNum(reportComment.getNum());
                 reportCommentOutputDto.setToken(reportComment.getToken());
                 reportCommentOutputDtoList.add(reportCommentOutputDto);
-
             }
+            String[] token = new String[comments.size()];
+            for (int i=0;i<comments.size();i++){
+                token[i] = comments.get(i).getToken();
+            }
+
+            List<Users> usersList = usersMapper.selectUserListByToken(token);
+
+            if (usersList.size()>0){
+               for (ReportCommentOutputDto r:reportCommentOutputDtoList){
+                   for (Users u :usersList){
+                       if (String.valueOf(u.getUuid()).equals(String.valueOf(r.getToken()))){
+                           String name = "";
+                           if (u.getActualName() != null){
+                               name = u.getActualName();
+                           }
+                          String headpic = "";
+                           if (u.getHeadpicReal() != null){
+                               headpic = u.getHeadpicReal();
+                           }
+                           String companyDuties ="";
+                           if (u.getCompanyDuties() != null){
+                               companyDuties = u.getCompanyDuties();
+                           }
+
+                           r.setUserName(name);
+                           r.setUserHeadpic(headpic);
+                           r.setUserCompanyDuties(companyDuties);
+                       }else {
+                           r.setUserHeadpic("");
+                           r.setUserName("");
+                           r.setUserCompanyDuties("");
+                       }
+                   }
+               }
+            }
+
         }
+
         result.setStatus(200);
         result.setMessage("success");
         result.setData(reportCommentOutputDtoList);
