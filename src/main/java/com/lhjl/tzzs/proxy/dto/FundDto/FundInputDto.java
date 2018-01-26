@@ -7,6 +7,8 @@ import java.math.BigDecimal;
  */
 public class FundInputDto {
 
+    private Integer projectId;
+
     private Integer institutionId;
 
     private String creator;
@@ -32,6 +34,14 @@ public class FundInputDto {
     private Integer[] investStages;
 
     private Integer[] focusDomains;
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
 
     public String getCreator() {
         return creator;

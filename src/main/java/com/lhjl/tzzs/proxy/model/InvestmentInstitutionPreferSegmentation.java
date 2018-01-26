@@ -5,35 +5,13 @@ import javax.persistence.*;
 @Table(name = "investment_institution_prefer_segmentation")
 public class InvestmentInstitutionPreferSegmentation {
     /**
-     * 公司ID
-     */
-    @Id
-    @Column(name = "company_id")
-    private Integer companyId;
-
-    /**
      * 公司偏好领域ID
      */
     @Column(name = "segmentation_prefer_id")
     private Integer segmentationPreferId;
 
-    /**
-     * 获取公司ID
-     *
-     * @return company_id - 公司ID
-     */
-    public Integer getCompanyId() {
-        return companyId;
-    }
-
-    /**
-     * 设置公司ID
-     *
-     * @param companyId 公司ID
-     */
-    public void setCompanyId(Integer companyId) {
-        this.companyId = companyId;
-    }
+    @Column(name = "company_id")
+    private Integer companyId;
 
     /**
      * 获取公司偏好领域ID
@@ -51,5 +29,19 @@ public class InvestmentInstitutionPreferSegmentation {
      */
     public void setSegmentationPreferId(Integer segmentationPreferId) {
         this.segmentationPreferId = segmentationPreferId;
+    }
+
+    /**
+     * @return company_id
+     */
+    public Integer getCompanyId() {
+        return companyId;
+    }
+
+    /**
+     * @param companyId
+     */
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
     }
 }
