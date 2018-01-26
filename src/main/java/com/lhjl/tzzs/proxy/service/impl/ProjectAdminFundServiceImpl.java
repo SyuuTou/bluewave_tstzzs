@@ -102,7 +102,7 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
     }
 
     @Override
-    public CommonDto<String> addOrUpdateFund(Integer projectId, FundInputDto body) {
+    public CommonDto<String> addOrUpdateFund(FundInputDto body) {
         CommonDto<String> result = new CommonDto<>();
         if(null == body || body.toString() == ""){
             result.setMessage("success");
@@ -112,7 +112,7 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
         }
 
         InvestmentInstitutionsFunds investmentInstitutionsFunds = new InvestmentInstitutionsFunds();
-        investmentInstitutionsFunds.setInvestmentInstitutionsId(projectId);
+        investmentInstitutionsFunds.setInvestmentInstitutionsId(body.getProjectId());
         investmentInstitutionsFunds.setYn(0);
         long now = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
