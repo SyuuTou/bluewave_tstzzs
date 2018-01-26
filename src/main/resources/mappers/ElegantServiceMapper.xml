@@ -29,17 +29,41 @@
     es.background_picture,es.id,es.scence_key,es.begin_time,es.end_time,es.recommend_yn,es.create_time
     from elegant_service es
     left join elegant_service_description esd on es.id = esd.elegant_service_id
+    right join elegant_service_identity_type esit on esit.elegant_service_id = es.id
+    left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
+    right join elegant_service_service_type esst on esst.elegant_service_id = es.id
+    left join meta_service_type mst on esst.meta_service_type_id = mst.id
     where es.on_off = 1
     and es.yn = 1
+    <if test="appid != null and appid != ''">
+      and es.appid = #{appid}
+    </if>
+    <if test="identityType != null and identityType.length > 0">
+      and esit.meta_identity_type_id in
+      <foreach collection="identityType" separator="," open="(" close=")" index="index" item="item">#{item}</foreach>
+    </if>
+    <if test="serviceType != null and serviceType.length > 0">
+      and esst.meta_service_type_id in
+      <foreach collection="serviceType" index="index" close=")" open="(" separator="," item="item">#{item}</foreach>
+    </if>
+    <if test="searchWord != null and searchWord !=''">
+      and (
+         es.service_name like CONCAT(CONCAT('%', #{searchWord}), '%')
+         or mit.type_name like CONCAT(CONCAT('%', #{searchWord}), '%')
+         or mst.service_type_name like CONCAT(CONCAT('%', #{searchWord}), '%')
+         or esd.description like CONCAT(CONCAT('%', #{searchWord}), '%'))
+    </if>
     <if test="recommendYn != null and recommendYn != ''">
       and es.recommend_yn = 1
     </if>
+    group by es.id
     <if test="createTimeOrder != null and createTimeOrder != ''">
       order by es.create_time desc
     </if>
     <if test="sortOrder != null and sortOrder != ''">
       order by es.sort
     </if>
+    limit #{startPage},#{pageSize}
   </select>
 
   <select id="findElegantServiceById" resultType="java.util.HashMap">

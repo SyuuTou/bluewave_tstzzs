@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceOutputDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceSearchInputDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.ElegantServiceService;
@@ -59,25 +60,54 @@ public class ElegantServiceImpl implements ElegantServiceService{
     @Autowired
     private MetaIdentityTypeMapper metaIdentityTypeMapper;
 
-    @Autowired MetaServiceTypeMapper metaServiceTypeMapper;
+    @Autowired
+    private MetaServiceTypeMapper metaServiceTypeMapper;
 
     /**
      * 获取精选活动列表的接口
      * @return
      */
     @Override
-    public CommonDto<List<Map<String, Object>>> findElegantServiceList(Integer recommendYn,Integer createTimeOrder) {
+    public CommonDto<List<Map<String, Object>>> findElegantServiceList(ElegantServiceSearchInputDto body,Integer appid) {
         CommonDto<List<Map<String,Object>>> result  = new CommonDto<>();
         Date now = new Date();
 
         List<Map<String,Object>> list = new ArrayList<>();
 
         Integer sortOrder = null;
-        if (createTimeOrder == null){
+        if (body.getCreateTimeOrder() == null){
             sortOrder = 1;
         }
 
-        List<Map<String,Object>> elegantServiceList = elegantServiceMapper.findElegantServiceList(recommendYn,createTimeOrder,sortOrder);
+        if (body.getPageNum() == null){
+            body.setPageNum(pageNumDefault);
+        }
+        if (body.getPageSize() == null){
+            body.setPageSize(pageSizeDefault);
+        }
+
+        //转数组
+        Integer[] identityType = {};
+        if (null != body.getIdentityType() && body.getIdentityType().size()>0){
+            Integer[] identityTypeA  = new Integer[body.getIdentityType().size()];
+            for (int i = 0;i<body.getIdentityType().size();i++){
+                identityTypeA[i] = body.getIdentityType().get(i);
+            }
+            identityType = identityTypeA;
+        }
+
+        Integer[] serviceType = {};
+        if (null != body.getServiceType() && body.getServiceType().size()>0){
+            Integer[] serviceTypeA = new Integer[body.getServiceType().size()];
+            for (int i=0;i<body.getServiceType().size();i++){
+                serviceTypeA[i] = body.getServiceType().get(i);
+            }
+            serviceType = serviceTypeA;
+        }
+
+        Integer startPage = (body.getPageNum()-1)*body.getPageSize();
+        List<Map<String,Object>> elegantServiceList = elegantServiceMapper.findElegantServiceList(body.getRecommendYn(),
+                body.getCreateTimeOrder(),sortOrder,appid,identityType,serviceType,body.getSearchWord(),startPage,body.getPageSize());
         if (elegantServiceList.size() > 0){
             for (Map<String,Object> m:elegantServiceList){
 

@@ -1,19 +1,13 @@
 package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceInputDto;
-import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceOutputDto;
-import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceInputDto;
-import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceOutputDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.*;
 import com.lhjl.tzzs.proxy.model.MetaIdentityType;
 import com.lhjl.tzzs.proxy.model.MetaServiceType;
 import com.lhjl.tzzs.proxy.service.ElegantServiceService;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -31,12 +25,12 @@ public class ElegantServiceController {
      * 获取精选活动列表的接口
      * @return
      */
-    @GetMapping("elegantservice/list")
-    public CommonDto<List<Map<String,Object>>> getElegantServiceList(Integer recommendYn,Integer createTimeOrder){
+    @PostMapping("/v{appid}/elegantservice/list")
+    public CommonDto<List<Map<String,Object>>> getElegantServiceList(@RequestBody ElegantServiceSearchInputDto body, @PathVariable Integer appid){
         CommonDto<List<Map<String,Object>>> result = new CommonDto<>();
 
         try {
-            result = elegantServiceService.findElegantServiceList(recommendYn,createTimeOrder);
+            result = elegantServiceService.findElegantServiceList(body,appid);
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());
             result.setData(null);
