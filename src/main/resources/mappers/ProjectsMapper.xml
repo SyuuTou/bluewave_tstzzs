@@ -711,7 +711,7 @@
         from
         (
 
-        select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,p.segmentation,pfl.stage
+        select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,p.project_source,p.yn,p.segmentation,pfl.stage
         from investment_institutions_project iip
         left join investment_institutions ii on iip.investment_institutions_id = ii.id
         left join project_financing_log pfl on iip.project_id = pfl.id
@@ -775,7 +775,7 @@
         from
         (
 
-        select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,p.segmentation,pfl.stage
+        select p.id, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,p.segmentation,p.project_source,p.yn,pfl.stage
         from investment_institutions_project iip
         left join investment_institutions ii on iip.investment_institutions_id = ii.id
         left join project_financing_log pfl on iip.project_id = pfl.id
