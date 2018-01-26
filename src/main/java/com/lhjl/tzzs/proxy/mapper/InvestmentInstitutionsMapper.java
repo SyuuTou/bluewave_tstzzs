@@ -58,4 +58,10 @@ public interface InvestmentInstitutionsMapper extends OwnerMapper<InvestmentInst
                                                              @Param("types") Integer types);
 
     List<Integer> selectUserApprovalInstitution(@Param("userId") Integer userId);
+    /**
+     * 根据投资方的简称关键字进行智能搜索
+     * @param keyword
+     * @return
+     */
+    List<InvestmentInstitutions> blurScan(String keyword);
 }

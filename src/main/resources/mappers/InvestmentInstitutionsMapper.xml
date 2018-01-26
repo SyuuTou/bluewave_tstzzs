@@ -86,6 +86,9 @@
         <result column="count" jdbcType="INTEGER" property="count" />
 
     </resultMap>
+     <select id="blurScan" resultType="com.lhjl.tzzs.proxy.model.InvestmentInstitutions" parameterType="String">
+        select * from investment_institutions where short_name like "%"#{keyword}"%" group by short_name
+    </select>
     <insert id="add" keyProperty="id" parameterType="com.lhjl.tzzs.proxy.model.InvestmentInstitutions" useGeneratedKeys="true">
         insert into investment_institutions(short_name, commet,create_time) values(#{shortName}, #{commet}, #{createTime} )
     </insert>

@@ -955,4 +955,13 @@
         GROUP BY project_id) ps ON p.id = ps.project_id
         where p.id = #{projectId}
     </select>
+
+    <select id="selectByCaseName" resultMap="BaseResultMap">
+        select * from projects where 1=1
+        <if test="inputWord !=null and inputWord !=''">
+            and short_name like concat(concat("%",#{inputWord}),"%")
+        </if>
+        limit 0,30;
+    </select>
+
 </mapper>

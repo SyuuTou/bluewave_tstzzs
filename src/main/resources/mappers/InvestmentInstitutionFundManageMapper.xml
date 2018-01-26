@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionFundManageMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionFundManage">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="interior_organization" jdbcType="VARCHAR" property="interiorOrganization" />
+    <result column="investment_decision_process" jdbcType="VARCHAR" property="investmentDecisionProcess" />
+    <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="rmb_amount" jdbcType="DECIMAL" property="rmbAmount" />
+    <result column="dollar_amount" jdbcType="DECIMAL" property="dollarAmount" />
+    <result column="bp_email" jdbcType="VARCHAR" property="bpEmail" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+  </resultMap>
+</mapper>

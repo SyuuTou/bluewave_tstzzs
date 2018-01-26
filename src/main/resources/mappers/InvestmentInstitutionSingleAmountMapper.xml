@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionSingleAmountMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionSingleAmount" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="currency_id" property="currencyId" jdbcType="INTEGER" />
+    <result column="investment_amount_single_low" property="investmentAmountSingleLow" jdbcType="DECIMAL" />
+    <result column="investment_amount_single_high" property="investmentAmountSingleHigh" jdbcType="DECIMAL" />
+  </resultMap>
+</mapper>

@@ -1660,4 +1660,14 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		result.setMessage("success"); 
 		return result;
 	}
+
+	@Override
+	public CommonDto<List<InvestmentInstitutions>> intelligentSearch(Integer appid, String keyword) {
+		CommonDto<List<InvestmentInstitutions>> result=new CommonDto<>();
+		
+		result.setData(investmentInstitutionsMapper.blurScan(keyword));
+		result.setStatus(200);
+		result.setMessage("success"); 
+		return result;
+	}
 }

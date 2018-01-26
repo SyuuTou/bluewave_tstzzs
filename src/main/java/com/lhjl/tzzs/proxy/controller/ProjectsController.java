@@ -50,6 +50,27 @@ public class ProjectsController extends GenericController{
 
     @Value("${pageSize}")  
     private String defaultPageSize;
+    
+    /**
+     * 投资方的智能搜索
+     * @param appid
+     * @param keyword
+     * @return
+     */
+    @GetMapping("/v{appid}/intelligentsearch/inves")
+    public CommonDto<List<InvestmentInstitutions>> intelligentSearch(@PathVariable Integer appid,String keyword){
+    	CommonDto<List<InvestmentInstitutions>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.intelligentSearch(appid,keyword);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
     /**
      * 根据id删除进展的信息
      * @param appid

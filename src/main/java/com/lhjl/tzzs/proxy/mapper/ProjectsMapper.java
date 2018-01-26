@@ -140,6 +140,13 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
 	 * @return
 	 */
 	ProInfoDto getProjectsSimpleInfos(@Param("projectId")Integer projectId);
+
+    /**
+     * 智能所搜经典案例名称
+     * @param inputWord
+     * @return
+     */
+    List<Projects> selectByCaseName(@Param("inputWord") String inputWord);
 }
 
 
