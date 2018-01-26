@@ -269,6 +269,11 @@
         GROUP BY  iip.investment_institutions_id
         ORDER BY iip.financing_time DESC) u  ON u.investment_institutions_id =ii.id
         WHERE ii.short_name is not null
+        and ii.short_name not like "%个人%"
+        and ii.short_name not like "%投资人%"
+        and ii.short_name not like "%自投%"
+        and ii.short_name not like "%自筹%"
+        and ii.short_name not like "%以及%"
         AND ii.short_name != ""
         ORDER BY u.financing_time DESC
         limit #{startPage},#{pageSize}
