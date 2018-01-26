@@ -274,6 +274,7 @@
         and ii.short_name not like "%自投%"
         and ii.short_name not like "%自筹%"
         and ii.short_name not like "%以及%"
+        and ii.short_name not like "%创始人%"
         AND ii.short_name != ""
         ORDER BY u.financing_time DESC
         limit #{startPage},#{pageSize}
