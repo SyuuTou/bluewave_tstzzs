@@ -32,7 +32,7 @@ public interface ElegantServiceService {
      * @param body
      * @return
      */
-    CommonDto<String> insertElagantService(ElegantServiceInputDto body);
+    CommonDto<String> insertElagantService(ElegantServiceInputDto body,Integer appid);
 
     /**
      * 获取基础身份类型的接口

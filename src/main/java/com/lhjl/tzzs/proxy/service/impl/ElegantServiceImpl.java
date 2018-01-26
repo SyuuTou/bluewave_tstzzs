@@ -169,7 +169,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
      */
     @Transactional
     @Override
-    public CommonDto<String> insertElagantService(ElegantServiceInputDto body) {
+    public CommonDto<String> insertElagantService(ElegantServiceInputDto body,Integer appid) {
         CommonDto<String> result  = new CommonDto<>();
         //先判断参数是否都录入了
         if (body.getServiceName() == null || "".equals(body.getServiceName()) || "undefined".equals(body.getServiceName())){
@@ -330,10 +330,10 @@ public class ElegantServiceImpl implements ElegantServiceService{
         //判断是更新还是新建
         if (body.getElegantServiceId() == null || "".equals(body.getElegantServiceId())){
             //新建
-            result = createElegantService(body);
+            result = createElegantService(body,appid);
         }else {
             //更新
-            result = updateElegantService(body);
+            result = updateElegantService(body,appid);
         }
 
 
@@ -659,7 +659,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
      * @return
      */
     @Transactional
-    public CommonDto<String> createElegantService(ElegantServiceInputDto body){
+    public CommonDto<String> createElegantService(ElegantServiceInputDto body,Integer appid){
         CommonDto<String> result = new CommonDto<>();
         Date now = new Date();
 
@@ -752,6 +752,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantService.setCreateTime(now);
         elegantService.setScenceKey(sceneKey);
         elegantService.setYn(1);//默认是未删除的，有效的
+        elegantService.setAppid(appid);
         elegantService.setWebSwitch(body.getWebSwitch());
 
         elegantServiceMapper.insertSelective(elegantService);
@@ -829,7 +830,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
      * @return
      */
     @Transactional
-    public CommonDto<String> updateElegantService(ElegantServiceInputDto body){
+    public CommonDto<String> updateElegantService(ElegantServiceInputDto body,Integer appid){
         CommonDto<String> result  = new CommonDto<>();
         Date now = new Date();
 
@@ -872,6 +873,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantService.setBackgroundPicture(body.getBackgroundPicture());
         elegantService.setBeginTime(beginTime);
         elegantService.setEndTime(endTime);
+        elegantService.setAppid(appid);
         elegantService.setWebSwitch(body.getWebSwitch());
         elegantService.setRecommendYn(body.getRecommendYn());
         elegantService.setOnOff(body.getOnOff());

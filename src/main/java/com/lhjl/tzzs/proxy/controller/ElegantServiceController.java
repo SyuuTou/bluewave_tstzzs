@@ -67,11 +67,11 @@ public class ElegantServiceController {
      * @param body
      * @return
      */
-    @PostMapping("insert/elegantservice")
-    public CommonDto<String> insertElegantService(@RequestBody ElegantServiceInputDto body){
+    @PostMapping("/v{appid}/insert/elegantservice")
+    public CommonDto<String> insertElegantService(@RequestBody ElegantServiceInputDto body,@PathVariable Integer appid){
         CommonDto<String> result = new CommonDto<>();
         try {
-            result= elegantServiceService.insertElagantService(body);
+            result= elegantServiceService.insertElagantService(body,appid);
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);
