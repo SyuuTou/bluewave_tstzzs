@@ -22,7 +22,7 @@ public class MetaController extends GenericController{
      * 得到所有投资类型
      * @return
      */
-    @GetMapping("/getinvesttype")
+    @GetMapping("/getsegmentations")
     public CommonDto<List<MetaSegmentation>> getInvestType( ){
         CommonDto<List<MetaSegmentation>> result = new CommonDto<>();
         try {
