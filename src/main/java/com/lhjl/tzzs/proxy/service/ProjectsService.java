@@ -17,6 +17,7 @@ import com.lhjl.tzzs.proxy.model.ProjectProgress;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.model.Recruitment;
 import com.lhjl.tzzs.proxy.model.RecruitmentInfo;
+import com.lhjl.tzzs.proxy.model.Users;
 
 
 /**
@@ -281,5 +282,12 @@ public interface ProjectsService {
      * @return
      */
 	CommonDto<List<InvestmentInstitutions>> intelligentSearch(Integer appid, String keyword);
+	/**
+     * 根据用户id获取用户信息
+     * @param appid
+     * @param userId
+     * @return
+     */
+	CommonDto<Users> getUserById(Integer appid, Integer userId);
 	
 }

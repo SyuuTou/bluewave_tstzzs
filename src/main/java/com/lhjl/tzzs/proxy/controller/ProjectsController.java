@@ -47,12 +47,17 @@ public class ProjectsController extends GenericController{
 
     @Value("${pageSize}")  
     private String defaultPageSize;
-    
-    /*@GetMapping("/v{appid}/echo/userById")
-    public CommonDto<List<InvestmentInstitutions>> intelligentSearch(@PathVariable Integer appid,String keyword){
-    	CommonDto<List<InvestmentInstitutions>> result =new CommonDto<>();
+    /**
+     * 根据用户id获取用户信息
+     * @param appid
+     * @param userId
+     * @return
+     */
+    @GetMapping("/v{appid}/echo/userbyid")
+    public CommonDto<Users> getUserById(@PathVariable Integer appid,Integer userId){
+    	CommonDto<Users> result =new CommonDto<>();
     	try {
-    		result=projectsService.intelligentSearch(appid,keyword);
+    		result=projectsService.getUserById(appid,userId);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
@@ -61,7 +66,7 @@ public class ProjectsController extends GenericController{
     		result.setStatus(500);
 	    }
     	return result;
-    }*/
+    }
     /**
      * 投资方的智能搜索
      * @param appid

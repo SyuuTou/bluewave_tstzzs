@@ -11,6 +11,8 @@ import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
+import com.lhjl.tzzs.proxy.service.UserInfoService;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -107,6 +109,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
     private RecruitmentInfoMapper recruitmentInfoMapper;
     @Autowired
     private ProjectProgressMapper projectProgressMapper;
+    @Resource
+    private UserInfoService userInfoService;
     /**
      * 查询我关注的项目
      *
@@ -1669,5 +1673,11 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		result.setStatus(200);
 		result.setMessage("success"); 
 		return result;
+	}
+
+	@Override
+	public CommonDto<Users> getUserById(Integer appid, Integer userId) {
+		
+		return userInfoService.getUserByUserId(userId);
 	}
 }
