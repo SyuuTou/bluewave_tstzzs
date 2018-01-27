@@ -1476,13 +1476,13 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 	@Transactional(readOnly=true)
 	@Override
-	public CommonDto<Object> listProParts(Integer appid, Integer proType,Integer proId) {
-		CommonDto<Object> result=new CommonDto<>();
+	public CommonDto<List<InvestmentInstitutionsAddressPart>> listProPartsByCompanyIdAndProtype(Integer appid, Integer companyType,Integer companyId) {
+		CommonDto<List<InvestmentInstitutionsAddressPart>> result=new CommonDto<>();
 //		Object partList = null;
-		InvestmentInstitutionsAddressPart iiap=new InvestmentInstitutionsAddressPart();
-		iiap.setInvestmentInstitutionId(proId);
+//		InvestmentInstitutionsAddressPart iiap=new InvestmentInstitutionsAddressPart();
+//		iiap.setInvestmentInstitutionId(companyId);
 		//获取该机构的所有分部信息
-		List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.select(iiap);
+		List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.selectAllByDefaultSort(companyId);
 //		if(list != null) {
 //			for(InvestmentInstitutionsAddressPart tmp:list) {
 //				InvestmentInstitutionsAddress iia =new InvestmentInstitutionsAddress();

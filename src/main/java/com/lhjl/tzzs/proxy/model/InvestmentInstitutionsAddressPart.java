@@ -63,22 +63,13 @@ public class InvestmentInstitutionsAddressPart {
      * 删除标志:0代表有效；1代表无效
      */
     private Integer yn;
+
     /**
-     * 公司总部邮箱
+     * 排序
      */
-    @Transient
-    private String headQuartersEmail;
-    
+    private Integer sort;
 
-    public String getHeadQuartersEmail() {
-		return headQuartersEmail;
-	}
-
-	public void setHeadQuartersEmail(String headQuartersEmail) {
-		this.headQuartersEmail = headQuartersEmail;
-	}
-
-	/**
+    /**
      * @return id
      */
     public Integer getId() {
@@ -282,13 +273,21 @@ public class InvestmentInstitutionsAddressPart {
         this.yn = yn;
     }
 
-	@Override
-	public String toString() {
-		return "InvestmentInstitutionsAddressPart [id=" + id + ", investmentInstitutionId=" + investmentInstitutionId
-				+ ", name=" + name + ", town=" + town + ", detailAddress=" + detailAddress + ", phoneCountryCode="
-				+ phoneCountryCode + ", phoneDistrictCode=" + phoneDistrictCode + ", phoneNumber=" + phoneNumber
-				+ ", partEmail=" + partEmail + ", longitude=" + longitude + ", latitude=" + latitude + ", yn=" + yn
-				+ ", headQuartersEmail=" + headQuartersEmail + "]";
-	}
-    
+    /**
+     * 获取排序
+     *
+     * @return sort - 排序
+     */
+    public Integer getSort() {
+        return sort;
+    }
+
+    /**
+     * 设置排序
+     *
+     * @param sort 排序
+     */
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
 }

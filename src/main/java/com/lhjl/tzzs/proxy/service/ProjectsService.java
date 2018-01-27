@@ -197,7 +197,7 @@ public interface ProjectsService {
      * @param proId 项目或者投资机构的id
      * @return
      */
-	CommonDto<Object> listProParts(Integer appid, Integer proType,Integer proId);
+	CommonDto<List<InvestmentInstitutionsAddressPart>> listProPartsByCompanyIdAndProtype(Integer appid, Integer companyType,Integer companyId);
 	/**
      * 根据id删除分部信息
      * @param appid
