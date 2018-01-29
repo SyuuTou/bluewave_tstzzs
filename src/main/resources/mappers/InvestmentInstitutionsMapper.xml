@@ -132,7 +132,7 @@
     </select>
     <select id="serachInstitution" resultMap="newDtoMap">
         SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,
-        case when ii.kenel_case is null then (case when ii.comment is null then "" else ii.comment end) else ii.kenel_case end kenel_case,
+        ii.kenel_case,
         ii.count,ii.sort FROM
         (SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, CASE when ii.kenel_case is NULL or ii.kenel_case = ''  then ii.`comment` ELSE ii.kenel_case END kenel_case, ii.count,ii.sort
         FROM investment_institutions ii
