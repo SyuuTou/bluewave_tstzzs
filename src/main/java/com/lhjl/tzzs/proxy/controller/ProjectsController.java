@@ -177,14 +177,14 @@ public class ProjectsController extends GenericController{
     /**
      * 招聘信息列表
      * @param appid
-     * @param proId 项目id
+     * @param companyId 项目(公司)id
      * @return
      */
     @GetMapping("/v{appid}/list/recruitmentinfo")
-    public CommonDto<List<Recruitment>> listRecruInfo(@PathVariable Integer appid,Integer proId){
+    public CommonDto<List<Recruitment>> listRecruInfo(@PathVariable Integer appid,Integer companyId){
     	CommonDto<List<Recruitment>> result =new CommonDto<>();
     	try {
-    		result=projectsService.listRecruInfos(appid,proId);
+    		result=projectsService.listRecruInfos(appid,companyId);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    

@@ -239,7 +239,7 @@ public interface ProjectsService {
      * @param proId 项目id
      * @return
      */
-	CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer proId);
+	CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer companyId);
 	/**
      * 招聘需求信息回显
      * @param appid
