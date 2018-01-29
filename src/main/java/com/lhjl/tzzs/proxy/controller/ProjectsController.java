@@ -175,6 +175,26 @@ public class ProjectsController extends GenericController{
     	return result;
     }
     /**
+     * 招聘信息列表
+     * @param appid
+     * @param proId 项目id
+     * @return
+     */
+    @GetMapping("/v{appid}/list/recruitmentinfo")
+    public CommonDto<List<Recruitment>> listRecruInfo(@PathVariable Integer appid,Integer proId){
+    	CommonDto<List<Recruitment>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.listRecruInfos(appid,proId);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
      * 招聘需求信息回显
      * @param appid
      * @param proId 项目id
