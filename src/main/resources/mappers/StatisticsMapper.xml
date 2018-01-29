@@ -91,13 +91,18 @@
         (select fe.education_experience name, fe.education_experience `value`, count(distinct mf.serial_number) count
         from project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
         LEFT JOIN founders f on mf.id = f.project_id
+        left join investment_institutions_project iip on pfl.id = iip.project_id
+        left join investment_institutions ii on iip.investment_institutions_id = ii.id
         right join founders_education fe on fe.founder_id = f.id and fe.education_experience != '' and fe.education_experience is not null
-        where pfl.financing_time > '2017-01-01'
+        where pfl.financing_time between #{beginTime} and #{endTime}
+        <if test="jgtype != null">
+            and ii.type = #{jgtype}
+        </if>
         and pfl.stage in('种子轮','天使轮','Pre-A轮')
         and mf.country = '中国'
         group by fe.education_experience
         order by count desc
-        limit 11 )a
+        limit #{froma},#{sizea} )a
     </select>
     <select id="financingWorkExperienceDistributed" resultMap="histogramResultMap">
 
