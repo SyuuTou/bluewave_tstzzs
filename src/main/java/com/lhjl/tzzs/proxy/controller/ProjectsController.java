@@ -153,11 +153,11 @@ public class ProjectsController extends GenericController{
      * @param body 招聘需求请求体
      * @return
      */
-    @PutMapping("/v{appid}/edit/recruitmentrequirement")  
-    public CommonDto<Boolean> editRecruInfo(@PathVariable Integer appid,@RequestBody RecruitmentInfo body){
+    @PutMapping("/v{appid}/saveorupdate/recruitmentrequirement")  
+    public CommonDto<Boolean> saveOrUpdateRecruInfo(@PathVariable Integer appid,@RequestBody RecruitmentInfo body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result=projectsService.editRequirementInfo(appid,body);
+    		result=projectsService.saveOrUpdateRecruInfo(appid,body);
 	    }catch(Exception e) {
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    

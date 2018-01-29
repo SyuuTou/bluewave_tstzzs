@@ -1604,9 +1604,14 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 	@Transactional
 	@Override
-	public CommonDto<Boolean> editRequirementInfo(Integer appid, RecruitmentInfo body) {
+	public CommonDto<Boolean> saveOrUpdateRecruInfo(Integer appid, RecruitmentInfo body) {
 		CommonDto<Boolean> result=new CommonDto<Boolean>();
-		recruitmentInfoMapper.updateByPrimaryKeySelective(body);
+		if(body.getId()!=null) {
+			recruitmentInfoMapper.updateByPrimaryKeySelective(body);
+		}else {
+			recruitmentInfoMapper.insertSelective(body);
+		}
+		
 		result.setData(true);
 		result.setStatus(200);
 		result.setMessage("success");

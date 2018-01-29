@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectLogoInfoOutputDto;
 import com.lhjl.tzzs.proxy.model.ProjectSendFinancingHistoryB;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.ProjectSendBService;
@@ -195,6 +196,26 @@ public class ProjectSendBController extends GenericService{
             result.setStatus(502);
         }
 
+        return result;
+    }
+
+    /**
+     * 读取提交项目基本信息的接口
+     * @param projectSendId
+     * @param appid
+     * @return
+     */
+    @GetMapping("v{appid}/project/sendb/logoinfo")
+    public CommonDto<ProjectLogoInfoOutputDto> readProjectLogoInfo(Integer projectSendId, @PathVariable Integer appid){
+        CommonDto<ProjectLogoInfoOutputDto> result  = new CommonDto<>();
+        try {
+            result = projectSendBService.readProjectSendBLogoInfo(projectSendId,appid);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
         return result;
     }
 }

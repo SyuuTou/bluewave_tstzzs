@@ -253,7 +253,7 @@ public interface ProjectsService {
      * @param body 招聘需求请求体
      * @return
      */
-	CommonDto<Boolean> editRequirementInfo(Integer appid, RecruitmentInfo body);
+	CommonDto<Boolean> saveOrUpdateRecruInfo(Integer appid, RecruitmentInfo body);
 	/**
      * 公司进展列表
      * @param appid

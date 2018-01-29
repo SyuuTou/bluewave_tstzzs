@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectLogoInfoOutputDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.*;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProjectSendBServiceImpl implements ProjectSendBService{
@@ -686,6 +688,66 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         projectSendFinancingHistoryBService.copyProjectSendFinancingHistoryB(newprojectSendId,projectSendBId,appid);
 
         result.setData(newprojectSendId);
+        result.setStatus(200);
+        result.setMessage("success");
+
+        return result;
+    }
+
+    /**
+     * 读取提交项目基本信息的接口
+     * @param projectSendId
+     * @param appid
+     * @return
+     */
+    @Override
+    public CommonDto<ProjectLogoInfoOutputDto> readProjectSendBLogoInfo(Integer projectSendId, Integer appid) {
+        CommonDto<ProjectLogoInfoOutputDto> result  =new CommonDto<>();
+
+        if (projectSendId == null){
+           result.setMessage("提交项目id不能为空");
+           result.setData(null);
+           result.setStatus(502);
+
+           return result;
+        }
+
+        if (appid == null){
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("应用id不能为空");
+
+            return result;
+        }
+
+        Map<String,Object> projectLogoInfo = projectSendAuditBMapper.searchProjectSendLogoInfo(projectSendId,appid);
+        if (projectLogoInfo == null){
+            result.setMessage("没找到当前id对应的项目");
+            result.setData(null);
+            result.setStatus(502);
+
+            return result;
+        }
+
+        ProjectLogoInfoOutputDto projectLogoInfoOutputDto = new ProjectLogoInfoOutputDto();
+
+        projectLogoInfoOutputDto.setAduitStatus((Integer) projectLogoInfo.get("audit_status"));
+        projectLogoInfoOutputDto.setId((Integer)projectLogoInfo.get("id"));
+        projectLogoInfoOutputDto.setShortName((String)projectLogoInfo.get("short_name"));
+        projectLogoInfoOutputDto.setProjectSourceId((Integer)projectLogoInfo.get("project_source"));
+        String actualName = "";
+        if (projectLogoInfo.get("actual_name") != null){
+            actualName = (String) projectLogoInfo.get("actual_name");
+        }
+        projectLogoInfoOutputDto.setUserName(actualName);
+        projectLogoInfoOutputDto.setUserId((Integer)projectLogoInfo.get("userid"));
+        String projectLogo = "";
+        if (projectLogoInfo.get("project_logo") != null){
+            projectLogo = (String) projectLogoInfo.get("project_logo");
+        }
+        projectLogoInfoOutputDto.setProjectLogo(projectLogo);
+
+        result.setData(projectLogoInfoOutputDto);
         result.setStatus(200);
         result.setMessage("success");
 
