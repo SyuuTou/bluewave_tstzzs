@@ -282,12 +282,5 @@ public interface ProjectsService {
      * @return
      */
 	CommonDto<List<InvestmentInstitutions>> intelligentSearch(Integer appid, String keyword);
-	/**
-     * 根据用户id获取用户信息
-     * @param appid
-     * @param userId
-     * @return
-     */
-	CommonDto<Users> getUserById(Integer appid, Integer userId);
 	
 }

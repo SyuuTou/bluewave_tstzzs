@@ -1677,12 +1677,6 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		result.setData(investmentInstitutionsMapper.blurScan(keyword));
 		result.setStatus(200);
 		result.setMessage("success"); 
-		return result;
-	}
-
-	@Override
-	public CommonDto<Users> getUserById(Integer appid, Integer userId) {
-		
-		return userInfoService.getUserByUserId(userId);
+		return result;  
 	}
 }
