@@ -936,12 +936,14 @@ public class UserInfoServiceImpl implements UserInfoService{
    	@Override
    	public CommonDto<Users> getUserByUserId(int userId) {
    		CommonDto<Users> result=new CommonDto<>();
-   		Users user = usersMapper.findUserById(userId);
+   		Users user = usersMapper.selectByPrimaryKey(userId);
    		result.setStatus(200);
-   		result.setMessage("ありがとうございました");
+   		result.setMessage("success");
    		result.setData(user);
+   		
    		return result;
    	}
+   	
    	/**
    	 * *******测试用分页查询
    	 */

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsProject;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
@@ -12,7 +13,11 @@ import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
 import com.lhjl.tzzs.proxy.model.MetaJobType;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.ProjectFollowStatus;
+import com.lhjl.tzzs.proxy.model.ProjectProgress;
 import com.lhjl.tzzs.proxy.model.Projects;
+import com.lhjl.tzzs.proxy.model.Recruitment;
+import com.lhjl.tzzs.proxy.model.RecruitmentInfo;
+import com.lhjl.tzzs.proxy.model.Users;
 
 
 /**
@@ -128,14 +133,14 @@ public interface ProjectsService {
 	 * @param projectId 项目id
 	 * @return
 	 */
-	CommonDto<List<ProjectFinancingLog>> getFinancingLogs(Integer appid, Integer projectId);
+	CommonDto<List<ProjectFinancingLog>> getFinancingLogs(Integer appid, Integer projectId);  
 	/**
 	 * 删除单条的融资历史记录信息
 	 * @param appid
 	 * @param financiingLogId 融资历史记录的标识id
 	 * @return
 	 */
-	CommonDto<Boolean> removeFinancingLogById(Integer appid, FinancingLogDelInputDto body);
+	CommonDto<Boolean> removeFinancingLogById(Integer appid, Integer id);
 
 	/**
 	 * 根据项目id获取项目跟进状态的接口
@@ -193,7 +198,7 @@ public interface ProjectsService {
      * @param proId 项目或者投资机构的id
      * @return
      */
-	CommonDto<Object> listProParts(Integer appid, Integer proType,Integer proId);
+	CommonDto<List<InvestmentInstitutionsAddressPart>> listProPartsByCompanyIdAndProtype(Integer appid, Integer companyType,Integer companyId);
 	/**
      * 根据id删除分部信息
      * @param appid
@@ -214,6 +219,68 @@ public interface ProjectsService {
      * @return
      */
 	CommonDto<List<MetaJobType>> getMetaJobTypes(Integer appid);
-	
+	/**
+     * 保存或者公司招聘信息
+     * @param appid
+     * @param body 公司的招聘信息
+     * @return
+     */
+	CommonDto<Boolean> saveOrUpdateRecruitment(Integer appid, Recruitment body);
+	/**
+     * 根据id删除招聘信息
+     * @param appid
+     * @param partId 招聘信息id
+     * @return
+     */
+	CommonDto<Boolean> removeRecruInfoById(Integer appid, Integer id);
+	/**
+     * 招聘职位信息列表
+     * @param appid
+     * @param proId 项目id
+     * @return
+     */
+	CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer proId);
+	/**
+     * 招聘需求信息回显
+     * @param appid
+     * @param proId 项目id
+     * @return
+     */
+	CommonDto<RecruitmentInfo> echoRequirementInfo(Integer appid, Integer proId);
+	/**
+     * 招聘需求信息编辑
+     * @param appid
+     * @param body 招聘需求请求体
+     * @return
+     */
+	CommonDto<Boolean> saveOrUpdateRecruInfo(Integer appid, RecruitmentInfo body);
+	/**
+     * 公司进展列表
+     * @param appid
+     * @param companyId 公司id
+     * @return
+     */
+	CommonDto<List<ProjectProgress>> listProProgress(Integer appid, Integer companyId);
+	/**
+     * 增加公司进展的消息
+     * @param appid
+     * @param body
+     * @return
+     */
+	CommonDto<Boolean> saveOrUpdateProgressInfo(Integer appid, ProjectProgress body);
+	 /**
+     * 根据id删除进展的信息
+     * @param appid
+     * @param id 进展的id
+     * @return
+     */
+	CommonDto<Boolean> removeProgressInfoById(Integer appid, Integer id);
+	/**
+     * 投资方的智能搜索
+     * @param appid
+     * @param keyword
+     * @return
+     */
+	CommonDto<List<InvestmentInstitutions>> intelligentSearch(Integer appid, String keyword);
 	
 }

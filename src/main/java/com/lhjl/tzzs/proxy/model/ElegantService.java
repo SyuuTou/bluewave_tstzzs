@@ -93,7 +93,7 @@ public class ElegantService {
     private String scenceKey;
 
     /**
-     * 是否推荐
+     * 是否隐藏，0表示已删除，1表示未删除（是否删除）
      */
     private Integer yn;
 
@@ -102,6 +102,11 @@ public class ElegantService {
      */
     @Column(name = "web_switch")
     private Integer webSwitch;
+
+    /**
+     * 应用id
+     */
+    private Integer appid;
 
     /**
      * @return id
@@ -370,18 +375,18 @@ public class ElegantService {
     }
 
     /**
-     * 获取是否推荐
+     * 获取是否隐藏，0表示已删除，1表示未删除（是否删除）
      *
-     * @return yn - 是否推荐
+     * @return yn - 是否隐藏，0表示已删除，1表示未删除（是否删除）
      */
     public Integer getYn() {
         return yn;
     }
 
     /**
-     * 设置是否推荐
+     * 设置是否隐藏，0表示已删除，1表示未删除（是否删除）
      *
-     * @param yn 是否推荐
+     * @param yn 是否隐藏，0表示已删除，1表示未删除（是否删除）
      */
     public void setYn(Integer yn) {
         this.yn = yn;
@@ -403,5 +408,23 @@ public class ElegantService {
      */
     public void setWebSwitch(Integer webSwitch) {
         this.webSwitch = webSwitch;
+    }
+
+    /**
+     * 获取应用id
+     *
+     * @return appid - 应用id
+     */
+    public Integer getAppid() {
+        return appid;
+    }
+
+    /**
+     * 设置应用id
+     *
+     * @param appid 应用id
+     */
+    public void setAppid(Integer appid) {
+        this.appid = appid;
     }
 }

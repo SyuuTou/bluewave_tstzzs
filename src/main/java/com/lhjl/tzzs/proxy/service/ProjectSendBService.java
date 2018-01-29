@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectLogoInfoOutputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBOutDto;
 
@@ -40,5 +41,13 @@ public interface ProjectSendBService {
      * @return
      */
     CommonDto<Integer> copyProject(Integer prepareid,Integer newprepareid,Integer appid,Integer userId,Integer projectSendBId);
+
+    /**
+     * 读取提交项目基本信息的接口
+     * @param projectSendId
+     * @param appid
+     * @return
+     */
+    CommonDto<ProjectLogoInfoOutputDto> readProjectSendBLogoInfo(Integer projectSendId,Integer appid);
 
 }

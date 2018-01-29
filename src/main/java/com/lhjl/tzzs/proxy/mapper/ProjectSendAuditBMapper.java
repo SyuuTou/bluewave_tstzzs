@@ -27,4 +27,5 @@ public interface ProjectSendAuditBMapper extends OwnerMapper<ProjectSendAuditB> 
                                                              @Param("creatTimeOrder") Integer creatTimeOrder,@Param("creatTimeOrderDesc") Integer creatTimeOrderDesc,
                                                              @Param("auditTimeOrder") Integer auditTimeOrder,@Param("auditTimeOrderDesc") Integer auditTimeOrderDesc,
                                                              @Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
+    Map<String,Object> searchProjectSendLogoInfo(@Param("projectSendId") Integer projectSendId,@Param("appid") Integer appid);
 }

@@ -63,19 +63,24 @@ public class InvestmentInstitutionsAddressPart {
      * 删除标志:0代表有效；1代表无效
      */
     private Integer yn;
+
     /**
-     * 公司总部邮箱
+     * 权重
+     */
+    private Integer weight;
+    /**
+     * 排序
      */
     @Transient
-    private String headQuartersEmail;
+    private Integer sort;
     
 
-    public String getHeadQuartersEmail() {
-		return headQuartersEmail;
+    public Integer getSort() {
+		return sort;
 	}
 
-	public void setHeadQuartersEmail(String headQuartersEmail) {
-		this.headQuartersEmail = headQuartersEmail;
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 
 	/**
@@ -282,13 +287,31 @@ public class InvestmentInstitutionsAddressPart {
         this.yn = yn;
     }
 
+    /**
+     * 获取权重
+     *
+     * @return weight - 权重
+     */
+    public Integer getWeight() {
+        return weight;
+    }
+
+    /**
+     * 设置权重
+     *
+     * @param weight 权重
+     */
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
 	@Override
 	public String toString() {
 		return "InvestmentInstitutionsAddressPart [id=" + id + ", investmentInstitutionId=" + investmentInstitutionId
 				+ ", name=" + name + ", town=" + town + ", detailAddress=" + detailAddress + ", phoneCountryCode="
 				+ phoneCountryCode + ", phoneDistrictCode=" + phoneDistrictCode + ", phoneNumber=" + phoneNumber
 				+ ", partEmail=" + partEmail + ", longitude=" + longitude + ", latitude=" + latitude + ", yn=" + yn
-				+ ", headQuartersEmail=" + headQuartersEmail + "]";
+				+ ", weight=" + weight + ", sort=" + sort + "]";
 	}
     
 }

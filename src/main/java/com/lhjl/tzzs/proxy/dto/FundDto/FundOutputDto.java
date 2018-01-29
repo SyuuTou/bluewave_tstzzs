@@ -25,9 +25,25 @@ public class FundOutputDto {
 
     private BigDecimal investmentAmountHigh;
 
-    private Integer[] investStages;
+    private String[] investStages;
 
-    private Integer[] focusDomains;
+    private String[] focusDomains;
+
+    public String[] getInvestStages() {
+        return investStages;
+    }
+
+    public void setInvestStages(String[] investStages) {
+        this.investStages = investStages;
+    }
+
+    public String[] getFocusDomains() {
+        return focusDomains;
+    }
+
+    public void setFocusDomains(String[] focusDomains) {
+        this.focusDomains = focusDomains;
+    }
 
     public Integer getFundId() {
         return fundId;
@@ -99,21 +115,5 @@ public class FundOutputDto {
 
     public void setInvestmentAmountHigh(BigDecimal investmentAmountHigh) {
         this.investmentAmountHigh = investmentAmountHigh;
-    }
-
-    public Integer[] getInvestStages() {
-        return investStages;
-    }
-
-    public void setInvestStages(Integer[] investStages) {
-        this.investStages = investStages;
-    }
-
-    public Integer[] getFocusDomains() {
-        return focusDomains;
-    }
-
-    public void setFocusDomains(Integer[] focusDomains) {
-        this.focusDomains = focusDomains;
     }
 }

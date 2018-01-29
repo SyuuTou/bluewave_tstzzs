@@ -24,8 +24,8 @@ public class ProjectAdminFundController extends GenericController{
      * @param projectId
      * @return
      */
-    @GetMapping("/{projectId}/getfundList")
-    public CommonDto<List<FundOutputDto>> getFundList(@PathVariable Integer projectId){
+    @GetMapping("/getfundList")
+    public CommonDto<List<FundOutputDto>> getFundList(Integer projectId){
 
         CommonDto<List<FundOutputDto>> result = new CommonDto<>();
         try {
@@ -41,15 +41,14 @@ public class ProjectAdminFundController extends GenericController{
 
     /**
      * 增加或更新基金
-     * @param projectId
      * @param body
      * @return
      */
-    @PostMapping("/{projectId}/addOrUpdatefund")
-    public CommonDto<String> addOrUpdateFund(@PathVariable Integer projectId, @RequestBody FundInputDto body){
+    @PostMapping("/addOrUpdatefund")
+    public CommonDto<String> addOrUpdateFund(@RequestBody FundInputDto body){
         CommonDto<String> result = new CommonDto<>();
         try {
-            result = projectAdminFundService.addOrUpdateFund(projectId, body);
+            result = projectAdminFundService.addOrUpdateFund(body);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
@@ -64,7 +63,7 @@ public class ProjectAdminFundController extends GenericController{
      * @param fundId
      * @return
      */
-    @GetMapping("deletefund")
+    @GetMapping("/deletefund")
     public CommonDto<String> deleteFund(Integer fundId){
 
         CommonDto<String> result = new CommonDto<>();

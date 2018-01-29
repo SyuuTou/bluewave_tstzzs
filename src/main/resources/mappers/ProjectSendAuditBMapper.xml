@@ -131,4 +131,13 @@
     </if>
     ) abcd
   </select>
+
+  <select id="searchProjectSendLogoInfo" resultType="java.util.HashMap">
+    SELECT psab.id,psab.audit_status,psab.project_source,psb.short_name,psb.project_logo,u.actual_name,u.id as userid
+    FROM project_send_audit_b psab
+    left join project_send_b psb on psab.project_send_b_id = psb.id
+    left join users u on psab.user_id = u.ID
+    where psab.id = #{projectSendId}
+    and psab.appid = #{appid}
+  </select>
 </mapper>

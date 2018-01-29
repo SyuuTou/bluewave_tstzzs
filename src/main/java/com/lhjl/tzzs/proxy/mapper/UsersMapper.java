@@ -53,4 +53,5 @@ public interface UsersMapper extends OwnerMapper<Users> {
 												   @Param("pageSize") Integer pageSize);
 
 	List<Map<String,Object>> selectByName(@Param("searchWord") String searchWord);
+	List<Users> selectUserListByToken(@Param("userTokens") String[] userTokens);
 }

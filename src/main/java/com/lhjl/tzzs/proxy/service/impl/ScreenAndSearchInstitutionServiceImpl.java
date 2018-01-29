@@ -271,11 +271,11 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     LabelList labelList =new LabelList();
                     labelList.setName("50指数机构");
                     labelList.setValue("50指数机构");
-                    labelList.setChecked(true);
+                    labelList.setChecked(false);
                     LabelList labelList1 =new LabelList();
                     labelList1.setName("行业指数机构");
                     labelList1.setValue("行业指数机构");
-                    labelList1.setChecked(false);
+                    labelList1.setChecked(true);
                     list1.add(labelList);
                     list1.add(labelList1);
                     map.put("investment_type",list1);
@@ -285,11 +285,11 @@ public class ScreenAndSearchInstitutionServiceImpl implements ScreenAndSearchIns
                     LabelList labelList =new LabelList();
                     labelList.setName("50指数机构");
                     labelList.setValue("50指数机构");
-                    labelList.setChecked(false);
+                    labelList.setChecked(true);
                     LabelList labelList1 =new LabelList();
                     labelList1.setName("行业指数机构");
                     labelList1.setValue("行业指数机构");
-                    labelList1.setChecked(true);
+                    labelList1.setChecked(false);
                     list1.add(labelList);
                     list1.add(labelList1);
                     map.put("investment_type",list1);

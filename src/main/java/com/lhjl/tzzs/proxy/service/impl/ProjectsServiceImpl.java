@@ -11,6 +11,8 @@ import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
+import com.lhjl.tzzs.proxy.service.UserInfoService;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -101,7 +103,14 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
     private InvestmentInstitutionsAddressMapper investmentInstitutionsAddressMapper;
     @Autowired
     private MetaJobTypeMapper metaJobTypeMapper;
-
+    @Autowired
+    private RecruitmentMapper recruitmentMapper;
+    @Autowired
+    private RecruitmentInfoMapper recruitmentInfoMapper;
+    @Autowired
+    private ProjectProgressMapper projectProgressMapper;
+    @Resource
+    private UserInfoService userInfoService;
     /**
      * 查询我关注的项目
      *
@@ -1133,7 +1142,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		
 		return result;
 	}
-
+    @Transactional
 	@Override
 	public CommonDto<Boolean> updateFollowStatus(Integer appid, ProjectsUpdateInputDto body) {
 		CommonDto<Boolean> result  =  new CommonDto<>();
@@ -1220,9 +1229,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	@Override
 	public CommonDto<List<String>> getFinancingStatus(Integer appid) {
 		CommonDto<List<String>> result =new CommonDto<>();
-		System.err.println("*****");
 		List<String> list=projectFinancingLogMapper.fetchFinancingStatus();
-		System.err.println(list+"********");
 		result.setData(list);
 		result.setMessage("success");
 		result.setStatus(200);
@@ -1249,19 +1256,20 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 				List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
 				
 				//用于获取所有的机构信息
-				List<InvestmentInstitutions> investmentInstitutions=new ArrayList<>();
-//				List<String> institutionShortNames=new ArrayList<>();
+//				List<InvestmentInstitutions> investmentInstitutions=new ArrayList<>();
+				List<String> institutionShortNames=new ArrayList<>();
 				if(iips != null) {
 					for(InvestmentInstitutionsProject obj:iips) {
 						//根据机构id获取机构的相关信息
 						InvestmentInstitutions instiOne = investmentInstitutionsMapper.selectByPrimaryKey(obj.getInvestmentInstitutionsId());
 						if(instiOne != null) {
-							investmentInstitutions.add(instiOne);
-//							institutionShortNames.add(instiOne.getShortName());
+//							investmentInstitutions.add(instiOne);
+							institutionShortNames.add(instiOne.getShortName());
 						}
 					}
 				}
-				e.setInstitutions(investmentInstitutions);
+//				e.setInstitutions(investmentInstitutions);
+				e.setInstitutionsShortNames(institutionShortNames);
 			});
 		}
 		
@@ -1273,11 +1281,11 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	
 	@Transactional
 	@Override
-	public CommonDto<Boolean> removeFinancingLogById(Integer appid, FinancingLogDelInputDto body) {
+	public CommonDto<Boolean> removeFinancingLogById(Integer appid, Integer id) {
 		CommonDto<Boolean> result=new CommonDto<Boolean>();
 		ProjectFinancingLog pfl=new ProjectFinancingLog();
-		pfl.setId(body.getLogId());
-		pfl.setYn(body.getDelStatus());
+		pfl.setId(id);
+		pfl.setYn(1);
 		projectFinancingLogMapper.updateByPrimaryKeySelective(pfl);
 		
 		result.setData(true);
@@ -1339,6 +1347,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			projectFinancingLogMapper.insertSelective(body);
 			afterUpdateLogId=body.getId();
 		}
+		
 		//获取该融资历史信息的相关的投资方的相关信息
 		List<String> shortNames = body.getInstitutionsShortNames();
 		if((shortNames != null) && (shortNames.size()!=0)) {
@@ -1471,13 +1480,17 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 	@Transactional(readOnly=true)
 	@Override
-	public CommonDto<Object> listProParts(Integer appid, Integer proType,Integer proId) {
-		CommonDto<Object> result=new CommonDto<>();
+	public CommonDto<List<InvestmentInstitutionsAddressPart>> listProPartsByCompanyIdAndProtype(Integer appid, Integer companyType,Integer companyId) {
+		CommonDto<List<InvestmentInstitutionsAddressPart>> result=new CommonDto<>();
 //		Object partList = null;
-		InvestmentInstitutionsAddressPart iiap=new InvestmentInstitutionsAddressPart();
-		iiap.setInvestmentInstitutionId(proId);
+//		InvestmentInstitutionsAddressPart iiap=new InvestmentInstitutionsAddressPart();
+//		iiap.setInvestmentInstitutionId(companyId);
 		//获取该机构的所有分部信息
-		List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.select(iiap);
+		List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.selectAllByWeight(companyId);
+		Integer i=0;
+		for(InvestmentInstitutionsAddressPart e:list) {
+			e.setSort(++i);
+		}
 //		if(list != null) {
 //			for(InvestmentInstitutionsAddressPart tmp:list) {
 //				InvestmentInstitutionsAddress iia =new InvestmentInstitutionsAddress();
@@ -1507,7 +1520,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		result.setStatus(200);
 		return result;
 	}
-
+	@Transactional
 	@Override
 	public CommonDto<Boolean> saveOrUpdayePart(Integer appid, InvestmentInstitutionsAddressPart body) {
 		CommonDto<Boolean> result =new CommonDto<Boolean>();
@@ -1531,7 +1544,143 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		result.setStatus(200);
 		return result;
 	}
+	@Transactional
+	@Override
+	public CommonDto<Boolean> saveOrUpdateRecruitment(Integer appid, Recruitment body) {
+		CommonDto<Boolean> result =new CommonDto<Boolean>();
+		if(body.getId()!=null) {//更新操作,此时用户id要设置到createdUserId中
+			body.setLastUpdateTime(new Date());
+			recruitmentMapper.updateByPrimaryKeySelective(body);
+		}else {//插入操作，此时用户id要设置到updatedUserId中
+			body.setCreateTime(new Date());
+			body.setYn(0);//默认设置为有效
+			recruitmentMapper.insertSelective(body);
+		}
+		result.setData(true);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+	@Transactional
+	@Override
+	public CommonDto<Boolean> removeRecruInfoById(Integer appid, Integer id) {
+		CommonDto<Boolean> result =new CommonDto<Boolean>();
+		Recruitment rec =new Recruitment();
+		rec.setId(id);
+		rec.setYn(1);
+		recruitmentMapper.updateByPrimaryKeySelective(rec);
+		result.setData(true);
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
 
+	@Override
+	public CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer proId) {
+		CommonDto<List<Recruitment>> result=new CommonDto<>();
+		Recruitment rec=new Recruitment();
+		rec.setCompanyId(proId);
+		
+		result.setData(recruitmentMapper.select(rec));
+		result.setStatus(200);
+		result.setMessage("success");  
+		
+		return result;
+	}
 
+	@Override
+	public CommonDto<RecruitmentInfo> echoRequirementInfo(Integer appid, Integer proId) {
+		CommonDto<RecruitmentInfo> result=new CommonDto<>();
+		RecruitmentInfo reci=new RecruitmentInfo();
+		reci.setCompanyId(proId);
+		try {
+			reci = recruitmentInfoMapper.selectOne(reci);
+			result.setData(reci);
+			result.setStatus(200);
+			result.setMessage("success"); 
+		}catch(Exception e) {
+			result.setData(null);
+			result.setStatus(200);
+			result.setMessage("项目id不唯一，数据产生错误"); 
+			return result;
+		}
+		return result;
+	}
+	@Transactional
+	@Override
+	public CommonDto<Boolean> saveOrUpdateRecruInfo(Integer appid, RecruitmentInfo body) {
+		CommonDto<Boolean> result=new CommonDto<Boolean>();
+		if(body.getId()!=null) {
+			recruitmentInfoMapper.updateByPrimaryKeySelective(body);
+		}else {
+			recruitmentInfoMapper.insertSelective(body);
+		}
+		
+		result.setData(true);
+		result.setStatus(200);
+		result.setMessage("success");
+		return result;
+	}
 
+	@Override
+	public CommonDto<List<ProjectProgress>> listProProgress(Integer appid, Integer companyId) {
+		CommonDto<List<ProjectProgress>> result=new CommonDto<>();
+		ProjectProgress pp=new ProjectProgress();
+		pp.setCompanyId(companyId);
+		pp.setYn(0);
+		List<ProjectProgress> pps = projectProgressMapper.select(pp);
+		if(pps!=null) {
+			pps.forEach((e)->{
+				Users user = usersMapper.selectByPrimaryKey(e.getOperationUser());
+				e.setUserName(user.getActualName());
+			});
+		}
+		result.setData(pps);
+		result.setStatus(200);
+		result.setMessage("success");  
+		
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> saveOrUpdateProgressInfo(Integer appid, ProjectProgress body) {
+		CommonDto<Boolean> result=new CommonDto<>();
+		if(body.getId()!=null) {//更新
+			body.setOperationTime(new Date());
+			projectProgressMapper.updateByPrimaryKeySelective(body);
+		}else {//插入
+			body.setOperationTime(new Date());
+			body.setYn(0);
+			projectProgressMapper.insertSelective(body);
+		}
+		
+		result.setData(true);
+		result.setStatus(200);
+		result.setMessage("success");  
+		
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> removeProgressInfoById(Integer appid, Integer id) {
+		CommonDto<Boolean> result=new CommonDto<>();
+		ProjectProgress pp=new ProjectProgress();
+		pp.setId(id);
+		pp.setYn(1);
+		projectProgressMapper.updateByPrimaryKeySelective(pp);
+		result.setData(true);
+		result.setStatus(200);
+		result.setMessage("success"); 
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<InvestmentInstitutions>> intelligentSearch(Integer appid, String keyword) {
+		CommonDto<List<InvestmentInstitutions>> result=new CommonDto<>();
+		
+		result.setData(investmentInstitutionsMapper.blurScan(keyword));
+		result.setStatus(200);
+		result.setMessage("success"); 
+		return result;  
+	}
 }

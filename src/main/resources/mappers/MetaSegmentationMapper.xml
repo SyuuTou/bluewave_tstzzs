@@ -46,4 +46,20 @@
     where investment_institutions_id = #{institutionId}
     group by ids.segmentation
   </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select * from meta_segmentation;
+  </select>
+
+  <select id="findSegmentationIdByName" resultType="Integer">
+    select id from meta_segmentation where `name`=#{segmentation};
+  </select>
+
+  <select id="selectBySegmentationIds" resultMap="BaseResultMap">
+    select * from meta_segmentation where 1=1
+    <if test="segmentationIds != null and segmentationIds!=''">
+      and id in
+      <foreach close=")" collection="segmentationIds" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+  </select>
 </mapper>

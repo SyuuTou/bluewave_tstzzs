@@ -12,7 +12,7 @@ import java.util.List;
 public interface ProjectAdminFundService {
     CommonDto<List<FundOutputDto>> getFundList(Integer projectId);
 
-    CommonDto<String> addOrUpdateFund(Integer projectId, FundInputDto body);
+    CommonDto<String> addOrUpdateFund(FundInputDto body);
 
     CommonDto<String> deleteFund(Integer fundId);
 }

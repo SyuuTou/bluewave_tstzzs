@@ -1,27 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.RecruitmentMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Recruitment" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.RecruitmentMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.Recruitment">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="project_id" property="projectId" jdbcType="INTEGER" />
-    <result column="job_type_id" property="jobTypeId" jdbcType="INTEGER" />
-    <result column="job_name" property="jobName" jdbcType="VARCHAR" />
-    <result column="job_address" property="jobAddress" jdbcType="VARCHAR" />
-    <result column="full_time" property="fullTime" jdbcType="INTEGER" />
-    <result column="job_comment" property="jobComment" jdbcType="VARCHAR" />
-    <result column="salary_low" property="salaryLow" jdbcType="DECIMAL" />
-    <result column="salary_high" property="salaryHigh" jdbcType="DECIMAL" />
-    <result column="welfare" property="welfare" jdbcType="VARCHAR" />
-    <result column="skill_requirment" property="skillRequirment" jdbcType="VARCHAR" />
-    <result column="share_option_low" property="shareOptionLow" jdbcType="DECIMAL" />
-    <result column="share_option_high" property="shareOptionHigh" jdbcType="DECIMAL" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="created_user_id" property="createdUserId" jdbcType="INTEGER" />
-    <result column="updated_user_id" property="updatedUserId" jdbcType="INTEGER" />
-    <result column="yn" property="yn" jdbcType="INTEGER" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="job_type_id" jdbcType="INTEGER" property="jobTypeId" />
+    <result column="job_name" jdbcType="VARCHAR" property="jobName" />
+    <result column="address_details" jdbcType="VARCHAR" property="addressDetails" />
+    <result column="full_time" jdbcType="INTEGER" property="fullTime" />
+    <result column="job_comment" jdbcType="VARCHAR" property="jobComment" />
+    <result column="salary_low" jdbcType="DECIMAL" property="salaryLow" />
+    <result column="salary_high" jdbcType="DECIMAL" property="salaryHigh" />
+    <result column="welfare" jdbcType="VARCHAR" property="welfare" />
+    <result column="skill_requirment" jdbcType="VARCHAR" property="skillRequirment" />
+    <result column="share_option_low" jdbcType="DECIMAL" property="shareOptionLow" />
+    <result column="share_option_high" jdbcType="DECIMAL" property="shareOptionHigh" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="created_user_id" jdbcType="INTEGER" property="createdUserId" />
+    <result column="updated_user_id" jdbcType="INTEGER" property="updatedUserId" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
   </resultMap>
+  
 </mapper>

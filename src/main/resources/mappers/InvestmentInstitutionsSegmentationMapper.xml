@@ -17,7 +17,7 @@
   <select id="findYear" resultType="java.util.HashMap">
     select pfl.financing_time_year from investment_institutions_project iip
     left join projects p on iip.project_id = p.ID
-    left join project_financing_log pfl on iip.project_id = pfl.project_id
+    left join project_financing_log pfl on iip.project_id = pfl.id
     where iip.investment_institutions_id = #{institutionId}
     and pfl.financing_time_year is not null
     group by pfl.financing_time_year
@@ -33,13 +33,16 @@
   </insert>
 
   <select id="selectSegmentationCount" resultType="java.util.HashMap">
-    SELECT c.segmentation_name,ms.segmentation_logo,COUNT(*) ct FROM(
-    SELECT * FROM project_segmentation WHERE project_id IN(
-    SELECT id FROM projects WHERE id IN
-    ( SELECT project_id FROM project_financing_log WHERE id IN(
-    SELECT  project_id FROM investment_institutions_project WHERE  investment_institutions_id = #{institutionId}))) ) c
-    LEFT JOIN meta_segmentation ms ON c.segmentation_name = ms.name
-    GROUP BY c.segmentation_name
-    order by ct desc
+    select count(1) ct , a.segmentation_name,ms.segmentation_logo from (
+    select p.id,ps.segmentation_name,p.full_name,iip.investment_institutions_id from project_financing_log pfl left join projects p on pfl.project_id = p.id
+    right join project_segmentation ps on ps.project_id = p.id
+    right join investment_institutions_project iip  on  iip.project_id = pfl.id
+    where iip.investment_institutions_id = #{institutionId} and ps.segmentation_name is not null
+    group by p.full_name,ps.segmentation_name
+    ) a
+    left join meta_segmentation ms on a.segmentation_name = ms.`name`
+    where ms.segmentation_logo is not null
+    group by a.segmentation_name
+    order by ct desc;
   </select>
 </mapper>
