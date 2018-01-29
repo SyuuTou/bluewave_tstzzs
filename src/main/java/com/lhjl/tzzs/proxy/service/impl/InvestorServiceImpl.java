@@ -6,6 +6,13 @@ import com.lhjl.tzzs.proxy.dto.DistributedCommonDto;
 import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.dto.LabelList;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
+import com.lhjl.tzzs.proxy.mapper.InvestorDemandCharacterMapper;
+import com.lhjl.tzzs.proxy.mapper.InvestorDemandMapper;
+import com.lhjl.tzzs.proxy.mapper.InvestorDemandSegmentationMapper;
+import com.lhjl.tzzs.proxy.mapper.InvestorDemandSpeedwayMapper;
+import com.lhjl.tzzs.proxy.mapper.InvestorDemandStageMapper;
+import com.lhjl.tzzs.proxy.mapper.InvestorInvestmentCaseMapper;
+import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaFinancingMapper;
 import com.lhjl.tzzs.proxy.service.EvaluateService;
 import com.lhjl.tzzs.proxy.service.InvestorService;
@@ -27,9 +34,22 @@ public class InvestorServiceImpl implements InvestorService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InvestorServiceImpl.class);
 
-//    @Autowired
-//    private MetaFinancingMapper financingMapper;
-
+    @Autowired
+    private InvestorsMapper investorsMapper;
+    @Autowired
+    private InvestorDemandMapper investorDemandMapper;
+    @Autowired
+    private InvestorDemandCharacterMapper investorDemandCharacterMapper;
+    @Autowired
+    private InvestorDemandSegmentationMapper investorDemandSegmentationMapper;
+    @Autowired
+    private InvestorDemandSpeedwayMapper investorDemandSpeedwayMapper;
+    @Autowired
+    private InvestorDemandStageMapper investorDemandStageMapper;
+    @Autowired
+    private InvestorInvestmentCaseMapper investorInvestmentCaseMapper;
+    
+    
     @Value("${pageNum}")
     private Integer pageNumDefault ;
 

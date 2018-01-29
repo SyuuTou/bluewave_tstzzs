@@ -24,9 +24,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
-import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
-import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
 
 import io.swagger.annotations.ApiImplicitParam;
@@ -50,7 +47,26 @@ public class ProjectsController extends GenericController{
 
     @Value("${pageSize}")  
     private String defaultPageSize;
-    
+    /**
+     * 根据用户id获取用户信息
+     * @param appid
+     * @param userId
+     * @return
+     */
+    @GetMapping("/v{appid}/echo/userbyid")
+    public CommonDto<Users> getUserById(@PathVariable Integer appid,Integer userId){
+    	CommonDto<Users> result =new CommonDto<>();
+    	try {
+    		result=projectsService.getUserById(appid,userId);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
     /**
      * 投资方的智能搜索
      * @param appid
@@ -137,11 +153,11 @@ public class ProjectsController extends GenericController{
      * @param body 招聘需求请求体
      * @return
      */
-    @PutMapping("/v{appid}/edit/recruitmentrequirement")  
-    public CommonDto<Boolean> editRecruInfo(@PathVariable Integer appid,@RequestBody RecruitmentInfo body){
+    @PutMapping("/v{appid}/saveorupdate/recruitmentrequirement")  
+    public CommonDto<Boolean> saveOrUpdateRecruInfo(@PathVariable Integer appid,@RequestBody RecruitmentInfo body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result=projectsService.editRequirementInfo(appid,body);
+    		result=projectsService.saveOrUpdateRecruInfo(appid,body);
 	    }catch(Exception e) {
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
@@ -273,19 +289,19 @@ public class ProjectsController extends GenericController{
     /**
      * 项目分部的列表信息
      * @param appid 扩展字段
-     * @param proType 项目的类别(根据不同的项目类别来列举不同项目的分部信息：1代表项目【产业公司】;2代表机构)
-     * @param proId 项目或者投资机构等的id
+     * @param companyType 项目的类别(根据不同的项目类别来列举不同项目的分部信息：1代表项目【产业公司】;2代表机构)
+     * @param companyId 项目或者投资机构等的id
      * @return
      */
-    @GetMapping("/v{appid}/list/proparts{proId}/protype{proType}")
-    public CommonDto<Object> listProPart(@PathVariable("appid") Integer appid,@PathVariable("proType") Integer proType,@PathVariable("proId") Integer proId){
-    	CommonDto<Object> result =new CommonDto<>();
+    @GetMapping("/v{appid}/list/proparts")
+    public CommonDto<List<InvestmentInstitutionsAddressPart>> listProPart(@PathVariable("appid") Integer appid,Integer companyType,Integer companyId){
+    	CommonDto<List<InvestmentInstitutionsAddressPart>> result =new CommonDto<>();
     	try {
-    		result=projectsService.listProParts(appid,proType,proId);
+    		result=projectsService.listProPartsByCompanyIdAndProtype(appid,companyType,companyId);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
-    		result.setData(result);
+    		result.setData(null);
     		result.setMessage("fail");
     		result.setStatus(500);
 	    }

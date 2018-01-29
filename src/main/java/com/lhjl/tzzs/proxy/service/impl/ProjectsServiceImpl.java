@@ -11,6 +11,8 @@ import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
+import com.lhjl.tzzs.proxy.service.UserInfoService;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -107,6 +109,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
     private RecruitmentInfoMapper recruitmentInfoMapper;
     @Autowired
     private ProjectProgressMapper projectProgressMapper;
+    @Resource
+    private UserInfoService userInfoService;
     /**
      * 查询我关注的项目
      *
@@ -1476,13 +1480,13 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 	@Transactional(readOnly=true)
 	@Override
-	public CommonDto<Object> listProParts(Integer appid, Integer proType,Integer proId) {
-		CommonDto<Object> result=new CommonDto<>();
+	public CommonDto<List<InvestmentInstitutionsAddressPart>> listProPartsByCompanyIdAndProtype(Integer appid, Integer companyType,Integer companyId) {
+		CommonDto<List<InvestmentInstitutionsAddressPart>> result=new CommonDto<>();
 //		Object partList = null;
-		InvestmentInstitutionsAddressPart iiap=new InvestmentInstitutionsAddressPart();
-		iiap.setInvestmentInstitutionId(proId);
+//		InvestmentInstitutionsAddressPart iiap=new InvestmentInstitutionsAddressPart();
+//		iiap.setInvestmentInstitutionId(companyId);
 		//获取该机构的所有分部信息
-		List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.select(iiap);
+		List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.selectAllByDefaultSort(companyId);
 //		if(list != null) {
 //			for(InvestmentInstitutionsAddressPart tmp:list) {
 //				InvestmentInstitutionsAddress iia =new InvestmentInstitutionsAddress();
@@ -1600,9 +1604,14 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 	@Transactional
 	@Override
-	public CommonDto<Boolean> editRequirementInfo(Integer appid, RecruitmentInfo body) {
+	public CommonDto<Boolean> saveOrUpdateRecruInfo(Integer appid, RecruitmentInfo body) {
 		CommonDto<Boolean> result=new CommonDto<Boolean>();
-		recruitmentInfoMapper.updateByPrimaryKeySelective(body);
+		if(body.getId()!=null) {
+			recruitmentInfoMapper.updateByPrimaryKeySelective(body);
+		}else {
+			recruitmentInfoMapper.insertSelective(body);
+		}
+		
 		result.setData(true);
 		result.setStatus(200);
 		result.setMessage("success");
@@ -1669,5 +1678,11 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		result.setStatus(200);
 		result.setMessage("success"); 
 		return result;
+	}
+
+	@Override
+	public CommonDto<Users> getUserById(Integer appid, Integer userId) {
+		
+		return userInfoService.getUserByUserId(userId);
 	}
 }

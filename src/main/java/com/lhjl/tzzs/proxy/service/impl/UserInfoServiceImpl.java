@@ -938,7 +938,7 @@ public class UserInfoServiceImpl implements UserInfoService{
    		CommonDto<Users> result=new CommonDto<>();
    		Users user = usersMapper.findUserById(userId);
    		result.setStatus(200);
-   		result.setMessage("ありがとうございました");
+   		result.setMessage("success");
    		result.setData(user);
    		return result;
    	}

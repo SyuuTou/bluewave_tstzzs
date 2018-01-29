@@ -17,6 +17,7 @@ import com.lhjl.tzzs.proxy.model.ProjectProgress;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.model.Recruitment;
 import com.lhjl.tzzs.proxy.model.RecruitmentInfo;
+import com.lhjl.tzzs.proxy.model.Users;
 
 
 /**
@@ -197,7 +198,7 @@ public interface ProjectsService {
      * @param proId 项目或者投资机构的id
      * @return
      */
-	CommonDto<Object> listProParts(Integer appid, Integer proType,Integer proId);
+	CommonDto<List<InvestmentInstitutionsAddressPart>> listProPartsByCompanyIdAndProtype(Integer appid, Integer companyType,Integer companyId);
 	/**
      * 根据id删除分部信息
      * @param appid
@@ -252,7 +253,7 @@ public interface ProjectsService {
      * @param body 招聘需求请求体
      * @return
      */
-	CommonDto<Boolean> editRequirementInfo(Integer appid, RecruitmentInfo body);
+	CommonDto<Boolean> saveOrUpdateRecruInfo(Integer appid, RecruitmentInfo body);
 	/**
      * 公司进展列表
      * @param appid
@@ -281,5 +282,12 @@ public interface ProjectsService {
      * @return
      */
 	CommonDto<List<InvestmentInstitutions>> intelligentSearch(Integer appid, String keyword);
+	/**
+     * 根据用户id获取用户信息
+     * @param appid
+     * @param userId
+     * @return
+     */
+	CommonDto<Users> getUserById(Integer appid, Integer userId);
 	
 }
