@@ -87,23 +87,17 @@
         order by a.count desc limit #{froma},#{sizea}
     </select>
     <select id="financingEducationExperienceDistributed" resultMap="histogramResultMap">
-
-        select education_experience y, count x from (
-        select fe.education_experience, count(distinct mf.short_name,pfl.stage) count from project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
-        left join investment_institutions ii on mf.`investment_institutions_id` = ii.id
+        select name x,count y from
+        (select fe.education_experience name, fe.education_experience `value`, count(distinct mf.serial_number) count
+        from project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id
         LEFT JOIN founders f on mf.id = f.project_id
-        right join founders_education fe on fe.founder_id = f.id and fe.education_experience != ''
-        where pfl.financing_time between
-        #{beginTime} and #{endTime}
-        and pfl.stage in ('种子轮','天使轮','Pre-A轮') and mf.country = '中国'
-        and fe.education_experience != ''
-        <if test="jgtype != null">
-            and ii.type = #{jgtype}
-        </if>
-
-        group by fe.education_experience ) a
-
-        order by a.count desc limit #{froma},#{sizea}
+        right join founders_education fe on fe.founder_id = f.id and fe.education_experience != '' and fe.education_experience is not null
+        where pfl.financing_time > '2017-01-01'
+        and pfl.stage in('种子轮','天使轮','Pre-A轮')
+        and mf.country = '中国'
+        group by fe.education_experience
+        order by count desc
+        limit 11 )a
     </select>
     <select id="financingWorkExperienceDistributed" resultMap="histogramResultMap">
 
