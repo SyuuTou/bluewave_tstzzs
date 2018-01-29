@@ -1486,7 +1486,11 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 //		InvestmentInstitutionsAddressPart iiap=new InvestmentInstitutionsAddressPart();
 //		iiap.setInvestmentInstitutionId(companyId);
 		//获取该机构的所有分部信息
-		List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.selectAllByDefaultSort(companyId);
+		List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.selectAllByWeight(companyId);
+		Integer i=0;
+		for(InvestmentInstitutionsAddressPart e:list) {
+			e.setSort(++i);
+		}
 //		if(list != null) {
 //			for(InvestmentInstitutionsAddressPart tmp:list) {
 //				InvestmentInstitutionsAddress iia =new InvestmentInstitutionsAddress();

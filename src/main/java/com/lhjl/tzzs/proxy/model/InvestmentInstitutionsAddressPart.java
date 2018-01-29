@@ -65,11 +65,25 @@ public class InvestmentInstitutionsAddressPart {
     private Integer yn;
 
     /**
+     * 权重
+     */
+    private Integer weight;
+    /**
      * 排序
      */
+    @Transient
     private Integer sort;
+    
 
-    /**
+    public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
+
+	/**
      * @return id
      */
     public Integer getId() {
@@ -274,20 +288,30 @@ public class InvestmentInstitutionsAddressPart {
     }
 
     /**
-     * 获取排序
+     * 获取权重
      *
-     * @return sort - 排序
+     * @return weight - 权重
      */
-    public Integer getSort() {
-        return sort;
+    public Integer getWeight() {
+        return weight;
     }
 
     /**
-     * 设置排序
+     * 设置权重
      *
-     * @param sort 排序
+     * @param weight 权重
      */
-    public void setSort(Integer sort) {
-        this.sort = sort;
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
+
+	@Override
+	public String toString() {
+		return "InvestmentInstitutionsAddressPart [id=" + id + ", investmentInstitutionId=" + investmentInstitutionId
+				+ ", name=" + name + ", town=" + town + ", detailAddress=" + detailAddress + ", phoneCountryCode="
+				+ phoneCountryCode + ", phoneDistrictCode=" + phoneDistrictCode + ", phoneNumber=" + phoneNumber
+				+ ", partEmail=" + partEmail + ", longitude=" + longitude + ", latitude=" + latitude + ", yn=" + yn
+				+ ", weight=" + weight + ", sort=" + sort + "]";
+	}
+    
 }
