@@ -60,10 +60,11 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @GetMapping("/v{appid}/echo/user/byappidandtoken")
-    public CommonDto<Users> getUserById(@PathVariable Integer appid,String token,Integer userId){
+    public CommonDto<Users> getUserById(@PathVariable Integer appid,String token){
     	CommonDto<Users> result =new CommonDto<>();
     	try {
-			result=userInfoService.getUserByUserId(userLoginService.getUserIdByToken(token,appid));
+    		Integer userId = userLoginService.getUserIdByToken(token,appid);
+			result=userInfoService.getUserByUserId(userId);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
