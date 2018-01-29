@@ -55,10 +55,10 @@
     select id from meta_segmentation where `name`=#{segmentation};
   </select>
 
-  <select id="selectBySegmentationIds" parameterType="java.util.List" resultMap="BaseResultMap">
+  <select id="selectBySegmentationIds" resultMap="BaseResultMap">
     select * from meta_segmentation where 1=1
     <if test="segmentationIds != null and segmentationIds!=''">
-      and id exists
+      and id in
       <foreach close=")" collection="segmentationIds" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
   </select>

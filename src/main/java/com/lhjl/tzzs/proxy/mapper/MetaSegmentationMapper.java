@@ -24,5 +24,5 @@ public interface MetaSegmentationMapper extends OwnerMapper<MetaSegmentation> {
 
     Integer findSegmentationIdByName(@Param("segmentation") String segmentation);
 
-    List<MetaSegmentation> selectBySegmentationIds(@Param("segmentationIds")List<Integer> segmentationIds);
+    List<MetaSegmentation> selectBySegmentationIds(@Param("segmentationIds")Integer[] segmentationIds);
 }

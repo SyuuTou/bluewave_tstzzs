@@ -14,6 +14,7 @@ import com.lhjl.tzzs.proxy.service.ProjectAdminFundService;
 import com.lhjl.tzzs.proxy.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -45,13 +46,12 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
     @Resource
     private InvestmentInstitutionsFundsStagesService investmentInstitutionsFundsStagesService;
 
-
+    @Transactional
     @Override
     public CommonDto<List<FundOutputDto>> getFundList(Integer projectId) {
         CommonDto<List<FundOutputDto>> result = new CommonDto<>();
         List<FundOutputDto> fundOutputDtoList = new ArrayList<>();
-        List<InvestmentInstitutionsFunds> investmentInstitutionsFundsList = new ArrayList<>();
-        investmentInstitutionsFundsList = investmentInstitutionsFundsMapper.getFundList(projectId);
+        List<InvestmentInstitutionsFunds> investmentInstitutionsFundsList = investmentInstitutionsFundsMapper.getFundList(projectId);
 
         if(null != investmentInstitutionsFundsList && investmentInstitutionsFundsList.size() != 0){
             for(InvestmentInstitutionsFunds investmentInstitutionsFunds_i: investmentInstitutionsFundsList){
@@ -59,7 +59,7 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
                 fundOutputDto.setFundId(investmentInstitutionsFunds_i.getId());
                 fundOutputDto.setShortName(investmentInstitutionsFunds_i.getName());
                 fundOutputDto.setFullName(investmentInstitutionsFunds_i.getFullName());
-                fundOutputDto.setEstablishedTime(investmentInstitutionsFunds_i.getCreateTime().toString());
+                fundOutputDto.setEstablishedTime(String.valueOf(investmentInstitutionsFunds_i.getCreateTime()));
                 fundOutputDto.setSurvivalPeriod(investmentInstitutionsFunds_i.getDuration());
                 fundOutputDto.setCurrencyType(investmentInstitutionsFunds_i.getCurrency());
                 fundOutputDto.setFundManageScale(investmentInstitutionsFunds_i.getScale());
@@ -78,7 +78,9 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
                     investmentInstitutionsFundsStagesList.forEach(investmentInstitutionsFundsStages_i -> {
                         investmentInstitutionsFundsStagess.add(investmentInstitutionsFundsStages_i.getStageId());
                     });
-                    List<MetaProjectStage> metaProjectStageList = metaProjectStageMapper.selectByStageIds(investmentInstitutionsFundsStagess);
+                    Integer[] StageIds = new Integer[investmentInstitutionsFundsStagess.size()];
+                    investmentInstitutionsFundsStagess.toArray(StageIds);
+                    List<MetaProjectStage> metaProjectStageList = metaProjectStageMapper.selectByStageIds(StageIds);
                     metaProjectStageList.forEach( metaProjectStage -> {
                         investmentInstitutionsFundsStageNames.add(metaProjectStage.getName());
                     });
@@ -99,7 +101,9 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
                     investmentInstitutionsFundsSegmentationList.forEach(investmentInstitutionsFundsSegmentation_i -> {
                         investmentInstitutionsFundsSegmentations.add(investmentInstitutionsFundsSegmentation_i.getSegmentationId());
                     });
-                    List<MetaSegmentation> metaSegmentationList = metaSegmentationMapper.selectBySegmentationIds(investmentInstitutionsFundsSegmentations);
+                    Integer[] SegmentationIds = new Integer[investmentInstitutionsFundsSegmentations.size()];
+                    investmentInstitutionsFundsSegmentations.toArray(SegmentationIds);
+                    List<MetaSegmentation> metaSegmentationList = metaSegmentationMapper.selectBySegmentationIds(SegmentationIds);
                     metaSegmentationList.forEach(metaSegmentation -> {
                         investmentInstitutionsFundsSegmentationNames.add(metaSegmentation.getName());
                     });
