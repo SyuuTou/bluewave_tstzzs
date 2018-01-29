@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.controller.weixin;
 
 
+import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ImageHandlerDto;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
 import org.apache.commons.io.IOUtils;
@@ -40,5 +41,12 @@ public class QRcodeController extends GenericController {
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         IOUtils.copy(in, response.getOutputStream());
 
+    }
+
+    public CommonDto<String> generateBase64(){
+
+
+
+        return null;
     }
 }

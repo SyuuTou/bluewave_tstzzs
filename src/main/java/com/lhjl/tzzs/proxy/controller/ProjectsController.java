@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.service.ProjectsService;
+import com.lhjl.tzzs.proxy.service.UserInfoService;
+import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -41,23 +43,28 @@ public class ProjectsController extends GenericController{
 
     @Resource
     private ProjectsService projectsService;
-
+    @Resource
+    private UserLoginService userLoginService;
+    @Resource
+    private UserInfoService userInfoService;
+    
     @Value("${pageNum}")  
     private String defaultPageNum;
 
     @Value("${pageSize}")  
     private String defaultPageSize;
     /**
-     * 根据用户id获取用户信息
+     * 根据appid以及token获取用户信息
      * @param appid
      * @param userId
      * @return
      */
-    @GetMapping("/v{appid}/echo/userbyid")
-    public CommonDto<Users> getUserById(@PathVariable Integer appid,Integer userId){
+    @GetMapping("/v{appid}/echo/user/byappidandtoken")
+    public CommonDto<Users> getUserById(@PathVariable Integer appid,String token){
     	CommonDto<Users> result =new CommonDto<>();
     	try {
-    		result=projectsService.getUserById(appid,userId);
+    		Integer userId = userLoginService.getUserIdByToken(token,appid);
+			result=userInfoService.getUserByUserId(userId);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
@@ -287,7 +294,7 @@ public class ProjectsController extends GenericController{
     	return result;
     }
     /**
-     * 项目分部的列表信息
+     * 项目(投资机构/公司)分部的列表信息
      * @param appid 扩展字段
      * @param companyType 项目的类别(根据不同的项目类别来列举不同项目的分部信息：1代表项目【产业公司】;2代表机构)
      * @param companyId 项目或者投资机构等的id
