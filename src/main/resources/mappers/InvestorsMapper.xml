@@ -44,6 +44,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  
    <select id="listInvestorsInfos" resultMap="InvestorsOutputMap">
     	SELECT i.ID,i.user_id,i.name,
 	ii.short_name,i.position,ide.phonenumber,
@@ -66,10 +67,57 @@
 							GROUP BY investor_demand_id) stage on stage.c=ide.id
 	LEFT JOIN (SELECT id,GROUP_CONCAT(city) as citys from investor_city GROUP BY id) city on city.id = i.ID
   WHERE i.approval_status != 0 AND i.yn =1
-  
+  <!-- 模糊搜索 -->
+  <if test="keyWords != null and keyWords != ''">
+                AND (i.name like "%"#{keyWords}"%" or ii.short_name like "%"#{keyWords}"%" or i.position like "%"#{keyWords}"%"
+				or mdst.type_name like "%"#{keyWords}"%" or iit.type like "%"#{keyWords}"%" or seg.segmentations like "%"#{keyWords}"%"
+				or speedway.speedways like "%"#{keyWords}"%" or speedways,stage.stages like "%"#{keyWords}"%"
+				or ide.demand like "%"#{keyWords}"%" or speedways,city.citys like "%"#{keyWords}"%")
+  </if>
+  <!-- 范围搜索 -->
+  <!-- 查询条件：创建开始时间 -->
+  <if test="startTime !=null and startTime !=''">
+        AND i.create_time &gt;= #{startTime}
+  </if>
+  <!-- 查询条件：创建结束时间 -->
+  <if test="endTime !=null and endTime !=''">
+      AND i.create_time &lt;= #{endTime}
+  </if>
+  <if test="amountBeginRmb !=null and amountBeginRmb !=''">
+      AND ide.investment_amount_low &gt;= #{amountBeginRmb}
+  </if>
+  <if test="amountEndRmb !=null and amountEndRmb !=''">
+      AND ide.investment_amount_high &lt;= #{amountEndRmb}
+  </if>
+  <if test="amountBeginDollar !=null and amountBeginDollar !=''">
+      AND ide.investment_amount_low_dollars &gt;= #{amountBeginDollar}
+  </if>
+  <if test="amountEndDollar !=null and amountEndDollar !=''">
+      AND ide.investment_amount_high_dollars &lt;= #{amountEndDollar}
+  </if>
+  <!-- 精确搜索 -->
+  <!-- 根据项目来源进行精确搜索 -->
+ <!--  <if test="typeName !=null and typeName !=''">
+      AND mdst.id = #{type_name}
+  </if>
+  <if test="type !=null and type !=''">
+      AND ide.investment_amount_high_dollars = #{type}
+  </if>
+  <if test="currency !=null and currency !=''">
+      AND ide.investment_amount_high_dollars = #{currency}
+  </if> -->
+  <!-- 默认排序 -->
+  <choose>
+      <when test="column != null and column !='' and order != null and order != ''">
+          order by i.${column} ${order}
+      </when>
+      <otherwise>
+          order by i.update_time desc
+      </otherwise>
+  </choose>
   limit #{start},#{pageSize}
-  
   </select>
+  
   <select id="getInvestorsListCount" resultType="Long">
     SELECT count(*)
 	FROM investors i
@@ -86,6 +134,32 @@
 							GROUP BY investor_demand_id) stage on stage.c=ide.id
 	LEFT JOIN (SELECT id,GROUP_CONCAT(city) as citys from investor_city GROUP BY id) city on city.id = i.ID
   WHERE i.approval_status != 0 AND i.yn =1
+  <if test="keyWords != null and keyWords != ''">
+                AND (i.name like "%"#{keyWords}"%" or ii.short_name like "%"#{keyWords}"%" or i.position like "%"#{keyWords}"%"
+				or mdst.type_name like "%"#{keyWords}"%" or iit.type like "%"#{keyWords}"%" or seg.segmentations like "%"#{keyWords}"%"
+				or speedway.speedways like "%"#{keyWords}"%" or speedways,stage.stages like "%"#{keyWords}"%"
+				or ide.demand like "%"#{keyWords}"%" or speedways,city.citys like "%"#{keyWords}"%")
+  </if>
+  <!-- 查询条件：创建开始时间 -->
+  <if test="startTime !=null and startTime !=''">
+        AND i.create_time &gt;= #{startTime}
+  </if>
+  <!-- 查询条件：创建结束时间 -->
+  <if test="endTime !=null and endTime !=''">
+      AND i.create_time &lt;= #{endTime}
+  </if>
+  <if test="amountBeginRmb !=null and amountBeginRmb !=''">
+      AND ide.investment_amount_low &gt;= #{amountBeginRmb}
+  </if>
+  <if test="amountEndRmb !=null and amountEndRmb !=''">
+      AND ide.investment_amount_high &lt;= #{amountEndRmb}
+  </if>
+  <if test="amountBeginDollar !=null and amountBeginDollar !=''">
+      AND ide.investment_amount_low_dollars &gt;= #{amountBeginDollar}
+  </if>
+  <if test="amountEndDollar !=null and amountEndDollar !=''">
+      AND ide.investment_amount_high_dollars &lt;= #{amountEndDollar}
+  </if>
   </select>
   
   <select id="findinvestorId" resultMap ="newInvestortMap">

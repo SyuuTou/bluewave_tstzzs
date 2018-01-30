@@ -58,6 +58,7 @@ public class InvestorServiceImpl implements InvestorService {
 
     @Value("${pageSize}")
     private Integer pageSizeDefault;
+    
     @Transactional(readOnly = true)
 	@Override
 	public CommonDto<Map<String,Object>> listInvestorsInfos(Integer appid, InvestorListInputDto body) {
@@ -86,7 +87,7 @@ public class InvestorServiceImpl implements InvestorService {
         	result.setData(null);
             result.setStatus(200);
             result.setMessage("日期字符串输入格式不正确");
-    		return result;
+    		return result;  
         }
         
         List<InvestorsOutputDto> list = investorsMapper.listInvestorsInfos(body);
