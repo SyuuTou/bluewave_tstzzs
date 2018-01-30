@@ -1579,6 +1579,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	public CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer companyId) {
 		CommonDto<List<Recruitment>> result=new CommonDto<>();
 		Recruitment rec=new Recruitment();
+		rec.setYn(0);
 		rec.setCompanyId(companyId);
 		
 		result.setData(recruitmentMapper.select(rec));

@@ -49,13 +49,13 @@ public class InvestorListInputDto {
     /**
      * 来源类型
      */
+//    private Integer
     /**
      * 合作等级
      */
     /**
      * 机构分类
      */
-    private String type;
     /**
      * 基金币种
      */
@@ -158,13 +158,6 @@ public class InvestorListInputDto {
 		this.amountEndDollar = amountEndDollar;
 	}
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
 
 	public String getColumn() {
 		return column;
@@ -205,16 +198,4 @@ public class InvestorListInputDto {
 	public void setStart(Long start) {
 		this.start = start;
 	}
-
-	@Override
-	public String toString() {
-		return "InvestorListInputDto [keyWords=" + keyWords + ", startTimeStr=" + startTimeStr + ", startTime="
-				+ startTime + ", endTimeStr=" + endTimeStr + ", endTime=" + endTime + ", amountBeginRmb="
-				+ amountBeginRmb + ", amountEndRmb=" + amountEndRmb + ", amountBeginDollar=" + amountBeginDollar
-				+ ", amountEndDollar=" + amountEndDollar + ", type=" + type + ", column=" + column + ", order=" + order
-				+ ", currentPage=" + currentPage + ", pageSize=" + pageSize + ", start=" + start + "]";
-	}
-    
-   
-    
 }
