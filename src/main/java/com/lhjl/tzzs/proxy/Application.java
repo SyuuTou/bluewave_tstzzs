@@ -42,7 +42,7 @@ import static springfox.documentation.schema.AlternateTypeRules.*;
 
 
 /**
- * @author liuzh
+ * @author liuzh  
  * @since 2015-12-12 18:22
  */
 //@EnableSwagger2
