@@ -55,10 +55,16 @@ public class Investors {
     private Date approvalTime;
 
     /**
-     * 认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     * 认证类型，0代表个人投资人，1代表机构投资人，2代表VIP投资人；
      */
     @Column(name = "investors_type")
     private Integer investorsType;
+
+    /**
+     * 投资人来源，meta_data_source_type表中的元数据id
+     */
+    @Column(name = "investor_source_type")
+    private Integer investorSourceType;
 
     /**
      * @return ID
@@ -219,20 +225,38 @@ public class Investors {
     }
 
     /**
-     * 获取认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     * 获取认证类型，0代表个人投资人，1代表机构投资人，2代表VIP投资人；
      *
-     * @return investors_type - 认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     * @return investors_type - 认证类型，0代表个人投资人，1代表机构投资人，2代表VIP投资人；
      */
     public Integer getInvestorsType() {
         return investorsType;
     }
 
     /**
-     * 设置认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     * 设置认证类型，0代表个人投资人，1代表机构投资人，2代表VIP投资人；
      *
-     * @param investorsType 认证类型，0代表个人投资，1代表机构投资，3代表vip投资人；
+     * @param investorsType 认证类型，0代表个人投资人，1代表机构投资人，2代表VIP投资人；
      */
     public void setInvestorsType(Integer investorsType) {
         this.investorsType = investorsType;
+    }
+
+    /**
+     * 获取投资人来源，meta_data_source_type表中的元数据id
+     *
+     * @return investor_source_type - 投资人来源，meta_data_source_type表中的元数据id
+     */
+    public Integer getInvestorSourceType() {
+        return investorSourceType;
+    }
+
+    /**
+     * 设置投资人来源，meta_data_source_type表中的元数据id
+     *
+     * @param investorSourceType 投资人来源，meta_data_source_type表中的元数据id
+     */
+    public void setInvestorSourceType(Integer investorSourceType) {
+        this.investorSourceType = investorSourceType;
     }
 }

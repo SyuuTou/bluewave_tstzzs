@@ -36,6 +36,9 @@ public class ProjectResDto {
     /**项目logo*/
     private String projectLogo;
 
+    /**融资时间*/
+    private String financingTime;
+
 
 
 
@@ -142,5 +145,13 @@ public class ProjectResDto {
 
     public void setProjectLogo(String projectLogo) {
         this.projectLogo = projectLogo;
+    }
+
+    public String getFinancingTime() {
+        return financingTime;
+    }
+
+    public void setFinancingTime(String financingTime) {
+        this.financingTime = financingTime;
     }
 }

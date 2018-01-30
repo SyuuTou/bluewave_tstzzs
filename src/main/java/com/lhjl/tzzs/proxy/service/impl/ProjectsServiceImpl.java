@@ -1576,10 +1576,11 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer proId) {
+	public CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer companyId) {
 		CommonDto<List<Recruitment>> result=new CommonDto<>();
 		Recruitment rec=new Recruitment();
-		rec.setCompanyId(proId);
+		rec.setYn(0);
+		rec.setCompanyId(companyId);
 		
 		result.setData(recruitmentMapper.select(rec));
 		result.setStatus(200);

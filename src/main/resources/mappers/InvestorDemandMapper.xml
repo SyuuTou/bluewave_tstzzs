@@ -7,6 +7,7 @@
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="investor_id" jdbcType="INTEGER" property="investorId" />
     <result column="city_preference" jdbcType="VARCHAR" property="cityPreference" />
     <result column="demand" jdbcType="VARCHAR" property="demand" />
     <result column="investment_amount_low" jdbcType="DECIMAL" property="investmentAmountLow" />
@@ -28,6 +29,7 @@
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
   </resultMap>
+  
   <select id="getInvestorDemandList" resultType="java.util.HashMap">
     SELECT b.id,b.user_name,b.userid,
     case when u.headpic_real is null then (case when u.headpic is null then "" else u.headpic end) else u.headpic_real end headpic,
@@ -51,7 +53,7 @@
     left join meta_project_stage mps on idse.meta_project_stage_id = mps.id
     group by investor_demand_id) a on b.id = a.investor_demand_id
     where 1=1
-    <if test="status != null and status.length > 0">
+    <if test="status != null and status.length &gt; 0">
     and b.demand_status in
       <foreach close=")" collection="status" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
@@ -89,7 +91,7 @@
     left join meta_project_stage mps on idse.meta_project_stage_id = mps.id
     group by investor_demand_id) a on b.id = a.investor_demand_id
     where 1=1
-    <if test="status != null and status.length > 0">
+    <if test="status != null and status.length &gt; 0">
       and b.demand_status in
       <foreach close=")" collection="status" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>

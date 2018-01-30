@@ -86,7 +86,7 @@
         <result column="count" jdbcType="INTEGER" property="count" />
 
     </resultMap>
-     <select id="blurScan" resultType="com.lhjl.tzzs.proxy.model.InvestmentInstitutions" parameterType="String">
+     <select id="blurScan" resultMap="BaseResultMap" parameterType="String">
         select * from investment_institutions where short_name like "%"#{keyword}"%" group by short_name
     </select>
     <insert id="add" keyProperty="id" parameterType="com.lhjl.tzzs.proxy.model.InvestmentInstitutions" useGeneratedKeys="true">
