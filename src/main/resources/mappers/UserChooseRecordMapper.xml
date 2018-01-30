@@ -26,17 +26,27 @@
     limit 0,3
   </select>
   <select id="getUserElegantLogList" resultType="java.util.HashMap">
-    select * from (
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
-    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
-    from user_choose_record ucr
-    left join users u on ucr.user_id = u.ID
-    right join users_weixin uw on u.ID = uw.user_id
+    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,
+    u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
+    u.actual_name
+    from (select * from user_choose_record
+    where 1=1
+    <if test="beginTime != null and beginTime !='' ">
+      and ucr.create_time between #{beginTime} and #{endTime}
+    </if>
+    and user_id != 481
+    order by create_time desc
+    ) ucr
+    left join (select us.id,us.company_name,us.company_duties,us.phonenumber,us.identity_type,
+    case when us.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else us.actual_name end actual_name
+    from users_weixin uw
+    left join users us on uw.user_id = us.ID) u on ucr.user_id = u.ID
     left join meta_scene ms on ucr.scene_key = ms.`key`
     left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
-    where ucr.log_type = 1
-    <if test="beginTime != null and beginTime !='' ">
-      and date(ucr.create_time)between(#{beginTime})and(#{endTime})
+    where 1=1
+    <if test="searchWord != null and searchWord !=''">
+      and (u.actual_name like CONCAT(CONCAT('%', #{searchWord}), '%') or u.company_duties like CONCAT(CONCAT('%', #{searchWord}), '%')
+      or u.company_name like CONCAT(CONCAT('%', #{searchWord}), '%') or ms.`desc` like CONCAT(CONCAT('%', #{searchWord}), '%') )
     </if>
     <if test="actionType != null and actionType != ''">
       and ucr.action_type in
@@ -50,115 +60,32 @@
         and acl.contact_status is null
       </if>
     </if>
-    <if test="searchWord != null and searchWord !=''">
-      and u.actual_name like CONCAT(CONCAT('%', #{searchWord}), '%')
-    </if>
-
-    union
-
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
-    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
-    from user_choose_record ucr
-    left join users u on ucr.user_id = u.ID
-    right join users_weixin uw on u.ID = uw.user_id
-    left join meta_scene ms on ucr.scene_key = ms.`key`
-    left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
-    where ucr.log_type = 1
-    <if test="beginTime != null and beginTime !='' ">
-      and date(ucr.create_time)between(#{beginTime})and(#{endTime})
-    </if>
-    <if test="actionType != null and actionType != ''">
-      and ucr.action_type in
-      <foreach close=")" collection="actionType" index="index" item="item" open="(" separator=",">#{item}</foreach>
-    </if>
-    <if test="contactType != null and contactType !=''">
-      <if test="contactType != 0">
-        and acl.contact_status = 1
-      </if>
-      <if test="contactType != 1">
-        and acl.contact_status is null
-      </if>
-    </if>
-    <if test="searchWord != null and searchWord !=''">
-      and u.company_duties like CONCAT(CONCAT('%', #{searchWord}), '%')
-    </if>
-
-    union
-
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
-    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
-    from user_choose_record ucr
-    left join users u on ucr.user_id = u.ID
-    right join users_weixin uw on u.ID = uw.user_id
-    left join meta_scene ms on ucr.scene_key = ms.`key`
-    left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
-    where ucr.log_type = 1
-    <if test="beginTime != null and beginTime !='' ">
-      and date(ucr.create_time)between(#{beginTime})and(#{endTime})
-    </if>
-    <if test="actionType != null and actionType != ''">
-      and ucr.action_type in
-      <foreach close=")" collection="actionType" index="index" item="item" open="(" separator=",">#{item}</foreach>
-    </if>
-    <if test="contactType != null and contactType !=''">
-      <if test="contactType != 0">
-        and acl.contact_status = 1
-      </if>
-      <if test="contactType != 1">
-        and acl.contact_status is null
-      </if>
-    </if>
-    <if test="searchWord != null and searchWord !=''">
-      and  u.company_name like CONCAT(CONCAT('%', #{searchWord}), '%')
-    </if>
-
-    union
-
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
-    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
-    from user_choose_record ucr
-    left join users u on ucr.user_id = u.ID
-    right join users_weixin uw on u.ID = uw.user_id
-    left join meta_scene ms on ucr.scene_key = ms.`key`
-    left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
-    where ucr.log_type = 1
-    <if test="beginTime != null and beginTime !='' ">
-      and date(ucr.create_time)between(#{beginTime})and(#{endTime})
-    </if>
-    <if test="actionType != null and actionType != ''">
-      and ucr.action_type in
-      <foreach close=")" collection="actionType" index="index" item="item" open="(" separator=",">#{item}</foreach>
-    </if>
-    <if test="contactType != null and contactType !=''">
-      <if test="contactType != 0">
-        and acl.contact_status = 1
-      </if>
-      <if test="contactType != 1">
-        and acl.contact_status is null
-      </if>
-    </if>
-    <if test="searchWord != null and searchWord !=''">
-      and ms.`desc` like CONCAT(CONCAT('%', #{searchWord}), '%')
-    </if>
-
-    ) a
-    order by a.create_time desc
     limit #{startPage},#{pageSize}
-
   </select>
 
   <select id="getUserElegantLogListCount" resultType="INTEGER">
     select count(*) from (
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
-    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
-    from user_choose_record ucr
-    left join users u on ucr.user_id = u.ID
-    right join users_weixin uw on u.ID = uw.user_id
+    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,
+    u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
+    u.actual_name
+    from (select * from user_choose_record
+    where 1=1
+    <if test="beginTime != null and beginTime !='' ">
+      and ucr.create_time between #{beginTime} and #{endTime}
+    </if>
+    and user_id != 481
+    order by create_time desc
+    ) ucr
+    left join (select us.id,us.company_name,us.company_duties,us.phonenumber,us.identity_type,
+    case when us.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else us.actual_name end actual_name
+    from users_weixin uw
+    left join users us on uw.user_id = us.ID) u on ucr.user_id = u.ID
     left join meta_scene ms on ucr.scene_key = ms.`key`
     left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
-    where ucr.log_type = 1
-    <if test="beginTime != null and beginTime !='' ">
-      and date(ucr.create_time)between(#{beginTime})and(#{endTime})
+    where 1=1
+    <if test="searchWord != null and searchWord !=''">
+      and (u.actual_name like CONCAT(CONCAT('%', #{searchWord}), '%') or u.company_duties like CONCAT(CONCAT('%', #{searchWord}), '%')
+      or u.company_name like CONCAT(CONCAT('%', #{searchWord}), '%') or ms.`desc` like CONCAT(CONCAT('%', #{searchWord}), '%') )
     </if>
     <if test="actionType != null and actionType != ''">
       and ucr.action_type in
@@ -171,96 +98,6 @@
       <if test="contactType != 1">
         and acl.contact_status is null
       </if>
-    </if>
-    <if test="searchWord != null and searchWord !=''">
-      and u.actual_name like CONCAT(CONCAT('%', #{searchWord}), '%')
-    </if>
-
-    union
-
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
-    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
-    from user_choose_record ucr
-    left join users u on ucr.user_id = u.ID
-    right join users_weixin uw on u.ID = uw.user_id
-    left join meta_scene ms on ucr.scene_key = ms.`key`
-    left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
-    where ucr.log_type = 1
-    <if test="beginTime != null and beginTime !='' ">
-      and date(ucr.create_time)between(#{beginTime})and(#{endTime})
-    </if>
-    <if test="actionType != null and actionType != ''">
-      and ucr.action_type in
-      <foreach close=")" collection="actionType" index="index" item="item" open="(" separator=",">#{item}</foreach>
-    </if>
-    <if test="contactType != null and contactType !=''">
-      <if test="contactType != 0">
-        and acl.contact_status = 1
-      </if>
-      <if test="contactType != 1">
-        and acl.contact_status is null
-      </if>
-    </if>
-    <if test="searchWord != null and searchWord !=''">
-      and u.company_duties like CONCAT(CONCAT('%', #{searchWord}), '%')
-    </if>
-
-    union
-
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
-    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
-    from user_choose_record ucr
-    left join users u on ucr.user_id = u.ID
-    right join users_weixin uw on u.ID = uw.user_id
-    left join meta_scene ms on ucr.scene_key = ms.`key`
-    left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
-    where ucr.log_type = 1
-    <if test="beginTime != null and beginTime !='' ">
-      and date(ucr.create_time)between(#{beginTime})and(#{endTime})
-    </if>
-    <if test="actionType != null and actionType != ''">
-      and ucr.action_type in
-      <foreach close=")" collection="actionType" index="index" item="item" open="(" separator=",">#{item}</foreach>
-    </if>
-    <if test="contactType != null and contactType !=''">
-      <if test="contactType != 0">
-        and acl.contact_status = 1
-      </if>
-      <if test="contactType != 1">
-        and acl.contact_status is null
-      </if>
-    </if>
-    <if test="searchWord != null and searchWord !=''">
-      and  u.company_name like CONCAT(CONCAT('%', #{searchWord}), '%')
-    </if>
-
-    union
-
-    select ucr.id,u.ID as uid,ucr.create_time,ucr.action_type,ucr.log_type,u.company_name,u.company_duties,u.phonenumber,u.identity_type,ms.`desc`,acl.contact_status,
-    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name
-    from user_choose_record ucr
-    left join users u on ucr.user_id = u.ID
-    right join users_weixin uw on u.ID = uw.user_id
-    left join meta_scene ms on ucr.scene_key = ms.`key`
-    left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
-    where ucr.log_type = 1
-    <if test="beginTime != null and beginTime !='' ">
-      and date(ucr.create_time)between(#{beginTime})and(#{endTime})
-    </if>
-    <if test="actionType != null and actionType != ''">
-      and ucr.action_type in
-      <foreach close=")" collection="actionType" index="index" item="item" open="(" separator=",">#{item}</foreach>
-    </if>
-    <if test="contactType != null and contactType !=''">
-      <if test="contactType != 0">
-        and acl.contact_status = 1
-      </if>
-      <if test="contactType != 1">
-        and acl.contact_status is null
-      </if>
-    </if>
-    <if test="searchWord != null and searchWord !=''">
-      and ms.`desc` like CONCAT(CONCAT('%', #{searchWord}), '%')
     </if>
     ) a
   </select>
