@@ -634,10 +634,11 @@
         <result column="interviewNum" jdbcType="INTEGER" property="interviewNum" />
         <result column="yn" jdbcType="INTEGER" property="yn" />
         <result column="project_logo" jdbcType="VARCHAR" property="projectLogo" />
+        <result column="financing_time" jdbcType="VARCHAR" property="financingTime"/>
     </resultMap>
 
     <select id="projectFilter" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
-        select a.id as projectId,
+        select a.id as projectId,DATE_FORMAT(a.financing_time,'%Y-%m-%d') financing_time,
         a.short_name,a.full_name,a.city,a.segmentation_name,a.evaluation_recommend,a.stage,
         case WHEN b.followNum = null then 0 ELSE b.followNum END followNum,
         case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
@@ -645,11 +646,11 @@
         case WHEN d.`status` = 1 then 1 else 0 END `status`,
         case when a.kernel_desc is null or a.kernel_desc ="" then (case when a.commet is null then "" else a.commet end) else a.kernel_desc end kernel_desc
         from(
-        select pp.id,pp.project_logo, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.city,pp.segmentation segmentation_name,pp.evaluation_recommend,pp.stage
+        select pp.id,pp.project_logo, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.city,pp.segmentation segmentation_name,pp.evaluation_recommend,pp.stage,pp.financing_time
         from
         (
 
-        select p.id,p.project_logo, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,p.segmentation,pfl.stage
+        select p.id,p.project_logo, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,p.segmentation,pfl.stage,max(pfl.financing_time) financing_time
         from investment_institutions_project iip
         left join investment_institutions ii on iip.investment_institutions_id = ii.id
         left join project_financing_log pfl on iip.project_id = pfl.id
@@ -689,7 +690,7 @@
             AND (pp.short_name like "%"#{keyWords}"%" or pp.full_name like "%"#{keyWords}"%" or pp.kernel_desc like "%"#{keyWords}"%" )
         </if>
         group by pp.short_name
-        order by pp.evaluation_recommend desc
+        order by pp.financing_time desc
         limit #{offset},#{pageSize}
         ) a left join (select count(user_id) followNum ,projects_id from follow where `status`=1 group by projects_id) b on a.id =
         b.projects_id
@@ -699,7 +700,7 @@
     </select>
 
     <select id="projectFilterOne" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
-        select a.id as projectId,
+        select a.id as projectId,DATE_FORMAT(a.financing_time,'%Y-%m-%d') financing_time,
         a.short_name,a.full_name,a.city,a.segmentation_name,a.evaluation_recommend,a.stage,
         case WHEN b.followNum = null then 0 ELSE b.followNum END followNum,
         case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
@@ -707,11 +708,11 @@
         case WHEN d.`status` = 1 then 1 else 0 END `status`,
         case when a.kernel_desc is null or a.kernel_desc ="" then (case when a.commet is null then "" else a.commet end) else a.kernel_desc end kernel_desc
         from(
-        select pp.id,pp.project_logo, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.city,pp.segmentation segmentation_name,pp.evaluation_recommend,pp.stage
+        select pp.id,pp.project_logo, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.city,pp.segmentation segmentation_name,pp.evaluation_recommend,pp.stage,pp.financing_time
         from
         (
 
-        select p.id,p.project_logo, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,p.project_source,p.yn,p.segmentation,pfl.stage
+        select p.id,p.project_logo, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,p.project_source,p.yn,p.segmentation,pfl.stage,pfl.financing_time
         from investment_institutions_project iip
         left join investment_institutions ii on iip.investment_institutions_id = ii.id
         left join project_financing_log pfl on iip.project_id = pfl.id
@@ -763,7 +764,7 @@
     </select>
 
     <select id="projectFilterTwo" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">
-        select a.id as projectId,
+        select a.id as projectId,DATE_FORMAT(a.financing_time,'%Y-%m-%d') financing_time,
         a.short_name,a.full_name,a.city,a.segmentation_name,a.evaluation_recommend,a.stage,a.project_logo,
         case WHEN b.followNum = null then 0 ELSE b.followNum END followNum,
         case WHEN c.interviewNum = null then 0 ELSE c.interviewNum END followNum,
@@ -771,11 +772,11 @@
         case WHEN d.`status` = 1 then 1 else 0 END `status`,
         case when a.kernel_desc is null or a.kernel_desc ="" then (case when a.commet is null then "" else a.commet end) else a.kernel_desc end kernel_desc
         from(
-        select pp.id,pp.project_logo, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.yn,pp.city,pp.segmentation segmentation_name,pp.project_source,pp.evaluation_recommend,pp.stage
+        select pp.id,pp.project_logo, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.yn,pp.city,pp.segmentation segmentation_name,pp.project_source,pp.evaluation_recommend,pp.stage,pp.financing_time
         from
         (
 
-        select p.id,p.project_logo, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,p.segmentation,p.project_source,p.yn,pfl.stage
+        select p.id,p.project_logo, p.short_name,p.full_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend,p.segmentation,p.project_source,p.yn,pfl.stage,pfl.financing_time
         from investment_institutions_project iip
         left join investment_institutions ii on iip.investment_institutions_id = ii.id
         left join project_financing_log pfl on iip.project_id = pfl.id
