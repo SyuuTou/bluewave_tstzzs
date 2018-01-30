@@ -177,7 +177,7 @@ public class ProjectsController extends GenericController{
     /**
      * 招聘信息列表
      * @param appid
-     * @param companyId 项目(公司)id
+     * @param companyId 项目(公司)id  
      * @return
      */
     @GetMapping("/v{appid}/list/recruitmentinfo")
