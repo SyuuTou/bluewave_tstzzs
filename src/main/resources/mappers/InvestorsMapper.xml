@@ -21,8 +21,74 @@
   <resultMap id="newInvestortMap" type="com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto">
     <result column="user_id" jdbcType="INTEGER" property="userId" />
   </resultMap>
-
-  <select id="findinvestorId" resultMap="newInvestortMap">
+  
+  <resultMap id="InvestorsOutputMap" type="com.lhjl.tzzs.proxy.investorDto.InvestorsOutputDto">
+    <result column="ID" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="segmentations" jdbcType="VARCHAR" property="segmentations" />
+    <result column="speedways" jdbcType="VARCHAR" property="speedways" />
+    <result column="stages" jdbcType="VARCHAR" property="stages" />
+    <result column="investment_amount_low" jdbcType="DECIMAL" property="investmentAmountLow" />
+    <result column="investment_amount_high" jdbcType="DECIMAL" property="investmentAmountHigh" />
+    <result column="investment_amount_low_dollars" jdbcType="DECIMAL" property="investmentAmountLowDollars" />
+    <result column="investment_amount_high_dollars" jdbcType="DECIMAL" property="investmentAmountHighDollars" />
+    <result column="demand" jdbcType="VARCHAR" property="demand" />
+    <result column="citys" jdbcType="VARCHAR" property="citys" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+   <select id="listInvestorsInfos" resultMap="InvestorsOutputMap">
+    	SELECT i.ID,i.user_id,i.name,
+	ii.short_name,i.position,ide.phonenumber,
+	mdst.type_name,iit.type,funds.currency,
+	seg.segmentations,speedway.speedways,stage.stages,
+	ide.investment_amount_low,ide.investment_amount_high,ide.investment_amount_low_dollars,ide.investment_amount_high_dollars,
+	ide.demand,city.citys,
+	i.create_time,i.update_time
+	FROM investors i
+	LEFT JOIN meta_data_source_type mdst ON i.investor_source_type = mdst.id
+	LEFT JOIN investment_institutions ii ON i.investment_institutions_id = ii.ID
+	LEFT JOIN investment_institutions_type iit ON ii.ID=iit.investment_institutions_id
+	LEFT JOIN (SELECT investment_institutions_id iid,GROUP_CONCAT(distinct currency) as currency from investment_institutions_funds GROUP BY investment_institutions_id
+							) funds ON funds.iid=ii.ID 
+	LEFT JOIN investor_demand ide ON i.id=ide.investor_id
+	LEFT JOIN (SELECT investor_demand_id a,GROUP_CONCAT(segmentation) as segmentations from investor_demand_segmentation GROUP BY investor_demand_id) seg on seg.a=ide.id
+	LEFT JOIN (SELECT investor_demand_id b,GROUP_CONCAT(speedway) as speedways from investor_demand_speedway GROUP BY investor_demand_id) speedway on speedway.b=ide.id
+	LEFT JOIN (SELECT ids.investor_demand_id c,GROUP_CONCAT(name) as stages from investor_demand_stage ids
+							LEFT JOIN meta_project_stage mps on ids.meta_project_stage_id = mps.id
+							GROUP BY investor_demand_id) stage on stage.c=ide.id
+	LEFT JOIN (SELECT id,GROUP_CONCAT(city) as citys from investor_city GROUP BY id) city on city.id = i.ID
+  WHERE i.approval_status != 0 AND i.yn =1
+  
+  limit #{start},#{pageSize}
+  
+  </select>
+  <select id="getInvestorsListCount" resultType="Long">
+    SELECT count(*)
+	FROM investors i
+	LEFT JOIN meta_data_source_type mdst ON i.investor_source_type = mdst.id
+	LEFT JOIN investment_institutions ii ON i.investment_institutions_id = ii.ID
+	LEFT JOIN investment_institutions_type iit ON ii.ID=iit.investment_institutions_id
+	LEFT JOIN (SELECT investment_institutions_id iid,GROUP_CONCAT(distinct currency) as currency from investment_institutions_funds GROUP BY investment_institutions_id
+							) funds ON funds.iid=ii.ID 
+	LEFT JOIN investor_demand ide ON i.id=ide.investor_id
+	LEFT JOIN (SELECT investor_demand_id a,GROUP_CONCAT(segmentation) as segmentations from investor_demand_segmentation GROUP BY investor_demand_id) seg on seg.a=ide.id
+	LEFT JOIN (SELECT investor_demand_id b,GROUP_CONCAT(speedway) as speedways from investor_demand_speedway GROUP BY investor_demand_id) speedway on speedway.b=ide.id
+	LEFT JOIN (SELECT ids.investor_demand_id c,GROUP_CONCAT(name) as stages from investor_demand_stage ids
+							LEFT JOIN meta_project_stage mps on ids.meta_project_stage_id = mps.id
+							GROUP BY investor_demand_id) stage on stage.c=ide.id
+	LEFT JOIN (SELECT id,GROUP_CONCAT(city) as citys from investor_city GROUP BY id) city on city.id = i.ID
+  WHERE i.approval_status != 0 AND i.yn =1
+  </select>
+  
+  <select id="findinvestorId" resultMap ="newInvestortMap">
     SELECT * FROM investors WHERE investment_institutions_id=#{invesId}
     ORDER BY create_time DESC
   </select>

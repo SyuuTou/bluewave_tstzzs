@@ -49,16 +49,18 @@ public class InvestorListInputDto {
     /**
      * 来源类型
      */
-//    private Integer
+    private Integer typeName;
     /**
      * 合作等级
      */
     /**
      * 机构分类
      */
+    private String type;
     /**
      * 基金币种
      */
+    private String currency;
     /**
      * 默认按照更新时间进行排序
      * 此处根据实际情况可考虑将列值传递过来
@@ -85,117 +87,117 @@ public class InvestorListInputDto {
      * 起始索引
      */
     private Long start;
-    
 	public String getKeyWords() {
 		return keyWords;
 	}
-
 	public void setKeyWords(String keyWords) {
 		this.keyWords = keyWords;
 	}
-
 	public String getStartTimeStr() {
 		return startTimeStr;
 	}
-
 	public void setStartTimeStr(String startTimeStr) {
 		this.startTimeStr = startTimeStr;
 	}
-
 	public Date getStartTime() {
 		return startTime;
 	}
-
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
-
 	public String getEndTimeStr() {
 		return endTimeStr;
 	}
-
 	public void setEndTimeStr(String endTimeStr) {
 		this.endTimeStr = endTimeStr;
 	}
-
 	public Date getEndTime() {
 		return endTime;
 	}
-
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
-
 	public Integer getAmountBeginRmb() {
 		return amountBeginRmb;
 	}
-
 	public void setAmountBeginRmb(Integer amountBeginRmb) {
 		this.amountBeginRmb = amountBeginRmb;
 	}
-
 	public Integer getAmountEndRmb() {
 		return amountEndRmb;
 	}
-
 	public void setAmountEndRmb(Integer amountEndRmb) {
 		this.amountEndRmb = amountEndRmb;
 	}
-
 	public Integer getAmountBeginDollar() {
 		return amountBeginDollar;
 	}
-
 	public void setAmountBeginDollar(Integer amountBeginDollar) {
 		this.amountBeginDollar = amountBeginDollar;
 	}
-
 	public Integer getAmountEndDollar() {
 		return amountEndDollar;
 	}
-
 	public void setAmountEndDollar(Integer amountEndDollar) {
 		this.amountEndDollar = amountEndDollar;
 	}
-
-
+	public Integer getTypeName() {
+		return typeName;
+	}
+	public void setTypeName(Integer typeName) {
+		this.typeName = typeName;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getCurrency() {
+		return currency;
+	}
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
 	public String getColumn() {
 		return column;
 	}
-
 	public void setColumn(String column) {
 		this.column = column;
 	}
-
 	public String getOrder() {
 		return order;
 	}
-
 	public void setOrder(String order) {
 		this.order = order;
 	}
-
 	public Integer getCurrentPage() {
 		return currentPage;
 	}
-
 	public void setCurrentPage(Integer currentPage) {
 		this.currentPage = currentPage;
 	}
-
 	public Integer getPageSize() {
 		return pageSize;
 	}
-
 	public void setPageSize(Integer pageSize) {
 		this.pageSize = pageSize;
 	}
-
 	public Long getStart() {
 		return start;
 	}
-
 	public void setStart(Long start) {
 		this.start = start;
 	}
+	@Override
+	public String toString() {
+		return "InvestorListInputDto [keyWords=" + keyWords + ", startTimeStr=" + startTimeStr + ", startTime="
+				+ startTime + ", endTimeStr=" + endTimeStr + ", endTime=" + endTime + ", amountBeginRmb="
+				+ amountBeginRmb + ", amountEndRmb=" + amountEndRmb + ", amountBeginDollar=" + amountBeginDollar
+				+ ", amountEndDollar=" + amountEndDollar + ", typeName=" + typeName + ", type=" + type + ", currency="
+				+ currency + ", column=" + column + ", order=" + order + ", currentPage=" + currentPage + ", pageSize="
+				+ pageSize + ", start=" + start + "]";
+	}
+    
+	
 }
