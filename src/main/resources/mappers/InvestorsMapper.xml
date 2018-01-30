@@ -15,13 +15,14 @@
     <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
     <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
     <result column="investors_type" jdbcType="INTEGER" property="investorsType" />
+    <result column="investor_source_type" jdbcType="INTEGER" property="investorSourceType" />
   </resultMap>
 
   <resultMap id="newInvestortMap" type="com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto">
     <result column="user_id" jdbcType="INTEGER" property="userId" />
   </resultMap>
 
-  <select id="findinvestorId" resultMap ="newInvestortMap">
+  <select id="findinvestorId" resultMap="newInvestortMap">
     SELECT * FROM investors WHERE investment_institutions_id=#{invesId}
     ORDER BY create_time DESC
   </select>
