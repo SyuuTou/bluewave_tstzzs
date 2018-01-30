@@ -29,10 +29,14 @@
     es.background_picture,es.id,es.scence_key,es.begin_time,es.end_time,es.recommend_yn,es.create_time
     from elegant_service es
     left join elegant_service_description esd on es.id = esd.elegant_service_id
-    right join elegant_service_identity_type esit on esit.elegant_service_id = es.id
-    left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
-    right join elegant_service_service_type esst on esst.elegant_service_id = es.id
-    left join meta_service_type mst on esst.meta_service_type_id = mst.id
+    <if test="identityType != null and identityType.length &gt; 0">
+      right join elegant_service_identity_type esit on esit.elegant_service_id = es.id
+      left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
+    </if>
+    <if test="serviceType != null and serviceType.length &gt; 0">
+      right join elegant_service_service_type esst on esst.elegant_service_id = es.id
+      left join meta_service_type mst on esst.meta_service_type_id = mst.id
+    </if>
     where es.on_off = 1
     and es.yn = 1
     <if test="appid != null and appid != ''">
