@@ -32,7 +32,7 @@
     from (select * from user_choose_record
     where 1=1
     <if test="beginTime != null and beginTime !='' ">
-      and ucr.create_time between #{beginTime} and #{endTime}
+      and create_time between #{beginTime} and #{endTime}
     </if>
     and user_id != 481
     order by create_time desc
@@ -71,7 +71,7 @@
     from (select * from user_choose_record
     where 1=1
     <if test="beginTime != null and beginTime !='' ">
-      and ucr.create_time between #{beginTime} and #{endTime}
+      and create_time between #{beginTime} and #{endTime}
     </if>
     and user_id != 481
     order by create_time desc
