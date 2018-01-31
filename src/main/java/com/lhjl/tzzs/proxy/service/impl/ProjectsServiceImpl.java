@@ -1406,10 +1406,10 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLodId) {
+	public CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLogId) {
 		CommonDto<List<InvestmentInstitutionsProject>> result =new CommonDto<>();
 		InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
-		iip.setProjectId(financingLodId);
+		iip.setProjectId(financingLogId);
 		//设置有效标志为有效
 		iip.setYn(0);
 		List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
@@ -1418,8 +1418,9 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			for(InvestmentInstitutionsProject temp:iips) {
 				InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(temp.getInvestmentInstitutionsId()); 
 				temp.setInvestmentShortName(ii.getShortName());
+				temp.setAccountingDateOutputStr(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(temp.getAccountingDate()));
 			}
-		}    
+		}
 		result.setData(iips);
         result.setStatus(200);
         result.setMessage("success");

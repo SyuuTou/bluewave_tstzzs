@@ -424,10 +424,10 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @GetMapping("/v{appid}/singlefinancinglogDetails")
-    public CommonDto<List<InvestmentInstitutionsProject>> financinglogDetails(@PathVariable("appid") Integer appid,Integer financingLodId){
+    public CommonDto<List<InvestmentInstitutionsProject>> financinglogDetails(@PathVariable("appid") Integer appid,Integer financingLogId){
     	CommonDto<List<InvestmentInstitutionsProject>> result =new CommonDto<>();
     	try {
-    		result=projectsService.getFinancingLogDetails(appid,financingLodId);
+    		result=projectsService.getFinancingLogDetails(appid,financingLogId);
 	    }catch(Exception e) {
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		  
