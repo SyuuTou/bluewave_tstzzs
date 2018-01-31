@@ -63,8 +63,8 @@ public class DatasOperationManage {
     /**
      * 所在群号
      */
-    @Column(name = "wechart_group_id")
-    private String wechartGroupId;
+    @Column(name = "wechat_group_id")
+    private String wechatGroupId;
 
     /**
      * 备注信息
@@ -256,22 +256,13 @@ public class DatasOperationManage {
         this.irPrincipal = irPrincipal;
     }
 
-    /**
-     * 获取所在群号
-     *
-     * @return wechart_group_id - 所在群号
-     */
-    public String getWechartGroupId() {
-        return wechartGroupId;
+
+    public String getWechatGroupId() {
+        return wechatGroupId;
     }
 
-    /**
-     * 设置所在群号
-     *
-     * @param wechartGroupId 所在群号
-     */
-    public void setWechartGroupId(String wechartGroupId) {
-        this.wechartGroupId = wechartGroupId;
+    public void setWechatGroupId(String wechatGroupId) {
+        this.wechatGroupId = wechatGroupId;
     }
 
     /**

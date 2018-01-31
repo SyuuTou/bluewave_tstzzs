@@ -24,7 +24,7 @@ public class CommonQRCodeService extends GenericService {
         CommonDto<String> result = new CommonDto<>();
 
         try {
-            File qrcode = qrcodeService.getQrcodeService().createQrcode(path,width);
+            File qrcode = qrcodeService.getQrcodeService().createWxCode(path,width);
             byte imageData[] = new byte[(int) qrcode.length()];
             FileInputStream imageInFile = new FileInputStream(qrcode);
             imageInFile.read(imageData);

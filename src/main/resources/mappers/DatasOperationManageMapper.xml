@@ -14,7 +14,7 @@
     <result column="customer_grade" property="customerGrade" jdbcType="VARCHAR" />
     <result column="source_type" property="sourceType" jdbcType="VARCHAR" />
     <result column="ir_principal" property="irPrincipal" jdbcType="VARCHAR" />
-    <result column="wechart_group_id" property="wechartGroupId" jdbcType="VARCHAR" />
+    <result column="wechat_group_id" property="wechatGroupId" jdbcType="VARCHAR" />
     <result column="note" property="note" jdbcType="VARCHAR" />
     <result column="is_hide" property="isHide" jdbcType="INTEGER" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
