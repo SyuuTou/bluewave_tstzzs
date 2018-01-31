@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
+import com.lhjl.tzzs.proxy.dto.ChangePrincipalInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.DistributedCommonDto;
 import com.lhjl.tzzs.proxy.dto.HistogramList;
@@ -136,27 +137,20 @@ public class InvestorServiceImpl implements InvestorService {
 	}
 
 	@Override
-	public CommonDto<Boolean> changeIrPrincipalBatch(Integer appid, List<Integer> investorIds, String irPrincipal) {
+	public CommonDto<Boolean> changeIrPrincipalBatch(Integer appid, ChangePrincipalInputDto body) {
 		CommonDto<Boolean> result =new CommonDto<>();
 		DatasOperationManage dom=new DatasOperationManage();
+		dom.setUpdateTime(new Date());
 		//删除所有选中投资人的记录信息
-		if(investorIds !=null && investorIds.size()!=0) {
-			investorIds.forEach((e)->{
+		if(body.getInvestorIds() !=null && body.getInvestorIds().size()!=0) {
+			body.getInvestorIds().forEach((e)->{
 				dom.setDataId(e);
-				dom.setDataId(e);
+				dom.setDataType("投资人");  
+				dom.setIrPrincipal(body.getIrPrincipal());
+				datasOperationManageMapper.changeInvestorIrPrincipal(dom);
 			});
-			dom.setIrPrincipal(irPrincipal);
-			dom.setDataType("投资人");
-			datasOperationManageMapper.delete(dom);
 		}
 			
-		//重新设置投资人的负责人信息
-		investorIds.forEach((e)->{
-			
-		});
-		
-//		List<Users> matchUserList = 
-		
 		result.setData(true);
         result.setStatus(200);
         result.setMessage("success");

@@ -22,5 +22,8 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   
+  <update id="changeInvestorIrPrincipal" >
+  	update datas_operation_manage set ir_principal=#{irPrincipal},update_time=#{updateTime} where data_id=#{dataId} and data_type=#{dataType} 
+  </update>
   
 </mapper>

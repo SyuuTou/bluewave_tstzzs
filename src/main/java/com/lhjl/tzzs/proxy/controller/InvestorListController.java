@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lhjl.tzzs.proxy.dto.ChangePrincipalInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
 import com.lhjl.tzzs.proxy.model.Users;
@@ -50,11 +52,10 @@ public class InvestorListController extends GenericController {
      * @return
      */
     @PutMapping("/v{appid}/change/irprincipal/batch")
-    public CommonDto<Boolean> changeIrPrincipalBatch(@PathVariable Integer appid,List<Integer> investorIds,String IrPrincipal){
-    	System.err.println(investorIds);
+    public CommonDto<Boolean> changeIrPrincipalBatch(@PathVariable Integer appid,@RequestBody ChangePrincipalInputDto body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-//    		result = investorService.changeIrPrincipalBatch(appid,investorIds,irPrincipal);
+    		result = investorService.changeIrPrincipalBatch(appid,body);
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		

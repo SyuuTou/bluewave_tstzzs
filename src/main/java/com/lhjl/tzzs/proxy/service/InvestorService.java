@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service;
 import java.util.List;
 import java.util.Map;
 
+import com.lhjl.tzzs.proxy.dto.ChangePrincipalInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
 import com.lhjl.tzzs.proxy.model.Users;
@@ -29,7 +30,7 @@ public interface InvestorService {
      * @param principal 负责人
      * @return
      */
-	CommonDto<Boolean> changeIrPrincipalBatch(Integer appid, List<Integer> investorIds, String irPrincipal);
+	CommonDto<Boolean> changeIrPrincipalBatch(Integer appid, ChangePrincipalInputDto body);
 
 
 }
