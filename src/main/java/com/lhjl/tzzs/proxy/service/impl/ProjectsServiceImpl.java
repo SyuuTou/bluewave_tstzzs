@@ -1365,7 +1365,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 					}else {//创建该机构
 						InvestmentInstitutions createIi=new InvestmentInstitutions();
 						createIi.setShortName(tmp);
-						investmentInstitutionsMapper.insert(createIi);
+						investmentInstitutionsMapper.insertSelective(createIi);
 						//获取自增长id
 						logRelativeInstitutions.add(createIi.getId());
 					}
@@ -1388,7 +1388,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 				logRelativeInstitutions.forEach((e)->{
 					//设置融资历史记录同投资机构的关系
 					iip.setInvestmentInstitutionsId(e);
-					investmentInstitutionsProjectMapper.insert(iip);
+					iip.setYn(0);
+					investmentInstitutionsProjectMapper.insertSelective(iip);
 				});
 			}
 		}else {//执行原关联的投资机构的删除操作
