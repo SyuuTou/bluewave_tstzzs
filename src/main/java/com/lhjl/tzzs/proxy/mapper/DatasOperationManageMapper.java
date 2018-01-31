@@ -10,5 +10,5 @@ public interface DatasOperationManageMapper extends OwnerMapper<DatasOperationMa
 	 * @param dom
 	 * @return
 	 */
-	Integer changeInvestorIrPrincipal(DatasOperationManage dom);    
+	Integer changeInvestorIrPrincipal(DatasOperationManage dom);      
 }
