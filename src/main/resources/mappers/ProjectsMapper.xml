@@ -646,7 +646,7 @@
         case WHEN d.`status` = 1 then 1 else 0 END `status`,
         case when a.kernel_desc is null or a.kernel_desc ="" then (case when a.commet is null then "" else a.commet end) else a.kernel_desc end kernel_desc
         from(
-        select pp.id,pp.project_logo, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.city,pp.segmentation segmentation_name,pp.evaluation_recommend,pp.stage,pp.financing_time
+        select pp.id,pp.project_logo, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.city,group_concat(distinct ps.segmentation_name) segmentation_name,pp.evaluation_recommend,pp.stage,pp.financing_time
         from
         (
 
@@ -708,7 +708,7 @@
         case WHEN d.`status` = 1 then 1 else 0 END `status`,
         case when a.kernel_desc is null or a.kernel_desc ="" then (case when a.commet is null then "" else a.commet end) else a.kernel_desc end kernel_desc
         from(
-        select pp.id,pp.project_logo, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.city,pp.segmentation segmentation_name,pp.evaluation_recommend,pp.stage,pp.financing_time
+        select pp.id,pp.project_logo, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.city,group_concat(distinct ps.segmentation_name) segmentation_name,pp.evaluation_recommend,pp.stage,pp.financing_time
         from
         (
 
@@ -772,7 +772,7 @@
         case WHEN d.`status` = 1 then 1 else 0 END `status`,
         case when a.kernel_desc is null or a.kernel_desc ="" then (case when a.commet is null then "" else a.commet end) else a.kernel_desc end kernel_desc
         from(
-        select pp.id,pp.project_logo, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.yn,pp.city,pp.segmentation segmentation_name,pp.project_source,pp.evaluation_recommend,pp.stage,pp.financing_time
+        select pp.id,pp.project_logo, pp.short_name,pp.full_name,pp.kernel_desc,pp.commet,pp.yn,pp.city,group_concat(distinct ps.segmentation_name) segmentation_name,pp.project_source,pp.evaluation_recommend,pp.stage,pp.financing_time
         from
         (
 
