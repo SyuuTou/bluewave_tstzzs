@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Table(name = "investment_institutions_project")
 public class InvestmentInstitutionsProject {
     /**
-     * 项目ID
+     * 融资历史轮次ID
      */
     @Column(name = "project_id")
     private Integer projectId;

@@ -167,9 +167,10 @@ public interface ProjectsService {
      * 移除项目的融资历史单阶段对应的投资机构信息
      * @param appid
      * @param id  investment_institutions_project表中的主键id
+     * @param investmentInstitutionsId 投资机构id
      * @return
      */
-	CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer id);
+	CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer id,Integer investmentInstitutionsId);
 	/**
 	 * 更新融资历史相关的投资机构信息
 	 * @param appid
