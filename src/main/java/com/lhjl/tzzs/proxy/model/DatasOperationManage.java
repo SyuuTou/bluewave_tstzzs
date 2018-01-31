@@ -15,6 +15,7 @@ public class DatasOperationManage {
     /**
      * 数据类型表：关联基础数据类型元数据
      */
+    @Id
     @Column(name = "data_type")
     private String dataType;
 
@@ -256,11 +257,20 @@ public class DatasOperationManage {
         this.irPrincipal = irPrincipal;
     }
 
-
+    /**
+     * 获取所在群号
+     *
+     * @return wechat_group_id - 所在群号
+     */
     public String getWechatGroupId() {
         return wechatGroupId;
     }
 
+    /**
+     * 设置所在群号
+     *
+     * @param wechatGroupId 所在群号
+     */
     public void setWechatGroupId(String wechatGroupId) {
         this.wechatGroupId = wechatGroupId;
     }

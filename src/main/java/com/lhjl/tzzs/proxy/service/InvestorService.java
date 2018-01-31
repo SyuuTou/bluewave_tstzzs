@@ -22,6 +22,14 @@ public interface InvestorService {
      * @return
      */  
 	CommonDto<List<Users>> matchUsers(Integer appid, String keyword);
+	/**
+     * 批量更换投资人的负责人
+     * @param appid
+     * @param InvestorIds 投资人的id数组
+     * @param principal 负责人
+     * @return
+     */
+	CommonDto<Boolean> changeIrPrincipalBatch(Integer appid, List<Integer> investorIds, String irPrincipal);
 
 
 }

@@ -1,24 +1,26 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.DatasOperationManageMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.DatasOperationManage" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.DatasOperationManageMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.DatasOperationManage">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="data_id" property="dataId" jdbcType="INTEGER" />
-    <result column="data_type" property="dataType" jdbcType="VARCHAR" />
-    <result column="basics_recommend" property="basicsRecommend" jdbcType="INTEGER" />
-    <result column="operation_recommend" property="operationRecommend" jdbcType="INTEGER" />
-    <result column="dynamic_recommand" property="dynamicRecommand" jdbcType="INTEGER" />
-    <result column="cooperative_relationship" property="cooperativeRelationship" jdbcType="VARCHAR" />
-    <result column="customer_grade" property="customerGrade" jdbcType="VARCHAR" />
-    <result column="source_type" property="sourceType" jdbcType="VARCHAR" />
-    <result column="ir_principal" property="irPrincipal" jdbcType="VARCHAR" />
-    <result column="wechat_group_id" property="wechatGroupId" jdbcType="VARCHAR" />
-    <result column="note" property="note" jdbcType="VARCHAR" />
-    <result column="is_hide" property="isHide" jdbcType="INTEGER" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <id column="data_id" jdbcType="INTEGER" property="dataId" />
+    <id column="data_type" jdbcType="VARCHAR" property="dataType" />
+    <result column="basics_recommend" jdbcType="INTEGER" property="basicsRecommend" />
+    <result column="operation_recommend" jdbcType="INTEGER" property="operationRecommend" />
+    <result column="dynamic_recommand" jdbcType="INTEGER" property="dynamicRecommand" />
+    <result column="cooperative_relationship" jdbcType="VARCHAR" property="cooperativeRelationship" />
+    <result column="customer_grade" jdbcType="VARCHAR" property="customerGrade" />
+    <result column="source_type" jdbcType="VARCHAR" property="sourceType" />
+    <result column="ir_principal" jdbcType="VARCHAR" property="irPrincipal" />
+    <result column="wechat_group_id" jdbcType="VARCHAR" property="wechatGroupId" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="is_hide" jdbcType="INTEGER" property="isHide" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  
+  
 </mapper>

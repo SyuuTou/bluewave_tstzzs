@@ -29,7 +29,10 @@
     <result column="short_name" jdbcType="VARCHAR" property="shortName" />
     <result column="position" jdbcType="VARCHAR" property="position" />
     <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
+    <result column="weChatGroupId" jdbcType="VARCHAR" property="weChatGroupId" />
+    <result column="irPrincipal" jdbcType="VARCHAR" property="weChatGroupId" />
     <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="cooperativeRelationship" jdbcType="VARCHAR" property="cooperativeRelationship" />
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="currency" jdbcType="VARCHAR" property="currency" />
     <result column="segmentations" jdbcType="VARCHAR" property="segmentations" />
@@ -48,6 +51,7 @@
    <select id="listInvestorsInfos" resultMap="InvestorsOutputMap">
     	SELECT i.ID,i.user_id,i.name,
 	ii.short_name,i.position,ide.phonenumber,
+	mgt.weChatGroupId, mgt.irPrincipal, mgt.cooperativeRelationship,
 	mdst.type_name,iit.type,funds.currency,
 	seg.segmentations,speedway.speedways,stage.stages,
 	ide.investment_amount_low,ide.investment_amount_high,ide.investment_amount_low_dollars,ide.investment_amount_high_dollars,
@@ -66,13 +70,15 @@
 							LEFT JOIN meta_project_stage mps on ids.meta_project_stage_id = mps.id
 							GROUP BY investor_demand_id) stage on stage.c=ide.id
 	LEFT JOIN (SELECT id,GROUP_CONCAT(city) as citys from investor_city GROUP BY id) city on city.id = i.ID
+	LEFT JOIN (SELECT data_id, wechat_group_id weChatGroupId,cooperative_relationship cooperativeRelationship,ir_principal irPrincipal from datas_operation_manage where data_type='投资人') mgt on mgt.data_id=i.ID
   WHERE i.approval_status != 0 AND i.yn =1
   <!-- 模糊搜索 -->
   <if test="keyWords != null and keyWords != ''">
                 AND (i.name like "%"#{keyWords}"%" or ii.short_name like "%"#{keyWords}"%" or i.position like "%"#{keyWords}"%"
 				or mdst.type_name like "%"#{keyWords}"%" or iit.type like "%"#{keyWords}"%" or seg.segmentations like "%"#{keyWords}"%"
 				or speedway.speedways like "%"#{keyWords}"%" or speedways,stage.stages like "%"#{keyWords}"%"
-				or ide.demand like "%"#{keyWords}"%" or speedways,city.citys like "%"#{keyWords}"%")
+				or ide.demand like "%"#{keyWords}"%" or speedways,city.citys like "%"#{keyWords}"%" or mgt.irPrincipal like "%"#{keyWords}"%"
+				or mgt.weChatGroupId like "%"#{keyWords}"%" )
   </if>
   <!-- 范围搜索 -->
   <!-- 查询条件：创建开始时间 -->
@@ -106,6 +112,13 @@
   <if test="currency !=null and currency !=''">
       AND funds.currency = #{currency}
   </if>
+  <if test="irPrincipal !=null and irPrincipal !=''">
+      AND mgt.irPrincipal = #{irPrincipal}
+  </if>
+  <if test="cooperativeRelationship !=null and cooperativeRelationship !=''">
+      AND mgt.cooperativeRelationship = #{cooperativeRelationship}
+  </if>
+  
   <!-- 默认排序 -->
   <choose>
       <when test="column != null and column !='' and order != null and order != ''">
@@ -119,7 +132,7 @@
   </select>
   
   <select id="getInvestorsListCount" resultType="Long">
-    SELECT count(*)
+  	SELECT count(*)
 	FROM investors i
 	LEFT JOIN meta_data_source_type mdst ON i.investor_source_type = mdst.id
 	LEFT JOIN investment_institutions ii ON i.investment_institutions_id = ii.ID
@@ -133,12 +146,14 @@
 							LEFT JOIN meta_project_stage mps on ids.meta_project_stage_id = mps.id
 							GROUP BY investor_demand_id) stage on stage.c=ide.id
 	LEFT JOIN (SELECT id,GROUP_CONCAT(city) as citys from investor_city GROUP BY id) city on city.id = i.ID
+	LEFT JOIN (SELECT data_id, wechat_group_id weChatGroupId,cooperative_relationship cooperativeRelationship,ir_principal irPrincipal from datas_operation_manage where data_type='投资人') mgt on mgt.data_id=i.ID
   WHERE i.approval_status != 0 AND i.yn =1
   <if test="keyWords != null and keyWords != ''">
                 AND (i.name like "%"#{keyWords}"%" or ii.short_name like "%"#{keyWords}"%" or i.position like "%"#{keyWords}"%"
 				or mdst.type_name like "%"#{keyWords}"%" or iit.type like "%"#{keyWords}"%" or seg.segmentations like "%"#{keyWords}"%"
 				or speedway.speedways like "%"#{keyWords}"%" or speedways,stage.stages like "%"#{keyWords}"%"
-				or ide.demand like "%"#{keyWords}"%" or speedways,city.citys like "%"#{keyWords}"%")
+				or ide.demand like "%"#{keyWords}"%" or speedways,city.citys like "%"#{keyWords}"%"
+				or mgt.irPrincipal like "%"#{keyWords}"%" or mgt.weChatGroupId like "%"#{keyWords}"%")
   </if>
   <!-- 查询条件：创建开始时间 -->
   <if test="startTime !=null">
@@ -168,6 +183,12 @@
   </if>
   <if test="currency !=null and currency !=''">
       AND funds.currency = #{currency}
+  </if>
+  <if test="irPrincipal !=null and irPrincipal !=''">
+      AND mgt.irPrincipal = #{irPrincipal}
+  </if>
+  <if test="cooperativeRelationship !=null and cooperativeRelationship !=''">
+      AND mgt.cooperativeRelationship = #{cooperativeRelationship}
   </if>
   </select>
   

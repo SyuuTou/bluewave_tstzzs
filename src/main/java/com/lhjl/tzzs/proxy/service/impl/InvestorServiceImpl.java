@@ -7,6 +7,7 @@ import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.dto.LabelList;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
 import com.lhjl.tzzs.proxy.investorDto.InvestorsOutputDto;
+import com.lhjl.tzzs.proxy.mapper.DatasOperationManageMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorDemandCharacterMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorDemandMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorDemandSegmentationMapper;
@@ -16,6 +17,7 @@ import com.lhjl.tzzs.proxy.mapper.InvestorInvestmentCaseMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaFinancingMapper;
 import com.lhjl.tzzs.proxy.mapper.UsersMapper;
+import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.model.Investors;
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.EvaluateService;
@@ -55,6 +57,8 @@ public class InvestorServiceImpl implements InvestorService {
     private InvestorInvestmentCaseMapper investorInvestmentCaseMapper;
     @Autowired
     private UsersMapper usersMapper;
+    @Autowired
+    private DatasOperationManageMapper datasOperationManageMapper;
     
     
     @Value("${pageNum}")
@@ -126,6 +130,34 @@ public class InvestorServiceImpl implements InvestorService {
 		List<Users> matchUserList = usersMapper.matchUsersExcepteBlackList(keyword);
 		
 		result.setData(matchUserList);
+        result.setStatus(200);
+        result.setMessage("success");
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> changeIrPrincipalBatch(Integer appid, List<Integer> investorIds, String irPrincipal) {
+		CommonDto<Boolean> result =new CommonDto<>();
+		DatasOperationManage dom=new DatasOperationManage();
+		//删除所有选中投资人的记录信息
+		if(investorIds !=null && investorIds.size()!=0) {
+			investorIds.forEach((e)->{
+				dom.setDataId(e);
+				dom.setDataId(e);
+			});
+			dom.setIrPrincipal(irPrincipal);
+			dom.setDataType("投资人");
+			datasOperationManageMapper.delete(dom);
+		}
+			
+		//重新设置投资人的负责人信息
+		investorIds.forEach((e)->{
+			
+		});
+		
+//		List<Users> matchUserList = 
+		
+		result.setData(true);
         result.setStatus(200);
         result.setMessage("success");
 		return result;
