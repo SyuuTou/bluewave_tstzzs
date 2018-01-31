@@ -858,6 +858,12 @@
         </if>
         where p.short_name is not NULL and p.short_name != '' and p.short_name not in ('个人投资人','天使投资人')
         and ii.short_name is not null
+        and ii.short_name not like "%个人%"
+        and ii.short_name not like "%投资人%"
+        and ii.short_name not like "%自投%"
+        and ii.short_name not like "%自筹%"
+        and ii.short_name not like "%以及%"
+        and ii.short_name not like "%创始人%"
         <if test="city != '' and city != null">
             and p.city in (${city})
         </if>
