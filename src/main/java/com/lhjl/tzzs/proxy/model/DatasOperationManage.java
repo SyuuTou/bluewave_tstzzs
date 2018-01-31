@@ -15,6 +15,7 @@ public class DatasOperationManage {
     /**
      * 数据类型表：关联基础数据类型元数据
      */
+    @Id
     @Column(name = "data_type")
     private String dataType;
 

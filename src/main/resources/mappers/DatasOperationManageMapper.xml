@@ -6,7 +6,7 @@
       WARNING - @mbg.generated
     -->
     <id column="data_id" jdbcType="INTEGER" property="dataId" />
-    <result column="data_type" jdbcType="VARCHAR" property="dataType" />
+    <id column="data_type" jdbcType="VARCHAR" property="dataType" />
     <result column="basics_recommend" jdbcType="INTEGER" property="basicsRecommend" />
     <result column="operation_recommend" jdbcType="INTEGER" property="operationRecommend" />
     <result column="dynamic_recommand" jdbcType="INTEGER" property="dynamicRecommand" />
@@ -21,5 +21,6 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  
   
 </mapper>

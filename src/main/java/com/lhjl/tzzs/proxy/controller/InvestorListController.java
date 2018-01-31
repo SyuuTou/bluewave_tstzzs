@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +37,28 @@ public class InvestorListController extends GenericController {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		
     		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+    	}
+        return result;
+    }
+    /**
+     * 批量更换投资人的负责人
+     * @param appid
+     * @param InvestorIds 投资人的id数组
+     * @param principal 负责人
+     * @return
+     */
+    @PutMapping("/v{appid}/change/irprincipal/batch")
+    public CommonDto<Boolean> changeIrPrincipalBatch(@PathVariable Integer appid,List<Integer> investorIds,String IrPrincipal){
+    	System.err.println(investorIds);
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+//    		result = investorService.changeIrPrincipalBatch(appid,investorIds,irPrincipal);
+    	}catch(Exception e) {
+    		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
+    		
+    		result.setData(false);
     		result.setMessage("fail");
     		result.setStatus(500);
     	}
