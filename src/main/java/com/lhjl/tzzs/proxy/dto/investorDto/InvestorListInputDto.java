@@ -50,7 +50,7 @@ public class InvestorListInputDto {
     /**
      * 来源类型
      */
-    private Integer typeName;
+    private String typeName;
     /**
      * 合作等级
      */
@@ -119,7 +119,6 @@ public class InvestorListInputDto {
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
-	
 	public BigDecimal getAmountBeginRmb() {
 		return amountBeginRmb;
 	}
@@ -144,10 +143,10 @@ public class InvestorListInputDto {
 	public void setAmountEndDollar(BigDecimal amountEndDollar) {
 		this.amountEndDollar = amountEndDollar;
 	}
-	public Integer getTypeName() {
+	public String getTypeName() {
 		return typeName;
 	}
-	public void setTypeName(Integer typeName) {
+	public void setTypeName(String typeName) {
 		this.typeName = typeName;
 	}
 	public String getType() {
@@ -201,6 +200,7 @@ public class InvestorListInputDto {
 				+ currency + ", column=" + column + ", order=" + order + ", currentPage=" + currentPage + ", pageSize="
 				+ pageSize + ", start=" + start + "]";
 	}
+	
     
 	
 }

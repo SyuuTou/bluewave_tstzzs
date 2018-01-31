@@ -92,9 +92,8 @@ public class InvestorServiceImpl implements InvestorService {
         }
         System.err.println(body);
         List<InvestorsOutputDto> list = investorsMapper.listInvestorsInfos(body);
-        System.err.println("******");
         //进行时间字符串的转换
-        list.forEach((e)->{
+        list.forEach((e)->{  
         	if(e.getUpdateTime() !=null) {
         		e.setUpdateTimeStr(sdf.format(e.getUpdateTime()));
         	}

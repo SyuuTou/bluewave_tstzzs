@@ -97,15 +97,15 @@
   </if>
   <!-- 精确搜索 -->
   <!-- 根据项目来源进行精确搜索 -->
- <!--  <if test="typeName !=null and typeName !=''">
-      AND mdst.id = #{type_name}
+  <if test="typeName !=null and typeName !=''">
+      AND mdst.type_name = #{typeName}
   </if>
   <if test="type !=null and type !=''">
-      AND ide.investment_amount_high_dollars = #{type}
+      AND iit.type = #{type}
   </if>
   <if test="currency !=null and currency !=''">
-      AND ide.investment_amount_high_dollars = #{currency}
-  </if> -->
+      AND funds.currency = #{currency}
+  </if>
   <!-- 默认排序 -->
   <choose>
       <when test="column != null and column !='' and order != null and order != ''">
@@ -159,6 +159,15 @@
   </if>
   <if test="amountEndDollar !=null and amountEndDollar !=''">
       AND ide.investment_amount_high_dollars &lt;= #{amountEndDollar}
+  </if>
+  <if test="typeName !=null and typeName !=''">
+      AND mdst.type_name = #{typeName}
+  </if>
+  <if test="type !=null and type !=''">
+      AND iit.type = #{type}
+  </if>
+  <if test="currency !=null and currency !=''">
+      AND funds.currency = #{currency}
   </if>
   </select>
   
