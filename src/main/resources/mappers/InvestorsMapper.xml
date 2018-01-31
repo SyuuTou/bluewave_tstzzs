@@ -56,7 +56,7 @@
 	FROM investors i
 	LEFT JOIN meta_data_source_type mdst ON i.investor_source_type = mdst.id
 	LEFT JOIN investment_institutions ii ON i.investment_institutions_id = ii.ID
-	LEFT JOIN investment_institutions_type iit ON ii.ID=iit.investment_institutions_id
+	LEFT JOIN (SELECT investment_institutions_id,GROUP_CONCAT(distinct type) as type from investment_institutions_type GROUP BY investment_institutions_id) iit ON ii.ID=iit.investment_institutions_id
 	LEFT JOIN (SELECT investment_institutions_id iid,GROUP_CONCAT(distinct currency) as currency from investment_institutions_funds GROUP BY investment_institutions_id
 							) funds ON funds.iid=ii.ID 
 	LEFT JOIN investor_demand ide ON i.id=ide.investor_id
@@ -123,7 +123,7 @@
 	FROM investors i
 	LEFT JOIN meta_data_source_type mdst ON i.investor_source_type = mdst.id
 	LEFT JOIN investment_institutions ii ON i.investment_institutions_id = ii.ID
-	LEFT JOIN investment_institutions_type iit ON ii.ID=iit.investment_institutions_id
+	LEFT JOIN (SELECT investment_institutions_id,GROUP_CONCAT(distinct type) as type from investment_institutions_type GROUP BY investment_institutions_id) iit ON ii.ID=iit.investment_institutions_id
 	LEFT JOIN (SELECT investment_institutions_id iid,GROUP_CONCAT(distinct currency) as currency from investment_institutions_funds GROUP BY investment_institutions_id
 							) funds ON funds.iid=ii.ID 
 	LEFT JOIN investor_demand ide ON i.id=ide.investor_id

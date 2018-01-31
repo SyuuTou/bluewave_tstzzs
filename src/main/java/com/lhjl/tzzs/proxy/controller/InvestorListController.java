@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
+import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.InvestorService;
 
 @RestController
@@ -31,6 +32,26 @@ public class InvestorListController extends GenericController {
     	CommonDto<Map<String,Object>> result =new CommonDto<>();
     	try {
     		result = investorService.listInvestorsInfos(appid,body);
+    	}catch(Exception e) {
+    		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+    	}
+        return result;
+    }
+    /**
+     * 投资人的用户匹配
+     * @param appid
+     * @param keyword
+     * @return
+     */
+    @GetMapping("/v{appid}/match/Users")
+    public CommonDto<List<Users>> matchUsers(@PathVariable Integer appid,String keyword){
+    	CommonDto<List<Users>> result =new CommonDto<>();
+    	try {
+    		result = investorService.matchUsers(appid,keyword);
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
+import com.lhjl.tzzs.proxy.model.Users;
 
 public interface InvestorService {
 	/**
@@ -14,6 +15,13 @@ public interface InvestorService {
 	 * @return
 	 */
 	CommonDto<Map<String,Object>> listInvestorsInfos(Integer appid, InvestorListInputDto body);
+	/**
+     * 投资人的用户匹配
+     * @param appid
+     * @param keyword 搜索关键字
+     * @return
+     */
+	CommonDto<List<Users>> matchUsers(Integer appid, String keyword);
 
 
 }
