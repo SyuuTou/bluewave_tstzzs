@@ -170,7 +170,7 @@ public interface ProjectsService {
      * @param investmentInstitutionsId 投资机构id
      * @return
      */
-	CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer id,Integer investmentInstitutionsId);
+	CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer projectId,Integer investmentInstitutionsId);
 	/**
 	 * 更新融资历史相关的投资机构信息
 	 * @param appid

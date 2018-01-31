@@ -1432,9 +1432,9 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	
 	@Transactional
 	@Override
-	public CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer id,Integer investmentInstitutionsId) {
+	public CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer projectId,Integer investmentInstitutionsId) {
 		CommonDto<Boolean> result=new CommonDto<>();
-		investmentInstitutionsProjectMapper.updateDelStatus(id,investmentInstitutionsId);
+		investmentInstitutionsProjectMapper.updateDelStatus(projectId,investmentInstitutionsId);
 		result.setData(true);
         result.setStatus(200);
         result.setMessage("success");

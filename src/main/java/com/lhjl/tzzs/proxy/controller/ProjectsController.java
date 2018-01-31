@@ -404,10 +404,10 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @DeleteMapping("/v{appid}/removesingleinvest")  
-    public CommonDto<Boolean> removeSingleInvestment(@PathVariable("appid") Integer appid,Integer id,Integer investmentInstitutionsId){
+    public CommonDto<Boolean> removeSingleInvestment(@PathVariable("appid") Integer appid,Integer projectId,Integer investmentInstitutionsId){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result=projectsService.removeSingleInvestment(appid,id,investmentInstitutionsId);
+    		result=projectsService.removeSingleInvestment(appid,projectId,investmentInstitutionsId);
 	    }catch(Exception e) {
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		  
