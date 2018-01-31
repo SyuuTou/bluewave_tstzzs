@@ -35,7 +35,6 @@
       and create_time between #{beginTime} and #{endTime}
     </if>
     and user_id != 481
-    order by create_time desc
     ) ucr
     left join (select us.id,us.company_name,us.company_duties,us.phonenumber,us.identity_type,
     case when us.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else us.actual_name end actual_name
@@ -60,6 +59,7 @@
         and acl.contact_status is null
       </if>
     </if>
+    order by ucr.create_time desc
     limit #{startPage},#{pageSize}
   </select>
 
@@ -74,7 +74,6 @@
       and create_time between #{beginTime} and #{endTime}
     </if>
     and user_id != 481
-    order by create_time desc
     ) ucr
     left join (select us.id,us.company_name,us.company_duties,us.phonenumber,us.identity_type,
     case when us.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else us.actual_name end actual_name
@@ -99,6 +98,7 @@
         and acl.contact_status is null
       </if>
     </if>
+    order by ucr.create_time desc
     ) a
   </select>
 </mapper>
