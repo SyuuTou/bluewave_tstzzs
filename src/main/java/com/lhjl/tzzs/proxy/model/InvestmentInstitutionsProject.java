@@ -70,7 +70,7 @@ public class InvestmentInstitutionsProject {
      * 时间输出转换字符串
      */
     @Transient
-    private String accountingDateOutputStr;
+    private String accountingDateOutputStr;  
 
 	
 
