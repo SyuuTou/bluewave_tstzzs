@@ -1394,7 +1394,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			}
 		}else {//执行原关联的投资机构的删除操作
 			InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
-			//设置融资历史的id
+			//设置融资历史的id  
 			iip.setProjectId(afterUpdateLogId);
 			//删除所有同之前投资机构的关系
 			investmentInstitutionsProjectMapper.delete(iip);  
