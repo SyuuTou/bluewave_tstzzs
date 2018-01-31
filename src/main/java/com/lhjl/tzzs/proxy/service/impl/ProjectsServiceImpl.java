@@ -1252,6 +1252,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 				Integer financingLogId = e.getId();
 				InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
 				iip.setProjectId(financingLogId);
+				iip.setYn(0);
 				//查询关系表中相关的投资方的相关信息
 				List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
 				

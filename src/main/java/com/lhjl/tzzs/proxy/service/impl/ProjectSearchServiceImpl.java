@@ -83,6 +83,28 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
 
         reqDto.setOffset((reqDto.getPageNo() - 1) * reqDto.getPageSize());
         List<ProjectResDto> projectResDtos = projectsMapper.projectFilter(reqDto);
+        if (projectResDtos.size() > 0){
+            for (ProjectResDto prd:projectResDtos){
+                String segmentationStringa = "";
+                if (prd.getSegmentation() != null){
+                    String[] segmentation = prd.getSegmentation().split(",");
+                    String[] segmentationForString = {};
+                    if (segmentation.length < 4){
+                        segmentationForString = segmentation;
+                    }else {
+                        String[] zhongzhuan = new String[3];
+                        for (int i=0;i<3;i++){
+                            zhongzhuan[i] = segmentation[i];
+                        }
+                        segmentationForString = zhongzhuan;
+                    }
+
+                    segmentationStringa = StringUtils.join(segmentationForString,",");
+                }
+
+                prd.setSegmentation(segmentationStringa);
+            }
+        }
 
 
         return new CommonDto<>(projectResDtos, "success", 200);
@@ -139,6 +161,28 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
             projectResDtos = projectsMapper.projectFilterOne(reqDto);
         }
 
+        if (projectResDtos.size() > 0){
+            for (ProjectResDto prd:projectResDtos){
+                String segmentationStringa = "";
+                if (prd.getSegmentation() != null){
+                    String[] segmentation = prd.getSegmentation().split(",");
+                    String[] segmentationForString = {};
+                    if (segmentation.length < 4){
+                        segmentationForString = segmentation;
+                    }else {
+                        String[] zhongzhuan = new String[3];
+                        for (int i=0;i<3;i++){
+                            zhongzhuan[i] = segmentation[i];
+                        }
+                        segmentationForString = zhongzhuan;
+                    }
+
+                    segmentationStringa = StringUtils.join(segmentationForString,",");
+                }
+
+                prd.setSegmentation(segmentationStringa);
+            }
+        }
 
         return new CommonDto<>(projectResDtos, "success", 200);
     }
