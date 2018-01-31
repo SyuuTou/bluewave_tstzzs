@@ -403,7 +403,7 @@ public class ProjectsController extends GenericController{
      * @param id  investment_institutions_project表中的主键id
      * @return
      */
-    @DeleteMapping("/v{appid}/removesingleinvest")
+    @DeleteMapping("/v{appid}/removesingleinvest")  
     public CommonDto<Boolean> removeSingleInvestment(@PathVariable("appid") Integer appid,Integer id,Integer investmentInstitutionsId){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
