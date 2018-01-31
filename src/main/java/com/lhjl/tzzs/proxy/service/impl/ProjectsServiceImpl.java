@@ -1252,6 +1252,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 				Integer financingLogId = e.getId();
 				InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
 				iip.setProjectId(financingLogId);
+				iip.setYn(0);
 				//查询关系表中相关的投资方的相关信息
 				List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
 				
@@ -1432,9 +1433,9 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	
 	@Transactional
 	@Override
-	public CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer id) {
+	public CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer projectId,Integer investmentInstitutionsId) {
 		CommonDto<Boolean> result=new CommonDto<>();
-		investmentInstitutionsProjectMapper.updateDelStatus(id);
+		investmentInstitutionsProjectMapper.updateDelStatus(projectId,investmentInstitutionsId);
 		result.setData(true);
         result.setStatus(200);
         result.setMessage("success");
@@ -1452,11 +1453,12 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	        result.setStatus(500);
 	        result.setMessage("日期字符串不正确");
 		}
-		System.err.println(body+"body**");
 		investmentInstitutionsProjectMapper.updateLogRelativeInvestmentInfo(body);
+		
 		result.setData(true);
         result.setStatus(200);
         result.setMessage("success");
+        
 		return result;
 	}
 
