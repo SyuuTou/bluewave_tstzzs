@@ -1418,8 +1418,6 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		if(iips !=null) {  
 			for(InvestmentInstitutionsProject temp:iips) {
 				InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(temp.getInvestmentInstitutionsId()); 
-				System.err.println(ii);
-				System.err.println(temp.getAccountingDate());
 				temp.setInvestmentShortName(ii.getShortName());
 				if(temp.getAccountingDate() != null) {
 					temp.setAccountingDateOutputStr(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(temp.getAccountingDate()));
