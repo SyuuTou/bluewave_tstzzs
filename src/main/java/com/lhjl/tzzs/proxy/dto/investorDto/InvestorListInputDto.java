@@ -45,8 +45,13 @@ public class InvestorListInputDto {
     
   //以下是筛选字段
     /**
+     * 群号
+     */
+    private String weChatGroupId;
+    /**
      * 负责人
      */
+    private String irPrincipal;
     /**
      * 来源类型
      */
@@ -54,6 +59,7 @@ public class InvestorListInputDto {
     /**
      * 合作等级
      */
+    private String cooperativeRelationship;
     /**
      * 机构分类
      */
@@ -143,11 +149,29 @@ public class InvestorListInputDto {
 	public void setAmountEndDollar(BigDecimal amountEndDollar) {
 		this.amountEndDollar = amountEndDollar;
 	}
+	public String getWeChatGroupId() {
+		return weChatGroupId;
+	}
+	public void setWeChatGroupId(String weChatGroupId) {
+		this.weChatGroupId = weChatGroupId;
+	}
+	public String getIrPrincipal() {
+		return irPrincipal;
+	}
+	public void setIrPrincipal(String irPrincipal) {
+		this.irPrincipal = irPrincipal;
+	}
 	public String getTypeName() {
 		return typeName;
 	}
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
+	}
+	public String getCooperativeRelationship() {
+		return cooperativeRelationship;
+	}
+	public void setCooperativeRelationship(String cooperativeRelationship) {
+		this.cooperativeRelationship = cooperativeRelationship;
 	}
 	public String getType() {
 		return type;
@@ -196,11 +220,9 @@ public class InvestorListInputDto {
 		return "InvestorListInputDto [keyWords=" + keyWords + ", startTimeStr=" + startTimeStr + ", startTime="
 				+ startTime + ", endTimeStr=" + endTimeStr + ", endTime=" + endTime + ", amountBeginRmb="
 				+ amountBeginRmb + ", amountEndRmb=" + amountEndRmb + ", amountBeginDollar=" + amountBeginDollar
-				+ ", amountEndDollar=" + amountEndDollar + ", typeName=" + typeName + ", type=" + type + ", currency="
-				+ currency + ", column=" + column + ", order=" + order + ", currentPage=" + currentPage + ", pageSize="
-				+ pageSize + ", start=" + start + "]";
+				+ ", amountEndDollar=" + amountEndDollar + ", weChatGroupId=" + weChatGroupId + ", irPrincipal="
+				+ irPrincipal + ", typeName=" + typeName + ", cooperativeRelationship=" + cooperativeRelationship
+				+ ", type=" + type + ", currency=" + currency + ", column=" + column + ", order=" + order
+				+ ", currentPage=" + currentPage + ", pageSize=" + pageSize + ", start=" + start + "]";
 	}
-	
-    
-	
 }
