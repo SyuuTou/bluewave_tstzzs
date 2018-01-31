@@ -134,7 +134,9 @@
     </select>
     <select id="serachInstitution" resultMap="newDtoMap">
         SELECT
-        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,c.kenel_case,c.comment,c.id
+        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,
+        case when c.kenel_case is null then (case when c.comment is null then "" else c.comment end) else c.kenel_case end kenel_case,
+        c.comment,c.id
         FROM
         (SELECT
         ii.id,ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
@@ -199,7 +201,9 @@
 
     <select id="findInvestment50New" resultMap="newDtoMap">
         SELECT
-        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,c.kenel_case,c.comment,c.id
+        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,
+        case when c.kenel_case is null then (case when c.comment is null then "" else c.comment end) else c.kenel_case end kenel_case,
+        c.comment,c.id
         FROM
         (SELECT
         ii.id,ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
@@ -226,7 +230,9 @@
 
     <select id="findInvestmentallNew" resultMap="newDtoMap">
         SELECT
-        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,c.kenel_case,c.comment,c.id
+        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,
+        case when c.kenel_case is null then (case when c.comment is null then "" else c.comment end) else c.kenel_case end kenel_case,
+        c.comment,c.id
         FROM
         (SELECT
         ii.id,ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
@@ -308,7 +314,9 @@
     </select>
     <select id="findRecentlyActiveInstitution" resultMap="newDtoMap">
         SELECT
-        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,c.kenel_case,c.comment,c.id,c.financing_time,c.p_name
+        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,
+        case when c.kenel_case is null then (case when c.comment is null then "" else c.comment end) else c.kenel_case end kenel_case,
+        c.comment,c.id,c.financing_time,c.p_name
         FROM
         (SELECT
         ii.id,ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
@@ -340,7 +348,9 @@
   	</select>
     <select id="filterInvestmentInstitution" resultMap="BaseResultMap">
         SELECT
-        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,c.kenel_case,c.comment,c.id
+        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,
+        case when c.kenel_case is null then (case when c.comment is null then "" else c.comment end) else c.kenel_case end kenel_case,
+        c.comment,c.id
         FROM
         (SELECT
         ii.id,ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
