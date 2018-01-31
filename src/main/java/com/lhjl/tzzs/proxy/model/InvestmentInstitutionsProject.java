@@ -72,8 +72,6 @@ public class InvestmentInstitutionsProject {
     @Transient
     private String accountingDateOutputStr;  
 
-	
-
 	public String getAccountingDateStr() {
 		return accountingDateStr;
 	}
