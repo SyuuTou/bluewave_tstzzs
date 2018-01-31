@@ -43,6 +43,7 @@
     left join meta_scene ms on ucr.scene_key = ms.`key`
     left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
     where 1=1
+    and ucr.log_type = 1
     <if test="searchWord != null and searchWord !=''">
       and (u.actual_name like CONCAT(CONCAT('%', #{searchWord}), '%') or u.company_duties like CONCAT(CONCAT('%', #{searchWord}), '%')
       or u.company_name like CONCAT(CONCAT('%', #{searchWord}), '%') or ms.`desc` like CONCAT(CONCAT('%', #{searchWord}), '%') )
@@ -82,6 +83,7 @@
     left join meta_scene ms on ucr.scene_key = ms.`key`
     left join admin_contact_log acl on ucr.id = acl.user_choose_record_id
     where 1=1
+    and ucr.log_type = 1
     <if test="searchWord != null and searchWord !=''">
       and (u.actual_name like CONCAT(CONCAT('%', #{searchWord}), '%') or u.company_duties like CONCAT(CONCAT('%', #{searchWord}), '%')
       or u.company_name like CONCAT(CONCAT('%', #{searchWord}), '%') or ms.`desc` like CONCAT(CONCAT('%', #{searchWord}), '%') )
