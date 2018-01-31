@@ -76,6 +76,7 @@ public class InvestorServiceImpl implements InvestorService {
         }
         //设置开始索引
         body.setStart((long) ((body.getCurrentPage()-1) * body.getPageSize())) ;
+        
         try{
         	if(body.getStartTimeStr() !=null) {
             	body.setStartTime(sdf.parse(body.getStartTimeStr()));
@@ -89,11 +90,11 @@ public class InvestorServiceImpl implements InvestorService {
             result.setMessage("日期字符串输入格式不正确");
     		return result;  
         }
-        
+        System.err.println(body);
         List<InvestorsOutputDto> list = investorsMapper.listInvestorsInfos(body);
+        System.err.println("******");
         //进行时间字符串的转换
         list.forEach((e)->{
-        	
         	if(e.getUpdateTime() !=null) {
         		e.setUpdateTimeStr(sdf.format(e.getUpdateTime()));
         	}

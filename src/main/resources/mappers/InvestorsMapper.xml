@@ -76,11 +76,11 @@
   </if>
   <!-- 范围搜索 -->
   <!-- 查询条件：创建开始时间 -->
-  <if test="startTime !=null and startTime !=''">
+  <if test="startTime !=null ">
         AND i.create_time &gt;= #{startTime}
   </if>
   <!-- 查询条件：创建结束时间 -->
-  <if test="endTime !=null and endTime !=''">
+  <if test="endTime !=null ">
       AND i.create_time &lt;= #{endTime}
   </if>
   <if test="amountBeginRmb !=null and amountBeginRmb !=''">
@@ -141,11 +141,11 @@
 				or ide.demand like "%"#{keyWords}"%" or speedways,city.citys like "%"#{keyWords}"%")
   </if>
   <!-- 查询条件：创建开始时间 -->
-  <if test="startTime !=null and startTime !=''">
+  <if test="startTime !=null">
         AND i.create_time &gt;= #{startTime}
   </if>
   <!-- 查询条件：创建结束时间 -->
-  <if test="endTime !=null and endTime !=''">
+  <if test="endTime !=null">
       AND i.create_time &lt;= #{endTime}
   </if>
   <if test="amountBeginRmb !=null and amountBeginRmb !=''">

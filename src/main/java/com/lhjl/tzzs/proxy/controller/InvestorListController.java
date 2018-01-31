@@ -15,7 +15,7 @@ import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
 import com.lhjl.tzzs.proxy.service.InvestorService;
 
 @RestController
-public class InvestorListController {
+public class InvestorListController extends GenericController {
 	@Resource 
 	private InvestorService investorService;
 	
@@ -31,6 +31,8 @@ public class InvestorListController {
     	try {
     		result = investorService.listInvestorsInfos(appid,body);
     	}catch(Exception e) {
+    		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
+    		
     		result.setData(null);
     		result.setMessage("fail");
     		result.setStatus(500);

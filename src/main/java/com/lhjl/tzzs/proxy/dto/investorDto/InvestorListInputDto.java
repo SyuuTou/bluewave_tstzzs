@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.dto.investorDto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class InvestorListInputDto {
@@ -28,19 +29,19 @@ public class InvestorListInputDto {
     /**
      * 单笔投资金额最低值（人民币）
      */
-    private Integer amountBeginRmb;
+    private BigDecimal amountBeginRmb;
     /**
      * 单笔投资金额最高值（人民币）
      */
-    private Integer amountEndRmb;
+    private BigDecimal amountEndRmb;
     /**
      * 单笔投资金额最低值（美元）
      */
-    private Integer amountBeginDollar;
+    private BigDecimal amountBeginDollar;
     /**
      * 单笔投资金额最高值（美元）
      */
-    private Integer amountEndDollar;
+    private BigDecimal amountEndDollar;
     
   //以下是筛选字段
     /**
@@ -118,28 +119,29 @@ public class InvestorListInputDto {
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
-	public Integer getAmountBeginRmb() {
+	
+	public BigDecimal getAmountBeginRmb() {
 		return amountBeginRmb;
 	}
-	public void setAmountBeginRmb(Integer amountBeginRmb) {
+	public void setAmountBeginRmb(BigDecimal amountBeginRmb) {
 		this.amountBeginRmb = amountBeginRmb;
 	}
-	public Integer getAmountEndRmb() {
+	public BigDecimal getAmountEndRmb() {
 		return amountEndRmb;
 	}
-	public void setAmountEndRmb(Integer amountEndRmb) {
+	public void setAmountEndRmb(BigDecimal amountEndRmb) {
 		this.amountEndRmb = amountEndRmb;
 	}
-	public Integer getAmountBeginDollar() {
+	public BigDecimal getAmountBeginDollar() {
 		return amountBeginDollar;
 	}
-	public void setAmountBeginDollar(Integer amountBeginDollar) {
+	public void setAmountBeginDollar(BigDecimal amountBeginDollar) {
 		this.amountBeginDollar = amountBeginDollar;
 	}
-	public Integer getAmountEndDollar() {
+	public BigDecimal getAmountEndDollar() {
 		return amountEndDollar;
 	}
-	public void setAmountEndDollar(Integer amountEndDollar) {
+	public void setAmountEndDollar(BigDecimal amountEndDollar) {
 		this.amountEndDollar = amountEndDollar;
 	}
 	public Integer getTypeName() {
