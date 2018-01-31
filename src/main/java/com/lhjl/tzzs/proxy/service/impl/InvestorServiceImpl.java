@@ -15,7 +15,9 @@ import com.lhjl.tzzs.proxy.mapper.InvestorDemandStageMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorInvestmentCaseMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaFinancingMapper;
+import com.lhjl.tzzs.proxy.mapper.UsersMapper;
 import com.lhjl.tzzs.proxy.model.Investors;
+import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.EvaluateService;
 import com.lhjl.tzzs.proxy.service.InvestorService;
 import com.lhjl.tzzs.proxy.utils.ComparatorHistogramList;
@@ -51,6 +53,8 @@ public class InvestorServiceImpl implements InvestorService {
     private InvestorDemandStageMapper investorDemandStageMapper;
     @Autowired
     private InvestorInvestmentCaseMapper investorInvestmentCaseMapper;
+    @Autowired
+    private UsersMapper usersMapper;
     
     
     @Value("${pageNum}")
@@ -110,6 +114,18 @@ public class InvestorServiceImpl implements InvestorService {
         map.put("pageSize", body.getPageSize());
         
         result.setData(map);
+        result.setStatus(200);
+        result.setMessage("success");
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<Users>> matchUsers(Integer appid, String keyword) {
+		CommonDto<List<Users>> result =new CommonDto<>();
+		
+		List<Users> matchUserList = usersMapper.matchUsersExcepteBlackList(keyword);
+		
+		result.setData(matchUserList);
         result.setStatus(200);
         result.setMessage("success");
 		return result;

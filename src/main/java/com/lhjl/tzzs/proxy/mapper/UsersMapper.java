@@ -54,4 +54,10 @@ public interface UsersMapper extends OwnerMapper<Users> {
 
 	List<Map<String,Object>> selectByName(@Param("searchWord") String searchWord);
 	List<Users> selectUserListByToken(@Param("userTokens") String[] userTokens);
+	/**
+	 * 匹配所有非黑名单中的模糊搜索后的用户
+	 * @param keyword
+	 * @return
+	 */
+	List<Users> matchUsersExcepteBlackList(String keyword);
 }
