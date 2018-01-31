@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaTemplateMessage;
-import com.github.binarywang.wxpay.bean.result.WxPayBaseResult;
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
@@ -635,6 +634,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 					default:approvalStatusString = "待审核";
 				}
 				investorsApprovalOutputDto.setAduitStatus(approvalStatusString);
+				investorsApprovalOutputDto.setInvestorTypeResult((String)m.get("shenfen"));
 
 				list.add(investorsApprovalOutputDto);
 

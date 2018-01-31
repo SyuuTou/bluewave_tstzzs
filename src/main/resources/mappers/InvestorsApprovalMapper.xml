@@ -56,7 +56,11 @@
   ORDER BY create_time DESC
   </select>
   <select id="findApprovalList" resultType="java.util.HashMap">
-    SELECT ia.id,ia.userid,ia.company,ia.company_duties,u.phonenumber,ia.approval_username,
+    SELECT ia.id,
+    case when ivs.investors_type is null then "" else
+    (case when ivs.investors_type = 0 then "个人投资人" else (case when ivs.investors_type = 1 then "机构投资人" else "VIP投资人" end) end)
+    end shenfen,
+    ia.userid,u.company_name company,ia.company_duties,u.phonenumber,u.actual_name approval_username,
     case when ia.investors_type is null then "" else
     (case when ia.investors_type = 0 then "个人投资人" else (case when ia.investors_type = 1 then "机构投资人" else "VIP投资人" end) end)
     end investors_type,
@@ -64,6 +68,7 @@
     FROM investors_approval ia
     left join users u on ia.userid = u.ID
     left join users_weixin uw on ia.userid = uw.user_id
+    left join (select * from investors  where approval_status = 1) ivs on ia.userid = ivs.user_id
     where
     1=1
     <if test="searchWord != null and searchWord !=''">
@@ -88,7 +93,11 @@
   </select>
   <select id="findApprovalListCount" resultType="java.lang.Integer">
     select count(*) ct from (
-    SELECT ia.id,ia.userid,ia.company,ia.company_duties,u.phonenumber,ia.approval_username,
+    SELECT ia.id,
+    case when ivs.investors_type is null then "" else
+    (case when ivs.investors_type = 0 then "个人投资人" else (case when ivs.investors_type = 1 then "机构投资人" else "VIP投资人" end) end)
+    end shenfen,
+    ia.userid,u.company_name company,ia.company_duties,u.phonenumber,ia.approval_username,
     case when ia.investors_type is null then "" else
     (case when ia.investors_type = 0 then "个人投资人" else (case when ia.investors_type = 1 then "机构投资人" else "VIP投资人" end) end)
     end investors_type,
@@ -96,6 +105,7 @@
     FROM investors_approval ia
     left join users u on ia.userid = u.ID
     left join users_weixin uw on ia.userid = uw.user_id
+    left join (select * from investors  where approval_status = 1) ivs on ia.userid = ivs.user_id
     where
     1=1
     <if test="searchWord != null and searchWord !=''">
