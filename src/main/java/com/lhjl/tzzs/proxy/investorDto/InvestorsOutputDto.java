@@ -99,8 +99,14 @@ public class InvestorsOutputDto {
 	 * 所在城市
 	 */
 	private Date updateTime;
+	/**
+	 * 创建时间出输出字符串
+	 */
 	@Transient
 	private String createTimeStr;
+	/**
+	 * 更新时间输出字符串
+	 */
 	@Transient
 	private String updateTimeStr;
 	

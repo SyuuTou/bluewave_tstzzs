@@ -162,7 +162,7 @@ public interface ProjectsService {
 	 * @param financingLodId 融资历史记录的id
 	 * @return
 	 */
-	CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLodId);
+	CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLogId);
 	/**
      * 移除项目的融资历史单阶段对应的投资机构信息
      * @param appid

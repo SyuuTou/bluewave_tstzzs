@@ -1365,7 +1365,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 					}else {//创建该机构
 						InvestmentInstitutions createIi=new InvestmentInstitutions();
 						createIi.setShortName(tmp);
-						investmentInstitutionsMapper.insert(createIi);
+						investmentInstitutionsMapper.insertSelective(createIi);
 						//获取自增长id
 						logRelativeInstitutions.add(createIi.getId());
 					}
@@ -1388,12 +1388,13 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 				logRelativeInstitutions.forEach((e)->{
 					//设置融资历史记录同投资机构的关系
 					iip.setInvestmentInstitutionsId(e);
-					investmentInstitutionsProjectMapper.insert(iip);
+					iip.setYn(0);
+					investmentInstitutionsProjectMapper.insertSelective(iip);
 				});
 			}
 		}else {//执行原关联的投资机构的删除操作
 			InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
-			//设置融资历史的id
+			//设置融资历史的id  
 			iip.setProjectId(afterUpdateLogId);
 			//删除所有同之前投资机构的关系
 			investmentInstitutionsProjectMapper.delete(iip);  
@@ -1418,7 +1419,9 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			for(InvestmentInstitutionsProject temp:iips) {
 				InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(temp.getInvestmentInstitutionsId()); 
 				temp.setInvestmentShortName(ii.getShortName());
-				temp.setAccountingDateOutputStr(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(temp.getAccountingDate()));
+				if(temp.getAccountingDate() != null) {
+					temp.setAccountingDateOutputStr(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(temp.getAccountingDate()));
+				}
 			}
 		}
 		result.setData(iips);
