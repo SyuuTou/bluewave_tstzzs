@@ -8,6 +8,7 @@ import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.dto.LabelList;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
 import com.lhjl.tzzs.proxy.investorDto.InvestorsOutputDto;
+import com.lhjl.tzzs.proxy.mapper.AdminUserMapper;
 import com.lhjl.tzzs.proxy.mapper.DatasOperationManageMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorDemandCharacterMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorDemandMapper;
@@ -18,6 +19,7 @@ import com.lhjl.tzzs.proxy.mapper.InvestorInvestmentCaseMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaFinancingMapper;
 import com.lhjl.tzzs.proxy.mapper.UsersMapper;
+import com.lhjl.tzzs.proxy.model.AdminUser;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.model.Investors;
 import com.lhjl.tzzs.proxy.model.Users;
@@ -60,6 +62,8 @@ public class InvestorServiceImpl implements InvestorService {
     private UsersMapper usersMapper;
     @Autowired
     private DatasOperationManageMapper datasOperationManageMapper;
+    @Autowired
+    private AdminUserMapper adminUserMapper;
     
     
     @Value("${pageNum}")
@@ -135,7 +139,7 @@ public class InvestorServiceImpl implements InvestorService {
         result.setMessage("success");
 		return result;
 	}
-
+	@Transactional
 	@Override
 	public CommonDto<Boolean> changeIrPrincipalBatch(Integer appid, ChangePrincipalInputDto body) {
 		CommonDto<Boolean> result =new CommonDto<>();
@@ -164,5 +168,73 @@ public class InvestorServiceImpl implements InvestorService {
 		return result;
 	}
 
+	@Override
+	public CommonDto<DatasOperationManage> echoInvestorsManagementInfo(Integer appid, Integer id) {
+		CommonDto<DatasOperationManage> result =new CommonDto<>();
+		DatasOperationManage dom =new DatasOperationManage();
+		dom.setDataId(id);
+		dom.setDataType("投资人");
+		//一个投资人只有一条的运营管理记录
+		dom = datasOperationManageMapper.selectOne(dom);
+		
+		result.setData(dom);
+        result.setStatus(200); 
+        result.setMessage("success");
+		return result;
+	}
+	@Transactional
+	@Override
+	public CommonDto<Boolean> saveOrUpdateInvestorsManagement(Integer appid, DatasOperationManage body) {
+		CommonDto<Boolean> result =new CommonDto<>();
+		
+		DatasOperationManage dom =new DatasOperationManage();
+		dom.setDataId(body.getDataId());
+		dom.setDataType("投资人");
+		
+		body.setDataType("投资人");
+		try {
+			if( datasOperationManageMapper.selectOne(dom) != null) {//执行更新操作
+				body.setUpdateTime(new Date());
+				datasOperationManageMapper.updateByPrimaryKeySelective(body);
+			}else {//执行增加
+				body.setCreateTime(new Date());
+				datasOperationManageMapper.insertSelective(body);
+			}
+		}catch(Exception e ) {
+			result.setData(true);
+	        result.setStatus(200); 
+	        result.setMessage("投资人存在重读数据，数据库数据存在问题");
+			return result;
+		}
+		result.setData(true);
+        result.setStatus(200); 
+        result.setMessage("success");
+        
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<AdminUser>> getTstzzsAdmin(Integer appid) {
+		CommonDto<List<AdminUser>> result =new CommonDto<>();
+		
+		List<AdminUser> tstzzsAdmins = adminUserMapper.selectTstzzsAdmins();
+		tstzzsAdmins.forEach((e)->{
+//			设置用户的公司名称
+			Users user = usersMapper.selectByPrimaryKey(e.getUserId());
+			e.setCompanyName(user.getCompanyName());
+			//设置用户的职位类型名称
+			Integer type = e.getAdminType();
+//			switch(type) {
+//			case 0 :
+//				
+//				break;
+//			}
+			
+		});
+		result.setData(tstzzsAdmins);
+        result.setStatus(200); 
+        result.setMessage("success");
+		return result;
+	}
     
 }
