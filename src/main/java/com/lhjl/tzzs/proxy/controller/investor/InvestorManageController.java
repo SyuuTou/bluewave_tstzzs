@@ -1,6 +1,8 @@
 package com.lhjl.tzzs.proxy.controller.investor;
 
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.model.AdminUser;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.service.InvestorService;
 
@@ -56,6 +59,25 @@ public class InvestorManageController extends GenericController {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		
     		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+    	}
+        return result;
+    }
+    /**
+     * 获取天使投资指数的所有后台管理员,即后台运营人员，负责人
+     * @param appid
+     * @return
+     */
+    @GetMapping("/v{appid}/tstzzsadmin")
+    public CommonDto<List<AdminUser>> tstzzsAdmin(@PathVariable Integer appid){
+    	CommonDto<List<AdminUser>> result =new CommonDto<>();
+    	try {
+    		result = investorService.getTstzzsAdmin(appid);
+    	}catch(Exception e) {
+    		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
+    		
+    		result.setData(null);
     		result.setMessage("fail");
     		result.setStatus(500);
     	}

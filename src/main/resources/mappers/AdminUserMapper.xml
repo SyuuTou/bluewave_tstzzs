@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.AdminUserMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.AdminUser" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="admin_type" property="adminType" jdbcType="INTEGER" />
+    <result column="meta_app_id" property="metaAppId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="yn" property="yn" jdbcType="INTEGER" />
+    <result column="phonenumber" property="phonenumber" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectTstzzsAdmins" resultMap="BaseResultMap">
+  	select * from admin_user 
+	where meta_app_id in (select id from meta_app where app_name = "天使投资指数")
+  </select>
+</mapper>

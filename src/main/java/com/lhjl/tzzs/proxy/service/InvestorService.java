@@ -6,6 +6,7 @@ import java.util.Map;
 import com.lhjl.tzzs.proxy.dto.ChangePrincipalInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
+import com.lhjl.tzzs.proxy.model.AdminUser;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.model.Users;
 
@@ -46,6 +47,12 @@ public interface InvestorService {
      * @return
      */
 	CommonDto<Boolean> saveOrUpdateInvestorsManagement(Integer appid, DatasOperationManage body);
+	/**
+     * 获取天使投资指数的所有后台管理员,即后台运营人员，负责人
+     * @param appid
+     * @return
+     */
+	CommonDto<List<AdminUser>> getTstzzsAdmin(Integer appid);
 
 
 }
