@@ -268,7 +268,7 @@ public class InvestorServiceImpl implements InvestorService {
 			e.printStackTrace();
 			result.setData(false);
 	        result.setStatus(200); 
-	        result.setMessage("日期字符串格式化错误");  
+	        result.setMessage("日期字符串格式化错误");    
 			return result;
 		}
 		//如果用户输入的截止日期小于当前日期，则用户输入非法
