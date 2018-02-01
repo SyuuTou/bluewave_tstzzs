@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.VIPOutputDto;
 import com.lhjl.tzzs.proxy.model.AdminUser;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.service.InvestorService;
@@ -24,16 +25,16 @@ public class InvestorVIPController extends GenericController {
 	private InvestorService investorService;
 	
 	/**
-	 * 回显投资人会员信息
+	 * 投资人会员信息输出
 	 * @param appid
-	 * @param id 投资人id
+	 * @param id 投资人用户id
 	 * @return
 	 */
     @GetMapping("/v{appid}/echo/vipinfo")
-    public CommonDto<DatasOperationManage> echoInvestorsVIPInfo(@PathVariable Integer appid,Integer id){
-    	CommonDto<DatasOperationManage> result =new CommonDto<>();
+    public CommonDto<VIPOutputDto> echoInvestorsVIPInfo(@PathVariable Integer appid,Integer userId){
+    	CommonDto<VIPOutputDto> result =new CommonDto<>();
     	try {
-    		result = investorService.echoInvestorsManagementInfo(appid,id);
+    		result = investorService.echoInvestorsVIPInfo(appid,userId);
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		

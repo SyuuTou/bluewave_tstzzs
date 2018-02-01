@@ -6,6 +6,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.DistributedCommonDto;
 import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.dto.LabelList;
+import com.lhjl.tzzs.proxy.dto.VIPOutputDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
 import com.lhjl.tzzs.proxy.investorDto.InvestorsOutputDto;
 import com.lhjl.tzzs.proxy.mapper.AdminUserMapper;
@@ -213,11 +214,10 @@ public class InvestorServiceImpl implements InvestorService {
 	}
 
 	@Override
-	public CommonDto<List<AdminUser>> getTstzzsAdmin(Integer appid) {
+	public CommonDto<List<AdminUser>> getTstzzsAdmin(Integer appid,String keyword) {
 		CommonDto<List<AdminUser>> result =new CommonDto<>();
 		
-		List<AdminUser> tstzzsAdmins = adminUserMapper.selectTstzzsAdmins();
-//		tstzzsAdmins.forEach((e)->{
+		List<AdminUser> tstzzsAdmins = adminUserMapper.selectTstzzsAdmins(keyword);
 		for(AdminUser tmp:tstzzsAdmins) {
 //			设置用户的公司名称
 			Users user = usersMapper.selectByPrimaryKey(tmp.getUserId());
@@ -243,8 +243,21 @@ public class InvestorServiceImpl implements InvestorService {
 			default:tmp.setDutyName("没有此职位");
 			}
 		}	
-//		});
+		
 		result.setData(tstzzsAdmins);
+        result.setStatus(200); 
+        result.setMessage("success");
+		return result;
+	}
+
+	@Override
+	public CommonDto<VIPOutputDto> echoInvestorsVIPInfo(Integer appid, Integer userId) {
+		CommonDto<VIPOutputDto> result=new CommonDto<>();
+//		Map<String,Object> map=new HashMap<>();
+		Users user = usersMapper.selectByPrimaryKey(userId);
+		
+//		map.put("", "");
+		result.setData(null);
         result.setStatus(200); 
         result.setMessage("success");
 		return result;

@@ -69,10 +69,10 @@ public class InvestorManageController extends GenericController {
      * @return
      */
     @GetMapping("/v{appid}/tstzzsadmin")
-    public CommonDto<List<AdminUser>> tstzzsAdmin(@PathVariable Integer appid){
+    public CommonDto<List<AdminUser>> tstzzsAdmin(@PathVariable Integer appid,String keyword){
     	CommonDto<List<AdminUser>> result =new CommonDto<>();
     	try {
-    		result = investorService.getTstzzsAdmin(appid);
+    		result = investorService.getTstzzsAdmin(appid,keyword);
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		
