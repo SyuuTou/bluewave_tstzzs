@@ -19,18 +19,18 @@ import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.service.InvestorService;
 
 @RestController
-public class InvestorManageController extends GenericController {
+public class InvestorVIPController extends GenericController {
 	@Resource 
 	private InvestorService investorService;
 	
 	/**
-	 * 回显投资人的运营管理信息
+	 * 回显投资人会员信息
 	 * @param appid
 	 * @param id 投资人id
 	 * @return
 	 */
-    @GetMapping("/v{appid}/echo/management")
-    public CommonDto<DatasOperationManage> echoInvestorsManagementInfo(@PathVariable Integer appid,Integer id){
+    @GetMapping("/v{appid}/echo/vipinfo")
+    public CommonDto<DatasOperationManage> echoInvestorsVIPInfo(@PathVariable Integer appid,Integer id){
     	CommonDto<DatasOperationManage> result =new CommonDto<>();
     	try {
     		result = investorService.echoInvestorsManagementInfo(appid,id);
@@ -49,11 +49,11 @@ public class InvestorManageController extends GenericController {
      * @param body
      * @return
      */
-    @PostMapping("/v{appid}/saveorupdate/management")
-    public CommonDto<Boolean> saveOrUpdateInvestorsManagement(@PathVariable Integer appid,@RequestBody DatasOperationManage body){
+    @PostMapping("/v{appid}/saveorupdate/vipinfo")
+    public CommonDto<Boolean> saveOrUpdateInvestorsVIPInfo(@PathVariable Integer appid,@RequestBody DatasOperationManage body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result = investorService.saveOrUpdateInvestorsManagement(appid,body);
+//    		result = investorService.saveOrUpdateInvestorsVIPInfo(appid,body);
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		
@@ -63,23 +63,5 @@ public class InvestorManageController extends GenericController {
     	}
         return result;
     }
-    /**
-     * 获取天使投资指数的所有后台管理员,即后台运营人员，负责人
-     * @param appid
-     * @return
-     */
-    @GetMapping("/v{appid}/tstzzsadmin")
-    public CommonDto<List<AdminUser>> tstzzsAdmin(@PathVariable Integer appid){
-    	CommonDto<List<AdminUser>> result =new CommonDto<>();
-    	try {
-    		result = investorService.getTstzzsAdmin(appid);
-    	}catch(Exception e) {
-    		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
-    		
-    		result.setData(null);
-    		result.setMessage("fail");
-    		result.setStatus(500);  
-    	}
-        return result;
-    }
+    
 }

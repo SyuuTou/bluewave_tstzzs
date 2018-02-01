@@ -103,7 +103,6 @@ public class InvestorServiceImpl implements InvestorService {
             result.setMessage("日期字符串输入格式不正确");
     		return result;  
         }
-        System.err.println(body);
         List<InvestorsOutputDto> list = investorsMapper.listInvestorsInfos(body);
         //进行时间字符串的转换
         list.forEach((e)->{  
