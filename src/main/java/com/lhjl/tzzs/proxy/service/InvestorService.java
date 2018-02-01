@@ -32,7 +32,7 @@ public interface InvestorService {
      * @param principal 负责人
      * @return
      */
-	CommonDto<Boolean> changeIrPrincipalBatch(Integer appid, ChangePrincipalInputDto body);
+	CommonDto<Boolean> changeIrPrincipalBatchOrSingle(Integer appid, ChangePrincipalInputDto body);
 	/**
 	 * 回显投资人的运营管理信息
 	 * @param appid

@@ -141,7 +141,7 @@ public class InvestorServiceImpl implements InvestorService {
 	}
 	@Transactional
 	@Override
-	public CommonDto<Boolean> changeIrPrincipalBatch(Integer appid, ChangePrincipalInputDto body) {
+	public CommonDto<Boolean> changeIrPrincipalBatchOrSingle(Integer appid, ChangePrincipalInputDto body) {
 		CommonDto<Boolean> result =new CommonDto<>();
 		DatasOperationManage dom=new DatasOperationManage();
 		dom.setUpdateTime(new Date());
