@@ -3,7 +3,7 @@ package com.lhjl.tzzs.proxy.model;
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "datas_operation_manage")
+@Table(name = "datas_operation_manage")  
 public class DatasOperationManage {
     /**
      * 数据ID
