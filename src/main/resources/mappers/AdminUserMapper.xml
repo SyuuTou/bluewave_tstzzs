@@ -16,6 +16,9 @@
   </resultMap>
   <select id="selectTstzzsAdmins" resultMap="BaseResultMap">
   	select * from admin_user 
-	where meta_app_id in (select id from meta_app where app_name = "天使投资指数")
+	where meta_app_id in (select id from meta_app where app_name = "天使投资指数") 
+	<if test="keyword !=null and keyword !=''">
+		and name like "%"#{keyword}"%"
+	</if>
   </select>
 </mapper>

@@ -1,11 +1,8 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import com.alibaba.druid.util.StringUtils;
 import com.lhjl.tzzs.proxy.dto.ChangePrincipalInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.DistributedCommonDto;
-import com.lhjl.tzzs.proxy.dto.HistogramList;
-import com.lhjl.tzzs.proxy.dto.LabelList;
+import com.lhjl.tzzs.proxy.dto.VIPOutputDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
 import com.lhjl.tzzs.proxy.investorDto.InvestorsOutputDto;
 import com.lhjl.tzzs.proxy.mapper.AdminUserMapper;
@@ -17,25 +14,21 @@ import com.lhjl.tzzs.proxy.mapper.InvestorDemandSpeedwayMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorDemandStageMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorInvestmentCaseMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
-import com.lhjl.tzzs.proxy.mapper.MetaFinancingMapper;
+import com.lhjl.tzzs.proxy.mapper.UserLevelRelationMapper;
 import com.lhjl.tzzs.proxy.mapper.UsersMapper;
 import com.lhjl.tzzs.proxy.model.AdminUser;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
-import com.lhjl.tzzs.proxy.model.Investors;
+import com.lhjl.tzzs.proxy.model.UserLevelRelation;
 import com.lhjl.tzzs.proxy.model.Users;
-import com.lhjl.tzzs.proxy.service.EvaluateService;
 import com.lhjl.tzzs.proxy.service.InvestorService;
-import com.lhjl.tzzs.proxy.utils.ComparatorHistogramList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -64,6 +57,8 @@ public class InvestorServiceImpl implements InvestorService {
     private DatasOperationManageMapper datasOperationManageMapper;
     @Autowired
     private AdminUserMapper adminUserMapper;
+    @Autowired
+    private UserLevelRelationMapper userLevelRelationMapper;
     
     
     @Value("${pageNum}")
@@ -103,7 +98,6 @@ public class InvestorServiceImpl implements InvestorService {
             result.setMessage("日期字符串输入格式不正确");
     		return result;  
         }
-        System.err.println(body);
         List<InvestorsOutputDto> list = investorsMapper.listInvestorsInfos(body);
         //进行时间字符串的转换
         list.forEach((e)->{  
@@ -111,7 +105,7 @@ public class InvestorServiceImpl implements InvestorService {
         		e.setUpdateTimeStr(sdf.format(e.getUpdateTime()));
         	}
         	if(e.getCreateTime() !=null) {
-        		e.setCreateTimeStr(sdf.format(e.getCreateTime()));
+        		e.setCreateTimeStr(sdf.format(e.getCreateTime()));  
         	}
         });
         Long total = investorsMapper.getInvestorsListCount(body);
@@ -141,10 +135,9 @@ public class InvestorServiceImpl implements InvestorService {
 	}
 	@Transactional
 	@Override
-	public CommonDto<Boolean> changeIrPrincipalBatch(Integer appid, ChangePrincipalInputDto body) {
+	public CommonDto<Boolean> changeIrPrincipalBatchOrSingle(Integer appid, ChangePrincipalInputDto body) {
 		CommonDto<Boolean> result =new CommonDto<>();
 		DatasOperationManage dom=new DatasOperationManage();
-		dom.setUpdateTime(new Date());
 		//删除所有选中投资人的记录信息
 		if(body.getInvestorIds() !=null && body.getInvestorIds().size()!=0) {
 			body.getInvestorIds().forEach((e)->{
@@ -156,6 +149,7 @@ public class InvestorServiceImpl implements InvestorService {
 					dom.setCreateTime(new Date());
 					datasOperationManageMapper.addInvestorIrPrincipal(dom);  
 				}else {//执行相关的更新操作
+					dom.setUpdateTime(new Date());
 					datasOperationManageMapper.changeInvestorIrPrincipal(dom);
 				}
 				
@@ -214,11 +208,10 @@ public class InvestorServiceImpl implements InvestorService {
 	}
 
 	@Override
-	public CommonDto<List<AdminUser>> getTstzzsAdmin(Integer appid) {
+	public CommonDto<List<AdminUser>> getTstzzsAdmin(Integer appid,String keyword) {
 		CommonDto<List<AdminUser>> result =new CommonDto<>();
 		
-		List<AdminUser> tstzzsAdmins = adminUserMapper.selectTstzzsAdmins();
-//		tstzzsAdmins.forEach((e)->{
+		List<AdminUser> tstzzsAdmins = adminUserMapper.selectTstzzsAdmins(keyword);
 		for(AdminUser tmp:tstzzsAdmins) {
 //			设置用户的公司名称
 			Users user = usersMapper.selectByPrimaryKey(tmp.getUserId());
@@ -244,8 +237,57 @@ public class InvestorServiceImpl implements InvestorService {
 			default:tmp.setDutyName("没有此职位");
 			}
 		}	
-//		});
+		
 		result.setData(tstzzsAdmins);
+        result.setStatus(200); 
+        result.setMessage("success");
+		return result;
+	}
+
+	@Override
+	public CommonDto<VIPOutputDto> echoInvestorsVIPInfo(Integer appid, Integer userId) {
+		CommonDto<VIPOutputDto> result=new CommonDto<>();
+//		Map<String,Object> map=new HashMap<>();
+		Users user = usersMapper.selectByPrimaryKey(userId);
+		
+//		map.put("", "");
+		result.setData(null);
+        result.setStatus(200); 
+        result.setMessage("success");
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> saveOrUpdateInvestorsVIPInfo(Integer appid, UserLevelRelation body) {
+		CommonDto<Boolean> result=new CommonDto<>();
+		UserLevelRelation ulr=new UserLevelRelation();
+		ulr.setUserId(body.getUserId());
+		//用户会员等级表的查询实体
+		List<UserLevelRelation> ulrs = userLevelRelationMapper.select(ulr);
+		//
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			if(body.getEndTimeStr() != null) {
+				body.setEndTime(sdf.parse(body.getEndTimeStr()));
+			}
+			if(body.getBeginTimeStr() != null) {
+				body.setBeginTime(sdf.parse(body.getBeginTimeStr()));
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+			result.setData(false);
+	        result.setStatus(200); 
+	        result.setMessage("日子字符串格式化错误");
+			return result;
+		}
+		
+		//设置创建时间
+		body.setCreateTime(new Date());
+		body.setYn(1);
+		body.setStatus(4);
+		userLevelRelationMapper.insertSelective(body);
+		
+		result.setData(true);
         result.setStatus(200); 
         result.setMessage("success");
 		return result;

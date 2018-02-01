@@ -22,4 +22,8 @@
     from project_send_financing_approval_b
     where project_send_b_id = #{oldid}
   </insert>
+
+  <select id="selectBySendProjectId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from project_send_financing_approval_b where project_send_b_id=#{projectId}
+  </select>
 </mapper>

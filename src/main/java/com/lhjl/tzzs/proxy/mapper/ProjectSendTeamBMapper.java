@@ -16,4 +16,6 @@ public interface ProjectSendTeamBMapper extends OwnerMapper<ProjectSendTeamB> {
      * @return
      */
     Integer copyProjectTeamB(ProjectSendSearchCommenDto projectSendSearchCommenDto);
+
+    List<ProjectSendTeamB> selectByProjectId(@Param("projectId") Integer projectId);
 }
