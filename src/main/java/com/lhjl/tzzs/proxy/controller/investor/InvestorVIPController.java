@@ -73,7 +73,7 @@ public class InvestorVIPController extends GenericController {
     public CommonDto<List<MetaUserLevel>> sourceMetaUserLevel(@PathVariable Integer appid){
     	CommonDto<List<MetaUserLevel>> result =new CommonDto<>();
     	try {
-    		result = investorService.sourceMetaUserLevels(appid);
+    		result = investorService.sourceMetaUserLevels(appid);  
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		
