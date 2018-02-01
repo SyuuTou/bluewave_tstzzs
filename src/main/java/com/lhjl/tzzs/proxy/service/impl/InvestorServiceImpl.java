@@ -144,7 +144,6 @@ public class InvestorServiceImpl implements InvestorService {
 	public CommonDto<Boolean> changeIrPrincipalBatchOrSingle(Integer appid, ChangePrincipalInputDto body) {
 		CommonDto<Boolean> result =new CommonDto<>();
 		DatasOperationManage dom=new DatasOperationManage();
-		dom.setUpdateTime(new Date());
 		//删除所有选中投资人的记录信息
 		if(body.getInvestorIds() !=null && body.getInvestorIds().size()!=0) {
 			body.getInvestorIds().forEach((e)->{
@@ -156,6 +155,7 @@ public class InvestorServiceImpl implements InvestorService {
 					dom.setCreateTime(new Date());
 					datasOperationManageMapper.addInvestorIrPrincipal(dom);  
 				}else {//执行相关的更新操作
+					dom.setUpdateTime(new Date());
 					datasOperationManageMapper.changeInvestorIrPrincipal(dom);
 				}
 				
