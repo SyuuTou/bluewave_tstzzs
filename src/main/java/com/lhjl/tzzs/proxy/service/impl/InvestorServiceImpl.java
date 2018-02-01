@@ -110,7 +110,7 @@ public class InvestorServiceImpl implements InvestorService {
         		e.setUpdateTimeStr(sdf.format(e.getUpdateTime()));
         	}
         	if(e.getCreateTime() !=null) {
-        		e.setCreateTimeStr(sdf.format(e.getCreateTime()));
+        		e.setCreateTimeStr(sdf.format(e.getCreateTime()));  
         	}
         });
         Long total = investorsMapper.getInvestorsListCount(body);
