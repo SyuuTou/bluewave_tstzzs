@@ -53,8 +53,36 @@ public class UserLevelRelation {
 3: 支付失败
      */
     private Integer status;
+    
+	/**
+	 * 会员开始时间输入字符串
+	 */
+    @Transient
+	private String beginTimeStr;
+	/**
+	 * 会员到期时间输入字符串
+	 */
+    @Transient
+	private String EndTimeStr;
+    
+    
+    public String getBeginTimeStr() {
+		return beginTimeStr;
+	}
 
-    /**
+	public void setBeginTimeStr(String beginTimeStr) {
+		this.beginTimeStr = beginTimeStr;
+	}
+
+	public String getEndTimeStr() {
+		return EndTimeStr;
+	}
+
+	public void setEndTimeStr(String endTimeStr) {
+		EndTimeStr = endTimeStr;
+	}
+
+	/**
      * @return id
      */
     public Integer getId() {
@@ -213,4 +241,12 @@ public class UserLevelRelation {
     public void setStatus(Integer status) {
         this.status = status;
     }
+
+	@Override
+	public String toString() {
+		return "UserLevelRelation [id=" + id + ", userId=" + userId + ", levelId=" + levelId + ", beginTime="
+				+ beginTime + ", endTime=" + endTime + ", createTime=" + createTime + ", yn=" + yn + ", status="
+				+ status + ", beginTimeStr=" + beginTimeStr + ", EndTimeStr=" + EndTimeStr + "]";
+	}
+    
 }

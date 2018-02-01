@@ -51,7 +51,6 @@ public class InvestorManageController extends GenericController {
      */
     @PostMapping("/v{appid}/saveorupdate/management")
     public CommonDto<Boolean> saveOrUpdateInvestorsManagement(@PathVariable Integer appid,@RequestBody DatasOperationManage body){
-    	System.err.println(body+"****");
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
     		result = investorService.saveOrUpdateInvestorsManagement(appid,body);
@@ -70,10 +69,10 @@ public class InvestorManageController extends GenericController {
      * @return
      */
     @GetMapping("/v{appid}/tstzzsadmin")
-    public CommonDto<List<AdminUser>> tstzzsAdmin(@PathVariable Integer appid){
+    public CommonDto<List<AdminUser>> tstzzsAdmin(@PathVariable Integer appid,String keyword){
     	CommonDto<List<AdminUser>> result =new CommonDto<>();
     	try {
-    		result = investorService.getTstzzsAdmin(appid);
+    		result = investorService.getTstzzsAdmin(appid,keyword);
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		
