@@ -26,4 +26,8 @@
   	update datas_operation_manage set ir_principal=#{irPrincipal},update_time=#{updateTime} where data_id=#{dataId} and data_type=#{dataType} 
   </update>
   
+  <select id="findInvestor" resultMap="BaseResultMap">
+  	select * from datas_operation_manage where data_id=#{dataId} and data_type=#{dataType}
+  </select>
+  
 </mapper>

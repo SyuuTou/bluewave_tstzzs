@@ -147,7 +147,13 @@ public class InvestorServiceImpl implements InvestorService {
 				dom.setDataId(e);
 				dom.setDataType("投资人");  
 				dom.setIrPrincipal(body.getIrPrincipal());
-				datasOperationManageMapper.changeInvestorIrPrincipal(dom);
+				if(datasOperationManageMapper.findInvestor(dom) ==null) {//不存在相关的投资人，执行插入设置
+					
+					datasOperationManageMapper.changeInvestorIrPrincipal(dom);
+				}else {
+					datasOperationManageMapper.changeInvestorIrPrincipal(dom);
+				}
+				
 			});
 		}
 			
