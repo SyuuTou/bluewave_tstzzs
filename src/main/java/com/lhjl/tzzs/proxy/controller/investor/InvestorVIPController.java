@@ -61,5 +61,19 @@ public class InvestorVIPController extends GenericController {
     	}
         return result;
     }
+   /* @Mapping("/v{appid}/saveorupdate/vipinfo")
+    public CommonDto<Boolean> saveOrUpdateInvestorsVIPInfo(@PathVariable Integer appid,@RequestBody UserLevelRelation body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result = investorService.saveOrUpdateInvestorsVIPInfo(appid,body);
+    	}catch(Exception e) {
+    		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
+    		
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+    	}
+        return result;
+    }*/
     
 }

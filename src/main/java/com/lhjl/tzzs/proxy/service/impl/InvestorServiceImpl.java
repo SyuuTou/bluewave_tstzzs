@@ -264,7 +264,7 @@ public class InvestorServiceImpl implements InvestorService {
 		ulr.setUserId(body.getUserId());
 		//用户会员等级表的查询实体
 		List<UserLevelRelation> ulrs = userLevelRelationMapper.select(ulr);
-		//
+		//进行数据格式的规范化
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try {
 			if(body.getEndTimeStr() != null) {
@@ -284,6 +284,7 @@ public class InvestorServiceImpl implements InvestorService {
 		//设置创建时间
 		body.setCreateTime(new Date());
 		body.setYn(1);
+		//后台管理员添加时需要设置状态为："赠送"
 		body.setStatus(4);
 		userLevelRelationMapper.insertSelective(body);
 		
