@@ -238,46 +238,72 @@ public class InvestorServiceImpl implements InvestorService {
 	@Override
 	public CommonDto<VIPOutputDto> echoInvestorsVIPInfo(Integer appid, Integer userId) {
 		CommonDto<VIPOutputDto> result=new CommonDto<>();
-//		Map<String,Object> map=new HashMap<>();
 		Users user = usersMapper.selectByPrimaryKey(userId);
 		
-//		map.put("", "");
 		result.setData(null);
         result.setStatus(200); 
         result.setMessage("success");
 		return result;
 	}
-
+	
+	@Transactional
 	@Override
 	public CommonDto<Boolean> saveOrUpdateInvestorsVIPInfo(Integer appid, UserLevelRelation body) {
 		CommonDto<Boolean> result=new CommonDto<>();
+		
 		UserLevelRelation ulr=new UserLevelRelation();
 		ulr.setUserId(body.getUserId());
+		ulr.setYn(1);  
+		System.err.println(ulr+"**url*");
 		//用户会员等级表的查询实体
-//		List<UserLevelRelation> ulrs = userLevelRelationMapper.select(ulr);
+		UserLevelRelation user = userLevelRelationMapper.selectOne(ulr);
+		System.err.println(user+"**user*");
 		//进行数据格式的规范化
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try {
 			if(body.getEndTimeStr() != null) {
 				body.setEndTime(sdf.parse(body.getEndTimeStr()));
 			}
-//			if(body.getBeginTimeStr() != null) {
-//				body.setBeginTime(sdf.parse(body.getBeginTimeStr()));
-//			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 			result.setData(false);
 	        result.setStatus(200); 
-	        result.setMessage("日子字符串格式化错误");
+	        result.setMessage("日期字符串格式化错误");  
 			return result;
 		}
-		
-		//设置创建时间
-		body.setCreateTime(new Date());
-		body.setYn(1);
-		//后台管理员添加时需要设置状态为："赠送"
-		body.setStatus(4);
-		userLevelRelationMapper.insertSelective(body);
+		//如果用户输入的截止日期小于当前日期，则用户输入非法
+		if(body.getEndTime().getTime() < new Date().getTime()) {
+			result.setData(false);
+	        result.setStatus(500); 
+	        result.setMessage("用户输入截止日期非法");
+			return result;
+		}
+		//不存在相关的用户会员记录
+		if(user == null) {//进行相应的插入操作
+			//设置会员的创建时间以及变更的时间
+			body.setBeginTime(new Date());
+			body.setCreateTime(new Date());
+			body.setYn(1);
+			//后台管理员添加时需要设置状态为："赠送"
+			body.setStatus(4);
+			userLevelRelationMapper.insertSelective(body);
+		}else {
+			//将user的有效位变更为无效
+			user.setYn(0);
+			userLevelRelationMapper.updateByPrimaryKeySelective(user);
+			body.setCreateTime(new Date());
+			body.setYn(1);
+			body.setStatus(4);
+			
+			if(user.getLevelId() !=body.getLevelId()) {//用户的会员等级进行了变更
+				
+				body.setBeginTime(new Date());
+				userLevelRelationMapper.insertSelective(body);
+			}else {//用户的会员等级没有进行变更，会员的开始时间没有发生变化，要取得之前会员的开始时间
+				body.setBeginTime(user.getBeginTime());
+				userLevelRelationMapper.insertSelective(body);
+			}
+		}
 		
 		result.setData(true);
         result.setStatus(200); 
