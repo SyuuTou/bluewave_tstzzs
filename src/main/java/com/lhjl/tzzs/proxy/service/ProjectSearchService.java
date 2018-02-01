@@ -17,4 +17,6 @@ public interface ProjectSearchService {
     CommonDto<List<Map<String,Object>>> ralatedInstitution(ProjectReqDto reqDto);
 
     CommonDto<List<HistogramList>> projectFilterStatistices(ProjectReqDto reqDto);
+
+    CommonDto<List<ProjectResDto>> projectHightQuality(String token,Integer pageNum,Integer pageSize);
 }

@@ -29,6 +29,12 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
     @Value("${statistics.endTime}")
     private String endTime;
 
+    @Value("${pageNum}")
+    private Integer pageNumDefault;
+
+    @Value("${pageSize}")
+    private Integer pageSizeDefault;
+
 //    @Value("${statistics.beginTime}")
 //    private String beginTime;
 //
@@ -321,4 +327,31 @@ public class ProjectSearchServiceImpl extends GenericService implements ProjectS
 
         return new CommonDto<>(projectResDtos, "success", 200);
     }
+
+    @Override
+    public CommonDto<List<ProjectResDto>> projectHightQuality(String token, Integer pageNum, Integer pageSize) {
+
+        CommonDto<List<ProjectResDto>> result = new CommonDto<>();
+
+        if (token == null || "".equals(token) || "undefined".equals(token)){
+            result.setMessage("用户token不能为空");
+            result.setData(null);
+            result.setStatus(502);
+
+            return result;
+        }
+        if (null == pageNum){
+            pageNum = pageNumDefault;
+        }
+        if (null == pageSize){
+            pageSize = pageSizeDefault;
+        }
+
+        Integer startPage = (pageNum-1)*pageSize;
+        List<ProjectResDto> projectResDtos = projectsMapper.projectHighQuality(token,startPage,pageSize);
+
+        return new CommonDto<>(projectResDtos, "success", 200);
+    }
+
+
 }
