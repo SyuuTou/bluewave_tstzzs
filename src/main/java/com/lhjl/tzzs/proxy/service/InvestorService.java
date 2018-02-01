@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.dto.VIPOutputDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
 import com.lhjl.tzzs.proxy.model.AdminUser;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
+import com.lhjl.tzzs.proxy.model.UserLevelRelation;
 import com.lhjl.tzzs.proxy.model.Users;
 
 public interface InvestorService {
@@ -61,6 +62,13 @@ public interface InvestorService {
 	 * @return
 	 */
 	CommonDto<VIPOutputDto> echoInvestorsVIPInfo(Integer appid, Integer userId);
+	/**
+     * 更新或者保存投资人的运营管理
+     * @param appid
+     * @param body
+     * @return
+     */
+	CommonDto<Boolean> saveOrUpdateInvestorsVIPInfo(Integer appid, UserLevelRelation body);
 
 
 }

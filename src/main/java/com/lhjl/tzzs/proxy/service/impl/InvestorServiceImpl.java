@@ -1,11 +1,7 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import com.alibaba.druid.util.StringUtils;
 import com.lhjl.tzzs.proxy.dto.ChangePrincipalInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.DistributedCommonDto;
-import com.lhjl.tzzs.proxy.dto.HistogramList;
-import com.lhjl.tzzs.proxy.dto.LabelList;
 import com.lhjl.tzzs.proxy.dto.VIPOutputDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
 import com.lhjl.tzzs.proxy.investorDto.InvestorsOutputDto;
@@ -18,25 +14,21 @@ import com.lhjl.tzzs.proxy.mapper.InvestorDemandSpeedwayMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorDemandStageMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorInvestmentCaseMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
-import com.lhjl.tzzs.proxy.mapper.MetaFinancingMapper;
+import com.lhjl.tzzs.proxy.mapper.UserLevelRelationMapper;
 import com.lhjl.tzzs.proxy.mapper.UsersMapper;
 import com.lhjl.tzzs.proxy.model.AdminUser;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
-import com.lhjl.tzzs.proxy.model.Investors;
+import com.lhjl.tzzs.proxy.model.UserLevelRelation;
 import com.lhjl.tzzs.proxy.model.Users;
-import com.lhjl.tzzs.proxy.service.EvaluateService;
 import com.lhjl.tzzs.proxy.service.InvestorService;
-import com.lhjl.tzzs.proxy.utils.ComparatorHistogramList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -65,6 +57,8 @@ public class InvestorServiceImpl implements InvestorService {
     private DatasOperationManageMapper datasOperationManageMapper;
     @Autowired
     private AdminUserMapper adminUserMapper;
+    @Autowired
+    private UserLevelRelationMapper userLevelRelationMapper;
     
     
     @Value("${pageNum}")
@@ -258,6 +252,41 @@ public class InvestorServiceImpl implements InvestorService {
 		
 //		map.put("", "");
 		result.setData(null);
+        result.setStatus(200); 
+        result.setMessage("success");
+		return result;
+	}
+
+	@Override
+	public CommonDto<Boolean> saveOrUpdateInvestorsVIPInfo(Integer appid, UserLevelRelation body) {
+		CommonDto<Boolean> result=new CommonDto<>();
+		UserLevelRelation ulr=new UserLevelRelation();
+		ulr.setUserId(body.getUserId());
+		//用户会员等级表的查询实体
+		List<UserLevelRelation> ulrs = userLevelRelationMapper.select(ulr);
+		//
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			if(body.getEndTimeStr() != null) {
+				body.setEndTime(sdf.parse(body.getEndTimeStr()));
+			}
+			if(body.getBeginTimeStr() != null) {
+				body.setBeginTime(sdf.parse(body.getBeginTimeStr()));
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+			result.setData(false);
+	        result.setStatus(200); 
+	        result.setMessage("日子字符串格式化错误");
+			return result;
+		}
+		
+		//设置创建时间
+		body.setCreateTime(new Date());
+		body.setYn(1);
+		userLevelRelationMapper.insertSelective(body);
+		
+		result.setData(true);
         result.setStatus(200); 
         result.setMessage("success");
 		return result;
