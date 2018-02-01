@@ -79,7 +79,7 @@ public class InvestorManageController extends GenericController {
     		
     		result.setData(null);
     		result.setMessage("fail");
-    		result.setStatus(500);
+    		result.setStatus(500);  
     	}
         return result;
     }
