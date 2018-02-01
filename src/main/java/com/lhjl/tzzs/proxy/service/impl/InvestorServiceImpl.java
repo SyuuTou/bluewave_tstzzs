@@ -284,6 +284,7 @@ public class InvestorServiceImpl implements InvestorService {
 		//设置创建时间
 		body.setCreateTime(new Date());
 		body.setYn(1);
+		body.setStatus(4);
 		userLevelRelationMapper.insertSelective(body);
 		
 		result.setData(true);
