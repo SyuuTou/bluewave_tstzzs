@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.DatasOperationManageMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.DatasOperationManage">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="data_id" jdbcType="INTEGER" property="dataId" />
+    <id column="data_type" jdbcType="VARCHAR" property="dataType" />
+    <result column="basics_recommend" jdbcType="INTEGER" property="basicsRecommend" />
+    <result column="operation_recommend" jdbcType="INTEGER" property="operationRecommend" />
+    <result column="dynamic_recommand" jdbcType="INTEGER" property="dynamicRecommand" />
+    <result column="cooperative_relationship" jdbcType="VARCHAR" property="cooperativeRelationship" />
+    <result column="customer_grade" jdbcType="VARCHAR" property="customerGrade" />
+    <result column="source_type" jdbcType="VARCHAR" property="sourceType" />
+    <result column="ir_principal" jdbcType="VARCHAR" property="irPrincipal" />
+    <result column="wechat_group_id" jdbcType="VARCHAR" property="wechatGroupId" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="is_hide" jdbcType="INTEGER" property="isHide" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  
+  <update id="changeInvestorIrPrincipal" >
+  	update datas_operation_manage set ir_principal=#{irPrincipal},update_time=#{updateTime} where data_id=#{dataId} and data_type=#{dataType} 
+  </update>
+  
+  <select id="findInvestor" resultMap="BaseResultMap">
+  	select * from datas_operation_manage where data_id=#{dataId} and data_type=#{dataType}
+  </select>
+  
+  <insert id="addInvestorIrPrincipal" >
+  	insert into datas_operation_manage(data_id,data_type,ir_principal,create_time) values(#{dataId},#{dataType},#{irPrincipal},#{createTime})
+  </insert>
+  
+</mapper>

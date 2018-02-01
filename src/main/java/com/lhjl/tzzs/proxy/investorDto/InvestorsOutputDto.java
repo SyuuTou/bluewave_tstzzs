@@ -32,11 +32,11 @@ public class InvestorsOutputDto {
 	/**
 	 * 群号
 	 */
-//	private String groupId;
+	private String weChatGroupId;
 	/**
 	 * 负责人
 	 */
-	
+	private String irPrincipal;
 	/**
 	 * 来源类型
 	 */
@@ -44,7 +44,7 @@ public class InvestorsOutputDto {
 	/**
 	 * 合作等级
 	 */
-	
+	private String cooperativeRelationship;
 	/**
 	 * 机构分类
 	 */
@@ -109,19 +109,6 @@ public class InvestorsOutputDto {
 	 */
 	@Transient
 	private String updateTimeStr;
-	
-	public String getCreateTimeStr() {
-		return createTimeStr;
-	}
-	public void setCreateTimeStr(String createTimeStr) {
-		this.createTimeStr = createTimeStr;
-	}
-	public String getUpdateTimeStr() {
-		return updateTimeStr;
-	}
-	public void setUpdateTimeStr(String updateTimeStr) {
-		this.updateTimeStr = updateTimeStr;
-	}
 	public Integer getId() {
 		return id;
 	}
@@ -158,17 +145,30 @@ public class InvestorsOutputDto {
 	public void setPhonenumber(String phonenumber) {
 		this.phonenumber = phonenumber;
 	}
-//	public String getGroupId() {
-//		return groupId;
-//	}
-//	public void setGroupId(String groupId) {
-//		this.groupId = groupId;
-//	}
+	public String getWeChatGroupId() {
+		return weChatGroupId;
+	}
+	public void setWeChatGroupId(String weChatGroupId) {
+		this.weChatGroupId = weChatGroupId;
+	}
+	public String getIrPrincipal() {
+		return irPrincipal;
+	}
+	public void setIrPrincipal(String irPrincipal) {
+		this.irPrincipal = irPrincipal;
+	}
 	public String getTypeName() {
 		return typeName;
 	}
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
+	}
+	
+	public String getCooperativeRelationship() {
+		return cooperativeRelationship;
+	}
+	public void setCooperativeRelationship(String cooperativeRelationship) {
+		this.cooperativeRelationship = cooperativeRelationship;
 	}
 	public String getType() {
 		return type;
@@ -230,7 +230,6 @@ public class InvestorsOutputDto {
 	public void setDemand(String demand) {
 		this.demand = demand;
 	}
-	
 	public String getCitys() {
 		return citys;
 	}
@@ -249,9 +248,29 @@ public class InvestorsOutputDto {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
-
-	
-	
-	
-	
+	public String getCreateTimeStr() {
+		return createTimeStr;
+	}
+	public void setCreateTimeStr(String createTimeStr) {
+		this.createTimeStr = createTimeStr;
+	}
+	public String getUpdateTimeStr() {
+		return updateTimeStr;
+	}
+	public void setUpdateTimeStr(String updateTimeStr) {
+		this.updateTimeStr = updateTimeStr;
+	}
+	@Override
+	public String toString() {
+		return "InvestorsOutputDto [id=" + id + ", userId=" + userId + ", name=" + name + ", shortName=" + shortName
+				+ ", position=" + position + ", phonenumber=" + phonenumber + ", weChatGroupId=" + weChatGroupId
+				+ ", irPrincipal=" + irPrincipal + ", typeName=" + typeName + ", cooperativeRelationship="
+				+ cooperativeRelationship + ", type=" + type + ", currency=" + currency + ", segmentations="
+				+ segmentations + ", speedways=" + speedways + ", stages=" + stages + ", investmentAmountLow="
+				+ investmentAmountLow + ", investmentAmountHigh=" + investmentAmountHigh
+				+ ", investmentAmountLowDollars=" + investmentAmountLowDollars + ", investmentAmountHighDollars="
+				+ investmentAmountHighDollars + ", demand=" + demand + ", citys=" + citys + ", createTime=" + createTime
+				+ ", updateTime=" + updateTime + ", createTimeStr=" + createTimeStr + ", updateTimeStr=" + updateTimeStr
+				+ "]";
+	}
 }
