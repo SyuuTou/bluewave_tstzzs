@@ -135,7 +135,7 @@ public class InvestorServiceImpl implements InvestorService {
         result.setMessage("success");
 		return result;
 	}
-
+	@Transactional
 	@Override
 	public CommonDto<Boolean> changeIrPrincipalBatch(Integer appid, ChangePrincipalInputDto body) {
 		CommonDto<Boolean> result =new CommonDto<>();
@@ -160,6 +160,50 @@ public class InvestorServiceImpl implements InvestorService {
 			
 		result.setData(true);
         result.setStatus(200);
+        result.setMessage("success");
+		return result;
+	}
+
+	@Override
+	public CommonDto<DatasOperationManage> echoInvestorsManagementInfo(Integer appid, Integer id) {
+		CommonDto<DatasOperationManage> result =new CommonDto<>();
+		DatasOperationManage dom =new DatasOperationManage();
+		dom.setDataId(id);
+		dom.setDataType("投资人");
+		//一个投资人独赢一条的运营管里记录
+		dom = datasOperationManageMapper.selectOne(dom);
+		
+		result.setData(dom);
+        result.setStatus(200); 
+        result.setMessage("success");
+		return result;
+	}
+	@Transactional
+	@Override
+	public CommonDto<Boolean> saveOrUpdateInvestorsManagement(Integer appid, DatasOperationManage body) {
+		CommonDto<Boolean> result =new CommonDto<>();
+		
+		DatasOperationManage dom =new DatasOperationManage();
+		dom.setDataId(body.getDataId());
+		dom.setDataType("投资人");
+		
+		body.setDataType("投资人");
+		try {
+			if( datasOperationManageMapper.selectOne(dom) != null) {//执行更新操作
+				body.setUpdateTime(new Date());
+				datasOperationManageMapper.updateByPrimaryKeySelective(body);
+			}else {//执行增加
+				body.setCreateTime(new Date());
+				datasOperationManageMapper.insertSelective(body);
+			}
+		}catch(Exception e ) {
+			result.setData(true);
+	        result.setStatus(200); 
+	        result.setMessage("投资人存在重读数据，数据库数据存在问题");
+			return result;
+		}
+		result.setData(true);
+        result.setStatus(200); 
         result.setMessage("success");
 		return result;
 	}

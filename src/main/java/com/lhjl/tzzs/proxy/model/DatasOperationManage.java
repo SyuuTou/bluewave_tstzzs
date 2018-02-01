@@ -364,4 +364,15 @@ public class DatasOperationManage {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	@Override
+	public String toString() {
+		return "DatasOperationManage [dataId=" + dataId + ", dataType=" + dataType + ", basicsRecommend="
+				+ basicsRecommend + ", operationRecommend=" + operationRecommend + ", dynamicRecommand="
+				+ dynamicRecommand + ", cooperativeRelationship=" + cooperativeRelationship + ", customerGrade="
+				+ customerGrade + ", sourceType=" + sourceType + ", irPrincipal=" + irPrincipal + ", wechatGroupId="
+				+ wechatGroupId + ", note=" + note + ", isHide=" + isHide + ", creator=" + creator + ", createTime="
+				+ createTime + ", updateTime=" + updateTime + "]";
+	}
+    
 }
