@@ -14,6 +14,7 @@ import com.lhjl.tzzs.proxy.mapper.InvestorDemandSpeedwayMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorDemandStageMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorInvestmentCaseMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
+import com.lhjl.tzzs.proxy.mapper.MetaAdminTypeMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaUserLevelMapper;
 import com.lhjl.tzzs.proxy.mapper.UserLevelRelationMapper;
 import com.lhjl.tzzs.proxy.mapper.UsersMapper;
@@ -63,6 +64,8 @@ public class InvestorServiceImpl implements InvestorService {
     private UserLevelRelationMapper userLevelRelationMapper;
     @Autowired
     private MetaUserLevelMapper metaUserLevelMapper;
+    @Autowired
+    private MetaAdminTypeMapper metaAdminTypeMapper;
     
     
     @Value("${pageNum}")
@@ -222,24 +225,8 @@ public class InvestorServiceImpl implements InvestorService {
 			tmp.setCompanyName(user.getCompanyName());
 			//设置用户的职位类型名称
 			Integer type = tmp.getAdminType();
-			switch(type) {
-			case 0 :
-				tmp.setDutyName("root超级管理员");
-				break;
-			case 1 :
-				tmp.setDutyName("普通管理员");
-				break;
-			case 2 :
-				tmp.setDutyName("业务员");
-				break;
-			case 3 :
-				tmp.setDutyName("FA承销");
-				break;
-			case 4 :
-				tmp.setDutyName("FA承做");
-				break;
-			default:tmp.setDutyName("没有此职位");
-			}
+			tmp.setDutyName(metaAdminTypeMapper.selectByPrimaryKey(type).getName());
+			
 		}	
 		
 		result.setData(tstzzsAdmins);
