@@ -752,7 +752,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 }
             }else {
                 if (investorsList.size()<1){
-                    result.setStatus(204);
+                    result.setStatus(205);
                     result.setMessage(tishi1);
                     result.setData(data);
 
