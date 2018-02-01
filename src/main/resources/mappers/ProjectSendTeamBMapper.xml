@@ -27,4 +27,8 @@
       select last_insert_id() as id
     </selectKey>
   </insert>
+
+  <select id="selectByProjectId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from project_send_team_b where project_send_b_id=#{projectId} and yn=0;
+  </select>
 </mapper>

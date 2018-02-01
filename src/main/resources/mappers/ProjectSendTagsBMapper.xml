@@ -14,4 +14,8 @@
     insert into project_send_tags_b(project_send_b_id,tag_name,appid) select #{newid},tag_name,appid
     from project_send_tags_b where project_send_b_id = #{oldid}
   </insert>
+
+  <select id="selectByProjectId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from project_send_tags_b where project_send_b_id=#{projectId};
+  </select>
 </mapper>

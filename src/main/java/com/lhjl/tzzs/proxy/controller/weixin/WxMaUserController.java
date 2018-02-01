@@ -82,6 +82,7 @@ public class WxMaUserController {
             this.logger.info(session.getOpenid());
             logger.info("Expiresin：");
             this.logger.info(session.getExpiresin().toString());
+
             //TODO 可以增加自己的逻辑，关联业务相关数据
             String openId = session.getOpenid();
             String sessionKey = session.getSessionKey();
