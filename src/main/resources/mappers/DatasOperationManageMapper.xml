@@ -30,4 +30,8 @@
   	select * from datas_operation_manage where data_id=#{dataId} and data_type=#{dataType}
   </select>
   
+  <insert id="addInvestorIrPrincipal" >
+  	insert into datas_operation_manage(data_id,data_type,ir_principal,create_time) values(#{dataId},#{dataType},#{irPrincipal},#{createTime})
+  </insert>
+  
 </mapper>

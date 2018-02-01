@@ -9,12 +9,18 @@ public interface DatasOperationManageMapper extends OwnerMapper<DatasOperationMa
 	 * 更新投资人的负责人
 	 * @param dom
 	 * @return
-	 */
+	 */  
 	Integer changeInvestorIrPrincipal(DatasOperationManage dom);
 	/**
 	 * 查找是否存在相应的投资人
 	 * @param dom
 	 * @return
 	 */
-	DatasOperationManage findInvestor(DatasOperationManage dom);  
+	DatasOperationManage findInvestor(DatasOperationManage dom);
+	/**
+	 * 添加相关的投资人对应的负责人  
+	 * @param dom
+	 * @return
+	 */
+	Integer addInvestorIrPrincipal(DatasOperationManage dom);  
 }
