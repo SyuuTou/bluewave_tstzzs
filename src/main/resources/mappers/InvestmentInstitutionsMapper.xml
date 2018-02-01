@@ -84,9 +84,11 @@
         <result column="yn" jdbcType="INTEGER" property="yn" />
         <result column="sort" jdbcType="INTEGER" property="sort" />
         <result column="count" jdbcType="INTEGER" property="count" />
+        <result column="financing_time" jdbcType="VARCHAR" property="financingTime"/>
+        <result column="p_name" jdbcType="VARCHAR" property="pName" />
 
     </resultMap>
-     <select id="blurScan" resultType="com.lhjl.tzzs.proxy.model.InvestmentInstitutions" parameterType="String">
+     <select id="blurScan" resultMap="BaseResultMap" parameterType="String">
         select * from investment_institutions where short_name like "%"#{keyword}"%" group by short_name
     </select>
     <insert id="add" keyProperty="id" parameterType="com.lhjl.tzzs.proxy.model.InvestmentInstitutions" useGeneratedKeys="true">
@@ -131,24 +133,39 @@
         limit #{startPage},#{pageSize}
     </select>
     <select id="serachInstitution" resultMap="newDtoMap">
-        SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.count,ii.sort FROM
-        (SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, CASE when ii.kenel_case is NULL or ii.kenel_case = ''  then ii.`comment` ELSE ii.kenel_case END kenel_case, ii.count,ii.sort
-        FROM investment_institutions ii
-        WHERE  ii.short_name LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')
-        UNION ALL
-        SELECT ii.id, ii.short_name,  ii.create_time, ii.type, ii.logo, CASE when ii.kenel_case is NULL or ii.kenel_case = ''  then ii.`comment` ELSE ii.kenel_case END kenel_case, ii.count,ii.sort
-        FROM investment_institutions ii
-        WHERE  ii.kenel_case LIKE CONCAT('%',#{shortName,jdbcType=VARCHAR},'%')) ii
-        where  1=1
-        and ii.short_name not like "%个人%"
-        and ii.short_name not like "%投资人%"
-        and ii.short_name not like "%自投%"
-        and ii.short_name not like "%自筹%"
-        and ii.short_name not like "%以及%"
-        and ii.short_name not like "%创始人%"
-        AND ii.short_name != ""
-        GROUP BY ii.short_name
-        ORDER BY ii.sort
+        SELECT
+        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,
+        case when c.kenel_case is null then (case when c.comment is null then "" else c.comment end) else c.kenel_case end kenel_case,
+        c.comment,c.id
+        FROM
+        (SELECT
+        ii.id,ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
+        CASE WHEN p.full_name IS NULL OR p.full_name = '' THEN p.short_name ELSE p.full_name END p_name,
+        pf.financing_time
+        FROM project_financing_log pf
+        LEFT JOIN projects p ON pf.project_id = p.id
+        LEFT JOIN investment_institutions_project iip ON iip.project_id = pf.id
+        LEFT JOIN investment_institutions ii ON iip.investment_institutions_id = ii.id
+        WHERE pf.financing_time BETWEEN '2017-01-01' AND '2017-12-31'
+        AND TRIM(pf.stage) IN ('种子轮' , '天使轮', 'Pre-A轮')
+        AND p.`country` = '中国'
+        <if test="shortName != null and shortName !=''">
+            and (ii.short_name like CONCAT("%",CONCAT(#{shortName},"%"))
+            or ii.kenel_case like CONCAT("%",CONCAT(#{shortName},"%"))
+            or ii.comment like CONCAT("%",CONCAT(#{shortName},"%")))
+        </if>
+        GROUP BY p_name , pf.stage) c
+        WHERE
+        c.short_name != ''
+        AND c.short_name IS NOT NULL
+        and c.short_name not like "%个人%"
+        and c.short_name not like "%投资人%"
+        and c.short_name not like "%自投%"
+        and c.short_name not like "%自筹%"
+        and c.short_name not like "%以及%"
+        and c.short_name not like "%创始人%"
+        GROUP BY c.short_name
+        ORDER BY count DESC
         LIMIT #{beginNum},#{pageSize}
     </select>
 
@@ -183,44 +200,63 @@
     </select>
 
     <select id="findInvestment50New" resultMap="newDtoMap">
-
         SELECT
-        COUNT(1) count, c.short_name,c.create_time,c.type,c.logo,c.kenel_case,c.comment,c.id
+        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,
+        case when c.kenel_case is null then (case when c.comment is null then "" else c.comment end) else c.kenel_case end kenel_case,
+        c.comment,c.id
         FROM
         (SELECT
-        ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
-        CASE
-        WHEN p.full_name IS NULL OR p.full_name = '' THEN p.short_name
-        ELSE p.full_name
-        END p_name,
+        ii.id,ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
+        CASE WHEN p.full_name IS NULL OR p.full_name = '' THEN p.short_name ELSE p.full_name END p_name,
         pf.financing_time
-        FROM
-        project_financing_log pf
+        FROM project_financing_log pf
         LEFT JOIN projects p ON pf.project_id = p.id
         LEFT JOIN investment_institutions_project iip ON iip.project_id = pf.id
         LEFT JOIN investment_institutions ii ON iip.investment_institutions_id = ii.id
+        WHERE pf.financing_time BETWEEN '2017-01-01' AND '2017-12-31'
+        AND TRIM(pf.stage) IN ('种子轮' , '天使轮', 'Pre-A轮')
+        AND p.`country` = '中国'
+        GROUP BY p_name , pf.stage) c
         WHERE
-        pf.financing_time BETWEEN  #{beginTime} and #{endTime}
-        AND pf.stage IN ('种子轮' , '天使轮', 'Pre-A轮')
-        AND ii.type = 1
-        GROUP BY p_name , pf.stage) c  where c.short_name != ''  and c.short_name is not null
-        GROUP BY c.short_name          ORDER BY count desc
+        c.short_name != ''
+        AND c.short_name IS NOT NULL
+        AND c.type = 1
+        GROUP BY c.short_name
+        ORDER BY count DESC
         <if test="beginNum != null and pageSize != null">
             LIMIT #{beginNum},#{pageSize}
         </if>
     </select>
 
     <select id="findInvestmentallNew" resultMap="newDtoMap">
-        select  ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,d.cont count  from (SELECT c.short_name,SUM(c.cc) cont  from (
-        SELECT a.short_name ,count(DISTINCT(p_name)) cc FROM (
-
-        select  case when p.full_name is null or p.full_name = '' then p.short_name else p.full_name end p_name, pf.`stage` , p.`city` , ii.`short_name`    from project_financing_log  pf
-        left join projects p on pf.project_id = p.id LEFT join investment_institutions_project iip on iip.project_id = pf.id
-        left join investment_institutions ii on iip.investment_institutions_id = ii.id
-        where pf.financing_time between  #{beginTime} and #{endTime}  and  trim(pf.stage) in ('种子轮','天使轮','Pre-A轮') and p.`country` = '中国' AND ii.`short_name` IS NOT NULL AND ii.`short_name` NOT LIKE  '%个人%' and ii.`short_name` not in ('自投','自筹') and ii.`short_name`  NOT LIKE '%天使投资人%'
-        GROUP BY p_name , ii.`short_name`      ) a   GROUP BY a.short_name
-        ) c GROUP BY c.short_name  ORDER BY SUM(c.cc) DESC ) d LEFT JOIN `investment_institutions` ii on d.short_name = ii.`short_name`
-        where ii.`logo` IS NOT NULL
+        SELECT
+        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,
+        case when c.kenel_case is null then (case when c.comment is null then "" else c.comment end) else c.kenel_case end kenel_case,
+        c.comment,c.id
+        FROM
+        (SELECT
+        ii.id,ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
+        CASE WHEN p.full_name IS NULL OR p.full_name = '' THEN p.short_name ELSE p.full_name END p_name,
+        pf.financing_time
+        FROM project_financing_log pf
+        LEFT JOIN projects p ON pf.project_id = p.id
+        LEFT JOIN investment_institutions_project iip ON iip.project_id = pf.id
+        LEFT JOIN investment_institutions ii ON iip.investment_institutions_id = ii.id
+        WHERE pf.financing_time BETWEEN '2017-01-01' AND '2017-12-31'
+        AND TRIM(pf.stage) IN ('种子轮' , '天使轮', 'Pre-A轮')
+        AND p.`country` = '中国'
+        GROUP BY p_name , pf.stage) c
+        WHERE
+        c.short_name != ''
+        AND c.short_name IS NOT NULL
+        and c.short_name not like "%个人%"
+        and c.short_name not like "%投资人%"
+        and c.short_name not like "%自投%"
+        and c.short_name not like "%自筹%"
+        and c.short_name not like "%以及%"
+        and c.short_name not like "%创始人%"
+        GROUP BY c.short_name
+        ORDER BY count DESC
         <if test="beginNum != null and pageSize != null">
             LIMIT #{beginNum},#{pageSize}
         </if>
@@ -277,64 +313,84 @@
         ORDER BY ii.sort
     </select>
     <select id="findRecentlyActiveInstitution" resultMap="newDtoMap">
-        SELECT ii.* FROM
-        investment_institutions ii
-        LEFT JOIN (
-        SELECT iip.investment_institutions_id,iip.financing_time FROM
-        (SELECT iip.investment_institutions_id,pfl.financing_time
-        FROM project_financing_log pfl
-        LEFT JOIN investment_institutions_project iip ON  iip.project_id = pfl.ID
-        WHERE investment_institutions_id IS NOT NULL
-        ORDER BY pfl.financing_time DESC
-        ) iip
-        GROUP BY  iip.investment_institutions_id
-        ORDER BY iip.financing_time DESC) u  ON u.investment_institutions_id =ii.id
-        WHERE ii.short_name is not null
-        and ii.short_name not like "%个人%"
-        and ii.short_name not like "%投资人%"
-        and ii.short_name not like "%自投%"
-        and ii.short_name not like "%自筹%"
-        and ii.short_name not like "%以及%"
-        and ii.short_name not like "%创始人%"
-        AND ii.short_name != ""
-        ORDER BY u.financing_time DESC
+        SELECT
+        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,
+        case when c.kenel_case is null then (case when c.comment is null then "" else c.comment end) else c.kenel_case end kenel_case,
+        c.comment,c.id,c.financing_time,c.p_name
+        FROM
+        (SELECT
+        ii.id,ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
+        CASE WHEN p.full_name IS NULL OR p.full_name = '' THEN p.short_name ELSE p.full_name END p_name,
+        pf.financing_time
+        FROM project_financing_log pf
+        LEFT JOIN projects p ON pf.project_id = p.id
+        LEFT JOIN investment_institutions_project iip ON iip.project_id = pf.id
+        LEFT JOIN investment_institutions ii ON iip.investment_institutions_id = ii.id
+        WHERE pf.financing_time BETWEEN '2017-01-01' AND '2017-12-31'
+        AND TRIM(pf.stage) IN ('种子轮' , '天使轮', 'Pre-A轮')
+        AND p.`country` = '中国'
+        GROUP BY p_name , pf.stage) c
+        WHERE
+        c.short_name != ''
+        AND c.short_name IS NOT NULL
+        and c.short_name not like "%个人%"
+        and c.short_name not like "%投资人%"
+        and c.short_name not like "%自投%"
+        and c.short_name not like "%自筹%"
+        and c.short_name not like "%以及%"
+        and c.short_name not like "%创始人%"
+        GROUP BY c.short_name
+        ORDER BY c.financing_time DESC
         limit #{startPage},#{pageSize}
     </select>
   	<select id="getLastInsertId" resultType="Integer">
   		SELECT LAST_INSERT_ID()
   	</select>
     <select id="filterInvestmentInstitution" resultMap="BaseResultMap">
-        SELECT ii.* FROM investment_institutions ii
-        <if test="domains != null and domains !=''">
-            left join investment_institutions_segmentation iis on ii.ID = iis.investment_institutions_id
-            left join meta_segmentation ms on iis.meta_segmentation_id = ms.id
+        SELECT
+        COUNT(1) count,c.short_name,c.create_time,c.type,c.logo,
+        case when c.kenel_case is null then (case when c.comment is null then "" else c.comment end) else c.kenel_case end kenel_case,
+        c.comment,c.id
+        FROM
+        (SELECT
+        ii.id,ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.comment,
+        CASE WHEN p.full_name IS NULL OR p.full_name = '' THEN p.short_name ELSE p.full_name END p_name,
+        pf.financing_time
+        FROM project_financing_log pf
+        LEFT JOIN projects p ON pf.project_id = p.id
+        LEFT JOIN investment_institutions_project iip ON iip.project_id = pf.id
+        LEFT JOIN investment_institutions ii ON iip.investment_institutions_id = ii.id
+        <if test="domains != null and domains.length &gt; 0">
+        right join project_segmentation ps on p.id = ps.project_id
         </if>
-       <if test="stages != null and stages != ''">
-           left join investment_institutions_stage iist on ii.id = iist.investment_institution_id
-           left join meta_project_stage mps on iist.meta_project_stage_id = mps.id
-       </if>
-        where 1=1
-        and ii.short_name not like "%个人%"
-        and ii.short_name not like "%投资人%"
-        and ii.short_name not like "%自投%"
-        and ii.short_name not like "%自筹%"
-        and ii.short_name not like "%以及%"
-        and ii.short_name not like "%创始人%"
-        AND ii.short_name != ""
-        <if test="domains != null and domains !=''">
-            and ms.`name` in
+        WHERE pf.financing_time BETWEEN '2017-01-01' AND '2017-12-31'
+        <if test="domains != null and domains.length &gt; 0">
+            and ps.segmentation_name in
             <foreach close=")" collection="domains" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
-        <if test="stages != null and stages !=''">
-            and mps.`name` in
+        AND TRIM(pf.stage) IN ('种子轮' , '天使轮', 'Pre-A轮')
+        AND p.`country` = '中国'
+        <if test="stages != null and stages.length &gt; 0">
+            and pf.stage in
             <foreach close=")" collection="stages" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
+        GROUP BY p_name , pf.stage) c
+        WHERE
+        c.short_name != ''
+        AND c.short_name IS NOT NULL
+        and c.short_name not like "%个人%"
+        and c.short_name not like "%投资人%"
+        and c.short_name not like "%自投%"
+        and c.short_name not like "%自筹%"
+        and c.short_name not like "%以及%"
+        and c.short_name not like "%创始人%"
         <if test="types != null and types !=''">
             and ii.types = #{types}
         </if>
-        group by ii.short_name
-        order by ii.count desc
+        GROUP BY c.short_name
+        ORDER BY count DESC
         limit #{startPage},#{pageSize}
+
     </select>
 
     <select id="selectUserApprovalInstitution" resultType="java.lang.Integer">

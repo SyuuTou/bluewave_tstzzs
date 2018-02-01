@@ -102,6 +102,13 @@ public class InvestmentInstitutionsDto {
 
     private Boolean gouxuanyn;
 
+    /**融资时间*/
+    @Column(name = "financing_time")
+    private String financingTime;
+
+    @Column(name = "p_name")
+    private String pName;
+
     /**
      * @return ID
      */
@@ -424,6 +431,22 @@ public class InvestmentInstitutionsDto {
      */
     public void setCount(Integer count) {
         this.count = count;
+    }
+
+    public String getFinancingTime() {
+        return financingTime;
+    }
+
+    public void setFinancingTime(String financingTime) {
+        this.financingTime = financingTime;
+    }
+
+    public String getpName() {
+        return pName;
+    }
+
+    public void setpName(String pName) {
+        this.pName = pName;
     }
 }
 

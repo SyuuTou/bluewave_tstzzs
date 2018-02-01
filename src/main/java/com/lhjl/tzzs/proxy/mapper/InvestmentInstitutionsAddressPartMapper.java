@@ -14,9 +14,9 @@ public interface InvestmentInstitutionsAddressPartMapper extends OwnerMapper<Inv
 	 */
 	List<InvestmentInstitutionsAddressPart> findAllById(Integer investmentInstitutionId);
 	/**
-	 * 根据sort字段排序获取所有的分部信息
+	 * 根据权重排序获取所有的分部信息
 	 * @param companyId
 	 * @return
 	 */
-	List<InvestmentInstitutionsAddressPart> selectAllByDefaultSort(@Param("companyId")Integer companyId);
+	List<InvestmentInstitutionsAddressPart> selectAllByWeight(@Param("companyId")Integer companyId);
 }

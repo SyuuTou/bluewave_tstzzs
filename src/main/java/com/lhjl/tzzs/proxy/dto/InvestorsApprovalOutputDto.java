@@ -10,6 +10,9 @@ public class InvestorsApprovalOutputDto {
     /**用户id*/
     private Integer userId;
 
+    /**身份类型审核结果*/
+    private String investorTypeResult;
+
     /**用户名*/
     private String userName;
 
@@ -54,6 +57,14 @@ public class InvestorsApprovalOutputDto {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getInvestorTypeResult() {
+        return investorTypeResult;
+    }
+
+    public void setInvestorTypeResult(String investorTypeResult) {
+        this.investorTypeResult = investorTypeResult;
     }
 
     public String getUserName() {

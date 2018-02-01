@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Table(name = "investment_institutions_project")
 public class InvestmentInstitutionsProject {
     /**
-     * 项目ID
+     * 融资历史轮次ID
      */
     @Column(name = "project_id")
     private Integer projectId;
@@ -62,18 +62,30 @@ public class InvestmentInstitutionsProject {
     @Transient
     private String investmentShortName;
     /**
-     * 前端传递过来的时间字符串
+     * 时间输入转换字符串
      */
     @Transient
     private String accountingDateStr;
-    
-    
-    public String getAccountingDateStr() {
+    /**
+     * 时间输出转换字符串
+     */
+    @Transient
+    private String accountingDateOutputStr;  
+
+	public String getAccountingDateStr() {
 		return accountingDateStr;
 	}
 
 	public void setAccountingDateStr(String accountingDateStr) {
 		this.accountingDateStr = accountingDateStr;
+	}
+
+	public String getAccountingDateOutputStr() {
+		return accountingDateOutputStr;
+	}
+
+	public void setAccountingDateOutputStr(String accountingDateOutputStr) {
+		this.accountingDateOutputStr = accountingDateOutputStr;
 	}
 
 	public String getInvestmentShortName() {
@@ -252,6 +264,9 @@ public class InvestmentInstitutionsProject {
 				+ investmentInstitutionsId + ", investmentDesc=" + investmentDesc + ", status=" + status
 				+ ", investmentAmount=" + investmentAmount + ", currency=" + currency + ", stockShare=" + stockShare
 				+ ", accountingDate=" + accountingDate + ", yn=" + yn + ", investmentShortName=" + investmentShortName
-				+ ", accountingDateStr=" + accountingDateStr + "]";
+				+ ", accountingDateStr=" + accountingDateStr + ", accountingDateOutputStr="
+				+ accountingDateOutputStr + "]";
 	}
+
+	
 }

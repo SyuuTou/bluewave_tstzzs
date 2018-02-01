@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaTemplateMessage;
-import com.github.binarywang.wxpay.bean.result.WxPayBaseResult;
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
@@ -635,6 +634,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 					default:approvalStatusString = "待审核";
 				}
 				investorsApprovalOutputDto.setAduitStatus(approvalStatusString);
+				investorsApprovalOutputDto.setInvestorTypeResult((String)m.get("shenfen"));
 
 				list.add(investorsApprovalOutputDto);
 
@@ -824,6 +824,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	 * @param body 请求对象
 	 * @return
 	 */
+	@Transactional
 	@Override
 	public CommonDto<String> adminApproval(InvestorSpecialApprovalDto body) {
 		CommonDto<String> result = new CommonDto<>();
@@ -925,6 +926,15 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		if (status > 0 && formId != null){
 			sendTemplate(userId,status,formId);
 		}
+
+		//更新用户信息
+		Users users = new Users();
+		users.setId(userId);
+		users.setActualName(body.getUserName());
+		users.setCompanyName(body.getCompanyName());
+		users.setCompanyDuties(body.getComanyDuties());
+
+		usersMapper.updateByPrimaryKeySelective(users);
 
 		result.setStatus(200);
 		result.setData(null);

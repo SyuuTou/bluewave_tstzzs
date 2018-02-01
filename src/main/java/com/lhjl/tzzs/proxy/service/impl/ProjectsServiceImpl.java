@@ -1252,6 +1252,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 				Integer financingLogId = e.getId();
 				InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
 				iip.setProjectId(financingLogId);
+				iip.setYn(0);
 				//查询关系表中相关的投资方的相关信息
 				List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
 				
@@ -1365,7 +1366,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 					}else {//创建该机构
 						InvestmentInstitutions createIi=new InvestmentInstitutions();
 						createIi.setShortName(tmp);
-						investmentInstitutionsMapper.insert(createIi);
+						investmentInstitutionsMapper.insertSelective(createIi);
 						//获取自增长id
 						logRelativeInstitutions.add(createIi.getId());
 					}
@@ -1388,12 +1389,13 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 				logRelativeInstitutions.forEach((e)->{
 					//设置融资历史记录同投资机构的关系
 					iip.setInvestmentInstitutionsId(e);
-					investmentInstitutionsProjectMapper.insert(iip);
+					iip.setYn(0);
+					investmentInstitutionsProjectMapper.insertSelective(iip);
 				});
 			}
 		}else {//执行原关联的投资机构的删除操作
 			InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
-			//设置融资历史的id
+			//设置融资历史的id  
 			iip.setProjectId(afterUpdateLogId);
 			//删除所有同之前投资机构的关系
 			investmentInstitutionsProjectMapper.delete(iip);  
@@ -1406,10 +1408,10 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLodId) {
+	public CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLogId) {
 		CommonDto<List<InvestmentInstitutionsProject>> result =new CommonDto<>();
 		InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
-		iip.setProjectId(financingLodId);
+		iip.setProjectId(financingLogId);
 		//设置有效标志为有效
 		iip.setYn(0);
 		List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
@@ -1418,8 +1420,11 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			for(InvestmentInstitutionsProject temp:iips) {
 				InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(temp.getInvestmentInstitutionsId()); 
 				temp.setInvestmentShortName(ii.getShortName());
+				if(temp.getAccountingDate() != null) {
+					temp.setAccountingDateOutputStr(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(temp.getAccountingDate()));
+				}
 			}
-		}    
+		}
 		result.setData(iips);
         result.setStatus(200);
         result.setMessage("success");
@@ -1428,9 +1433,9 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	
 	@Transactional
 	@Override
-	public CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer id) {
+	public CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer projectId,Integer investmentInstitutionsId) {
 		CommonDto<Boolean> result=new CommonDto<>();
-		investmentInstitutionsProjectMapper.updateDelStatus(id);
+		investmentInstitutionsProjectMapper.updateDelStatus(projectId,investmentInstitutionsId);
 		result.setData(true);
         result.setStatus(200);
         result.setMessage("success");
@@ -1448,11 +1453,12 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	        result.setStatus(500);
 	        result.setMessage("日期字符串不正确");
 		}
-		System.err.println(body+"body**");
 		investmentInstitutionsProjectMapper.updateLogRelativeInvestmentInfo(body);
+		
 		result.setData(true);
         result.setStatus(200);
         result.setMessage("success");
+        
 		return result;
 	}
 
@@ -1486,7 +1492,11 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 //		InvestmentInstitutionsAddressPart iiap=new InvestmentInstitutionsAddressPart();
 //		iiap.setInvestmentInstitutionId(companyId);
 		//获取该机构的所有分部信息
-		List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.selectAllByDefaultSort(companyId);
+		List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.selectAllByWeight(companyId);
+		Integer i=0;
+		for(InvestmentInstitutionsAddressPart e:list) {
+			e.setSort(++i);
+		}
 //		if(list != null) {
 //			for(InvestmentInstitutionsAddressPart tmp:list) {
 //				InvestmentInstitutionsAddress iia =new InvestmentInstitutionsAddress();
@@ -1572,10 +1582,11 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer proId) {
+	public CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer companyId) {
 		CommonDto<List<Recruitment>> result=new CommonDto<>();
 		Recruitment rec=new Recruitment();
-		rec.setCompanyId(proId);
+		rec.setYn(0);
+		rec.setCompanyId(companyId);
 		
 		result.setData(recruitmentMapper.select(rec));
 		result.setStatus(200);
@@ -1677,12 +1688,6 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		result.setData(investmentInstitutionsMapper.blurScan(keyword));
 		result.setStatus(200);
 		result.setMessage("success"); 
-		return result;
-	}
-
-	@Override
-	public CommonDto<Users> getUserById(Integer appid, Integer userId) {
-		
-		return userInfoService.getUserByUserId(userId);
+		return result;  
 	}
 }

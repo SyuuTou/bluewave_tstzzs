@@ -732,112 +732,101 @@ public class UserLevelServiceImpl implements UserLevelService {
             if(type == null){
                 type = 0;
             }
-            String tishi = "";
-            Integer reserveField = 0;
-            if (action.getReserveField() == null){
-                reserveField=0;
-            }else {
-                reserveField = action.getReserveField();
-            }
-            if (reserveField == 1){
-                tishi = "约谈指数机构投资项目，仅对VIP投资人开放";
-            }else {
-                if (type == 1){
-                    tishi = "约谈50指数机构所投资项目，仅对VIP投资人开放";
-                }else{
-                    tishi = "约谈行业指数机构所投资项目，仅对VIP投资人开放";
-                }
-            }
 
-            //增加对投资人类型的判断
+            //约谈50指数机构约谈的项目,仅对VIP投资人会员开放,约谈非50指数机构投资项目,仅对认证投资人开放
             Example invetorExample = new Example(Investors.class);
-            invetorExample.and().andEqualTo("userId",localUserId);
+            invetorExample.and().andEqualTo("userId",localUserId).andEqualTo("yn",1).andNotEqualTo("approvalStatus",0);
 
             List<Investors> investorsList = investorsMapper.selectByExample(invetorExample);
 
-            if (investorsList.size()>0){
-                if(!sceneKeys.contains(sceneKey)){
+            String tishi = "约谈50指数机构所投资项目,仅针对VIP投资人会员开放";
+            String tishi1 = "约谈非50指数机构所投资项目,仅针对认证投资人开放";
+
+            if (type == 1){
+                if (userLevel != 4){
                     result.setStatus(202);
-                    result.setMessage(tishi);
                     result.setData(data);
+                    result.setMessage(tishi);
+
                     return result;
                 }
             }else {
-                result.setStatus(202);
-                result.setMessage(tishi);
-                result.setData(data);
+                if (investorsList.size()<1){
+                    result.setStatus(205);
+                    result.setMessage(tishi1);
+                    result.setData(data);
 
-                return result;
-            }
-
-
-
-
-
-            data.put("type", type);
-
-            //查询是否购买过此功能
-            boolean isBuy = this.isBuy(sceneKey, localUserId, action.getProjectsId() + "");
-            if(isBuy){
-                result.setStatus(200);
-                result.setMessage("该功能已被购买，可直接进入");
-                result.setData(data);
-                return result;
-            }
-
-            //获取消费金币数量
-            MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
-            metaObtainIntegral.setSceneKey(sceneKey);
-            metaObtainIntegral.setUserLevel(4);
-            if(type == 1){
-                metaObtainIntegral.setProjectsType(1);
-            }else{
-                metaObtainIntegral.setProjectsType(0);
-            }
-            metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
-            int consumeNum = metaObtainIntegral.getIntegral();
-
-            if (consumeNum == 0){
-                result.setStatus(200);
-                result.setMessage("VIP投资人无需消费，可直接进入");
-                result.setData(data);
-                return result;
-            }
-            //金币足够
-            if(totalCoins + consumeNum >= 0){
-
-                result.setStatus(204);
-                if(type == 1){
-                    result.setMessage("约谈50指数机构所投资项目，共消费"+(-consumeNum)+"金币，一次性收费后不再计费");
-                }else{
-                    result.setMessage("约谈行业指数机构所投资项目，共消费"+(-consumeNum)+"金币，一次性收费后不再计费");
+                    return result;
                 }
-
-                data.put("consumeNum", -consumeNum);
-                //判断是否提示
-                UserScene userScene = new UserScene();
-                userScene.setUserId(localUserId);
-                userScene.setSceneKey(sceneKey);
-                userScene.setYn(0);
-                userScene = userSceneMapper.selectOne(userScene);
-                if(userScene == null || userScene.getFlag() == 0){
-                    data.put("flag", "0");//提示
-                }else{
-                    data.put("flag", "1");//不提示
-                }
-                result.setData(data);
-                return result;
-            }else{
-                result.setStatus(203);
-                if(type == 1){
-                    result.setMessage("约谈50指数机构所投资项目需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
-                }else{
-                    result.setMessage("约谈行业指数机构所投资项目需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
-                }
-                data.put("consumeNum", -consumeNum);
-                result.setData(data);
-                return result;
             }
+
+            result.setMessage("约谈功能无需消费");
+            result.setData(data);
+            result.setStatus(200);
+//            data.put("type", type);
+//
+//            //查询是否购买过此功能
+//            boolean isBuy = this.isBuy(sceneKey, localUserId, action.getProjectsId() + "");
+//            if(isBuy){
+//                result.setStatus(200);
+//                result.setMessage("该功能已被购买，可直接进入");
+//                result.setData(data);
+//                return result;
+//            }
+//
+//            //获取消费金币数量
+//            MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
+//            metaObtainIntegral.setSceneKey(sceneKey);
+//            metaObtainIntegral.setUserLevel(4);
+//            if(type == 1){
+//                metaObtainIntegral.setProjectsType(1);
+//            }else{
+//                metaObtainIntegral.setProjectsType(0);
+//            }
+//            metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
+//            int consumeNum = metaObtainIntegral.getIntegral();
+//
+//            if (consumeNum == 0){
+//                result.setStatus(200);
+//                result.setMessage("VIP投资人无需消费，可直接进入");
+//                result.setData(data);
+//                return result;
+//            }
+//            //金币足够
+//            if(totalCoins + consumeNum >= 0){
+//
+//                result.setStatus(204);
+//                if(type == 1){
+//                    result.setMessage("约谈50指数机构所投资项目，共消费"+(-consumeNum)+"金币，一次性收费后不再计费");
+//                }else{
+//                    result.setMessage("约谈行业指数机构所投资项目，共消费"+(-consumeNum)+"金币，一次性收费后不再计费");
+//                }
+//
+//                data.put("consumeNum", -consumeNum);
+//                //判断是否提示
+//                UserScene userScene = new UserScene();
+//                userScene.setUserId(localUserId);
+//                userScene.setSceneKey(sceneKey);
+//                userScene.setYn(0);
+//                userScene = userSceneMapper.selectOne(userScene);
+//                if(userScene == null || userScene.getFlag() == 0){
+//                    data.put("flag", "0");//提示
+//                }else{
+//                    data.put("flag", "1");//不提示
+//                }
+//                result.setData(data);
+//                return result;
+//            }else{
+//                result.setStatus(203);
+//                if(type == 1){
+//                    result.setMessage("约谈50指数机构所投资项目需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
+//                }else{
+//                    result.setMessage("约谈行业指数机构所投资项目需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
+//                }
+//                data.put("consumeNum", -consumeNum);
+//                result.setData(data);
+//                return result;
+//            }
 
         }
 
@@ -1123,510 +1112,6 @@ public class UserLevelServiceImpl implements UserLevelService {
         return result;
     }
 
-
-
-
-
-//    /**
-//     * 消费金币提醒
-//     * @param action 请求对象
-//     * @return
-//     */
-//    @Transactional
-//    @Override
-//    public CommonDto<Map<String, Object>> consumeTips(ActionDto action) {
-//        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
-//        Map<String, Object> data = new HashMap<String,Object>();
-//        //获取本系统userId
-//        Integer localUserId = this.getLocalUserId(action.getUserId());
-//        if(localUserId == null){
-//            result.setStatus(301);
-//            result.setMessage("当前用户信息无效");
-//            return result;
-//        }
-//        //查询当前用户会员等级
-//        UserLevelRelation userLevelRelation = new UserLevelRelation();
-//        userLevelRelation.setUserId(localUserId);
-//        userLevelRelation.setYn(1);
-//        userLevelRelation.setStatus(1);
-//        userLevelRelation = userLevelRelationMapper.selectOne(userLevelRelation);
-//        int userLevel = 0;
-//        if(userLevelRelation != null){
-//            userLevel = userLevelRelation.getLevelId();
-//
-//            Example userLevelRelationForTime = new Example(UserLevelRelation.class);
-//            userLevelRelationForTime.and().andEqualTo("userId",localUserId).andEqualTo("levelId",userLevel);
-//            userLevelRelationForTime.setOrderByClause("end_time asc");
-//            List<UserLevelRelation> userLevelRelationList = userLevelRelationMapper.selectByExample(userLevelRelationForTime);
-//
-//            if (userLevelRelationList.size() > 0){
-//                Date userLevelEndTime = userLevelRelationList.get(0).getEndTime();
-//                Date now = new Date();
-//                if (now.getTime() > userLevelEndTime.getTime()){
-//                    result.setStatus(202);
-//                    result.setMessage("查看天使投资指数统计数据和项目列表，仅对VIP投资人开放");
-//                    result.setData(data);
-//
-//                    return result;
-//                }
-//            }
-//        }
-//        data.put("levelId", userLevel);
-//        //查询当前用户金币余额
-//        Integer z =userIntegralsMapper.findIntegralsZ(localUserId);
-//        Integer x =userIntegralsMapper.findIntegralsX(localUserId);
-//        int totalCoins = z+x;
-//
-//        String sceneKey = action.getSceneKey();
-//
-//        //首页消费与项目
-//        if(INDEX.equals(sceneKey) || PROJECT.equals(sceneKey)){
-//
-//
-//            if(userLevel != 4 && userLevel != 1){
-//                result.setStatus(202);
-//                result.setMessage("查看天使投资指数统计数据和项目列表，仅对VIP投资人开放");
-//                result.setData(data);
-//                return result;
-//            }
-//
-//            if(INDEX.equals(sceneKey)){
-//                result.setStatus(200);
-//                result.setMessage("进入首页不再进行收费");
-//                result.setData(data);
-//                return result;
-//            }
-//
-//            //获取消费金币数量
-//            MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
-//            metaObtainIntegral.setSceneKey(sceneKey);
-//            metaObtainIntegral.setUserLevel(4);
-//            metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
-//            int consumeNum = metaObtainIntegral.getIntegral();
-//
-//            //查询是否购买过此功能且在有效期内
-//            UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
-//            userIntegralConsume.setSceneKey(sceneKey);
-//            userIntegralConsume.setUserId(localUserId);
-//            List<UserIntegralConsume> userIntegralsList = userIntegralConsumeMapper.select(userIntegralConsume);
-//            //有效数据
-//            List<UserIntegralConsume> valid = new ArrayList<UserIntegralConsume>();
-//            if(userIntegralsList.size() > 0){
-//                for(UserIntegralConsume integrals : userIntegralsList){
-//                    //计算是否失效
-//                    Date endTime = integrals.getEndTime();
-//                    Date now = new Date();
-//                    if(endTime.getTime() > now.getTime()){
-//                        valid.add(integrals);
-//                    }
-//                }
-//            }
-//
-//            if(valid.size() > 0){
-//                result.setStatus(200);
-//                result.setMessage("该功能已被购买，可直接进入");
-//                result.setData(data);
-//                return result;
-//            }
-//
-//            //余额足够
-//            if((totalCoins + consumeNum) >= 0){
-//                result.setStatus(204);
-//                result.setMessage("使用查看更多指数统计数据，消费"+(-consumeNum)+"金币，24小时内可重复查看");
-//                data.put("consumeNum", -consumeNum);
-//                //判断是否提示
-//                UserScene userScene = new UserScene();
-//                userScene.setUserId(localUserId);
-//                userScene.setSceneKey(sceneKey);
-//                userScene.setYn(0);
-//                userScene = userSceneMapper.selectOne(userScene);
-//                if(userScene == null || userScene.getFlag() == 0){
-//                    data.put("flag", "0");//提示
-//                }else{
-//                    data.put("flag", "1");//不提示
-//                }
-//                result.setData(data);
-//                return result;
-//            }else{
-//                result.setStatus(203);
-//                result.setMessage("查看天使投资指数统计数据和项目列表需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
-//                data.put("consumeNum", -consumeNum);
-//                result.setData(data);
-//                return result;
-//            }
-//
-//        }
-//        //约谈消费
-//        if(INTERVIEW.equals(sceneKey)){
-//            //查询项目信息(是否属于50机构)
-//            Integer type = projectsMapper.findIvestmentTypeById(action.getProjectsId());
-//            if(type == null){
-//                type = 0;
-//            }
-//            String tishi = "";
-//            if (type == 1){
-//                tishi = "约谈50指数机构所投资项目，仅对VIP投资人开放";
-//            }else{
-//                tishi = "约谈行业指数机构所投资项目，仅对VIP投资人开放";
-//            }
-//
-////            if(userLevel < 4){
-////                result.setStatus(202);
-////                result.setMessage(tishi);
-////                result.setData(data);
-////                return result;
-////            }
-//
-//
-//
-//            data.put("type", type);
-//
-//            //查询是否购买过此功能
-//            boolean isBuy = this.isBuy(sceneKey, localUserId, action.getProjectsId() + "");
-//            if(isBuy){
-//                result.setStatus(200);
-//                result.setMessage("该功能已被购买，可直接进入");
-//                result.setData(data);
-//                return result;
-//            }
-//
-//            //获取消费金币数量
-//            MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
-//            metaObtainIntegral.setSceneKey(sceneKey);
-//            metaObtainIntegral.setUserLevel(4);
-//            if(type == 1){
-//                metaObtainIntegral.setProjectsType(1);
-//            }else{
-//                metaObtainIntegral.setProjectsType(0);
-//            }
-//            metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
-//            int consumeNum = metaObtainIntegral.getIntegral();
-//
-//            if (consumeNum == 0){
-//                result.setStatus(200);
-//                result.setMessage("VIP投资人无需消费，可直接进入");
-//                result.setData(data);
-//                return result;
-//            }
-//            //金币足够
-//            if(totalCoins + consumeNum >= 0){
-//
-//                result.setStatus(204);
-//                if(type == 1){
-//                    result.setMessage("约谈50指数机构所投资项目，共消费"+(-consumeNum)+"金币，一次性收费后不再计费");
-//                }else{
-//                    result.setMessage("约谈非50指数机构所投资项目，共消费"+(-consumeNum)+"金币，一次性收费后不再计费");
-//                }
-//
-//                data.put("consumeNum", -consumeNum);
-//                //判断是否提示
-//                UserScene userScene = new UserScene();
-//                userScene.setUserId(localUserId);
-//                userScene.setSceneKey(sceneKey);
-//                userScene.setYn(0);
-//                userScene = userSceneMapper.selectOne(userScene);
-//                if(userScene == null || userScene.getFlag() == 0){
-//                    data.put("flag", "0");//提示
-//                }else{
-//                    data.put("flag", "1");//不提示
-//                }
-//                result.setData(data);
-//                return result;
-//            }else{
-//                result.setStatus(203);
-//                if(type == 1){
-//                    result.setMessage("约谈50指数机构所投资项目需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
-//                }else{
-//                    result.setMessage("约谈非50指数机构所投资项目需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
-//                }
-//                data.put("consumeNum", -consumeNum);
-//                result.setData(data);
-//                return result;
-//            }
-//
-//        }
-//
-//        //评估消费
-//        if(ASSESS.equals(sceneKey)){
-//            //判断会员级别
-//            if(userLevel < 1){
-//                result.setStatus(202);
-//                result.setMessage("项目评估仅对会员用户开放，完善个人资料后赠送普通会员");
-//                result.setData(data);
-//                return result;
-//            }
-//            //判断权限
-//            String roundName = action.getRoundName();
-//            String industryName = action.getIndustryName();
-//            String cityName = action.getCityName();
-//            String educationName =action.getEducationName();
-//            String workName = action.getWorkName();
-//
-//            //获取该场景配置信息
-//            MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
-//            metaObtainIntegral.setSceneKey(sceneKey);
-//            metaObtainIntegral.setUserLevel(userLevel);
-//            metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
-//
-//            //普通会员
-//            if(userLevel == 1){
-//                if(industryName != null && !"".equals(industryName) && !"不限".equals(industryName)){
-//                    result.setStatus(205);
-//                    result.setMessage("普通会员用户每次只能选择一个评估选项");
-//                    result.setData(data);
-//                    return result;
-//                }
-//                if(cityName != null && !"".equals(cityName) && !"不限".equals(cityName)){
-//                    result.setStatus(205);
-//                    result.setMessage("普通会员用户每次只能选择一个评估选项");
-//                    result.setData(data);
-//                    return result;
-//                }
-//                if(educationName != null && !"".equals(educationName) && !"不限".equals(educationName)){
-//                    result.setStatus(205);
-//                    result.setMessage("普通会员用户每次只能选择一个评估选项");
-//                    result.setData(data);
-//                    return result;
-//                }
-//                if(workName != null && !"".equals(workName) && !"不限".equals(workName)){
-//                    result.setStatus(205);
-//                    result.setMessage("普通会员用户每次只能选择一个评估选项");
-//                    result.setData(data);
-//                    return result;
-//                }
-//                if(roundName != null && !"".equals(roundName)){
-//                    //查询是否购买过
-//                    boolean isBuy = isBuy(sceneKey, localUserId, roundName);
-//                    if(isBuy){
-//                        result.setStatus(200);
-//                        result.setMessage("该功能已被购买，可直接进入");
-//                        result.setData(data);
-//                        return result;
-//                    }
-//                    int consumeNum = metaObtainIntegral.getIntegral();
-//                    //金币足够
-//                    if(totalCoins + consumeNum > 0){
-//                        result.setStatus(204);
-//                        result.setMessage("使用项目评估，每个选项扣除"+(-consumeNum)+"金币，共消费"+(-consumeNum)+"金币，24小时内可重复查看该选项");
-//                        data.put("consumeNum", -consumeNum);
-//                        //判断是否提示
-//                        UserScene userScene = new UserScene();
-//                        userScene.setUserId(localUserId);
-//                        userScene.setSceneKey(sceneKey);
-//                        userScene.setYn(0);
-//                        userScene = userSceneMapper.selectOne(userScene);
-//                        if(userScene == null || userScene.getFlag() == 0){
-//                            data.put("flag", "0");//提示
-//                        }else{
-//                            data.put("flag", "1");//不提示
-//                        }
-//                        result.setData(data);
-//                        return result;
-//                    }else{
-//                        result.setStatus(203);
-//                        result.setMessage("使用项目评估需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
-//                        data.put("consumeNum", -consumeNum);
-//                        result.setData(data);
-//                        return result;
-//                    }
-//                }else{
-//                    result.setStatus(303);
-//                    result.setMessage("融资阶段必须选择");
-//                    return result;
-//                }
-//            }
-//            //高级以上会员
-//            if(userLevel >= 2){
-//                //过滤未购买的选项
-//                List<String> buys = new ArrayList<String>();
-//                if(roundName != null && !"".equals(roundName)){
-//                    boolean isBuy = isBuy(sceneKey, localUserId, roundName);
-//                    if(!isBuy){
-//                        buys.add(roundName);
-//                    }
-//                }else{
-//                    result.setStatus(303);
-//                    result.setMessage("融资阶段必须选择");
-//                    return result;
-//                }
-//                if(industryName != null && !"".equals(industryName) && !"不限".equals(industryName)){
-//                    boolean isBuy = isBuy(sceneKey, localUserId, industryName);
-//                    if(!isBuy){
-//                        buys.add(industryName);
-//                    }
-//                }
-//                if(cityName != null && !"".equals(cityName) && !"不限".equals(cityName)){
-//                    boolean isBuy = isBuy(sceneKey, localUserId, cityName);
-//                    if(!isBuy){
-//                        buys.add(cityName);
-//                    }
-//                }
-//                if(educationName != null && !"".equals(educationName) && !"不限".equals(educationName)){
-//                    boolean isBuy = isBuy(sceneKey, localUserId, educationName);
-//                    if(!isBuy){
-//                        buys.add(educationName);
-//                    }
-//                }
-//                if(workName != null && !"".equals(workName) && !"不限".equals(workName)){
-//                    boolean isBuy = isBuy(sceneKey, localUserId, workName);
-//                    if(!isBuy){
-//                        buys.add(workName);
-//                    }
-//                }
-//                //存在需要消费的选项
-//                if(buys.size() > 0){
-//                    int consumeNum = metaObtainIntegral.getIntegral()*buys.size();
-//                    if(totalCoins + consumeNum >= 0){
-//                        result.setStatus(204);
-//                        result.setMessage("使用项目评估，每个选项扣除"+(-metaObtainIntegral.getIntegral())+"金币，共消费"+(-consumeNum)+"金币，24小时内可重复查看该选项");
-//                        data.put("consumeNum", -consumeNum);
-//                        //判断是否提示
-//                        UserScene userScene = new UserScene();
-//                        userScene.setUserId(localUserId);
-//                        userScene.setSceneKey(sceneKey);
-//                        userScene.setYn(0);
-//                        userScene = userSceneMapper.selectOne(userScene);
-//                        if(userScene == null || userScene.getFlag() == 0){
-//                            data.put("flag", "0");//提示
-//                        }else{
-//                            data.put("flag", "1");//不提示
-//                        }
-//                        result.setData(data);
-//                        return result;
-//                    }else{
-//                        result.setStatus(203);
-//                        result.setMessage("使用项目评估需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
-//                        data.put("consumeNum", -consumeNum);
-//                        result.setData(data);
-//                        return result;
-//                    }
-//                }else{
-//                    result.setStatus(200);
-//                    result.setMessage("该功能已被购买，可直接进入");
-//                    result.setData(data);
-//                    return result;
-//                }
-//            }
-//        }
-//
-//        //投递消费
-//        if(SEND.equals(sceneKey)){
-//            //判断会员级别
-//            if(userLevel < 1){
-//                result.setStatus(202);
-//                result.setMessage("投递项目仅对会员用户开放，完善个人资料后赠送普通会员");
-//                result.setData(data);
-//                return result;
-//            }
-//
-//            //获取机构信息
-//            String[] ids = action.getInvestmentIds().split(",");
-//
-//            if(ids.length < 1){
-//                result.setStatus(302);
-//                result.setMessage("未选择机构，无法进行消费计算");
-//                return result;
-//            }
-//
-//            //获取该场景配置信息
-//            MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
-//            metaObtainIntegral.setSceneKey(sceneKey);
-//            metaObtainIntegral.setUserLevel(userLevel);
-//            metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
-//
-//            //过滤已购买机构
-//            List<String> buys = new ArrayList<String>();
-//            for(int i=0; i<ids.length;i++){
-//                String investmentId = ids[i];
-//                //判断是否购买过
-//                boolean isBuy = isBuy(sceneKey, localUserId, investmentId);
-//                if(!isBuy){
-//                    buys.add(investmentId);
-//                }
-//            }
-//
-//            //存在需要消费的机构
-//            if(buys.size() > 0){
-//                //校验投递机构个数
-//                int curNum = buys.size();//当前投递机构数
-//
-//                //获取已经投递机构数（有效的）
-//                Example example = new Example(UserIntegralConsumeDatas.class);
-//                example.and().andEqualTo("userId",localUserId).andEqualTo("sceneKey",sceneKey);
-//                List<UserIntegralConsumeDatas> userIntegralConsumeDatasList = userIntegralConsumeDatasMapper.selectByExample(example);
-//                int dayNum = 0;
-//                for(UserIntegralConsumeDatas consumeDatas : userIntegralConsumeDatasList){
-//                    UserIntegralConsume consume = new UserIntegralConsume();
-//                    consume.setId(consumeDatas.getUserIntegralConsumeId());
-//                    consume = userIntegralConsumeMapper.selectOne(consume);
-//                    Date endTime = consume.getEndTime();
-//                    if(endTime != null){
-//                        Date now = new Date();
-//                        if(endTime.getTime() > now.getTime()){
-//                            dayNum ++;
-//                        }
-//                    }
-//                }
-//                if((curNum + dayNum) > metaObtainIntegral.getDeliverNum()){
-//                    result.setStatus(205);
-//                    switch (userLevel){
-//                        case 1:
-//                            result.setMessage("普通会员只能选择"+metaObtainIntegral.getDeliverNum()+"个机构进行提交，当前已投递"+dayNum+"个");
-//                            data.put("button", "0");
-//                            break;
-//                        case 2:
-//                            result.setMessage("高级会员只能选择"+metaObtainIntegral.getDeliverNum()+"个机构进行提交，当前已投递"+dayNum+"个");
-//                            data.put("button", "0");
-//                            break;
-//                        case 3:
-//                            result.setMessage("VIP会员每日可选择"+metaObtainIntegral.getDeliverNum()+"个机构进行提交，当前已投递"+dayNum+"个");
-//                            data.put("button", "0");
-//                            break;
-//                        case 4:
-//                            result.setMessage("VIP投资人每日可选择"+metaObtainIntegral.getDeliverNum()+"个机构进行提交，当前已投递"+dayNum+"个");
-//                            data.put("button", "1");
-//                            break;
-//                    }
-//                    result.setData(data);
-//                    return result;
-//                }
-//
-//                int consumeNum = metaObtainIntegral.getIntegral()*buys.size();
-//                //金币足够
-//                if(totalCoins + consumeNum >= 0){
-//                    result.setStatus(204);
-//                    result.setMessage("使用投递项目，投递1个机构扣除"+(-metaObtainIntegral.getIntegral())+"金币，共消费"+(-consumeNum)+"金币，24小时内可重复提交给该机构");
-//                    data.put("consumeNum", -consumeNum);
-//                    //判断是否提示
-//                    UserScene userScene = new UserScene();
-//                    userScene.setUserId(localUserId);
-//                    userScene.setSceneKey(sceneKey);
-//                    userScene.setYn(0);
-//                    userScene = userSceneMapper.selectOne(userScene);
-//                    if(userScene == null || userScene.getFlag() == 0){
-//                        data.put("flag", "0");//提示
-//                    }else{
-//                        data.put("flag", "1");//不提示
-//                    }
-//                    result.setData(data);
-//                    return result;
-//                }else{
-//                    result.setStatus(203);
-//                    result.setMessage("使用投递项目，需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
-//                    data.put("consumeNum", -consumeNum);
-//                    result.setData(data);
-//                    return result;
-//                }
-//            }else{
-//                result.setStatus(200);
-//                result.setMessage("该功能已被购买，可直接进入");
-//                result.setData(data);
-//                return result;
-//            }
-//        }
-//
-//        return result;
-//    }
 
     /**
      * 信息流里查看约谈的提示接口
@@ -1969,51 +1454,51 @@ public class UserLevelServiceImpl implements UserLevelService {
         //约谈消费
         if(INTERVIEW.equals(sceneKey)){
 
-            //查询项目信息(是否属于50机构)
-            Integer type = projectsMapper.findIvestmentTypeById(action.getProjectsId());
-
-            //获取消费金币数量
-            MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
-            metaObtainIntegral.setSceneKey(sceneKey);
-            metaObtainIntegral.setUserLevel(4);
-            if(type == 1){
-                metaObtainIntegral.setProjectsType(1);
-            }else{
-                metaObtainIntegral.setProjectsType(0);
-            }
-            metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
-            int consumeNum = metaObtainIntegral.getIntegral();
-
-            Date now = new Date();
-
-            //计算失效时间
-            Date end = userLevelRelation.getEndTime();
-
-            //插入消费表
-            UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
-            userIntegralConsume.setUserId(localUserId);
-            userIntegralConsume.setSceneKey(sceneKey);
-            userIntegralConsume.setCostNum(consumeNum);
-            userIntegralConsume.setBeginTime(now);
-            userIntegralConsume.setCreateTime(now);
-            userIntegralConsume.setEndTime(end);
-            userIntegralConsumeMapper.insert(userIntegralConsume);
-            int consumeId = userIntegralConsume.getId();
-
-            //更新金币记录表
-            this.changeIntegrals(localUserId, -consumeNum);
-
-            //插入交易记录明细表
-            UserIntegralConsumeDatas newUserIntegralConsumeDatas = new UserIntegralConsumeDatas();
-            newUserIntegralConsumeDatas.setUserId(localUserId);
-            newUserIntegralConsumeDatas.setSceneKey(sceneKey);
-            newUserIntegralConsumeDatas.setDatasId(action.getProjectsId()+"");
-            newUserIntegralConsumeDatas.setConsumeDate(new Date());
-            newUserIntegralConsumeDatas.setUserIntegralConsumeId(consumeId);
-            userIntegralConsumeDatasMapper.insert(newUserIntegralConsumeDatas);
+//            //查询项目信息(是否属于50机构)
+//            Integer type = projectsMapper.findIvestmentTypeById(action.getProjectsId());
+//
+//            //获取消费金币数量
+//            MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
+//            metaObtainIntegral.setSceneKey(sceneKey);
+//            metaObtainIntegral.setUserLevel(4);
+//            if(type == 1){
+//                metaObtainIntegral.setProjectsType(1);
+//            }else{
+//                metaObtainIntegral.setProjectsType(0);
+//            }
+//            metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
+//            int consumeNum = metaObtainIntegral.getIntegral();
+//
+//            Date now = new Date();
+//
+//            //计算失效时间
+//            Date end = userLevelRelation.getEndTime();
+//
+//            //插入消费表
+//            UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
+//            userIntegralConsume.setUserId(localUserId);
+//            userIntegralConsume.setSceneKey(sceneKey);
+//            userIntegralConsume.setCostNum(consumeNum);
+//            userIntegralConsume.setBeginTime(now);
+//            userIntegralConsume.setCreateTime(now);
+//            userIntegralConsume.setEndTime(end);
+//            userIntegralConsumeMapper.insert(userIntegralConsume);
+//            int consumeId = userIntegralConsume.getId();
+//
+//            //更新金币记录表
+//            this.changeIntegrals(localUserId, -consumeNum);
+//
+//            //插入交易记录明细表
+//            UserIntegralConsumeDatas newUserIntegralConsumeDatas = new UserIntegralConsumeDatas();
+//            newUserIntegralConsumeDatas.setUserId(localUserId);
+//            newUserIntegralConsumeDatas.setSceneKey(sceneKey);
+//            newUserIntegralConsumeDatas.setDatasId(action.getProjectsId()+"");
+//            newUserIntegralConsumeDatas.setConsumeDate(new Date());
+//            newUserIntegralConsumeDatas.setUserIntegralConsumeId(consumeId);
+//            userIntegralConsumeDatasMapper.insert(newUserIntegralConsumeDatas);
 
             result.setStatus(200);
-            result.setMessage("金币消费成功");
+            result.setMessage("约谈无需消费");
             result.setData(data);
             return result;
 

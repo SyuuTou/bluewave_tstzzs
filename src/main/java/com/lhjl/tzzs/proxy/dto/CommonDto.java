@@ -4,7 +4,7 @@ package com.lhjl.tzzs.proxy.dto;
 public class CommonDto<T> {
 
     private String message;
-    private Integer status;
+    private Integer status ;
     private T data;
 
     public CommonDto(){

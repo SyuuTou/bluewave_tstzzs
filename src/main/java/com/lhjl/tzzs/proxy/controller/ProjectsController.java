@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.service.ProjectsService;
+import com.lhjl.tzzs.proxy.service.UserInfoService;
+import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -41,23 +43,28 @@ public class ProjectsController extends GenericController{
 
     @Resource
     private ProjectsService projectsService;
-
+    @Resource
+    private UserLoginService userLoginService;
+    @Resource
+    private UserInfoService userInfoService;
+    
     @Value("${pageNum}")  
     private String defaultPageNum;
 
     @Value("${pageSize}")  
     private String defaultPageSize;
     /**
-     * 根据用户id获取用户信息
+     * 根据appid以及token获取用户信息
      * @param appid
      * @param userId
      * @return
      */
-    @GetMapping("/v{appid}/echo/userbyid")
-    public CommonDto<Users> getUserById(@PathVariable Integer appid,Integer userId){
+    @GetMapping("/v{appid}/echo/user/byappidandtoken")
+    public CommonDto<Users> getUserById(@PathVariable Integer appid,String token){
     	CommonDto<Users> result =new CommonDto<>();
     	try {
-    		result=projectsService.getUserById(appid,userId);
+    		Integer userId = userLoginService.getUserIdByToken(token,appid);
+			result=userInfoService.getUserByUserId(userId);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
@@ -162,6 +169,26 @@ public class ProjectsController extends GenericController{
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
     		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
+     * 招聘信息列表
+     * @param appid
+     * @param companyId 项目(公司)id  
+     * @return
+     */
+    @GetMapping("/v{appid}/list/recruitmentinfo")
+    public CommonDto<List<Recruitment>> listRecruInfo(@PathVariable Integer appid,Integer companyId){
+    	CommonDto<List<Recruitment>> result =new CommonDto<>();
+    	try {
+    		result=projectsService.listRecruInfos(appid,companyId);
+	    }catch(Exception e) {  
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(null);
     		result.setMessage("fail");
     		result.setStatus(500);
 	    }
@@ -287,7 +314,7 @@ public class ProjectsController extends GenericController{
     	return result;
     }
     /**
-     * 项目分部的列表信息
+     * 项目(投资机构/公司)分部的列表信息
      * @param appid 扩展字段
      * @param companyType 项目的类别(根据不同的项目类别来列举不同项目的分部信息：1代表项目【产业公司】;2代表机构)
      * @param companyId 项目或者投资机构等的id
@@ -376,11 +403,11 @@ public class ProjectsController extends GenericController{
      * @param id  investment_institutions_project表中的主键id
      * @return
      */
-    @DeleteMapping("/v{appid}/removesingleinvest")
-    public CommonDto<Boolean> removeSingleInvestment(@PathVariable("appid") Integer appid,Integer id){
+    @DeleteMapping("/v{appid}/removesingleinvest")  
+    public CommonDto<Boolean> removeSingleInvestment(@PathVariable("appid") Integer appid,Integer projectId,Integer investmentInstitutionsId){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result=projectsService.removeSingleInvestment(appid,id);
+    		result=projectsService.removeSingleInvestment(appid,projectId,investmentInstitutionsId);
 	    }catch(Exception e) {
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		  
@@ -397,10 +424,10 @@ public class ProjectsController extends GenericController{
      * @return
      */
     @GetMapping("/v{appid}/singlefinancinglogDetails")
-    public CommonDto<List<InvestmentInstitutionsProject>> financinglogDetails(@PathVariable("appid") Integer appid,Integer financingLodId){
+    public CommonDto<List<InvestmentInstitutionsProject>> financinglogDetails(@PathVariable("appid") Integer appid,Integer financingLogId){
     	CommonDto<List<InvestmentInstitutionsProject>> result =new CommonDto<>();
     	try {
-    		result=projectsService.getFinancingLogDetails(appid,financingLodId);
+    		result=projectsService.getFinancingLogDetails(appid,financingLogId);
 	    }catch(Exception e) {
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		  

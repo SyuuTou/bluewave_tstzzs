@@ -162,14 +162,15 @@ public interface ProjectsService {
 	 * @param financingLodId 融资历史记录的id
 	 * @return
 	 */
-	CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLodId);
+	CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLogId);
 	/**
      * 移除项目的融资历史单阶段对应的投资机构信息
      * @param appid
      * @param id  investment_institutions_project表中的主键id
+     * @param investmentInstitutionsId 投资机构id
      * @return
      */
-	CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer id);
+	CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer projectId,Integer investmentInstitutionsId);
 	/**
 	 * 更新融资历史相关的投资机构信息
 	 * @param appid
@@ -239,7 +240,7 @@ public interface ProjectsService {
      * @param proId 项目id
      * @return
      */
-	CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer proId);
+	CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer companyId);
 	/**
      * 招聘需求信息回显
      * @param appid
@@ -282,12 +283,5 @@ public interface ProjectsService {
      * @return
      */
 	CommonDto<List<InvestmentInstitutions>> intelligentSearch(Integer appid, String keyword);
-	/**
-     * 根据用户id获取用户信息
-     * @param appid
-     * @param userId
-     * @return
-     */
-	CommonDto<Users> getUserById(Integer appid, Integer userId);
 	
 }
