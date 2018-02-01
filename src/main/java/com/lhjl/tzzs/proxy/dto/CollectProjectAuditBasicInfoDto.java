@@ -13,9 +13,9 @@ public class CollectProjectAuditBasicInfoDto {
 
     private String url;
 
-    private String companyTag;
+    private String[] companyTag;
 
-    private String competitiveProduct;
+    private String[] competitiveProduct;
 
     private String[] segmentation;
 
@@ -61,19 +61,19 @@ public class CollectProjectAuditBasicInfoDto {
         this.url = url;
     }
 
-    public String getCompanyTag() {
+    public String[] getCompanyTag() {
         return companyTag;
     }
 
-    public void setCompanyTag(String companyTag) {
+    public void setCompanyTag(String[] companyTag) {
         this.companyTag = companyTag;
     }
 
-    public String getCompetitiveProduct() {
+    public String[] getCompetitiveProduct() {
         return competitiveProduct;
     }
 
-    public void setCompetitiveProduct(String competitiveProduct) {
+    public void setCompetitiveProduct(String[] competitiveProduct) {
         this.competitiveProduct = competitiveProduct;
     }
 
