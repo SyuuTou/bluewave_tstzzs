@@ -218,19 +218,33 @@ public class InvestorServiceImpl implements InvestorService {
 		CommonDto<List<AdminUser>> result =new CommonDto<>();
 		
 		List<AdminUser> tstzzsAdmins = adminUserMapper.selectTstzzsAdmins();
-		tstzzsAdmins.forEach((e)->{
+//		tstzzsAdmins.forEach((e)->{
+		for(AdminUser tmp:tstzzsAdmins) {
 //			设置用户的公司名称
-			Users user = usersMapper.selectByPrimaryKey(e.getUserId());
-			e.setCompanyName(user.getCompanyName());
+			Users user = usersMapper.selectByPrimaryKey(tmp.getUserId());
+			tmp.setCompanyName(user.getCompanyName());
 			//设置用户的职位类型名称
-			Integer type = e.getAdminType();
-//			switch(type) {
-//			case 0 :
-//				
-//				break;
-//			}
-			
-		});
+			Integer type = tmp.getAdminType();
+			switch(type) {
+			case 0 :
+				tmp.setDutyName("root超级管理员");
+				break;
+			case 1 :
+				tmp.setDutyName("普通管理员");
+				break;
+			case 2 :
+				tmp.setDutyName("业务员");
+				break;
+			case 3 :
+				tmp.setDutyName("FA承销");
+				break;
+			case 4 :
+				tmp.setDutyName("FA承做");
+				break;
+			default:tmp.setDutyName("没有此职位");
+			}
+		}	
+//		});
 		result.setData(tstzzsAdmins);
         result.setStatus(200); 
         result.setMessage("success");
