@@ -4,20 +4,16 @@ import com.github.pagehelper.PageRowBounds;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ReportCommentDto.ReportCommentInputDto;
 import com.lhjl.tzzs.proxy.dto.ReportCommentDto.ReportCommentOutputDto;
-import com.lhjl.tzzs.proxy.mapper.ReportCollectionMapper;
-import com.lhjl.tzzs.proxy.mapper.ReportCommentMapper;
-import com.lhjl.tzzs.proxy.mapper.ReportConcernMapper;
-import com.lhjl.tzzs.proxy.mapper.UsersMapper;
-import com.lhjl.tzzs.proxy.model.ReportCollection;
-import com.lhjl.tzzs.proxy.model.ReportComment;
-import com.lhjl.tzzs.proxy.model.ReportConcern;
-import com.lhjl.tzzs.proxy.model.Users;
+import com.lhjl.tzzs.proxy.mapper.*;
+import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.bluewave.ReportEventService;
 import com.lhjl.tzzs.proxy.utils.DateUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,6 +35,9 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
 
     @Autowired
     private UsersMapper usersMapper;
+
+    @Autowired
+    private ReportCommentConcenMapper reportCommentConcenMapper;
 
 
     @Transactional
@@ -190,41 +189,45 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
 
     @Transactional
     @Override
-    public CommonDto<String> updateReportCommentConcen(Integer appId, Long commentId) {
+    public CommonDto<String> updateReportCommentConcen(Integer appId, Long commentId, String token) {
 
-        ReportComment reportComment = reportCommentMapper.selectByPrimaryKey(commentId);
-        Integer num = reportComment.getNum();
-        if (null == num){
-            num = 0;
-        }
-        reportComment.setNum(num+1);
-        reportCommentMapper.updateByPrimaryKey(reportComment);
+        ReportCommentConcen reportCommentConcen = new ReportCommentConcen();
+        reportCommentConcen.setAppId(appId);
+        reportCommentConcen.setCommentId(commentId);
+        reportCommentConcen.setToken(token);
+        reportCommentConcen.setYn(1);
+        reportCommentConcen.setCreateTime(DateTime.now().toDate());
+        reportCommentConcenMapper.insert(reportCommentConcen);
         return new CommonDto<>("ok", "success", 200);
     }
 
     @Transactional
     @Override
-    public CommonDto<String> deleteReportCommentConcen(Integer appId, Long commentId) {
+    public CommonDto<String> deleteReportCommentConcen(Integer appId, Long commentId, String token) {
 
-        ReportComment reportComment = reportCommentMapper.selectByPrimaryKey(commentId);
-        Integer num = reportComment.getNum();
-        if (null == num){
-            num = 0;
-        }else{
-            num --;
-        }
-        reportComment.setNum(num);
-        reportCommentMapper.updateByPrimaryKey(reportComment);
+        ReportCommentConcen reportCommentConcen = new ReportCommentConcen();
+        reportCommentConcen.setAppId(appId);
+        reportCommentConcen.setCommentId(commentId);
+        reportCommentConcen.setToken(token);
+        reportCommentConcen.setYn(1);
+        reportCommentConcenMapper.delete(reportCommentConcenMapper.selectOne(reportCommentConcen));
+
         return new CommonDto<>("ok", "success", 200);
 
     }
 
     @Transactional(readOnly = true)
     @Override
-    public CommonDto<Integer> getReportCommentConcenNum(Integer appId, Long commentId) {
+    public CommonDto<Integer> getReportCommentConcenNum(Integer appId, Long commentId, String token) {
 
-        ReportComment reportComment = reportCommentMapper.selectByPrimaryKey(commentId);
-        return new CommonDto<>(reportComment.getNum(), "success", 200);
+        ReportCommentConcen reportCommentConcen = new ReportCommentConcen();
+        reportCommentConcen.setAppId(appId);
+        reportCommentConcen.setCommentId(commentId);
+       if (StringUtil.isNotEmpty(token)) {
+           reportCommentConcen.setToken(token);
+       }
+        reportCommentConcen.setYn(1);
+        return new CommonDto<>(reportCommentConcenMapper.selectCount(reportCommentConcen), "success", 200);
     }
 
 

@@ -63,12 +63,12 @@ public class ReportDetailController extends GenericController {
         return result;
     }
     @PutMapping("/v{appId}/report/comment/{commentId}/concen")
-    public CommonDto<String> addReportCommentConcen(@PathVariable Integer appId,@PathVariable Long commentId){
+    public CommonDto<String> addReportCommentConcen(@PathVariable Integer appId,@PathVariable Long commentId, String token){
 
         CommonDto<String> result = null;
 
         try {
-            result = reportEventService.updateReportCommentConcen(appId, commentId);
+            result = reportEventService.updateReportCommentConcen(appId, commentId,token);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,12 +78,12 @@ public class ReportDetailController extends GenericController {
     }
 
     @DeleteMapping("/v{appId}/report/comment/{commentId}/concen")
-    public CommonDto<String> deleteReportCommentConcen(@PathVariable Integer appId,@PathVariable Long commentId){
+    public CommonDto<String> deleteReportCommentConcen(@PathVariable Integer appId,@PathVariable Long commentId, String token){
 
         CommonDto<String> result = null;
 
         try {
-            result = reportEventService.deleteReportCommentConcen(appId, commentId);
+            result = reportEventService.deleteReportCommentConcen(appId, commentId,token);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -93,12 +93,12 @@ public class ReportDetailController extends GenericController {
     }
 
     @GetMapping("/v{appId}/report/comment/{commentId}/concen")
-    public CommonDto<Integer> getReportCommentConcenNum(@PathVariable Integer appId,@PathVariable Long commentId){
+    public CommonDto<Integer> getReportCommentConcenNum(@PathVariable Integer appId,@PathVariable Long commentId,String token){
 
         CommonDto<Integer> result = null;
 
         try {
-            result = reportEventService.getReportCommentConcenNum(appId, commentId);
+            result = reportEventService.getReportCommentConcenNum(appId, commentId, token);
         } catch (Exception e) {
             e.printStackTrace();
         }
