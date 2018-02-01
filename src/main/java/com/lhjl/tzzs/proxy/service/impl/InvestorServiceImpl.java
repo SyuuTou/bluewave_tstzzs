@@ -14,10 +14,12 @@ import com.lhjl.tzzs.proxy.mapper.InvestorDemandSpeedwayMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorDemandStageMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorInvestmentCaseMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
+import com.lhjl.tzzs.proxy.mapper.MetaUserLevelMapper;
 import com.lhjl.tzzs.proxy.mapper.UserLevelRelationMapper;
 import com.lhjl.tzzs.proxy.mapper.UsersMapper;
 import com.lhjl.tzzs.proxy.model.AdminUser;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
+import com.lhjl.tzzs.proxy.model.MetaUserLevel;
 import com.lhjl.tzzs.proxy.model.UserLevelRelation;
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.InvestorService;
@@ -59,6 +61,8 @@ public class InvestorServiceImpl implements InvestorService {
     private AdminUserMapper adminUserMapper;
     @Autowired
     private UserLevelRelationMapper userLevelRelationMapper;
+    @Autowired
+    private MetaUserLevelMapper metaUserLevelMapper;
     
     
     @Value("${pageNum}")
@@ -263,16 +267,16 @@ public class InvestorServiceImpl implements InvestorService {
 		UserLevelRelation ulr=new UserLevelRelation();
 		ulr.setUserId(body.getUserId());
 		//用户会员等级表的查询实体
-		List<UserLevelRelation> ulrs = userLevelRelationMapper.select(ulr);
+//		List<UserLevelRelation> ulrs = userLevelRelationMapper.select(ulr);
 		//进行数据格式的规范化
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try {
 			if(body.getEndTimeStr() != null) {
 				body.setEndTime(sdf.parse(body.getEndTimeStr()));
 			}
-			if(body.getBeginTimeStr() != null) {
-				body.setBeginTime(sdf.parse(body.getBeginTimeStr()));
-			}
+//			if(body.getBeginTimeStr() != null) {
+//				body.setBeginTime(sdf.parse(body.getBeginTimeStr()));
+//			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 			result.setData(false);
@@ -290,6 +294,17 @@ public class InvestorServiceImpl implements InvestorService {
 		
 		result.setData(true);
         result.setStatus(200); 
+        result.setMessage("success");
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<MetaUserLevel>> sourceMetaUserLevels(Integer appid) {
+		CommonDto<List<MetaUserLevel>> result =new CommonDto<List<MetaUserLevel>>();
+		List<MetaUserLevel> metaUserLevels = metaUserLevelMapper.selectAll();
+		
+		result.setData(metaUserLevels);
+        result.setStatus(200);
         result.setMessage("success");
 		return result;
 	}

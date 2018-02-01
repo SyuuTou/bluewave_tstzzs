@@ -2,6 +2,8 @@ package com.lhjl.tzzs.proxy.controller.investor;
 
 
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.VIPOutputDto;
+import com.lhjl.tzzs.proxy.model.MetaUserLevel;
 import com.lhjl.tzzs.proxy.model.UserLevelRelation;
 import com.lhjl.tzzs.proxy.service.InvestorService;
 
@@ -61,19 +64,24 @@ public class InvestorVIPController extends GenericController {
     	}
         return result; 
     }
-   /* @Mapping("/v{appid}/saveorupdate/vipinfo")
-    public CommonDto<Boolean> saveOrUpdateInvestorsVIPInfo(@PathVariable Integer appid,@RequestBody UserLevelRelation body){
-    	CommonDto<Boolean> result =new CommonDto<>();
+    /**
+     * 回显user_level_relation表的元数据
+     * @param appid
+     * @return
+     */
+    @GetMapping("/v{appid}/meta/metaUserLevel")
+    public CommonDto<List<MetaUserLevel>> sourceMetaUserLevel(@PathVariable Integer appid){
+    	CommonDto<List<MetaUserLevel>> result =new CommonDto<>();
     	try {
-    		result = investorService.saveOrUpdateInvestorsVIPInfo(appid,body);
+    		result = investorService.sourceMetaUserLevels(appid);
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		
-    		result.setData(false);
+    		result.setData(null);
     		result.setMessage("fail");
     		result.setStatus(500);
     	}
         return result;
-    }*/
+    }
     
 }

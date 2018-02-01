@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.dto.VIPOutputDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
 import com.lhjl.tzzs.proxy.model.AdminUser;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
+import com.lhjl.tzzs.proxy.model.MetaUserLevel;
 import com.lhjl.tzzs.proxy.model.UserLevelRelation;
 import com.lhjl.tzzs.proxy.model.Users;
 
@@ -69,6 +70,12 @@ public interface InvestorService {
      * @return
      */
 	CommonDto<Boolean> saveOrUpdateInvestorsVIPInfo(Integer appid, UserLevelRelation body);
+	/**
+     * 回显user_level_relation表的元数据
+     * @param appid
+     * @return
+     */
+	CommonDto<List<MetaUserLevel>> sourceMetaUserLevels(Integer appid);
 
 
 }
