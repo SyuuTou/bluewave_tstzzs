@@ -186,7 +186,7 @@ public class InvestorServiceImpl implements InvestorService {
 			dom.setRecommand(dom.getBasicsRecommend()+dom.getDynamicRecommand()+dom.getOperationRecommend());
 		}
 		
-		result.setData(dom !=null ?dom : new DatasOperationManage());
+		result.setData(dom !=null ? dom : new DatasOperationManage());
         result.setStatus(200); 
         result.setMessage("success");
 		return result;
@@ -256,7 +256,7 @@ public class InvestorServiceImpl implements InvestorService {
 			vod.setUserLevelRelation(new UserLevelRelation());
 		}else {
 			vod.setUserLevelRelation(url);
-			vod.setCostNum(userIntegralConsumeMapper.getCostNum(userId));
+			vod.setCostNum(Math.abs(userIntegralConsumeMapper.getCostNum(userId)));
 			vod.setActualVipCostNum(usersPayMapper.getActualVipCostNum(userId));
 			vod.setSumIntegrateCostNum(usersPayMapper.getSumIntegrateCostNum(userId));
 			vod.setSumPayNum(usersPayMapper.getSumPayNum(userId));
