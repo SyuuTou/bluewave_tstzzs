@@ -94,8 +94,22 @@ public class DatasOperationManage {
      */
     @Column(name = "update_time")
     private Date updateTime;
-
     /**
+     * 总推荐值
+     */
+    @Transient
+    private Integer recommand;
+    
+
+    public Integer getRecommand() {
+		return recommand;
+	}
+
+	public void setRecommand(Integer recommand) {
+		this.recommand = recommand;
+	}
+
+	/**
      * 获取数据ID
      *
      * @return data_id - 数据ID
@@ -372,7 +386,7 @@ public class DatasOperationManage {
 				+ dynamicRecommand + ", cooperativeRelationship=" + cooperativeRelationship + ", customerGrade="
 				+ customerGrade + ", sourceType=" + sourceType + ", irPrincipal=" + irPrincipal + ", wechatGroupId="
 				+ wechatGroupId + ", note=" + note + ", isHide=" + isHide + ", creator=" + creator + ", createTime="
-				+ createTime + ", updateTime=" + updateTime + "]";
+				+ createTime + ", updateTime=" + updateTime + ", recommand=" + recommand + "]";
 	}
     
 }
