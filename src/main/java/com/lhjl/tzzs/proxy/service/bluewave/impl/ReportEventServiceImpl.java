@@ -104,7 +104,7 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
     }
 
     @Override
-    public CommonDto<List<ReportCommentOutputDto>> findReportComment(Integer appId, Integer reportId, String token, Integer pageNo, Integer pageSize) {
+    public CommonDto<List<ReportCommentOutputDto>> findReportComment(Integer appId, Integer reportId, String tokenName, Integer pageNo, Integer pageSize) {
 
         CommonDto<List<ReportCommentOutputDto>> result = new CommonDto<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -133,7 +133,7 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
                 reportCommentConcen.setAppId(appId);
                 reportCommentConcen.setCommentId(reportComment.getId());
                 reportCommentOutputDto.setNum(reportCommentConcenMapper.selectCount(reportCommentConcen));
-                reportCommentConcen.setToken(token);
+                reportCommentConcen.setToken(tokenName);
                 reportCommentOutputDto.setIsLike(reportCommentConcenMapper.selectCount(reportCommentConcen));
                 reportCommentConcen.setToken(null);
                 reportCommentOutputDto.setToken(reportComment.getToken());
