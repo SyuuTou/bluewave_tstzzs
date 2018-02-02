@@ -2,13 +2,21 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.AdminCreatProjectDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.EventDto;
 import com.lhjl.tzzs.proxy.dto.ProjectRatingDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.ProjectRatingService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
@@ -34,6 +42,18 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
 
     @Autowired
     private UserTokenMapper userTokenMapper;
+
+    @Autowired
+    private ProjectSendAuditBMapper projectSendAuditBMapper;
+
+    @Autowired
+    private ProjectSendInstitutionBMapper projectSendInstitutionBMapper;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Value("${event.trigger.url}")
+    private String eventUrl;
 
     @Override
     public CommonDto<String> projectRating(ProjectRatingDto body){
@@ -92,7 +112,46 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
             adminProjectRatingLogMapper.insertSelective(adminProjectRatingLog);
         }
 
+        //发信息流
+        CommonDto<AdminCreatProjectDto>  result1 =  getUserAndInvestmentInstitutionIds(body.getProjectId());
+        if (result1.getStatus() != 200){
+            result.setMessage(result1.getMessage());
+            result.setStatus(502);
+            result.setData(null);
 
+            return result;
+        }
+
+        String projectLevel = "D";
+        if (body.getRatingStage() != null){
+            switch (body.getRatingStage()){
+                case 0:projectLevel = "D";
+                break;
+                case 1:projectLevel = "C";
+                break;
+                case 2:projectLevel = "B";
+                break;
+                case 3:projectLevel = "A";
+                break;
+                case 4:projectLevel = "S";
+            }
+        }
+        if (null != result1.getData().getProjectCreaterId() && null != result1.getData().getInvestmentInstitutionIds() ){
+            EventDto eventDto = new EventDto();
+            eventDto.setFromUser(result1.getData().getProjectCreaterId());
+            List<Integer> projectIds = new ArrayList<>();
+            projectIds.add(body.getProjectId());
+            eventDto.setProjectIds(projectIds);
+            eventDto.setEventType("RECOMMEND");
+            eventDto.setProjectLevel(projectLevel);
+            eventDto.setInvestmentInstitutionsIds(result1.getData().getInvestmentInstitutionIds());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<EventDto> entity = new HttpEntity<>(eventDto, headers);
+            HttpEntity<CommonDto<String>> investors =  restTemplate.exchange(eventUrl+"/trigger/event", HttpMethod.POST,entity,new ParameterizedTypeReference<CommonDto<String>>(){} );
+
+        }
 
         result.setStatus(200);
         result.setMessage("success");
@@ -173,6 +232,84 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
         result.setStatus(200);
         result.setData(resultA);
         result.setMessage("success");
+
+        return result;
+    }
+
+    /**
+     * 根据项目id获取,提交人,机构ids数组的接口
+     * @param projectId
+     * @return
+     */
+    @Override
+    public CommonDto<AdminCreatProjectDto> getUserAndInvestmentInstitutionIds(Integer projectId) {
+        CommonDto<AdminCreatProjectDto> result = new CommonDto<>();
+
+        if (projectId == null){
+            result.setStatus(502);
+            result.setMessage("项目id不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        AdminCreatProjectDto adminCreatProjectDto = new AdminCreatProjectDto();
+
+        //根据项目id,获取机构id数组
+        Example apaExample = new Example(AdminProjectApprovalLog.class);
+        apaExample.and().andEqualTo("projectId",projectId);
+        apaExample.setOrderByClause("approvaled_time desc");
+
+        List<AdminProjectApprovalLog> adminProjectApprovalLogList = adminProjectApprovalLogMapper.selectByExample(apaExample);
+
+       if (adminProjectApprovalLogList.size() < 1){
+           result.setMessage("当前项目未选择任何机构");
+           result.setStatus(200);
+           result.setData(adminCreatProjectDto);
+
+           return result;
+       }
+        Integer projectSendId = adminProjectApprovalLogList.get(0).getProjectSourceId();
+       if (null == projectSendId){
+           result.setMessage("项目来源未知,无法找到对应提交的机构");
+           result.setStatus(502);
+           result.setData(null);
+
+           return result;
+       }
+
+       //获取prepareId
+        ProjectSendAuditB projectSendAuditB = projectSendAuditBMapper.selectByPrimaryKey(projectSendId);
+       if (projectSendAuditB != null){
+           Integer prepareId = projectSendAuditB.getPrepareId();
+
+        List<Integer> institutionIds = projectSendInstitutionBMapper.getInstitutionIdsByPrepareId(prepareId);
+        adminCreatProjectDto.setInvestmentInstitutionIds(institutionIds);
+
+        //获取用户token
+        UserToken userToken = new UserToken();
+        userToken.setUserId(projectSendAuditB.getUserId());
+
+        UserToken userTokenString = userTokenMapper.selectOne(userToken);
+        if (userTokenString == null){
+            result.setMessage("提交人的账户已被删除");
+            result.setStatus(200);
+            result.setData(adminCreatProjectDto);
+
+            return result;
+        }
+        String usertoken = userTokenString.getToken();
+        adminCreatProjectDto.setProjectCreaterId(usertoken);
+
+        result.setData(adminCreatProjectDto);
+        result.setStatus(200);
+        result.setMessage("success");
+
+       }else {
+           result.setData(adminCreatProjectDto);
+           result.setStatus(502);
+           result.setMessage("没找到提交记录");
+       }
 
         return result;
     }

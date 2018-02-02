@@ -186,95 +186,95 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
     public CommonDto<InvestorInvestInfoDto> getInvestorInvestInfo(Integer investorId) {
         CommonDto<InvestorInvestInfoDto> result = new CommonDto<>();
         InvestorInvestInfoDto investorInvestInfoDto = new InvestorInvestInfoDto();
-
         InvestorDemand investorDemand = investorDemandMapper.selectByInvestorId(investorId);
+        if(null != investorDemand) {
+            investorInvestInfoDto.setInvestorId(investorId);
+            investorInvestInfoDto.setInvestorDemandId(investorDemand.getId());
+            investorInvestInfoDto.setPreferDesc(investorDemand.getFuture());
+            investorInvestInfoDto.setInvestAmountHighDollar(investorDemand.getInvestmentAmountHighDollars());
+            investorInvestInfoDto.setInvestAmountLowDollar(investorDemand.getInvestmentAmountLowDollars());
+            investorInvestInfoDto.setInvestAmountLowRmb(investorDemand.getInvestmentAmountLow());
+            investorInvestInfoDto.setInvestAmountHighRmb(investorDemand.getInvestmentAmountHigh());
 
-        investorInvestInfoDto.setInvestorId(investorId);
-        investorInvestInfoDto.setInvestorDemandId(investorDemand.getId());
-        investorInvestInfoDto.setPreferDesc(investorDemand.getFuture());
-        investorInvestInfoDto.setInvestAmountHighDollar(investorDemand.getInvestmentAmountHighDollars());
-        investorInvestInfoDto.setInvestAmountLowDollar(investorDemand.getInvestmentAmountLowDollars());
-        investorInvestInfoDto.setInvestAmountLowRmb(investorDemand.getInvestmentAmountLow());
-        investorInvestInfoDto.setInvestAmountHighRmb(investorDemand.getInvestmentAmountHigh());
+            InvestorDemandSegmentation investorDemandSegmentation = new InvestorDemandSegmentation();
+            investorDemandSegmentation.setInvestorDemandId(investorDemand.getId());
+            List<InvestorDemandSegmentation> investorDemandSegmentationList = investorDemandSegmentationService.select(investorDemandSegmentation);
+            String[] investorDemandSegmentationArr = null;
+            if (null == investorDemandSegmentationList) {
+                investorInvestInfoDto.setFocusSegmentations(investorDemandSegmentationArr);
+            } else {
+                List<String> investorDemandSegmentations = new ArrayList<>();
+                investorDemandSegmentationList.forEach(investorDemandSegmentation_i -> {
+                    investorDemandSegmentations.add(investorDemandSegmentation_i.getSegmentation());
+                });
+                investorDemandSegmentationArr = new String[investorDemandSegmentations.size()];
+                investorDemandSegmentations.toArray(investorDemandSegmentationArr);
+                investorInvestInfoDto.setFocusSegmentations(investorDemandSegmentationArr);
+            }
 
-        InvestorDemandSegmentation investorDemandSegmentation = new InvestorDemandSegmentation();
-        investorDemandSegmentation.setInvestorDemandId(investorDemand.getId());
-        List<InvestorDemandSegmentation> investorDemandSegmentationList = investorDemandSegmentationService.select(investorDemandSegmentation);
-        String[] investorDemandSegmentationArr = null;
-        if(null == investorDemandSegmentationList){
-            investorInvestInfoDto.setFocusSegmentations(investorDemandSegmentationArr);
-        }else{
-            List<String> investorDemandSegmentations = new ArrayList<>();
-            investorDemandSegmentationList.forEach(investorDemandSegmentation_i -> {
-                investorDemandSegmentations.add(investorDemandSegmentation_i.getSegmentation());
-            });
-            investorDemandSegmentationArr = new String[investorDemandSegmentations.size()];
-            investorDemandSegmentations.toArray(investorDemandSegmentationArr);
-            investorInvestInfoDto.setFocusSegmentations(investorDemandSegmentationArr);
-        }
+            InvestorDemandStage investorDemandStage = new InvestorDemandStage();
+            investorDemandStage.setInvestorDemandId(investorDemand.getId());
+            List<InvestorDemandStage> investorDemandStagesList = investorDemandStageService.select(investorDemandStage);
+            Integer[] investorDemandStageArr = null;
+            if (null == investorDemandStagesList) {
+                investorInvestInfoDto.setFocusStages(investorDemandStageArr);
+            } else {
+                List<Integer> investorDemandStages = new ArrayList<>();
+                investorDemandStagesList.forEach(investorDemandStage_i -> {
+                    investorDemandStages.add(investorDemandStage_i.getMetaProjectStageId());
+                });
+                investorDemandStageArr = new Integer[investorDemandStages.size()];
+                investorDemandStages.toArray(investorDemandStageArr);
+                investorInvestInfoDto.setFocusStages(investorDemandStageArr);
+            }
 
-        InvestorDemandStage investorDemandStage = new InvestorDemandStage();
-        investorDemandStage.setInvestorDemandId(investorDemand.getId());
-        List<InvestorDemandStage> investorDemandStagesList = investorDemandStageService.select(investorDemandStage);
-        Integer[] investorDemandStageArr = null;
-        if(null == investorDemandStagesList){
-            investorInvestInfoDto.setFocusStages(investorDemandStageArr);
-        }else{
-            List<Integer> investorDemandStages = new ArrayList<>();
-            investorDemandStagesList.forEach(investorDemandStage_i -> {
-                investorDemandStages.add(investorDemandStage_i.getMetaProjectStageId());
-            });
-            investorDemandStageArr = new Integer[investorDemandStages.size()];
-            investorDemandStages.toArray(investorDemandStageArr);
-            investorInvestInfoDto.setFocusStages(investorDemandStageArr);
-        }
+            InvestorDemandArea investorDemandArea = new InvestorDemandArea();
+            investorDemandArea.setInvestorDemandId(investorDemand.getId());
+            List<InvestorDemandArea> InvestorDemandAreaList = investorDemandAreaService.select(investorDemandArea);
+            String[] investorDemandCityArr = null;
+            if (null == InvestorDemandAreaList) {
+                investorInvestInfoDto.setPreferCitys(investorDemandCityArr);
+            } else {
+                List<String> investorDemandCitys = new ArrayList<>();
+                InvestorDemandAreaList.forEach(investorDemandCity_i -> {
+                    investorDemandCitys.add(investorDemandCity_i.getCity());
+                });
+                investorDemandCityArr = new String[investorDemandCitys.size()];
+                investorDemandCitys.toArray(investorDemandCityArr);
+                investorInvestInfoDto.setPreferCitys(investorDemandCityArr);
+            }
 
-        InvestorDemandArea investorDemandArea = new InvestorDemandArea();
-        investorDemandArea.setInvestorDemandId(investorDemand.getId());
-        List<InvestorDemandArea> InvestorDemandAreaList = investorDemandAreaService.select(investorDemandArea);
-        String[] investorDemandCityArr = null;
-        if(null == InvestorDemandAreaList){
-            investorInvestInfoDto.setPreferCitys(investorDemandCityArr);
-        }else{
-            List<String> investorDemandCitys = new ArrayList<>();
-            InvestorDemandAreaList.forEach(investorDemandCity_i -> {
-                investorDemandCitys.add(investorDemandCity_i.getCity());
-            });
-            investorDemandCityArr = new String[investorDemandCitys.size()];
-            investorDemandCitys.toArray(investorDemandCityArr);
-            investorInvestInfoDto.setPreferCitys(investorDemandCityArr);
-        }
+            InvestorDemandSpeedway investorDemandSpeedway = new InvestorDemandSpeedway();
+            investorDemandSpeedway.setInvestorDemandId(investorDemand.getId());
+            List<InvestorDemandSpeedway> investorDemandSpeedwayList = investorDemandSpeedwayService.select(investorDemandSpeedway);
+            String[] investorDemandSpeedwayArr = null;
+            if (null == investorDemandSpeedwayList) {
+                investorInvestInfoDto.setFocusSpeedway(investorDemandSpeedwayArr);
+            } else {
+                List<String> investorDemandSpeedways = new ArrayList<>();
+                investorDemandSpeedwayList.forEach(investorDemandSpeedway_i -> {
+                    investorDemandSpeedways.add(investorDemandSpeedway_i.getSpeedway());
+                });
+                investorDemandSpeedwayArr = new String[investorDemandSpeedways.size()];
+                investorDemandSpeedways.toArray(investorDemandSegmentationArr);
+                investorInvestInfoDto.setFocusSpeedway(investorDemandSpeedwayArr);
+            }
 
-        InvestorDemandSpeedway investorDemandSpeedway = new InvestorDemandSpeedway();
-        investorDemandSpeedway.setInvestorDemandId(investorDemand.getId());
-        List<InvestorDemandSpeedway> investorDemandSpeedwayList = investorDemandSpeedwayService.select(investorDemandSpeedway);
-        String[] investorDemandSpeedwayArr = null;
-        if(null == investorDemandSpeedwayList){
-            investorInvestInfoDto.setFocusSpeedway(investorDemandSpeedwayArr);
-        }else{
-            List<String> investorDemandSpeedways = new ArrayList<>();
-            investorDemandSpeedwayList.forEach(investorDemandSpeedway_i -> {
-                investorDemandSpeedways.add(investorDemandSpeedway_i.getSpeedway());
-            });
-            investorDemandSpeedwayArr = new String[investorDemandSpeedways.size()];
-            investorDemandSpeedways.toArray(investorDemandSegmentationArr);
-            investorInvestInfoDto.setFocusSpeedway(investorDemandSpeedwayArr);
-        }
-
-        InvestorDemandCharacter investorDemandCharacter = new InvestorDemandCharacter();
-        investorDemandCharacter.setInvestorDemandId(investorDemand.getId());
-        List<InvestorDemandCharacter> investorDemandCharacterList = investorDemandCharacterService.select(investorDemandCharacter);
-        String[] investorDemandCharacterArr = null;
-        if(null == investorDemandCharacterList){
-            investorInvestInfoDto.setFocusCharacters(investorDemandCharacterArr);
-        }else{
-            List<String> investorDemandCharacters = new ArrayList<>();
-            investorDemandCharacterList.forEach(investorDemandCharacter_i -> {
-                investorDemandCharacters.add(investorDemandCharacter_i.getCharacter());
-            });
-            investorDemandCharacterArr = new String[investorDemandCharacters.size()];
-            investorDemandCharacters.toArray(investorDemandSegmentationArr);
-            investorInvestInfoDto.setFocusSpeedway(investorDemandCharacterArr);
+            InvestorDemandCharacter investorDemandCharacter = new InvestorDemandCharacter();
+            investorDemandCharacter.setInvestorDemandId(investorDemand.getId());
+            List<InvestorDemandCharacter> investorDemandCharacterList = investorDemandCharacterService.select(investorDemandCharacter);
+            String[] investorDemandCharacterArr = null;
+            if (null == investorDemandCharacterList) {
+                investorInvestInfoDto.setFocusCharacters(investorDemandCharacterArr);
+            } else {
+                List<String> investorDemandCharacters = new ArrayList<>();
+                investorDemandCharacterList.forEach(investorDemandCharacter_i -> {
+                    investorDemandCharacters.add(investorDemandCharacter_i.getCharacter());
+                });
+                investorDemandCharacterArr = new String[investorDemandCharacters.size()];
+                investorDemandCharacters.toArray(investorDemandSegmentationArr);
+                investorInvestInfoDto.setFocusSpeedway(investorDemandCharacterArr);
+            }
         }
 
         result.setMessage("success");

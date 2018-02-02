@@ -11,4 +11,9 @@
     <result column="project_send_prepareid" property="projectSendPrepareid" jdbcType="INTEGER" />
     <result column="appid" property="appid" jdbcType="INTEGER" />
   </resultMap>
+  <select id="getInstitutionIdsByPrepareId" resultType="java.lang.Integer">
+    SELECT investment_institution_id FROM project_send_institution_b
+    where project_send_prepareid = #{prepareId}
+    group by investment_institution_id;
+  </select>
 </mapper>
