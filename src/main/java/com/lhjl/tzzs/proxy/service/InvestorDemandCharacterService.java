@@ -8,13 +8,13 @@ import java.util.List;
  * Created by lanhaijulang on 2018/1/20.
  */
 public interface InvestorDemandCharacterService {
-    int save(InvestorDemandCharacter investorDemandCharacter);
+    Integer save(InvestorDemandCharacter investorDemandCharacter);
 
     void deleteAll(Integer investorId);
 
     void delete(InvestorDemandCharacter investorDemandCharacter);
 
-    int insertList(List<InvestorDemandCharacter> investorDemandCharacterList);
+    Integer insertList(List<InvestorDemandCharacter> investorDemandCharacterList);
 
     List<InvestorDemandCharacter> select(InvestorDemandCharacter investorDemandCharacter);
 

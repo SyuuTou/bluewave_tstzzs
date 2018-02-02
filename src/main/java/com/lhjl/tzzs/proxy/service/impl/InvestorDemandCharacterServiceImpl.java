@@ -19,7 +19,7 @@ public class InvestorDemandCharacterServiceImpl implements InvestorDemandCharact
     private InvestorDemandCharacterMapper investorDemandCharacterMapper;
 
     @Override
-    public int save(InvestorDemandCharacter investorDemandCharacter) {
+    public Integer save(InvestorDemandCharacter investorDemandCharacter) {
         return  investorDemandCharacterMapper.insert(investorDemandCharacter);
     }
 
@@ -36,7 +36,7 @@ public class InvestorDemandCharacterServiceImpl implements InvestorDemandCharact
     }
 
     @Override
-    public int insertList(List<InvestorDemandCharacter> investorDemandCharacterList) {
+    public Integer insertList(List<InvestorDemandCharacter> investorDemandCharacterList) {
         return  investorDemandCharacterMapper.insertList(investorDemandCharacterList);
     }
 

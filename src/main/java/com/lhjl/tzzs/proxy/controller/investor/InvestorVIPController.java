@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.VIPOutputDto;
+import com.lhjl.tzzs.proxy.mapper.MetaSceneMapper;
 import com.lhjl.tzzs.proxy.model.MetaUserLevel;
 import com.lhjl.tzzs.proxy.model.UserLevelRelation;
 import com.lhjl.tzzs.proxy.service.InvestorService;
@@ -23,7 +24,8 @@ import com.lhjl.tzzs.proxy.service.InvestorService;
 public class InvestorVIPController extends GenericController {
 	@Resource 
 	private InvestorService investorService;
-	
+	@Resource 
+	private MetaSceneMapper metaSceneMapper;
 	/**
 	 * 投资人会员信息输出
 	 * @param appid
@@ -78,7 +80,7 @@ public class InvestorVIPController extends GenericController {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		
     		result.setData(null);
-    		result.setMessage("fail");
+    		result.setMessage("fail");  
     		result.setStatus(500);
     	}
         return result;

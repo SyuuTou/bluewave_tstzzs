@@ -19,4 +19,14 @@
     <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
     <result column="trade_no" jdbcType="INTEGER" property="tradeNo" />
   </resultMap>
+  <select id="getSumPayNum" resultType="java.math.BigDecimal">
+  	select sum(received) from users_pay where user_id = #{userId}
+  </select>
+    <select id="getSumIntegrateCostNum" resultType="java.math.BigDecimal">
+  	select sum(received) from users_pay where user_id = #{userId} and scene_key in('wvGw5Fh5','watiSqHQ','yMQ8UfyU','gLzc1hRF','wvTAMN5e','6IigxtMh','tfoguHA1','xHwofbNs','dpGXuIqb')
+  </select>
+  
+  <select id="getActualVipCostNum" resultType="java.math.BigDecimal">
+  	select sum(received) from users_pay where user_id = #{userId} and scene_key in('aMvVjSju','y4Ep6YQT','N4VlBBJP','nEBlAOV9')
+  </select>
 </mapper>

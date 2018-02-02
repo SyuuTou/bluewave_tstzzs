@@ -625,7 +625,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             Founders founders = new Founders();
             founders.setName(body.getActualName());
             founders.setUserId(userId);
-            founders.setYn(0);
+            founders.setYn(1);
             founders.setCreateTime(now);
 
             foundersMapper.insertSelective(founders);

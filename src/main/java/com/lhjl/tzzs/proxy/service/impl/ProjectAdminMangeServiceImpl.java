@@ -26,7 +26,7 @@ public class ProjectAdminMangeServiceImpl implements ProjectAdminManageService {
     private InvestmentInstitutionFundManageService investmentInstitutionFundManageService;
 
     @Resource
-    private InvestmentInstitutionInvestTypeService investmentInstitutionInvestTypeService;
+    private InvestmentInstitutionsTypeService investmentInstitutionsTypeService;
 
     @Resource
     private InvestmentInstitutionClassicCaseService investmentInstitutionClassicCaseService;
@@ -63,19 +63,19 @@ public class ProjectAdminMangeServiceImpl implements ProjectAdminManageService {
         projectManageDto.setInteriorOrganization(investmentInstitutionFundManage.getInteriorOrganization());
         projectManageDto.setInvestmentDecisionProcess(investmentInstitutionFundManage.getInvestmentDecisionProcess());
 
-        InvestmentInstitutionInvestType investmentInstitutionInvestType = new InvestmentInstitutionInvestType();
-        investmentInstitutionInvestType.setCompanyId(companyId);
-        List<InvestmentInstitutionInvestType> investmentInstitutionInvestTypeList = investmentInstitutionInvestTypeService.select(investmentInstitutionInvestType);
-        Integer[] investmentInstitutionInvestTypeArr = null;
-        if (null != investmentInstitutionInvestTypeList && investmentInstitutionInvestTypeList.size()!=0) {
-            investmentInstitutionInvestTypeArr = new Integer[investmentInstitutionInvestTypeList.size()];
-            List<Integer> investmentInstitutionInvestTypes = new ArrayList<>();
-            investmentInstitutionInvestTypeList.forEach( investmentInstitutionInvestType_i ->{
-                investmentInstitutionInvestTypes.add(investmentInstitutionInvestType_i.getInvestTypeId());
+        InvestmentInstitutionsType investmentInstitutionsType = new InvestmentInstitutionsType();
+        investmentInstitutionsType.setInvestmentInstitutionsId(companyId);
+        List<InvestmentInstitutionsType> investmentInstitutionsTypeList = investmentInstitutionsTypeService.select(investmentInstitutionsType);
+        String[] investmentInstitutionsTypeArr = null;
+        if (null != investmentInstitutionsTypeList && investmentInstitutionsTypeList.size()!=0) {
+            investmentInstitutionsTypeArr = new String[investmentInstitutionsTypeList.size()];
+            List<String> investmentInstitutionsTypes = new ArrayList<>();
+            investmentInstitutionsTypeList.forEach( investmentInstitutionInvestType_i ->{
+                investmentInstitutionsTypes.add(investmentInstitutionInvestType_i.getType());
             });
-            investmentInstitutionInvestTypes.toArray(investmentInstitutionInvestTypeArr);
+            investmentInstitutionsTypes.toArray(investmentInstitutionsTypeArr);
         }
-        projectManageDto.setInvestTypes(investmentInstitutionInvestTypeArr);
+        projectManageDto.setInvestTypes(investmentInstitutionsTypeArr);
 
         InvestmentInstitutionClassicCase investmentInstitutionClassicCase = new InvestmentInstitutionClassicCase();
         investmentInstitutionClassicCase.setCompanyId(companyId);
@@ -135,23 +135,23 @@ public class ProjectAdminMangeServiceImpl implements ProjectAdminManageService {
             investmentInstitutionFundManageInsertResult = investmentInstitutionFundManageService.updateByPrimaryKey(investmentInstitutionFundManage);
         }
 
-        List<InvestmentInstitutionInvestType> investmentInstitutionInvestTypeList = new ArrayList<>();
-        investmentInstitutionInvestTypeService.deleteAll(body.getCompanyId());
+        List<InvestmentInstitutionsType> investmentInstitutionsTypeList = new ArrayList<>();
+        investmentInstitutionsTypeService.deleteAll(body.getCompanyId());
         if(null == body.getInvestTypes() || body.getInvestTypes().length == 0){
-            InvestmentInstitutionInvestType investmentInstitutionInvestType = new InvestmentInstitutionInvestType();
-            investmentInstitutionInvestType.setCompanyId(body.getCompanyId());
-            investmentInstitutionInvestType.setInvestTypeId(null);
-            investmentInstitutionInvestTypeList.add(investmentInstitutionInvestType);
+            InvestmentInstitutionsType investmentInstitutionsType = new InvestmentInstitutionsType();
+            investmentInstitutionsType.setInvestmentInstitutionsId(body.getCompanyId());
+            investmentInstitutionsType.setType(null);
+            investmentInstitutionsTypeList.add(investmentInstitutionsType);
         }else{
-            for(Integer stageId : body.getInvestTypes()){
-                InvestmentInstitutionInvestType investmentInstitutionInvestType1  = new InvestmentInstitutionInvestType();
-                investmentInstitutionInvestType1.setInvestTypeId(stageId);
-                investmentInstitutionInvestType1.setCompanyId(body.getCompanyId());
-                investmentInstitutionInvestTypeList.add(investmentInstitutionInvestType1);
+            for(String investType : body.getInvestTypes()){
+                InvestmentInstitutionsType investmentInstitutionsType1  = new InvestmentInstitutionsType();
+                investmentInstitutionsType1.setInvestmentInstitutionsId(body.getCompanyId());
+                investmentInstitutionsType1.setType(investType);
+                investmentInstitutionsTypeList.add(investmentInstitutionsType1);
             }
         }
 
-        Integer investmentInstitutionInvestTypeInsertResult = investmentInstitutionInvestTypeService.insertList(investmentInstitutionInvestTypeList);
+        Integer investmentInstitutionInvestTypeInsertResult = investmentInstitutionsTypeService.insertList(investmentInstitutionsTypeList);
 
 
         List<InvestmentInstitutionClassicCase> investmentInstitutionClassicCaseList = new ArrayList<>();

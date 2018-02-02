@@ -61,10 +61,140 @@ public class Investors {
     private Integer investorsType;
 
     /**
-     * 投资人来源，meta_data_source_type表中的元数据id
+     * 投资人来源类型，meta_data_source_type表中的元数据id
      */
     @Column(name = "investor_source_type")
     private Integer investorSourceType;
+
+    /**
+     * 所属团队id
+     */
+    @Column(name = "team_id")
+    private Integer teamId;
+
+    /**
+     * 自定义团队名称
+     */
+    @Column(name = "self_def_team")
+    private String selfDefTeam;
+
+    /**
+     * 手机电话
+     */
+    private String phone;
+
+    /**
+     * 一句话介绍
+     */
+    @Column(name = "kernel_description")
+    private String kernelDescription;
+
+    /**
+     * 身份类型
+     */
+    @Column(name = "identity_type")
+    private Integer identityType;
+
+    /**
+     * 微信号
+     */
+    private String weichat;
+
+    /**
+     * 邮箱
+     */
+    private String email;
+
+    /**
+     * 出生年月
+     */
+    @Column(name = "birth_day")
+    private Date birthDay;
+
+    /**
+     * 性别，0：男；1：女
+     */
+    private Integer sex;
+
+    /**
+     * 学历
+     */
+    private Integer diploma;
+
+    /**
+     * 国籍，通过元数据表配置
+     */
+    private Integer nationality;
+
+    /**
+     * 任职时间
+     */
+    @Column(name = "tenure_time")
+    private Date tenureTime;
+
+    /**
+     * 工作名片
+     */
+    @Column(name = "business_card")
+    private String businessCard;
+
+    /**
+     * 高清图片
+     */
+    private String picture;
+
+    /**
+     * 创业经历描述
+     */
+    @Column(name = "business_description")
+    private String businessDescription;
+
+    /**
+     * 教育经历描述
+     */
+    @Column(name = "education_description")
+    private String educationDescription;
+
+    /**
+     * 工作经历描述
+     */
+    @Column(name = "work_description")
+    private String workDescription;
+
+    /**
+     * 个人荣誉或社会资质
+     */
+    private String honor;
+
+    /**
+     * 个人简介
+     */
+    @Column(name = "personal_introduction")
+    private String personalIntroduction;
+
+    /**
+     * 更新时间
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
+
+    /**
+     * 公司简介
+     */
+    @Column(name = "company_introduction")
+    private String companyIntroduction;
+
+    /**
+     * 认证说明
+     */
+    @Column(name = "certification_instructions")
+    private String certificationInstructions;
+
+    /**
+     * 工作名片反面
+     */
+    @Column(name = "business_card_opposite")
+    private String businessCardOpposite;
 
     /**
      * @return ID
@@ -243,20 +373,434 @@ public class Investors {
     }
 
     /**
-     * 获取投资人来源，meta_data_source_type表中的元数据id
+     * 获取投资人来源类型，meta_data_source_type表中的元数据id
      *
-     * @return investor_source_type - 投资人来源，meta_data_source_type表中的元数据id
+     * @return investor_source_type - 投资人来源类型，meta_data_source_type表中的元数据id
      */
     public Integer getInvestorSourceType() {
         return investorSourceType;
     }
 
     /**
-     * 设置投资人来源，meta_data_source_type表中的元数据id
+     * 设置投资人来源类型，meta_data_source_type表中的元数据id
      *
-     * @param investorSourceType 投资人来源，meta_data_source_type表中的元数据id
+     * @param investorSourceType 投资人来源类型，meta_data_source_type表中的元数据id
      */
     public void setInvestorSourceType(Integer investorSourceType) {
         this.investorSourceType = investorSourceType;
+    }
+
+    /**
+     * 获取所属团队id
+     *
+     * @return team_id - 所属团队id
+     */
+    public Integer getTeamId() {
+        return teamId;
+    }
+
+    /**
+     * 设置所属团队id
+     *
+     * @param teamId 所属团队id
+     */
+    public void setTeamId(Integer teamId) {
+        this.teamId = teamId;
+    }
+
+    /**
+     * 获取自定义团队名称
+     *
+     * @return self_def_team - 自定义团队名称
+     */
+    public String getSelfDefTeam() {
+        return selfDefTeam;
+    }
+
+    /**
+     * 设置自定义团队名称
+     *
+     * @param selfDefTeam 自定义团队名称
+     */
+    public void setSelfDefTeam(String selfDefTeam) {
+        this.selfDefTeam = selfDefTeam;
+    }
+
+    /**
+     * 获取手机电话
+     *
+     * @return phone - 手机电话
+     */
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     * 设置手机电话
+     *
+     * @param phone 手机电话
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    /**
+     * 获取一句话介绍
+     *
+     * @return kernel_description - 一句话介绍
+     */
+    public String getKernelDescription() {
+        return kernelDescription;
+    }
+
+    /**
+     * 设置一句话介绍
+     *
+     * @param kernelDescription 一句话介绍
+     */
+    public void setKernelDescription(String kernelDescription) {
+        this.kernelDescription = kernelDescription;
+    }
+
+    /**
+     * 获取身份类型
+     *
+     * @return identity_type - 身份类型
+     */
+    public Integer getIdentityType() {
+        return identityType;
+    }
+
+    /**
+     * 设置身份类型
+     *
+     * @param identityType 身份类型
+     */
+    public void setIdentityType(Integer identityType) {
+        this.identityType = identityType;
+    }
+
+    /**
+     * 获取微信号
+     *
+     * @return weichat - 微信号
+     */
+    public String getWeichat() {
+        return weichat;
+    }
+
+    /**
+     * 设置微信号
+     *
+     * @param weichat 微信号
+     */
+    public void setWeichat(String weichat) {
+        this.weichat = weichat;
+    }
+
+    /**
+     * 获取邮箱
+     *
+     * @return email - 邮箱
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * 设置邮箱
+     *
+     * @param email 邮箱
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * 获取出生年月
+     *
+     * @return birth_day - 出生年月
+     */
+    public Date getBirthDay() {
+        return birthDay;
+    }
+
+    /**
+     * 设置出生年月
+     *
+     * @param birthDay 出生年月
+     */
+    public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    /**
+     * 获取性别，0：男；1：女
+     *
+     * @return sex - 性别，0：男；1：女
+     */
+    public Integer getSex() {
+        return sex;
+    }
+
+    /**
+     * 设置性别，0：男；1：女
+     *
+     * @param sex 性别，0：男；1：女
+     */
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    /**
+     * 获取学历
+     *
+     * @return diploma - 学历
+     */
+    public Integer getDiploma() {
+        return diploma;
+    }
+
+    /**
+     * 设置学历
+     *
+     * @param diploma 学历
+     */
+    public void setDiploma(Integer diploma) {
+        this.diploma = diploma;
+    }
+
+    /**
+     * 获取国籍，通过元数据表配置
+     *
+     * @return nationality - 国籍，通过元数据表配置
+     */
+    public Integer getNationality() {
+        return nationality;
+    }
+
+    /**
+     * 设置国籍，通过元数据表配置
+     *
+     * @param nationality 国籍，通过元数据表配置
+     */
+    public void setNationality(Integer nationality) {
+        this.nationality = nationality;
+    }
+
+    /**
+     * 获取任职时间
+     *
+     * @return tenure_time - 任职时间
+     */
+    public Date getTenureTime() {
+        return tenureTime;
+    }
+
+    /**
+     * 设置任职时间
+     *
+     * @param tenureTime 任职时间
+     */
+    public void setTenureTime(Date tenureTime) {
+        this.tenureTime = tenureTime;
+    }
+
+    /**
+     * 获取工作名片
+     *
+     * @return business_card - 工作名片
+     */
+    public String getBusinessCard() {
+        return businessCard;
+    }
+
+    /**
+     * 设置工作名片
+     *
+     * @param businessCard 工作名片
+     */
+    public void setBusinessCard(String businessCard) {
+        this.businessCard = businessCard;
+    }
+
+    /**
+     * 获取高清图片
+     *
+     * @return picture - 高清图片
+     */
+    public String getPicture() {
+        return picture;
+    }
+
+    /**
+     * 设置高清图片
+     *
+     * @param picture 高清图片
+     */
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    /**
+     * 获取创业经历描述
+     *
+     * @return business_description - 创业经历描述
+     */
+    public String getBusinessDescription() {
+        return businessDescription;
+    }
+
+    /**
+     * 设置创业经历描述
+     *
+     * @param businessDescription 创业经历描述
+     */
+    public void setBusinessDescription(String businessDescription) {
+        this.businessDescription = businessDescription;
+    }
+
+    /**
+     * 获取教育经历描述
+     *
+     * @return education_description - 教育经历描述
+     */
+    public String getEducationDescription() {
+        return educationDescription;
+    }
+
+    /**
+     * 设置教育经历描述
+     *
+     * @param educationDescription 教育经历描述
+     */
+    public void setEducationDescription(String educationDescription) {
+        this.educationDescription = educationDescription;
+    }
+
+    /**
+     * 获取工作经历描述
+     *
+     * @return work_description - 工作经历描述
+     */
+    public String getWorkDescription() {
+        return workDescription;
+    }
+
+    /**
+     * 设置工作经历描述
+     *
+     * @param workDescription 工作经历描述
+     */
+    public void setWorkDescription(String workDescription) {
+        this.workDescription = workDescription;
+    }
+
+    /**
+     * 获取个人荣誉或社会资质
+     *
+     * @return honor - 个人荣誉或社会资质
+     */
+    public String getHonor() {
+        return honor;
+    }
+
+    /**
+     * 设置个人荣誉或社会资质
+     *
+     * @param honor 个人荣誉或社会资质
+     */
+    public void setHonor(String honor) {
+        this.honor = honor;
+    }
+
+    /**
+     * 获取个人简介
+     *
+     * @return personal_introduction - 个人简介
+     */
+    public String getPersonalIntroduction() {
+        return personalIntroduction;
+    }
+
+    /**
+     * 设置个人简介
+     *
+     * @param personalIntroduction 个人简介
+     */
+    public void setPersonalIntroduction(String personalIntroduction) {
+        this.personalIntroduction = personalIntroduction;
+    }
+
+    /**
+     * 获取更新时间
+     *
+     * @return update_time - 更新时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param updateTime 更新时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取公司简介
+     *
+     * @return company_introduction - 公司简介
+     */
+    public String getCompanyIntroduction() {
+        return companyIntroduction;
+    }
+
+    /**
+     * 设置公司简介
+     *
+     * @param companyIntroduction 公司简介
+     */
+    public void setCompanyIntroduction(String companyIntroduction) {
+        this.companyIntroduction = companyIntroduction;
+    }
+
+    /**
+     * 获取认证说明
+     *
+     * @return certification_instructions - 认证说明
+     */
+    public String getCertificationInstructions() {
+        return certificationInstructions;
+    }
+
+    /**
+     * 设置认证说明
+     *
+     * @param certificationInstructions 认证说明
+     */
+    public void setCertificationInstructions(String certificationInstructions) {
+        this.certificationInstructions = certificationInstructions;
+    }
+
+    /**
+     * 获取工作名片反面
+     *
+     * @return business_card_opposite - 工作名片反面
+     */
+    public String getBusinessCardOpposite() {
+        return businessCardOpposite;
+    }
+
+    /**
+     * 设置工作名片反面
+     *
+     * @param businessCardOpposite 工作名片反面
+     */
+    public void setBusinessCardOpposite(String businessCardOpposite) {
+        this.businessCardOpposite = businessCardOpposite;
     }
 }

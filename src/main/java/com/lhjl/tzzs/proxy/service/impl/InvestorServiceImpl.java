@@ -16,8 +16,10 @@ import com.lhjl.tzzs.proxy.mapper.InvestorInvestmentCaseMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaAdminTypeMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaUserLevelMapper;
+import com.lhjl.tzzs.proxy.mapper.UserIntegralConsumeMapper;
 import com.lhjl.tzzs.proxy.mapper.UserLevelRelationMapper;
 import com.lhjl.tzzs.proxy.mapper.UsersMapper;
+import com.lhjl.tzzs.proxy.mapper.UsersPayMapper;
 import com.lhjl.tzzs.proxy.model.AdminUser;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.model.MetaUserLevel;
@@ -66,7 +68,10 @@ public class InvestorServiceImpl implements InvestorService {
     private MetaUserLevelMapper metaUserLevelMapper;
     @Autowired
     private MetaAdminTypeMapper metaAdminTypeMapper;
-    
+    @Autowired
+    private UserIntegralConsumeMapper userIntegralConsumeMapper;
+    @Autowired
+    private UsersPayMapper usersPayMapper;
     
     @Value("${pageNum}")
     private Integer pageNumDefault ;
@@ -177,8 +182,11 @@ public class InvestorServiceImpl implements InvestorService {
 		dom.setDataType("投资人");
 		//一个投资人只有一条的运营管理记录
 		dom = datasOperationManageMapper.selectOne(dom);
+		if(dom !=null) {
+			dom.setRecommand(dom.getBasicsRecommend()+dom.getDynamicRecommand()+dom.getOperationRecommend());
+		}
 		
-		result.setData(dom);
+		result.setData(dom !=null ?dom : new DatasOperationManage());
         result.setStatus(200); 
         result.setMessage("success");
 		return result;
@@ -238,9 +246,23 @@ public class InvestorServiceImpl implements InvestorService {
 	@Override
 	public CommonDto<VIPOutputDto> echoInvestorsVIPInfo(Integer appid, Integer userId) {
 		CommonDto<VIPOutputDto> result=new CommonDto<>();
-		Users user = usersMapper.selectByPrimaryKey(userId);
+		VIPOutputDto vod = new VIPOutputDto();
+		UserLevelRelation ulr=new UserLevelRelation();
+		ulr.setUserId(userId);
+		ulr.setYn(1);  
+		UserLevelRelation url = userLevelRelationMapper.selectOne(ulr);
+		if(url ==null) {
+			//返回一个默认初始化的用户会员对象
+			vod.setUserLevelRelation(new UserLevelRelation());
+		}else {
+			vod.setUserLevelRelation(url);
+			vod.setCostNum(userIntegralConsumeMapper.getCostNum(userId));
+			vod.setActualVipCostNum(usersPayMapper.getActualVipCostNum(userId));
+			vod.setSumIntegrateCostNum(usersPayMapper.getSumIntegrateCostNum(userId));
+			vod.setSumPayNum(usersPayMapper.getSumPayNum(userId));
+		}
 		
-		result.setData(null);
+		result.setData(vod);
         result.setStatus(200); 
         result.setMessage("success");
 		return result;

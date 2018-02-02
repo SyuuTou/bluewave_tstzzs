@@ -62,6 +62,9 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
     @Autowired
     private ProjectSendPrepareidBMapper projectSendPrepareidBMapper;
 
+    @Autowired
+    private AdminProjectApprovalLogMapper adminProjectApprovalLogMapper;
+
     /**
      * 读取项目审核列表接口
      * @return
@@ -232,14 +235,6 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
     public CommonDto<String> auditProjectSend(ProjectSendAuditBInputDto body, Integer appid) {
         CommonDto<String> result  = new CommonDto<>();
 
-        if (body.getProjectId() == null){
-            result.setStatus(502);
-            result.setData(null);
-            result.setMessage("项目id不能为空");
-
-            return result;
-        }
-
         if (body.getShortName() == null){
             result.setData(null);
             result.setMessage("公司名称不能为空");
@@ -262,21 +257,49 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
 
         // 项目领域信息
         CommonDto<String> result2 = auditProjectSegment(body,projectId,appid);
+        if (result2.getStatus() != 200){
+            return  result2;
+        }
         // 项目标签信息
         CommonDto<String> result3 = auditProjectTags(body,projectId,appid);
+        if (result3.getStatus() != 200){
+            return result3;
+        }
         // 项目竞品信息
         CommonDto<String> result4 = auditProjectCompetation(body,projectId,appid);
+        if (result4.getStatus() != 200){
+            return result4;
+        }
         // 项目当前融资信息
         CommonDto<String> result5 = auditProjectFinancingApproval(body,projectId,appid);
+        if (result5.getStatus() != 200){
+            return result5;
+        }
         // 项目历史融资信息
         CommonDto<String> result6 = auditProjectFinancingHistory(body,projectId,appid);
+        if (result6.getStatus() != 200){
+            return result6;
+        }
         // 团队成员
         CommonDto<String> result7 = auditProjectTeamMember(body,projectId,appid);
+        if (result7.getStatus() != 200){
+            return result7;
+        }
         // 提交记录修改状态
         CommonDto<String> result8 = auditProjectSendLogB(body,projectId,appid);
+        if (result8.getStatus() != 200){
+            return result8;
+        }
         // pareid修改状态
         CommonDto<String> result9 = auditProjectPrepearId(body,projectId,appid);
-        //todo 发信息流
+        if (result9.getStatus() != 200){
+            return result9;
+        }
+        // 创建项目审核记录表的信息
+        CommonDto<String> result10 = creatAdminAuditRecord(body,projectId,appid);
+        if (result10.getStatus() != 200){
+            return result10;
+        }
 
         result.setData(null);
         result.setStatus(200);
@@ -833,6 +856,63 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
         result.setMessage("success");
         result.setData(null);
         result.setStatus(200);
+
+        return result;
+    }
+
+    /**
+     * 创建管理员审核记录表
+     * @param body
+     * @param projectId
+     * @param appid
+     * @return
+     */
+    @Transactional
+    public CommonDto<String> creatAdminAuditRecord(ProjectSendAuditBInputDto body,Integer projectId,Integer appid){
+        CommonDto<String> result = new CommonDto<>();
+        Date now = new Date();
+
+        if (projectId == null){
+            result.setMessage("项目id不能为空");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+        if (body.getProjectSendLogId() == null){
+            result.setMessage("提交项目id不能为空");
+            result.setData(null);
+            result.setStatus(502);
+
+            return result;
+        }
+
+        AdminProjectApprovalLog adminProjectApprovalLog = new AdminProjectApprovalLog();
+        adminProjectApprovalLog.setProjectId(projectId);
+        adminProjectApprovalLog.setProjectSourceId(body.getProjectSendLogId());
+        adminProjectApprovalLog.setProjectSourceType(0);
+        adminProjectApprovalLog.setApprovaledStatus(body.getStatus());
+        adminProjectApprovalLog.setApprovaledTime(now);
+        if (body.getAdministractor() != null){
+            adminProjectApprovalLog.setApprovaledAdminName(body.getAdministractor());
+        }
+
+        Example apaExample = new Example(AdminProjectApprovalLog.class);
+        apaExample.and().andEqualTo("projectSourceId",body.getProjectSendLogId()).andEqualTo("projectSourceId",projectId);
+
+        List<AdminProjectApprovalLog> adminProjectApprovalLogList = adminProjectApprovalLogMapper.selectByExample(apaExample);
+        if (adminProjectApprovalLogList.size()>0){
+            adminProjectApprovalLog.setId(adminProjectApprovalLogList.get(0).getId());
+
+            adminProjectApprovalLogMapper.updateByPrimaryKeySelective(adminProjectApprovalLog);
+        }else {
+            adminProjectApprovalLogMapper.insertSelective(adminProjectApprovalLog);
+        }
+
+        result.setMessage("success");
+        result.setStatus(200);
+        result.setData(null);
 
         return result;
     }

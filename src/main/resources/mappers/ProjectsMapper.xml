@@ -1030,4 +1030,9 @@
         limit #{startPage},#{pageSize}
 
     </select>
+
+
+    <select id="selectByProjectShortName" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select * from projects from `short_name`=#{searchWord};
+    </select>
 </mapper>
