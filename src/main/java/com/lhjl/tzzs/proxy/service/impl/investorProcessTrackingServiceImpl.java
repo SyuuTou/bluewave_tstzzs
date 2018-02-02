@@ -31,6 +31,7 @@ public class investorProcessTrackingServiceImpl implements InvestorProcessTracki
         investorOperationLog.setInvestorId(body.getInvestorId());
         investorOperationLog.setOperator(body.getOperator());
         investorOperationLog.setOperateContent(body.getOperateContent());
+        investorOperationLog.setYn(0);
 
         Integer investorOperationLogInsertResult = -1;
         if(null == body.getId()){
