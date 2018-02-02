@@ -1710,4 +1710,34 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
         result.setMessage("success");
 		return result;
 	}
+
+	@Override
+	public CommonDto<Boolean> saveOrUpdateProjectManagement(Integer appid, DatasOperationManage body) {
+		CommonDto<Boolean> result =new CommonDto<>();
+		
+		DatasOperationManage dom =new DatasOperationManage();
+		dom.setDataId(body.getDataId());
+		dom.setDataType("PROJECT");
+		
+		body.setDataType("PROJECT");
+		try {
+			if( datasOperationManageMapper.selectOne(dom) != null) {//执行更新操作
+				body.setUpdateTime(new Date());
+				datasOperationManageMapper.updateByPrimaryKeySelective(body);
+			}else {//执行增加
+				body.setCreateTime(new Date());
+				datasOperationManageMapper.insertSelective(body);
+			}
+		}catch(Exception e ) {
+			result.setData(true);
+	        result.setStatus(200); 
+	        result.setMessage("运营管理表中存在项目冗余数据，数据存在问题");
+			return result;
+		}
+		result.setData(true);
+        result.setStatus(200); 
+        result.setMessage("success");
+        
+		return result;
+	}
 }

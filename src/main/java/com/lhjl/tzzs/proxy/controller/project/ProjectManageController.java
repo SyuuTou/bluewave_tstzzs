@@ -39,5 +39,25 @@ public class ProjectManageController extends GenericController {
     	}
         return result;
     }
+    /**
+     * 更新或者保存项目的运营管理
+     * @param appid
+     * @param body
+     * @return
+     */
+    @PostMapping("/v{appid}/saveorupdate/project/management")
+    public CommonDto<Boolean> saveOrUpdateInvestorsManagement(@PathVariable Integer appid,@RequestBody DatasOperationManage body){
+    	CommonDto<Boolean> result =new CommonDto<>();
+    	try {
+    		result = projectsService.saveOrUpdateProjectManagement(appid,body);
+    	}catch(Exception e) {
+    		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
+    		
+    		result.setData(false);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+    	}
+        return result;
+    }
 
 }

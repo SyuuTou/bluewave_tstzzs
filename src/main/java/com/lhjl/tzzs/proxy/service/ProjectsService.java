@@ -291,5 +291,12 @@ public interface ProjectsService {
 	 * @return
 	 */
 	CommonDto<DatasOperationManage> echoProjectManagementInfo(Integer appid, Integer projectId);
+	/**
+     * 更新或者保存项目的运营管理
+     * @param appid
+     * @param body
+     * @return
+     */
+	CommonDto<Boolean> saveOrUpdateProjectManagement(Integer appid, DatasOperationManage body);
 	
 }

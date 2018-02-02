@@ -49,7 +49,7 @@ public class InvestorManageController extends GenericController {
      * @param body
      * @return
      */
-    @PostMapping("/v{appid}/saveorupdate/management")
+    @PostMapping("/v{appid}/saveorupdate/investor/management")
     public CommonDto<Boolean> saveOrUpdateInvestorsManagement(@PathVariable Integer appid,@RequestBody DatasOperationManage body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {

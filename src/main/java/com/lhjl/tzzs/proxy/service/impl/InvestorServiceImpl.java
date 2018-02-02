@@ -212,7 +212,7 @@ public class InvestorServiceImpl implements InvestorService {
 		}catch(Exception e ) {
 			result.setData(true);
 	        result.setStatus(200); 
-	        result.setMessage("投资人存在重读数据，数据库数据存在问题");
+	        result.setMessage("运营管理表中存在投资人冗余数据，数据存在问题");
 			return result;
 		}
 		result.setData(true);
