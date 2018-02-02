@@ -87,4 +87,26 @@ public class ProjectRatingController {
 
         return result;
     }
+
+    /**
+     * 新版获取机构ids和提交人token的接口
+     * @param projectId
+     * @return
+     */
+    @GetMapping("admin/creat/event/new")
+    public CommonDto<AdminCreatProjectDto> adminCreateEventNew(Integer projectId){
+        CommonDto<AdminCreatProjectDto> result = new CommonDto<>();
+
+        try {
+            result = projectRatingService.getUserAndInvestmentInstitutionIds(projectId);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+        }
+
+        return result;
+    }
+
 }

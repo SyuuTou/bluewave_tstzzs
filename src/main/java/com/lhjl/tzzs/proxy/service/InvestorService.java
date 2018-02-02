@@ -42,7 +42,7 @@ public interface InvestorService {
 	 * @param id 投资人id
 	 * @return
 	 */
-	CommonDto<DatasOperationManage> echoInvestorsManagementInfo(Integer appid, Integer id);
+	CommonDto<DatasOperationManage> echoInvestorsManagementInfo(Integer appid, Integer investorId);
 	/**
      * 更新或者保存投资人的运营管理信息
      * @param appid

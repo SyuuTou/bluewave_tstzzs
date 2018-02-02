@@ -26,4 +26,11 @@ public interface ProjectRatingService {
      * @return
      */
     CommonDto<AdminProjectRatingLog> getProjectRatingInfo(Integer projectId);
+
+    /**
+     * 获取评级项目的,提交方,还有选择机构ids数组的接口
+     * @param projectId
+     * @return
+     */
+    CommonDto<AdminCreatProjectDto> getUserAndInvestmentInstitutionIds(Integer projectId);
 }
