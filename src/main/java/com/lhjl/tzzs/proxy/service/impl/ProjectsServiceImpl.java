@@ -111,6 +111,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
     private ProjectProgressMapper projectProgressMapper;
     @Resource
     private UserInfoService userInfoService;
+    @Resource
+    private DatasOperationManageMapper datasOperationManageMapper;
     /**
      * 查询我关注的项目
      *
@@ -1689,5 +1691,23 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		result.setStatus(200);
 		result.setMessage("success"); 
 		return result;  
+	}
+
+	@Override
+	public CommonDto<DatasOperationManage> echoProjectManagementInfo(Integer appid, Integer projectId) {
+		CommonDto<DatasOperationManage> result =new CommonDto<>();
+		DatasOperationManage dom =new DatasOperationManage();
+		dom.setDataId(projectId);
+		dom.setDataType("PROJECT");
+		//一个项目只有一条的运营管理记录
+		dom = datasOperationManageMapper.selectOne(dom);
+		if(dom !=null) {
+			dom.setRecommand(dom.getBasicsRecommend()+dom.getDynamicRecommand()+dom.getOperationRecommend());
+		}
+		
+		result.setData(dom !=null ? dom : new DatasOperationManage());
+        result.setStatus(200); 
+        result.setMessage("success");
+		return result;
 	}
 }

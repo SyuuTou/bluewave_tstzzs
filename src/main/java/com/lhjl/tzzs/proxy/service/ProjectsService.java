@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
+import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsProject;
@@ -283,5 +284,12 @@ public interface ProjectsService {
      * @return
      */
 	CommonDto<List<InvestmentInstitutions>> intelligentSearch(Integer appid, String keyword);
+	/**
+	 * 回显项目的运营管理信息
+	 * @param appid
+	 * @param projectId 项目id
+	 * @return
+	 */
+	CommonDto<DatasOperationManage> echoProjectManagementInfo(Integer appid, Integer projectId);
 	
 }

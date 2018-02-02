@@ -29,7 +29,7 @@ public class InvestorManageController extends GenericController {
 	 * @param id 投资人id
 	 * @return
 	 */
-    @GetMapping("/v{appid}/echo/management")
+    @GetMapping("/v{appid}/echo/investor/management")
     public CommonDto<DatasOperationManage> echoInvestorsManagementInfo(@PathVariable Integer appid,Integer id){
     	CommonDto<DatasOperationManage> result =new CommonDto<>();
     	try {

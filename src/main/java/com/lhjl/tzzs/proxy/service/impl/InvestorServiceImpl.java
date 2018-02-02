@@ -154,7 +154,7 @@ public class InvestorServiceImpl implements InvestorService {
 		if(body.getInvestorIds() !=null && body.getInvestorIds().size()!=0) {
 			body.getInvestorIds().forEach((e)->{
 				dom.setDataId(e);
-				dom.setDataType("投资人");  
+				dom.setDataType("INVESTOR");  
 				dom.setIrPrincipal(body.getIrPrincipal());
 				if(datasOperationManageMapper.findInvestor(dom) ==null) {//不存在相关的投资人，执行插入设置
 					//新增插入时间
@@ -179,7 +179,7 @@ public class InvestorServiceImpl implements InvestorService {
 		CommonDto<DatasOperationManage> result =new CommonDto<>();
 		DatasOperationManage dom =new DatasOperationManage();
 		dom.setDataId(id);
-		dom.setDataType("投资人");
+		dom.setDataType("INVESTOR");
 		//一个投资人只有一条的运营管理记录
 		dom = datasOperationManageMapper.selectOne(dom);
 		if(dom !=null) {
@@ -198,9 +198,9 @@ public class InvestorServiceImpl implements InvestorService {
 		
 		DatasOperationManage dom =new DatasOperationManage();
 		dom.setDataId(body.getDataId());
-		dom.setDataType("投资人");
+		dom.setDataType("INVESTOR");
 		
-		body.setDataType("投资人");
+		body.setDataType("INVESTOR");
 		try {
 			if( datasOperationManageMapper.selectOne(dom) != null) {//执行更新操作
 				body.setUpdateTime(new Date());
