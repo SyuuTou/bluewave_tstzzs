@@ -76,6 +76,7 @@
     <if test="projetcSource != null and projetcSource != ''">
       and psab.project_source =#{projetcSource}
     </if>
+    group by psab.id
     <if test="creatTimeOrder != null and creatTimeOrder != ''">
       order by psab.create_time
       <if test="creatTimeOrderDesc != null and creatTimeOrderDesc !=''">

@@ -21,7 +21,7 @@ import com.lhjl.tzzs.proxy.service.InvestorService;
 @RestController
 public class InvestorManageController extends GenericController {
 	@Resource 
-	private InvestorService investorService;
+	private InvestorService investorService;  
 	
 	/**
 	 * 回显投资人的运营管理信息
@@ -29,11 +29,11 @@ public class InvestorManageController extends GenericController {
 	 * @param id 投资人id
 	 * @return
 	 */
-    @GetMapping("/v{appid}/echo/management")
-    public CommonDto<DatasOperationManage> echoInvestorsManagementInfo(@PathVariable Integer appid,Integer id){
+    @GetMapping("/v{appid}/echo/investor/management")
+    public CommonDto<DatasOperationManage> echoInvestorsManagementInfo(@PathVariable Integer appid,Integer investorId){
     	CommonDto<DatasOperationManage> result =new CommonDto<>();
     	try {
-    		result = investorService.echoInvestorsManagementInfo(appid,id);
+    		result = investorService.echoInvestorsManagementInfo(appid,investorId);
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		
@@ -49,7 +49,7 @@ public class InvestorManageController extends GenericController {
      * @param body
      * @return
      */
-    @PostMapping("/v{appid}/saveorupdate/management")
+    @PostMapping("/v{appid}/saveorupdate/investor/management")
     public CommonDto<Boolean> saveOrUpdateInvestorsManagement(@PathVariable Integer appid,@RequestBody DatasOperationManage body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {

@@ -936,6 +936,25 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 		usersMapper.updateByPrimaryKeySelective(users);
 
+		// 升级会员等级
+		Example ulrExample = new Example(UserLevelRelation.class);
+		ulrExample.and().andEqualTo("userId",userId).andEqualTo("levelId",4);
+
+		List<UserLevelRelation> userLevelRelationListHistory = userLevelRelationMapper.selectByExample(ulrExample);
+		if (userLevelRelationListHistory.size() > 0){
+			//历史上有这个等级会员了就不送了
+		}else {
+
+			CommonDto<Boolean> resulta = specialUpUserlevel(userId,4);
+			if (resulta.getStatus() != 200){
+				result.setMessage(resulta.getMessage());
+				result.setStatus(502);
+				result.setData(null);
+
+				return result;
+			}
+		}
+
 		result.setStatus(200);
 		result.setData(null);
 		result.setMessage("success");
@@ -1607,6 +1626,94 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		userLevelRelation.setYn(1);
 
 		userLevelRelationMapper.insertSelective(userLevelRelation);
+
+		result.setMessage("success");
+		result.setData(null);
+		result.setStatus(200);
+
+		return result;
+	}
+
+	/**
+	 * 特殊的给用户升级接口
+	 * @param userId
+	 * @param levelStage
+	 * @return
+	 */
+	@Transactional
+	public CommonDto<Boolean> specialUpUserlevel(Integer userId,Integer levelStage){
+		CommonDto<Boolean> result = new CommonDto<>();
+		Date now =new Date();
+
+		//计算失效时间
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(DateTime.now().toDate());
+		calendar.add(Calendar.MONTH, 3);
+		Date end = calendar.getTime();
+
+
+		if (userId == null){
+			result.setMessage("用户id不能为空");
+			result.setData(null);
+			result.setStatus(502);
+
+			return result;
+		}
+
+		if(levelStage == null){
+			result.setMessage("升级等级不能为空");
+			result.setStatus(502);
+			result.setData(null);
+
+			return result;
+		}
+
+		//获取当前用户的会员等级
+		Example ulExample = new Example(UserLevelRelation.class);
+		ulExample.and().andEqualTo("userId",userId).andEqualTo("yn",1);
+		ulExample.setOrderByClause("end_time desc");
+
+		List<UserLevelRelation> userLevelRelationList = userLevelRelationMapper.selectByExample(ulExample);
+		if (userLevelRelationList.size() > 0){
+			// 修改原等级为无效
+			Integer userLevelRecently = userLevelRelationList.get(0).getLevelId();
+
+			if (userLevelRecently > levelStage){
+				result.setMessage("当前已经有更高等级的会员了");
+				result.setStatus(200);
+				result.setData(null);
+				return result;
+			}else {
+				for (UserLevelRelation ulr: userLevelRelationList){
+					ulr.setYn(0);
+					userLevelRelationMapper.updateByPrimaryKeySelective(ulr);
+				}
+
+				UserLevelRelation userLevelRelation = new UserLevelRelation();
+				userLevelRelation.setUserId(userId);
+				userLevelRelation.setCreateTime(now);
+				userLevelRelation.setBeginTime(now);
+				userLevelRelation.setEndTime(end);
+				userLevelRelation.setLevelId(levelStage);
+				userLevelRelation.setYn(1);
+				userLevelRelation.setStatus(1);
+
+				userLevelRelationMapper.insertSelective(userLevelRelation);
+			}
+		}else {
+
+			UserLevelRelation userLevelRelation = new UserLevelRelation();
+			userLevelRelation.setUserId(userId);
+			userLevelRelation.setCreateTime(now);
+			userLevelRelation.setBeginTime(now);
+			userLevelRelation.setEndTime(end);
+			userLevelRelation.setLevelId(levelStage);
+			userLevelRelation.setYn(1);
+			userLevelRelation.setStatus(1);
+
+			userLevelRelationMapper.insertSelective(userLevelRelation);
+
+		}
 
 		result.setMessage("success");
 		result.setData(null);
