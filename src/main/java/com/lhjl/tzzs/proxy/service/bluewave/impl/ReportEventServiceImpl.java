@@ -132,6 +132,7 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
                 reportCommentOutputDto.setReportId(reportComment.getReportId());
                 reportCommentConcen.setAppId(appId);
                 reportCommentConcen.setCommentId(reportComment.getId());
+                reportCommentConcen.setYn(1);
                 reportCommentOutputDto.setNum(reportCommentConcenMapper.selectCount(reportCommentConcen));
                 reportCommentConcen.setToken(tokenName);
                 reportCommentOutputDto.setIsLike(reportCommentConcenMapper.selectCount(reportCommentConcen));

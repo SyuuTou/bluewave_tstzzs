@@ -251,6 +251,21 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
             return result;
         }
 
+        //判断项目是否已经存在
+        if (body.getComparedStatus() == 0){
+            Projects projects = new Projects();
+            projects.setShortName(body.getShortName());
+
+            List<Projects> projectsList =  projectsMapper.select(projects);
+            if (projectsList.size() > 0){
+                result.setMessage("当前项目在平台项目库已存在,请务必对比确认");
+                result.setData(null);
+                result.setStatus(502);
+
+                return result;
+            }
+        }
+
         // 审核项目主体信息
         CommonDto<Integer> projectIdResult = auditMainProject(body,appid);
         Integer projectId = projectIdResult.getData();
