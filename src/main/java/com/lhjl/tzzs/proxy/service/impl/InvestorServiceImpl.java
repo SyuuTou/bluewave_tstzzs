@@ -260,7 +260,7 @@ public class InvestorServiceImpl implements InvestorService {
 			vod.setActualVipCostNum(usersPayMapper.getActualVipCostNum(userId));
 			vod.setSumIntegrateCostNum(usersPayMapper.getSumIntegrateCostNum(userId));
 			vod.setSumPayNum(usersPayMapper.getSumPayNum(userId));
-		}
+		}  
 		
 		result.setData(vod);
         result.setStatus(200); 
