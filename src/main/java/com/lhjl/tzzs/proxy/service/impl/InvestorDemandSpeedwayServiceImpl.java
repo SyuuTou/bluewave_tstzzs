@@ -19,7 +19,7 @@ public class InvestorDemandSpeedwayServiceImpl implements InvestorDemandSpeedway
     private InvestorDemandSpeedwayMapper investorDemandSpeedwayMapper;
 
     @Override
-    public int save(InvestorDemandSpeedway investorDemandSpeedway) {
+    public Integer save(InvestorDemandSpeedway investorDemandSpeedway) {
         return investorDemandSpeedwayMapper.insert(investorDemandSpeedway);
     }
 
@@ -36,7 +36,7 @@ public class InvestorDemandSpeedwayServiceImpl implements InvestorDemandSpeedway
     }
 
     @Override
-    public int insertList(List<InvestorDemandSpeedway> investorDemandSpeedwayList) {
+    public Integer insertList(List<InvestorDemandSpeedway> investorDemandSpeedwayList) {
 
         return investorDemandSpeedwayMapper.insertList(investorDemandSpeedwayList);
     }

@@ -16,6 +16,29 @@
     <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
     <result column="investors_type" jdbcType="INTEGER" property="investorsType" />
     <result column="investor_source_type" jdbcType="INTEGER" property="investorSourceType" />
+    <result column="team_id" jdbcType="INTEGER" property="teamId" />
+    <result column="self_def_team" jdbcType="VARCHAR" property="selfDefTeam" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="kernel_description" jdbcType="VARCHAR" property="kernelDescription" />
+    <result column="identity_type" jdbcType="INTEGER" property="identityType" />
+    <result column="weichat" jdbcType="VARCHAR" property="weichat" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="birth_day" jdbcType="TIMESTAMP" property="birthDay" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="diploma" jdbcType="INTEGER" property="diploma" />
+    <result column="nationality" jdbcType="INTEGER" property="nationality" />
+    <result column="tenure_time" jdbcType="TIMESTAMP" property="tenureTime" />
+    <result column="business_card" jdbcType="VARCHAR" property="businessCard" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="business_description" jdbcType="VARCHAR" property="businessDescription" />
+    <result column="education_description" jdbcType="VARCHAR" property="educationDescription" />
+    <result column="work_description" jdbcType="VARCHAR" property="workDescription" />
+    <result column="honor" jdbcType="VARCHAR" property="honor" />
+    <result column="personal_introduction" jdbcType="VARCHAR" property="personalIntroduction" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="company_introduction" jdbcType="VARCHAR" property="companyIntroduction" />
+    <result column="certification_instructions" jdbcType="VARCHAR" property="certificationInstructions" />
+    <result column="business_card_opposite" jdbcType="VARCHAR" property="businessCardOpposite" />
   </resultMap>
 
   <resultMap id="newInvestortMap" type="com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto">
@@ -192,7 +215,7 @@
   </if>
   </select>
   
-  <select id="findinvestorId" resultMap ="newInvestortMap">
+  <select id="findinvestorId" resultMap="newInvestortMap">
     SELECT * FROM investors WHERE investment_institutions_id=#{invesId}
     ORDER BY create_time DESC
   </select>

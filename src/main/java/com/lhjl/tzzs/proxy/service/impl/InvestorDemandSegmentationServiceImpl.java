@@ -19,7 +19,7 @@ public class InvestorDemandSegmentationServiceImpl implements InvestorDemandSegm
     private InvestorDemandSegmentationMapper investorDemandSegmentationMapper;
 
     @Override
-    public int save(InvestorDemandSegmentation investorDemandSegmentation) {
+    public Integer save(InvestorDemandSegmentation investorDemandSegmentation) {
        return investorDemandSegmentationMapper.insert(investorDemandSegmentation);
     }
 
@@ -36,7 +36,7 @@ public class InvestorDemandSegmentationServiceImpl implements InvestorDemandSegm
     }
 
     @Override
-    public int insertList(List<InvestorDemandSegmentation> investorDemandSegmentationList) {
+    public Integer insertList(List<InvestorDemandSegmentation> investorDemandSegmentationList) {
         return investorDemandSegmentationMapper.insertList(investorDemandSegmentationList);
     }
 

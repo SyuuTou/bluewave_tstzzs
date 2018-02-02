@@ -10,13 +10,13 @@ import java.util.List;
  */
 public interface InvestorDemandStageService {
 
-    int save(InvestorDemandStage investorDemandStage);
+    Integer save(InvestorDemandStage investorDemandStage);
 
     void deleteAll(Integer investorId);
 
     void delete(InvestorDemandStage investorDemandStage);
 
-    int insertList(List<InvestorDemandStage> investorDemandStageList);
+    Integer insertList(List<InvestorDemandStage> investorDemandStageList);
 
     List<InvestorDemandStage> select(InvestorDemandStage investorDemandStage);
 }

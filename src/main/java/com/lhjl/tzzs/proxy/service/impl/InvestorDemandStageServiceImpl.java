@@ -20,7 +20,7 @@ public class InvestorDemandStageServiceImpl implements InvestorDemandStageServic
     private InvestorDemandStageMapper investorDemandStageMapper;
 
     @Override
-    public int save(InvestorDemandStage investorDemandStage) {
+    public Integer save(InvestorDemandStage investorDemandStage) {
        return  investorDemandStageMapper.insert(investorDemandStage);
     }
 
@@ -37,7 +37,7 @@ public class InvestorDemandStageServiceImpl implements InvestorDemandStageServic
     }
 
     @Override
-    public int insertList(List<InvestorDemandStage> investorDemandStageList) {
+    public Integer insertList(List<InvestorDemandStage> investorDemandStageList) {
         return investorDemandStageMapper.insertList(investorDemandStageList);
     }
 
