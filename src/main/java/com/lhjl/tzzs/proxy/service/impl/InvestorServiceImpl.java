@@ -182,8 +182,11 @@ public class InvestorServiceImpl implements InvestorService {
 		dom.setDataType("投资人");
 		//一个投资人只有一条的运营管理记录
 		dom = datasOperationManageMapper.selectOne(dom);
+		if(dom !=null) {
+			dom.setRecommand(dom.getBasicsRecommend()+dom.getDynamicRecommand()+dom.getOperationRecommend());
+		}
 		
-		result.setData(dom);
+		result.setData(dom !=null ?dom : new DatasOperationManage());
         result.setStatus(200); 
         result.setMessage("success");
 		return result;
