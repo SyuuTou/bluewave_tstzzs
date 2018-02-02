@@ -23,11 +23,21 @@ public class CollectProjectAuditBasicInfoDto {
 
     private String companyEmail;
 
+    private String hREmail;
+
     private String companyCity;
 
     private String companyAddress;
 
     private Integer isInvestforward;
+
+    public String gethREmail() {
+        return hREmail;
+    }
+
+    public void sethREmail(String hREmail) {
+        this.hREmail = hREmail;
+    }
 
     public String getProjectId() {
         return projectId;

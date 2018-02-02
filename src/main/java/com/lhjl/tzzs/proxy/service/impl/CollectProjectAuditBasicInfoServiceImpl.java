@@ -15,6 +15,7 @@ import com.lhjl.tzzs.proxy.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +54,10 @@ public class CollectProjectAuditBasicInfoServiceImpl implements CollectProjectAu
         collectProjectAuditBasicInfoDto.setCompanyFullName(projectSendB.getFullName());
         collectProjectAuditBasicInfoDto.setKernelDesc(projectSendB.getKernelDesc());
         collectProjectAuditBasicInfoDto.setUrl(projectSendB.getUrl());
-        collectProjectAuditBasicInfoDto.setEstablishedTime(String.valueOf(projectSendB.getCreateTime()));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        collectProjectAuditBasicInfoDto.setEstablishedTime(sdf.format(projectSendB.getCreateTime()));
 
         List<ProjectSendTagsB> projectSendTagsBList = projectSendTagsBMapper.selectByProjectId(projectId);
         List<String> projectSendTagsBLists = new ArrayList<>();
