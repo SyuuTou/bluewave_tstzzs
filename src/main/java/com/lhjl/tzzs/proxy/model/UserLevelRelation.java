@@ -57,8 +57,8 @@ public class UserLevelRelation {
 	/**
 	 * 会员开始时间输入字符串
 	 */
-    @Transient
-	private String beginTimeStr;
+//    @Transient
+//	private String beginTimeStr;
 	/**
 	 * 会员到期时间输入字符串
 	 */
@@ -66,13 +66,13 @@ public class UserLevelRelation {
 	private String EndTimeStr;
     
     
-    public String getBeginTimeStr() {
-		return beginTimeStr;
-	}
-
-	public void setBeginTimeStr(String beginTimeStr) {
-		this.beginTimeStr = beginTimeStr;
-	}
+//    public String getBeginTimeStr() {
+//		return beginTimeStr;
+//	}
+//
+//	public void setBeginTimeStr(String beginTimeStr) {
+//		this.beginTimeStr = beginTimeStr;
+//	}
 
 	public String getEndTimeStr() {
 		return EndTimeStr;
@@ -246,7 +246,7 @@ public class UserLevelRelation {
 	public String toString() {
 		return "UserLevelRelation [id=" + id + ", userId=" + userId + ", levelId=" + levelId + ", beginTime="
 				+ beginTime + ", endTime=" + endTime + ", createTime=" + createTime + ", yn=" + yn + ", status="
-				+ status + ", beginTimeStr=" + beginTimeStr + ", EndTimeStr=" + EndTimeStr + "]";
+				+ status + ", EndTimeStr=" + EndTimeStr + "]";
 	}
     
 }

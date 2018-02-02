@@ -6,6 +6,7 @@ import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.dto.ProjectReqDto;
 import com.lhjl.tzzs.proxy.dto.ProjectResDto;
 import com.lhjl.tzzs.proxy.service.ProjectSearchService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -78,5 +79,28 @@ public class FilterController extends GenericController {
         return result;
     }
 
+    /**
+     * 获取精选项目信息
+     * @param token
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("project/high/quality")
+    public CommonDto<List<ProjectResDto>> getHighQualityProject(String token,Integer pageNum,Integer pageSize){
+        CommonDto<List<ProjectResDto>> result  = new CommonDto<>();
+
+        try {
+            result = projectSearchService.projectHightQuality(token, pageNum, pageSize);
+
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+        }
+
+        return result;
+    }
 
 }

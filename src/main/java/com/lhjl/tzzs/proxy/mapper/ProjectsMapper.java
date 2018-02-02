@@ -147,6 +147,9 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
      * @return
      */
     List<Projects> selectByCaseName(@Param("inputWord") String inputWord);
+
+    List<ProjectResDto> projectHighQuality(@Param("userToken") String userToken,@Param("startPage") Integer startPage,
+                                           @Param("pageSize") Integer pageSize);
 }
 
 

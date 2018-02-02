@@ -24,9 +24,9 @@ public interface ReportEventService {
 
     CommonDto<Integer> findReportConcenNum(Integer appId, Integer reportId);
 
-    CommonDto<String> updateReportCommentConcen(Integer appId, Long commentId);
+    CommonDto<String> updateReportCommentConcen(Integer appId, Long commentId, String token);
 
-    CommonDto<String> deleteReportCommentConcen(Integer appId, Long commentId);
+    CommonDto<String> deleteReportCommentConcen(Integer appId, Long commentId, String token);
 
-    CommonDto<Integer> getReportCommentConcenNum(Integer appId, Long commentId);
+    CommonDto<Integer> getReportCommentConcenNum(Integer appId, Long commentId, String token);
 }

@@ -42,7 +42,7 @@ public class ProjectAuditBController extends GenericService{
         CommonDto<String> result  = new CommonDto<>();
 
         try {
-
+            result = projectAuditBService.auditProjectSend(body, appid);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");

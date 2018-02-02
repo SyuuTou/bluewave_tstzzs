@@ -988,5 +988,46 @@
         </if>
         limit 0,30;
     </select>
+    
+    <select id="projectHighQuality" resultMap="projectFilterMap">
 
+        select a.id as projectId,a.stage,a.short_name,a.full_name,a.city,a.segmentation_name,a.evaluation_recommend,
+        case when a.project_logo is null then "" else a.project_logo end project_logo,
+        case WHEN b.followNum is null then 0 ELSE b.followNum END followNum,
+        case WHEN c.interviewNum is null then 0 ELSE c.interviewNum END interviewNum,
+        case WHEN b.followNum is null OR b.followNum = 0 then 0 ELSE 1 END yn,
+        case WHEN d.`status` = 1 then 1 else 0 END `status`,
+        case when a.kernel_desc is null or a.kernel_desc ="" then (case when a.commet is null then "" else a.commet end) else a.kernel_desc end kernel_desc
+        from(
+        select p.id,ppss.stage,p.project_logo,p.short_name,p.full_name,group_concat(ps.segmentation_name) segmentation_name,p.kernel_desc,p.commet,p.city,p.evaluation_recommend from(
+        select f.projects_id from(
+        select ut.token from investors ivs
+        left join users u on ivs.user_id = u.ID
+        left join user_token ut on u.ID = ut.user_id
+        where ivs.yn = 1 and ivs.approval_status != 0 and ut.token is not null
+        ) aa
+        left join follow f on aa.token = f.user_id
+        where f.projects_id is not null and f.status =1 group by f.projects_id
+        ) bb
+        left join projects p on bb.projects_id = p.ID
+        right join project_segmentation ps on p.id = ps.project_id
+
+        left join (select * from(
+        select pfl.* from project_financing_log pfl
+        left join projects p on pfl.project_id = p.ID
+        where pfl.project_id is not null
+        and pfl.stage is not null
+        order by pfl.financing_time desc) hh
+        group by hh.project_id) ppss on p.id = ppss.project_id
+        where p.short_name is not null
+        group by p.short_name
+        )a
+        left join (select count(user_id) followNum ,projects_id from follow where `status`=1 group by projects_id) b on a.id = b.projects_id
+        left join (select count(user_id) interviewNum ,projects_id from interview group by projects_id) c on a.id = c.projects_id
+        left JOIN (select fo.status,projects_id,fo.user_id from follow fo where fo.status= 1 and fo.user_id = #{userToken}
+        group by fo.projects_id,fo.user_id) d on a.id = d.projects_id
+        order by a.evaluation_recommend desc
+        limit #{startPage},#{pageSize}
+
+    </select>
 </mapper>

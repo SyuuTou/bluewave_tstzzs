@@ -232,14 +232,6 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
     public CommonDto<String> auditProjectSend(ProjectSendAuditBInputDto body, Integer appid) {
         CommonDto<String> result  = new CommonDto<>();
 
-        if (body.getProjectId() == null){
-            result.setStatus(502);
-            result.setData(null);
-            result.setMessage("项目id不能为空");
-
-            return result;
-        }
-
         if (body.getShortName() == null){
             result.setData(null);
             result.setMessage("公司名称不能为空");
