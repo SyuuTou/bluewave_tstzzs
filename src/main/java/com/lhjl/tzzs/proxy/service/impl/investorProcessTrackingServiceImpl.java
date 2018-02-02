@@ -31,13 +31,23 @@ public class investorProcessTrackingServiceImpl implements InvestorProcessTracki
         investorOperationLog.setInvestorId(body.getInvestorId());
         investorOperationLog.setOperator(body.getOperator());
         investorOperationLog.setOperateContent(body.getOperateContent());
+        investorOperationLog.setYn(0);
+
+        long now = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String createTime = null;
+        try {
+            createTime = sdf.format(new Date(now));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Integer investorOperationLogInsertResult = -1;
         if(null == body.getId()){
-            investorOperationLog.setCreateTime(DateUtils.parse(body.getOperateTime()));
+            investorOperationLog.setCreateTime(DateUtils.parse(createTime));
             investorOperationLogInsertResult =  investorOperationLogMapper.insert(investorOperationLog);
         }else{
-            investorOperationLog.setUpdateTime(DateUtils.parse(body.getOperateTime()));
+            investorOperationLog.setUpdateTime(DateUtils.parse(createTime));
             investorOperationLogInsertResult =  investorOperationLogMapper.updateByPrimaryKey(investorOperationLog);
         }
 

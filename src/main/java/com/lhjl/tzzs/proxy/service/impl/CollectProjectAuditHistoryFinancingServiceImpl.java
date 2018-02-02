@@ -10,6 +10,7 @@ import com.lhjl.tzzs.proxy.service.CollectProjectAuditHistoryFinancingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,9 @@ public class CollectProjectAuditHistoryFinancingServiceImpl implements CollectPr
                 CollectProjectAuditHistoryFinancingDto collectProjectAuditHistoryFinancingDto = new CollectProjectAuditHistoryFinancingDto();
                 collectProjectAuditHistoryFinancingDto.setHistoryFinancingId(projectSendFinancingHistoryB.getId());
                 collectProjectAuditHistoryFinancingDto.setStage(projectSendFinancingHistoryB_i.getStage());
-                collectProjectAuditHistoryFinancingDto.setInvestTime(String.valueOf(projectSendFinancingHistoryB_i.getFinancingTime()));
+
+                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+                collectProjectAuditHistoryFinancingDto.setInvestTime(sdf.format(projectSendFinancingHistoryB_i.getFinancingTime()));
                 collectProjectAuditHistoryFinancingDto.setInvestAmount(projectSendFinancingHistoryB.getAmount());
                 collectProjectAuditHistoryFinancingDto.setCurrencyType(projectSendFinancingHistoryB_i.getCurrency()); //融资金额币种单位
                 collectProjectAuditHistoryFinancingDto.setAssessmentAmount(projectSendFinancingHistoryB.getTotalAmount());

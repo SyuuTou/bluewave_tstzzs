@@ -154,7 +154,7 @@ public class InvestorServiceImpl implements InvestorService {
 		if(body.getInvestorIds() !=null && body.getInvestorIds().size()!=0) {
 			body.getInvestorIds().forEach((e)->{
 				dom.setDataId(e);
-				dom.setDataType("投资人");  
+				dom.setDataType("INVESTOR");  
 				dom.setIrPrincipal(body.getIrPrincipal());
 				if(datasOperationManageMapper.findInvestor(dom) ==null) {//不存在相关的投资人，执行插入设置
 					//新增插入时间
@@ -175,11 +175,11 @@ public class InvestorServiceImpl implements InvestorService {
 	}
 
 	@Override
-	public CommonDto<DatasOperationManage> echoInvestorsManagementInfo(Integer appid, Integer id) {
+	public CommonDto<DatasOperationManage> echoInvestorsManagementInfo(Integer appid, Integer investorId) {
 		CommonDto<DatasOperationManage> result =new CommonDto<>();
 		DatasOperationManage dom =new DatasOperationManage();
-		dom.setDataId(id);
-		dom.setDataType("投资人");
+		dom.setDataId(investorId);
+		dom.setDataType("INVESTOR");
 		//一个投资人只有一条的运营管理记录
 		dom = datasOperationManageMapper.selectOne(dom);
 		if(dom !=null) {
@@ -198,9 +198,9 @@ public class InvestorServiceImpl implements InvestorService {
 		
 		DatasOperationManage dom =new DatasOperationManage();
 		dom.setDataId(body.getDataId());
-		dom.setDataType("投资人");
+		dom.setDataType("INVESTOR");
 		
-		body.setDataType("投资人");
+		body.setDataType("INVESTOR");
 		try {
 			if( datasOperationManageMapper.selectOne(dom) != null) {//执行更新操作
 				body.setUpdateTime(new Date());
@@ -212,7 +212,7 @@ public class InvestorServiceImpl implements InvestorService {
 		}catch(Exception e ) {
 			result.setData(true);
 	        result.setStatus(200); 
-	        result.setMessage("投资人存在重读数据，数据库数据存在问题");
+	        result.setMessage("运营管理表中存在投资人冗余数据，数据存在问题");
 			return result;
 		}
 		result.setData(true);
