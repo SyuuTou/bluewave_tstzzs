@@ -97,6 +97,9 @@ public class ProjectSendAuditBInputDto {
     /**审核管理员姓名*/
     private String administractor;
 
+    /**对比状态判断,0表示未对比,1表示已经对比*/
+    private Integer comparedStatus;
+
     public String getProjectLogo() {
         return projectLogo;
     }
@@ -343,5 +346,13 @@ public class ProjectSendAuditBInputDto {
 
     public void setAdministractor(String administractor) {
         this.administractor = administractor;
+    }
+
+    public Integer getComparedStatus() {
+        return comparedStatus;
+    }
+
+    public void setComparedStatus(Integer comparedStatus) {
+        this.comparedStatus = comparedStatus;
     }
 }
