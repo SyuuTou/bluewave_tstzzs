@@ -36,6 +36,16 @@ public class ReportCommentOutputDto {
 
     private long createTime;
 
+    private int isLike;
+
+    public int getIsLike() {
+        return isLike;
+    }
+
+    public void setIsLike(int isLike) {
+        this.isLike = isLike;
+    }
+
     public long getId() {
         return id;
     }

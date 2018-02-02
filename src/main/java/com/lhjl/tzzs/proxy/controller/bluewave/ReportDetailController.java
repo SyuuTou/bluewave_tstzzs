@@ -108,13 +108,13 @@ public class ReportDetailController extends GenericController {
     }
 
     @GetMapping("/v{appId}/report/comment/{reportId}")
-    public CommonDto<List<ReportCommentOutputDto>> findReportComment(@PathVariable Integer appId, @PathVariable Integer reportId, Integer pageNo, Integer pageSize){
+    public CommonDto<List<ReportCommentOutputDto>> findReportComment(@PathVariable Integer appId, @PathVariable Integer reportId, String token, Integer pageNo, Integer pageSize){
         CommonDto<List<ReportCommentOutputDto>> result = new CommonDto<>();
         if (null == pageSize){
             pageSize = 10;
         }
         try {
-            result = reportEventService.findReportComment(appId, reportId,pageNo, pageSize);
+            result = reportEventService.findReportComment(appId, reportId, token,pageNo, pageSize);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -71,7 +71,7 @@ public class InvestorVIPController extends GenericController {
      * @param appid
      * @return
      */
-    @GetMapping("/v{appid}/meta/metaUserLevel")
+    @GetMapping("/v{appid}/meta/metauserlevel")
     public CommonDto<List<MetaUserLevel>> sourceMetaUserLevel(@PathVariable Integer appid){
     	CommonDto<List<MetaUserLevel>> result =new CommonDto<>();
     	try {
