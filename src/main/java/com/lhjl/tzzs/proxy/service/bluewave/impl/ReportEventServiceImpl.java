@@ -104,7 +104,7 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
     }
 
     @Override
-    public CommonDto<List<ReportCommentOutputDto>> findReportComment(Integer appId, Integer reportId, Integer pageNo, Integer pageSize) {
+    public CommonDto<List<ReportCommentOutputDto>> findReportComment(Integer appId, Integer reportId, String token, Integer pageNo, Integer pageSize) {
 
         CommonDto<List<ReportCommentOutputDto>> result = new CommonDto<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -117,8 +117,10 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
 
         PageRowBounds rowBounds = new PageRowBounds(offset, limit);
 
+
         List<ReportComment> comments = reportCommentMapper.selectReportOrderByCreateTime(appId, reportId, offset, pageSize);
         List<ReportCommentOutputDto> reportCommentOutputDtoList = new ArrayList<>();
+        ReportCommentConcen reportCommentConcen = new ReportCommentConcen();
         if (null != comments && comments.size()>0){
 
             for(ReportComment reportComment : comments){
@@ -128,7 +130,12 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
                 reportCommentOutputDto.setId(reportComment.getId());
                 reportCommentOutputDto.setMessage(reportComment.getMessage());
                 reportCommentOutputDto.setReportId(reportComment.getReportId());
-                reportCommentOutputDto.setNum(reportComment.getNum());
+                reportCommentConcen.setAppId(appId);
+                reportCommentConcen.setCommentId(reportComment.getId());
+                reportCommentOutputDto.setNum(reportCommentConcenMapper.selectCount(reportCommentConcen));
+                reportCommentConcen.setToken(token);
+                reportCommentOutputDto.setIsLike(reportCommentConcenMapper.selectCount(reportCommentConcen));
+                reportCommentConcen.setToken(null);
                 reportCommentOutputDto.setToken(reportComment.getToken());
                 reportCommentOutputDtoList.add(reportCommentOutputDto);
             }
