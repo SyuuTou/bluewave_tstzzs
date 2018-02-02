@@ -12,7 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
-
+/**
+ * 项目详情运营管理模块接口
+ * @author IdataVC
+ *
+ */
 @RestController
 public class ProjectManageController extends GenericController {
 
