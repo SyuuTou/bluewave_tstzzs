@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Mapper
@@ -150,6 +151,10 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
 
     List<ProjectResDto> projectHighQuality(@Param("userToken") String userToken,@Param("startPage") Integer startPage,
                                            @Param("pageSize") Integer pageSize);
+
+
+    //审核匹配查询项目相关信息
+    Projects selectByProjectShortName(@Param("searchWord") String searchWord);
 }
 
 

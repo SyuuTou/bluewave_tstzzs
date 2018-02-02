@@ -64,4 +64,8 @@ public interface InvestmentInstitutionsMapper extends OwnerMapper<InvestmentInst
      * @return
      */
     List<InvestmentInstitutions> blurScan(String keyword);
+
+    Integer selectByCompanyName(@Param("companyName") String companyName);
+
+    String selectById(@Param("investmentInstitutionsId") Integer investmentInstitutionsId);
 }
