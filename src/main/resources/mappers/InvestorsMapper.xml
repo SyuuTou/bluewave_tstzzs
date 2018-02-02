@@ -93,7 +93,7 @@
 							LEFT JOIN meta_project_stage mps on ids.meta_project_stage_id = mps.id
 							GROUP BY investor_demand_id) stage on stage.c=ide.id
 	LEFT JOIN (SELECT id,GROUP_CONCAT(city) as citys from investor_city GROUP BY id) city on city.id = i.ID
-	LEFT JOIN (SELECT data_id, wechat_group_id weChatGroupId,cooperative_relationship cooperativeRelationship,ir_principal irPrincipal from datas_operation_manage where data_type='投资人') mgt on mgt.data_id=i.ID
+	LEFT JOIN (SELECT data_id, wechat_group_id weChatGroupId,cooperative_relationship cooperativeRelationship,ir_principal irPrincipal from datas_operation_manage where data_type='INVESTOR') mgt on mgt.data_id=i.ID
   WHERE i.approval_status != 0 AND i.yn =1
   <!-- 模糊搜索 -->
   <if test="keyWords != null and keyWords != ''">
@@ -169,7 +169,7 @@
 							LEFT JOIN meta_project_stage mps on ids.meta_project_stage_id = mps.id
 							GROUP BY investor_demand_id) stage on stage.c=ide.id
 	LEFT JOIN (SELECT id,GROUP_CONCAT(city) as citys from investor_city GROUP BY id) city on city.id = i.ID
-	LEFT JOIN (SELECT data_id, wechat_group_id weChatGroupId,cooperative_relationship cooperativeRelationship,ir_principal irPrincipal from datas_operation_manage where data_type='投资人') mgt on mgt.data_id=i.ID
+	LEFT JOIN (SELECT data_id, wechat_group_id weChatGroupId,cooperative_relationship cooperativeRelationship,ir_principal irPrincipal from datas_operation_manage where data_type='INVESTOR') mgt on mgt.data_id=i.ID
   WHERE i.approval_status != 0 AND i.yn =1
   <if test="keyWords != null and keyWords != ''">
                 AND (i.name like "%"#{keyWords}"%" or ii.short_name like "%"#{keyWords}"%" or i.position like "%"#{keyWords}"%"
