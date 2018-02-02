@@ -181,7 +181,15 @@ public class InvestorServiceImpl implements InvestorService {
 		dom.setDataId(investorId);
 		dom.setDataType("INVESTOR");
 		//一个投资人只有一条的运营管理记录
-		dom = datasOperationManageMapper.selectOne(dom);
+		try {
+			dom = datasOperationManageMapper.selectOne(dom);
+		}catch(Exception e) {
+			result.setData(null);
+	        result.setStatus(500); 
+	        result.setMessage("由于请求参数不正确导致数据库查询出多条相关的运营纪录");
+			return result;
+		}
+		
 		if(dom !=null) {
 			dom.setRecommand(dom.getBasicsRecommend()+dom.getDynamicRecommand()+dom.getOperationRecommend());
 		}
