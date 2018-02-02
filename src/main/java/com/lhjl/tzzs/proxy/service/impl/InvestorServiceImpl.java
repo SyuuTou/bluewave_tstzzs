@@ -175,10 +175,10 @@ public class InvestorServiceImpl implements InvestorService {
 	}
 
 	@Override
-	public CommonDto<DatasOperationManage> echoInvestorsManagementInfo(Integer appid, Integer id) {
+	public CommonDto<DatasOperationManage> echoInvestorsManagementInfo(Integer appid, Integer investorId) {
 		CommonDto<DatasOperationManage> result =new CommonDto<>();
 		DatasOperationManage dom =new DatasOperationManage();
-		dom.setDataId(id);
+		dom.setDataId(investorId);
 		dom.setDataType("INVESTOR");
 		//一个投资人只有一条的运营管理记录
 		dom = datasOperationManageMapper.selectOne(dom);

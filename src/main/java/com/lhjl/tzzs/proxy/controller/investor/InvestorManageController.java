@@ -30,10 +30,10 @@ public class InvestorManageController extends GenericController {
 	 * @return
 	 */
     @GetMapping("/v{appid}/echo/investor/management")
-    public CommonDto<DatasOperationManage> echoInvestorsManagementInfo(@PathVariable Integer appid,Integer id){
+    public CommonDto<DatasOperationManage> echoInvestorsManagementInfo(@PathVariable Integer appid,Integer investorId){
     	CommonDto<DatasOperationManage> result =new CommonDto<>();
     	try {
-    		result = investorService.echoInvestorsManagementInfo(appid,id);
+    		result = investorService.echoInvestorsManagementInfo(appid,investorId);
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		
