@@ -250,12 +250,19 @@ public class InvestorServiceImpl implements InvestorService {
 		UserLevelRelation ulr=new UserLevelRelation();
 		ulr.setUserId(userId);
 		ulr.setYn(1);  
-		UserLevelRelation url = userLevelRelationMapper.selectOne(ulr);
-		if(url ==null) {
+		
+		ulr = userLevelRelationMapper.selectOne(ulr);
+		
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		if(ulr ==null) {
 			//返回一个默认初始化的用户会员对象
 			vod.setUserLevelRelation(new UserLevelRelation());
 		}else {
-			vod.setUserLevelRelation(url);
+			ulr.setBeginTimeStr(sdf.format(ulr.getBeginTime()));
+			ulr.setEndTimeStr(sdf.format(ulr.getEndTime()));
+			
+			vod.setUserLevelRelation(ulr);
 			vod.setCostNum(Math.abs(userIntegralConsumeMapper.getCostNum(userId)));
 			vod.setActualVipCostNum(usersPayMapper.getActualVipCostNum(userId));
 			vod.setSumIntegrateCostNum(usersPayMapper.getSumIntegrateCostNum(userId));

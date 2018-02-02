@@ -21,7 +21,7 @@ import com.lhjl.tzzs.proxy.service.InvestorService;
 @RestController
 public class InvestorManageController extends GenericController {
 	@Resource 
-	private InvestorService investorService;
+	private InvestorService investorService;  
 	
 	/**
 	 * 回显投资人的运营管理信息
