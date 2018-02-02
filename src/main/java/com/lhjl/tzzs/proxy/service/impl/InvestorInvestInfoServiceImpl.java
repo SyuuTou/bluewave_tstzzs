@@ -256,7 +256,7 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
                     investorDemandSpeedways.add(investorDemandSpeedway_i.getSpeedway());
                 });
                 investorDemandSpeedwayArr = new String[investorDemandSpeedways.size()];
-                investorDemandSpeedways.toArray(investorDemandSegmentationArr);
+                investorDemandSpeedways.toArray(investorDemandSpeedwayArr);
                 investorInvestInfoDto.setFocusSpeedway(investorDemandSpeedwayArr);
             }
 
@@ -272,8 +272,8 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
                     investorDemandCharacters.add(investorDemandCharacter_i.getCharacter());
                 });
                 investorDemandCharacterArr = new String[investorDemandCharacters.size()];
-                investorDemandCharacters.toArray(investorDemandSegmentationArr);
-                investorInvestInfoDto.setFocusSpeedway(investorDemandCharacterArr);
+                investorDemandCharacters.toArray(investorDemandCharacterArr);
+                investorInvestInfoDto.setFocusCharacters(investorDemandCharacterArr);
             }
         }
 

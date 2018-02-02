@@ -31,28 +31,20 @@ public class InvestorInvestInfoDto {
 
     private String[] focusCharacters;
 
-    public Integer getInvestorDemandId() {
-        return investorDemandId;
-    }
-
-    public void setInvestorDemandId(Integer investorDemandId) {
-        this.investorDemandId = investorDemandId;
-    }
-
-    public String getPreferDesc() {
-        return preferDesc;
-    }
-
-    public void setPreferDesc(String preferDesc) {
-        this.preferDesc = preferDesc;
-    }
-
     public Integer getInvestorId() {
         return investorId;
     }
 
     public void setInvestorId(Integer investorId) {
         this.investorId = investorId;
+    }
+
+    public Integer getInvestorDemandId() {
+        return investorDemandId;
+    }
+
+    public void setInvestorDemandId(Integer investorDemandId) {
+        this.investorDemandId = investorDemandId;
     }
 
     public String[] getFocusSegmentations() {
@@ -77,6 +69,14 @@ public class InvestorInvestInfoDto {
 
     public void setPreferCitys(String[] preferCitys) {
         this.preferCitys = preferCitys;
+    }
+
+    public String getPreferDesc() {
+        return preferDesc;
+    }
+
+    public void setPreferDesc(String preferDesc) {
+        this.preferDesc = preferDesc;
     }
 
     public BigDecimal getInvestAmountLowRmb() {
