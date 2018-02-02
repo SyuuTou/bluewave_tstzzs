@@ -253,11 +253,6 @@ public class InvestorServiceImpl implements InvestorService {
 			vod.setUserLevelRelation(new UserLevelRelation());
 		}else {
 			vod.setUserLevelRelation(url);
-//			userIntegralConsumeMapper.getCostNum(userId);
-//			
-//			usersPayMapper.getActualVipCostNum(userId);
-//			usersPayMapper.getSumIntegrateCostNum(userId); 
-//			usersPayMapper.getSumPayNum(userId);
 			vod.setCostNum(userIntegralConsumeMapper.getCostNum(userId));
 			vod.setActualVipCostNum(usersPayMapper.getActualVipCostNum(userId));
 			vod.setSumIntegrateCostNum(usersPayMapper.getSumIntegrateCostNum(userId));
