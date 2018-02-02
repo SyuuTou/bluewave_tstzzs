@@ -36,4 +36,6 @@ public interface InvestorDemandMapper extends OwnerMapper<InvestorDemand> {
      * @return
      */
     Map<String,Object> selectDemandByUserId(@Param("userId") Integer userId,@Param("appid") Integer appid);
+
+    InvestorDemand selectByInvestorId(@Param("investorId")Integer investorId);
 }

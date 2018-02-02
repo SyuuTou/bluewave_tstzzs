@@ -125,77 +125,75 @@ public class InvestmentLogInformationServiceImpl  implements InvestmentLogInform
 				result.setStatus(50001);
 				result.setMessage("缺少用户id");
 			}
-			
 
+			UserToken userToken = new UserToken();
+			userToken.setToken(token);
+			userToken = userTokenMapper.selectOne(userToken);
+			if(userToken !=null){
+			InvestmentInstitutionInformation investmentInstitutionInformation = new InvestmentInstitutionInformation();
+			investmentInstitutionInformation.setUserId(userToken.getUserId());
+			if(null ==  logId || "".equals(logId)) {
+				investmentInstitutionInformation.setLogId(-1);
+			}else{
+				investmentInstitutionInformation.setLogId(logId);
+			}
+			investmentInstitutionInformation = investmentInstitutionInformationMapper.selectOne(investmentInstitutionInformation);
+			if(investmentInstitutionInformation !=null){
+				//更改信息列表保存
+			investmentInstitutionInformation.setCity(city);
+			investmentInstitutionInformation.setDomain(domanin);
+			investmentInstitutionInformation.setFullName(fullName);
+			investmentInstitutionInformation.setInvestmentIdea(investmentIdea);
+			investmentInstitutionInformation.setLogo(logo);
+			investmentInstitutionInformation.setMeiAmount(meiAmount);
+			investmentInstitutionInformation.setMeiAmountMax(meiAmountMax);
+			investmentInstitutionInformation.setMeiAmountMix(meiAmountMin);
+			investmentInstitutionInformation.setOneintroduction(oneIntroduction);
+			investmentInstitutionInformation.setRenAmount(renAmount);
+			investmentInstitutionInformation.setRenAmountMax(renAmountMax);
+			investmentInstitutionInformation.setRenAmountMix(renAmountMin);
+			investmentInstitutionInformation.setRepresentative(representative);
+			investmentInstitutionInformation.setShortName(shortName);
+			investmentInstitutionInformation.setStage(stage);
+			investmentInstitutionInformation.setSummary(jianjie);
+			investmentInstitutionInformation.setWebsite(website);
+			investmentInstitutionInformationMapper.updateByPrimaryKey(investmentInstitutionInformation);
+			}else {
+				   InvestmentInstitutionInformation investmentInstitutionInformation1 = new InvestmentInstitutionInformation();
+					investmentInstitutionInformation1.setUserId(userToken.getUserId());
+					investmentInstitutionInformation1.setCity(city);
+					investmentInstitutionInformation1.setDomain(domanin);
+					investmentInstitutionInformation1.setFullName(fullName);
+					investmentInstitutionInformation1.setInvestmentIdea(investmentIdea);
+					investmentInstitutionInformation1.setLogId(-1);
+					investmentInstitutionInformation1.setLogo(logo);
+					investmentInstitutionInformation1.setMeiAmount(meiAmount);
+					investmentInstitutionInformation1.setMeiAmountMax(meiAmountMax);
+					investmentInstitutionInformation1.setMeiAmountMix(meiAmountMin);
+					investmentInstitutionInformation1.setOneintroduction(oneIntroduction);
+					investmentInstitutionInformation1.setRenAmount(renAmount);
+					investmentInstitutionInformation1.setRenAmountMax(renAmountMax);
+					investmentInstitutionInformation1.setRenAmountMix(renAmountMin);
+					investmentInstitutionInformation1.setRepresentative(representative);
+					investmentInstitutionInformation1.setShortName(shortName);
+					investmentInstitutionInformation1.setStage(stage);
+					investmentInstitutionInformation1.setSummary(jianjie);
+					investmentInstitutionInformation1.setWebsite(website);
+					investmentInstitutionInformationMapper.insert(investmentInstitutionInformation1);
 
-				UserToken userToken = new UserToken();
-		        userToken.setToken(token);
-				userToken = userTokenMapper.selectOne(userToken);
-				if(userToken !=null){
-				InvestmentInstitutionInformation investmentInstitutionInformation = new InvestmentInstitutionInformation();
-				investmentInstitutionInformation.setUserId(userToken.getUserId());
-				if(null ==  logId || "".equals(logId)) {
-					investmentInstitutionInformation.setLogId(-1);
-				}else{
-					investmentInstitutionInformation.setLogId(logId);
-				}
-				investmentInstitutionInformation = investmentInstitutionInformationMapper.selectOne(investmentInstitutionInformation);
-				if(investmentInstitutionInformation !=null){
-					//更改信息列表保存
-				investmentInstitutionInformation.setCity(city);
-				investmentInstitutionInformation.setDomain(domanin);
-				investmentInstitutionInformation.setFullName(fullName);
-				investmentInstitutionInformation.setInvestmentIdea(investmentIdea);
-				investmentInstitutionInformation.setLogo(logo);
-				investmentInstitutionInformation.setMeiAmount(meiAmount);
-				investmentInstitutionInformation.setMeiAmountMax(meiAmountMax);
-				investmentInstitutionInformation.setMeiAmountMix(meiAmountMin);
-				investmentInstitutionInformation.setOneintroduction(oneIntroduction);
-				investmentInstitutionInformation.setRenAmount(renAmount);
-				investmentInstitutionInformation.setRenAmountMax(renAmountMax);
-				investmentInstitutionInformation.setRenAmountMix(renAmountMin);
-				investmentInstitutionInformation.setRepresentative(representative);
-				investmentInstitutionInformation.setShortName(shortName);
-				investmentInstitutionInformation.setStage(stage);
-				investmentInstitutionInformation.setSummary(jianjie);
-				investmentInstitutionInformation.setWebsite(website);
-				investmentInstitutionInformationMapper.updateByPrimaryKey(investmentInstitutionInformation);
-				}else {
-					   InvestmentInstitutionInformation investmentInstitutionInformation1 = new InvestmentInstitutionInformation();
-						investmentInstitutionInformation1.setUserId(userToken.getUserId());
-						investmentInstitutionInformation1.setCity(city);
-						investmentInstitutionInformation1.setDomain(domanin);
-						investmentInstitutionInformation1.setFullName(fullName);
-						investmentInstitutionInformation1.setInvestmentIdea(investmentIdea);
-						investmentInstitutionInformation1.setLogId(-1);
-						investmentInstitutionInformation1.setLogo(logo);
-						investmentInstitutionInformation1.setMeiAmount(meiAmount);
-						investmentInstitutionInformation1.setMeiAmountMax(meiAmountMax);
-						investmentInstitutionInformation1.setMeiAmountMix(meiAmountMin);
-						investmentInstitutionInformation1.setOneintroduction(oneIntroduction);
-						investmentInstitutionInformation1.setRenAmount(renAmount);
-						investmentInstitutionInformation1.setRenAmountMax(renAmountMax);
-						investmentInstitutionInformation1.setRenAmountMix(renAmountMin);
-						investmentInstitutionInformation1.setRepresentative(representative);
-						investmentInstitutionInformation1.setShortName(shortName);
-						investmentInstitutionInformation1.setStage(stage);
-						investmentInstitutionInformation1.setSummary(jianjie);
-						investmentInstitutionInformation1.setWebsite(website);
-						investmentInstitutionInformationMapper.insert(investmentInstitutionInformation1);
+			}
+			}else{
+				result.setStatus(5101);
+				result.setMessage("用户token不存在");
 
-				}
-				}else{
-					result.setStatus(5101);
-					result.setMessage("用户token不存在");
+			}
 
-				}
+			result.setMessage("success");
+			result.setStatus(200);
+			result.setData(shortName);
 
-				result.setMessage("success");
-				result.setStatus(200);
-				result.setData(shortName);
-
-			return result;
-		}
+		return result;
+	}
 
 	/**
 	 * 机构信息数据的回显

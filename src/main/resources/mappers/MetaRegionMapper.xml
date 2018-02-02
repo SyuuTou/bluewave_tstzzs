@@ -20,4 +20,8 @@
       and ming like concat(concat("%",#{searchWord}),"%")
     </if>
   </select>
+
+  <select id="selectAllCountry" resultMap="BaseResultMap">
+    SELECT * FROM idatavc.meta_region where shengid = 0 and gid != 45055 and (id = 45055 or id > 45062) order by convert(ming using gbk) asc
+  </select>
 </mapper>

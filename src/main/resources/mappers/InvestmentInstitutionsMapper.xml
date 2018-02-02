@@ -401,4 +401,15 @@
         group by short_name
         order by ii.id;
     </select>
+
+    <select id="selectByCompanyName" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select ID from investment_institutions where short_name =#{companyName};
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select short_name from investment_institutions where
+        <if test="investmentInstitutionsId != null and investmentInstitutionsId !=''">
+            ID=#{investmentInstitutionsId}
+        </if>
+    </select>
 </mapper>

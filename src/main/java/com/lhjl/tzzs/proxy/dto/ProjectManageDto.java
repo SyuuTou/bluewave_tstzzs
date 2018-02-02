@@ -11,7 +11,7 @@ public class ProjectManageDto {
 
     private Integer companyId;
 
-    private Integer[] investTypes;
+    private String[] investTypes;
 
     private String interiorOrganization;
 
@@ -43,11 +43,11 @@ public class ProjectManageDto {
         this.companyId = companyId;
     }
 
-    public Integer[] getInvestTypes() {
+    public String[] getInvestTypes() {
         return investTypes;
     }
 
-    public void setInvestTypes(Integer[] investTypes) {
+    public void setInvestTypes(String[] investTypes) {
         this.investTypes = investTypes;
     }
 

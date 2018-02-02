@@ -20,7 +20,7 @@ public interface ReportEventService {
 
     CommonDto<String> updateReportConcen(Integer appId, ReportConcern reportConcern);
 
-    CommonDto<List<ReportCommentOutputDto>> findReportComment(Integer appId, Integer reportId, Integer pageNo, Integer pageSize);
+    CommonDto<List<ReportCommentOutputDto>> findReportComment(Integer appId, Integer reportId, String token, Integer pageNo, Integer pageSize);
 
     CommonDto<Integer> findReportConcenNum(Integer appId, Integer reportId);
 
