@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorCertificationDto;
+import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
 import com.lhjl.tzzs.proxy.model.InvestorDemandCharacter;
 import com.lhjl.tzzs.proxy.model.InvestorInvestmentCase;
@@ -26,6 +27,9 @@ public class InvestorCertificationInfoServiceImpl implements InvestorCertificati
 
     @Autowired
     private InvestorInvestmentCaseService investorInvestmentCaseService;
+
+    @Autowired
+    private InvestmentInstitutionsMapper investmentInstitutionsMapper;
 
     @Override
     public CommonDto<String> addOrUpdateInvestorCertification(InvestorCertificationDto body) {
@@ -101,6 +105,9 @@ public class InvestorCertificationInfoServiceImpl implements InvestorCertificati
             result.setStatus(300);
             return result;
         }
+        String companyName = investmentInstitutionsMapper.selectById(investors.getInvestmentInstitutionsId());
+        investorCertificationDto.setCompanyName(companyName);
+        investorCertificationDto.setPosition(investors.getPosition());
         investorCertificationDto.setInvestorType(investors.getIdentityType());
         investorCertificationDto.setInvestorId(investors.getId());
         investorCertificationDto.setBusinessCard(investors.getBusinessCard());
