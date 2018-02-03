@@ -34,9 +34,6 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   
-  <select id="matchUsersExcepteBlackList" parameterType="String" resultMap="BaseResultMap">
-    SELECT * FROM users where actual_name like "%"#{keyword}"%" and id not in (select user_id from black_list )
-  </select>
   
 <!--  测试用zd-->
 <select id="findUserById" parameterType="INTEGER" resultMap="BaseResultMap">

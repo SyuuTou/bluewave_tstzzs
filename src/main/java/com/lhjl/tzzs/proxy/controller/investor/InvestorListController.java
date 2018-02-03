@@ -68,14 +68,14 @@ public class InvestorListController extends GenericController {
     /**
      * 投资人的用户匹配
      * @param appid
-     * @param keyword
+     * @param userId
      * @return
      */
-    @GetMapping("/v{appid}/match/Users")
-    public CommonDto<List<Users>> matchUsers(@PathVariable Integer appid,String keyword){
-    	CommonDto<List<Users>> result =new CommonDto<>();
+    @GetMapping("/v{appid}/match/users")
+    public CommonDto<Boolean> matchUsers(@PathVariable Integer appid,Integer userId,Integer investorId){
+    	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result = investorService.matchUsers(appid,keyword);
+    		result = investorService.matchUsers(appid,userId,investorId);
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		
