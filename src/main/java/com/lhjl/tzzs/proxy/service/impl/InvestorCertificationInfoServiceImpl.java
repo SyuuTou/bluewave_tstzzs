@@ -105,6 +105,7 @@ public class InvestorCertificationInfoServiceImpl implements InvestorCertificati
             result.setStatus(300);
             return result;
         }
+
         String companyName = investmentInstitutionsMapper.selectById(investors.getInvestmentInstitutionsId());
         investorCertificationDto.setCompanyName(companyName);
         investorCertificationDto.setPosition(investors.getPosition());
