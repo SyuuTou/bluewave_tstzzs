@@ -328,11 +328,22 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         Integer result  = null;
         Date now = new Date();
 
+        Users users = usersMapper.selectByPrimaryKey(userId);
+
         ProjectSendB projectSendB = new ProjectSendB();
         projectSendB.setAppid(appid);
         projectSendB.setPrepareId(prepareid);
         projectSendB.setUserId(userId);
         projectSendB.setEditStatus(0);
+        if (null != users.getCompanyName()){
+            projectSendB.setShortName(users.getCompanyName());
+        }
+        if (null != users.getCity()){
+            projectSendB.setCity(users.getCity());
+        }
+        if (null != users.getCompanyDesc()){
+            projectSendB.setCommet(users.getCompanyDesc());
+        }
 
        ProjectSendB projectSendBResult =  projectSendBMapper.selectOne(projectSendB);
        if (projectSendBResult != null){
@@ -775,22 +786,33 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
 
             return result;
         }
+        //如果项目的名称简介不存在,取用户信息里的
+        Users userss = usersMapper.selectByPrimaryKey(userid);
 
         String projectLogo = "";
         if (projectSendB.getProjectLogo() != null){
             projectLogo = projectSendB.getProjectLogo();
         }
         projectSendBOutDto.setProjectLogo(projectLogo);
+        if (  null == projectSendB.getShortName() || "".equals(projectSendB.getShortName())){
+            projectSendB.setShortName(userss.getCompanyName());
+        }
         projectSendBOutDto.setShortName(projectSendB.getShortName());
         projectSendBOutDto.setFullName(projectSendB.getFullName());
         projectSendBOutDto.setKernelDesc(projectSendB.getKernelDesc());
         projectSendBOutDto.setProjectInvestmentHighlights(projectSendB.getProjectInvestmentHighlights());
+        if (null ==projectSendB.getCommet() || "".equals(projectSendB.getCommet())){
+            projectSendB.setCommet(userss.getCompanyDesc());
+        }
         projectSendBOutDto.setCommet(projectSendB.getCommet());
         String url = "";
         if (projectSendB.getUrl() != ""){
             url = projectSendB.getUrl();
         }
         projectSendBOutDto.setUrl(url);
+        if (null == projectSendB.getCity() || "".equals(projectSendB.getCity())){
+            projectSendB.setCity(userss.getCity());
+        }
         projectSendBOutDto.setCity(projectSendB.getCity());
 
         //项目领域

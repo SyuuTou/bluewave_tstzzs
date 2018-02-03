@@ -51,19 +51,17 @@ public class QRcodeController extends GenericController {
     }
 
     @PostMapping("qrcode/generate/base64")
-    public CommonDto<String> generateBase64(@RequestBody QRCodeDto reqDto){
+    public void generateBase64(@RequestBody QRCodeDto reqDto,HttpServletResponse response) throws IOException {
 
         CommonDto<String> result = null;
-
+        InputStream in = null;
         try {
-            result = commonQRCodeService.createWXaQRCode(reqDto.getPath(),reqDto.getWidth());
+            in = commonQRCodeService.createWXaQRCode(reqDto.getPath(),reqDto.getWidth());
         } catch (Exception e) {
             this.logger.error(e.getMessage(),e.fillInStackTrace());
-            result = new CommonDto<>();
-            result.setStatus(500);
-            result.setMessage("success");
         }
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        IOUtils.copy(in, response.getOutputStream());
 
-        return result;
     }
 }
