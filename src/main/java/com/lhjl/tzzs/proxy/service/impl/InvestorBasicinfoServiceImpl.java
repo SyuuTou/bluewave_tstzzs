@@ -237,11 +237,13 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
         investorBasicInfoDto.setIdentityType(investors.getIdentityType());
         investorBasicInfoDto.setWeiChat(investors.getWeichat());
         investorBasicInfoDto.setEmail(investors.getEmail());
-        investorBasicInfoDto.setBirthDay(String.valueOf(investors.getBirthDay()));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+        investorBasicInfoDto.setBirthDay(sdf.format(investors.getBirthDay()));
         investorBasicInfoDto.setSex(investors.getSex());
         investorBasicInfoDto.setDiploma(investors.getDiploma());
         investorBasicInfoDto.setNationality(investors.getNationality());
-        investorBasicInfoDto.setTenureTime(String.valueOf(investors.getTenureTime()));
+        investorBasicInfoDto.setTenureTime(sdf.format(investors.getTenureTime()));
         investorBasicInfoDto.setCompanyIntro(investors.getCompanyIntroduction());
         investorBasicInfoDto.setBusinessCard(investors.getBusinessCard());
         investorBasicInfoDto.setPicture(investors.getPicture());
