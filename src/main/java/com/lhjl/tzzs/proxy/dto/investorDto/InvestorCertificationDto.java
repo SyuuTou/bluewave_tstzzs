@@ -16,6 +16,16 @@ public class InvestorCertificationDto {
     private Integer investorType;
 
     /**
+     * 所在公司
+     */
+    private String companyName;
+
+    /**
+     * 担任职务
+     */
+    private String position;
+
+    /**
      * 投资案例
      */
     private String[] investCase;
@@ -34,6 +44,22 @@ public class InvestorCertificationDto {
      * 认证说明
      */
     private String certificationDesc;
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
 
     public String getBusinessCardOpposite() {
         return businessCardOpposite;
