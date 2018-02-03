@@ -1,7 +1,8 @@
 package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.investorDto.InvestorBasicInfoDto;
+import com.lhjl.tzzs.proxy.dto.investorDto.InvestorBasicInfoInputDto;
+import com.lhjl.tzzs.proxy.dto.investorDto.InvestorBasicInfoOutputDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorIntroductionDto;
 import com.lhjl.tzzs.proxy.model.MetaDiploma;
 import com.lhjl.tzzs.proxy.model.MetaRegion;
@@ -33,7 +34,7 @@ public class InvestorBasicinfoController extends GenericController{
     //TODO 自定义城市智能检索
 
     @PostMapping("/addorupdateinvestorbasicinfo")
-    public CommonDto<String> addOrUpdateInvestorBasicInfo(@RequestBody InvestorBasicInfoDto body){
+    public CommonDto<String> addOrUpdateInvestorBasicInfo(@RequestBody InvestorBasicInfoInputDto body){
         CommonDto<String> result = new CommonDto<>();
         try {
             result = investorBasicinfoService.addOrUpdateInvestorBasicInfo(body);
@@ -47,8 +48,8 @@ public class InvestorBasicinfoController extends GenericController{
     }
 
     @GetMapping("/getinvestorbasicinfo")
-    public CommonDto<InvestorBasicInfoDto> getInvestorBasicInfo(Integer investorId){
-        CommonDto<InvestorBasicInfoDto> result = new CommonDto<>();
+    public CommonDto<InvestorBasicInfoOutputDto> getInvestorBasicInfo(Integer investorId){
+        CommonDto<InvestorBasicInfoOutputDto> result = new CommonDto<>();
         try {
             result = investorBasicinfoService.getInvestorBasicInfo(investorId);
         }catch (Exception e){

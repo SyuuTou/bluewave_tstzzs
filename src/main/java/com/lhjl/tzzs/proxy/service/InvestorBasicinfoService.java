@@ -1,7 +1,8 @@
 package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.investorDto.InvestorBasicInfoDto;
+import com.lhjl.tzzs.proxy.dto.investorDto.InvestorBasicInfoInputDto;
+import com.lhjl.tzzs.proxy.dto.investorDto.InvestorBasicInfoOutputDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorIntroductionDto;
 import com.lhjl.tzzs.proxy.model.MetaDiploma;
 import com.lhjl.tzzs.proxy.model.MetaRegion;
@@ -13,9 +14,9 @@ import java.util.List;
  */
 public interface InvestorBasicinfoService {
 
-    CommonDto<String> addOrUpdateInvestorBasicInfo(InvestorBasicInfoDto body);
+    CommonDto<String> addOrUpdateInvestorBasicInfo(InvestorBasicInfoInputDto body);
 
-    CommonDto<InvestorBasicInfoDto> getInvestorBasicInfo(Integer investorId);
+    CommonDto<InvestorBasicInfoOutputDto> getInvestorBasicInfo(Integer investorId);
 
     CommonDto<InvestorIntroductionDto> getInvestorIntroduction(Integer investorId);
 
