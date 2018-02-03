@@ -11,6 +11,11 @@ public class InvestorKernelInfoDto {
     private Integer investorId;
 
     /**
+     * 用户Id
+     */
+    private Integer userId;
+
+    /**
      * 投资人姓名
      */
     private String name;
@@ -44,6 +49,14 @@ public class InvestorKernelInfoDto {
      * 一句话核心描述
      */
     private String kernelDesc;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public String getName() {
         return name;
