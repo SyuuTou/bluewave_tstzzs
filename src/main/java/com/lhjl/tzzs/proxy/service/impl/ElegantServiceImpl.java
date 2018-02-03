@@ -45,7 +45,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
     @Autowired
     private ElegantServiceDescriptionMapper elegantServiceDescriptionMapper;
 
-    @Autowired
+    @Autowired 
     private ElegantServiceDescriptionDetailMapper elegantServiceDescriptionDetailMapper;
 
     @Autowired

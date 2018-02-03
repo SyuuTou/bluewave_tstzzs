@@ -22,6 +22,7 @@ import com.lhjl.tzzs.proxy.mapper.UsersMapper;
 import com.lhjl.tzzs.proxy.mapper.UsersPayMapper;
 import com.lhjl.tzzs.proxy.model.AdminUser;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
+import com.lhjl.tzzs.proxy.model.Investors;
 import com.lhjl.tzzs.proxy.model.MetaUserLevel;
 import com.lhjl.tzzs.proxy.model.UserLevelRelation;
 import com.lhjl.tzzs.proxy.model.Users;
@@ -135,12 +136,15 @@ public class InvestorServiceImpl implements InvestorService {
 	}
 
 	@Override
-	public CommonDto<List<Users>> matchUsers(Integer appid, String keyword) {
-		CommonDto<List<Users>> result =new CommonDto<>();
+	public CommonDto<Boolean> matchUsers(Integer appid, Integer userId,Integer investorId) {
+		CommonDto<Boolean> result =new CommonDto<>();
+		Investors investor=new Investors();
+		investor.setId(investorId);
+		investor.setUserId(userId);
 		
-		List<Users> matchUserList = usersMapper.matchUsersExcepteBlackList(keyword);
+		investorsMapper.updateByPrimaryKeySelective(investor);
 		
-		result.setData(matchUserList);
+		result.setData(true);
         result.setStatus(200);
         result.setMessage("success");
 		return result;

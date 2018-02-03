@@ -27,7 +27,7 @@ public interface InvestorService {
      * @param keyword 搜索关键字    
      * @return
      */  
-	CommonDto<List<Users>> matchUsers(Integer appid, String keyword);
+	CommonDto<Boolean> matchUsers(Integer appid, Integer userId,Integer investorId);
 	/**
      * 批量更换投资人的负责人
      * @param appid
