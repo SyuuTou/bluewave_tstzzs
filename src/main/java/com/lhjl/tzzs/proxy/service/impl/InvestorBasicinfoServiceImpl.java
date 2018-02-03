@@ -258,6 +258,7 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             investorBasicInfoOutputDto.setTenureTime(sdf.format(investors.getTenureTime()));
         }
         investorBasicInfoOutputDto.setCompanyIntro(investors.getCompanyIntroduction());
+        System.out.println(investors.getBusinessCard());
         investorBasicInfoOutputDto.setBusinessCard(investors.getBusinessCard());
         investorBasicInfoOutputDto.setPicture(investors.getPicture());
         investorBasicInfoOutputDto.setBussiness(investors.getBusinessDescription());
