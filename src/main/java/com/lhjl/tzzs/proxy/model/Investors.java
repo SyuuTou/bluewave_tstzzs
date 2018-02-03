@@ -197,6 +197,12 @@ public class Investors {
     private String businessCardOpposite;
 
     /**
+     * 投资人头像
+     */
+    @Column(name = "head_picture")
+    private String headPicture;
+
+    /**
      * @return ID
      */
     public Integer getId() {
@@ -802,5 +808,23 @@ public class Investors {
      */
     public void setBusinessCardOpposite(String businessCardOpposite) {
         this.businessCardOpposite = businessCardOpposite;
+    }
+
+    /**
+     * 获取投资人头像
+     *
+     * @return head_picture - 投资人头像
+     */
+    public String getHeadPicture() {
+        return headPicture;
+    }
+
+    /**
+     * 设置投资人头像
+     *
+     * @param headPicture 投资人头像
+     */
+    public void setHeadPicture(String headPicture) {
+        this.headPicture = headPicture;
     }
 }

@@ -56,6 +56,7 @@ public class InvestorInfoServiceImpl implements InvestorInfoService {
         }
         investors.setInvestmentInstitutionsId(investmentInstitutionsId);
         investors.setPosition(body.getCompanyDuties());
+        investors.setHeadPicture(body.getHeadPicture());
         investors.setTeamId(body.getTeamId());
         investors.setSelfDefTeam(body.getSelfDefTeam());
         investors.setPhone(body.getPhone());
@@ -96,6 +97,7 @@ public class InvestorInfoServiceImpl implements InvestorInfoService {
         String companyName = investmentInstitutionsMapper.selectById(investors.getInvestmentInstitutionsId());
         investorKernelInfoDto.setCompanyName(companyName);
         investorKernelInfoDto.setCompanyDuties(investors.getPosition());
+        investorKernelInfoDto.setHeadPicture(investors.getHeadPicture());
         investorKernelInfoDto.setTeamId(investors.getTeamId());
         investorKernelInfoDto.setSelfDefTeam(investors.getSelfDefTeam());
         investorKernelInfoDto.setPhone(investors.getPhone());

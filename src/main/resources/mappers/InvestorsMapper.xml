@@ -39,6 +39,7 @@
     <result column="company_introduction" jdbcType="VARCHAR" property="companyIntroduction" />
     <result column="certification_instructions" jdbcType="VARCHAR" property="certificationInstructions" />
     <result column="business_card_opposite" jdbcType="VARCHAR" property="businessCardOpposite" />
+    <result column="head_picture" jdbcType="VARCHAR" property="headPicture" />
   </resultMap>
 
   <resultMap id="newInvestortMap" type="com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto">
