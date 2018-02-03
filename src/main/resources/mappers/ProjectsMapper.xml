@@ -406,12 +406,12 @@
 
     <!--处理amount的xml-->
     <select id="findProjectAmountOfZ" resultType="java.util.HashMap">
-        SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.calculation_amount_status,m.city FROM projects m left join project_financing_log n on m.ID = n.project_id right join project_segmentation f on m.ID = f.project_id where n.amount = 0 and n.financing_time &gt;= '2017-01-01';
-    </select>
+SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.calculation_amount_status,m.city FROM projects m RIGHT join project_financing_log n on m.ID = n.project_id right join project_segmentation f on m.ID = f.project_id where f.segmentation_name != '' and   n.amount = 0 and n.financing_time &gt;= '2017-01-01'
+        group by m.full_name , n.stage    </select>
 
     <select id="findProjectByRoundAndE" parameterType="String" resultType="java.math.BigDecimal">
         SELECT avg(n.amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join
-        project_segmentation f on m.ID = f.project_id where n.amount &gt; 0 and n.financing_time &gt;= '2016-07-01'
+        project_segmentation f on m.ID = f.project_id where n.amount &gt; 0 and n.financing_time &gt;= '2016-07-01' and n.data_soruce_type_id = 7
         <if test="segmentation!='null' and segmentation != null">
             and f.segmentation_name = #{segmentation}
         </if>
@@ -422,7 +422,7 @@
 
     <select id="findProjectByRoundAndC" parameterType="String" resultType="java.math.BigDecimal">
         SELECT avg(n.amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join
-        project_segmentation f on m.ID = f.project_id where n.amount &gt; 0 and n.financing_time &gt;= '2016-07-01'
+        project_segmentation f on m.ID = f.project_id where n.amount &gt; 0 and n.financing_time &gt;= '2016-07-01' and n.data_soruce_type_id = 7
         <if test="stage!='null' and stage != null">
             and n.stage = #{stage}
         </if>
@@ -433,13 +433,13 @@
 
     <!--处理allmount的xml-->
     <select id="findProjectAllAmountOfZ" resultType="java.util.HashMap">
-        SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.total_amount,n.calculation_amount_status,m.city FROM projects m left join project_financing_log n on m.ID = n.project_id right join project_segmentation f on m.ID = f.project_id where n.total_amount = 0 and n.financing_time &gt;= '2016-07-01';
-    </select>
+        SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.total_amount,n.calculation_amount_status,m.city FROM projects m RIGHT join project_financing_log n on m.ID = n.project_id right join project_segmentation f on m.ID = f.project_id where  f.segmentation_name != '' and  n.total_amount = 0 and n.financing_time &gt;= '2016-07-01'
+		  group by m.full_name, n.stage
+		 </select>
 
     <select id="findProjectAllByRoundAndE" parameterType="String" resultType="java.math.BigDecimal">
         SELECT avg(n.total_amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join
-        project_segmentation f on m.ID = f.project_id where n.total_amount &gt; 0 and n.financing_time &gt;=
-        '2016-07-01'
+        project_segmentation f on m.ID = f.project_id where n.total_amount &gt; 0 and n.financing_time &gt;= '2016-07-01' and n.data_soruce_type_id = 7
         <if test="segmentation!='null' and segmentation != null">
             and f.segmentation_name = #{segmentation}
         </if>
@@ -450,8 +450,7 @@
 
     <select id="findProjectAllByRoundAndC" parameterType="String" resultType="java.math.BigDecimal">
         SELECT avg(n.total_amount) FROM projects m left join project_financing_log n on m.ID = n.project_id right join
-        project_segmentation f on m.ID = f.project_id where n.total_amount &gt; 0 and n.financing_time &gt;=
-        '2016-07-01'
+        project_segmentation f on m.ID = f.project_id where n.total_amount &gt; 0 and n.financing_time &gt;= '2016-07-01' and n.data_soruce_type_id = 7
         <if test="stage!='null' and stage != null">
             and n.stage = #{stage}
         </if>

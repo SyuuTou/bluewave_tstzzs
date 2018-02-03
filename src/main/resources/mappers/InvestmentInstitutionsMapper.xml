@@ -407,9 +407,6 @@
     </select>
 
     <select id="selectById" parameterType="java.lang.Integer" resultType="java.lang.String">
-        select short_name from investment_institutions where
-        <if test="investmentInstitutionsId != null and investmentInstitutionsId !=''">
-            ID=#{investmentInstitutionsId}
-        </if>
+        select short_name from investment_institutions where ID=#{investmentInstitutionsId}
     </select>
 </mapper>
