@@ -16,5 +16,6 @@
     <result column="app_id" property="appId" jdbcType="INTEGER" />
     <result column="commission" property="commission" jdbcType="DECIMAL" />
     <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="union_key" property="unionKey" jdbcType="VARCHAR" />
   </resultMap>
 </mapper>
