@@ -157,4 +157,18 @@ public class InvestmentInstitutionTeamServiceImpl implements InvestmentInstituti
         result.setData(teamMemberDetailOutpuyDto);
         return result;
     }
+
+    @Override
+    public CommonDto<List<MetaInvestmentInstitutionTeamType>> getTeamType() {
+        CommonDto<List<MetaInvestmentInstitutionTeamType>> result = new CommonDto<>();
+
+        List<MetaInvestmentInstitutionTeamType> metaInvestmentInstitutionTeamTypeList = new ArrayList<>();
+
+        metaInvestmentInstitutionTeamTypeList = metaInvestmentInstitutionTeamTypeMapper.selectAll();
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(metaInvestmentInstitutionTeamTypeList);
+        return result;
+    }
 }

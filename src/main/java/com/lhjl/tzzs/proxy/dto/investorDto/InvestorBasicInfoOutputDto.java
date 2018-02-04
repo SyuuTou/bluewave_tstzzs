@@ -1,9 +1,9 @@
 package com.lhjl.tzzs.proxy.dto.investorDto;
 
 /**
- * Created by lanhaijulang on 2018/1/25.
+ * Created by lanhaijulang on 2018/2/3.
  */
-public class InvestorBasicInfoDto {
+public class InvestorBasicInfoOutputDto {
 
     /**
      * 投资人Id
@@ -18,7 +18,7 @@ public class InvestorBasicInfoDto {
     /**
      * 领域id
      */
-    private Integer[] segmentations;
+    private String[] segmentations;
 
     /**
      * 微信
@@ -53,12 +53,12 @@ public class InvestorBasicInfoDto {
     /**'
      * 学历
      */
-    private Integer diploma;
+    private String diploma;
 
     /**
      * 国籍
      */
-    private Integer nationality;
+    private String nationality;
 
     /**
      * 任职时间
@@ -84,6 +84,14 @@ public class InvestorBasicInfoDto {
      * 工作名片
      */
     private String businessCard;
+
+    public String getBusinessCard() {
+        return businessCard;
+    }
+
+    public void setBusinessCard(String businessCard) {
+        this.businessCard = businessCard;
+    }
 
     /**
      * 图片
@@ -115,6 +123,21 @@ public class InvestorBasicInfoDto {
      */
     private String honor;
 
+    /**
+     * 反面名片
+     * @return
+     */
+    private String businessCardOposite;
+
+
+    public String getBusinessCardOposite() {
+        return businessCardOposite;
+    }
+
+    public void setBusinessCardOposite(String businessCardOposite) {
+        this.businessCardOposite = businessCardOposite;
+    }
+
     public Integer getInvestorId() {
         return investorId;
     }
@@ -131,11 +154,11 @@ public class InvestorBasicInfoDto {
         this.identityType = identityType;
     }
 
-    public Integer[] getSegmentations() {
+    public String[] getSegmentations() {
         return segmentations;
     }
 
-    public void setSegmentations(Integer[] segmentations) {
+    public void setSegmentations(String[] segmentations) {
         this.segmentations = segmentations;
     }
 
@@ -187,19 +210,19 @@ public class InvestorBasicInfoDto {
         this.sex = sex;
     }
 
-    public Integer getDiploma() {
+    public String getDiploma() {
         return diploma;
     }
 
-    public void setDiploma(Integer diploma) {
+    public void setDiploma(String diploma) {
         this.diploma = diploma;
     }
 
-    public Integer getNationality() {
+    public String getNationality() {
         return nationality;
     }
 
-    public void setNationality(Integer nationality) {
+    public void setNationality(String nationality) {
         this.nationality = nationality;
     }
 
@@ -235,13 +258,6 @@ public class InvestorBasicInfoDto {
         this.educationExperiences = educationExperiences;
     }
 
-    public String getBusinessCard() {
-        return businessCard;
-    }
-
-    public void setBusinessCard(String businessCard) {
-        businessCard = businessCard;
-    }
 
     public String getPicture() {
         return picture;
@@ -290,4 +306,5 @@ public class InvestorBasicInfoDto {
     public void setHonor(String honor) {
         this.honor = honor;
     }
+
 }

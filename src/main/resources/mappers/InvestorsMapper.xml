@@ -175,8 +175,8 @@
                 AND (i.name like "%"#{keyWords}"%" or ii.short_name like "%"#{keyWords}"%" or i.position like "%"#{keyWords}"%"
 				or mdst.type_name like "%"#{keyWords}"%" or iit.type like "%"#{keyWords}"%" or seg.segmentations like "%"#{keyWords}"%"
 				or speedway.speedways like "%"#{keyWords}"%" or stage.stages like "%"#{keyWords}"%"
-				or ide.demand like "%"#{keyWords}"%" or city.citys like "%"#{keyWords}"%" or mgt.irPrincipal like "%"#{keyWords}"%"
-				or mgt.weChatGroupId like "%"#{keyWords}"%" )
+				or ide.demand like "%"#{keyWords}"%" or city.citys like "%"#{keyWords}"%"
+				or mgt.irPrincipal like "%"#{keyWords}"%" or mgt.weChatGroupId like "%"#{keyWords}"%")
   </if>
   <!-- 查询条件：创建开始时间 -->
   <if test="startTime !=null">

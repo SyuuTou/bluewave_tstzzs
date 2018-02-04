@@ -43,6 +43,7 @@ public class InvestorInfoServiceImpl implements InvestorInfoService {
         Investors investors = new Investors();
         investors.setId(body.getInvestorId());
         investors.setName(body.getName());
+        investors.setUserId(body.getUserId());
         Integer investmentInstitutionsId = null;
         if(null != body.getCompanyName() && body.getCompanyName() != ""){
             investmentInstitutionsId = investmentInstitutionsMapper.selectByCompanyName(body.getCompanyName());
@@ -55,6 +56,7 @@ public class InvestorInfoServiceImpl implements InvestorInfoService {
         }
         investors.setInvestmentInstitutionsId(investmentInstitutionsId);
         investors.setPosition(body.getCompanyDuties());
+        investors.setHeadPicture(body.getHeadPicture());
         investors.setTeamId(body.getTeamId());
         investors.setSelfDefTeam(body.getSelfDefTeam());
         investors.setPhone(body.getPhone());
@@ -95,10 +97,12 @@ public class InvestorInfoServiceImpl implements InvestorInfoService {
         String companyName = investmentInstitutionsMapper.selectById(investors.getInvestmentInstitutionsId());
         investorKernelInfoDto.setCompanyName(companyName);
         investorKernelInfoDto.setCompanyDuties(investors.getPosition());
+        investorKernelInfoDto.setHeadPicture(investors.getHeadPicture());
         investorKernelInfoDto.setTeamId(investors.getTeamId());
         investorKernelInfoDto.setSelfDefTeam(investors.getSelfDefTeam());
         investorKernelInfoDto.setPhone(investors.getPhone());
         investorKernelInfoDto.setKernelDesc(investors.getKernelDescription());
+        investorKernelInfoDto.setUserId(investors.getUserId());
 
         result.setStatus(200);
         result.setMessage("success");

@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionTeamDto;
 import com.lhjl.tzzs.proxy.dto.TeamManageDto.TeamMemberDetailOutpuyDto;
+import com.lhjl.tzzs.proxy.model.MetaInvestmentInstitutionTeamType;
 
 import java.util.List;
 
@@ -20,5 +21,7 @@ public interface InvestmentInstitutionTeamService {
      * @return
      */
     CommonDto<TeamMemberDetailOutpuyDto> getInfoByMemberId(Integer memberId);
+
+    CommonDto<List<MetaInvestmentInstitutionTeamType>> getTeamType();
 
 }

@@ -1,7 +1,8 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.investorDto.InvestorBasicInfoDto;
+import com.lhjl.tzzs.proxy.dto.investorDto.InvestorBasicInfoInputDto;
+import com.lhjl.tzzs.proxy.dto.investorDto.InvestorBasicInfoOutputDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorIntroductionDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
@@ -52,8 +53,11 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
     @Autowired
     private MetaRegionMapper metaRegionMapper;
 
+    @Autowired
+    private MetaSegmentationMapper metaSegmentationMapper;
+
     @Override
-    public CommonDto<String> addOrUpdateInvestorBasicInfo(InvestorBasicInfoDto body) {
+    public CommonDto<String> addOrUpdateInvestorBasicInfo(InvestorBasicInfoInputDto body) {
         CommonDto<String> result = new CommonDto<>();
 
         Investors investors = new Investors();
@@ -223,9 +227,9 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
     }
 
     @Override
-    public CommonDto<InvestorBasicInfoDto> getInvestorBasicInfo(Integer investorId) {
-        CommonDto<InvestorBasicInfoDto> result = new CommonDto<>();
-        InvestorBasicInfoDto investorBasicInfoDto = new InvestorBasicInfoDto();
+    public CommonDto<InvestorBasicInfoOutputDto> getInvestorBasicInfo(Integer investorId) {
+        CommonDto<InvestorBasicInfoOutputDto> result = new CommonDto<>();
+        InvestorBasicInfoOutputDto investorBasicInfoOutputDto = new InvestorBasicInfoOutputDto();
 
         Investors investors = investorsMapper.selectByPrimaryKey(investorId);
         if(null == investors){
@@ -234,44 +238,64 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             result.setStatus(300);
             return result;
         }
-        investorBasicInfoDto.setIdentityType(investors.getIdentityType());
-        investorBasicInfoDto.setWeiChat(investors.getWeichat());
-        investorBasicInfoDto.setEmail(investors.getEmail());
-        investorBasicInfoDto.setBirthDay(String.valueOf(investors.getBirthDay()));
-        investorBasicInfoDto.setSex(investors.getSex());
-        investorBasicInfoDto.setDiploma(investors.getDiploma());
-        investorBasicInfoDto.setNationality(investors.getNationality());
-        investorBasicInfoDto.setTenureTime(String.valueOf(investors.getTenureTime()));
-        investorBasicInfoDto.setCompanyIntro(investors.getCompanyIntroduction());
-        investorBasicInfoDto.setBusinessCard(investors.getBusinessCard());
-        investorBasicInfoDto.setPicture(investors.getPicture());
-        investorBasicInfoDto.setBussiness(investors.getBusinessDescription());
-        investorBasicInfoDto.setWorkExperience(investors.getWorkDescription());
-        investorBasicInfoDto.setEducationExperience(investors.getEducationDescription());
-        investorBasicInfoDto.setHonor(investors.getHonor());
+        investorBasicInfoOutputDto.setInvestorId(investors.getId());
+        investorBasicInfoOutputDto.setIdentityType(investors.getIdentityType());
+        investorBasicInfoOutputDto.setWeiChat(investors.getWeichat());
+        investorBasicInfoOutputDto.setEmail(investors.getEmail());
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+        if(null == investors.getBirthDay() || "undefined".equals(investors.getBirthDay())){
+            investorBasicInfoOutputDto.setBirthDay("");
+        }else{
+            investorBasicInfoOutputDto.setBirthDay(sdf.format(investors.getBirthDay()));
+        }
+        investorBasicInfoOutputDto.setSex(investors.getSex());
+        String diploma = metaDiplomaMapper.selectByDiplomaId(investors.getDiploma());
+        investorBasicInfoOutputDto.setDiploma(diploma);
+        String countryName = metaRegionMapper.selectByRegionId(investors.getNationality());
+        investorBasicInfoOutputDto.setNationality(countryName);
+        investorBasicInfoOutputDto.setBusinessCardOposite(investors.getBusinessCardOpposite());
+        if(null == investors.getTenureTime() || "undefined".equals(investors.getTenureTime())){
+            investorBasicInfoOutputDto.setTenureTime("");
+        }else{
+            investorBasicInfoOutputDto.setTenureTime(sdf.format(investors.getTenureTime()));
+        }
+        investorBasicInfoOutputDto.setCompanyIntro(investors.getCompanyIntroduction());
+        System.out.println(investors.getBusinessCard());
+        investorBasicInfoOutputDto.setBusinessCard(investors.getBusinessCard());
+        investorBasicInfoOutputDto.setPicture(investors.getPicture());
+        investorBasicInfoOutputDto.setBussiness(investors.getBusinessDescription());
+        investorBasicInfoOutputDto.setWorkExperience(investors.getWorkDescription());
+        investorBasicInfoOutputDto.setEducationExperience(investors.getEducationDescription());
+        investorBasicInfoOutputDto.setHonor(investors.getHonor());
 
         InvestorSegmentation investorSegmentation = new InvestorSegmentation();
         investorSegmentation.setId(investorId);
         List<InvestorSegmentation> investorSegmentationList = investorSegmentationService.select(investorSegmentation);
-        Integer[] investorSegmentationArr = null;
-        if(null == investorSegmentationList){
-            investorBasicInfoDto.setSegmentations(investorSegmentationArr);
+        String[] investorSegmentationArr = null;
+        if(null == investorSegmentationList || investorSegmentationList.size() == 0){
+            investorBasicInfoOutputDto.setSegmentations(investorSegmentationArr);
         }else{
             List<Integer> investorSegmentationIds = new ArrayList<>();
             investorSegmentationList.forEach(investorSegmentation_i -> {
                 investorSegmentationIds.add(investorSegmentation_i.getSegmentationId());
             });
-            investorSegmentationArr = new Integer[investorSegmentationIds.size()];
-            investorSegmentationIds.toArray(investorSegmentationArr);
-            investorBasicInfoDto.setSegmentations(investorSegmentationArr);
+            Integer[] investorSegmentationIdArr = new Integer[investorSegmentationIds.size()];
+            investorSegmentationIds.toArray(investorSegmentationIdArr);
+            List<MetaSegmentation> metaSegmentationList = metaSegmentationMapper.selectBySegmentationIds(investorSegmentationIdArr);
+            List<String> segmentations = new ArrayList<>();
+            metaSegmentationList.forEach( metaSegmentation -> {
+                segmentations.add(metaSegmentation.getName());
+            });
+            segmentations.toArray(investorSegmentationArr);
+            investorBasicInfoOutputDto.setSegmentations(investorSegmentationArr);
         }
 
         InvestorCity investorCity = new InvestorCity();
         investorCity.setId(investorId);
         List<InvestorCity> investorCityList = investorCityService.select(investorCity);
         String[] investorCityArr = null;
-        if(null == investorCityList){
-            investorBasicInfoDto.setCitys(investorCityArr);
+        if(null == investorCityList || investorCityList.size()==0){
+            investorBasicInfoOutputDto.setCitys(investorCityArr);
         }else{
             List<String> investorCitys = new ArrayList<>();
             investorCityList.forEach(investorCity_i -> {
@@ -279,15 +303,15 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             });
             investorCityArr = new String[investorCitys.size()];
             investorCitys.toArray(investorCityArr);
-            investorBasicInfoDto.setCitys(investorCityArr);
+            investorBasicInfoOutputDto.setCitys(investorCityArr);
         }
 
         InvestorSelfdefCity investorSelfdefCity = new InvestorSelfdefCity();
         investorSelfdefCity.setId(investorId);
         List<InvestorSelfdefCity> investorSelfdefCityList = investorSelfdefCityService.select(investorSelfdefCity);
         String[] investorSelfdefCityArr = null;
-        if(null == investorSelfdefCityList){
-            investorBasicInfoDto.setCitys(investorSelfdefCityArr);
+        if(null == investorSelfdefCityList || investorSelfdefCityList.size() == 0){
+            investorBasicInfoOutputDto.setCitys(investorSelfdefCityArr);
         }else{
             List<String> investorSelfdefCitys = new ArrayList<>();
             investorSelfdefCityList.forEach(investorSelfdefCity_i -> {
@@ -295,15 +319,15 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             });
             investorSelfdefCityArr = new String[investorSelfdefCitys.size()];
             investorSelfdefCitys.toArray(investorSelfdefCityArr);
-            investorBasicInfoDto.setSelfDefCity(investorSelfdefCityArr);
+            investorBasicInfoOutputDto.setSelfDefCity(investorSelfdefCityArr);
         }
 
         InvestorBusiness investorBusiness = new InvestorBusiness();
         investorBusiness.setId(investorId);
         List<InvestorBusiness> investorBusinessesList = investorBusinessService.select(investorBusiness);
         String[] investorBusinessArr = null;
-        if(null == investorBusinessesList){
-            investorBasicInfoDto.setCitys(investorBusinessArr);
+        if(null == investorBusinessesList || investorBusinessesList.size() == 0){
+            investorBasicInfoOutputDto.setCitys(investorBusinessArr);
         }else{
             List<String> investorBusinessess = new ArrayList<>();
             investorBusinessesList.forEach(investorSelfdefCity_i -> {
@@ -311,15 +335,15 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             });
             investorBusinessArr = new String[investorBusinessess.size()];
             investorBusinessess.toArray(investorBusinessArr);
-            investorBasicInfoDto.setBusinesses(investorBusinessArr);
+            investorBasicInfoOutputDto.setBusinesses(investorBusinessArr);
         }
 
         InvestorWorkExperience investorWorkExperience = new InvestorWorkExperience();
         investorWorkExperience.setId(investorId);
         List<InvestorWorkExperience> investorWorkExperienceList = investorWorkExperienceService.select(investorWorkExperience);
         String[] investorWorkExperienceArr = null;
-        if(null == investorWorkExperienceList){
-            investorBasicInfoDto.setWorkExperiences(investorWorkExperienceArr);
+        if(null == investorWorkExperienceList || investorWorkExperienceList.size() == 0){
+            investorBasicInfoOutputDto.setWorkExperiences(investorWorkExperienceArr);
         }else{
             List<String> investorWorkExperiences = new ArrayList<>();
             investorWorkExperienceList.forEach(investorWorkExperience_i -> {
@@ -327,15 +351,15 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             });
             investorWorkExperienceArr = new String[investorWorkExperiences.size()];
             investorWorkExperiences.toArray(investorWorkExperienceArr);
-            investorBasicInfoDto.setWorkExperiences(investorWorkExperienceArr);
+            investorBasicInfoOutputDto.setWorkExperiences(investorWorkExperienceArr);
         }
 
         InvestorEducationExperience investorEducationExperience = new InvestorEducationExperience();
         investorEducationExperience.setId(investorId);
         List<InvestorEducationExperience> investorEducationExperienceList = investorEducationExperienceService.select(investorEducationExperience);
         String[] investorEducationExperienceArr = null;
-        if(null == investorEducationExperienceList){
-            investorBasicInfoDto.setEducationExperiences(investorEducationExperienceArr);
+        if(null == investorEducationExperienceList || investorEducationExperienceList.size() == 0){
+            investorBasicInfoOutputDto.setEducationExperiences(investorEducationExperienceArr);
         }else{
             List<String> investorEducationExperiences = new ArrayList<>();
             investorEducationExperienceList.forEach(investorEducationExperience_i -> {
@@ -343,10 +367,10 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             });
             investorEducationExperienceArr = new String[investorEducationExperiences.size()];
             investorEducationExperiences.toArray(investorEducationExperienceArr);
-            investorBasicInfoDto.setEducationExperiences(investorEducationExperienceArr);
+            investorBasicInfoOutputDto.setEducationExperiences(investorEducationExperienceArr);
         }
 
-        result.setData(investorBasicInfoDto);
+        result.setData(investorBasicInfoOutputDto);
         result.setMessage("success");
         result.setStatus(200);
         return result;

@@ -1,5 +1,7 @@
 package com.lhjl.tzzs.proxy.dto.investorDto;
 
+import com.lhjl.tzzs.proxy.model.MetaInvestmentInstitutionTeamType;
+
 /**
  * Created by lanhaijulang on 2018/1/25.
  */
@@ -9,6 +11,16 @@ public class InvestorKernelInfoDto {
      * 投资人Id
      */
     private Integer investorId;
+
+    /**
+     * 用户Id
+     */
+    private Integer userId;
+
+    /**
+     * 头像
+     */
+    private String headPicture;
 
     /**
      * 投资人姓名
@@ -44,6 +56,22 @@ public class InvestorKernelInfoDto {
      * 一句话核心描述
      */
     private String kernelDesc;
+
+    public String getHeadPicture() {
+        return headPicture;
+    }
+
+    public void setHeadPicture(String headPicture) {
+        this.headPicture = headPicture;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public String getName() {
         return name;

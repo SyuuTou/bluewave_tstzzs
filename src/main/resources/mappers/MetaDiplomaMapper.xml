@@ -8,4 +8,9 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="diploma_name" property="diplomaName" jdbcType="VARCHAR" />
   </resultMap>
+
+  <select id="selectByDiplomaId" parameterType="java.lang.Integer" resultType="java.lang.String">
+    select diploma_name from meta_diploma where id=#{diplomaId};
+  </select>
+
 </mapper>
