@@ -67,7 +67,7 @@ public class InvestorVIPController extends GenericController {
         return result; 
     }
     /**
-     * 回显user_level_relation表的元数据
+     * 回显meta_user_level表的元数据
      * @param appid
      * @return
      */
