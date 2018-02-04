@@ -23,7 +23,7 @@
 	</if>
   </select>
 
-    <select id="selectByLoginBody" parameterType="java.lang.String" resultMap="java.lang.Integer">
+    <select id="selectByLoginBody" parameterType="java.lang.String" resultType="java.lang.Integer">
         select user_id from admin_user where `name` =#{username} and `password` =#{password};
   </select>
 </mapper>

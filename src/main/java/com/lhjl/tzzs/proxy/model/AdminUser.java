@@ -28,6 +28,12 @@ public class AdminUser {
     private Integer metaAppId;
 
     /**
+     * 密码
+     */
+    @Column(name = "password")
+    private String password;
+
+    /**
      * 创建时间
      */
     @Column(name = "create_time")
@@ -43,9 +49,32 @@ public class AdminUser {
     private String name;
 
     /**
-     * 密码
+     * 公司姓名
      */
-    private String password;
+    @Transient
+    private String companyName;
+    /**
+     * 职务名称
+     */
+    @Transient
+    private String dutyName;
+
+
+    public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getDutyName() {
+		return dutyName;
+	}
+
+	public void setDutyName(String dutyName) {
+		this.dutyName = dutyName;
+	}
 
     /**
      * @return id
