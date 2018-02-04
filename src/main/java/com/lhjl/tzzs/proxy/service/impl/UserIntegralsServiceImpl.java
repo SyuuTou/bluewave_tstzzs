@@ -708,8 +708,8 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals.setSceneKey("xHwofbNs");
 				Integer jb=qj.intValue();
 				if(jb>=188){
-				userIntegrals.setConsumeNum(0);
-				userIntegrals.setIntegralNum(jb);
+				userIntegrals.setConsumeNum(new BigDecimal(0));
+				userIntegrals.setIntegralNum(qj);
 				userIntegrals.setCreateTime(new Date());
 				Calendar calendar = new GregorianCalendar();
 				calendar.setTime(new Date());
@@ -726,12 +726,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				//购买金币赠送的记录
 				UserIntegrals userIntegrals2 =new UserIntegrals();
 				userIntegrals2.setUserId(userId);
-				userIntegrals2.setConsumeNum(0);
+				userIntegrals2.setConsumeNum(new BigDecimal(0));
 				String sKey = userIntegralsMapper.findBySkey(leId);
 				userIntegrals2.setSceneKey(sKey);
 				jb=qj.intValue();
 				Integer snum =(int)(jb*bei);
-				userIntegrals2.setIntegralNum(snum);
+				userIntegrals2.setIntegralNum(qj.multiply(new BigDecimal(bei)));
 				userIntegrals2.setCreateTime(new Date());
 				MetaObtainIntegral metaObtainIntegral1 = new MetaObtainIntegral();
 				metaObtainIntegral1.setSceneKey(sKey);
@@ -746,9 +746,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				UserIntegralConsume userIntegrals3=new UserIntegralConsume();
 				userIntegrals3.setUserId(userId);
 				userIntegrals3.setSceneKey("xHwofbNs");
-				Integer jb1=qj.intValue();
+//				Integer jb1=qj.intValue();
 				//if(jb>=100){
-				userIntegrals3.setCostNum(jb1);
+				userIntegrals3.setCostNum(qj);
 				userIntegrals3.setCreateTime(new Date());
 				Calendar calendar3 = new GregorianCalendar();
 				calendar3.setTime(new Date());
@@ -767,9 +767,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals4.setUserId(userId);
 				String sKey4 = userIntegralsMapper.findBySkey(leId);
 				userIntegrals4.setSceneKey(sKey4);
-				jb=qj.intValue();
-				Integer snum4 =(int)(jb*bei);
-				userIntegrals4.setCostNum(snum4);
+//				jb=qj.intValue();
+//				Integer snum4 =(int)(jb*bei);
+				userIntegrals4.setCostNum(qj.multiply(new BigDecimal(bei)));
 				userIntegrals4.setCreateTime(new Date());
 				MetaObtainIntegral metaObtainIntegral4 = new MetaObtainIntegral();
 				metaObtainIntegral4.setSceneKey(sKey);
@@ -792,8 +792,8 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userIntegrals.setSceneKey("xHwofbNs");
 					Integer jb = qj.intValue();
 					if(jb>=188){
-					userIntegrals.setConsumeNum(0);
-					userIntegrals.setIntegralNum(jb);
+					userIntegrals.setConsumeNum(new BigDecimal("0"));
+					userIntegrals.setIntegralNum(qj);
 					userIntegrals.setCreateTime(new Date());
 					//时间场景
 					Calendar calendar = new GregorianCalendar();
@@ -808,12 +808,12 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					//购买金币赠送的记录
 					UserIntegrals userIntegrals2 = new UserIntegrals();
 					userIntegrals2.setUserId(userId);
-					userIntegrals2.setConsumeNum(0);
+					userIntegrals2.setConsumeNum(new BigDecimal("0"));
 					String sKey = userIntegralsMapper.findBySkey(leId + 1);
 					userIntegrals2.setSceneKey(sKey);
-					jb = qj.intValue();
-					Integer snum = (int) (jb * bei);
-					userIntegrals2.setIntegralNum(snum);
+//					jb = qj.intValue();
+//					Integer snum = (int) (jb * bei);
+					userIntegrals2.setIntegralNum(qj.multiply(new BigDecimal(bei)));
 					userIntegrals2.setCreateTime(new Date());
 					//时间场景
 					MetaObtainIntegral metaObtainIntegral1 = new MetaObtainIntegral();
@@ -828,9 +828,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					UserIntegralConsume userIntegrals3=new UserIntegralConsume();
 					userIntegrals3.setUserId(userId);
 					userIntegrals3.setSceneKey("xHwofbNs");
-					Integer jb1=qj.intValue();
+//					Integer jb1=qj.intValue();
 					//if(jb>=100){
-					userIntegrals3.setCostNum(jb1);
+					userIntegrals3.setCostNum(qj);
 					userIntegrals3.setCreateTime(new Date());
 					Calendar calendar3 = new GregorianCalendar();
 					calendar3.setTime(new Date());
@@ -851,7 +851,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userIntegrals4.setSceneKey(sKey4);
 					jb=qj.intValue();
 					Integer snum4 =(int)(jb*bei);
-					userIntegrals4.setCostNum(snum4);
+					userIntegrals4.setCostNum(qj.multiply(new BigDecimal(bei)));
 					userIntegrals4.setCreateTime(new Date());
 					MetaObtainIntegral metaObtainIntegral4 = new MetaObtainIntegral();
 					metaObtainIntegral4.setSceneKey(sKey4);

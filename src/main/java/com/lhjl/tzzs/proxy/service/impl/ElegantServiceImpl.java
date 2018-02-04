@@ -719,7 +719,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 metaObtainIntegral.setCreateTime(now);
                 metaObtainIntegral.setSceneKey(sceneKey);
                 metaObtainIntegral.setUserLevel(mul.getId());
-                metaObtainIntegral.setIntegral(originalPrice.intValue());
+                metaObtainIntegral.setIntegral(originalPrice);
                 metaObtainIntegral.setPeriod(365);
                 metaObtainIntegral.setYn(0);
                 metaObtainIntegral.setRatio(one);

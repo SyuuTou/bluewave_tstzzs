@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -26,7 +27,7 @@ public class UserIntegralConsume {
      * 花费积分数量
      */
     @Column(name = "cost_num")
-    private Integer costNum;
+    private BigDecimal costNum;
 
     /**
      * 创建时间
@@ -46,6 +47,16 @@ public class UserIntegralConsume {
     @Column(name = "end_time")
     private Date endTime;
 
+    @Column(name = "app_id")
+    private Integer appId;
+
+    public Integer getAppId() {
+        return appId;
+    }
+
+    public void setAppId(Integer appId) {
+        this.appId = appId;
+    }
     /**
      * @return ID
      */
@@ -96,21 +107,11 @@ public class UserIntegralConsume {
         this.sceneKey = sceneKey;
     }
 
-    /**
-     * 获取花费积分数量
-     *
-     * @return cost_num - 花费积分数量
-     */
-    public Integer getCostNum() {
+    public BigDecimal getCostNum() {
         return costNum;
     }
 
-    /**
-     * 设置花费积分数量
-     *
-     * @param costNum 花费积分数量
-     */
-    public void setCostNum(Integer costNum) {
+    public void setCostNum(BigDecimal costNum) {
         this.costNum = costNum;
     }
 
