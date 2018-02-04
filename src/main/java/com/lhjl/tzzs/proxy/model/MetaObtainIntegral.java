@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -25,7 +26,7 @@ public class MetaObtainIntegral {
     /**
      * 积分，
      */
-    private Integer integral;
+    private BigDecimal integral;
 
     /**
      * 周期
@@ -110,21 +111,11 @@ public class MetaObtainIntegral {
         this.userLevel = userLevel;
     }
 
-    /**
-     * 获取积分，
-     *
-     * @return integral - 积分，
-     */
-    public Integer getIntegral() {
+    public BigDecimal getIntegral() {
         return integral;
     }
 
-    /**
-     * 设置积分，
-     *
-     * @param integral 积分，
-     */
-    public void setIntegral(Integer integral) {
+    public void setIntegral(BigDecimal integral) {
         this.integral = integral;
     }
 
