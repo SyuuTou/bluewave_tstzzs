@@ -13,7 +13,7 @@ public class InvestorBasicInfoOutputDto {
     /**
      * 身份类型
      */
-    private Integer identityType;
+    private String identityType;
 
     /**
      * 领域id
@@ -146,11 +146,11 @@ public class InvestorBasicInfoOutputDto {
         this.investorId = investorId;
     }
 
-    public Integer getIdentityType() {
+    public String getIdentityType() {
         return identityType;
     }
 
-    public void setIdentityType(Integer identityType) {
+    public void setIdentityType(String identityType) {
         this.identityType = identityType;
     }
 

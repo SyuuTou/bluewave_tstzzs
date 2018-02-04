@@ -13,12 +13,12 @@ public class InvestorBasicInfoInputDto {
     /**
      * 身份类型
      */
-    private Integer identityType;
+    private String identityType;
 
     /**
      * 领域id
      */
-    private Integer[] segmentations;
+    private String[] segmentations;
 
     /**
      * 微信
@@ -53,12 +53,12 @@ public class InvestorBasicInfoInputDto {
     /**'
      * 学历
      */
-    private Integer diploma;
+    private String diploma;
 
     /**
      * 国籍
      */
-    private Integer nationality;
+    private String nationality;
 
     /**
      * 任职时间
@@ -123,19 +123,19 @@ public class InvestorBasicInfoInputDto {
         this.investorId = investorId;
     }
 
-    public Integer getIdentityType() {
+    public String getIdentityType() {
         return identityType;
     }
 
-    public void setIdentityType(Integer identityType) {
+    public void setIdentityType(String identityType) {
         this.identityType = identityType;
     }
 
-    public Integer[] getSegmentations() {
+    public String[] getSegmentations() {
         return segmentations;
     }
 
-    public void setSegmentations(Integer[] segmentations) {
+    public void setSegmentations(String[] segmentations) {
         this.segmentations = segmentations;
     }
 
@@ -187,19 +187,19 @@ public class InvestorBasicInfoInputDto {
         this.sex = sex;
     }
 
-    public Integer getDiploma() {
+    public String getDiploma() {
         return diploma;
     }
 
-    public void setDiploma(Integer diploma) {
+    public void setDiploma(String diploma) {
         this.diploma = diploma;
     }
 
-    public Integer getNationality() {
+    public String getNationality() {
         return nationality;
     }
 
-    public void setNationality(Integer nationality) {
+    public void setNationality(String nationality) {
         this.nationality = nationality;
     }
 

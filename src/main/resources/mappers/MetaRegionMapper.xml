@@ -26,7 +26,11 @@
   </select>
 
   <select id="selectByRegionId" parameterType="java.lang.Integer" resultType="java.lang.String">
-    SELECT ming FROM idatavc.meta_region where id=#{regionId};
+    SELECT ming FROM idatavc.meta_region where id =#{regionId};
+  </select>
+
+  <select id="findNationalityIdByCountry" parameterType="java.lang.String" resultType="java.lang.Integer">
+      select id from idatavc.meta_region where `ming` =#{nationalityName};
   </select>
 
 </mapper>

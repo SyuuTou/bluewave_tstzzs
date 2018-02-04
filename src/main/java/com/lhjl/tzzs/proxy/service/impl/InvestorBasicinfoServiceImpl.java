@@ -56,19 +56,28 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
     @Autowired
     private MetaSegmentationMapper metaSegmentationMapper;
 
+    @Autowired
+    private MetaIdentityTypeMapper metaIdentityTypeMapper;
+
     @Override
     public CommonDto<String> addOrUpdateInvestorBasicInfo(InvestorBasicInfoInputDto body) {
         CommonDto<String> result = new CommonDto<>();
 
         Investors investors = new Investors();
         investors.setId(body.getInvestorId());
-        investors.setIdentityType(body.getIdentityType());
+        Integer identityType = metaIdentityTypeMapper.findIdByIdentityName(body.getIdentityType());
+        investors.setIdentityType(identityType);
         investors.setWeichat(body.getWeiChat());
         investors.setEmail(body.getEmail());
         investors.setBirthDay(DateUtils.parse(body.getBirthDay()));
         investors.setSex(body.getSex());
-        investors.setDiploma(body.getDiploma());
-        investors.setNationality(body.getNationality());
+
+        Integer diplomaId = metaDiplomaMapper.findDiplomaIdBydiplomaName(body.getDiploma());
+        investors.setDiploma(diplomaId);
+
+        Integer nationalityId = metaRegionMapper.findNationalityIdByCountry(body.getNationality());
+        investors.setNationality(nationalityId);
+
         investors.setTenureTime(DateUtils.parse(body.getTenureTime()));
         investors.setCompanyIntroduction(body.getCompanyIntro());
         investors.setBusinessCard(body.getBusinessCard());
@@ -105,7 +114,8 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             investorSegmentation.setSegmentationId(null);
             investorSegmentationList.add(investorSegmentation);
         }else{
-            for (Integer investorSegmentationId : body.getSegmentations()){
+            List<Integer> segmentationIds = metaSegmentationMapper.findMetaSegmentationBySegmentation(body.getSegmentations());
+            for (Integer investorSegmentationId : segmentationIds){
                 InvestorSegmentation investorSegmentation = new InvestorSegmentation();
                 investorSegmentation.setId(body.getInvestorId());
                 investorSegmentation.setSegmentationId(investorSegmentationId);
@@ -239,7 +249,8 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             return result;
         }
         investorBasicInfoOutputDto.setInvestorId(investors.getId());
-        investorBasicInfoOutputDto.setIdentityType(investors.getIdentityType());
+        String identityName = metaIdentityTypeMapper.findIdentityNameById(investors.getIdentityType());
+        investorBasicInfoOutputDto.setIdentityType(identityName);
         investorBasicInfoOutputDto.setWeiChat(investors.getWeichat());
         investorBasicInfoOutputDto.setEmail(investors.getEmail());
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
@@ -286,6 +297,7 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             metaSegmentationList.forEach( metaSegmentation -> {
                 segmentations.add(metaSegmentation.getName());
             });
+            investorSegmentationArr = new String[segmentations.size()];
             segmentations.toArray(investorSegmentationArr);
             investorBasicInfoOutputDto.setSegmentations(investorSegmentationArr);
         }

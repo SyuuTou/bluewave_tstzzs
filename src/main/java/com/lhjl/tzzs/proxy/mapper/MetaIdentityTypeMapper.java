@@ -8,4 +8,8 @@ import java.util.List;
 
 public interface MetaIdentityTypeMapper extends OwnerMapper<MetaIdentityType> {
     List<MetaIdentityType> findMetaIndentityType(@Param("identityType") String[] identityType);
+
+    Integer findIdByIdentityName(@Param("identityTypeName") String identityTypeName);
+
+    String findIdentityNameById(@Param("identityTypeId") Integer identityTypeId);
 }

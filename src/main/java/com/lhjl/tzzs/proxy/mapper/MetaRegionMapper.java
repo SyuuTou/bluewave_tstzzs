@@ -12,4 +12,6 @@ public interface MetaRegionMapper extends OwnerMapper<MetaRegion> {
     List<MetaRegion> selectAllCountry();
 
     String selectByRegionId(@Param("regionId") Integer regionId);
+
+    Integer findNationalityIdByCountry(@Param("nationalityName") String nationalityName);
 }

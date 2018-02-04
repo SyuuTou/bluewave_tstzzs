@@ -6,4 +6,6 @@ import org.apache.ibatis.annotations.Param;
 
 public interface MetaDiplomaMapper extends OwnerMapper<MetaDiploma> {
     String selectByDiplomaId(@Param("diplomaId") Integer diplomaId);
+
+    Integer findDiplomaIdBydiplomaName(@Param("diplomaName") String diplomaName);
 }

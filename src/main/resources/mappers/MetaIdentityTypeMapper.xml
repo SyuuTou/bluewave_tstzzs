@@ -16,4 +16,12 @@
       <foreach close=")" collection="identityType" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
   </select>
+
+  <select id="findIdByIdentityName" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select id from meta_identity_type where `type_name` =#{identityTypeName};
+  </select>
+
+  <select id="findIdentityNameById" parameterType="java.lang.Integer" resultType="java.lang.String">
+    select type_name from meta_identity_type where id =#{identityTypeId};
+  </select>
 </mapper>

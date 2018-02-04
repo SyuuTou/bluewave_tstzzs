@@ -10,7 +10,11 @@
   </resultMap>
 
   <select id="selectByDiplomaId" parameterType="java.lang.Integer" resultType="java.lang.String">
-    select diploma_name from meta_diploma where id=#{diplomaId};
+    select diploma_name from meta_diploma where id =#{diplomaId};
+  </select>
+
+  <select id="findDiplomaIdBydiplomaName" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select id from meta_diploma where `diploma_name` =#{diplomaName};
   </select>
 
 </mapper>
