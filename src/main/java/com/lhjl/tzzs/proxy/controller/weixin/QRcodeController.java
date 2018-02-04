@@ -50,7 +50,7 @@ public class QRcodeController extends GenericController {
 
     }
 
-    @PostMapping("qrcode/generate/base64")
+    @PostMapping("qrcode/generate")
     public void generateBase64(@RequestBody QRCodeDto reqDto,HttpServletResponse response) throws IOException {
 
         CommonDto<String> result = null;
@@ -60,7 +60,7 @@ public class QRcodeController extends GenericController {
         } catch (Exception e) {
             this.logger.error(e.getMessage(),e.fillInStackTrace());
         }
-        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        response.setContentType(MediaType.IMAGE_PNG_VALUE);
         IOUtils.copy(in, response.getOutputStream());
 
     }

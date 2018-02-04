@@ -59,6 +59,12 @@ public class RedEnvelope {
     private String message;
 
     /**
+     * 替换ID在网络传输
+     */
+    @Column(name = "union_key")
+    private String unionKey;
+
+    /**
      * @return id
      */
     public Long getId() {
@@ -242,5 +248,23 @@ public class RedEnvelope {
      */
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    /**
+     * 获取替换ID在网络传输
+     *
+     * @return union_key - 替换ID在网络传输
+     */
+    public String getUnionKey() {
+        return unionKey;
+    }
+
+    /**
+     * 设置替换ID在网络传输
+     *
+     * @param unionKey 替换ID在网络传输
+     */
+    public void setUnionKey(String unionKey) {
+        this.unionKey = unionKey;
     }
 }

@@ -7,7 +7,6 @@ import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeResDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
-import com.lhjl.tzzs.proxy.service.UserEditService;
 import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
 import org.joda.time.DateTime;
 import org.joda.time.DurationFieldType;
@@ -21,6 +20,7 @@ import tk.mybatis.mapper.util.StringUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Transactional(readOnly = true)
 @Service("redEnvelopeService")
@@ -65,6 +65,10 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
         UserToken userToken = userTokenMapper.selectOne(query);
 
+        if (null == userToken){
+            return null;
+        }
+
         return userToken.getUserId();
     }
 
@@ -107,7 +111,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
             MetaObtainIntegral obtainIntegral = metaObtainIntegralMapper.selectOne(queryObtainIntegral);
 
-            addUserIntegralsLog(appId, senceKey, userId, obtainIntegral.getIntegral(), obtainIntegralPeriod);
+            addUserIntegralsLog(appId, senceKey, userId, obtainIntegral.getIntegral(), obtainIntegralPeriod,true);
 
 
 
@@ -120,7 +124,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 //        return null;
     }
 
-    public void addUserIntegralsLog(Integer appId, String senceKey, Integer userId, BigDecimal obtainIntegral, Integer obtainIntegralPeriod) {
+    public void addUserIntegralsLog(Integer appId, String senceKey, Integer userId, BigDecimal obtainIntegral, Integer obtainIntegralPeriod,  Boolean flag ) {
         UserIntegrals addUserIntegrals = new UserIntegrals();
         addUserIntegrals.setEndTime(DateTime.now().withTime(23,59,59,999).withFieldAdded(DurationFieldType.days(),obtainIntegralPeriod).toDate());
         addUserIntegrals.setBeginTime(DateTime.now().withTime(0,0,0,0).toDate());
@@ -142,11 +146,20 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         addUserIntegralConsume.setAppId(appId);
 
         userIntegralConsumeMapper.insert(addUserIntegralConsume);
+
+        if (flag) {
+            RedEnvelopeLimit redEnvelopeLimit = this.getRedEnvelopeLimit(appId, "MAX_LIMIT");
+
+            redEnvelopeLimit.setGrantValue(redEnvelopeLimit.getGrantValue().add(obtainIntegral));
+
+            redEnvelopeLimitMapper.updateByPrimaryKey(redEnvelopeLimit);
+
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public CommonDto<Long> createRedEnvelope(Integer appId, RedEnvelopeDto redEnvelopeDto) {
+    public CommonDto<String> createRedEnvelope(Integer appId, RedEnvelopeDto redEnvelopeDto) {
 
 
         RedEnvelope redEnvelope = new RedEnvelope();
@@ -162,22 +175,26 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
         Users users = this.getUserInfo(appId, redEnvelopeDto.getToken());
 
-        this.addUserIntegralsLog(appId,"SEND_ANGEL_TOKEN ",users.getId(),redEnvelope.getTotalAmount(),obtainIntegralPeriod);
+        this.addUserIntegralsLog(appId,"SEND_ANGEL_TOKEN ",users.getId(),redEnvelope.getTotalAmount(),obtainIntegralPeriod,false);
 
-        return new CommonDto<>(redEnvelope.getId(),"succcess", 200);
+        return new CommonDto<>(redEnvelope.getUnionKey(),"succcess", 200);
     }
 
     @Override
     public CommonDto<BigDecimal> checkMaxQuanlity(Integer appId) {
 
-        RedEnvelopeLimit queryRedEnvelopeLimit = new RedEnvelopeLimit();
-        queryRedEnvelopeLimit.setAppId(appId);
-        queryRedEnvelopeLimit.setKey("MAX_LIMIT");
-        RedEnvelopeLimit redEnvelopeLimit = redEnvelopeLimitMapper.selectOne(queryRedEnvelopeLimit);
+        RedEnvelopeLimit redEnvelopeLimit = getRedEnvelopeLimit(appId, "MAX_LIMIT");
 
         BigDecimal limit = redEnvelopeLimit.getLimitValue().subtract(redEnvelopeLimit.getGrantValue());
 
         return new CommonDto<>(limit,"success",200);
+    }
+
+    public RedEnvelopeLimit getRedEnvelopeLimit(Integer appId, String max_limit) {
+        RedEnvelopeLimit queryRedEnvelopeLimit = new RedEnvelopeLimit();
+        queryRedEnvelopeLimit.setAppId(appId);
+        queryRedEnvelopeLimit.setKey(max_limit);
+        return redEnvelopeLimitMapper.selectOne(queryRedEnvelopeLimit);
     }
 
     @Override
@@ -195,17 +212,14 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
         List<UserIntegrals> userIntegralsList = userIntegralsMapper.selectByExample(userIntegralsQuery);
 
-        BigDecimal quanlity = new BigDecimal("0");
+        AtomicReference<BigDecimal> quanlity = new AtomicReference<>(new BigDecimal("0"));
 
         userIntegralsList.forEach(item -> {
-            quanlity.add(item.getIntegralNum());
+            quanlity.set(quanlity.get().add(item.getIntegralNum()));
         });
 
-        RedEnvelopeLimit queryRedEnvelopeLimit = new RedEnvelopeLimit();
-        queryRedEnvelopeLimit.setAppId(appId);
-        queryRedEnvelopeLimit.setKey("DAY_LIMIT");
-        RedEnvelopeLimit redEnvelopeLimit = redEnvelopeLimitMapper.selectOne(queryRedEnvelopeLimit);
-        BigDecimal limit = redEnvelopeLimit.getLimitValue().subtract(quanlity);
+        RedEnvelopeLimit redEnvelopeLimit = getRedEnvelopeLimit(appId, "DAY_LIMIT");
+        BigDecimal limit = redEnvelopeLimit.getLimitValue().subtract(quanlity.get());
 
 
         return new CommonDto<>(limit,"success",200);
@@ -218,16 +232,19 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         //获取用户ID
         Integer userId = this.getUserId(appId, token);
 
+        if (null == userId){
+            return new CommonDto<>(new BigDecimal(0), "未找到用户", 200);
+        }
         UserIntegralConsume userIntegralConsumeQuery = new UserIntegralConsume();
         userIntegralConsumeQuery.setAppId(appId);
         userIntegralConsumeQuery.setUserId(userId);
 
         List<UserIntegralConsume> userIntegralConsumes = userIntegralConsumeMapper.select(userIntegralConsumeQuery);
-        BigDecimal totalAmount = new BigDecimal(0);
+        BigDecimal totalAmount = new BigDecimal("0.00");
 
-        userIntegralConsumes.forEach(item -> {
-            totalAmount.add(item.getCostNum());
-        });
+        for (UserIntegralConsume userIntegralConsume: userIntegralConsumes){
+            totalAmount = totalAmount.add(userIntegralConsume.getCostNum());
+        }
 
 
         return new CommonDto<>(totalAmount, "success", 200);
@@ -290,7 +307,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                     redEnvelopeLog.setToken(token);
                     redEnvelopeLogMapper.insert(redEnvelopeLog);
 
-                    this.addUserIntegralsLog(appId,"GET_ANGEL_TOKEN",users.getId(),redEnvelope.getAmount(),obtainIntegralPeriod);
+                    this.addUserIntegralsLog(appId,"GET_ANGEL_TOKEN",users.getId(),redEnvelope.getAmount(),obtainIntegralPeriod,true);
 
                     break;
                 }

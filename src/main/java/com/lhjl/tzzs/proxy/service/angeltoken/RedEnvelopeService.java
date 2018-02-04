@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public interface RedEnvelopeService {
     CommonDto<String> checkAndAddAngelToken(Integer appId, String token, String senceKey);
 
-    CommonDto<Long> createRedEnvelope(Integer appId, RedEnvelopeDto redEnvelopeDto);
+    CommonDto<String> createRedEnvelope(Integer appId, RedEnvelopeDto redEnvelopeDto);
 
     CommonDto<BigDecimal> checkMaxQuanlity(Integer appId);
 

@@ -71,14 +71,14 @@ public class RedEnvelopeController extends GenericController {
      * @return
      */
     @PostMapping("/v{appId}/redenvelope")
-    public CommonDto<Long> createRedEnvelope(@RequestBody RedEnvelopeDto redEnvelopeDto, @PathVariable Integer appId){
-        CommonDto<Long> result = null;
+    public CommonDto<String> createRedEnvelope(@RequestBody RedEnvelopeDto redEnvelopeDto, @PathVariable Integer appId){
+        CommonDto<String> result = null;
 
         try {
             result = redEnvelopeService.createRedEnvelope(appId,redEnvelopeDto);
         } catch (Exception e) {
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
-            result = new CommonDto<>(0l,"创建红包异常，请重试。",500);
+            result = new CommonDto<>("","创建红包异常，请重试。",500);
         }
 
         return result;

@@ -18,6 +18,7 @@ public class RedEnvelopeLimit {
     /**
      * 唯一key
      */
+    @Column(name = "`key`")
     private String key;
 
     /**
