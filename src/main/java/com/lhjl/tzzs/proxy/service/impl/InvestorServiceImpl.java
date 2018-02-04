@@ -292,13 +292,27 @@ public class InvestorServiceImpl implements InvestorService {
 	public CommonDto<Boolean> saveOrUpdateInvestorsVIPInfo(Integer appid, UserLevelRelation body) {
 		CommonDto<Boolean> result=new CommonDto<>();
 		
+		if(body.getUserId() == null) {
+			result.setData(false);
+	        result.setStatus(500); 
+	        result.setMessage("请输入相关的userId");    
+			return result;
+		}
 		UserLevelRelation ulr=new UserLevelRelation();
 		ulr.setUserId(body.getUserId());
 		ulr.setYn(1);  
-		System.err.println(ulr+"**url*");
+		UserLevelRelation user=null;
 		//用户会员等级表的查询实体
-		UserLevelRelation user = userLevelRelationMapper.selectOne(ulr);
-		System.err.println(user+"**user*");
+		try {
+			user = userLevelRelationMapper.selectOne(ulr);
+		}catch(Exception e) {
+			result.setData(false);
+	        result.setStatus(500); 
+	        result.setMessage("数据库记录存在非法数据");
+			return result;
+		}
+		
+		
 		//进行数据格式的规范化
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try {
