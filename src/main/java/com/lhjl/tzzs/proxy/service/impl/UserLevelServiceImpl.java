@@ -11,8 +11,6 @@ import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.service.UserIntegralsService;
 import com.lhjl.tzzs.proxy.service.UserLevelService;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,7 +147,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 metaObtainIntegral.setSceneKey("EWJkiU7Q");
                 metaObtainIntegral.setUserLevel(userLevel.getId());
                 metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
-                int originalCost = metaObtainIntegral.getIntegral();
+                BigDecimal originalCost = metaObtainIntegral.getIntegral();
                 userLevelDto.setOriginalCost(originalCost);
 
                 //获取金币赠送
@@ -189,7 +187,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 condition = metaObtainIntegralMapper.selectOne(condition);
                 userLevelDto.setConditionNum(condition.getDeliverNum());
 
-                int coinsNum = (int)(userLevel.getAmount().intValue() * metaObtainIntegral.getRatio());
+                BigDecimal coinsNum = userLevel.getAmount().multiply(new BigDecimal(metaObtainIntegral.getRatio()));
                 userLevelDto.setRatio(ratio);
                 userLevelDto.setCoinNum(coinsNum);
 
@@ -320,7 +318,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         metaObtainIntegral.setSceneKey("EWJkiU7Q");
         metaObtainIntegral.setUserLevel(userLevel.getId());
         metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
-        int originalCost = metaObtainIntegral.getIntegral();
+        BigDecimal originalCost = metaObtainIntegral.getIntegral();
         userLevelDto.setOriginalCost(originalCost);
 
         //获取金币赠送
@@ -360,7 +358,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         condition = metaObtainIntegralMapper.selectOne(condition);
         userLevelDto.setConditionNum(condition.getDeliverNum());
 
-        int coinsNum = (int)(originalCost * metaObtainIntegral.getRatio());
+        BigDecimal coinsNum = originalCost.multiply(new BigDecimal(metaObtainIntegral.getRatio()));
         userLevelDto.setRatio(ratio);
         userLevelDto.setCoinNum(coinsNum);
 
@@ -642,9 +640,9 @@ public class UserLevelServiceImpl implements UserLevelService {
         List<String> sceneKeys = userLevelRelationMapper.findByUserIdLeid(localUserId,action.getSceneKey(),dateFormat.format(DateTime.now().toDate()));
         data.put("levelId", userLevel);
         //查询当前用户金币余额
-        Integer z =userIntegralsMapper.findIntegralsZ(localUserId);
-        Integer x =userIntegralsMapper.findIntegralsX(localUserId);
-        int totalCoins = z+x;
+        BigDecimal z =userIntegralsMapper.findIntegralsZ(localUserId);
+        BigDecimal x =userIntegralsMapper.findIntegralsX(localUserId);
+        BigDecimal totalCoins = z.add(x);
 
         String sceneKey = action.getSceneKey();
 
@@ -671,7 +669,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             metaObtainIntegral.setSceneKey(sceneKey);
             metaObtainIntegral.setUserLevel(4);
             metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
-            int consumeNum = metaObtainIntegral.getIntegral();
+            BigDecimal consumeNum = metaObtainIntegral.getIntegral();
 
             //查询是否购买过此功能且在有效期内
             UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
@@ -699,10 +697,10 @@ public class UserLevelServiceImpl implements UserLevelService {
             }
 
             //余额足够
-            if((totalCoins + consumeNum) >= 0){
+            if((totalCoins.add(consumeNum)).compareTo(new BigDecimal(0)) >= 0){
                 result.setStatus(204);
-                result.setMessage("使用查看更多指数统计数据，消费"+(-consumeNum)+"金币，24小时内可重复查看");
-                data.put("consumeNum", -consumeNum);
+                result.setMessage("使用查看更多指数统计数据，消费"+(consumeNum.multiply(new BigDecimal(-1)).toString())+"金币，24小时内可重复查看");
+                data.put("consumeNum", consumeNum.multiply(new BigDecimal(-1)));
                 //判断是否提示
                 UserScene userScene = new UserScene();
                 userScene.setUserId(localUserId);
@@ -718,8 +716,8 @@ public class UserLevelServiceImpl implements UserLevelService {
                 return result;
             }else{
                 result.setStatus(203);
-                result.setMessage("查看天使投资指数统计数据和项目列表需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
-                data.put("consumeNum", -consumeNum);
+                result.setMessage("查看天使投资指数统计数据和项目列表需要"+(consumeNum.multiply(new BigDecimal(-1)).toString())+"金币，您的金币已不足，快去充值吧");
+                data.put("consumeNum", consumeNum.multiply(new BigDecimal(-1)));
                 result.setData(data);
                 return result;
             }
@@ -887,12 +885,12 @@ public class UserLevelServiceImpl implements UserLevelService {
                         result.setData(data);
                         return result;
                     }
-                    int consumeNum = metaObtainIntegral.getIntegral();
+                    BigDecimal consumeNum = metaObtainIntegral.getIntegral();
                     //金币足够
-                    if(totalCoins + consumeNum > 0){
+                    if(totalCoins.add(consumeNum).compareTo(new BigDecimal(0))  > 0){
                         result.setStatus(204);
-                        result.setMessage("使用项目评估，每个选项扣除"+(-consumeNum)+"金币，共消费"+(-consumeNum)+"金币，24小时内可重复查看该选项");
-                        data.put("consumeNum", -consumeNum);
+                        result.setMessage("使用项目评估，每个选项扣除"+(consumeNum.multiply(new BigDecimal(-1)))+"金币，共消费"+(consumeNum.multiply(new BigDecimal(-1)))+"金币，24小时内可重复查看该选项");
+                        data.put("consumeNum", consumeNum.multiply(new BigDecimal(-1)));
                         //判断是否提示
                         UserScene userScene = new UserScene();
                         userScene.setUserId(localUserId);
@@ -908,8 +906,8 @@ public class UserLevelServiceImpl implements UserLevelService {
                         return result;
                     }else{
                         result.setStatus(203);
-                        result.setMessage("使用项目评估需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
-                        data.put("consumeNum", -consumeNum);
+                        result.setMessage("使用项目评估需要"+(consumeNum.multiply(new BigDecimal(-1)))+"金币，您的金币已不足，快去充值吧");
+                        data.put("consumeNum", consumeNum.multiply(new BigDecimal(-1)));
                         result.setData(data);
                         return result;
                     }
@@ -959,11 +957,11 @@ public class UserLevelServiceImpl implements UserLevelService {
                 }
                 //存在需要消费的选项
                 if(buys.size() > 0){
-                    int consumeNum = metaObtainIntegral.getIntegral()*buys.size();
-                    if(totalCoins + consumeNum >= 0){
+                    BigDecimal consumeNum = metaObtainIntegral.getIntegral().multiply(new BigDecimal(buys.size()));
+                    if(totalCoins.add(consumeNum).compareTo(new BigDecimal(0)) >= 0){
                         result.setStatus(204);
-                        result.setMessage("使用项目评估，每个选项扣除"+(-metaObtainIntegral.getIntegral())+"金币，共消费"+(-consumeNum)+"金币，24小时内可重复查看该选项");
-                        data.put("consumeNum", -consumeNum);
+                        result.setMessage("使用项目评估，每个选项扣除"+(metaObtainIntegral.getIntegral().multiply(new BigDecimal(-1)))+"金币，共消费"+(consumeNum.multiply(new BigDecimal(-1)))+"金币，24小时内可重复查看该选项");
+                        data.put("consumeNum", consumeNum.multiply(new BigDecimal(-1)));
                         //判断是否提示
                         UserScene userScene = new UserScene();
                         userScene.setUserId(localUserId);
@@ -979,8 +977,8 @@ public class UserLevelServiceImpl implements UserLevelService {
                         return result;
                     }else{
                         result.setStatus(203);
-                        result.setMessage("使用项目评估需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
-                        data.put("consumeNum", -consumeNum);
+                        result.setMessage("使用项目评估需要"+(consumeNum.multiply(new BigDecimal(-1)))+"金币，您的金币已不足，快去充值吧");
+                        data.put("consumeNum", consumeNum.multiply(new BigDecimal(-1)));
                         result.setData(data);
                         return result;
                     }
@@ -1075,12 +1073,12 @@ public class UserLevelServiceImpl implements UserLevelService {
                     return result;
                 }
 
-                int consumeNum = metaObtainIntegral.getIntegral()*buys.size();
+                BigDecimal consumeNum = metaObtainIntegral.getIntegral().multiply(new BigDecimal(buys.size()));
                 //金币足够
-                if(totalCoins + consumeNum >= 0){
+                if(totalCoins .add(consumeNum).compareTo(new BigDecimal(0)) >= 0){
                     result.setStatus(204);
-                    result.setMessage("使用投递项目，投递1个机构扣除"+(-metaObtainIntegral.getIntegral())+"金币，共消费"+(-consumeNum)+"金币，24小时内可重复提交给该机构");
-                    data.put("consumeNum", -consumeNum);
+                    result.setMessage("使用投递项目，投递1个机构扣除"+(metaObtainIntegral.getIntegral().multiply(new BigDecimal(-1)))+"金币，共消费"+(consumeNum.multiply(new BigDecimal(-1)))+"金币，24小时内可重复提交给该机构");
+                    data.put("consumeNum", consumeNum.multiply(new BigDecimal(-1)));
                     //判断是否提示
                     UserScene userScene = new UserScene();
                     userScene.setUserId(localUserId);
@@ -1096,8 +1094,8 @@ public class UserLevelServiceImpl implements UserLevelService {
                     return result;
                 }else{
                     result.setStatus(203);
-                    result.setMessage("使用投递项目，需要"+(-consumeNum)+"金币，您的金币已不足，快去充值吧");
-                    data.put("consumeNum", -consumeNum);
+                    result.setMessage("使用投递项目，需要"+(consumeNum.multiply(new BigDecimal(-1)))+"金币，您的金币已不足，快去充值吧");
+                    data.put("consumeNum", consumeNum.multiply(new BigDecimal(-1)));
                     result.setData(data);
                     return result;
                 }
@@ -1172,7 +1170,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         }
 
         //获取当前场景的消费金额
-        Integer costNum = getSenceCost(scence,1);
+        BigDecimal costNum = getSenceCost(scence,1);
 
         //先查一下用户是否已经消费过
         Example uicExample = new Example(UserIntegralConsume.class);
@@ -1203,22 +1201,22 @@ public class UserLevelServiceImpl implements UserLevelService {
                 //判断用户账户余额是否充足
                 if (jugeCoinsIsEnough(userId,costNum)){
                     result.setStatus(204);
-                    result.setMessage("查看约谈内容，共消费"+(-costNum)+"金币，一次性收费后不再计费");
+                    result.setMessage("查看约谈内容，共消费"+(costNum.multiply(new BigDecimal(-1)))+"金币，一次性收费后不再计费");
                     result.setData(data);
                 }else {
                     result.setStatus(203);
-                    result.setMessage("查看约谈内容，需要"+(-costNum)+"金币，您的金币已不足，快去充值吧");
+                    result.setMessage("查看约谈内容，需要"+(costNum.multiply(new BigDecimal(-1)))+"金币，您的金币已不足，快去充值吧");
                 }
             }
         }else {
             //判断用户账户余额是否充足
             if (jugeCoinsIsEnough(userId,costNum)){
                 result.setStatus(204);
-                result.setMessage("查看约谈内容，共消费"+(-costNum)+"金币，一次性收费后不再计费");
+                result.setMessage("查看约谈内容，共消费"+(costNum.multiply(new BigDecimal(-1)))+"金币，一次性收费后不再计费");
                 result.setData(data);
             }else {
                 result.setStatus(203);
-                result.setMessage("查看约谈内容，需要"+(-costNum)+"金币，您的金币已不足，快去充值吧");
+                result.setMessage("查看约谈内容，需要"+(costNum.multiply(new BigDecimal(-1)))+"金币，您的金币已不足，快去充值吧");
             }
         }
 
@@ -1232,15 +1230,15 @@ public class UserLevelServiceImpl implements UserLevelService {
      * @param costNum 花费数量
      * @return
      */
-    private boolean jugeCoinsIsEnough(Integer userId,Integer costNum){
+    private boolean jugeCoinsIsEnough(Integer userId, BigDecimal costNum){
         boolean jieguo = false;
         //查询当前用户金币余额
         Map<String, Object> u = userIntegralsMapper.findIntegralsU(userId);
-        Integer z = Integer.valueOf(String.valueOf(u.get("xnum")));
-        Integer x = Integer.valueOf(String.valueOf(u.get("znum")));
-        int totalCoins = z+x;
+        BigDecimal z = new BigDecimal(String.valueOf(u.get("xnum")));
+        BigDecimal x = new BigDecimal(String.valueOf(u.get("znum")));
+        BigDecimal totalCoins = z.add(x);
 
-        if ((-costNum) < totalCoins){
+        if ((costNum.multiply(new BigDecimal(-1))) .compareTo(totalCoins) < 0){
             jieguo = true;
         }
 
@@ -1253,8 +1251,8 @@ public class UserLevelServiceImpl implements UserLevelService {
      * @param userlevel 用户等级
      * @return
      */
-    private Integer getSenceCost(String sence,Integer userlevel){
-        Integer result = 0;
+    private BigDecimal getSenceCost(String sence,Integer userlevel){
+        BigDecimal result = new BigDecimal(0);
 
         Example moiExample = new Example(MetaObtainIntegral.class);
         moiExample.and().andEqualTo("sceneKey",sence).andEqualTo("userLevel");
@@ -1332,7 +1330,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         List<MetaObtainIntegral> metaObtainIntegralList = metaObtainIntegralMapper.selectByExample(moiExample);
 
         //获取需要消费金币
-        Integer costNum = 0;
+        BigDecimal costNum = new BigDecimal(0);
         //获取周期
         Integer period = 0;
         if (metaObtainIntegralList.size() > 0){
@@ -1365,7 +1363,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         userIntegralConsumeMapper.insert(userIntegralConsume);
 
         //更新金币记录表
-        changeIntegrals(userId, -costNum);
+        changeIntegrals(userId, costNum.multiply(new BigDecimal(-1)));
 
         Integer consumeId = userIntegralConsume.getId();
         //插入交易记录明细表
@@ -1422,7 +1420,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             metaObtainIntegral.setSceneKey(sceneKey);
             metaObtainIntegral.setUserLevel(4);
             metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
-            int consumeNum = metaObtainIntegral.getIntegral();
+            BigDecimal consumeNum = metaObtainIntegral.getIntegral();
 
             Date now = new Date();
             //计算失效时间
@@ -1443,7 +1441,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             userIntegralConsumeMapper.insert(userIntegralConsume);
 
             //更新金币记录表
-            this.changeIntegrals(localUserId, -consumeNum);
+            this.changeIntegrals(localUserId, consumeNum.multiply(new BigDecimal(-1)));
 
             result.setStatus(200);
             result.setMessage("金币消费成功");
@@ -1522,7 +1520,7 @@ public class UserLevelServiceImpl implements UserLevelService {
 
             //普通会员
             if(userLevel == 1){
-                int consumeNum = metaObtainIntegral.getIntegral();
+                BigDecimal consumeNum = metaObtainIntegral.getIntegral();
                 //金币足够
                 Date now = new Date();
                 //计算失效时间
@@ -1542,7 +1540,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 int consumeId = userIntegralConsume.getId();
 
                 //更新金币记录表
-                this.changeIntegrals(localUserId, -consumeNum);
+                this.changeIntegrals(localUserId, consumeNum.multiply(new BigDecimal(-1)));
 
                 //插入交易记录明细表
                 UserIntegralConsumeDatas newUserIntegralConsumeDatas = new UserIntegralConsumeDatas();
@@ -1593,7 +1591,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                     }
                 }
                 //存在需要消费的选项
-                int consumeNum = metaObtainIntegral.getIntegral()*buys.size();
+                BigDecimal consumeNum = metaObtainIntegral.getIntegral().multiply(new BigDecimal(buys.size()));
                 Date now = new Date();
                 //计算失效时间
                 Calendar calendar = new GregorianCalendar();
@@ -1612,7 +1610,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 int consumeId = userIntegralConsume.getId();
 
                 //更新金币记录表
-                this.changeIntegrals(localUserId, -consumeNum);
+                this.changeIntegrals(localUserId, consumeNum.multiply(new BigDecimal(-1)));
 
                 //插入交易记录明细表
                 for(String string : buys){
@@ -1654,7 +1652,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 }
             }
 
-            int consumeNum = metaObtainIntegral.getIntegral()*buys.size();
+            BigDecimal consumeNum = metaObtainIntegral.getIntegral().multiply(new BigDecimal(buys.size()));
             Date now = new Date();
             //计算失效时间
             Calendar calendar = new GregorianCalendar();
@@ -1673,7 +1671,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             int consumeId = userIntegralConsume.getId();
 
             //更新金币记录表
-            this.changeIntegrals(localUserId, -consumeNum);
+            this.changeIntegrals(localUserId, consumeNum.multiply(new BigDecimal(-1)));
 
             //插入交易记录明细表
             for(String string : buys){
@@ -1700,26 +1698,26 @@ public class UserLevelServiceImpl implements UserLevelService {
      * @param userId 用户ID
      * @param consumeNum 此次消费金币数量
      */
-    private void changeIntegrals(int userId, int consumeNum){
+    private void changeIntegrals(int userId, BigDecimal consumeNum){
         Example condition = new Example(UserIntegrals.class);
         condition.and().andEqualTo("userId", userId).andGreaterThan("endTime", new Date()).andGreaterThan("integralNum", 0);
         condition.setOrderByClause("end_time asc");
         List<UserIntegrals> integrals = userIntegralsMapper.selectByExample(condition);
         for(int i=0; i<integrals.size(); i++){
             //当前金币已消费数量
-            int res = integrals.get(i).getIntegralNum() + integrals.get(i).getConsumeNum();
-            if(res >= consumeNum){
-                integrals.get(i).setConsumeNum(integrals.get(i).getConsumeNum()-consumeNum);
+            BigDecimal res = integrals.get(i).getIntegralNum() .add(integrals.get(i).getConsumeNum()) ;
+            if(res.compareTo(consumeNum) >= 0){
+                integrals.get(i).setConsumeNum(integrals.get(i).getConsumeNum().subtract(consumeNum));
                 integrals.get(i).setConsumeTime(new Date());
                 userIntegralsMapper.updateByPrimaryKey(integrals.get(i));
-                consumeNum = 0;
-            }else if(res != 0){
-                integrals.get(i).setConsumeNum(-integrals.get(i).getIntegralNum());
+                consumeNum = new BigDecimal(0);
+            }else if(res.compareTo(new BigDecimal(0)) !=  0){
+                integrals.get(i).setConsumeNum(integrals.get(i).getIntegralNum().multiply(new BigDecimal(-1)));
                 integrals.get(i).setConsumeTime(new Date());
                 userIntegralsMapper.updateByPrimaryKey(integrals.get(i));
-                consumeNum = consumeNum - res;
+                consumeNum = consumeNum .subtract(res);
             }
-            if(consumeNum == 0){
+            if(consumeNum .compareTo(new BigDecimal(0)) == 0){
                 break;
             }
         }
@@ -1882,7 +1880,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 UserIntegrals userIntegrals =new UserIntegrals();
                 userIntegrals.setUserId(userId);
                 userIntegrals.setSceneKey(sKey);
-                userIntegrals.setIntegralNum(hnum);
+                userIntegrals.setIntegralNum(qj1.multiply(new BigDecimal(1+bei2)));
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(new Date());
@@ -1893,13 +1891,13 @@ public class UserLevelServiceImpl implements UserLevelService {
                 Date end= calendar.getTime();
                 userIntegrals.setEndTime(end);
                 userIntegrals.setBeginTime((new Date()));
-                userIntegrals.setConsumeNum(0);
+                userIntegrals.setConsumeNum(new BigDecimal("0"));
                 userIntegralsMapper.insert(userIntegrals);
                 //总表插入
                 UserIntegralConsume userIntegrals3=new UserIntegralConsume();
                 userIntegrals3.setUserId(userId);
                 userIntegrals3.setSceneKey(sKey);
-                userIntegrals3.setCostNum(hnum);
+                userIntegrals3.setCostNum(new BigDecimal(hnum));
                 //if(jb>=100){
                 userIntegrals3.setCreateTime(new Date());
                 Calendar calendar3 = new GregorianCalendar();
@@ -1932,7 +1930,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 UserIntegrals userIntegrals =new UserIntegrals();
                 userIntegrals.setUserId(userId);
                 userIntegrals.setSceneKey(sKey);
-                userIntegrals.setIntegralNum(hnum);
+                userIntegrals.setIntegralNum(qj1.multiply(new BigDecimal(1+bei2)));
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(new Date());
@@ -1943,12 +1941,12 @@ public class UserLevelServiceImpl implements UserLevelService {
                 Date end= calendar.getTime();
                 userIntegrals.setEndTime(end);
                 userIntegrals.setBeginTime((new Date()));
-                userIntegrals.setConsumeNum(0);
+                userIntegrals.setConsumeNum(new BigDecimal("0"));
                 userIntegralsMapper.insert(userIntegrals);
                 UserIntegralConsume userIntegrals3=new UserIntegralConsume();
                 userIntegrals3.setUserId(userId);
                 userIntegrals3.setSceneKey(sKey);
-                userIntegrals3.setCostNum(hnum);
+                userIntegrals3.setCostNum(qj1.multiply(new BigDecimal(1+bei2)));
                 //if(jb>=100){
                 userIntegrals3.setCreateTime(new Date());
                 Calendar calendar3 = new GregorianCalendar();
@@ -2061,10 +2059,10 @@ public class UserLevelServiceImpl implements UserLevelService {
                 //userIntegrals2.setSceneKey(sKey);
                 //Integer snum =(int)(body.getQj()*bei);
                 UserIntegrals userIntegrals =new UserIntegrals();
-                userIntegrals.setConsumeNum(0);
+                userIntegrals.setConsumeNum(new BigDecimal("0"));
                 userIntegrals.setUserId(userId);
                 userIntegrals.setSceneKey(sKey);
-                userIntegrals.setIntegralNum(hnum);
+                userIntegrals.setIntegralNum(qj2.multiply(new BigDecimal(1+bei2)));
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(new Date());
@@ -2081,7 +2079,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 UserIntegralConsume userIntegrals3=new UserIntegralConsume();
                 userIntegrals3.setUserId(userId);
                 userIntegrals3.setSceneKey(sKey);
-                userIntegrals3.setCostNum(hnum);
+                userIntegrals3.setCostNum(qj2.multiply(new BigDecimal(1+bei2)));
                 //if(jb>=100){
                 userIntegrals3.setCreateTime(new Date());
                 Calendar calendar3 = new GregorianCalendar();

@@ -14,19 +14,20 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
         <result column="consume_num" property="consumeNum" jdbcType="INTEGER" />
         <result column="consume_time" property="consumeTime" jdbcType="TIMESTAMP" />
+        <result column="app_id" jdbcType="INTEGER" property="appId" />
     </resultMap>
-    <select id="findIntegralsZ" parameterType="INTEGER" resultType="INTEGER" >
+    <select id="findIntegralsZ" parameterType="INTEGER" resultType="DECIMAL" >
         SELECT IFNULL(SUM(integral_num),0) znum  FROM user_integrals c
         WHERE c.user_id=#{userId,jdbcType=INTEGER} AND c.integral_num>0
         AND c.`end_time` >NOW()
     </select>
-    <select id="findIntegralsX" parameterType="INTEGER" resultType="INTEGER" >
+    <select id="findIntegralsX" parameterType="INTEGER" resultType="DECIMAL" >
         SELECT  IFNULL(SUM(cost_num),0) xnum  FROM user_integral_consume c WHERE user_id=#{userId,jdbcType=INTEGER} AND c.cost_num    &lt;  0
     </select>
     <select id="findBySkey" parameterType="INTEGER" resultType="String" >
         SELECT m.scene_key FROM meta_obtain_integral m WHERE m.user_level=#{leId} AND m.scene_key IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
     </select>
-    <select id="findByQnum" parameterType="INTEGER" resultType="INTEGER" >
+    <select id="findByQnum" parameterType="INTEGER" resultType="DECIMAL" >
         SELECT integral FROM meta_obtain_integral WHERE scene_key='EWJkiU7Q' AND user_level =#{leId}
     </select>
     <select id="findIntegralsU" parameterType="INTEGER" resultType="java.util.HashMap" >

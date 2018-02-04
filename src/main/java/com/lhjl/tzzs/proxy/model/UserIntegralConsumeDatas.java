@@ -39,6 +39,16 @@ public class UserIntegralConsumeDatas {
     @Column(name = "user_integral_consume_id")
     private Integer userIntegralConsumeId;
 
+    @Column(name = "app_id")
+    private Integer appId;
+
+    public Integer getAppId() {
+        return appId;
+    }
+
+    public void setAppId(Integer appId) {
+        this.appId = appId;
+    }
     /**
      * @return id
      */

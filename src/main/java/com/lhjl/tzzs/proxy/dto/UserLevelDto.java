@@ -44,7 +44,7 @@ public class UserLevelDto {
      * 原价
      * @return
      */
-    private Integer originalCost;
+    private BigDecimal originalCost;
 
     /**
      * 场景key
@@ -60,7 +60,7 @@ public class UserLevelDto {
      * 当前会员金币赠送值
      * @return
      */
-    private Integer coinNum;
+    private BigDecimal coinNum;
 
     /**
      * 当前会员金币赠送比例
@@ -133,13 +133,10 @@ public class UserLevelDto {
         this.actualPrice = actualPrice;
     }
 
-    public Integer getOriginalCost() {
+    public BigDecimal getOriginalCost() {
         return originalCost;
     }
 
-    public void setOriginalCost(Integer originalCost) {
-        this.originalCost = originalCost;
-    }
 
     public String getSceneKey() {
         return sceneKey;
@@ -157,11 +154,15 @@ public class UserLevelDto {
         this.moneyId = moneyId;
     }
 
-    public Integer getCoinNum() {
+    public BigDecimal getCoinNum() {
         return coinNum;
     }
 
-    public void setCoinNum(Integer coinNum) {
+    public void setOriginalCost(BigDecimal originalCost) {
+        this.originalCost = originalCost;
+    }
+
+    public void setCoinNum(BigDecimal coinNum) {
         this.coinNum = coinNum;
     }
 

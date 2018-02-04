@@ -11,6 +11,7 @@
     <result column="datas_id" jdbcType="VARCHAR" property="datasId" />
     <result column="consume_date" jdbcType="DATE" property="consumeDate" />
     <result column="user_integral_consume_id" jdbcType="INTEGER" property="userIntegralConsumeId" />
+    <result column="app_id" jdbcType="INTEGER" property="appId" />
   </resultMap>
 
 </mapper>

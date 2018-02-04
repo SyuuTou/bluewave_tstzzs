@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
@@ -72,7 +73,7 @@ public class InvestorListController extends GenericController {
      * @return
      */
     @GetMapping("/v{appid}/match/users")
-    public CommonDto<Boolean> matchUsers(@PathVariable Integer appid,Integer userId,Integer investorId){
+    public CommonDto<Boolean> matchUsers(@PathVariable Integer appid,Integer userId, Integer investorId){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
     		result = investorService.matchUsers(appid,userId,investorId);

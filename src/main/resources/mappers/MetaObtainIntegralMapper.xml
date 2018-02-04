@@ -8,7 +8,7 @@
     <id column="ID" jdbcType="INTEGER" property="id" />
     <result column="scene_key" jdbcType="VARCHAR" property="sceneKey" />
     <result column="user_level" jdbcType="INTEGER" property="userLevel" />
-    <result column="integral" jdbcType="INTEGER" property="integral" />
+    <result column="integral" jdbcType="DECIMAL" property="integral" />
     <result column="period" jdbcType="INTEGER" property="period" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="yn" jdbcType="INTEGER" property="yn" />

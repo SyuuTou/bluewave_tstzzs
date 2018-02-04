@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -25,7 +26,7 @@ public class UserIntegrals {
      * 积分数量
      */
     @Column(name = "integral_num")
-    private Integer integralNum;
+    private BigDecimal integralNum;
 
     /**
      * 有效开始时间
@@ -46,13 +47,24 @@ public class UserIntegrals {
      * 累计消费的积分
      */
     @Column(name = "consume_num")
-    private Integer consumeNum;
+    private BigDecimal consumeNum;
 
     /**
      * 消费时间
      */
     @Column(name = "consume_time")
     private Date consumeTime;
+
+    @Column(name = "app_id")
+    private Integer appId;
+
+    public Integer getAppId() {
+        return appId;
+    }
+
+    public void setAppId(Integer appId) {
+        this.appId = appId;
+    }
 
     /**
      * @return id
@@ -104,23 +116,6 @@ public class UserIntegrals {
         this.sceneKey = sceneKey;
     }
 
-    /**
-     * 获取积分数量
-     *
-     * @return integral_num - 积分数量
-     */
-    public Integer getIntegralNum() {
-        return integralNum;
-    }
-
-    /**
-     * 设置积分数量
-     *
-     * @param integralNum 积分数量
-     */
-    public void setIntegralNum(Integer integralNum) {
-        this.integralNum = integralNum;
-    }
 
     /**
      * 获取有效开始时间
@@ -172,21 +167,19 @@ public class UserIntegrals {
         this.createTime = createTime;
     }
 
-    /**
-     * 获取累计消费的积分
-     *
-     * @return consume_num - 累计消费的积分
-     */
-    public Integer getConsumeNum() {
+    public BigDecimal getIntegralNum() {
+        return integralNum;
+    }
+
+    public void setIntegralNum(BigDecimal integralNum) {
+        this.integralNum = integralNum;
+    }
+
+    public BigDecimal getConsumeNum() {
         return consumeNum;
     }
 
-    /**
-     * 设置累计消费的积分
-     *
-     * @param consumeNum 累计消费的积分
-     */
-    public void setConsumeNum(Integer consumeNum) {
+    public void setConsumeNum(BigDecimal consumeNum) {
         this.consumeNum = consumeNum;
     }
 
