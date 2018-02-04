@@ -17,5 +17,5 @@ public interface RedEnvelopeService {
 
     CommonDto<BigDecimal> checkRemainingBalance(Integer appId, String token);
 
-    CommonDto<RedEnvelopeResDto> receiveRedEnvelope(Integer appId, Long redEnvelopeId, String token);
+    CommonDto<RedEnvelopeResDto> receiveRedEnvelope(Integer appId, String unionId, String token);
 }

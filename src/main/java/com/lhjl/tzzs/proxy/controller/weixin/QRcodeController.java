@@ -9,15 +9,16 @@ import com.lhjl.tzzs.proxy.service.common.CommonQRCodeService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -63,5 +64,30 @@ public class QRcodeController extends GenericController {
         response.setContentType(MediaType.IMAGE_PNG_VALUE);
         IOUtils.copy(in, response.getOutputStream());
 
+    }
+
+    @GetMapping("qrcode/generate")
+    public HttpEntity<byte[]> generateQrcode(String path, Integer width, HttpServletResponse response) throws IOException {
+
+        CommonDto<String> result = null;
+        InputStream in = null;
+        try {
+            in = commonQRCodeService.createWXaQRCode(path,width);
+        } catch (Exception e) {
+            this.logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[512];
+        int l = in.read(buffer);
+        while(l >= 0) {
+            outputStream.write(buffer, 0, l);
+            l = in.read(buffer);
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        headers.setContentLength(outputStream.toByteArray().length);
+        headers.set("Content-Disposition", "attachment; filename=image.png");
+        return new HttpEntity<byte[]>(outputStream.toByteArray(), headers);
     }
 }

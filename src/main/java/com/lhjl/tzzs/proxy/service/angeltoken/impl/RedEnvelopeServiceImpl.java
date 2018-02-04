@@ -8,6 +8,7 @@ import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
+import com.lhjl.tzzs.proxy.utils.MD5Util;
 import org.joda.time.DateTime;
 import org.joda.time.DurationFieldType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,6 +162,13 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
     @Override
     public CommonDto<String> createRedEnvelope(Integer appId, RedEnvelopeDto redEnvelopeDto) {
 
+        if (redEnvelopeDto.getAmount().compareTo(new BigDecimal(0))<=0){
+            return new CommonDto<>("","红包金额必须大于0",200);
+        }
+
+        if(redEnvelopeDto.getQuantity()<=0){
+            return new CommonDto<>("","红包数量必须大于0",200);
+        }
 
         RedEnvelope redEnvelope = new RedEnvelope();
         redEnvelope.setAmount(redEnvelopeDto.getAmount());
@@ -169,7 +177,9 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         redEnvelope.setCreateTime(DateTime.now().toDate());
         redEnvelope.setQuantity(redEnvelopeDto.getQuantity());
         redEnvelope.setStatus(0);
+        redEnvelope.setReceiveQuantity(0);
         redEnvelope.setToken(redEnvelopeDto.getToken());
+        redEnvelope.setUnionKey(MD5Util.md5Encode(DateTime.now().millisOfDay().getAsString(),""));
 
         redEnvelopeMapper.insert(redEnvelope);
 
@@ -251,8 +261,9 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
     }
 
 
+    @Transactional
     @Override
-    public CommonDto<RedEnvelopeResDto> receiveRedEnvelope(Integer appId, Long redEnvelopeId, String token) {
+    public CommonDto<RedEnvelopeResDto> receiveRedEnvelope(Integer appId, String unionId, String token) {
 
         CommonDto<RedEnvelopeResDto> result = new CommonDto<>();
         RedEnvelopeResDto redEnvelopeResDto = new RedEnvelopeResDto();
@@ -274,49 +285,59 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                 redEnvelopeResDto.setNeckName(usersWeixin.getNickName());
             }
         }
+        RedEnvelope queryRedEnvelope = new RedEnvelope();
+        queryRedEnvelope.setUnionKey(unionId);
+        RedEnvelope redEnvelope = redEnvelopeMapper.selectOne(queryRedEnvelope);
+        redEnvelopeResDto.setAmount(redEnvelope.getAmount());
+        redEnvelopeResDto.setQuantity(redEnvelope.getReceiveQuantity());
+        redEnvelopeResDto.setTotalQuantity(redEnvelope.getQuantity());
+        redEnvelopeResDto.setMessage(redEnvelope.getMessage());
+        RedEnvelopeLog queryRedEnvelopeLog = new RedEnvelopeLog();
+        queryRedEnvelopeLog.setAppId(appId);
+        queryRedEnvelopeLog.setToken(token);
+        queryRedEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
+        RedEnvelopeLog checkRedEnvelopeLog = redEnvelopeLogMapper.selectOne(queryRedEnvelopeLog);
+        if (null != checkRedEnvelopeLog){
+            redEnvelopeResDto.setStatus("Completed");
+        }else {
+            //尝试3次获取红包
+            for (int i = 0; i < 3; i++) {
 
-        //尝试3次获取红包
-        for (int i =0 ;i < 3; i++) {
-            RedEnvelope redEnvelope = redEnvelopeMapper.selectByPrimaryKey(redEnvelopeId);
 
-            redEnvelopeResDto.setAmount(redEnvelope.getAmount());
-            redEnvelopeResDto.setQuantity(redEnvelope.getReceiveQuantity());
-            redEnvelopeResDto.setTotalQuantity(redEnvelope.getQuantity());
 
-            if (redEnvelope.getQuantity() == redEnvelope.getReceiveQuantity()){
+                if (redEnvelope.getQuantity() == redEnvelope.getReceiveQuantity()) {
 
-                if (StringUtil.isEmpty(redEnvelopeResDto.getMessage())){
-                    redEnvelopeResDto.setMessage(redEnvelope.getMessage());
-                }
-                redEnvelopeResDto.setStatus("Finished");
-                break;
-            }else {
-                Example example = new Example(RedEnvelope.class);
-                example.and().andEqualTo("appId", appId).andEqualTo("id", redEnvelopeId).andEqualTo("receiveQuantity", redEnvelope.getReceiveQuantity());
-
-                redEnvelope.setReceiveQuantity(redEnvelope.getReceiveQuantity()+1);
-                if (redEnvelopeMapper.updateByExample(redEnvelope, example) > 0) {
-
-                    redEnvelopeResDto.setStatus("Received");
-
-                    RedEnvelopeLog redEnvelopeLog = new RedEnvelopeLog();
-                    redEnvelopeLog.setAmount(redEnvelope.getAmount());
-                    redEnvelopeLog.setAppId(appId);
-                    redEnvelopeLog.setCreateTime(DateTime.now().toDate());
-                    redEnvelopeLog.setRedEnvelopeId(redEnvelopeId);
-                    redEnvelopeLog.setToken(token);
-                    redEnvelopeLogMapper.insert(redEnvelopeLog);
-
-                    this.addUserIntegralsLog(appId,"GET_ANGEL_TOKEN",users.getId(),redEnvelope.getAmount(),obtainIntegralPeriod,true);
-
+                    if (StringUtil.isEmpty(redEnvelopeResDto.getMessage())) {
+                        redEnvelopeResDto.setMessage(redEnvelope.getMessage());
+                    }
+                    redEnvelopeResDto.setStatus("Finished");
                     break;
+                } else {
+                    Example example = new Example(RedEnvelope.class);
+                    example.and().andEqualTo("appId", appId).andEqualTo("unionKey", unionId).andEqualTo("receiveQuantity", redEnvelope.getReceiveQuantity());
+                    redEnvelope.setReceiveQuantity(redEnvelope.getReceiveQuantity() + 1);
+                    if (redEnvelopeMapper.updateByExample(redEnvelope, example) > 0) {
+
+                        redEnvelopeResDto.setStatus("Received");
+
+                        RedEnvelopeLog redEnvelopeLog = new RedEnvelopeLog();
+                        redEnvelopeLog.setAmount(redEnvelope.getAmount());
+                        redEnvelopeLog.setAppId(appId);
+                        redEnvelopeLog.setCreateTime(DateTime.now().toDate());
+                        redEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
+                        redEnvelopeLog.setToken(token);
+                        redEnvelopeLogMapper.insert(redEnvelopeLog);
+
+                        this.addUserIntegralsLog(appId, "GET_ANGEL_TOKEN", users.getId(), redEnvelope.getAmount(), obtainIntegralPeriod, true);
+
+                        break;
+                    }
                 }
             }
         }
-
-        RedEnvelopeLog queryRedEnvelope = new RedEnvelopeLog();
-        queryRedEnvelope.setRedEnvelopeId(redEnvelopeId);
-        List<RedEnvelopeLog> redEnvelopeLogs = redEnvelopeLogMapper.select(queryRedEnvelope);
+        queryRedEnvelopeLog = new RedEnvelopeLog();
+        queryRedEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
+        List<RedEnvelopeLog> redEnvelopeLogs = redEnvelopeLogMapper.select(queryRedEnvelopeLog);
 
         List<RedEnvelopeLogDto> redEnvelopeLogDtos = new ArrayList<>();
 
@@ -342,6 +363,8 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
         redEnvelopeResDto.setRedEnvelopeLogs(redEnvelopeLogDtos);
         result.setData(redEnvelopeResDto);
+        result.setMessage("success");
+        result.setStatus(200);
 
         return result;
     }
