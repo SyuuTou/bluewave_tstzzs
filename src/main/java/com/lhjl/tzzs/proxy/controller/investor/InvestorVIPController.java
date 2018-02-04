@@ -79,7 +79,7 @@ public class InvestorVIPController extends GenericController {
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		
-    		result.setData(null);
+    		result.setData(null); 
     		result.setMessage("fail");  
     		result.setStatus(500);
     	}
