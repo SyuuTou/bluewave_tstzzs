@@ -53,12 +53,12 @@ public class InvestorBasicInfoOutputDto {
     /**'
      * 学历
      */
-    private Integer diploma;
+    private String diploma;
 
     /**
      * 国籍
      */
-    private Integer nationality;
+    private String nationality;
 
     /**
      * 任职时间
@@ -84,6 +84,14 @@ public class InvestorBasicInfoOutputDto {
      * 工作名片
      */
     private String businessCard;
+
+    public String getBusinessCard() {
+        return businessCard;
+    }
+
+    public void setBusinessCard(String businessCard) {
+        this.businessCard = businessCard;
+    }
 
     /**
      * 图片
@@ -120,6 +128,7 @@ public class InvestorBasicInfoOutputDto {
      * @return
      */
     private String businessCardOposite;
+
 
     public String getBusinessCardOposite() {
         return businessCardOposite;
@@ -201,19 +210,19 @@ public class InvestorBasicInfoOutputDto {
         this.sex = sex;
     }
 
-    public Integer getDiploma() {
+    public String getDiploma() {
         return diploma;
     }
 
-    public void setDiploma(Integer diploma) {
+    public void setDiploma(String diploma) {
         this.diploma = diploma;
     }
 
-    public Integer getNationality() {
+    public String getNationality() {
         return nationality;
     }
 
-    public void setNationality(Integer nationality) {
+    public void setNationality(String nationality) {
         this.nationality = nationality;
     }
 
@@ -249,13 +258,6 @@ public class InvestorBasicInfoOutputDto {
         this.educationExperiences = educationExperiences;
     }
 
-    public String getBusinessCard() {
-        return businessCard;
-    }
-
-    public void setBusinessCard(String businessCard) {
-        businessCard = businessCard;
-    }
 
     public String getPicture() {
         return picture;
@@ -304,4 +306,5 @@ public class InvestorBasicInfoOutputDto {
     public void setHonor(String honor) {
         this.honor = honor;
     }
+
 }

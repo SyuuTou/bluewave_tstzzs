@@ -10,4 +10,6 @@ public interface MetaRegionMapper extends OwnerMapper<MetaRegion> {
     List<MetaRegion> selectByCityName(@Param("searchWord") String searchWord);
 
     List<MetaRegion> selectAllCountry();
+
+    String selectByRegionId(@Param("regionId") Integer regionId);
 }

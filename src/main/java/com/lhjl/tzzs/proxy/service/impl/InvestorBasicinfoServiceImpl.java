@@ -249,8 +249,10 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             investorBasicInfoOutputDto.setBirthDay(sdf.format(investors.getBirthDay()));
         }
         investorBasicInfoOutputDto.setSex(investors.getSex());
-        investorBasicInfoOutputDto.setDiploma(investors.getDiploma());
-        investorBasicInfoOutputDto.setNationality(investors.getNationality());
+        String diploma = metaDiplomaMapper.selectByDiplomaId(investors.getDiploma());
+        investorBasicInfoOutputDto.setDiploma(diploma);
+        String countryName = metaRegionMapper.selectByRegionId(investors.getNationality());
+        investorBasicInfoOutputDto.setNationality(countryName);
         investorBasicInfoOutputDto.setBusinessCardOposite(investors.getBusinessCardOpposite());
         if(null == investors.getTenureTime() || "undefined".equals(investors.getTenureTime())){
             investorBasicInfoOutputDto.setTenureTime("");
