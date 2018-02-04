@@ -53,7 +53,7 @@
     <result column="position" jdbcType="VARCHAR" property="position" />
     <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
     <result column="weChatGroupId" jdbcType="VARCHAR" property="weChatGroupId" />
-    <result column="irPrincipal" jdbcType="VARCHAR" property="weChatGroupId" />
+    <result column="irPrincipal" jdbcType="VARCHAR" property="irPrincipal" />
     <result column="type_name" jdbcType="VARCHAR" property="typeName" />
     <result column="cooperativeRelationship" jdbcType="VARCHAR" property="cooperativeRelationship" />
     <result column="type" jdbcType="VARCHAR" property="type" />
@@ -99,8 +99,8 @@
   <if test="keyWords != null and keyWords != ''">
                 AND (i.name like "%"#{keyWords}"%" or ii.short_name like "%"#{keyWords}"%" or i.position like "%"#{keyWords}"%"
 				or mdst.type_name like "%"#{keyWords}"%" or iit.type like "%"#{keyWords}"%" or seg.segmentations like "%"#{keyWords}"%"
-				or speedway.speedways like "%"#{keyWords}"%" or speedways,stage.stages like "%"#{keyWords}"%"
-				or ide.demand like "%"#{keyWords}"%" or speedways,city.citys like "%"#{keyWords}"%" or mgt.irPrincipal like "%"#{keyWords}"%"
+				or speedway.speedways like "%"#{keyWords}"%" or stage.stages like "%"#{keyWords}"%"
+				or ide.demand like "%"#{keyWords}"%" or city.citys like "%"#{keyWords}"%" or mgt.irPrincipal like "%"#{keyWords}"%"
 				or mgt.weChatGroupId like "%"#{keyWords}"%" )
   </if>
   <!-- 范围搜索 -->
@@ -174,9 +174,9 @@
   <if test="keyWords != null and keyWords != ''">
                 AND (i.name like "%"#{keyWords}"%" or ii.short_name like "%"#{keyWords}"%" or i.position like "%"#{keyWords}"%"
 				or mdst.type_name like "%"#{keyWords}"%" or iit.type like "%"#{keyWords}"%" or seg.segmentations like "%"#{keyWords}"%"
-				or speedway.speedways like "%"#{keyWords}"%" or speedways,stage.stages like "%"#{keyWords}"%"
-				or ide.demand like "%"#{keyWords}"%" or speedways,city.citys like "%"#{keyWords}"%"
-				or mgt.irPrincipal like "%"#{keyWords}"%" or mgt.weChatGroupId like "%"#{keyWords}"%")
+				or speedway.speedways like "%"#{keyWords}"%" or stage.stages like "%"#{keyWords}"%"
+				or ide.demand like "%"#{keyWords}"%" or city.citys like "%"#{keyWords}"%" or mgt.irPrincipal like "%"#{keyWords}"%"
+				or mgt.weChatGroupId like "%"#{keyWords}"%" )
   </if>
   <!-- 查询条件：创建开始时间 -->
   <if test="startTime !=null">
