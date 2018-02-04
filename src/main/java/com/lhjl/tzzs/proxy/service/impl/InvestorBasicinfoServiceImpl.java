@@ -69,7 +69,7 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
         investors.setIdentityType(identityType);
         investors.setWeichat(body.getWeiChat());
         investors.setEmail(body.getEmail());
-        investors.setBirthDay(DateUtils.parse(body.getBirthDay()));
+        investors.setBirthDay(DateUtils.parse1(body.getBirthDay()));
         investors.setSex(body.getSex());
 
         Integer diplomaId = metaDiplomaMapper.findDiplomaIdBydiplomaName(body.getDiploma());
@@ -78,7 +78,7 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
         Integer nationalityId = metaRegionMapper.findNationalityIdByCountry(body.getNationality());
         investors.setNationality(nationalityId);
 
-        investors.setTenureTime(DateUtils.parse(body.getTenureTime()));
+        investors.setTenureTime(DateUtils.parse1(body.getTenureTime()));
         investors.setCompanyIntroduction(body.getCompanyIntro());
         investors.setBusinessCard(body.getBusinessCard());
         investors.setPicture(body.getPicture());
