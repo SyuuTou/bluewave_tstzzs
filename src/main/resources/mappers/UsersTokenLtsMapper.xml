@@ -11,4 +11,8 @@
     <result column="register_time" jdbcType="TIMESTAMP" property="registerTime" />
     <result column="meta_app_id" jdbcType="INTEGER" property="metaAppId" />
   </resultMap>
+
+  <select id="findTokenByUserid" parameterType="java.lang.Integer" resultType="java.lang.String">
+    select token from user_token where user_id =#{userId};
+  </select>
 </mapper>

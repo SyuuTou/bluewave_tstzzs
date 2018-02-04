@@ -1,18 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lhjl.tzzs.proxy.mapper.AdminUserMapper" >
-  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.AdminUser" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.AdminUserMapper">
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.AdminUser">
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="admin_type" property="adminType" jdbcType="INTEGER" />
-    <result column="meta_app_id" property="metaAppId" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="yn" property="yn" jdbcType="INTEGER" />
-    <result column="phonenumber" property="phonenumber" jdbcType="VARCHAR" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="admin_type" jdbcType="INTEGER" property="adminType" />
+    <result column="meta_app_id" jdbcType="INTEGER" property="metaAppId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="yn" jdbcType="INTEGER" property="yn" />
+    <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
   </resultMap>
   <select id="selectTstzzsAdmins" resultMap="BaseResultMap">
   	select * from admin_user 
@@ -20,5 +21,9 @@
 	<if test="keyword !=null and keyword !=''">
 		and name like "%"#{keyword}"%"
 	</if>
+  </select>
+
+    <select id="selectByLoginBody" parameterType="java.lang.String" resultMap="java.lang.Integer">
+        select user_id from admin_user where `name` =#{username} and `password` =#{password};
   </select>
 </mapper>

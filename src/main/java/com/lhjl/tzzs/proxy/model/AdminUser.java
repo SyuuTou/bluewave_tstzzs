@@ -41,35 +41,13 @@ public class AdminUser {
     private String phonenumber;
 
     private String name;
+
     /**
-     * 公司姓名
+     * 密码
      */
-    @Transient
-    private String companyName;
+    private String password;
+
     /**
-     * 职务名称
-     */
-    @Transient
-    private String dutyName;
-    
-
-    public String getCompanyName() {
-		return companyName;
-	}
-
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
-
-	public String getDutyName() {
-		return dutyName;
-	}
-
-	public void setDutyName(String dutyName) {
-		this.dutyName = dutyName;
-	}
-
-	/**
      * @return id
      */
     public Integer getId() {
@@ -201,11 +179,21 @@ public class AdminUser {
         this.name = name;
     }
 
-	@Override
-	public String toString() {
-		return "AdminUser [id=" + id + ", userId=" + userId + ", adminType=" + adminType + ", metaAppId=" + metaAppId
-				+ ", createTime=" + createTime + ", yn=" + yn + ", phonenumber=" + phonenumber + ", name=" + name
-				+ ", companyName=" + companyName + ", dutyName=" + dutyName + "]";
-	}
-    
+    /**
+     * 获取密码
+     *
+     * @return password - 密码
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * 设置密码
+     *
+     * @param password 密码
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
