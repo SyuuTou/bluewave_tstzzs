@@ -14,4 +14,8 @@ public interface MetaInvestmentInstitutionTeamTypeMapper extends OwnerMapper<Met
      * @return
      */
     List<MetaInvestmentInstitutionTeamType> selectTeamTypeByInstitutionId(@Param("institutionId") Integer institutionId);
+
+    Integer findTeamIdByName(@Param("teamName") String teamName);
+
+    String findTeamNameById(@Param("teamId") Integer teamId);
 }

@@ -4,8 +4,10 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorKernelInfoDto;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
+import com.lhjl.tzzs.proxy.mapper.MetaInvestmentInstitutionTeamTypeMapper;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.Investors;
+import com.lhjl.tzzs.proxy.model.MetaInvestmentInstitutionTeamType;
 import com.lhjl.tzzs.proxy.service.InvestorInfoService;
 import com.lhjl.tzzs.proxy.utils.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class InvestorInfoServiceImpl implements InvestorInfoService {
 
     @Autowired
     private InvestorsMapper investorsMapper;
+
+    @Autowired
+    private MetaInvestmentInstitutionTeamTypeMapper metaInvestmentInstitutionTeamTypeMapper;
 
     @Override
     public CommonDto<String> addOrUpdateInvestorInfo(InvestorKernelInfoDto body) {
@@ -57,7 +62,9 @@ public class InvestorInfoServiceImpl implements InvestorInfoService {
         investors.setInvestmentInstitutionsId(investmentInstitutionsId);
         investors.setPosition(body.getCompanyDuties());
         investors.setHeadPicture(body.getHeadPicture());
-        investors.setTeamId(body.getTeamId());
+
+        Integer teamId = metaInvestmentInstitutionTeamTypeMapper.findTeamIdByName(body.getTeamName());
+        investors.setTeamId(teamId);
         investors.setSelfDefTeam(body.getSelfDefTeam());
         investors.setPhone(body.getPhone());
         investors.setKernelDescription(body.getKernelDesc());
@@ -98,7 +105,8 @@ public class InvestorInfoServiceImpl implements InvestorInfoService {
         investorKernelInfoDto.setCompanyName(companyName);
         investorKernelInfoDto.setCompanyDuties(investors.getPosition());
         investorKernelInfoDto.setHeadPicture(investors.getHeadPicture());
-        investorKernelInfoDto.setTeamId(investors.getTeamId());
+        String teamName = metaInvestmentInstitutionTeamTypeMapper.findTeamNameById(investors.getTeamId());
+        investorKernelInfoDto.setTeamName(teamName);
         investorKernelInfoDto.setSelfDefTeam(investors.getSelfDefTeam());
         investorKernelInfoDto.setPhone(investors.getPhone());
         investorKernelInfoDto.setKernelDesc(investors.getKernelDescription());

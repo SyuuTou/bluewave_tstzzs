@@ -40,7 +40,7 @@ public class InvestorKernelInfoDto {
     /**
      * 团队Id
      */
-    private Integer teamId;
+    private String teamName;
 
     /**
      * 自定义团队
@@ -97,12 +97,12 @@ public class InvestorKernelInfoDto {
         this.companyDuties = companyDuties;
     }
 
-    public Integer getTeamId() {
-        return teamId;
+    public String getTeamName() {
+        return teamName;
     }
 
-    public void setTeamId(Integer teamId) {
-        this.teamId = teamId;
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
     public String getSelfDefTeam() {

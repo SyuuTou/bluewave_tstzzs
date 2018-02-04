@@ -17,4 +17,12 @@
     group by meiity.type_name
     order by meiity.sort
   </select>
+
+  <select id="findTeamIdByName" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select id from meta_investment_institution_team_type where `type_name` =#{teamName};
+  </select>
+
+  <select id="findTeamNameById" parameterType="java.lang.Integer" resultType="java.lang.String">
+    select type_name from meta_investment_institution_team_type where id =#{teamId};
+  </select>
 </mapper>
