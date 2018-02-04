@@ -346,10 +346,10 @@ public class InvestorServiceImpl implements InvestorService {
 			//将user的有效位变更为无效
 			user.setYn(0);
 			userLevelRelationMapper.updateByPrimaryKeySelective(user);
+			
 			body.setCreateTime(new Date());
 			body.setYn(1);
 			body.setStatus(4);
-			
 			if(user.getLevelId() !=body.getLevelId()) {//用户的会员等级进行了变更
 				
 				body.setBeginTime(new Date());
