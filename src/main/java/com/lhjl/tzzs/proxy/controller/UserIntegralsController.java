@@ -55,7 +55,7 @@ public class UserIntegralsController {
 		} catch (Exception e) {
 			result.setStatus(5101);
 			result.setMessage("项目显示页面异常，请稍后再试");
-			log.error(e.getMessage());
+			log.error(e.getMessage(),e.fillInStackTrace());
 		}
 		return result;
 	}

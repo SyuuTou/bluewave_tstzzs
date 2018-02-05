@@ -68,8 +68,10 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 			/*Integer z =userIntegralsMapper.findIntegralsZ(userId);
 			Integer x =userIntegralsMapper.findIntegralsX(userId);*/
 			Map<String, Object> u = userIntegralsMapper.findIntegralsU(userId);
-			Integer z = Integer.valueOf(String.valueOf(u.get("xnum")));
-			Integer x = Integer.valueOf(String.valueOf(u.get("znum")));
+			BigDecimal xnum = (BigDecimal) u.get("xnum");
+			BigDecimal znum = (BigDecimal) u.get("znum");
+			Integer z = xnum.intValue();
+			Integer x = znum.intValue();
 			int y=z+x;
 			map.put("ynum",y);
 		}else{
