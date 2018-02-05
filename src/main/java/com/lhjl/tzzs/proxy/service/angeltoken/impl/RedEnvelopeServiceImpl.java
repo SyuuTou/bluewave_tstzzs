@@ -313,6 +313,8 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         RedEnvelopeLog checkRedEnvelopeLog = redEnvelopeLogMapper.selectOne(queryRedEnvelopeLog);
         if (null != checkRedEnvelopeLog){
             redEnvelopeResDto.setStatus("Completed");
+            redEnvelopeResDto.setMessage(redEnvelope.getMessage());
+            redEnvelopeResDto.setAmount(checkRedEnvelopeLog.getAmount());
         }else {
             //尝试3次获取红包
             for (int i = 0; i < 3; i++) {
@@ -335,7 +337,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                     BigDecimal reciveAmount = null;
                     if (redEnvelope.getRedEnvelopeType() == 0) {
                         reciveAmount = redEnvelope.getAmount();
-                        redEnvelopeLog.setAmount(redEnvelope.getAmount());
+                        redEnvelopeLog.setAmount(reciveAmount);
                         redEnvelope.setReceiveAmount(redEnvelope.getReceiveAmount().add(redEnvelope.getAmount()));
                         redEnvelopeResDto.setAmount(reciveAmount);
                     }else if (redEnvelope.getRedEnvelopeType() == 1) {
