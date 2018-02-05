@@ -52,7 +52,7 @@ public class LoginServiceImpl implements LoginService{
         }catch(Exception e) {
         	result.setStatus(500);
             result.setMessage("user_token表中存在两条相同的userId");
-            result.setData(false);
+            result.setData(false); 
             return result;
         }
         
