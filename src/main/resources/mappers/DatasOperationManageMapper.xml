@@ -20,9 +20,10 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="index_type" jdbcType="INTEGER" property="indexType" />
   </resultMap>
   
-  <update id="changeInvestorIrPrincipal" >
+  <update id="changeInvestorIrPrincipal">
   	update datas_operation_manage set ir_principal=#{irPrincipal},update_time=#{updateTime} where data_id=#{dataId} and data_type=#{dataType} 
   </update>
   
@@ -30,7 +31,7 @@
   	select * from datas_operation_manage where data_id=#{dataId} and data_type=#{dataType}
   </select>
   
-  <insert id="addInvestorIrPrincipal" >
+  <insert id="addInvestorIrPrincipal">
   	insert into datas_operation_manage(data_id,data_type,ir_principal,create_time) values(#{dataId},#{dataType},#{irPrincipal},#{createTime})
   </insert>
   

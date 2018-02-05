@@ -3,7 +3,7 @@ package com.lhjl.tzzs.proxy.model;
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "datas_operation_manage")  
+@Table(name = "datas_operation_manage")
 public class DatasOperationManage {
     /**
      * 数据ID
@@ -13,7 +13,7 @@ public class DatasOperationManage {
     private Integer dataId;
 
     /**
-     * 数据类型表：关联基础数据类型元数据
+     * 数据类型表：关联基础数据类型元数据的key
      */
     @Id
     @Column(name = "data_type")
@@ -94,22 +94,19 @@ public class DatasOperationManage {
      */
     @Column(name = "update_time")
     private Date updateTime;
+
+    /**
+     * 行业指数类型：0:50指数,1：非50行业指数,2：其他
+     */
+    @Column(name = "index_type")
+    private Integer indexType;
     /**
      * 总推荐值
      */
     @Transient
     private Integer recommand;
-    
 
-    public Integer getRecommand() {
-		return recommand;
-	}
-
-	public void setRecommand(Integer recommand) {
-		this.recommand = recommand;
-	}
-
-	/**
+    /**
      * 获取数据ID
      *
      * @return data_id - 数据ID
@@ -128,18 +125,18 @@ public class DatasOperationManage {
     }
 
     /**
-     * 获取数据类型表：关联基础数据类型元数据
+     * 获取数据类型表：关联基础数据类型元数据的key
      *
-     * @return data_type - 数据类型表：关联基础数据类型元数据
+     * @return data_type - 数据类型表：关联基础数据类型元数据的key
      */
     public String getDataType() {
         return dataType;
     }
 
     /**
-     * 设置数据类型表：关联基础数据类型元数据
+     * 设置数据类型表：关联基础数据类型元数据的key
      *
-     * @param dataType 数据类型表：关联基础数据类型元数据
+     * @param dataType 数据类型表：关联基础数据类型元数据的key
      */
     public void setDataType(String dataType) {
         this.dataType = dataType;
@@ -379,6 +376,32 @@ public class DatasOperationManage {
         this.updateTime = updateTime;
     }
 
+    /**
+     * 获取行业指数类型：0:50指数,1：非50行业指数,2：其他
+     *
+     * @return index_type - 行业指数类型：0:50指数,1：非50行业指数,2：其他
+     */
+    public Integer getIndexType() {
+        return indexType;
+    }
+
+    /**
+     * 设置行业指数类型：0:50指数,1：非50行业指数,2：其他
+     *
+     * @param indexType 行业指数类型：0:50指数,1：非50行业指数,2：其他
+     */
+    public void setIndexType(Integer indexType) {
+        this.indexType = indexType;
+    }
+
+	public Integer getRecommand() {
+		return recommand;
+	}
+
+	public void setRecommand(Integer recommand) {
+		this.recommand = recommand;
+	}
+
 	@Override
 	public String toString() {
 		return "DatasOperationManage [dataId=" + dataId + ", dataType=" + dataType + ", basicsRecommend="
@@ -386,7 +409,8 @@ public class DatasOperationManage {
 				+ dynamicRecommand + ", cooperativeRelationship=" + cooperativeRelationship + ", customerGrade="
 				+ customerGrade + ", sourceType=" + sourceType + ", irPrincipal=" + irPrincipal + ", wechatGroupId="
 				+ wechatGroupId + ", note=" + note + ", isHide=" + isHide + ", creator=" + creator + ", createTime="
-				+ createTime + ", updateTime=" + updateTime + ", recommand=" + recommand + "]";
+				+ createTime + ", updateTime=" + updateTime + ", indexType=" + indexType + ", recommand=" + recommand
+				+ "]";
 	}
     
 }
