@@ -5,6 +5,14 @@ import java.util.Date;
 
 public class InvestorListInputDto {
 	/**
+	 * userId
+	 */
+	private Integer userId;
+	/**
+	 * 类型
+	 */
+	private Integer adminType;
+	/**
      * 模糊搜索关键字
      */
     private String keyWords;
@@ -215,14 +223,31 @@ public class InvestorListInputDto {
 	public void setStart(Long start) {
 		this.start = start;
 	}
+	
+	public Integer getUserId() {
+		return userId;
+	}
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+	
+	public Integer getAdminType() {
+		return adminType;
+	}
+	public void setAdminType(Integer adminType) {
+		this.adminType = adminType;
+	}
 	@Override
 	public String toString() {
-		return "InvestorListInputDto [keyWords=" + keyWords + ", startTimeStr=" + startTimeStr + ", startTime="
-				+ startTime + ", endTimeStr=" + endTimeStr + ", endTime=" + endTime + ", amountBeginRmb="
-				+ amountBeginRmb + ", amountEndRmb=" + amountEndRmb + ", amountBeginDollar=" + amountBeginDollar
-				+ ", amountEndDollar=" + amountEndDollar + ", weChatGroupId=" + weChatGroupId + ", irPrincipal="
-				+ irPrincipal + ", typeName=" + typeName + ", cooperativeRelationship=" + cooperativeRelationship
-				+ ", type=" + type + ", currency=" + currency + ", column=" + column + ", order=" + order
-				+ ", currentPage=" + currentPage + ", pageSize=" + pageSize + ", start=" + start + "]";
+		return "InvestorListInputDto [userId=" + userId + ", adminType=" + adminType + ", keyWords=" + keyWords
+				+ ", startTimeStr=" + startTimeStr + ", startTime=" + startTime + ", endTimeStr=" + endTimeStr
+				+ ", endTime=" + endTime + ", amountBeginRmb=" + amountBeginRmb + ", amountEndRmb=" + amountEndRmb
+				+ ", amountBeginDollar=" + amountBeginDollar + ", amountEndDollar=" + amountEndDollar
+				+ ", weChatGroupId=" + weChatGroupId + ", irPrincipal=" + irPrincipal + ", typeName=" + typeName
+				+ ", cooperativeRelationship=" + cooperativeRelationship + ", type=" + type + ", currency=" + currency
+				+ ", column=" + column + ", order=" + order + ", currentPage=" + currentPage + ", pageSize=" + pageSize
+				+ ", start=" + start + "]";
 	}
+
+	
 }

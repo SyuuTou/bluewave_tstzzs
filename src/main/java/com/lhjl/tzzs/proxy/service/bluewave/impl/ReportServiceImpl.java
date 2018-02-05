@@ -94,6 +94,8 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         report.setTitle(reqBody.getTitle());
         report.setWeightingFactor(reqBody.getWeightingFactor());
         report.setAuthor(reqBody.getAuthor());
+        report.setYn(reqBody.getYn());
+        report.setStatus(reqBody.getStatus());
 //        System.err.println(report+"*****report");
         
         int offset = (reqBody.getPageNo() - 1) * reqBody.getPageSize();
@@ -123,8 +125,9 @@ public class ReportServiceImpl extends GenericService implements ReportService {
             .andEqualTo("creater",reqBody.getCreater()).andEqualTo("fromRul",reqBody.getFromRul())
             .andEqualTo("id",reqBody.getId()).andEqualTo("sourceTextUrl",reqBody.getSourceTextUrl())
             .andEqualTo("status",reqBody.getStatus()).andEqualTo("subTitle",reqBody.getSubTitle())
-            .andEqualTo("title",reqBody.getTitle()).andEqualTo("weightingFactor",reqBody.getWeightingFactor())
-            .andEqualTo("author",reqBody.getAuthor());
+            .andLike("title",reqBody.getTitle()).andEqualTo("weightingFactor",reqBody.getWeightingFactor())
+            .andEqualTo("author",reqBody.getAuthor()).andNotEqualTo("yn",reqBody.getYn())
+            .andNotEqualTo("status",reqBody.getStatus());
 
             list = reportMapper.selectByExampleAndRowBounds(reportExample,rowBounds);
             rowBounds.setTotal((long) reportMapper.selectCountByExample(reportExample));

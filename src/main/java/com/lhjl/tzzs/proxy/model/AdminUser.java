@@ -225,4 +225,12 @@ public class AdminUser {
     public void setPassword(String password) {
         this.password = password;
     }
+
+	@Override
+	public String toString() {
+		return "AdminUser [id=" + id + ", userId=" + userId + ", adminType=" + adminType + ", metaAppId=" + metaAppId
+				+ ", password=" + password + ", createTime=" + createTime + ", yn=" + yn + ", phonenumber="
+				+ phonenumber + ", name=" + name + ", companyName=" + companyName + ", dutyName=" + dutyName + "]";
+	}
+    
 }

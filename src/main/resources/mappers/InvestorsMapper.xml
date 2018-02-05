@@ -94,7 +94,15 @@
 							GROUP BY investor_demand_id) stage on stage.c=ide.id
 	LEFT JOIN (SELECT id,GROUP_CONCAT(city) as citys from investor_city GROUP BY id) city on city.id = i.ID
 	LEFT JOIN (SELECT data_id, wechat_group_id weChatGroupId,cooperative_relationship cooperativeRelationship,ir_principal irPrincipal from datas_operation_manage where data_type='INVESTOR') mgt on mgt.data_id=i.ID
-  WHERE i.approval_status != 0 AND i.yn =1
+  WHERE i.approval_status != 0 AND i.yn =1 
+  <choose>
+		<!-- 不是超级管理员 -->
+      <when test="adminType !=0 and irPrincipal != null and irPrincipal != ''">
+         AND mgt.irPrincipal = #{irPrincipal}
+      </when>
+      <otherwise>
+      </otherwise>
+  </choose>
   <!-- 模糊搜索 -->
   <if test="keyWords != null and keyWords != ''">
                 AND (i.name like "%"#{keyWords}"%" or ii.short_name like "%"#{keyWords}"%" or i.position like "%"#{keyWords}"%"
@@ -135,9 +143,9 @@
   <if test="currency !=null and currency !=''">
       AND funds.currency = #{currency}
   </if>
-  <if test="irPrincipal !=null and irPrincipal !=''">
+ <!--  <if test="irPrincipal !=null and irPrincipal !=''">
       AND mgt.irPrincipal = #{irPrincipal}
-  </if>
+  </if> -->
   <if test="cooperativeRelationship !=null and cooperativeRelationship !=''">
       AND mgt.cooperativeRelationship = #{cooperativeRelationship}
   </if>
@@ -171,6 +179,16 @@
 	LEFT JOIN (SELECT id,GROUP_CONCAT(city) as citys from investor_city GROUP BY id) city on city.id = i.ID
 	LEFT JOIN (SELECT data_id, wechat_group_id weChatGroupId,cooperative_relationship cooperativeRelationship,ir_principal irPrincipal from datas_operation_manage where data_type='INVESTOR') mgt on mgt.data_id=i.ID
   WHERE i.approval_status != 0 AND i.yn =1
+  <!-- 设置负责人为当前用户 -->
+  
+  <choose>
+	<!-- 不是超级管理员 -->
+    <when test="adminType !=0 and irPrincipal != null and irPrincipal != ''">
+       AND mgt.irPrincipal = #{irPrincipal}
+    </when>
+    <otherwise>
+    </otherwise>
+  </choose>
   <if test="keyWords != null and keyWords != ''">
                 AND (i.name like "%"#{keyWords}"%" or ii.short_name like "%"#{keyWords}"%" or i.position like "%"#{keyWords}"%"
 				or mdst.type_name like "%"#{keyWords}"%" or iit.type like "%"#{keyWords}"%" or seg.segmentations like "%"#{keyWords}"%"
@@ -207,9 +225,9 @@
   <if test="currency !=null and currency !=''">
       AND funds.currency = #{currency}
   </if>
-  <if test="irPrincipal !=null and irPrincipal !=''">
+ <!--  <if test="irPrincipal !=null and irPrincipal !=''">
       AND mgt.irPrincipal = #{irPrincipal}
-  </if>
+  </if> -->
   <if test="cooperativeRelationship !=null and cooperativeRelationship !=''">
       AND mgt.cooperativeRelationship = #{cooperativeRelationship}
   </if>
