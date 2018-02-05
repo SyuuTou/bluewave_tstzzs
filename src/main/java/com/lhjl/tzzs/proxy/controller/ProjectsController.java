@@ -72,7 +72,7 @@ public class ProjectsController extends GenericController{
     		result.setMessage("fail");
     		result.setStatus(500);
 	    }
-    	return result;
+    	return result;  
     }
     /**
      * 投资方的智能搜索
