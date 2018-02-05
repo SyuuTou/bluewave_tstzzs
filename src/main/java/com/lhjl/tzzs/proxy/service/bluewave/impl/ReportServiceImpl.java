@@ -138,7 +138,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
             .andEqualTo("status",reqBody.getStatus()).andEqualTo("subTitle",reqBody.getSubTitle())
             .andLike("title",reqBody.getTitle()).andEqualTo("weightingFactor",reqBody.getWeightingFactor())
             .orLike("author",reqBody.getAuthor()).andNotEqualTo("yn",reqBody.getYn())
-            .andNotEqualTo("status",reqBody.getStatus());
+            .andEqualTo("status",reqBody.getStatus());
             if (null == reqBody.getOrderAsc() || reqBody.getOrderAsc() != 1){
                 reportExample.setOrderByClause("update_time desc");
             }else {
