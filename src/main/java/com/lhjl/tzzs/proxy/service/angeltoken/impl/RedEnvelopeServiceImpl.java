@@ -164,8 +164,16 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
     @Override
     public CommonDto<String> createRedEnvelope(Integer appId, RedEnvelopeDto redEnvelopeDto) {
 
-        if (redEnvelopeDto.getAmount().compareTo(new BigDecimal(0))<=0){
-            return new CommonDto<>("","红包金额必须大于0",200);
+        if (null == redEnvelopeDto.getRedEnvelopeType()){
+            return new CommonDto<>("","红包累心不可为空",200);
+        }else if (redEnvelopeDto.getRedEnvelopeType() == 0) {
+            if (redEnvelopeDto.getAmount().compareTo(new BigDecimal(0)) <= 0) {
+                return new CommonDto<>("", "红包金额必须大于0", 200);
+            }
+        }else if (redEnvelopeDto.getRedEnvelopeType() == 1){
+            if (redEnvelopeDto.getTotalAmount().compareTo(new BigDecimal(0)) <= 0) {
+                return new CommonDto<>("", "红包总金额必须大于0", 200);
+            }
         }
 
         if(redEnvelopeDto.getQuantity()<=0){
@@ -324,14 +332,15 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                     redEnvelope.setReceiveQuantity(redEnvelope.getReceiveQuantity() + 1);
 
                     RedEnvelopeLog redEnvelopeLog = new RedEnvelopeLog();
-
+                    BigDecimal reciveAmount = null;
                     if (redEnvelope.getRedEnvelopeType() == 0) {
+                        reciveAmount = redEnvelope.getAmount();
                         redEnvelopeLog.setAmount(redEnvelope.getAmount());
                         redEnvelope.setReceiveAmount(redEnvelope.getReceiveAmount().add(redEnvelope.getAmount()));
-                    }else if (redEnvelope.getRedEnvelopeType() == 0) {
-                        BigDecimal randomAmount = randomAmount(redEnvelope.getQuantity(),redEnvelope.getReceiveQuantity(),redEnvelope.getTotalAmount(),redEnvelope.getReceiveAmount());
-                        redEnvelopeLog.setAmount(randomAmount);
-                        redEnvelope.setReceiveAmount(redEnvelope.getReceiveAmount().add(randomAmount));
+                    }else if (redEnvelope.getRedEnvelopeType() == 1) {
+                        reciveAmount = randomAmount(redEnvelope.getQuantity(),redEnvelope.getReceiveQuantity(),redEnvelope.getTotalAmount(),redEnvelope.getReceiveAmount());
+                        redEnvelopeLog.setAmount(reciveAmount);
+                        redEnvelope.setReceiveAmount(redEnvelope.getReceiveAmount().add(reciveAmount));
                     }
                     if (redEnvelopeMapper.updateByExample(redEnvelope, example) > 0) {
 
@@ -347,7 +356,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
 
 
-                        this.addUserIntegralsLog(appId, "GET_ANGEL_TOKEN", users.getId(), redEnvelope.getAmount(), obtainIntegralPeriod, true);
+                        this.addUserIntegralsLog(appId, "GET_ANGEL_TOKEN", users.getId(), reciveAmount, obtainIntegralPeriod, true);
 
                         break;
                     }
@@ -412,7 +421,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
 
 
-                return totalAmount.subtract(receiveAmount).multiply(new BigDecimal(differenceRandomNum));
+                return totalAmount.subtract(receiveAmount).multiply(new BigDecimal(differenceRandomNum)).setScale(2,BigDecimal.ROUND_HALF_DOWN);
 
             }
 
