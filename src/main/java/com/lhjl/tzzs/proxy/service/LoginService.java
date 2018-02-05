@@ -8,5 +8,5 @@ import com.lhjl.tzzs.proxy.dto.LoginReqBody;
  */
 public interface LoginService {
 
-    CommonDto<String> login(LoginReqBody body);
+    CommonDto<Boolean> login(LoginReqBody body);
 }

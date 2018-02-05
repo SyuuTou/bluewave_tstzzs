@@ -117,4 +117,11 @@ public class UserToken {
     public void setMetaAppId(String metaAppId) {
         this.metaAppId = metaAppId;
     }
+
+	@Override
+	public String toString() {
+		return "UserToken [id=" + id + ", userId=" + userId + ", token=" + token + ", registerTime=" + registerTime
+				+ ", metaAppId=" + metaAppId + "]";
+	}
+    
 }

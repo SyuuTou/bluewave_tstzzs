@@ -20,14 +20,14 @@ public class BackstageAdminController extends GenericController {
 
     //后台登录
     @PostMapping("/loginbackstage")
-    public CommonDto<String> login(@RequestBody LoginReqBody body) {
-        CommonDto<String> result = new CommonDto<>();
+    public CommonDto<Boolean> login(@RequestBody LoginReqBody body) {
+        CommonDto<Boolean> result = new CommonDto<>();
         try {
             result = loginService.login(body);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
-            result.setData(null);
+            result.setData(false);
             result.setStatus(502);
         }
         return result;
