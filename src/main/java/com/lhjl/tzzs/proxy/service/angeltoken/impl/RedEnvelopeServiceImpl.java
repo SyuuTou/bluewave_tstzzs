@@ -302,7 +302,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         RedEnvelope queryRedEnvelope = new RedEnvelope();
         queryRedEnvelope.setUnionKey(unionId);
         RedEnvelope redEnvelope = redEnvelopeMapper.selectOne(queryRedEnvelope);
-        redEnvelopeResDto.setAmount(redEnvelope.getAmount());
+
         redEnvelopeResDto.setQuantity(redEnvelope.getReceiveQuantity());
         redEnvelopeResDto.setTotalQuantity(redEnvelope.getQuantity());
         redEnvelopeResDto.setMessage(redEnvelope.getMessage());
@@ -337,10 +337,12 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                         reciveAmount = redEnvelope.getAmount();
                         redEnvelopeLog.setAmount(redEnvelope.getAmount());
                         redEnvelope.setReceiveAmount(redEnvelope.getReceiveAmount().add(redEnvelope.getAmount()));
+                        redEnvelopeResDto.setAmount(reciveAmount);
                     }else if (redEnvelope.getRedEnvelopeType() == 1) {
                         reciveAmount = randomAmount(redEnvelope.getQuantity(),redEnvelope.getReceiveQuantity(),redEnvelope.getTotalAmount(),redEnvelope.getReceiveAmount());
                         redEnvelopeLog.setAmount(reciveAmount);
                         redEnvelope.setReceiveAmount(redEnvelope.getReceiveAmount().add(reciveAmount));
+                        redEnvelopeResDto.setAmount(reciveAmount);
                     }
                     if (redEnvelopeMapper.updateByExample(redEnvelope, example) > 0) {
 
@@ -363,6 +365,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                 }
             }
         }
+
         queryRedEnvelopeLog = new RedEnvelopeLog();
         queryRedEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
         List<RedEnvelopeLog> redEnvelopeLogs = redEnvelopeLogMapper.select(queryRedEnvelopeLog);
@@ -399,29 +402,12 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
     private BigDecimal randomAmount(Integer quantity, Integer receiveQuantity, BigDecimal totalAmount, BigDecimal receiveAmount) {
 
-            if (quantity - receiveQuantity == 0){
-                return new BigDecimal(0);
-            }else if (quantity - receiveQuantity == 1){
+            if (quantity - receiveQuantity == 1){
                 return totalAmount.subtract(receiveAmount);
             }else {
-                Random random = new Random();
-                Integer difference = quantity*100 - receiveQuantity*100;
-                Integer randomNum;
-                Double differenceRandomNum = null;
-                Integer denominator;
-                if (difference == 0){
-                    denominator = quantity*10/2;
-                    randomNum = random.nextInt();
-                    differenceRandomNum = randomNum*1.0 / denominator;
-                }else{
-                    denominator = quantity*100-receiveQuantity*100;
-                    randomNum = random.nextInt(denominator);
-                    differenceRandomNum = randomNum*1.0 / denominator;
-                }
 
 
-
-                return totalAmount.subtract(receiveAmount).multiply(new BigDecimal(differenceRandomNum)).setScale(2,BigDecimal.ROUND_HALF_DOWN);
+                return totalAmount.subtract(receiveAmount).divide(new BigDecimal(quantity - receiveQuantity),2).multiply(new BigDecimal(Math.random())).setScale(2,BigDecimal.ROUND_HALF_DOWN);
 
             }
 
@@ -440,7 +426,9 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
     }
 
     public static void main(String[] args) {
-        System.out.println(DateTime.now().withTime(0,0,0,0).withFieldAdded(DurationFieldType.days(),30).toString("yyyy-MM-dd HH:mm:ss"));
+//        System.out.println(DateTime.now().withTime(0,0,0,0).withFieldAdded(DurationFieldType.days(),30).toString("yyyy-MM-dd HH:mm:ss"));
 //        System.out.println(DateTime.now().withTime(23,59,59,999).toString("yyyy-MM-dd HH:mm:ss"));
+//        Random random = new Random();
+//        System.out.println(String.valueOf());
     }
 }
