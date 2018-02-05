@@ -180,6 +180,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         redEnvelope.setQuantity(redEnvelopeDto.getQuantity());
         redEnvelope.setStatus(0);
         redEnvelope.setReceiveQuantity(0);
+        redEnvelope.setReceiveAmount(new BigDecimal(0));
         redEnvelope.setToken(redEnvelopeDto.getToken());
         redEnvelope.setUnionKey(MD5Util.md5Encode(DateTime.now().millisOfDay().getAsString(),""));
         redEnvelope.setMessage(redEnvelopeDto.getMessage());
