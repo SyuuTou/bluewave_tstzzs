@@ -8,6 +8,7 @@ import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
+import com.lhjl.tzzs.proxy.utils.MD5Util;
 import org.joda.time.DateTime;
 import org.joda.time.DurationFieldType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,6 +171,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         redEnvelope.setQuantity(redEnvelopeDto.getQuantity());
         redEnvelope.setStatus(0);
         redEnvelope.setToken(redEnvelopeDto.getToken());
+        redEnvelope.setUnionKey(MD5Util.md5Encode(DateTime.now().millisOfDay().getAsString(),""));
 
         redEnvelopeMapper.insert(redEnvelope);
 
