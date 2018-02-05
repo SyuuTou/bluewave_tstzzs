@@ -65,6 +65,18 @@ public class RedEnvelope {
     private String unionKey;
 
     /**
+     * 红包类型；0: 等额分配；1:随机分配
+     */
+    @Column(name = "red_envelope_type")
+    private Integer redEnvelopeType;
+
+    /**
+     * 被领取金额
+     */
+    @Column(name = "receive_amount")
+    private BigDecimal receiveAmount;
+
+    /**
      * @return id
      */
     public Long getId() {
@@ -266,5 +278,41 @@ public class RedEnvelope {
      */
     public void setUnionKey(String unionKey) {
         this.unionKey = unionKey;
+    }
+
+    /**
+     * 获取红包类型；0: 等额分配；1:随机分配
+     *
+     * @return red_envelope_type - 红包类型；0: 等额分配；1:随机分配
+     */
+    public Integer getRedEnvelopeType() {
+        return redEnvelopeType;
+    }
+
+    /**
+     * 设置红包类型；0: 等额分配；1:随机分配
+     *
+     * @param redEnvelopeType 红包类型；0: 等额分配；1:随机分配
+     */
+    public void setRedEnvelopeType(Integer redEnvelopeType) {
+        this.redEnvelopeType = redEnvelopeType;
+    }
+
+    /**
+     * 获取被领取金额
+     *
+     * @return receive_amount - 被领取金额
+     */
+    public BigDecimal getReceiveAmount() {
+        return receiveAmount;
+    }
+
+    /**
+     * 设置被领取金额
+     *
+     * @param receiveAmount 被领取金额
+     */
+    public void setReceiveAmount(BigDecimal receiveAmount) {
+        this.receiveAmount = receiveAmount;
     }
 }

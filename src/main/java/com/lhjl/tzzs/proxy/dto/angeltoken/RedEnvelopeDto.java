@@ -14,7 +14,17 @@ public class RedEnvelopeDto {
     private String message;
     /** 当前用户token */
     private String token;
+    /** 红包类型；0：为定额红包，1：为随机红包 */
+    private Integer redEnvelopeType;
 
+
+    public Integer getRedEnvelopeType() {
+        return redEnvelopeType;
+    }
+
+    public void setRedEnvelopeType(Integer redEnvelopeType) {
+        this.redEnvelopeType = redEnvelopeType;
+    }
 
     public BigDecimal getAmount() {
         return amount;
