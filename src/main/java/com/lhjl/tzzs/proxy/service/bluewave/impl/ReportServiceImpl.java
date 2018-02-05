@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import tk.mybatis.mapper.entity.Example;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -80,6 +81,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     public CommonDto<List<Map<String,Object>>> queryReport(Integer appId, ReportReqBody reqBody) {
     	
         CommonTotal<List<Map<String,Object>>> result = new CommonTotal<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         Report report = new Report();
         report.setComments(reqBody.getComments());
@@ -187,6 +189,14 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         		});
         	}
         	map.put("lables", labels);
+
+        	//格式化时间
+            if (null != tmp.getUpdateTime()){
+                Date updateTime = tmp.getUpdateTime();
+                String updateTimeString = sdf.format(updateTime);
+                map.put("updateTimeString",updateTimeString);
+            }
+
         	lists.add(map);
         }
         result.setData(lists);
