@@ -21,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -116,7 +117,18 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 //                }
 //        	}
         }else {
-        	list = reportMapper.selectByRowBounds(report, rowBounds);
+            Example reportExample = new Example(Report.class);
+            reportExample.and().andEqualTo("comments",reqBody.getComments())
+            .andEqualTo("content",reqBody.getContent()).andEqualTo("coverUrl",reqBody.getCoverUrl())
+            .andEqualTo("creater",reqBody.getCreater()).andEqualTo("fromRul",reqBody.getFromRul())
+            .andEqualTo("id",reqBody.getId()).andEqualTo("sourceTextUrl",reqBody.getSourceTextUrl())
+            .andEqualTo("status",reqBody.getStatus()).andEqualTo("subTitle",reqBody.getSubTitle())
+            .andEqualTo("title",reqBody.getTitle()).andEqualTo("weightingFactor",reqBody.getWeightingFactor())
+            .andEqualTo("author",reqBody.getAuthor());
+
+            list = reportMapper.selectByExampleAndRowBounds(reportExample,rowBounds);
+            rowBounds.setTotal((long) reportMapper.selectCountByExample(reportExample));
+//        	list = reportMapper.selectByRowBounds(report, rowBounds);
         }
         
         List<Map<String,Object>> lists=new ArrayList<>();
