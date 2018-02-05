@@ -97,8 +97,8 @@
   WHERE i.approval_status != 0 AND i.yn =1 
   <choose>
 		<!-- 不是超级管理员 -->
-      <when test="adminType !=0 and irPrincipal != null and irPrincipal != ''">
-         AND mgt.irPrincipal = #{irPrincipal}
+      <when test="adminType !=0 and adminName != null and adminName != ''">
+         AND mgt.irPrincipal = #{adminName}
       </when>
       <otherwise>
       </otherwise>
@@ -143,9 +143,9 @@
   <if test="currency !=null and currency !=''">
       AND funds.currency = #{currency}
   </if>
- <!--  <if test="irPrincipal !=null and irPrincipal !=''">
+  <if test="irPrincipal !=null and irPrincipal !=''">
       AND mgt.irPrincipal = #{irPrincipal}
-  </if> -->
+  </if>
   <if test="cooperativeRelationship !=null and cooperativeRelationship !=''">
       AND mgt.cooperativeRelationship = #{cooperativeRelationship}
   </if>
@@ -182,12 +182,12 @@
   <!-- 设置负责人为当前用户 -->
   
   <choose>
-	<!-- 不是超级管理员 -->
-    <when test="adminType !=0 and irPrincipal != null and irPrincipal != ''">
-       AND mgt.irPrincipal = #{irPrincipal}
-    </when>
-    <otherwise>
-    </otherwise>
+		<!-- 不是超级管理员 -->
+      <when test="adminType !=0 and adminName != null and adminName != ''">
+         AND mgt.irPrincipal = #{adminName}
+      </when>
+      <otherwise>
+      </otherwise>
   </choose>
   <if test="keyWords != null and keyWords != ''">
                 AND (i.name like "%"#{keyWords}"%" or ii.short_name like "%"#{keyWords}"%" or i.position like "%"#{keyWords}"%"
@@ -225,9 +225,9 @@
   <if test="currency !=null and currency !=''">
       AND funds.currency = #{currency}
   </if>
- <!--  <if test="irPrincipal !=null and irPrincipal !=''">
+  <if test="irPrincipal !=null and irPrincipal !=''">
       AND mgt.irPrincipal = #{irPrincipal}
-  </if> -->
+  </if>
   <if test="cooperativeRelationship !=null and cooperativeRelationship !=''">
       AND mgt.cooperativeRelationship = #{cooperativeRelationship}
   </if>

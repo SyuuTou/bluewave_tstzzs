@@ -13,6 +13,10 @@ public class InvestorListInputDto {
 	 */
 	private Integer adminType;
 	/**
+	 * 类型
+	 */
+	private String adminName;
+	/**
      * 模糊搜索关键字
      */
     private String keyWords;
@@ -237,17 +241,27 @@ public class InvestorListInputDto {
 	public void setAdminType(Integer adminType) {
 		this.adminType = adminType;
 	}
+	
+	
+	public String getAdminName() {
+		return adminName;
+	}
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
 	@Override
 	public String toString() {
-		return "InvestorListInputDto [userId=" + userId + ", adminType=" + adminType + ", keyWords=" + keyWords
-				+ ", startTimeStr=" + startTimeStr + ", startTime=" + startTime + ", endTimeStr=" + endTimeStr
-				+ ", endTime=" + endTime + ", amountBeginRmb=" + amountBeginRmb + ", amountEndRmb=" + amountEndRmb
-				+ ", amountBeginDollar=" + amountBeginDollar + ", amountEndDollar=" + amountEndDollar
-				+ ", weChatGroupId=" + weChatGroupId + ", irPrincipal=" + irPrincipal + ", typeName=" + typeName
-				+ ", cooperativeRelationship=" + cooperativeRelationship + ", type=" + type + ", currency=" + currency
-				+ ", column=" + column + ", order=" + order + ", currentPage=" + currentPage + ", pageSize=" + pageSize
-				+ ", start=" + start + "]";
+		return "InvestorListInputDto [userId=" + userId + ", adminType=" + adminType + ", adminName=" + adminName
+				+ ", keyWords=" + keyWords + ", startTimeStr=" + startTimeStr + ", startTime=" + startTime
+				+ ", endTimeStr=" + endTimeStr + ", endTime=" + endTime + ", amountBeginRmb=" + amountBeginRmb
+				+ ", amountEndRmb=" + amountEndRmb + ", amountBeginDollar=" + amountBeginDollar + ", amountEndDollar="
+				+ amountEndDollar + ", weChatGroupId=" + weChatGroupId + ", irPrincipal=" + irPrincipal + ", typeName="
+				+ typeName + ", cooperativeRelationship=" + cooperativeRelationship + ", type=" + type + ", currency="
+				+ currency + ", column=" + column + ", order=" + order + ", currentPage=" + currentPage + ", pageSize="
+				+ pageSize + ", start=" + start + "]";
 	}
+	
+
 
 	
 }

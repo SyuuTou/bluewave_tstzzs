@@ -95,7 +95,7 @@ public class InvestorServiceImpl implements InvestorService {
         if (body.getCurrentPage() == null){
             body.setCurrentPage(pageNumDefault);
         }
-        //设置开始索引
+        //设置开始索引  
         body.setStart((long) ((body.getCurrentPage()-1) * body.getPageSize())) ;
         
         AdminUser au=new AdminUser();
@@ -105,13 +105,11 @@ public class InvestorServiceImpl implements InvestorService {
         try {
         	au = adminUserMapper.selectOne(au);
         	if(au != null) {
-        		//设置管理员的类型
+        		//设置管理员的类型  
         		body.setAdminType(au.getAdminType());
-        		//设置当前的（管理员）负责人
-            	body.setIrPrincipal(au.getName());
+        		//设置当前的（管理员）负责人的名称
+            	body.setAdminName(au.getName());
         	} 
-//        	System.err.println(au+"adminuser*******"+body.getIrPrincipal());
-//        	System.err.println(body.getAdminType()==0);
         	
         }catch(Exception e) {
         	result.setData(null);
