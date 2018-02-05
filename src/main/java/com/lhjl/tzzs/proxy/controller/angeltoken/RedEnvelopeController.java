@@ -92,12 +92,16 @@ public class RedEnvelopeController extends GenericController {
      * @param token
      * @return
      */
-    @GetMapping("/v{appId}/redenvelope/{redEnvelopeId}")
-    public CommonDto<RedEnvelopeResDto> getRedEnvelope(@PathVariable Integer appId, @PathVariable Long redEnvelopeId, String token){
+    @GetMapping("/v{appId}/redenvelope/{unionId}")
+    public CommonDto<RedEnvelopeResDto> getRedEnvelope(@PathVariable Integer appId, @PathVariable String unionId, String token){
 
         CommonDto<RedEnvelopeResDto> result = null;
 
-        result = redEnvelopeService.receiveRedEnvelope(appId, redEnvelopeId, token);
+        try {
+            result = redEnvelopeService.receiveRedEnvelope(appId, unionId, token);
+        } catch (Exception e) {
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+        }
 
         return result;
     }
