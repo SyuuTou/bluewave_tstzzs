@@ -944,14 +944,15 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		if (userLevelRelationListHistory.size() > 0){
 			//历史上有这个等级会员了就不送了
 		}else {
+			if (body.getInvestorType() == 1){
+				CommonDto<Boolean> resulta = specialUpUserlevel(userId,4);
+				if (resulta.getStatus() != 200){
+					result.setMessage(resulta.getMessage());
+					result.setStatus(502);
+					result.setData(null);
 
-			CommonDto<Boolean> resulta = specialUpUserlevel(userId,4);
-			if (resulta.getStatus() != 200){
-				result.setMessage(resulta.getMessage());
-				result.setStatus(502);
-				result.setData(null);
-
-				return result;
+					return result;
+				}
 			}
 		}
 
