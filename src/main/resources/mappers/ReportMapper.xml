@@ -26,6 +26,8 @@
     right join report_column rc on r.id = rc.report_id
     left join report_institution_relation rir on r.id = rir.report_id
     where  1= 1
+    and yn != 0
+    and status != 0
     <if test="institutionId != null and institutionId !=''">
       and rir.institution_id = #{institutionId}
     </if>
@@ -42,6 +44,8 @@
     right join report_column rc on r.id = rc.report_id
     left join report_institution_relation rir on r.id = rir.report_id
     where  1= 1
+    and yn != 0
+    and status != 0
     <if test="institutionId != null and institutionId !=''">
       and rir.institution_id = #{institutionId}
     </if>
