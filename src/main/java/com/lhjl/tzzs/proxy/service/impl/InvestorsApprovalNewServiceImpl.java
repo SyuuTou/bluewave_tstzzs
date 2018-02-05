@@ -182,7 +182,7 @@ public class InvestorsApprovalNewServiceImpl implements InvestorsApprovalNewServ
 				u.setCompanyDuties(params.getFillOffice());
 				u.setActualName(params.getCompellation());
 				u.setWorkCard(params.getTempFilePaths());
-				usersMapper.updateByPrimaryKey(u);
+				usersMapper.updateByPrimaryKeySelective(u);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
 			}
