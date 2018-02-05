@@ -1,7 +1,10 @@
 package com.lhjl.tzzs.proxy.dto.angeltoken;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.math.BigDecimal;
 
+@JsonIgnoreProperties
 public class RedEnvelopeDto {
 
     /** 单个可领取金额 */
