@@ -110,6 +110,9 @@ public class InvestorServiceImpl implements InvestorService {
         		//设置当前的（管理员）负责人
             	body.setIrPrincipal(au.getName());
         	}
+//        	System.err.println(au+"adminuser*******"+body.getIrPrincipal());
+//        	System.err.println(body.getAdminType()==0);
+        	
         }catch(Exception e) {
         	result.setData(null);
             result.setStatus(500);
