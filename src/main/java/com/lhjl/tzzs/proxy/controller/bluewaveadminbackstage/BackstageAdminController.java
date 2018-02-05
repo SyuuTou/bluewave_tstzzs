@@ -20,7 +20,12 @@ public class BackstageAdminController extends GenericController {
     @Autowired
     private LoginService loginService;
 
-    //后台登录
+    /**
+     * 天使指数后台运营登录
+     * @param body
+     * @param appid 天使指数小程序以及运营后台的appid为1
+     * @return
+     */
     @PostMapping("/v{appid}/loginbackstage")
     public CommonDto<AdminUser> login(@RequestBody LoginReqBody body,@PathVariable("appid") Integer appid) {
         CommonDto<AdminUser> result = new CommonDto<>();
