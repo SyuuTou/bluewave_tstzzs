@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
+import io.swagger.models.auth.In;
 import org.joda.time.DateTime;
 import org.joda.time.DurationFieldType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import tk.mybatis.mapper.util.StringUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Transactional(readOnly = true)
@@ -178,8 +180,11 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         redEnvelope.setQuantity(redEnvelopeDto.getQuantity());
         redEnvelope.setStatus(0);
         redEnvelope.setReceiveQuantity(0);
+        redEnvelope.setReceiveAmount(new BigDecimal(0));
         redEnvelope.setToken(redEnvelopeDto.getToken());
         redEnvelope.setUnionKey(MD5Util.md5Encode(DateTime.now().millisOfDay().getAsString(),""));
+        redEnvelope.setMessage(redEnvelopeDto.getMessage());
+        redEnvelope.setRedEnvelopeType(redEnvelopeDto.getRedEnvelopeType());
 
         redEnvelopeMapper.insert(redEnvelope);
 
@@ -199,6 +204,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
         return new CommonDto<>(limit,"success",200);
     }
+
 
     public RedEnvelopeLimit getRedEnvelopeLimit(Integer appId, String max_limit) {
         RedEnvelopeLimit queryRedEnvelopeLimit = new RedEnvelopeLimit();
@@ -316,17 +322,30 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                     Example example = new Example(RedEnvelope.class);
                     example.and().andEqualTo("appId", appId).andEqualTo("unionKey", unionId).andEqualTo("receiveQuantity", redEnvelope.getReceiveQuantity());
                     redEnvelope.setReceiveQuantity(redEnvelope.getReceiveQuantity() + 1);
+
+                    RedEnvelopeLog redEnvelopeLog = new RedEnvelopeLog();
+
+                    if (redEnvelope.getRedEnvelopeType() == 0) {
+                        redEnvelopeLog.setAmount(redEnvelope.getAmount());
+                        redEnvelope.setReceiveAmount(redEnvelope.getReceiveAmount().add(redEnvelope.getAmount()));
+                    }else if (redEnvelope.getRedEnvelopeType() == 0) {
+                        BigDecimal randomAmount = randomAmount(redEnvelope.getQuantity(),redEnvelope.getReceiveQuantity(),redEnvelope.getTotalAmount(),redEnvelope.getReceiveAmount());
+                        redEnvelopeLog.setAmount(randomAmount);
+                        redEnvelope.setReceiveAmount(redEnvelope.getReceiveAmount().add(randomAmount));
+                    }
                     if (redEnvelopeMapper.updateByExample(redEnvelope, example) > 0) {
 
                         redEnvelopeResDto.setStatus("Received");
 
-                        RedEnvelopeLog redEnvelopeLog = new RedEnvelopeLog();
-                        redEnvelopeLog.setAmount(redEnvelope.getAmount());
+
+
                         redEnvelopeLog.setAppId(appId);
                         redEnvelopeLog.setCreateTime(DateTime.now().toDate());
                         redEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
                         redEnvelopeLog.setToken(token);
                         redEnvelopeLogMapper.insert(redEnvelopeLog);
+
+
 
                         this.addUserIntegralsLog(appId, "GET_ANGEL_TOKEN", users.getId(), redEnvelope.getAmount(), obtainIntegralPeriod, true);
 
@@ -367,6 +386,36 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         result.setStatus(200);
 
         return result;
+    }
+
+    private BigDecimal randomAmount(Integer quantity, Integer receiveQuantity, BigDecimal totalAmount, BigDecimal receiveAmount) {
+
+            if (quantity - receiveQuantity == 0){
+                return new BigDecimal(0);
+            }else if (quantity - receiveQuantity == 1){
+                return totalAmount.subtract(receiveAmount);
+            }else {
+                Random random = new Random();
+                Integer difference = quantity*100 - receiveQuantity*100;
+                Integer randomNum;
+                Double differenceRandomNum = null;
+                Integer denominator;
+                if (difference == 0){
+                    denominator = quantity*10/2;
+                    randomNum = random.nextInt();
+                    differenceRandomNum = randomNum*1.0 / denominator;
+                }else{
+                    denominator = quantity*100-receiveQuantity*100;
+                    randomNum = random.nextInt(denominator);
+                    differenceRandomNum = randomNum*1.0 / denominator;
+                }
+
+
+
+                return totalAmount.subtract(receiveAmount).multiply(new BigDecimal(differenceRandomNum));
+
+            }
+
     }
 
 
