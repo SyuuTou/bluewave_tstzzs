@@ -98,6 +98,25 @@ public class InvestorServiceImpl implements InvestorService {
         //设置开始索引
         body.setStart((long) ((body.getCurrentPage()-1) * body.getPageSize())) ;
         
+        AdminUser au=new AdminUser();
+        au.setMetaAppId(appid);
+        au.setUserId(body.getUserId());
+        //设置管理员的管理员类型
+        try {
+        	au = adminUserMapper.selectOne(au);
+        	if(au != null) {
+        		//设置管理员的类型
+        		body.setAdminType(au.getAdminType());
+        		//设置当前的（管理员）负责人
+            	body.setIrPrincipal(au.getName());
+        	}
+        }catch(Exception e) {
+        	result.setData(null);
+            result.setStatus(500);
+            result.setMessage("数据库数据存在问题，相同的用户id存在两条数据");
+    		return result;
+        }
+        //输入时间字符串转换为日期
         try{
         	if(body.getStartTimeStr() !=null) {
             	body.setStartTime(sdf.parse(body.getStartTimeStr()));
@@ -112,7 +131,8 @@ public class InvestorServiceImpl implements InvestorService {
     		return result;  
         }
         List<InvestorsOutputDto> list = investorsMapper.listInvestorsInfos(body);
-        //进行时间字符串的转换
+        
+        //日期转换为输出时间字符串
         list.forEach((e)->{  
         	if(e.getUpdateTime() !=null) {
         		e.setUpdateTimeStr(sdf.format(e.getUpdateTime()));
