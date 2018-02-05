@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.controller.bluewaveadminbackstage;
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.LoginReqBody;
+import com.lhjl.tzzs.proxy.model.AdminUser;
 import com.lhjl.tzzs.proxy.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,14 +22,14 @@ public class BackstageAdminController extends GenericController {
 
     //后台登录
     @PostMapping("/v{appid}/loginbackstage")
-    public CommonDto<Boolean> login(@RequestBody LoginReqBody body,@PathVariable("appid") Integer appid) {
-        CommonDto<Boolean> result = new CommonDto<>();
+    public CommonDto<AdminUser> login(@RequestBody LoginReqBody body,@PathVariable("appid") Integer appid) {
+        CommonDto<AdminUser> result = new CommonDto<>();
         try {
             result = loginService.login(body,appid);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
-            result.setData(false);
+            result.setData(null);
             result.setStatus(502);
         }
         return result;

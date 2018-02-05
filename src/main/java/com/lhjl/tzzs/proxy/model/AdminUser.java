@@ -58,9 +58,23 @@ public class AdminUser {
      */
     @Transient
     private String dutyName;
+    /**
+     * 用户token
+     */
+    @Transient
+    private String token;
+    
 
 
-    public String getCompanyName() {
+    public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getCompanyName() {
 		return companyName;
 	}
 
@@ -230,7 +244,10 @@ public class AdminUser {
 	public String toString() {
 		return "AdminUser [id=" + id + ", userId=" + userId + ", adminType=" + adminType + ", metaAppId=" + metaAppId
 				+ ", password=" + password + ", createTime=" + createTime + ", yn=" + yn + ", phonenumber="
-				+ phonenumber + ", name=" + name + ", companyName=" + companyName + ", dutyName=" + dutyName + "]";
+				+ phonenumber + ", name=" + name + ", companyName=" + companyName + ", dutyName=" + dutyName
+				+ ", token=" + token + "]";
 	}
+    
+	
     
 }

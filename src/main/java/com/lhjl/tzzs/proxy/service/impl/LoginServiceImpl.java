@@ -28,24 +28,23 @@ public class LoginServiceImpl implements LoginService{
     private UserTokenMapper userTokenMapper;
 
     @Override
-    public CommonDto<Boolean> login(LoginReqBody body,Integer appid) {
-        CommonDto<Boolean> result = new CommonDto<>();
+    public CommonDto<AdminUser> login(LoginReqBody body,Integer appid) {
+        CommonDto<AdminUser> result = new CommonDto<>();
 
         if(StringUtils.isAnyBlank(body.getUserName(), body.getPassword())){
             result.setStatus(300);
             result.setMessage("请输入账号和密码");
-            result.setData(false);
+            result.setData(null);
         }
         AdminUser adminUser=new AdminUser();
         adminUser.setName(body.getUserName());
         adminUser.setPassword(body.getPassword());
         adminUser.setMetaAppId(appid);
         adminUser = adminUserMapper.selectOne(adminUser);
-
         if(adminUser == null ){
             result.setStatus(300);
             result.setMessage("没有该用户");
-            result.setData(false);
+            result.setData(null);
             return result;
         }
     	UserToken userToken =new UserToken();
@@ -56,22 +55,23 @@ public class LoginServiceImpl implements LoginService{
         }catch(Exception e) {
         	result.setStatus(500);
             result.setMessage("user_token表中存在两条相同的userId");
-            result.setData(false); 
+            result.setData(null); 
             return result;
         }
         
         if(userToken != null) {
         	if( userToken.getToken() != null && !("".equals(userToken.getToken())) ){
+        		adminUser.setToken(userToken.getToken());
                 result.setStatus(200);
                 result.setMessage("登录成功");
-                result.setData(true);
+                result.setData(adminUser);
                 return result;
             }
         }
         
         result.setStatus(300);
         result.setMessage("登录失败");
-        result.setData(false);
+        result.setData(null);
         return result;
     }
 }
