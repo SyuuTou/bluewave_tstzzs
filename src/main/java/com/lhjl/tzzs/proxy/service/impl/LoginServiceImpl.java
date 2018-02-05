@@ -58,7 +58,7 @@ public class LoginServiceImpl implements LoginService{
             result.setData(null); 
             return result;
         }
-        
+        //根据用户是否存在token判断是否登录成功
         if(userToken != null) {
         	if( userToken.getToken() != null && !("".equals(userToken.getToken())) ){
         		adminUser.setToken(userToken.getToken());
