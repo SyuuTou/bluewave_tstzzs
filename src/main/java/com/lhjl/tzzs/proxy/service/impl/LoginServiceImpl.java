@@ -28,7 +28,7 @@ public class LoginServiceImpl implements LoginService{
     private UserTokenMapper userTokenMapper;
 
     @Override
-    public CommonDto<Boolean> login(LoginReqBody body) {
+    public CommonDto<Boolean> login(LoginReqBody body,Integer appid) {
         CommonDto<Boolean> result = new CommonDto<>();
 
         if(StringUtils.isAnyBlank(body.getUserName(), body.getPassword())){
@@ -36,17 +36,21 @@ public class LoginServiceImpl implements LoginService{
             result.setMessage("请输入账号和密码");
             result.setData(false);
         }
+        AdminUser adminUser=new AdminUser();
+        adminUser.setName(body.getUserName());
+        adminUser.setPassword(body.getPassword());
+        adminUser.setMetaAppId(appid);
+        adminUser = adminUserMapper.selectOne(adminUser);
 
-        Integer userId = adminUserMapper.selectByLoginBody(body.getUserName(), body.getPassword());
-//        System.err.println(userId+"****userId");
-        if(userId == null || "undefined".equals(userId)){
+        if(adminUser == null ){
             result.setStatus(300);
             result.setMessage("没有该用户");
             result.setData(false);
             return result;
         }
-        UserToken userToken =new UserToken();
-        userToken.setUserId(userId);
+    	UserToken userToken =new UserToken();
+        userToken.setUserId(adminUser.getUserId());
+        
         try {
         	userToken = userTokenMapper.selectOne(userToken);
         }catch(Exception e) {
@@ -56,7 +60,6 @@ public class LoginServiceImpl implements LoginService{
             return result;
         }
         
-//        System.err.println(userToken+"***userToken");
         if(userToken != null) {
         	if( userToken.getToken() != null && !("".equals(userToken.getToken())) ){
                 result.setStatus(200);
