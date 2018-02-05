@@ -119,6 +119,15 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 //                }
 //        	}
         }else {
+            if (reqBody.getTitle() != null && !"".equals(reqBody.getTitle())){
+                String title = "%" + reqBody.getTitle() + "%";
+                reqBody.setTitle(title);
+            }
+            if (null != reqBody.getAuthor() && !"".equals(reqBody.getAuthor())){
+                String author = "%" + reqBody.getAuthor() + "%";
+                reqBody.setAuthor(author);
+            }
+
             Example reportExample = new Example(Report.class);
             reportExample.and().andEqualTo("comments",reqBody.getComments())
             .andEqualTo("content",reqBody.getContent()).andEqualTo("coverUrl",reqBody.getCoverUrl())
@@ -126,8 +135,14 @@ public class ReportServiceImpl extends GenericService implements ReportService {
             .andEqualTo("id",reqBody.getId()).andEqualTo("sourceTextUrl",reqBody.getSourceTextUrl())
             .andEqualTo("status",reqBody.getStatus()).andEqualTo("subTitle",reqBody.getSubTitle())
             .andLike("title",reqBody.getTitle()).andEqualTo("weightingFactor",reqBody.getWeightingFactor())
-            .andEqualTo("author",reqBody.getAuthor()).andNotEqualTo("yn",reqBody.getYn())
+            .andLike("author",reqBody.getAuthor()).andNotEqualTo("yn",reqBody.getYn())
             .andNotEqualTo("status",reqBody.getStatus());
+            if (null == reqBody.getOrderAsc() || reqBody.getOrderAsc() != 1){
+                reportExample.setOrderByClause("update_time desc");
+            }else {
+                reportExample.setOrderByClause("update_time");
+            }
+
 
             list = reportMapper.selectByExampleAndRowBounds(reportExample,rowBounds);
             rowBounds.setTotal((long) reportMapper.selectCountByExample(reportExample));

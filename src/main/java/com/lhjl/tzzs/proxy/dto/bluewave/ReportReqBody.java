@@ -99,6 +99,9 @@ public class ReportReqBody {
      * 机构id数组
      */
     private List<Integer> institutionId;
+
+    /**是否正序排列,1表示是,否则倒序*/
+    private Integer orderAsc;
     
     
     public Integer getColumnId() {
@@ -291,6 +294,14 @@ public class ReportReqBody {
 
     public void setInvestmentInstitutionId(Integer investmentInstitutionId) {
         this.investmentInstitutionId = investmentInstitutionId;
+    }
+
+    public Integer getOrderAsc() {
+        return orderAsc;
+    }
+
+    public void setOrderAsc(Integer orderAsc) {
+        this.orderAsc = orderAsc;
     }
 
     @Override
