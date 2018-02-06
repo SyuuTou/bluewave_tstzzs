@@ -255,7 +255,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
 
 
     @Override
-    public CommonDto<String> addOrUpdatePojectTeamMember(Integer projectId, ProjectTeamMemberInputDto body) {
+    public CommonDto<String> addOrUpdatePojectTeamMember(ProjectTeamMemberInputDto body) {
         CommonDto<String> result = new CommonDto<>();
         if(null == body || body.toString() == ""){
             result.setMessage("success");
@@ -267,7 +267,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         Integer projectInsertResult = -1;
 
         ProjectTeamMember projectTeamMember = new ProjectTeamMember();
-        projectTeamMember.setProjectId(projectId);
+        projectTeamMember.setProjectId(body.getProjectId());
         projectTeamMember.setId(body.getMemberId());
         projectTeamMember.setWeight( body.getWeight());
         projectTeamMember.setMumberName(body.getName());

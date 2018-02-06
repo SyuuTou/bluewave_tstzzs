@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ProjectTeamMemberDto.ProjectTeamIntroInputDto;
 
 import java.util.Map;
 
@@ -9,7 +10,7 @@ import java.util.Map;
  */
 public interface ProjectAdminTeamIntroService {
 
-    CommonDto<String> addOrUpdatePojectTeamIntro(Integer projectId, String teamIntroduction);
+    CommonDto<String> addOrUpdatePojectTeamIntro(ProjectTeamIntroInputDto body);
 
     CommonDto<Map<String, Object>> getPojectTeamIntro(Integer projectId);
 

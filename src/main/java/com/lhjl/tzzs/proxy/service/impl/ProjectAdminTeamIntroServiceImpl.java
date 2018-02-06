@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ProjectTeamMemberDto.ProjectTeamIntroInputDto;
 import com.lhjl.tzzs.proxy.mapper.ProjectTeamInfoMapper;
 import com.lhjl.tzzs.proxy.model.ProjectTeamInfo;
 import com.lhjl.tzzs.proxy.model.ProjectTeamMember;
@@ -22,19 +23,19 @@ public class ProjectAdminTeamIntroServiceImpl implements ProjectAdminTeamIntroSe
     private ProjectTeamInfoMapper projectTeamInfoMapper;
 
     @Override
-    public CommonDto<String> addOrUpdatePojectTeamIntro(Integer projectId, String teamIntroduction) {
+    public CommonDto<String> addOrUpdatePojectTeamIntro(ProjectTeamIntroInputDto body) {
 
         CommonDto<String> result = new CommonDto<>();
 
         ProjectTeamInfo projectTeamInfo = new ProjectTeamInfo();
-        projectTeamInfo.setProjectId(projectId);
+        projectTeamInfo.setProjectId(body.getProjectId());
         ProjectTeamInfo projectTeamInfo1 = projectTeamInfoMapper.selectByPrimaryKey(projectTeamInfo);
         Integer projectTeamInfoInsertResult  = -1;
         if(null == projectTeamInfo1){
-            projectTeamInfo.setTeamIntroduction(teamIntroduction);
+            projectTeamInfo.setTeamIntroduction(body.getTeamIntroduction());
             projectTeamInfoInsertResult = projectTeamInfoMapper.insert(projectTeamInfo);
         }else{
-            projectTeamInfo.setTeamIntroduction(teamIntroduction);
+            projectTeamInfo.setTeamIntroduction(body.getTeamIntroduction());
             projectTeamInfoInsertResult = projectTeamInfoMapper.updateByPrimaryKeySelective(projectTeamInfo);
         }
         if(projectTeamInfoInsertResult > 0){

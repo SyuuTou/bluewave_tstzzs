@@ -96,7 +96,7 @@ public class CollectProjectAuditTeamDto{
 
         private String educationExperienceDesc;
 
-        private Integer weight;
+        private Integer weight = 0;
 
         private Integer isHide;
 
