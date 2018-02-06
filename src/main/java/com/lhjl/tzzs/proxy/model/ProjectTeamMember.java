@@ -117,6 +117,33 @@ public class ProjectTeamMember {
     private Integer teamId;
 
     /**
+     * 出生日期（曹传桂）
+     */
+    @Column(name = "birth_day")
+    private Date birthDay;
+
+    /**
+     * 任职时间（曹传桂）
+     */
+    @Column(name = "tenure_time")
+    private Date tenureTime;
+
+    /**
+     * 性别:0男1女（曹传桂）
+     */
+    private Integer sex;
+
+    /**
+     * 学历ID(曹传桂)
+     */
+    private Integer diploma;
+
+    /**
+     * 国籍(曹传桂)
+     */
+    private Integer nationality;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -466,5 +493,95 @@ public class ProjectTeamMember {
      */
     public void setTeamId(Integer teamId) {
         this.teamId = teamId;
+    }
+
+    /**
+     * 获取出生日期（曹传桂）
+     *
+     * @return birth_day - 出生日期（曹传桂）
+     */
+    public Date getBirthDay() {
+        return birthDay;
+    }
+
+    /**
+     * 设置出生日期（曹传桂）
+     *
+     * @param birthDay 出生日期（曹传桂）
+     */
+    public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    /**
+     * 获取任职时间（曹传桂）
+     *
+     * @return tenure_time - 任职时间（曹传桂）
+     */
+    public Date getTenureTime() {
+        return tenureTime;
+    }
+
+    /**
+     * 设置任职时间（曹传桂）
+     *
+     * @param tenureTime 任职时间（曹传桂）
+     */
+    public void setTenureTime(Date tenureTime) {
+        this.tenureTime = tenureTime;
+    }
+
+    /**
+     * 获取性别:0男1女（曹传桂）
+     *
+     * @return sex - 性别:0男1女（曹传桂）
+     */
+    public Integer getSex() {
+        return sex;
+    }
+
+    /**
+     * 设置性别:0男1女（曹传桂）
+     *
+     * @param sex 性别:0男1女（曹传桂）
+     */
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    /**
+     * 获取学历ID(曹传桂)
+     *
+     * @return diploma - 学历ID(曹传桂)
+     */
+    public Integer getDiploma() {
+        return diploma;
+    }
+
+    /**
+     * 设置学历ID(曹传桂)
+     *
+     * @param diploma 学历ID(曹传桂)
+     */
+    public void setDiploma(Integer diploma) {
+        this.diploma = diploma;
+    }
+
+    /**
+     * 获取国籍(曹传桂)
+     *
+     * @return nationality - 国籍(曹传桂)
+     */
+    public Integer getNationality() {
+        return nationality;
+    }
+
+    /**
+     * 设置国籍(曹传桂)
+     *
+     * @param nationality 国籍(曹传桂)
+     */
+    public void setNationality(Integer nationality) {
+        this.nationality = nationality;
     }
 }
