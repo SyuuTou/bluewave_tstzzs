@@ -193,6 +193,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         redEnvelope.setUnionKey(MD5Util.md5Encode(DateTime.now().millisOfDay().getAsString(),""));
         redEnvelope.setMessage(redEnvelopeDto.getMessage());
         redEnvelope.setRedEnvelopeType(redEnvelopeDto.getRedEnvelopeType());
+        redEnvelope.setDescription(redEnvelopeDto.getDescription());
 
         redEnvelopeMapper.insert(redEnvelope);
 
