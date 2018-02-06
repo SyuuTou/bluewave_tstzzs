@@ -13,7 +13,17 @@ public class RedEnvelopeResDto {
     private String status; //
     private Integer totalQuantity;
     private Integer quantity;
+    private String description;
     private List<RedEnvelopeLogDto> redEnvelopeLogs;
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getNeckName() {
         return neckName;
