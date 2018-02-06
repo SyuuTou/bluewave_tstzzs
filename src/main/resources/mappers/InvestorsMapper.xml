@@ -94,7 +94,7 @@
 							GROUP BY investor_demand_id) stage on stage.c=ide.id
 	LEFT JOIN (SELECT id,GROUP_CONCAT(city) as citys from investor_city GROUP BY id) city on city.id = i.ID
 	LEFT JOIN (SELECT data_id, wechat_group_id weChatGroupId,cooperative_relationship cooperativeRelationship,ir_principal irPrincipal from datas_operation_manage where data_type='INVESTOR') mgt on mgt.data_id=i.ID
-  WHERE  i.yn =1
+  WHERE i.yn =1
   <choose>
 		<!-- 不是超级管理员 -->
       <when test="adminType !=0 and adminName != null and adminName != ''">
