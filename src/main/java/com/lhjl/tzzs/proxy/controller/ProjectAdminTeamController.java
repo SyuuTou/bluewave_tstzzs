@@ -45,10 +45,10 @@ public class ProjectAdminTeamController extends  GenericController{
      * @param projectId
      * @return
      */
-    @GetMapping("/{projectId}/getprojectteammemberList")
-    public CommonDto<ProjectTeamMemberOutputDto> getprojectteammemberList(@PathVariable Integer projectId){
+    @GetMapping("/getprojectteammemberList")
+    public CommonDto<List<ProjectTeamMemberOutputDto>> getprojectteammemberList(Integer projectId){
 
-        CommonDto<ProjectTeamMemberOutputDto> result = new CommonDto<>();
+        CommonDto<List<ProjectTeamMemberOutputDto>> result = new CommonDto<>();
         try {
             result = projectAdminTeamService.getProjectTeamMemberList(projectId);
         }catch (Exception e){

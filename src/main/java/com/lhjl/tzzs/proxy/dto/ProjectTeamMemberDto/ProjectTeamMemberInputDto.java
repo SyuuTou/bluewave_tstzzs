@@ -6,6 +6,12 @@ import java.math.BigDecimal;
  * Created by lanhaijulang on 2018/1/18.
  */
 public class ProjectTeamMemberInputDto {
+
+    /**
+     * 项目Id
+     */
+    private Integer projectId;
+
     /**
      * 成员ID
      */
@@ -82,6 +88,31 @@ public class ProjectTeamMemberInputDto {
     private String selfDefTeam;
 
     /**
+     * 出生日期
+     */
+    private String birthDay;
+
+    /**
+     * 任职时间
+     */
+    private String tenureTime;
+
+    /**
+     * 性别
+     */
+    private Integer sex;
+
+    /**
+     * 学历
+     */
+    private Integer diploma;
+
+    /**
+     * 国籍
+     */
+    private Integer nationality;
+
+    /**
      * 关注领域
      */
     private Integer[] focusDomain;
@@ -130,6 +161,54 @@ public class ProjectTeamMemberInputDto {
      * 是否隐藏，默认不隐藏，不隐藏为1
      */
     private Integer isHide;
+
+    public String getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(String birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public String getTenureTime() {
+        return tenureTime;
+    }
+
+    public void setTenureTime(String tenureTime) {
+        this.tenureTime = tenureTime;
+    }
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public Integer getDiploma() {
+        return diploma;
+    }
+
+    public void setDiploma(Integer diploma) {
+        this.diploma = diploma;
+    }
+
+    public Integer getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(Integer nationality) {
+        this.nationality = nationality;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
 
     public String getHeadPicture() {
         return headPicture;

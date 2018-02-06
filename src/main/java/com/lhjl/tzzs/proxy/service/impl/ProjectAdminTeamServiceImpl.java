@@ -75,11 +75,9 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
     }
 
     @Override
-    public CommonDto<ProjectTeamMemberOutputDto> getProjectTeamMemberList(Integer projectId) {
-        CommonDto<ProjectTeamMemberOutputDto> result = new CommonDto<>();
-        ProjectTeamMemberOutputDto projectTeamMemberOutputDto = new ProjectTeamMemberOutputDto();
-
-        List<ProjectTeamMemberOutputDto.ProjectTeamMemberDetailDto> projectTeamMemberDetailDtos = new ArrayList<>();
+    public CommonDto<List<ProjectTeamMemberOutputDto>> getProjectTeamMemberList(Integer projectId) {
+        CommonDto<List<ProjectTeamMemberOutputDto>> result = new CommonDto<>();
+        List<ProjectTeamMemberOutputDto> projectTeamMemberOutputDtoList = new ArrayList<>();
 
         Projects projects = new Projects();
         projects.setId(projectId);
@@ -87,19 +85,25 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         Projects projects1 = projectsMapper.selectByPrimaryKey(projects);
         List<ProjectTeamMember> projectTeamMembers = new ArrayList<>();
         if(null != projects1) {
-            projectTeamMemberOutputDto.setTeamDesc(projects1.getCommet());
 
             projectTeamMembers = projectTeamMemberMapper.getProjectMemberList(projectId);
 
             if (null != projectTeamMembers && projectTeamMembers.size() != 0) {
                 for(ProjectTeamMember projectTeamMember_i: projectTeamMembers){
-                    ProjectTeamMemberOutputDto.ProjectTeamMemberDetailDto projectTeamMemberDetailDto = new ProjectTeamMemberOutputDto.ProjectTeamMemberDetailDto();
-                    projectTeamMemberDetailDto.setMemberId(projectTeamMember_i.getId());
-                    projectTeamMemberDetailDto.setWeight(projectTeamMember_i.getWeight());
-                    projectTeamMemberDetailDto.setName(projectTeamMember_i.getMumberName());
-                    projectTeamMemberDetailDto.setJobTitle(projectTeamMember_i.getMumberDuties());
-                    projectTeamMemberDetailDto.setMemberDesc(projectTeamMember_i.getMumberDesc());
-                    projectTeamMemberDetailDto.setPhone(projectTeamMember_i.getPhone());
+                    ProjectTeamMemberOutputDto projectTeamMemberOutputDto1 = new ProjectTeamMemberOutputDto();
+                    projectTeamMemberOutputDto1.setProjectId(projectId);
+                    projectTeamMemberOutputDto1.setMemberId(projectTeamMember_i.getId());
+                    projectTeamMemberOutputDto1.setWeight(projectTeamMember_i.getWeight());
+                    projectTeamMemberOutputDto1.setName(projectTeamMember_i.getMumberName());
+                    projectTeamMemberOutputDto1.setJobTitle(projectTeamMember_i.getMumberDuties());
+                    projectTeamMemberOutputDto1.setMemberDesc(projectTeamMember_i.getMumberDesc());
+                    projectTeamMemberOutputDto1.setPhone(projectTeamMember_i.getPhone());
+
+                    projectTeamMemberOutputDto1.setBirthDay(DateUtils.format1(projectTeamMember_i.getBirthDay()));
+                    projectTeamMemberOutputDto1.setTenureTime(DateUtils.format1(projectTeamMember_i.getTenureTime()));
+                    projectTeamMemberOutputDto1.setSex(projectTeamMember_i.getSex());
+                    projectTeamMemberOutputDto1.setDiploma(projectTeamMember_i.getDiploma());
+                    projectTeamMemberOutputDto1.setNationality(projectTeamMember_i.getNationality());
 
                     //获取每个成员的工作经历
                     ProjectTeamMemberWork projectTeamMemberWork = new ProjectTeamMemberWork();
@@ -108,14 +112,14 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
                     String[] projectTeamMemberWorkArr = null;
                     List<String> projectTeamMemberWorkList = new ArrayList<>();
                     if(null == projectTeamMemberWorks || projectTeamMemberWorks.size() == 0){
-                        projectTeamMemberDetailDto.setWorkExperiences(null);
+                        projectTeamMemberOutputDto1.setWorkExperiences(null);
                     }else{
                         projectTeamMemberWorks.forEach(projectTeamMemberWork_i -> {
                             projectTeamMemberWorkList.add(projectTeamMemberWork_i.getWorkExperience());
                         });
                         projectTeamMemberWorkArr = new String[projectTeamMemberWorks.size()];
                         projectTeamMemberWorkList.toArray(projectTeamMemberWorkArr);
-                        projectTeamMemberDetailDto.setWorkExperiences(projectTeamMemberWorkArr);
+                        projectTeamMemberOutputDto1.setWorkExperiences(projectTeamMemberWorkArr);
                     }
 
 
@@ -126,30 +130,30 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
                     List<String> projectTeamMemberEducationList = new ArrayList<>();
                     String[] projectTeamMemberEducationArr = null;
                     if(null == projectTeamMemberEducations || projectTeamMemberEducations.size() == 0){
-                        projectTeamMemberDetailDto.setEducationExperience(projectTeamMemberEducationArr);
+                        projectTeamMemberOutputDto1.setEducationExperience(projectTeamMemberEducationArr);
                     }else{
                         projectTeamMemberEducations.forEach(projectTeamMemberEducation_i -> {
                             projectTeamMemberEducationList.add(projectTeamMemberEducation_i.getEducationExperience());
                         });
                         projectTeamMemberEducationArr = new String[projectTeamMemberEducations.size()];
                         projectTeamMemberEducationList.toArray(projectTeamMemberEducationArr);
-                        projectTeamMemberDetailDto.setEducationExperience(projectTeamMemberEducationArr);
+                        projectTeamMemberOutputDto1.setEducationExperience(projectTeamMemberEducationArr);
                     }
 
-                    projectTeamMemberDetailDto.setIsOnJob(projectTeamMember_i.getIsonjob());
-                    projectTeamMemberDetailDto.setHeadPicture(projectTeamMember_i.getHeadPicture());
-                    projectTeamMemberDetailDto.setPicture(projectTeamMember_i.getPicture());
-                    projectTeamMemberDetailDto.setEmail(projectTeamMember_i.getEmail());
-                    projectTeamMemberDetailDto.setWeiChat(projectTeamMember_i.getWeichat());
-                    projectTeamMemberDetailDto.setTeamId(projectTeamMember_i.getTeamId());
+                    projectTeamMemberOutputDto1.setIsOnJob(projectTeamMember_i.getIsonjob());
+                    projectTeamMemberOutputDto1.setHeadPicture(projectTeamMember_i.getHeadPicture());
+                    projectTeamMemberOutputDto1.setPicture(projectTeamMember_i.getPicture());
+                    projectTeamMemberOutputDto1.setEmail(projectTeamMember_i.getEmail());
+                    projectTeamMemberOutputDto1.setWeiChat(projectTeamMember_i.getWeichat());
+                    projectTeamMemberOutputDto1.setTeamId(projectTeamMember_i.getTeamId());
 
                     ProjectTeamMemberSelfteam projectTeamMemberSelfteam_i = new ProjectTeamMemberSelfteam();
                     projectTeamMemberSelfteam_i.setMemberId(projectTeamMember_i.getId());
                     List<ProjectTeamMemberSelfteam> projectTeamMemberSelfteamList = projectTeamMemberSelfteamService.select(projectTeamMemberSelfteam_i);
                     if(projectTeamMemberSelfteamList == null || projectTeamMemberSelfteamList.size() == 0){
-                        projectTeamMemberDetailDto.setSelfDefTeam("");
+                        projectTeamMemberOutputDto1.setSelfDefTeam("");
                     }else{
-                        projectTeamMemberDetailDto.setSelfDefTeam(projectTeamMemberSelfteamList.get(0).getTeamName());
+                        projectTeamMemberOutputDto1.setSelfDefTeam(projectTeamMemberSelfteamList.get(0).getTeamName());
                     }
 
                     ProjectTeamMemberSegmentation projectTeamMemberSegmentation = new ProjectTeamMemberSegmentation();
@@ -158,14 +162,14 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
                     List<Integer> projectTeamMemberSegmentations = new ArrayList<>();
                     Integer[] projectTeamMemberSegmentationArr = null;
                     if(projectTeamMemberSegmentationList == null || projectTeamMemberSegmentationList.size() == 0){
-                        projectTeamMemberDetailDto.setFocusDomain(projectTeamMemberSegmentationArr);
+                        projectTeamMemberOutputDto1.setFocusDomain(projectTeamMemberSegmentationArr);
                     }else{
                         projectTeamMemberSegmentationList.forEach(projectTeamMemberSegmentation_i -> {
                             projectTeamMemberSegmentations.add(projectTeamMemberSegmentation_i.getSegmentationId());
                         });
                         projectTeamMemberSegmentationArr = new Integer[projectTeamMemberSegmentationList.size()];
                         projectTeamMemberSegmentations.toArray(projectTeamMemberSegmentationArr);
-                        projectTeamMemberDetailDto.setFocusDomain(projectTeamMemberSegmentationArr);
+                        projectTeamMemberOutputDto1.setFocusDomain(projectTeamMemberSegmentationArr);
                     }
 
                     ProjectTeamMemberStage projectTeamMemberStage = new ProjectTeamMemberStage();
@@ -174,16 +178,16 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
                     List<Integer> projectTeamMemberStages = new ArrayList<>();
                     Integer[] projectTeamMemberStageArr = null;
                     if(null == projectTeamMemberStageList || projectTeamMemberStageList.size() == 0){
-                        projectTeamMemberDetailDto.setInvestStages(projectTeamMemberStageArr);
+                        projectTeamMemberOutputDto1.setInvestStages(projectTeamMemberStageArr);
                     }else{
                         projectTeamMemberStageList.forEach(projectTeamMemberStage_i -> {
                             projectTeamMemberStages.add(projectTeamMemberStage_i.getStageId());
                         });
                         projectTeamMemberStageArr = new Integer[projectTeamMemberStageList.size()];
                         projectTeamMemberStages.toArray(projectTeamMemberStageArr);
-                        projectTeamMemberDetailDto.setInvestStages(projectTeamMemberStageArr);
+                        projectTeamMemberOutputDto1.setInvestStages(projectTeamMemberStageArr);
                     }
-                    projectTeamMemberDetailDto.setStockPer(projectTeamMember_i.getShareRatio());
+                    projectTeamMemberOutputDto1.setStockPer(projectTeamMember_i.getShareRatio());
 
                     ProjectTeamMemberCity projectTeamMemberCity = new ProjectTeamMemberCity();
                     projectTeamMemberCity.setMemberId(projectTeamMember_i.getId());
@@ -191,13 +195,13 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
                     List<String> projectTeamMemberCitys = new ArrayList<>();
                     String[] projectTeamMemberCityArr = null;
                     if (projectTeamMemberCityList == null || projectTeamMemberCityList.size() == 0){
-                        projectTeamMemberDetailDto.setCitys(projectTeamMemberCityArr);
+                        projectTeamMemberOutputDto1.setCitys(projectTeamMemberCityArr);
                     }else{
                         projectTeamMemberCityList.forEach(projectTeamMemberCity_i -> {
                             projectTeamMemberCitys.add(projectTeamMemberCity_i.getCityName());
                         });
                         projectTeamMemberCityArr = new String[projectTeamMemberCityList.size()];
-                        projectTeamMemberDetailDto.setCitys(projectTeamMemberCityArr);
+                        projectTeamMemberOutputDto1.setCitys(projectTeamMemberCityArr);
                     }
 
 
@@ -207,14 +211,14 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
                     List<String> projectTeamMemberSelfcitys = new ArrayList<>();
                     String[] projectTeamMemberSelfcityArr = null;
                     if (null == projectTeamMemberSelfcityList || projectTeamMemberSelfcityList.size() == 0){
-                        projectTeamMemberDetailDto.setSelfcitys(projectTeamMemberSelfcityArr);
+                        projectTeamMemberOutputDto1.setSelfcitys(projectTeamMemberSelfcityArr);
                     }else{
                         projectTeamMemberSelfcityList.forEach(projectTeamMemberSelfcity_i -> {
                             projectTeamMemberSelfcitys.add(projectTeamMemberSelfcity_i.getCity());
                         });
                         projectTeamMemberSelfcityArr = new String[projectTeamMemberSelfcityList.size()];
                         projectTeamMemberSelfcitys.toArray(projectTeamMemberSelfcityArr);
-                        projectTeamMemberDetailDto.setSelfcitys(projectTeamMemberSelfcityArr);
+                        projectTeamMemberOutputDto1.setSelfcitys(projectTeamMemberSelfcityArr);
                     }
 
                     ProjectTeamMemberBusiness projectTeamMemberBusiness = new ProjectTeamMemberBusiness();
@@ -223,27 +227,26 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
                     List<String> projectTeamMemberBusinesss = new ArrayList<>();
                     String[] projectTeamMemberBusinessArr = null;
                     if (projectTeamMemberBusinessList == null || projectTeamMemberBusinessList.size() ==0){
-                        projectTeamMemberDetailDto.setBusinesses(projectTeamMemberBusinessArr);
+                        projectTeamMemberOutputDto1.setBusinesses(projectTeamMemberBusinessArr);
                     }else{
                         projectTeamMemberBusinessList.forEach(projectTeamMemberBusiness_i -> {
                             projectTeamMemberBusinesss.add(projectTeamMemberBusiness_i.getCompanyName());
                         });
                         projectTeamMemberBusinessArr = new String[projectTeamMemberBusinessList.size()];
                         projectTeamMemberBusinesss.toArray(projectTeamMemberBusinessArr);
-                        projectTeamMemberDetailDto.setBusinesses(projectTeamMemberBusinessArr);
+                        projectTeamMemberOutputDto1.setBusinesses(projectTeamMemberBusinessArr);
                     }
 
-                    projectTeamMemberDetailDto.setBusinessDesc(projectTeamMember_i.getBusinessExperienceDesc());
-                    projectTeamMemberDetailDto.setWorkDesc(projectTeamMember_i.getWorkExperienceDesc());
-                    projectTeamMemberDetailDto.setEducationDesc(projectTeamMember_i.getEducationExperienceDesc());
-                    projectTeamMemberDetailDto.setIsHide(projectTeamMember_i.getIshide());
-                    projectTeamMemberDetailDtos.add(projectTeamMemberDetailDto);
+                    projectTeamMemberOutputDto1.setBusinessDesc(projectTeamMember_i.getBusinessExperienceDesc());
+                    projectTeamMemberOutputDto1.setWorkDesc(projectTeamMember_i.getWorkExperienceDesc());
+                    projectTeamMemberOutputDto1.setEducationDesc(projectTeamMember_i.getEducationExperienceDesc());
+                    projectTeamMemberOutputDto1.setIsHide(projectTeamMember_i.getIshide());
+                    projectTeamMemberOutputDtoList.add(projectTeamMemberOutputDto1);
                 };
             }
-            projectTeamMemberOutputDto.setProjectTeamMemberDetailDtoList(projectTeamMemberDetailDtos);
         }
 
-        result.setData(projectTeamMemberOutputDto);
+        result.setData(projectTeamMemberOutputDtoList);
         result.setMessage("success");
         result.setStatus(200);
         return result;
@@ -275,6 +278,21 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         projectTeamMember.setHeadPicture(body.getHeadPicture());
         projectTeamMember.setPicture(body.getPicture());
         projectTeamMember.setEmail(body.getEmail());
+
+        if(null == body.getBirthDay() || "".equals(body.getBirthDay()) ){
+            projectTeamMember.setBirthDay(null);
+        }else{
+            projectTeamMember.setBirthDay(DateUtils.parse1(body.getBirthDay()));
+        }
+
+        if(null == body.getTenureTime() || "".equals(body.getTenureTime()) ){
+            projectTeamMember.setTenureTime(null);
+        }else{
+            projectTeamMember.setTenureTime(DateUtils.parse1(body.getTenureTime()));
+        }
+        projectTeamMember.setSex(body.getSex());
+        projectTeamMember.setDiploma(body.getDiploma());
+        projectTeamMember.setNationality(body.getNationality());
         projectTeamMember.setShareRatio(body.getStockPer());
         projectTeamMember.setWeichat(body.getWeiChat());
         projectTeamMember.setIshide(body.getIsHide());

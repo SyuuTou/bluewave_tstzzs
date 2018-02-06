@@ -194,6 +194,10 @@ public class DateUtils{
         return format(date, FMT_DATETIME);
     }
 
+    public static String format1(Date date){
+        return format(date, FMT_DATE);
+    }
+
     /**
      * 格式化日期
      *
