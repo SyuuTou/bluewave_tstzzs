@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface ProjectAdminTeamService {
 
-    CommonDto<ProjectTeamMemberOutputDto> getProjectTeamMemberList(Integer projectId);
+    CommonDto<List<ProjectTeamMemberOutputDto>> getProjectTeamMemberList(Integer projectId);
 
     CommonDto<String> addOrUpdatePojectTeamMember(Integer projectId, ProjectTeamMemberInputDto body);
 
