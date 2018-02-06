@@ -9,7 +9,7 @@ import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
-import io.swagger.models.auth.In;
+
 import org.joda.time.DateTime;
 import org.joda.time.DurationFieldType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import tk.mybatis.mapper.util.StringUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
 import java.util.concurrent.atomic.AtomicReference;
 
 @Transactional(readOnly = true)
@@ -282,122 +282,137 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         CommonDto<RedEnvelopeResDto> result = new CommonDto<>();
         RedEnvelopeResDto redEnvelopeResDto = new RedEnvelopeResDto();
 
-        Users users = this.getUserInfo(appId,token);
-        if (StringUtil.isNotEmpty(users.getHeadpicReal())) {
-            redEnvelopeResDto.setHeadPic(users.getHeadpicReal());
-        }else{
-            redEnvelopeResDto.setHeadPic(users.getHeadpic());
-        }
-        if (StringUtil.isNotEmpty(users.getActualName())) {
-            redEnvelopeResDto.setNeckName(users.getActualName());
-        }else {
-            UsersWeixin queryUserWeixin = new UsersWeixin();
-            queryUserWeixin.setUserId(users.getId());
-
-            UsersWeixin usersWeixin = usersWeixinMapper.selectOne(queryUserWeixin);
-            if (null != usersWeixin) {
-                redEnvelopeResDto.setNeckName(usersWeixin.getNickName());
+        try {
+            Users users = this.getUserInfo(appId,token);
+            if (StringUtil.isNotEmpty(users.getHeadpicReal())) {
+                redEnvelopeResDto.setHeadPic(users.getHeadpicReal());
+            }else{
+                redEnvelopeResDto.setHeadPic(users.getHeadpic());
             }
-        }
-        RedEnvelope queryRedEnvelope = new RedEnvelope();
-        queryRedEnvelope.setUnionKey(unionId);
-        RedEnvelope redEnvelope = redEnvelopeMapper.selectOne(queryRedEnvelope);
+            if (StringUtil.isNotEmpty(users.getActualName())) {
+                redEnvelopeResDto.setNeckName(users.getActualName());
+            }else {
+                UsersWeixin queryUserWeixin = new UsersWeixin();
+                queryUserWeixin.setUserId(users.getId());
 
-        redEnvelopeResDto.setQuantity(redEnvelope.getReceiveQuantity());
-        redEnvelopeResDto.setTotalQuantity(redEnvelope.getQuantity());
-        redEnvelopeResDto.setMessage(redEnvelope.getMessage());
-        RedEnvelopeLog queryRedEnvelopeLog = new RedEnvelopeLog();
-        queryRedEnvelopeLog.setAppId(appId);
-        queryRedEnvelopeLog.setToken(token);
-        queryRedEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
-        RedEnvelopeLog checkRedEnvelopeLog = redEnvelopeLogMapper.selectOne(queryRedEnvelopeLog);
-        if (null != checkRedEnvelopeLog){
-            redEnvelopeResDto.setStatus("Completed");
+                UsersWeixin usersWeixin = usersWeixinMapper.selectOne(queryUserWeixin);
+                if (null != usersWeixin) {
+                    redEnvelopeResDto.setNeckName(usersWeixin.getNickName());
+                }
+            }
+            RedEnvelope queryRedEnvelope = new RedEnvelope();
+            queryRedEnvelope.setUnionKey(unionId);
+            RedEnvelope redEnvelope = redEnvelopeMapper.selectOne(queryRedEnvelope);
+
+            redEnvelopeResDto.setQuantity(redEnvelope.getReceiveQuantity());
+            redEnvelopeResDto.setTotalQuantity(redEnvelope.getQuantity());
             redEnvelopeResDto.setMessage(redEnvelope.getMessage());
-            redEnvelopeResDto.setAmount(checkRedEnvelopeLog.getAmount());
-        }else {
-            //尝试3次获取红包
-            for (int i = 0; i < 3; i++) {
+            RedEnvelopeLog queryRedEnvelopeLog = new RedEnvelopeLog();
+            queryRedEnvelopeLog.setAppId(appId);
+            queryRedEnvelopeLog.setToken(token);
+            queryRedEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
+            RedEnvelopeLog checkRedEnvelopeLog = redEnvelopeLogMapper.selectOne(queryRedEnvelopeLog);
+            if (null != checkRedEnvelopeLog){
+                redEnvelopeResDto.setStatus("Completed");
+                redEnvelopeResDto.setMessage(redEnvelope.getMessage());
+                redEnvelopeResDto.setAmount(checkRedEnvelopeLog.getAmount());
+            }else {
+                //尝试3次获取红包
+                for (int i = 0; i < 3; i++) {
 
 
 
-                if (redEnvelope.getQuantity() == redEnvelope.getReceiveQuantity()) {
+                    if (redEnvelope.getQuantity() == redEnvelope.getReceiveQuantity()) {
 
-                    if (StringUtil.isEmpty(redEnvelopeResDto.getMessage())) {
-                        redEnvelopeResDto.setMessage(redEnvelope.getMessage());
-                    }
-                    redEnvelopeResDto.setStatus("Finished");
-                    break;
-                } else {
-                    Example example = new Example(RedEnvelope.class);
-                    example.and().andEqualTo("appId", appId).andEqualTo("unionKey", unionId).andEqualTo("receiveQuantity", redEnvelope.getReceiveQuantity());
-                    redEnvelope.setReceiveQuantity(redEnvelope.getReceiveQuantity() + 1);
-
-                    RedEnvelopeLog redEnvelopeLog = new RedEnvelopeLog();
-                    BigDecimal reciveAmount = null;
-                    if (redEnvelope.getRedEnvelopeType() == 0) {
-                        reciveAmount = redEnvelope.getAmount();
-                        redEnvelopeLog.setAmount(reciveAmount);
-                        redEnvelope.setReceiveAmount(redEnvelope.getReceiveAmount().add(redEnvelope.getAmount()));
-                        redEnvelopeResDto.setAmount(reciveAmount);
-                    }else if (redEnvelope.getRedEnvelopeType() == 1) {
-                        reciveAmount = randomAmount(redEnvelope.getQuantity(),redEnvelope.getReceiveQuantity(),redEnvelope.getTotalAmount(),redEnvelope.getReceiveAmount());
-                        redEnvelopeLog.setAmount(reciveAmount);
-                        redEnvelope.setReceiveAmount(redEnvelope.getReceiveAmount().add(reciveAmount));
-                        redEnvelopeResDto.setAmount(reciveAmount);
-                    }
-                    if (redEnvelopeMapper.updateByExample(redEnvelope, example) > 0) {
-
-                        redEnvelopeResDto.setStatus("Received");
-
-
-
-                        redEnvelopeLog.setAppId(appId);
-                        redEnvelopeLog.setCreateTime(DateTime.now().toDate());
-                        redEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
-                        redEnvelopeLog.setToken(token);
-                        redEnvelopeLogMapper.insert(redEnvelopeLog);
-
-
-
-                        this.addUserIntegralsLog(appId, "GET_ANGEL_TOKEN", users.getId(), reciveAmount, obtainIntegralPeriod, true);
-
+                        if (StringUtil.isEmpty(redEnvelopeResDto.getMessage())) {
+                            redEnvelopeResDto.setMessage(redEnvelope.getMessage());
+                        }
+                        redEnvelopeResDto.setStatus("Finished");
                         break;
+                    } else {
+                        RedEnvelopeLog redEnvelopeLog = new RedEnvelopeLog();
+                        BigDecimal reciveAmount = null;
+                        if (redEnvelope.getRedEnvelopeType() == 0) {
+                            reciveAmount = redEnvelope.getAmount();
+                            redEnvelopeLog.setAmount(reciveAmount);
+                            redEnvelope.setReceiveAmount(redEnvelope.getReceiveAmount().add(redEnvelope.getAmount()));
+                            redEnvelopeResDto.setAmount(reciveAmount);
+                        }else if (redEnvelope.getRedEnvelopeType() == 1) {
+                            reciveAmount = randomAmount(redEnvelope.getQuantity(),redEnvelope.getReceiveQuantity(),redEnvelope.getTotalAmount(),redEnvelope.getReceiveAmount());
+                            redEnvelopeLog.setAmount(reciveAmount);
+                            redEnvelope.setReceiveAmount(redEnvelope.getReceiveAmount().add(reciveAmount));
+                            redEnvelopeResDto.setAmount(reciveAmount);
+                        }
+                        Example example = new Example(RedEnvelope.class);
+                        example.and().andEqualTo("appId", appId).andEqualTo("unionKey", unionId).andEqualTo("receiveQuantity", redEnvelope.getReceiveQuantity());
+                        redEnvelope.setReceiveQuantity(redEnvelope.getReceiveQuantity() + 1);
+
+
+
+                        if (redEnvelopeMapper.updateByExample(redEnvelope, example) > 0) {
+
+                            redEnvelopeResDto.setStatus("Received");
+
+
+
+                            redEnvelopeLog.setAppId(appId);
+                            redEnvelopeLog.setCreateTime(DateTime.now().toDate());
+                            redEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
+                            redEnvelopeLog.setToken(token);
+                            redEnvelopeLogMapper.insert(redEnvelopeLog);
+
+
+
+                            this.addUserIntegralsLog(appId, "GET_ANGEL_TOKEN", users.getId(), reciveAmount, obtainIntegralPeriod, true);
+
+                            break;
+                        }
                     }
                 }
             }
+
+            queryRedEnvelopeLog = new RedEnvelopeLog();
+            queryRedEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
+            List<RedEnvelopeLog> redEnvelopeLogs = redEnvelopeLogMapper.select(queryRedEnvelopeLog);
+
+            List<RedEnvelopeLogDto> redEnvelopeLogDtos = new ArrayList<>();
+
+            redEnvelopeLogs.forEach(item -> {
+                RedEnvelopeLogDto redEnvelopeLogDto = new RedEnvelopeLogDto();
+                try {
+                    redEnvelopeLogDto.setAmount(item.getAmount());
+                    redEnvelopeLogDto.setCreateTime(item.getCreateTime());
+                    redEnvelopeLogDto.setToken(item.getToken());
+                    Users temp = this.getUserInfo(appId,item.getToken());
+                    if (null != temp) {
+                        if (StringUtil.isNotEmpty(temp.getHeadpicReal())) {
+                            redEnvelopeLogDto.setHeadPic(temp.getHeadpicReal());
+                        } else {
+                            redEnvelopeLogDto.setHeadPic(temp.getHeadpic());
+                        }
+                        if (StringUtil.isNotEmpty(temp.getActualName())) {
+                            redEnvelopeLogDto.setName(temp.getActualName());
+                        } else {
+                            UsersWeixin usersWeixin = this.usersWeixinMapper.selectByPrimaryKey(temp.getId());
+                            if (null != usersWeixin) {
+                                redEnvelopeLogDto.setName(usersWeixin.getNickName());
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                   this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+                }
+                redEnvelopeLogDtos.add(redEnvelopeLogDto);
+            });
+
+            redEnvelopeResDto.setRedEnvelopeLogs(redEnvelopeLogDtos);
+            result.setData(redEnvelopeResDto);
+            result.setMessage("success");
+            result.setStatus(200);
+        } catch (Exception e) {
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            throw e;
         }
-
-        queryRedEnvelopeLog = new RedEnvelopeLog();
-        queryRedEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
-        List<RedEnvelopeLog> redEnvelopeLogs = redEnvelopeLogMapper.select(queryRedEnvelopeLog);
-
-        List<RedEnvelopeLogDto> redEnvelopeLogDtos = new ArrayList<>();
-
-        redEnvelopeLogs.forEach(item -> {
-            RedEnvelopeLogDto redEnvelopeLogDto = new RedEnvelopeLogDto();
-            redEnvelopeLogDto.setAmount(item.getAmount());
-            redEnvelopeLogDto.setCreateTime(item.getCreateTime());
-            redEnvelopeLogDto.setToken(item.getToken());
-            Users temp = this.getUserInfo(appId,item.getToken());
-            if (StringUtil.isNotEmpty(temp.getHeadpicReal())) {
-                redEnvelopeLogDto.setHeadPic(temp.getHeadpicReal());
-            }else{
-                redEnvelopeLogDto.setHeadPic(temp.getHeadpic());
-            }
-            if (StringUtil.isNotEmpty(temp.getActualName())) {
-                redEnvelopeLogDto.setName(temp.getActualName());
-            }else {
-                UsersWeixin usersWeixin = this.usersWeixinMapper.selectByPrimaryKey(temp.getId());
-                redEnvelopeLogDto.setName(usersWeixin.getNickName());
-            }
-            redEnvelopeLogDtos.add(redEnvelopeLogDto);
-        });
-
-        redEnvelopeResDto.setRedEnvelopeLogs(redEnvelopeLogDtos);
-        result.setData(redEnvelopeResDto);
-        result.setMessage("success");
-        result.setStatus(200);
 
         return result;
     }
@@ -422,7 +437,10 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         queryUserToken.setMetaAppId(String.valueOf(appId));
         UserToken userToken = userTokenMapper.selectOne(queryUserToken);
 
-        Users users = usersMapper.selectByPrimaryKey(userToken.getUserId());
+        Users users = null;
+        if (null != userToken) {
+            users = usersMapper.selectByPrimaryKey(userToken.getUserId());
+        }
 
         return users;
     }
