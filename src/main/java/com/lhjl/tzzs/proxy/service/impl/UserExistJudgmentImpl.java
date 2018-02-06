@@ -39,7 +39,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
     //判断用户是否注册过，没有即注册。
     @Transactional
     @Override
-    public CommonDto<UserExsitJudgmentDto> userExistJudgment(String oppenId){
+    public CommonDto<UserExsitJudgmentDto> userExistJudgment(String oppenId,Integer appid){
         CommonDto<UserExsitJudgmentDto> result =new CommonDto<UserExsitJudgmentDto>();
         UserExsitJudgmentDto userExsitJudgmentDto =new UserExsitJudgmentDto();
 
@@ -132,6 +132,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
                 users.setCreateTime(now);
                 String uuid = token;
                 users.setUuid(uuid);
+                users.setMetaAppId(appid);
 
                 usersMapper.insertSelective(users);
 
@@ -141,6 +142,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
                 userToken1.setUserId(userid);
                 userToken1.setToken(token);
                 userToken1.setRegisterTime(now);
+                userToken1.setMetaAppId(String.valueOf(appid));
 
                 userTokenMapper.insert(userToken1);
 
@@ -149,6 +151,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
                 usersWeixinForInsert1.setOpenid(oppenId);
                 usersWeixinForInsert1.setUserId(userid);
                 usersWeixinForInsert1.setCreateTime(now);
+                usersWeixinForInsert1.setMetaAppId(appid);
 
                 usersWeixinMapper.insertSelective(usersWeixinForInsert1);
 
@@ -180,6 +183,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
             users.setCreateTime(now);
             String uuid = token;
             users.setUuid(uuid);
+            users.setMetaAppId(appid);
 
             usersMapper.insertSelective(users);
 
@@ -189,6 +193,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
             userToken.setUserId(userid);
             userToken.setToken(token);
             userToken.setRegisterTime(now);
+            userToken.setMetaAppId(String.valueOf(appid));
 
             userTokenMapper.insert(userToken);
 
@@ -197,6 +202,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
             usersWeixinForInsert.setOpenid(oppenId);
             usersWeixinForInsert.setUserId(userid);
             usersWeixinForInsert.setCreateTime(now);
+            usersWeixinForInsert.setMetaAppId(appid);
 
             usersWeixinMapper.insertSelective(usersWeixinForInsert);
 

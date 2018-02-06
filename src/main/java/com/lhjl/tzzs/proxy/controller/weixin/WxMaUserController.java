@@ -55,8 +55,8 @@ public class WxMaUserController {
      * 登陆接口
      */
 
-    @GetMapping("login")
-    public CommonDto<UserExsitJudgmentDto> login(String code) {
+    @GetMapping("/v{appid}/login")
+    public CommonDto<UserExsitJudgmentDto> login(String code,@PathVariable Integer appid) {
         CommonDto<UserExsitJudgmentDto> result = new CommonDto<>();
         UserExsitJudgmentDto userExsitJudgmentDto =new UserExsitJudgmentDto();
         logger.info("请求进来了login接口");
@@ -86,7 +86,7 @@ public class WxMaUserController {
             //TODO 可以增加自己的逻辑，关联业务相关数据
             String openId = session.getOpenid();
             String sessionKey = session.getSessionKey();
-            result = userExistJudgmentService.userExistJudgment(openId);
+            result = userExistJudgmentService.userExistJudgment(openId,appid);
             String userid =String.valueOf(result.getData().getYhid());
             //给sessionKey加上前缀
             String cacheKeyId = "sessionkey:" + userid;

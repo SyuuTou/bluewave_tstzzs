@@ -6,7 +6,7 @@ import com.lhjl.tzzs.proxy.dto.UserYnDto;
 
 
 public interface UserExistJudgmentService {
-    CommonDto<UserExsitJudgmentDto> userExistJudgment(String oppenId);
+    CommonDto<UserExsitJudgmentDto> userExistJudgment(String oppenId,Integer appid);
     CommonDto<UserYnDto> userYn(String token);
     int getUserId(String token);
 }
