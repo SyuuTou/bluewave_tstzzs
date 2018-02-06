@@ -21,7 +21,7 @@
     <result column="appid" jdbcType="INTEGER" property="appid" />
   </resultMap>
   <select id="getLastCreateProject" resultMap="BaseResultMap">
-    SELECT * FROM project_send_b where user_id = #{userId} and appid = #{appid} and prepare_id = #{prepareId}
+    SELECT * FROM project_send_b where user_id = #{userId} and appid = #{appid}
     order by create_time desc
     limit 0,3;
   </select>
