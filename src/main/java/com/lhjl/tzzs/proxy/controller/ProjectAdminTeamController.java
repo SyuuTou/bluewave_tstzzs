@@ -85,7 +85,7 @@ public class ProjectAdminTeamController extends  GenericController{
      * @param memberId
      * @return
      */
-    @GetMapping("deleteprojectteammember")
+    @DeleteMapping("deleteprojectteammember")
     public CommonDto<String> deleteProjectTeamMember(Integer memberId){
 
         CommonDto<String> result = new CommonDto<>();
