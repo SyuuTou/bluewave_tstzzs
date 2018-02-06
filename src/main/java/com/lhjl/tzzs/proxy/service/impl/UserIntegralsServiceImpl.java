@@ -558,17 +558,17 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				Float bei =usersMapper.findByBei(leId);
 				for (Map<String, Object> obj : list){
 					//UserIntegralConsume u =new  UserIntegralConsume();
-					if(Integer.valueOf(String.valueOf(obj.get("cost_num")))>=0){
+					if(new BigDecimal(obj.get("cost_num").toString()).compareTo(new BigDecimal(0))>=0){
 						if("xHwofbNs".equals(String.valueOf(obj.get("scene_key")))){
-							Integer dnum =Integer.valueOf(String.valueOf(obj.get("cost_num")));
+							BigDecimal dnum =new BigDecimal(obj.get("cost_num").toString());
 							obj.put("dnum","充值"+dnum+"元");
-							Integer hnum =Integer.valueOf(String.valueOf(obj.get("num")));
+							BigDecimal hnum =new BigDecimal(obj.get("num").toString());
 							obj.put("hnum","+"+hnum);
 							obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
 							obj.put("end_time",String.valueOf(obj.get("end_time")).substring(0,10));
 							obj.put("userName",null);
 						}else{
-							Integer dnum=Integer.valueOf(String.valueOf(obj.get("cost_num")));
+							BigDecimal dnum =new BigDecimal(obj.get("cost_num").toString());
 							//Integer dnum1=(int)(hnum*(1-bei));
 							obj.put("dnum","+"+dnum);
 							obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
@@ -586,7 +586,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						String skey =String.valueOf(obj.get("scene_key"));
 						//String userName = metaSceneMapper.selectbyDesc(skey);
 						//obj.put("userName",userName);
-						Integer dnum =Integer.valueOf(String.valueOf(obj.get("cost_num")));
+						BigDecimal dnum =new BigDecimal(obj.get("cost_num").toString());
 						obj.put("dnum",dnum);
 						obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
 						MetaScene m =new MetaScene();
@@ -620,19 +620,20 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				Float bei =usersMapper.findByBei(leId);
 				for (Map<String, Object> obj : list) {
 					UserIntegrals u = new UserIntegrals();
-					if (Integer.valueOf(String.valueOf(obj.get("cost_num"))) >= 0) {
+					if (new BigDecimal(obj.get("cost_num").toString()).compareTo(new BigDecimal(0))>=0) {
 						if ("xHwofbNs".equals(String.valueOf(obj.get("scene_key")))) {
-							Integer dnum = Integer.valueOf(String.valueOf(obj.get("cost_num")));
+							BigDecimal dnum =new BigDecimal(obj.get("cost_num").toString());
 							obj.put("dnum", "充值" + dnum + "元");
 							Integer leId1 = 1;
-							Integer hnum =Integer.valueOf(String.valueOf(obj.get("num")));
+							BigDecimal hnum =new BigDecimal(obj.get("num").toString());
+//							Integer hnum =Integer.valueOf(String.valueOf(obj.get("num")));
 							obj.put("hnum","+"+hnum);
 							obj.put("begin_time", String.valueOf(obj.get("begin_time")).substring(0, 10));
 							obj.put("end_time", String.valueOf(obj.get("end_time")).substring(0, 10));
 							obj.put("userName", null);
 
 						} else {
-							Integer dnum = Integer.valueOf(String.valueOf(obj.get("cost_num")));
+							BigDecimal dnum =new BigDecimal(obj.get("cost_num").toString());
 							//Integer dnum1=(int)(hnum*(1-bei));
 							obj.put("dnum", "+" + dnum);
 							obj.put("begin_time", String.valueOf(obj.get("begin_time")).substring(0, 10));
@@ -650,7 +651,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						String skey =String.valueOf(obj.get("scene_key"));
 						//String userName = metaSceneMapper.selectbyDesc(skey);
 						//obj.put("userName",userName);
-						Integer dnum =Integer.valueOf(String.valueOf(obj.get("cost_num")));
+						BigDecimal dnum =new BigDecimal(obj.get("cost_num").toString());
 						obj.put("dnum",dnum);
 						obj.put("begin_time",String.valueOf(obj.get("begin_time")).substring(0,10));
 						MetaScene m =new MetaScene();
