@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ProjectTeamMemberDto.ProjectTeamIntroInputDto;
 import com.lhjl.tzzs.proxy.service.ProjectAdminTeamIntroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +19,13 @@ public class ProjectAdminTeamIntroController extends GenericController{
 
     /**
      * 增加或更新团队成员信息
-     * @param projectId
      * @return
      */
-    @PostMapping("/{projectId}/addOrUpdatePojectTeamIntro")
-    public CommonDto<String> addOrUpdatePojectTeamIntro(@PathVariable Integer projectId, @RequestBody String teamIntroduction){
+    @PostMapping("/addOrUpdatePojectTeamIntro")
+    public CommonDto<String> addOrUpdatePojectTeamIntro(@RequestBody ProjectTeamIntroInputDto body){
         CommonDto<String> result = new CommonDto<>();
         try {
-            result = projectAdminTeamIntroService.addOrUpdatePojectTeamIntro(projectId, teamIntroduction);
+            result = projectAdminTeamIntroService.addOrUpdatePojectTeamIntro(body);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");

@@ -15,7 +15,7 @@ public interface ProjectAdminTeamService {
 
     CommonDto<List<ProjectTeamMemberOutputDto>> getProjectTeamMemberList(Integer projectId);
 
-    CommonDto<String> addOrUpdatePojectTeamMember(Integer projectId, ProjectTeamMemberInputDto body);
+    CommonDto<String> addOrUpdatePojectTeamMember(ProjectTeamMemberInputDto body);
 
     CommonDto<String> deleteProjectTeamMember(Integer memberId);
 

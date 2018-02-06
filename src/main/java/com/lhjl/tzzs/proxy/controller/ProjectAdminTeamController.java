@@ -66,11 +66,11 @@ public class ProjectAdminTeamController extends  GenericController{
      * @param body
      * @return
      */
-    @PostMapping("/{projectId}/addOrUpdatePojectTeamMember")
-    public CommonDto<String> addOrUpdatePojectTeamMember(@PathVariable Integer projectId, @RequestBody ProjectTeamMemberInputDto body){
+    @PostMapping("/addOrUpdatePojectTeamMember")
+    public CommonDto<String> addOrUpdatePojectTeamMember(@RequestBody ProjectTeamMemberInputDto body){
         CommonDto<String> result = new CommonDto<>();
         try {
-            result = projectAdminTeamService.addOrUpdatePojectTeamMember(projectId, body);
+            result = projectAdminTeamService.addOrUpdatePojectTeamMember(body);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
