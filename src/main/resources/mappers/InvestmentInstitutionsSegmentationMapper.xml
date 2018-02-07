@@ -11,7 +11,9 @@
   <select id="findSegment" resultType="java.util.Map">
     select ms.`name`,ms.segmentation_logo from investment_institutions_segmentation iis
     left join meta_segmentation ms on iis.meta_segmentation_id = ms.id
-    where iis.investment_institutions_id = #{institutionId};
+    where iis.investment_institutions_id = #{institutionId}
+    and ms.name is not null
+    and ms.segmentation_logo is not null;
   </select>
 
   <select id="findYear" resultType="java.util.HashMap">
