@@ -62,7 +62,6 @@ public class ProjectAdminTeamController extends  GenericController{
 
     /**
      * 增加或更新团队成员信息
-     * @param projectId
      * @param body
      * @return
      */
