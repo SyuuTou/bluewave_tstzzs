@@ -23,7 +23,7 @@ public class ProjectFinancingLogDetailsController extends GenericController {
 	/**
 	 * 投资人列表
 	 * @param appid
-	 * @param body 投资人列表请求体
+	 * @param body 投资人列表请求体  
 	 * @return
 	 */
 //    @PostMapping("/v{appid}/list/investors")
