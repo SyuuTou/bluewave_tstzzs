@@ -214,11 +214,21 @@ public class InvestorServiceImpl implements InvestorService {
 	        result.setMessage("由于请求参数不正确导致数据库查询出多条相关的运营纪录");
 			return result;
 		}
-		
 		if(dom !=null) {
-			dom.setRecommand(dom.getBasicsRecommend()+dom.getDynamicRecommand()+dom.getOperationRecommend());
+			Integer basicsRecommend = dom.getBasicsRecommend();
+			if(basicsRecommend==null) {
+				basicsRecommend=0;
+			}
+			Integer dynamicRecommand = dom.getDynamicRecommand();
+			if(dynamicRecommand==null) {
+				dynamicRecommand=0;
+			}
+			Integer operationRecommend = dom.getOperationRecommend();
+			if(operationRecommend==null) {
+				operationRecommend=0;
+			}
+			dom.setRecommand(basicsRecommend + dynamicRecommand+ operationRecommend );
 		}
-		
 		result.setData(dom !=null ? dom : new DatasOperationManage());
         result.setStatus(200); 
         result.setMessage("success");
