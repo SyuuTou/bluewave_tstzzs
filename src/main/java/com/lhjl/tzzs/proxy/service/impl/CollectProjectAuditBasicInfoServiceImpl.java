@@ -69,7 +69,7 @@ public class CollectProjectAuditBasicInfoServiceImpl implements CollectProjectAu
 
         collectProjectAuditBasicInfoDto.setEstablishedTime(sdf.format(projectSendB.getCreateTime()));
 
-        List<ProjectSendTagsB> projectSendTagsBList = projectSendTagsBMapper.selectByProjectId(projectId);
+        List<ProjectSendTagsB> projectSendTagsBList = projectSendTagsBMapper.selectByProjectId(projectSendAuditB1.getProjectSendBId());
         List<String> projectSendTagsBLists = new ArrayList<>();
         String[] projectSendTagsBArr = null;
         if(null != projectSendTagsBList){
@@ -81,7 +81,7 @@ public class CollectProjectAuditBasicInfoServiceImpl implements CollectProjectAu
         }
         collectProjectAuditBasicInfoDto.setCompanyTag(projectSendTagsBArr);
 
-        List<ProjectSendCompetingB> projectSendCompetingBList = projectSendCompetingBMapper.selectByProjectId(projectId);
+        List<ProjectSendCompetingB> projectSendCompetingBList = projectSendCompetingBMapper.selectByProjectId(projectSendAuditB1.getProjectSendBId());
         List<String> projectSendCompetingBLists = new ArrayList<>();
         String[] projectSendCompetingBArr = null;
         if(null != projectSendCompetingBList){
@@ -93,7 +93,7 @@ public class CollectProjectAuditBasicInfoServiceImpl implements CollectProjectAu
         }
         collectProjectAuditBasicInfoDto.setCompetitiveProduct(projectSendCompetingBArr);
 
-        List<ProjectSendSegmentationB> projectSendSegmentationBList = projectSendSegmentationBMapper.selectByProjectId(projectId);
+        List<ProjectSendSegmentationB> projectSendSegmentationBList = projectSendSegmentationBMapper.selectByProjectId(projectSendAuditB1.getProjectSendBId());
         List<String> projectSendSegmentationBLists = new ArrayList<>();
         String[] projectSendSegmentationBArr = null;
         if(null != projectSendSegmentationBList){
