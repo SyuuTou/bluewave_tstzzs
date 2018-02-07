@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.project;
+package com.lhjl.tzzs.proxy.controller.project.details;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +40,6 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 public class ProjectsController extends GenericController{
 
-    private static final Logger log = LoggerFactory.getLogger(ProjectsController.class);
-
     @Resource
     private ProjectsService projectsService;
     
@@ -75,7 +73,7 @@ public class ProjectsController extends GenericController{
         } catch (Exception e) {
             result.setStatus(5101);
             result.setMessage("项目显示页面异常，请稍后再试");
-            log.error(e.getMessage(),e);
+            this.LOGGER.error(e.getMessage(),e);
         }
         return result;
     }
@@ -97,7 +95,7 @@ public class ProjectsController extends GenericController{
         } catch (Exception e) {
             result.setStatus(5102);
             result.setMessage("页面显示异常，请稍后再试");
-            log.error(e.getMessage());
+            this.LOGGER.error(e.getMessage());
         }
 
 
@@ -135,7 +133,7 @@ public class ProjectsController extends GenericController{
         } catch (Exception e) {
             result.setStatus(5103);
             result.setMessage("搜索异常，请稍后再试");
-            log.error(e.getMessage());
+            this.LOGGER.error(e.getMessage());
         }
         return result;
     }
@@ -164,7 +162,7 @@ public class ProjectsController extends GenericController{
         } catch (Exception e) {
             result.setStatus(5104);
             result.setMessage("页面显示异常，请稍后再试");
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
         }
         return result;
     }
@@ -193,7 +191,7 @@ public class ProjectsController extends GenericController{
         } catch (Exception e) {
             result.setStatus(5104);
             result.setMessage("页面显示异常，请稍后再试");
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
         }
         return result;
     }
@@ -210,7 +208,7 @@ public class ProjectsController extends GenericController{
         try {
             result = projectsService.getProjectDetails(body);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setData(null);
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
@@ -230,7 +228,7 @@ public class ProjectsController extends GenericController{
         try {
             result = projectsService.getProjectFinancingNow(body);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);
             result.setMessage("服务器端发生错误");
             result.setData(null);
@@ -250,7 +248,7 @@ public class ProjectsController extends GenericController{
         try {
             result = projectsService.getProjectFinancingHistory(body);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);
             result.setMessage("服务器端发生错误");
             result.setData(null);
@@ -270,7 +268,7 @@ public class ProjectsController extends GenericController{
         try {
             result = projectsService.getProjectFinancingTeam(body);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);
             result.setMessage("服务器端发生错误");
             result.setData(null);
@@ -291,7 +289,7 @@ public class ProjectsController extends GenericController{
         try {
 
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);
             result.setMessage("服务器端发生错误");
             result.setData(null);
@@ -313,7 +311,7 @@ public class ProjectsController extends GenericController{
         try {
             result = projectsService.judgeProjectIsMine(xmid,token);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);
             result.setMessage("服务器端发生错误");
             result.setData(false);
@@ -335,7 +333,7 @@ public class ProjectsController extends GenericController{
         try {
             result = projectsService.getProjectAdministractorList(body);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
             result.setData(list);
@@ -356,7 +354,7 @@ public class ProjectsController extends GenericController{
         try {
             result = projectsService.getProjectComplexInfo(body);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);
             result.setMessage("服务器端发生错误");
             result.setData(null);

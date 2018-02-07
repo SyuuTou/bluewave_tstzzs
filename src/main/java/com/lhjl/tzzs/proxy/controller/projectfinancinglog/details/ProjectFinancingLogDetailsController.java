@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.projectfinancinglog;
+package com.lhjl.tzzs.proxy.controller.projectfinancinglog.details;
 
 import java.util.List;
 import java.util.Map;
