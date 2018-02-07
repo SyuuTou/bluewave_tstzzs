@@ -5,6 +5,7 @@ import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeDto;
 import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeResDto;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 public interface RedEnvelopeService {
     CommonDto<String> checkAndAddAngelToken(Integer appId, String token, String senceKey);
@@ -18,4 +19,6 @@ public interface RedEnvelopeService {
     CommonDto<BigDecimal> checkRemainingBalance(Integer appId, String token);
 
     CommonDto<RedEnvelopeResDto> receiveRedEnvelope(Integer appId, String unionId, String token);
+
+    CommonDto<Map<String,BigDecimal>> getInvitationedLimit(Integer appId, String token);
 }

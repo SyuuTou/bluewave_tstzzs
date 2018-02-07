@@ -19,5 +19,6 @@
     <result column="union_key" property="unionKey" jdbcType="VARCHAR" />
     <result column="red_envelope_type" property="redEnvelopeType" jdbcType="INTEGER" />
     <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
   </resultMap>
 </mapper>

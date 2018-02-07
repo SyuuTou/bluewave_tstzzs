@@ -2,7 +2,9 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CollectProjectAuditTeamDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.mapper.ProjectSendAuditBMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamBMapper;
+import com.lhjl.tzzs.proxy.model.ProjectSendAuditB;
 import com.lhjl.tzzs.proxy.model.ProjectSendTeamB;
 import com.lhjl.tzzs.proxy.service.CollectProjectAuditTeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
     @Autowired
     private ProjectSendTeamBMapper projectSendTeamBMapper;
 
+    @Autowired
+    private ProjectSendAuditBMapper projectSendAuditBMapper;
+
     @Override
     public CommonDto<CollectProjectAuditTeamDto> getCollectProjectAuditTeam(Integer projectId) {
 
@@ -30,10 +35,22 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
 
         List<CollectProjectAuditTeamDto.CollectProjectAuditMemberDto> collectProjectAuditMemberDtoList = new ArrayList<>();
 
-        List<ProjectSendTeamB> projectSendTeamBList = projectSendTeamBMapper.selectByProjectId(projectId);
+        ProjectSendAuditB projectSendAuditB = new ProjectSendAuditB();
+        projectSendAuditB.setId(projectId);
+
+        ProjectSendAuditB projectSendAuditB1 = projectSendAuditBMapper.selectByPrimaryKey(projectSendAuditB);
+
+        if(null == projectSendAuditB1){
+            result.setStatus(300);
+            result.setMessage("failed");
+            result.setData(null);
+            return result;
+        }
+
+        List<ProjectSendTeamB> projectSendTeamBList = projectSendTeamBMapper.selectByProjectId(projectSendAuditB1.getProjectSendBId());
 
         if(null != projectSendTeamBList && projectSendTeamBList.size() != 0){
-            projectSendTeamBList.forEach( projectSendTeamB_i ->{
+            for(ProjectSendTeamB projectSendTeamB_i : projectSendTeamBList){
                 CollectProjectAuditTeamDto.CollectProjectAuditMemberDto collectProjectAuditMemberDto = new CollectProjectAuditTeamDto.CollectProjectAuditMemberDto();
                 collectProjectAuditMemberDto.setMemberId(projectSendTeamB_i.getId());
                 collectProjectAuditMemberDto.setMemberName(projectSendTeamB_i.getMemberName());
@@ -41,7 +58,7 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
                 collectProjectAuditMemberDto.setStockPer(projectSendTeamB_i.getStockRatio());
                 collectProjectAuditMemberDto.setKernelDesc(projectSendTeamB_i.getMemberDesc());
                 collectProjectAuditMemberDtoList.add(collectProjectAuditMemberDto);
-            });
+            }
         }
 
         //对审核项目成员进行权重排序

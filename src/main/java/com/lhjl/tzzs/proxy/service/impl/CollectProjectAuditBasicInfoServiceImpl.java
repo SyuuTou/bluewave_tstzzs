@@ -2,14 +2,8 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CollectProjectAuditBasicInfoDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.mapper.ProjectSendBMapper;
-import com.lhjl.tzzs.proxy.mapper.ProjectSendCompetingBMapper;
-import com.lhjl.tzzs.proxy.mapper.ProjectSendSegmentationBMapper;
-import com.lhjl.tzzs.proxy.mapper.ProjectSendTagsBMapper;
-import com.lhjl.tzzs.proxy.model.ProjectSendB;
-import com.lhjl.tzzs.proxy.model.ProjectSendCompetingB;
-import com.lhjl.tzzs.proxy.model.ProjectSendSegmentationB;
-import com.lhjl.tzzs.proxy.model.ProjectSendTagsB;
+import com.lhjl.tzzs.proxy.mapper.*;
+import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.CollectProjectAuditBasicInfoService;
 import com.lhjl.tzzs.proxy.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +31,28 @@ public class CollectProjectAuditBasicInfoServiceImpl implements CollectProjectAu
     @Autowired
     private ProjectSendSegmentationBMapper projectSendSegmentationBMapper;
 
+    @Autowired
+    private ProjectSendAuditBMapper projectSendAuditBMapper;
+
     @Override
     public CommonDto<CollectProjectAuditBasicInfoDto> getCollectProjectAuditBasicInfo(Integer projectId) {
         CommonDto<CollectProjectAuditBasicInfoDto> result = new CommonDto<>();
 
         CollectProjectAuditBasicInfoDto collectProjectAuditBasicInfoDto = new CollectProjectAuditBasicInfoDto();
 
-        ProjectSendB projectSendB = projectSendBMapper.selectByPrimaryKey(projectId);
+        ProjectSendAuditB projectSendAuditB = new ProjectSendAuditB();
+        projectSendAuditB.setId(projectId);
+
+        ProjectSendAuditB projectSendAuditB1 = projectSendAuditBMapper.selectByPrimaryKey(projectSendAuditB);
+
+        if(null == projectSendAuditB1){
+            result.setStatus(300);
+            result.setMessage("failed");
+            result.setData(null);
+            return result;
+        }
+
+        ProjectSendB projectSendB = projectSendBMapper.selectByPrimaryKey(projectSendAuditB1.getProjectSendBId());
         if(null == projectSendB){
             result.setStatus(300);
             result.setMessage("failed");

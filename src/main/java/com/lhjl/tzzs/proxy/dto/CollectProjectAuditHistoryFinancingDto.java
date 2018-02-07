@@ -8,7 +8,10 @@ import java.util.List;
  */
 public class CollectProjectAuditHistoryFinancingDto {
 
+
     private Integer historyFinancingId;
+
+    private Integer projectId;
 
     private String stage;
 
@@ -27,6 +30,14 @@ public class CollectProjectAuditHistoryFinancingDto {
     private String[] investors;
 
     private String investorsDesc;
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
 
     private List<CollectInvestorDto> collectInvestorDtoList;
 

@@ -2,8 +2,10 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CollectProjectAuditHistoryFinancingDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.mapper.ProjectSendAuditBMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendFinancingHistoryBMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendInvestorBMapper;
+import com.lhjl.tzzs.proxy.model.ProjectSendAuditB;
 import com.lhjl.tzzs.proxy.model.ProjectSendFinancingHistoryB;
 import com.lhjl.tzzs.proxy.model.ProjectSendInvestorB;
 import com.lhjl.tzzs.proxy.service.CollectProjectAuditHistoryFinancingService;
@@ -26,6 +28,9 @@ public class CollectProjectAuditHistoryFinancingServiceImpl implements CollectPr
     @Autowired
     private ProjectSendInvestorBMapper projectSendInvestorBMapper;
 
+    @Autowired
+    private ProjectSendAuditBMapper projectSendAuditBMapper;
+
     @Override
     public CommonDto<List<CollectProjectAuditHistoryFinancingDto>> getCollectProjectAuditHistoryFinancing(Integer projectId) {
 
@@ -33,17 +38,30 @@ public class CollectProjectAuditHistoryFinancingServiceImpl implements CollectPr
 
         List<CollectProjectAuditHistoryFinancingDto> collectProjectAuditHistoryFinancingDtoList = new ArrayList<>();
 
+        ProjectSendAuditB projectSendAuditB = new ProjectSendAuditB();
+        projectSendAuditB.setId(projectId);
+
+        ProjectSendAuditB projectSendAuditB1 = projectSendAuditBMapper.selectByPrimaryKey(projectSendAuditB);
+
+        if(null == projectSendAuditB1){
+            result.setStatus(300);
+            result.setMessage("failed");
+            result.setData(null);
+            return result;
+        }
+
         ProjectSendFinancingHistoryB projectSendFinancingHistoryB = new ProjectSendFinancingHistoryB();
-        projectSendFinancingHistoryB.setProjectSendBId(projectId);
+        projectSendFinancingHistoryB.setProjectSendBId(projectSendAuditB1.getProjectSendBId());
 
         List<ProjectSendFinancingHistoryB> projectSendFinancingHistoryBList = projectSendFinancingHistoryBMapper.select(projectSendFinancingHistoryB);
 
         if(null != projectSendFinancingHistoryBList && projectSendFinancingHistoryBList.size() != 0){
-            projectSendFinancingHistoryBList.forEach(projectSendFinancingHistoryB_i -> {
+            for(ProjectSendFinancingHistoryB projectSendFinancingHistoryB_i : projectSendFinancingHistoryBList){
                 CollectProjectAuditHistoryFinancingDto collectProjectAuditHistoryFinancingDto = new CollectProjectAuditHistoryFinancingDto();
-                collectProjectAuditHistoryFinancingDto.setHistoryFinancingId(projectSendFinancingHistoryB.getId());
-                collectProjectAuditHistoryFinancingDto.setStage(projectSendFinancingHistoryB_i.getStage());
 
+                collectProjectAuditHistoryFinancingDto.setHistoryFinancingId(projectSendFinancingHistoryB_i.getId());
+                collectProjectAuditHistoryFinancingDto.setStage(projectSendFinancingHistoryB_i.getStage());
+                collectProjectAuditHistoryFinancingDto.setProjectId(projectSendFinancingHistoryB_i.getProjectSendBId());
                 SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
                 collectProjectAuditHistoryFinancingDto.setInvestTime(sdf.format(projectSendFinancingHistoryB_i.getFinancingTime()));
                 collectProjectAuditHistoryFinancingDto.setInvestAmount(projectSendFinancingHistoryB.getAmount());
@@ -71,7 +89,7 @@ public class CollectProjectAuditHistoryFinancingServiceImpl implements CollectPr
                 collectProjectAuditHistoryFinancingDto.setCollectInvestorDtoList(collectInvestorDtoList);
 
                 collectProjectAuditHistoryFinancingDtoList.add(collectProjectAuditHistoryFinancingDto);
-            });
+            };
         }
 
         result.setStatus(200);

@@ -19,7 +19,17 @@ public class RedEnvelopeDto {
     private String token;
     /** 红包类型；0：为定额红包，1：为随机红包 */
     private Integer redEnvelopeType;
+    /** 红包类型描述；INVITATIONED：邀请红包 ，QUOTAED：定额红包，RANDOMED：随机红包*/
+    private String description;
 
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Integer getRedEnvelopeType() {
         return redEnvelopeType;

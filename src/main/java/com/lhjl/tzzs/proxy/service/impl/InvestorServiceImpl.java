@@ -5,27 +5,8 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.VIPOutputDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
 import com.lhjl.tzzs.proxy.investorDto.InvestorsOutputDto;
-import com.lhjl.tzzs.proxy.mapper.AdminUserMapper;
-import com.lhjl.tzzs.proxy.mapper.DatasOperationManageMapper;
-import com.lhjl.tzzs.proxy.mapper.InvestorDemandCharacterMapper;
-import com.lhjl.tzzs.proxy.mapper.InvestorDemandMapper;
-import com.lhjl.tzzs.proxy.mapper.InvestorDemandSegmentationMapper;
-import com.lhjl.tzzs.proxy.mapper.InvestorDemandSpeedwayMapper;
-import com.lhjl.tzzs.proxy.mapper.InvestorDemandStageMapper;
-import com.lhjl.tzzs.proxy.mapper.InvestorInvestmentCaseMapper;
-import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
-import com.lhjl.tzzs.proxy.mapper.MetaAdminTypeMapper;
-import com.lhjl.tzzs.proxy.mapper.MetaUserLevelMapper;
-import com.lhjl.tzzs.proxy.mapper.UserIntegralConsumeMapper;
-import com.lhjl.tzzs.proxy.mapper.UserLevelRelationMapper;
-import com.lhjl.tzzs.proxy.mapper.UsersMapper;
-import com.lhjl.tzzs.proxy.mapper.UsersPayMapper;
-import com.lhjl.tzzs.proxy.model.AdminUser;
-import com.lhjl.tzzs.proxy.model.DatasOperationManage;
-import com.lhjl.tzzs.proxy.model.Investors;
-import com.lhjl.tzzs.proxy.model.MetaUserLevel;
-import com.lhjl.tzzs.proxy.model.UserLevelRelation;
-import com.lhjl.tzzs.proxy.model.Users;
+import com.lhjl.tzzs.proxy.mapper.*;
+import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.InvestorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -73,6 +55,9 @@ public class InvestorServiceImpl implements InvestorService {
     private UserIntegralConsumeMapper userIntegralConsumeMapper;
     @Autowired
     private UsersPayMapper usersPayMapper;
+
+    @Autowired
+    private UserTokenMapper userTokenMapper;
     
     @Value("${pageNum}")
     private Integer pageNumDefault ;
@@ -83,6 +68,19 @@ public class InvestorServiceImpl implements InvestorService {
     @Transactional(readOnly = true)
 	@Override
 	public CommonDto<Map<String,Object>> listInvestorsInfos(Integer appid, InvestorListInputDto body) {
+
+    	if (StringUtil.isEmpty(body.getToken())){
+    		return new CommonDto<>(null, "Token 不能为空。", 200);
+		}
+
+		UserToken query = new UserToken();
+    	query.setToken(body.getToken());
+
+    	UserToken userToken = userTokenMapper.selectOne(query);
+
+		Users users = usersMapper.selectByPrimaryKey(userToken.getUserId());
+
+
 		CommonDto<Map<String,Object>> result =new CommonDto<>();
 		Map<String,Object> map=new HashMap<>();
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -100,7 +98,7 @@ public class InvestorServiceImpl implements InvestorService {
         
         AdminUser au=new AdminUser();
         au.setMetaAppId(appid);
-        au.setUserId(body.getUserId());
+        au.setUserId(userToken.getUserId());
         //设置管理员的管理员类型
         try {
         	au = adminUserMapper.selectOne(au);
@@ -108,7 +106,9 @@ public class InvestorServiceImpl implements InvestorService {
         		//设置管理员的类型  
         		body.setAdminType(au.getAdminType());
         		//设置当前的（管理员）负责人的名称
-            	body.setAdminName(au.getName());
+				if (StringUtil.isNotEmpty(users.getActualName())) {
+					body.setAdminName(users.getActualName());
+				}
         	} 
         	
         }catch(Exception e) {

@@ -103,10 +103,22 @@ public class InvestorListInputDto {
      * 每页显示数量
      */
     private Integer pageSize;
+
+    private String token;
+
     /**
      * 起始索引
      */
     private Long start;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 	public String getKeyWords() {
 		return keyWords;
 	}
