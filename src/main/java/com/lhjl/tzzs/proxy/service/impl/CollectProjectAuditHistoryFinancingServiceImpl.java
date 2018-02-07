@@ -64,9 +64,9 @@ public class CollectProjectAuditHistoryFinancingServiceImpl implements CollectPr
                 collectProjectAuditHistoryFinancingDto.setProjectId(projectSendFinancingHistoryB_i.getProjectSendBId());
                 SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
                 collectProjectAuditHistoryFinancingDto.setInvestTime(sdf.format(projectSendFinancingHistoryB_i.getFinancingTime()));
-                collectProjectAuditHistoryFinancingDto.setInvestAmount(projectSendFinancingHistoryB.getAmount());
+                collectProjectAuditHistoryFinancingDto.setInvestAmount(projectSendFinancingHistoryB_i.getAmount());
                 collectProjectAuditHistoryFinancingDto.setCurrencyType(projectSendFinancingHistoryB_i.getCurrency()); //融资金额币种单位
-                collectProjectAuditHistoryFinancingDto.setAssessmentAmount(projectSendFinancingHistoryB.getTotalAmount());
+                collectProjectAuditHistoryFinancingDto.setAssessmentAmount(projectSendFinancingHistoryB_i.getTotalAmount());
                 ProjectSendInvestorB projectSendInvestorB = new ProjectSendInvestorB();
                 projectSendInvestorB.setPsFinancingHistoryBId(projectSendFinancingHistoryB_i.getId());
                 List<ProjectSendInvestorB> projectSendInvestorBList = projectSendInvestorBMapper.select(projectSendInvestorB);
