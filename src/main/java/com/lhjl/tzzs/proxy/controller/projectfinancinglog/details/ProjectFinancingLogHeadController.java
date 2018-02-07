@@ -28,7 +28,7 @@ public class ProjectFinancingLogHeadController extends GenericController {
 	 * @param projectFinancingLogId
 	 * @return
 	 */
-    @PostMapping("/v{appid}/echo/head/projectfinancinglog")
+    @GetMapping("/v{appid}/echo/head/projectfinancinglog")
     public CommonDto<ProjectFinancingLogHeadOutputDto> listInvestorsInfo(@PathVariable Integer appid,Integer projectFinancingLogId){
     	CommonDto<ProjectFinancingLogHeadOutputDto> result =new CommonDto<>();
     	try {
@@ -38,7 +38,7 @@ public class ProjectFinancingLogHeadController extends GenericController {
     		
     		result.setData(null);
     		result.setMessage("fail");
-    		result.setStatus(500);
+    		result.setStatus(500);  
     	}
         return result;
     }

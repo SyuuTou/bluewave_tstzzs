@@ -51,5 +51,5 @@ public interface ProjectFinancingLogMapper extends OwnerMapper<ProjectFinancingL
      * 投资事件头部信息的输出
      * @return
      */
-	ProjectFinancingLogHeadOutputDto echoProjectFinancingLogHead(Integer projectFinancingLogId);
+	ProjectFinancingLogHeadOutputDto echoProjectFinancingLogHead(@Param("projectFinancingLogId") Integer projectFinancingLogId);
 }
