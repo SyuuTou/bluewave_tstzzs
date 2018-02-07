@@ -865,6 +865,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		}else if(body.getInvestorType() == 0){
 			investorAuditType = 3;
 		}
+		if (null != body.getLeader()){
+			investorsApproval.setLeadership(body.getLeader());
+		}
 		investorsApproval.setApprovalResult(investorAuditType);
 		investorsApproval.setReviewTime(now);
 
@@ -904,6 +907,9 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		investorsForInsert.setPosition(body.getCompanyName());
 		investorsForInsert.setYn(1);
 		investorsForInsert.setInvestmentInstitutionsId(jgid);
+		if (null != body.getLeader()){
+			investorsForInsert.setLeaderYn(body.getLeader());
+		}
 		if (investors != null){
 			investorsForInsert.setId(investors.getId());
 

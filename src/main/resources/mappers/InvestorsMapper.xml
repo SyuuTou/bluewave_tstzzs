@@ -9,7 +9,6 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="investment_institutions_id" jdbcType="INTEGER" property="investmentInstitutionsId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="yn" jdbcType="INTEGER" property="yn" />
     <result column="position" jdbcType="VARCHAR" property="position" />
     <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
@@ -35,10 +34,13 @@
     <result column="work_description" jdbcType="VARCHAR" property="workDescription" />
     <result column="honor" jdbcType="VARCHAR" property="honor" />
     <result column="personal_introduction" jdbcType="VARCHAR" property="personalIntroduction" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="company_introduction" jdbcType="VARCHAR" property="companyIntroduction" />
     <result column="certification_instructions" jdbcType="VARCHAR" property="certificationInstructions" />
     <result column="business_card_opposite" jdbcType="VARCHAR" property="businessCardOpposite" />
+    <result column="head_picture" jdbcType="VARCHAR" property="headPicture" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="leader_yn" jdbcType="INTEGER" property="leaderYn" />
   </resultMap>
 
   <resultMap id="newInvestortMap" type="com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto">
