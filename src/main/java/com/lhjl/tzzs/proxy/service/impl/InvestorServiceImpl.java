@@ -225,7 +225,7 @@ public class InvestorServiceImpl implements InvestorService {
 			}
 			Integer operationRecommend = dom.getOperationRecommend();
 			if(operationRecommend==null) {
-				operationRecommend=0;
+				operationRecommend=0;  
 			}
 			dom.setRecommand(basicsRecommend + dynamicRecommand+ operationRecommend );
 		}
