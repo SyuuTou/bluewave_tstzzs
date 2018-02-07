@@ -27,12 +27,6 @@ public class Investors {
     private Integer userId;
 
     /**
-     * 创建时间
-     */
-    @Column(name = "create_time")
-    private Date createTime;
-
-    /**
      * 是否有效；1: 有效，0:无效
      */
     private Integer yn;
@@ -173,12 +167,6 @@ public class Investors {
     private String personalIntroduction;
 
     /**
-     * 更新时间
-     */
-    @Column(name = "update_time")
-    private Date updateTime;
-
-    /**
      * 公司简介
      */
     @Column(name = "company_introduction")
@@ -201,6 +189,24 @@ public class Investors {
      */
     @Column(name = "head_picture")
     private String headPicture;
+
+    /**
+     * 创建时间
+     */
+    @Column(name = "create_time")
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
+
+    /**
+     * 领投资格,张扬阳
+     */
+    @Column(name = "leader_yn")
+    private Integer leaderYn;
 
     /**
      * @return ID
@@ -268,24 +274,6 @@ public class Investors {
      */
     public void setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    /**
-     * 获取创建时间
-     *
-     * @return create_time - 创建时间
-     */
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    /**
-     * 设置创建时间
-     *
-     * @param createTime 创建时间
-     */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
     }
 
     /**
@@ -739,24 +727,6 @@ public class Investors {
     }
 
     /**
-     * 获取更新时间
-     *
-     * @return update_time - 更新时间
-     */
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    /**
-     * 设置更新时间
-     *
-     * @param updateTime 更新时间
-     */
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    /**
      * 获取公司简介
      *
      * @return company_introduction - 公司简介
@@ -826,5 +796,59 @@ public class Investors {
      */
     public void setHeadPicture(String headPicture) {
         this.headPicture = headPicture;
+    }
+
+    /**
+     * 获取创建时间
+     *
+     * @return create_time - 创建时间
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * 设置创建时间
+     *
+     * @param createTime 创建时间
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    /**
+     * 获取更新时间
+     *
+     * @return update_time - 更新时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param updateTime 更新时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取领投资格,张扬阳
+     *
+     * @return leader_yn - 领投资格,张扬阳
+     */
+    public Integer getLeaderYn() {
+        return leaderYn;
+    }
+
+    /**
+     * 设置领投资格,张扬阳
+     *
+     * @param leaderYn 领投资格,张扬阳
+     */
+    public void setLeaderYn(Integer leaderYn) {
+        this.leaderYn = leaderYn;
     }
 }
