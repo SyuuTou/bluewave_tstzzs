@@ -332,7 +332,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         projectTeamMemberBusiness.setMemberId(projectTeamMember.getId());
         projectTeamMemberBusinessService.delete(projectTeamMemberBusiness);
         List<ProjectTeamMemberBusiness> projectTeamMemberBusinessList = new ArrayList<>();
-        if(body.getBusinesses().length == 0 || body.getBusinesses() == null){
+        if(body.getBusinesses() == null || body.getBusinesses().length == 0 ){
             ProjectTeamMemberBusiness projectTeamMemberBusiness1 = new ProjectTeamMemberBusiness();
             projectTeamMemberBusiness1.setMemberId(projectTeamMember.getId());
             projectTeamMemberBusiness1.setCompanyName("");
@@ -351,7 +351,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         projectTeamMemberSelfcity.setMemberId(projectTeamMember.getId());
         projectTeamMemberSelfcityMapper.delete(projectTeamMemberSelfcity);
         List<ProjectTeamMemberSelfcity> projectTeamMemberSelfcityList = new ArrayList<>();
-        if(body.getSelfcitys().length == 0 || body.getSelfcitys() == null){
+        if(body.getSelfcitys() == null || body.getSelfcitys().length == 0 ){
             ProjectTeamMemberSelfcity projectTeamMemberSelfcity1 = new ProjectTeamMemberSelfcity();
             projectTeamMemberSelfcity1.setMemberId(projectTeamMember.getId());
             projectTeamMemberSelfcity1.setCity("");
@@ -370,7 +370,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         projectTeamMemberCity.setMemberId(projectTeamMember.getId());
         projectTeamMemberCityService.delete(projectTeamMemberCity);
         List<ProjectTeamMemberCity> projectTeamMemberCityList = new ArrayList<>();
-        if(body.getCitys().length == 0 || body.getCitys() == null){
+        if(body.getCitys() == null || body.getCitys().length == 0){
             ProjectTeamMemberCity projectTeamMemberCity1 = new ProjectTeamMemberCity();
             projectTeamMemberCity1.setMemberId(projectTeamMember.getId());
             projectTeamMemberCity1.setCityName("");
@@ -389,7 +389,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         projectTeamMemberStage.setMemberId(projectTeamMember.getId());
         projectTeamMemberStageService.delete(projectTeamMemberStage);
         List<ProjectTeamMemberStage> projectTeamMemberStageList = new ArrayList<>();
-        if(body.getInvestStages().length == 0 || body.getInvestStages() == null){
+        if(body.getInvestStages() == null || body.getInvestStages().length == 0 ){
             ProjectTeamMemberStage projectTeamMemberStage1 = new ProjectTeamMemberStage();
             projectTeamMemberStage1.setMemberId(projectTeamMember.getId());
             projectTeamMemberStage1.setStageId(null);
@@ -408,13 +408,13 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         projectTeamMemberEducation.setProjectTeamMemberId(projectTeamMember.getId());
         projectTeamMemberEducationService.delete(projectTeamMemberEducation);
         List<ProjectTeamMemberEducation> projectTeamMemberEducationList = new ArrayList<>();
-        if(body.getEducationExperience().length == 0 || body.getEducationExperience() == null){
+        if(body.getEducationExperience() == null || body.getEducationExperience().length == 0){
             ProjectTeamMemberEducation projectTeamMemberEducation1 = new ProjectTeamMemberEducation();
             projectTeamMemberEducation1.setProjectTeamMemberId(projectTeamMember.getId());
             projectTeamMemberEducation1.setEducationExperience("");
             projectTeamMemberEducationList.add(projectTeamMemberEducation1);
         }else{
-            for(int i = 0; i < body.getInvestStages().length; i++){
+            for(int i = 0; i < body.getEducationExperience().length; i++){
                 ProjectTeamMemberEducation projectTeamMemberEducation1 = new ProjectTeamMemberEducation();
                 projectTeamMemberEducation1.setProjectTeamMemberId(projectTeamMember.getId());
                 projectTeamMemberEducation1.setEducationExperience(body.getEducationExperience()[i]);
@@ -427,7 +427,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         projectTeamMemberWork.setProjectTeamMemberId(projectTeamMember.getId());
         projectTeamMemberWorkService.delete(projectTeamMemberWork);
         List<ProjectTeamMemberWork> projectTeamMemberWorkList = new ArrayList<>();
-        if(body.getWorkExperiences().length == 0 || body.getWorkExperiences() == null){
+        if(body.getWorkExperiences() == null || body.getWorkExperiences().length == 0){
             ProjectTeamMemberWork projectTeamMemberWork1 = new ProjectTeamMemberWork();
             projectTeamMemberWork1.setProjectTeamMemberId(projectTeamMember.getId());
             projectTeamMemberWork1.setWorkExperience("");
@@ -446,7 +446,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         projectTeamMemberSegmentation.setMemberId(projectTeamMember.getId());
         List<ProjectTeamMemberSegmentation> projectTeamMemberSegmentationList = new ArrayList<>();
         projectTeamMemberSegmentationService.delete(projectTeamMemberSegmentation);
-        if(body.getFocusDomain().length == 0 || body.getFocusDomain() == null){
+        if(body.getFocusDomain() == null || body.getFocusDomain().length == 0){
             ProjectTeamMemberSegmentation projectTeamMemberSegmentation1 = new ProjectTeamMemberSegmentation();
             projectTeamMemberSegmentation1.setMemberId(projectTeamMember.getId());
             projectTeamMemberSegmentation1.setSegmentationId(null);
