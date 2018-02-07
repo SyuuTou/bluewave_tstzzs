@@ -28,6 +28,7 @@
     <result column="company_duties" jdbcType="VARCHAR" property="companyDuties" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
+    <result column="event_key" jdbcType="VARCHAR" property="eventKey" />
   </resultMap>
   
   <select id="getInvestorDemandList" resultType="java.util.HashMap">
@@ -36,7 +37,7 @@
     b.company_name,b.company_duties,b.phonenumber,
     ids.segmentation,idsw.speedway,a.stage,b.investment_amount_low,b.investment_amount_high,
     b.investment_amount_low_dollars,b.investment_amount_high_dollars,idc.user_character,
-    b.future,b.demand_status,b.update_time
+    b.future,b.demand_status,b.update_time,b.event_key
     FROM investor_demand b
     left join users u on b.userid = u.id
     left join
@@ -63,7 +64,12 @@
     <if test="appid != null and appid !=''">
       and b.appid = #{appid}
     </if>
-
+    <if test="dataType != null and dataType !=''">
+      and b.demand_status = #{dataType}
+    </if>
+    <if test="userId != null and userId !=''">
+      and b.userid = #{userId}
+    </if>
     order by b.creat_time desc
     limit #{startPage},#{pageSize}
   </select>
@@ -100,6 +106,12 @@
     </if>
     <if test="appid != null and appid !=''">
       and b.appid = #{appid}
+    </if>
+    <if test="dataType != null and dataType !=''">
+      and b.demand_status = #{dataType}
+    </if>
+    <if test="userId != null and userId !=''">
+      and b.userid = #{userId}
     </if>
     order by b.creat_time desc
     ) abc

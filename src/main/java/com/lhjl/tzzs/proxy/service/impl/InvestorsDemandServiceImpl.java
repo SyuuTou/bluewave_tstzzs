@@ -7,7 +7,9 @@ import com.lhjl.tzzs.proxy.service.*;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.lhjl.tzzs.proxy.service.common.CommonUserService;
 import com.lhjl.tzzs.proxy.utils.DateUtils;
+import com.lhjl.tzzs.proxy.utils.MD5Util;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -767,9 +769,28 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
         }
 
         Integer startPage = (body.getPageNum() -1)*body.getPageSize();
+        Integer dataType = null;
+        Integer userId = null;
+
+        switch (body.getDataType()){
+            case "Featured":
+                dataType = 1;
+                break;
+            case "Latest":
+
+                break;
+            case "Mine":
+                Users record = new Users();
+                record.setUuid(body.getToken());
+                Users users = usersMapper.selectOne(record);
+                userId = users.getId();
+                break;
+        }
+
+
 
         List<Map<String,Object>> inverstorDemandList = investorDemandMapper.getInvestorDemandList(startPage,
-                body.getPageSize(),status,isUser,appid);
+                body.getPageSize(),status,isUser,appid,dataType,userId);
         if (inverstorDemandList.size() > 0){
             for (Map<String,Object> inverstorMap:inverstorDemandList){
                 InvestorDemandListOutputDto investorDemandListOutputDto = new InvestorDemandListOutputDto();
@@ -873,10 +894,20 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
                 }
                 investorDemandListOutputDto.setUpdateTime(updateTime);
 
+
+                if (inverstorMap.get("event_key") == null || String.valueOf(inverstorMap.get("event_key")).equals("")){
+                     InvestorDemand investorDemand = investorDemandMapper.selectByPrimaryKey(inverstorMap.get("id"));
+                     investorDemand.setEventKey(MD5Util.md5Encode(DateTime.now().millisOfDay().getAsString(),""));
+                     investorDemandMapper.updateByPrimaryKey(investorDemand);
+                    investorDemandListOutputDto.setEventKey(investorDemand.getEventKey());
+                }else{
+                    investorDemandListOutputDto.setEventKey(String.valueOf(inverstorMap.get("event_key")));
+                }
+
                 list.add(investorDemandListOutputDto);
             }
         }
-        Integer allcount = investorDemandMapper.getInvestorDemandListCount(startPage,body.getPageSize(),status,isUser,appid);
+        Integer allcount = investorDemandMapper.getInvestorDemandListCount(startPage,body.getPageSize(),status,isUser,appid,dataType,userId);
 
         map.put("currentPage",body.getPageNum());
         map.put("total",allcount);
