@@ -21,8 +21,10 @@ import tk.mybatis.mapper.util.StringUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Transactional(readOnly = true)
@@ -165,7 +167,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
     public CommonDto<String> createRedEnvelope(Integer appId, RedEnvelopeDto redEnvelopeDto) {
 
         if (null == redEnvelopeDto.getRedEnvelopeType()){
-            return new CommonDto<>("","红包累心不可为空",200);
+            return new CommonDto<>("","红包类型不可为空",200);
         }else if (redEnvelopeDto.getRedEnvelopeType() == 0) {
             if (redEnvelopeDto.getAmount().compareTo(new BigDecimal(0)) <= 0) {
                 return new CommonDto<>("", "红包金额必须大于0", 200);
@@ -193,6 +195,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         redEnvelope.setUnionKey(MD5Util.md5Encode(DateTime.now().millisOfDay().getAsString(),""));
         redEnvelope.setMessage(redEnvelopeDto.getMessage());
         redEnvelope.setRedEnvelopeType(redEnvelopeDto.getRedEnvelopeType());
+        redEnvelope.setDescription(redEnvelopeDto.getDescription());
 
         redEnvelopeMapper.insert(redEnvelope);
 
@@ -284,6 +287,9 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
         try {
             Users users = this.getUserInfo(appId,token);
+            if (null == users){
+                return  new CommonDto<>(null, "用户不存在", 200);
+            }
             if (StringUtil.isNotEmpty(users.getHeadpicReal())) {
                 redEnvelopeResDto.setHeadPic(users.getHeadpicReal());
             }else{
@@ -303,7 +309,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
             RedEnvelope queryRedEnvelope = new RedEnvelope();
             queryRedEnvelope.setUnionKey(unionId);
             RedEnvelope redEnvelope = redEnvelopeMapper.selectOne(queryRedEnvelope);
-
+            redEnvelopeResDto.setDescription(redEnvelope.getDescription());
             redEnvelopeResDto.setQuantity(redEnvelope.getReceiveQuantity());
             redEnvelopeResDto.setTotalQuantity(redEnvelope.getQuantity());
             redEnvelopeResDto.setMessage(redEnvelope.getMessage());
@@ -338,7 +344,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                             redEnvelope.setReceiveAmount(redEnvelope.getReceiveAmount().add(redEnvelope.getAmount()));
                             redEnvelopeResDto.setAmount(reciveAmount);
                         }else if (redEnvelope.getRedEnvelopeType() == 1) {
-                            reciveAmount = randomAmount(redEnvelope.getQuantity(),redEnvelope.getReceiveQuantity(),redEnvelope.getTotalAmount(),redEnvelope.getReceiveAmount());
+                            reciveAmount = randomAmount(redEnvelope.getQuantity(),redEnvelope.getReceiveQuantity(),redEnvelope.getTotalAmount(),redEnvelope.getReceiveAmount(),appId);
                             redEnvelopeLog.setAmount(reciveAmount);
                             redEnvelope.setReceiveAmount(redEnvelope.getReceiveAmount().add(reciveAmount));
                             redEnvelopeResDto.setAmount(reciveAmount);
@@ -346,7 +352,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                         Example example = new Example(RedEnvelope.class);
                         example.and().andEqualTo("appId", appId).andEqualTo("unionKey", unionId).andEqualTo("receiveQuantity", redEnvelope.getReceiveQuantity());
                         redEnvelope.setReceiveQuantity(redEnvelope.getReceiveQuantity() + 1);
-
+                        redEnvelopeResDto.setQuantity(redEnvelope.getReceiveQuantity());
 
 
                         if (redEnvelopeMapper.updateByExample(redEnvelope, example) > 0) {
@@ -417,8 +423,26 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         return result;
     }
 
-    private BigDecimal randomAmount(Integer quantity, Integer receiveQuantity, BigDecimal totalAmount, BigDecimal receiveAmount) {
+    @Override
+    public CommonDto<Map<String, BigDecimal>> getInvitationedLimit(Integer appId, String token) {
 
+        RedEnvelopeLimit redEnvelopeLimitAmount = this.getRedEnvelopeLimit(appId, "INVITATION_AMOUNT");
+        RedEnvelopeLimit redEnvelopeLimitQuanlity = this.getRedEnvelopeLimit(appId, "INVITATION_QUANLITY");
+        Map<String, BigDecimal> limitMap = new HashMap<>();
+        limitMap.put("invitationAmount",redEnvelopeLimitAmount.getLimitValue());
+        limitMap.put("invitationQuanlity",redEnvelopeLimitQuanlity.getLimitValue());
+
+
+
+        return new CommonDto<>(limitMap,"success", 200);
+    }
+
+    private BigDecimal randomAmount(Integer quantity, Integer receiveQuantity, BigDecimal totalAmount, BigDecimal receiveAmount, Integer appId) {
+
+        RedEnvelopeLimit redEnvelopeLimit = this.getRedEnvelopeLimit(appId, "RED_ENVELOPE_LIMIT");
+        if (totalAmount.divide(redEnvelopeLimit.getLimitValue()).compareTo(new BigDecimal(0)) == 0){
+            return redEnvelopeLimit.getLimitValue();
+        }
             if (quantity - receiveQuantity == 1){
                 return totalAmount.subtract(receiveAmount);
             }else {

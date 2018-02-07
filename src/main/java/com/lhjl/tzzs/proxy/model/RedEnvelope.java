@@ -71,10 +71,15 @@ public class RedEnvelope {
     private Integer redEnvelopeType;
 
     /**
-     * 被领取金额
+     * 被领取金额 
      */
     @Column(name = "receive_amount")
     private BigDecimal receiveAmount;
+
+    /**
+     * 红包类型描述；INVITATIONED：邀请红包 ，QUOTAED：定额红包，RANDOMED：随机红包
+     */
+    private String description;
 
     /**
      * @return id
@@ -299,20 +304,38 @@ public class RedEnvelope {
     }
 
     /**
-     * 获取被领取金额
+     * 获取被领取金额 
      *
-     * @return receive_amount - 被领取金额
+     * @return receive_amount - 被领取金额 
      */
     public BigDecimal getReceiveAmount() {
         return receiveAmount;
     }
 
     /**
-     * 设置被领取金额
+     * 设置被领取金额 
      *
-     * @param receiveAmount 被领取金额
+     * @param receiveAmount 被领取金额 
      */
     public void setReceiveAmount(BigDecimal receiveAmount) {
         this.receiveAmount = receiveAmount;
+    }
+
+    /**
+     * 获取红包类型描述；INVITATIONED：邀请红包 ，QUOTAED：定额红包，RANDOMED：随机红包
+     *
+     * @return description - 红包类型描述；INVITATIONED：邀请红包 ，QUOTAED：定额红包，RANDOMED：随机红包
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * 设置红包类型描述；INVITATIONED：邀请红包 ，QUOTAED：定额红包，RANDOMED：随机红包
+     *
+     * @param description 红包类型描述；INVITATIONED：邀请红包 ，QUOTAED：定额红包，RANDOMED：随机红包
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

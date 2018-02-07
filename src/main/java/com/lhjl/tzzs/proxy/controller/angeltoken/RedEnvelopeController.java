@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.Map;
 
 
 /**
@@ -39,6 +40,21 @@ public class RedEnvelopeController extends GenericController {
 
         return result;
 
+    }
+
+    /**
+     * 获取邀请红包的金额和数量限制
+     * @param appId
+     * @param token
+     * @return
+     */
+    @GetMapping("/v{appId}/invitationed/limit")
+    public CommonDto<Map<String,BigDecimal>> getInvitationedLimit(@PathVariable Integer appId, String token){
+        CommonDto<Map<String,BigDecimal>> result = null;
+
+        result = redEnvelopeService.getInvitationedLimit(appId, token);
+
+        return result;
     }
 
 
