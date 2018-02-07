@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.projectfinancinglog;
+package com.lhjl.tzzs.proxy.controller.projectfinancinglog.list;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
