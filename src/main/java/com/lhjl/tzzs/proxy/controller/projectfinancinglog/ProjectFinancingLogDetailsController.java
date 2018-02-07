@@ -20,15 +20,10 @@ public class ProjectFinancingLogDetailsController extends GenericController {
 	 @Resource
 	    private ProjectFinancingLogService projectFinancingLogService;
 	
-	/**
-	 * 投资人列表
-	 * @param appid
-	 * @param body 投资人列表请求体  
-	 * @return
-	 */
+	
 //    @PostMapping("/v{appid}/list/investors")
-//    public CommonDto<Map<String,Object>> listInvestorsInfo(@PathVariable Integer appid,@RequestBody InvestorListInputDto body){
-//    	CommonDto<Map<String,Object>> result =new CommonDto<>();
+//    public CommonDto<> listInvestorsInfo(@PathVariable Integer appid,Integer projectFinancingLogId){
+//    	CommonDto<> result =new CommonDto<>();
 //    	try {
 //    		result = projectFinancingLogService.listInvestorsInfos(appid,body);
 //    	}catch(Exception e) {
