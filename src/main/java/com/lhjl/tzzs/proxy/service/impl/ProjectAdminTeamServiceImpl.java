@@ -107,7 +107,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
 
                     //获取每个成员的工作经历
                     ProjectTeamMemberWork projectTeamMemberWork = new ProjectTeamMemberWork();
-                    projectTeamMemberWork.setId(projectTeamMember_i.getId());
+                    projectTeamMemberWork.setProjectTeamMemberId(projectTeamMember_i.getId());
                     List<ProjectTeamMemberWork> projectTeamMemberWorks = projectTeamMemberWorkService.select(projectTeamMemberWork);
                     String[] projectTeamMemberWorkArr = null;
                     List<String> projectTeamMemberWorkList = new ArrayList<>();
@@ -125,7 +125,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
 
 
                     ProjectTeamMemberEducation projectTeamMemberEducation = new ProjectTeamMemberEducation();
-                    projectTeamMemberEducation.setId(projectTeamMember_i.getId());
+                    projectTeamMemberEducation.setProjectTeamMemberId(projectTeamMember_i.getId());
                     List<ProjectTeamMemberEducation> projectTeamMemberEducations = projectTeamMemberEducationService.select(projectTeamMemberEducation);
                     List<String> projectTeamMemberEducationList = new ArrayList<>();
                     String[] projectTeamMemberEducationArr = null;
