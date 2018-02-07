@@ -70,17 +70,14 @@ public class ProjectAdminTeamIntroServiceImpl implements ProjectAdminTeamIntroSe
         projectTeamInfo.setProjectId(projectId);
         ProjectTeamInfo projectTeamInfo1 = projectTeamInfoMapper.selectByPrimaryKey(projectTeamInfo);
 
-        if(null == projectTeamInfo1){
-            map.put("projectId", projectId);
-            map.put("data", null);
-            result.setStatus(300);
-            result.setMessage("failed");
-            result.setData(map);
-            return result;
-        }
+
 
         map.put("projectId", projectId);
-        map.put("data", projectTeamInfo1.getTeamIntroduction());
+        if(null == projectTeamInfo1){
+            map.put("data",null);
+        }else {
+            map.put("data", projectTeamInfo1.getTeamIntroduction());
+        }
 
         result.setData(map);
         result.setStatus(200);
