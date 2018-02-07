@@ -34,10 +34,23 @@
     <result column="yn" jdbcType="INTEGER" property="yn" />
   </resultMap>
   
-	
-	<select id="fetchFinancingStatus" resultType="String">  
-		select distinct(stage) from project_financing_log where stage is not null and stage !=""
-    </select>
+  <resultMap id="ProjectFinancingLogHeadOutputDtoMap" type="com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutputDto">
+    <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="short_name" jdbcType="VARCHAR" property="projectName" />
+  </resultMap>
+  
+	<select id="echoProjectFinancingLogHead" resultMap="ProjectFinancingLogHeadOutputDtoMap" parameterType="Integer">  
+		SELECT pfl.serial_number,mdst.type_name,p.short_name
+    FROM project_financing_log pfl
+    left join meta_data_source_type mdst on pfl.data_soruce_type_id = mdst.id
+    left join projects p on pfl.project_id = p.id
+    where pfl.ID=#{projectFinancingLogId}
+   </select>
+   
+   <select id="fetchFinancingStatus" resultType="String">  
+	select distinct(stage) from project_financing_log where stage is not null and stage !=""
+   </select>
 	  
   <select id="selectProjectFinancingLogList" parameterType="Integer" resultMap="BaseResultMap">
     select * from project_financing_log where project_id = #{projectId} and `status`= #{projectStatus}
