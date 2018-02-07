@@ -65,6 +65,9 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
     @Autowired
     private AdminProjectApprovalLogMapper adminProjectApprovalLogMapper;
 
+    @Autowired
+    private InvestmentInstitutionsMapper investmentInstitutionsMapper;
+
     /**
      * 读取项目审核列表接口
      * @return
@@ -696,7 +699,32 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
                 if (psfh.getInvestor().size() > 0){
                     for (ProjectSendInvestorDto psi:psfh.getInvestor()){
                         InvestmentInstitutionsProject investmentInstitutionsProject = new InvestmentInstitutionsProject();
-                        investmentInstitutionsProject.setInvestmentInstitutionsId(psi.getInvestmentInstitutionId());
+                        if (psi.getInvestmentInstitutionId() != null){
+                            investmentInstitutionsProject.setInvestmentInstitutionsId(psi.getInvestmentInstitutionId());
+                        }else {
+                            if ( null != psi.getInvestmentInstitutionName()){
+                                InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
+                                investmentInstitutions.setShortName(psi.getInvestmentInstitutionName());
+
+                                List<InvestmentInstitutions> investmentInstitutionsList = investmentInstitutionsMapper.select(investmentInstitutions);
+                                 if (investmentInstitutionsList.size() > 0){
+                                     investmentInstitutionsProject.setInvestmentInstitutionsId(investmentInstitutionsList.get(0).getId());
+                                 }else {
+                                     investmentInstitutionsMapper.insertSelective(investmentInstitutions);
+
+                                     investmentInstitutionsProject.setInvestmentInstitutionsId(investmentInstitutions.getId());
+                                 }
+
+                            }else {
+                                result.setMessage("投资机构id,投资机构名称都为空,无法保存融资历史");
+                                result.setStatus(502);
+                                result.setData(null);
+
+                                return result;
+                            }
+
+                        }
+
                         investmentInstitutionsProject.setProjectId(projectFinancingLogId);
 
                         investmentInstitutionsProjectMapper.insertSelective(investmentInstitutionsProject);

@@ -15,6 +15,9 @@ public class ProjectSendInvestorDto {
     /**机构id*/
     private Integer investmentInstitutionId;
 
+    /**机构名称*/
+    private String investmentInstitutionName;
+
     public Integer getProjectFinancingHistoryId() {
         return projectFinancingHistoryId;
     }
@@ -45,5 +48,13 @@ public class ProjectSendInvestorDto {
 
     public void setInvestmentInstitutionId(Integer investmentInstitutionId) {
         this.investmentInstitutionId = investmentInstitutionId;
+    }
+
+    public String getInvestmentInstitutionName() {
+        return investmentInstitutionName;
+    }
+
+    public void setInvestmentInstitutionName(String investmentInstitutionName) {
+        this.investmentInstitutionName = investmentInstitutionName;
     }
 }
