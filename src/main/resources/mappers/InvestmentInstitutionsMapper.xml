@@ -126,6 +126,7 @@
         c.short_name != ''
         AND c.short_name IS NOT NULL
         and c.short_name not like "%个人%"
+        and c.logo is not null
         and c.short_name not like "%投资人%"
         and c.short_name not like "%自投%"
         and c.short_name not like "%自筹%"
@@ -161,6 +162,7 @@
         WHERE
         c.short_name != ''
         AND c.short_name IS NOT NULL
+        and c.logo is not null
         and c.short_name not like "%个人%"
         and c.short_name not like "%投资人%"
         and c.short_name not like "%自投%"
