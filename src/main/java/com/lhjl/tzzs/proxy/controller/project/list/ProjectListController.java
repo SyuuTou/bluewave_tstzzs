@@ -34,7 +34,7 @@ public class ProjectListController extends GenericController {
      * @param body
      * @return
      */
-    @PostMapping("/v{appid}/list/projects")
+    @PostMapping("/v{appid}/list/projects")  
     public CommonDto<Map<String, Object>> listProject(@PathVariable("appid") Integer appid,@RequestBody ProjectsListInputDto body){
     	CommonDto<Map<String, Object>> result=new CommonDto<>();
     	try {
