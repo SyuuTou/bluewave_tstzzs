@@ -83,25 +83,8 @@
     left join elegant_service_service_type esst on esit.elegant_service_id = esst.elegant_service_id
     left join meta_service_type mst on esit.meta_identity_type_id = mst.id
     where es.yn = 1
-    <if test="beginTime != null and beginTime!=''">
-      and  date(es.begin_time)between
-
-      #{beginTime} and #{endTime}
-    </if>
-    <if test="searchWord != null and searchWord !=''">
-      and es.service_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
-    </if>
-    group by es.id
-    union
-    select es.*,esc.cooperation_name from elegant_service es
-    left join elegant_service_cooperation esc on es.id = esc.elegant_service_id
-    left join elegant_service_identity_type esit on esit.elegant_service_id = es.id
-    left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
-    left join elegant_service_service_type esst on esit.elegant_service_id = esst.elegant_service_id
-    left join meta_service_type mst on esit.meta_identity_type_id = mst.id
-    where es.yn = 1
     <if test="appid != null and appid != ''">
-      es.appid = #{appid}
+     and es.appid = #{appid}
     </if>
     <if test="beginTime != null and beginTime!=''">
       and  date(es.begin_time)between
@@ -109,41 +92,10 @@
       #{beginTime} and #{endTime}
     </if>
     <if test="searchWord != null and searchWord !=''">
-      and mit.type_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
-    </if>
-    group by es.id
-    union
-    select es.*,esc.cooperation_name from elegant_service es
-    left join elegant_service_cooperation esc on es.id = esc.elegant_service_id
-    left join elegant_service_identity_type esit on esit.elegant_service_id = es.id
-    left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
-    left join elegant_service_service_type esst on esit.elegant_service_id = esst.elegant_service_id
-    left join meta_service_type mst on esit.meta_identity_type_id = mst.id
-    where es.yn = 1
-    <if test="beginTime != null and beginTime!=''">
-      and  date(es.begin_time)between
-
-      #{beginTime} and #{endTime}
-    </if>
-    <if test="searchWord != null and searchWord !=''">
-      and mst.service_type_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
-    </if>
-    group by es.id
-    union
-    select es.*,esc.cooperation_name from elegant_service es
-    left join elegant_service_cooperation esc on es.id = esc.elegant_service_id
-    left join elegant_service_identity_type esit on esit.elegant_service_id = es.id
-    left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
-    left join elegant_service_service_type esst on esit.elegant_service_id = esst.elegant_service_id
-    left join meta_service_type mst on esit.meta_identity_type_id = mst.id
-    where es.yn = 1
-    <if test="beginTime != null and beginTime!=''">
-      and  date(es.begin_time)between
-
-      #{beginTime} and #{endTime}
-    </if>
-    <if test="searchWord != null and searchWord !=''">
-      and esc.cooperation_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
+      and (mit.type_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
+      or es.service_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
+      or mst.service_type_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
+      or esc.cooperation_name like  CONCAT(CONCAT('%', #{searchWord}), '%'))
     </if>
     group by es.id
     ) as a
@@ -160,25 +112,8 @@
     left join elegant_service_service_type esst on esit.elegant_service_id = esst.elegant_service_id
     left join meta_service_type mst on esit.meta_identity_type_id = mst.id
     where es.yn = 1
-    <if test="beginTime != null and beginTime!=''">
-      and  date(es.begin_time)between
-
-      #{beginTime} and #{endTime}
-    </if>
-    <if test="searchWord != null and searchWord !=''">
-      and es.service_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
-    </if>
-    group by es.id
-    union
-    select es.*,esc.cooperation_name from elegant_service es
-    left join elegant_service_cooperation esc on es.id = esc.elegant_service_id
-    left join elegant_service_identity_type esit on esit.elegant_service_id = es.id
-    left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
-    left join elegant_service_service_type esst on esit.elegant_service_id = esst.elegant_service_id
-    left join meta_service_type mst on esit.meta_identity_type_id = mst.id
-    where es.yn = 1
     <if test="appid != null and appid != ''">
-      es.appid = #{appid}
+      and es.appid = #{appid}
     </if>
     <if test="beginTime != null and beginTime!=''">
       and  date(es.begin_time)between
@@ -186,41 +121,10 @@
       #{beginTime} and #{endTime}
     </if>
     <if test="searchWord != null and searchWord !=''">
-      and mit.type_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
-    </if>
-    group by es.id
-    union
-    select es.*,esc.cooperation_name from elegant_service es
-    left join elegant_service_cooperation esc on es.id = esc.elegant_service_id
-    left join elegant_service_identity_type esit on esit.elegant_service_id = es.id
-    left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
-    left join elegant_service_service_type esst on esit.elegant_service_id = esst.elegant_service_id
-    left join meta_service_type mst on esit.meta_identity_type_id = mst.id
-    where es.yn = 1
-    <if test="beginTime != null and beginTime!=''">
-      and  date(es.begin_time)between
-
-      #{beginTime} and #{endTime}
-    </if>
-    <if test="searchWord != null and searchWord !=''">
-      and mst.service_type_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
-    </if>
-    group by es.id
-    union
-    select es.*,esc.cooperation_name from elegant_service es
-    left join elegant_service_cooperation esc on es.id = esc.elegant_service_id
-    left join elegant_service_identity_type esit on esit.elegant_service_id = es.id
-    left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
-    left join elegant_service_service_type esst on esit.elegant_service_id = esst.elegant_service_id
-    left join meta_service_type mst on esit.meta_identity_type_id = mst.id
-    where es.yn = 1
-    <if test="beginTime != null and beginTime!=''">
-      and  date(es.begin_time)between
-
-      #{beginTime} and #{endTime}
-    </if>
-    <if test="searchWord != null and searchWord !=''">
-      and esc.cooperation_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
+      and (mit.type_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
+      or es.service_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
+      or mst.service_type_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
+      or esc.cooperation_name like  CONCAT(CONCAT('%', #{searchWord}), '%'))
     </if>
     group by es.id
     ) as a
