@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.controller;
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.service.UserIntegralsService;
 import com.lhjl.tzzs.proxy.service.UserLevelService;
+import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -75,7 +76,27 @@ public class UserLevelController {
         String userStr = body.getUserId();
         int levelId = body.getLevelId();
         try{
-            result = userLevelService.upLevel(userStr, levelId,body.getPresentedType());
+            result = userLevelService.upLevel(userStr, levelId,body.getPresentedType(), 1); //默认
+        }catch(Exception e){
+            result.setStatus(501);
+            result.setMessage("升级会员异常");
+            logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
+
+    /**
+     * 升级会员等级（包括购买会员）
+     * @param body 请求对象
+     * @return
+     */
+    @PostMapping("/v{appId}/uplevel")
+    public CommonDto<Map<String, Object>> upLevel(@RequestBody ActionDto body, @PathVariable Integer appId){
+        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+        String userStr = body.getUserId();
+        int levelId = body.getLevelId();
+        try{
+            result = userLevelService.upLevel(userStr, levelId,body.getPresentedType(), appId); //默认
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("升级会员异常");
@@ -93,7 +114,7 @@ public class UserLevelController {
     public CommonDto<Map<String, Object>> consumeTips(@RequestBody ActionDto body){
         CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
         try{
-            result = userLevelService.consumeTips(body);
+            result = userLevelService.consumeTips(body, 1);
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("会员消费异常");
@@ -101,6 +122,25 @@ public class UserLevelController {
         }
         return result;
     }
+
+    /**
+     * 消费金币提示
+     * @param body 请求对象
+     * @return
+     */
+    @PostMapping("/v{appId}/consumetips")
+    public CommonDto<Map<String, Object>> consumeTips(@RequestBody ActionDto body,@PathVariable Integer appId){
+        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+        try{
+            result = userLevelService.consumeTips(body, appId);
+        }catch(Exception e){
+            result.setStatus(501);
+            result.setMessage("会员消费异常");
+            logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
+
     /**
      * 消费金币
      * @param body 请求对象
@@ -110,7 +150,26 @@ public class UserLevelController {
     public CommonDto<Map<String, Object>> consume(@RequestBody ActionDto body){
         CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
         try{
-            result = userLevelService.consume(body);
+            result = userLevelService.consume(body, 1);
+        }catch(Exception e){
+            result.setStatus(501);
+            result.setMessage("会员消费异常");
+            logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
+
+
+    /**
+     * 消费金币
+     * @param body 请求对象
+     * @return
+     */
+    @PostMapping("/v{appId}/consume")
+    public CommonDto<Map<String, Object>> consume(@RequestBody ActionDto body, @PathVariable Integer appId){
+        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+        try{
+            result = userLevelService.consume(body,appId);
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("会员消费异常");
@@ -130,7 +189,27 @@ public class UserLevelController {
         String userId = body.getUserId();
         String sceneKey = body.getSceneKey();
         try{
-            result = userLevelService.cancel(userId, sceneKey);
+            result = userLevelService.cancel(userId, sceneKey, 1);
+        }catch(Exception e){
+            result.setStatus(501);
+            result.setMessage("用户取消消费提示异常");
+            logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
+
+    /**
+     * 用户取消消费提示
+     * @param body 请求对象
+     * @return
+     */
+    @PostMapping("/v{appId}/cancel")
+    public CommonDto<Map<String, Object>> cancelTips(@RequestBody ActionDto body, Integer appId){
+        CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
+        String userId = body.getUserId();
+        String sceneKey = body.getSceneKey();
+        try{
+            result = userLevelService.cancel(userId, sceneKey, appId);
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("用户取消消费提示异常");
@@ -167,7 +246,7 @@ public class UserLevelController {
         CommonDto<Map<String,Object>> result  = new CommonDto<>();
 
         try {
-            result = userLevelService.getUserLevel(token);
+            result = userLevelService.getUserLevel(token, 1);
         }catch (Exception e){
             logger.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);
@@ -179,6 +258,24 @@ public class UserLevelController {
         return result;
     }
 
+    @GetMapping("/v{appId}/user/level/judgment")
+    public CommonDto<Map<String,Object>> userLevelJudgment(String token, Integer appId){
+        CommonDto<Map<String,Object>> result  = new CommonDto<>();
+
+        try {
+            result = userLevelService.getUserLevel(token, appId);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+
+        }
+
+        return result;
+    }
+
+
     /**
      * 事件流点击查看约谈内容接口
      * @param body
@@ -189,7 +286,27 @@ public class UserLevelController {
         CommonDto<Map<String,Object>> result = new CommonDto<>();
 
         try {
-            result = userLevelService.interviewTips(body);
+            result = userLevelService.interviewTips(body, 1);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+            result.setData(null);
+        }
+        return result;
+    }
+
+    /**
+     * 事件流点击查看约谈内容接口
+     * @param body
+     * @return
+     */
+    @PostMapping("/v{appId}/interviewTips")
+    public CommonDto<Map<String,Object>> getInterviewTips(@RequestBody InterviewInputDto body, @PathVariable Integer appId){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        try {
+            result = userLevelService.interviewTips(body, appId);
         }catch (Exception e){
             logger.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
@@ -204,7 +321,23 @@ public class UserLevelController {
         CommonDto<Map<String,Object>> result = new CommonDto<>();
 
         try {
-            result =userLevelService.interviewCost(body);
+            result =userLevelService.interviewCost(body, 1);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+        }
+
+        return result;
+    }
+
+    @PostMapping("/v{appId}/interviewCost")
+    public CommonDto<Map<String,Object>> setInterviewCost(@RequestBody InterviewInputDto body, @PathVariable Integer appId){
+        CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+        try {
+            result =userLevelService.interviewCost(body, appId);
         }catch (Exception e){
             logger.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);

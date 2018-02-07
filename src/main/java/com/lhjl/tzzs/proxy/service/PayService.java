@@ -7,7 +7,7 @@ import com.lhjl.tzzs.proxy.dto.PayRequestBody;
 import java.util.Map;
 
 public interface PayService {
-    CommonDto<Map<String,String>> generatePayInfo(PayRequestBody payRequestBody);
+    CommonDto<Map<String,String>> generatePayInfo(PayRequestBody payRequestBody, Integer appId);
 
     void payNotifyHandler(WxPayOrderNotifyResult result);
 }

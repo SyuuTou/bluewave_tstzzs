@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.investor;
+package com.lhjl.tzzs.proxy.controller.investor.list;
 
 import java.util.List;
 import java.util.Map;

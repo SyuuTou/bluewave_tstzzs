@@ -53,9 +53,10 @@ public interface InvestorsApprovalService {
 	/**
 	 * 后台审核操作接口
 	 * @param body 请求对象
-	 * @return
+	 * @param appId
+     * @return
 	 */
-	CommonDto<String> approval(InvestorsApprovalActionDto body);
+	CommonDto<String> approval(InvestorsApprovalActionDto body, Integer appId);
 
 	/**
 	 * 后台审核操作接口(新)
@@ -87,7 +88,8 @@ public interface InvestorsApprovalService {
 	 * @param userName 用户名
 	 * @param companyName 公司名称
 	 * @param comanyDuties 公司职位
+	 * @param appId
 	 * @return
 	 */
-	CommonDto<String> specialApproval(Integer userId,Integer status,String userName,String companyName,String comanyDuties);
+	CommonDto<String> specialApproval(Integer userId, Integer status, String userName, String companyName, String comanyDuties, Integer appId);
 }

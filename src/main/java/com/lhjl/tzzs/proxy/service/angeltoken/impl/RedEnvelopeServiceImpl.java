@@ -116,7 +116,8 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
             MetaObtainIntegral obtainIntegral = metaObtainIntegralMapper.selectOne(queryObtainIntegral);
 
-            addUserIntegralsLog(appId, senceKey, userId, obtainIntegral.getIntegral(), obtainIntegralPeriod,true);
+
+            addUserIntegralsLog(appId, senceKey, userId, obtainIntegral.getIntegral(), obtainIntegralPeriod,true, new BigDecimal(1));
 
 
 
@@ -129,36 +130,73 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 //        return null;
     }
 
-    public void addUserIntegralsLog(Integer appId, String senceKey, Integer userId, BigDecimal obtainIntegral, Integer obtainIntegralPeriod,  Boolean flag ) {
-        UserIntegrals addUserIntegrals = new UserIntegrals();
-        addUserIntegrals.setEndTime(DateTime.now().withTime(23,59,59,999).withFieldAdded(DurationFieldType.days(),obtainIntegralPeriod).toDate());
-        addUserIntegrals.setBeginTime(DateTime.now().withTime(0,0,0,0).toDate());
-        addUserIntegrals.setCreateTime(DateTime.now().toDate());
-        addUserIntegrals.setSceneKey(senceKey);
-        addUserIntegrals.setIntegralNum(obtainIntegral);
-        addUserIntegrals.setUserId(userId);
-        addUserIntegrals.setAppId(appId);
+    public void addUserIntegralsLog(Integer appId, String senceKey, Integer userId, BigDecimal obtainIntegral, Integer obtainIntegralPeriod, Boolean flag, BigDecimal plusOrMinus) {
+        try {
+            BigDecimal obtainIntegralCopy = obtainIntegral;
+            if (plusOrMinus.compareTo(new BigDecimal(0))>=0) {
+                UserIntegrals addUserIntegrals = new UserIntegrals();
+                addUserIntegrals.setEndTime(DateTime.now().withTime(23, 59, 59, 999).withFieldAdded(DurationFieldType.days(), obtainIntegralPeriod).toDate());
+                addUserIntegrals.setBeginTime(DateTime.now().withTime(0, 0, 0, 0).toDate());
+                addUserIntegrals.setCreateTime(DateTime.now().toDate());
+                addUserIntegrals.setSceneKey(senceKey);
+                addUserIntegrals.setIntegralNum(obtainIntegralCopy);
+                addUserIntegrals.setUserId(userId);
+                addUserIntegrals.setAppId(appId);
 
-        userIntegralsMapper.insert(addUserIntegrals);
+                userIntegralsMapper.insert(addUserIntegrals);
+            }else{
+                UserIntegrals query = new UserIntegrals();
+                query.setAppId(appId);
+                query.setUserId(userId);
+                List<UserIntegrals> userIntegralsList = userIntegralsMapper.select(query);
+                BigDecimal temp = null;
+                for (UserIntegrals userIntegrals : userIntegralsList){
+                    if (null != userIntegrals.getConsumeNum()) {
+                        temp = userIntegrals.getIntegralNum().add(userIntegrals.getConsumeNum());
+                    }else {
+                        temp = userIntegrals.getIntegralNum();
+                        userIntegrals.setConsumeNum(new BigDecimal(0));
+                    }
 
-        UserIntegralConsume addUserIntegralConsume = new UserIntegralConsume();
-        addUserIntegralConsume.setSceneKey(senceKey);
-        addUserIntegralConsume.setUserId(userId);
-        addUserIntegralConsume.setBeginTime(DateTime.now().withTime(0,0,0,0).toDate());
-        addUserIntegralConsume.setEndTime(DateTime.now().withTime(23,59,59,999).withFieldAdded(DurationFieldType.days(),obtainIntegralPeriod).toDate());
-        addUserIntegralConsume.setCostNum(obtainIntegral);
-        addUserIntegralConsume.setCreateTime(DateTime.now().toDate());
-        addUserIntegralConsume.setAppId(appId);
+                    if (temp.compareTo(new BigDecimal(0)) > 0  ){
+                        if (temp.compareTo(obtainIntegralCopy) >= 0){
+                            userIntegrals.setConsumeNum(userIntegrals.getConsumeNum().add(obtainIntegralCopy.multiply(new BigDecimal(-1))));
+                            obtainIntegralCopy = new BigDecimal(0);
+                        }else{
+                            userIntegrals.setConsumeNum(userIntegrals.getIntegralNum().multiply(new BigDecimal(-1)));
+                            obtainIntegralCopy = obtainIntegralCopy.subtract(temp);
+                        }
+                        userIntegralsMapper.updateByPrimaryKey(userIntegrals);
+                    }
 
-        userIntegralConsumeMapper.insert(addUserIntegralConsume);
+                    if (obtainIntegralCopy.compareTo(new BigDecimal(0)) == 0){
+                        break;
+                    }
+                }
+            }
 
-        if (flag) {
-            RedEnvelopeLimit redEnvelopeLimit = this.getRedEnvelopeLimit(appId, "MAX_LIMIT");
+            UserIntegralConsume addUserIntegralConsume = new UserIntegralConsume();
+            addUserIntegralConsume.setSceneKey(senceKey);
+            addUserIntegralConsume.setUserId(userId);
+            addUserIntegralConsume.setBeginTime(DateTime.now().withTime(0,0,0,0).toDate());
+            addUserIntegralConsume.setEndTime(DateTime.now().withTime(23,59,59,999).withFieldAdded(DurationFieldType.days(),obtainIntegralPeriod).toDate());
+            addUserIntegralConsume.setCostNum(obtainIntegral.multiply(plusOrMinus));
+            addUserIntegralConsume.setCreateTime(DateTime.now().toDate());
+            addUserIntegralConsume.setAppId(appId);
 
-            redEnvelopeLimit.setGrantValue(redEnvelopeLimit.getGrantValue().add(obtainIntegral));
+            userIntegralConsumeMapper.insert(addUserIntegralConsume);
 
-            redEnvelopeLimitMapper.updateByPrimaryKey(redEnvelopeLimit);
+            if (flag) {
+                RedEnvelopeLimit redEnvelopeLimit = this.getRedEnvelopeLimit(appId, "MAX_LIMIT");
 
+                redEnvelopeLimit.setGrantValue(redEnvelopeLimit.getGrantValue().add(obtainIntegral));
+
+                redEnvelopeLimitMapper.updateByPrimaryKey(redEnvelopeLimit);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 
@@ -200,9 +238,9 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         redEnvelopeMapper.insert(redEnvelope);
 
         Users users = this.getUserInfo(appId, redEnvelopeDto.getToken());
-
-        this.addUserIntegralsLog(appId,"SEND_ANGEL_TOKEN ",users.getId(),redEnvelope.getTotalAmount(),obtainIntegralPeriod,false);
-
+        if (!redEnvelopeDto.getDescription().equals("INVITATIONED")) {
+            this.addUserIntegralsLog(appId, "SEND_ANGEL_TOKEN ", users.getId(), redEnvelope.getTotalAmount(), obtainIntegralPeriod, false, new BigDecimal(-1));
+        }
         return new CommonDto<>(redEnvelope.getUnionKey(),"succcess", 200);
     }
 
@@ -369,7 +407,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
 
 
-                            this.addUserIntegralsLog(appId, "GET_ANGEL_TOKEN", users.getId(), reciveAmount, obtainIntegralPeriod, true);
+                            this.addUserIntegralsLog(appId, "GET_ANGEL_TOKEN", users.getId(), reciveAmount, obtainIntegralPeriod, true, new BigDecimal(1));
 
                             break;
                         }
@@ -377,9 +415,13 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                 }
             }
 
-            queryRedEnvelopeLog = new RedEnvelopeLog();
-            queryRedEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
-            List<RedEnvelopeLog> redEnvelopeLogs = redEnvelopeLogMapper.select(queryRedEnvelopeLog);
+//            queryRedEnvelopeLog = new RedEnvelopeLog();
+//            queryRedEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
+
+            Example queryRedEnvelopeLogExample = new Example(RedEnvelopeLog.class);
+            queryRedEnvelopeLogExample.and().andEqualTo("redEnvelopeId",redEnvelope.getId());
+            queryRedEnvelopeLogExample.setOrderByClause("create_time desc");
+            List<RedEnvelopeLog> redEnvelopeLogs = redEnvelopeLogMapper.selectByExample(queryRedEnvelopeLogExample);
 
             List<RedEnvelopeLogDto> redEnvelopeLogDtos = new ArrayList<>();
 
@@ -399,7 +441,9 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                         if (StringUtil.isNotEmpty(temp.getActualName())) {
                             redEnvelopeLogDto.setName(temp.getActualName());
                         } else {
-                            UsersWeixin usersWeixin = this.usersWeixinMapper.selectByPrimaryKey(temp.getId());
+                            UsersWeixin query = new UsersWeixin();
+                            query.setUserId(temp.getId());
+                            UsersWeixin usersWeixin = this.usersWeixinMapper.selectOne(query);
                             if (null != usersWeixin) {
                                 redEnvelopeLogDto.setName(usersWeixin.getNickName());
                             }

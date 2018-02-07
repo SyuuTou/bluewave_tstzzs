@@ -1127,11 +1127,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		
 		List<ProjectsListOutputDto> list = projectsMapper.findSplit(body);
 		
-		System.err.println(list.size()+"**size");
-		
 		Long total = projectsMapper.findSplitCount(body);
-		
-		System.err.println(total+"total****");
 		
 		map.put("data", list);
 		map.put("total", total);
@@ -1709,7 +1705,19 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			return result;
 		}
 		if(dom !=null) {
-			dom.setRecommand(dom.getBasicsRecommend()+dom.getDynamicRecommand()+dom.getOperationRecommend());
+			Integer basicsRecommend = dom.getBasicsRecommend();
+			if(basicsRecommend==null) {
+				basicsRecommend=0;
+			}
+			Integer dynamicRecommand = dom.getDynamicRecommand();
+			if(dynamicRecommand==null) {
+				dynamicRecommand=0;
+			}
+			Integer operationRecommend = dom.getOperationRecommend();
+			if(operationRecommend==null) {
+				operationRecommend=0;  
+			}
+			dom.setRecommand(basicsRecommend + dynamicRecommand+ operationRecommend );
 		}
 		
 		result.setData(dom !=null ? dom : new DatasOperationManage());

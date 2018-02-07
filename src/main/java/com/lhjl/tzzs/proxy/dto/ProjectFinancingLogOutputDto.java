@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 
 public class ProjectFinancingLogOutputDto {
 
+	 /**投资事件主键id*/
+    private Integer id;
+    
     /**投资事件编号*/
     private Integer serialNumber;
 
@@ -212,4 +215,25 @@ public class ProjectFinancingLogOutputDto {
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
+    
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "ProjectFinancingLogOutputDto [id=" + id + ", serialNumber=" + serialNumber + ", typeName=" + typeName
+				+ ", investmentInstitutionId=" + investmentInstitutionId + ", institutionName=" + institutionName
+				+ ", projectId=" + projectId + ", projectName=" + projectName + ", segmentationName=" + segmentationName
+				+ ", stage=" + stage + ", amount=" + amount + ", currency=" + currency + ", shareDivest=" + shareDivest
+				+ ", valuation=" + valuation + ", totalAmount=" + totalAmount + ", prAmount=" + prAmount
+				+ ", financingTime=" + financingTime + ", InvestmentInstitutionsList=" + InvestmentInstitutionsList
+				+ ", proportionList=" + proportionList + ", createTime=" + createTime + ", updateTime=" + updateTime
+				+ "]";
+	}
+    
 }

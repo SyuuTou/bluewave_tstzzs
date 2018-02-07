@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.mapper;
 
+import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutputDto;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
@@ -46,4 +47,9 @@ public interface ProjectFinancingLogMapper extends OwnerMapper<ProjectFinancingL
 	List<String> fetchFinancingStatus();
 
     ProjectFinancingLog selectByProjectId(@Param("projectId") Integer projectId);
+    /**
+     * 投资事件头部信息的输出
+     * @return
+     */
+	ProjectFinancingLogHeadOutputDto echoProjectFinancingLogHead(Integer projectFinancingLogId);
 }

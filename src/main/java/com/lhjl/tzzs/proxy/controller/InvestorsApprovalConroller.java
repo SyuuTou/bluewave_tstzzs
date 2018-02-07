@@ -21,10 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.lhjl.tzzs.proxy.service.InvestorsApprovalService;
 @RestController
@@ -176,7 +173,7 @@ public class InvestorsApprovalConroller {
 	public CommonDto<String> approval(InvestorsApprovalActionDto body){
 		CommonDto<String> result = new CommonDto<>();
 		try {
-			result = investorsApprovalService.approval(body);
+			result = investorsApprovalService.approval(body,1);
 		} catch (Exception e) {
 			result.setStatus(5101);
 			result.setMessage("投资审核操作异常");
@@ -184,6 +181,25 @@ public class InvestorsApprovalConroller {
 		}
 		return result;
 	}
+
+	/**
+	 * 后台审核操作接口
+	 * @param body 请求对象
+	 * @return
+	 */
+	@GetMapping("/v{appId}/approval")
+	public CommonDto<String> approval(InvestorsApprovalActionDto body, @PathVariable Integer appId){
+		CommonDto<String> result = new CommonDto<>();
+		try {
+			result = investorsApprovalService.approval(body,appId);
+		} catch (Exception e) {
+			result.setStatus(5101);
+			result.setMessage("投资审核操作异常");
+			log.error(e.getMessage(),e.fillInStackTrace());
+		}
+		return result;
+	}
+
 
 	/**
 	 * 后台审核操作接口(新)
@@ -254,7 +270,32 @@ public class InvestorsApprovalConroller {
 		CommonDto<String> result = new CommonDto<>();
 
 		try {
-			result = investorsApprovalService.specialApproval(userId,status,userName,companyName,comanyDuties);
+			result = investorsApprovalService.specialApproval(userId,status,userName,companyName,comanyDuties,1);
+		}catch (Exception e){
+			log.error(e.getMessage(),e.fillInStackTrace());
+			result.setMessage("服务器端发生错误");
+			result.setStatus(502);
+			result.setData(null);
+		}
+
+		return result;
+	}
+
+	/**
+	 * 用户列表页审核用户成为投资人的接口
+	 * @param userId 用户id
+     * @param status 审核状态
+	 * @param userName 用户名
+	 * @param companyName 公司名称
+	 * @param comanyDuties 公司职位
+	 * @return
+	 */
+	@GetMapping("/v{appId}/special/approval")
+	public CommonDto<String> specialApproval(Integer userId,Integer status,String userName,String companyName,String comanyDuties,@PathVariable Integer appId){
+		CommonDto<String> result = new CommonDto<>();
+
+		try {
+			result = investorsApprovalService.specialApproval(userId,status,userName,companyName,comanyDuties,appId);
 		}catch (Exception e){
 			log.error(e.getMessage(),e.fillInStackTrace());
 			result.setMessage("服务器端发生错误");

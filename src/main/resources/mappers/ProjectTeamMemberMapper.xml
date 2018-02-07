@@ -25,8 +25,12 @@
     <result column="work_experience_desc" jdbcType="VARCHAR" property="workExperienceDesc" />
     <result column="education_experience_desc" jdbcType="VARCHAR" property="educationExperienceDesc" />
     <result column="team_id" jdbcType="INTEGER" property="teamId" />
+    <result column="birth_day" jdbcType="TIMESTAMP" property="birthDay" />
+    <result column="tenure_time" jdbcType="TIMESTAMP" property="tenureTime" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="diploma" jdbcType="INTEGER" property="diploma" />
+    <result column="nationality" jdbcType="INTEGER" property="nationality" />
   </resultMap>
-
   <select id="getProjectMemberList" resultMap="BaseResultMap">
     select * from project_team_member where project_id=#{projectId} and yn=0 order by weight;
   </select>

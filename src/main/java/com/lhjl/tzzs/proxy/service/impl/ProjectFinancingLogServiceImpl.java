@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service.impl;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogInputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogOutputDto;
+import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutputDto;
 import com.lhjl.tzzs.proxy.mapper.ProjectFinancingLogMapper;
 import com.lhjl.tzzs.proxy.service.ProjectFinancingLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +82,11 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
         if (projectFinancingLogList.size() > 0){
             for (Map<String,Object> maps:projectFinancingLogList){
                 ProjectFinancingLogOutputDto projectFinancingLogOutputDto = new ProjectFinancingLogOutputDto();
+                
+                if (maps.get("ID") != null){
+                	projectFinancingLogOutputDto.setId((Integer) maps.get("ID"));
+                }
+                
                 Integer serialNumber = 0;
                 if (maps.get("serial_number") != null){
                     serialNumber = (Integer) maps.get("serial_number");
@@ -196,4 +202,15 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 
         return result;
     }
+
+	@Override
+	public CommonDto<ProjectFinancingLogHeadOutputDto> echoProjectFinancingLogHead(Integer appid,
+			Integer projectFinancingLogId) {
+		CommonDto<ProjectFinancingLogHeadOutputDto> result=new CommonDto<>();
+		ProjectFinancingLogHeadOutputDto ProjectFinancingLogHead = projectFinancingLogMapper.echoProjectFinancingLogHead(projectFinancingLogId);
+		result.setData(ProjectFinancingLogHead);
+        result.setStatus(200);
+        result.setMessage("success");
+		return result;
+	}
 }

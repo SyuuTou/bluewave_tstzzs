@@ -1,9 +1,9 @@
-package com.lhjl.tzzs.proxy.controller.projectfinancinglog;
+package com.lhjl.tzzs.proxy.controller.projectfinancinglog.list;
 
+import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogInputDto;
 import com.lhjl.tzzs.proxy.service.ProjectFinancingLogService;
-import com.lhjl.tzzs.proxy.utils.GenericController;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +30,7 @@ public class ProjectFinancingLogListController extends GenericController{
         try {
             result = projectFinancingLogService.getProjectFinancingLogList(body);
         }catch (Exception e){
-            this.logger.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);
             result.setData(null);
             result.setMessage("服务器端发生错误");

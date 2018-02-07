@@ -51,7 +51,7 @@
     limit 0,3
   </select>
   <select id="getProjectFinancingLogList" resultType="java.util.HashMap">
-    SELECT pfl.serial_number,mdst.type_name,ii.id as investment_institution_id,ii.short_name as institution_name,
+    SELECT pfl.ID,pfl.serial_number,mdst.type_name,ii.id as investment_institution_id,ii.short_name as institution_name,
     p.id as project_id,p.short_name as project_name,ps.segmentation_name,pfl.stage,pfl.amount,pfl.currency,
     pfl.share_divest,pfl.valuation,pfl.total_amount,pfl.pr_amount,pfl.financing_time,pfl.Investment_institutions_list,
     pfl.proportion_list,pfl.create_time,pfl.update_time
@@ -103,7 +103,7 @@
   </select>
   <select id="getProjectFinancingLogListCount" resultType="java.lang.Integer">
     select count(*) ct from (
-    SELECT pfl.serial_number,mdst.type_name,ii.id as investment_institution_id,ii.short_name as institution_name,
+    SELECT pfl.ID,pfl.serial_number,mdst.type_name,ii.id as investment_institution_id,ii.short_name as institution_name,
     p.id as project_id,p.short_name as project_name,ps.segmentation_name,pfl.stage,pfl.amount,pfl.currency,
     pfl.share_divest,pfl.valuation,pfl.total_amount,pfl.pr_amount,pfl.financing_time,pfl.Investment_institutions_list,
     pfl.proportion_list,pfl.create_time,pfl.update_time

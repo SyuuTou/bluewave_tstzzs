@@ -72,7 +72,7 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
             investorDemandInsertResult = investorDemandMapper.insert(investorDemand);
         }else{
             investorDemand.setUpdateTime(DateUtils.parse(createTime));
-            investorDemandInsertResult = investorDemandMapper.insert(investorDemand);
+            investorDemandInsertResult = investorDemandMapper.updateByPrimaryKeySelective(investorDemand);
         }
 
         Integer investorDemandSegmentationInsertResult = -1;
@@ -158,7 +158,7 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
             investorDemandCharacter.setCharacter(null);
             investorDemandCharacterList.add(investorDemandCharacter);
         }else{
-            for (String investorDemandCharacter : body.getPreferCitys()){
+            for (String investorDemandCharacter : body.getFocusCharacters()){
                 InvestorDemandCharacter investorDemandCharacter1 = new InvestorDemandCharacter();
                 investorDemandCharacter1.setInvestorDemandId(investorDemand.getId());
                 investorDemandCharacter1.setCharacter(investorDemandCharacter);

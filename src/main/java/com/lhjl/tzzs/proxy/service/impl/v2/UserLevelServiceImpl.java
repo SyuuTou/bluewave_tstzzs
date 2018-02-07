@@ -29,42 +29,42 @@ public class UserLevelServiceImpl  implements UserLevelService {
     }
 
     @Override
-    public CommonDto<Map<String, Object>> upLevel(String userStr, int levelId, String presentedType) {
+    public CommonDto<Map<String, Object>> upLevel(String userStr, int levelId, String presentedType, Integer appId) {
         return null;
     }
 
     @Override
-    public CommonDto<Map<String, Object>> consumeTips(ActionDto action) {
+    public CommonDto<Map<String, Object>> consumeTips(ActionDto action, Integer appId) {
         return null;
     }
 
     @Override
-    public CommonDto<Map<String, Object>> consume(ActionDto action) {
+    public CommonDto<Map<String, Object>> consume(ActionDto action, Integer appId) {
         return null;
     }
 
     @Override
-    public CommonDto<Map<String, Object>> cancel(String userId, String sceneKey) {
+    public CommonDto<Map<String, Object>> cancel(String userId, String sceneKey, Integer appId) {
         return null;
     }
 
     @Override
-    public CommonDto<String> changeLevel(Integer userId, int status) {
+    public CommonDto<String> changeLevel(Integer userId, int status, Integer appId) {
         return null;
     }
 
     @Override
-    public CommonDto<Map<String, Object>> getUserLevel(String token) {
+    public CommonDto<Map<String, Object>> getUserLevel(String token, Integer appId) {
         return null;
     }
 
     @Override
-    public CommonDto<Map<String, Object>> interviewTips(InterviewInputDto body) {
+    public CommonDto<Map<String, Object>> interviewTips(InterviewInputDto body, Integer appId) {
         return null;
     }
 
     @Override
-    public CommonDto<Map<String, Object>> interviewCost(InterviewInputDto body) {
+    public CommonDto<Map<String, Object>> interviewCost(InterviewInputDto body, Integer appId) {
         return null;
     }
 }

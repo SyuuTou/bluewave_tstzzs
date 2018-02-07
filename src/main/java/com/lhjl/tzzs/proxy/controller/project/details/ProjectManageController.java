@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.project;
+package com.lhjl.tzzs.proxy.controller.project.details;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;

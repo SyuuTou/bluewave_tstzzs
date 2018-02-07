@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by lanhaijulang on 2018/1/18.
  */
-public class ProjectTeamMemberOutputDto {
+public class ProjectTeamMemberOutputDto implements Comparable<ProjectTeamMemberOutputDto>{
 
     /**
      * 项目Id
@@ -21,7 +21,7 @@ public class ProjectTeamMemberOutputDto {
     /**
      * 权重
      */
-    private Integer weight;
+    private Integer weight = 0;
 
     /**
      * 姓名
@@ -422,5 +422,12 @@ public class ProjectTeamMemberOutputDto {
 
     public void setProjectId(Integer projectId) {
         this.projectId = projectId;
+    }
+
+    @Override
+    public int compareTo(ProjectTeamMemberOutputDto projectTeamMemberOutputDto) {
+
+        int result = this.weight > projectTeamMemberOutputDto.weight ? 1 : (this.weight == projectTeamMemberOutputDto.weight ? 0 : -1);
+        return result;
     }
 }
