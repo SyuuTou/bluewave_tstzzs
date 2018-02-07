@@ -409,11 +409,12 @@ public class UserLevelServiceImpl implements UserLevelService {
      * 更新会员记录表（支付之后使用）
      * @param userId 用户ID(本系统ID)
      * @param status 支付状态
+     * @param appId
      * @return
      */
     @Transactional
     @Override
-    public CommonDto<String> changeLevel(Integer userId, int status) {
+    public CommonDto<String> changeLevel(Integer userId, int status, Integer appId) {
         CommonDto<String> result = new CommonDto<String>();
         //支付成功
         if(status == 1){
@@ -443,7 +444,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userLevelRelationMapper.updateByPrimaryKey(old);
                 //更新用户金币
                 String sceneKey = this.getUserLevelKey(old.getLevelId());
-                this.insertMemberChange(userId, sceneKey);
+                this.insertMemberChange(userId, sceneKey, appId);
             }
         }else{
             //更新新的等级记录信息
@@ -473,7 +474,7 @@ public class UserLevelServiceImpl implements UserLevelService {
      */
     @Transactional
     @Override
-    public CommonDto<Map<String, Object>> upLevel(String userStr, int levelId, String presentedType) {
+    public CommonDto<Map<String, Object>> upLevel(String userStr, int levelId, String presentedType, Integer appId) {
         CommonDto<Map<String, Object>> result = new CommonDto<>();
         try {
             Integer localUserId = this.getLocalUserId(userStr);
@@ -527,7 +528,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 if(levelId > userLevelRelationOld.getLevelId()){
                     //更新金币记录表
                     String sceneKeyInsert = this.getUserLevelKey(levelId);
-                    this.insertMember(localUserId, sceneKeyInsert, levelId);
+                    this.insertMember(localUserId, sceneKeyInsert, levelId, appId);
 
                     //将之前的等级记录失效
                     userLevelRelationOld.setYn(0);
@@ -544,7 +545,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             }else{
                 //更新金币记录表
                 String sceneKeyInsert = this.getUserLevelKey(levelId);
-                this.insertMember(localUserId, sceneKeyInsert, levelId);
+                this.insertMember(localUserId, sceneKeyInsert, levelId,appId);
             }
 
             Date beginTime = null;
@@ -595,11 +596,12 @@ public class UserLevelServiceImpl implements UserLevelService {
     /**
      * 消费金币提醒
      * @param action 请求对象
+     * @param appId
      * @return
      */
     @Transactional
     @Override
-    public CommonDto<Map<String, Object>> consumeTips(ActionDto action) {
+    public CommonDto<Map<String, Object>> consumeTips(ActionDto action, Integer appId) {
         CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
         Map<String, Object> data = new HashMap<String,Object>();
         //获取本系统userId
@@ -1114,10 +1116,11 @@ public class UserLevelServiceImpl implements UserLevelService {
     /**
      * 信息流里查看约谈的提示接口
      * @param body
+     * @param appId
      * @return
      */
     @Override
-    public CommonDto<Map<String,Object>> interviewTips(InterviewInputDto body){
+    public CommonDto<Map<String,Object>> interviewTips(InterviewInputDto body, Integer appId){
         CommonDto<Map<String,Object>> result = new CommonDto<>();
         Date now = new Date();
         String token = "";
@@ -1269,11 +1272,12 @@ public class UserLevelServiceImpl implements UserLevelService {
     /**
      * 信息流里查看约谈的消费接口
      * @param body
+     * @param appId
      * @return
      */
     @Transactional
     @Override
-    public CommonDto<Map<String,Object>> interviewCost(InterviewInputDto body){
+    public CommonDto<Map<String,Object>> interviewCost(InterviewInputDto body, Integer appId){
         CommonDto<Map<String,Object>> result = new CommonDto<>();
 
         String token = "";
@@ -1384,11 +1388,12 @@ public class UserLevelServiceImpl implements UserLevelService {
     /**
      * 消费金币
      * @param action 请求对象
+     * @param appId
      * @return
      */
     @Transactional
     @Override
-    public CommonDto<Map<String, Object>> consume(ActionDto action) {
+    public CommonDto<Map<String, Object>> consume(ActionDto action, Integer appId) {
         CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
         Map<String, Object> data = new HashMap<String,Object>();
 
@@ -1727,10 +1732,11 @@ public class UserLevelServiceImpl implements UserLevelService {
      * 用户取消消费提示
      * @param userId 用户ID
      * @param sceneKey 场景KEY
+     * @param appId
      * @return
      */
     @Override
-    public CommonDto<Map<String, Object>> cancel(String userId, String sceneKey) {
+    public CommonDto<Map<String, Object>> cancel(String userId, String sceneKey, Integer appId) {
         CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
         //获取本系统userId
         Integer localUserId = this.getLocalUserId(userId);
@@ -1849,7 +1855,7 @@ public class UserLevelServiceImpl implements UserLevelService {
     /**
      * 购买会员的金币记录表
      */
-    private CommonDto<String> insertMember(Integer userId,String sKey,Integer leId) {
+    private CommonDto<String> insertMember(Integer userId, String sKey, Integer leId, Integer appId) {
         CommonDto<String> result = new CommonDto<String>();
         Map<String,Integer> map =new HashMap<String,Integer>();
         if(userId !=null){
@@ -1860,6 +1866,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 //Integer dnum1 = userIntegralsMapper.findByQnum(leId1);
             	MetaUserLevel userLevel11 =new MetaUserLevel();
             	userLevel11.setId(leId1);
+
             	MetaUserLevel m2 = metaUserLevelMapper.selectByPrimaryKey(userLevel11);
                 BigDecimal qj2=m2.getAmount();
                 Integer dnum1=qj2.intValue();
@@ -1880,6 +1887,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 UserIntegrals userIntegrals =new UserIntegrals();
                 userIntegrals.setUserId(userId);
                 userIntegrals.setSceneKey(sKey);
+                userIntegrals.setAppId(appId);
                 userIntegrals.setIntegralNum(qj1.multiply(new BigDecimal(1+bei2)));
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
@@ -1897,6 +1905,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 UserIntegralConsume userIntegrals3=new UserIntegralConsume();
                 userIntegrals3.setUserId(userId);
                 userIntegrals3.setSceneKey(sKey);
+                userIntegrals3.setAppId(appId);
                 userIntegrals3.setCostNum(new BigDecimal(hnum));
                 //if(jb>=100){
                 userIntegrals3.setCreateTime(new Date());
@@ -1930,6 +1939,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 UserIntegrals userIntegrals =new UserIntegrals();
                 userIntegrals.setUserId(userId);
                 userIntegrals.setSceneKey(sKey);
+                userIntegrals.setAppId(appId);
                 userIntegrals.setIntegralNum(qj1.multiply(new BigDecimal(1+bei2)));
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
@@ -1946,6 +1956,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 UserIntegralConsume userIntegrals3=new UserIntegralConsume();
                 userIntegrals3.setUserId(userId);
                 userIntegrals3.setSceneKey(sKey);
+                userIntegrals3.setAppId(appId);
                 userIntegrals3.setCostNum(qj1.multiply(new BigDecimal(1+bei2)));
                 //if(jb>=100){
                 userIntegrals3.setCreateTime(new Date());
@@ -1970,7 +1981,7 @@ public class UserLevelServiceImpl implements UserLevelService {
     /**
      * 购买会员的金币记录表
      */
-    private CommonDto<String> insertMemberChange(Integer userId,String sKey) {
+    private CommonDto<String> insertMemberChange(Integer userId,String sKey,Integer appId) {
         CommonDto<String> result = new CommonDto<String>();
         Map<String,Integer> map =new HashMap<String,Integer>();
         if(userId !=null){
@@ -2062,6 +2073,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setConsumeNum(new BigDecimal("0"));
                 userIntegrals.setUserId(userId);
                 userIntegrals.setSceneKey(sKey);
+                userIntegrals.setAppId(appId);
                 userIntegrals.setIntegralNum(qj2.multiply(new BigDecimal(1+bei2)));
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
@@ -2079,6 +2091,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 UserIntegralConsume userIntegrals3=new UserIntegralConsume();
                 userIntegrals3.setUserId(userId);
                 userIntegrals3.setSceneKey(sKey);
+                userIntegrals3.setAppId(appId);
                 userIntegrals3.setCostNum(qj2.multiply(new BigDecimal(1+bei2)));
                 //if(jb>=100){
                 userIntegrals3.setCreateTime(new Date());
@@ -2103,9 +2116,10 @@ public class UserLevelServiceImpl implements UserLevelService {
     /**
      * 获取当前获取当前用户有效等级，有多个显示等级最高的那个
      * @param token
+     * @param appId
      * @return
      */
-    public CommonDto<Map<String,Object>> getUserLevel(String token){
+    public CommonDto<Map<String,Object>> getUserLevel(String token, Integer appId){
         CommonDto<Map<String,Object>> result = new CommonDto<>();
         Map<String,Object> obj = new HashMap<>();
 

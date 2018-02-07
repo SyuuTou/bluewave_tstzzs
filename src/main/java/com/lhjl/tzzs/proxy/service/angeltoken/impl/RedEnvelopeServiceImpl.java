@@ -238,7 +238,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         redEnvelopeMapper.insert(redEnvelope);
 
         Users users = this.getUserInfo(appId, redEnvelopeDto.getToken());
-        if (redEnvelopeDto.getRedEnvelopeType() == 0 && !redEnvelopeDto.getDescription().equals("INVITATIONED")) {
+        if (!redEnvelopeDto.getDescription().equals("INVITATIONED")) {
             this.addUserIntegralsLog(appId, "SEND_ANGEL_TOKEN ", users.getId(), redEnvelope.getTotalAmount(), obtainIntegralPeriod, false, new BigDecimal(-1));
         }
         return new CommonDto<>(redEnvelope.getUnionKey(),"succcess", 200);

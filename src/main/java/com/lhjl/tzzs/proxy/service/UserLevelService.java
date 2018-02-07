@@ -34,55 +34,62 @@ public interface UserLevelService {
      * @param presentedType
      * @return
      */
-    CommonDto<Map<String, Object>> upLevel(String userStr, int levelId, String presentedType);
+    CommonDto<Map<String, Object>> upLevel(String userStr, int levelId, String presentedType, Integer appId);
 
     /**
      * 消费金币提醒
      * @param action 请求对象
+     * @param appId
      * @return
      */
-    CommonDto<Map<String, Object>> consumeTips(ActionDto action);
+    CommonDto<Map<String, Object>> consumeTips(ActionDto action, Integer appId);
     /**
      * 消费金币
      * @param action 请求对象
+     * @param appId
      * @return
      */
-    CommonDto<Map<String, Object>> consume(ActionDto action);
+    CommonDto<Map<String, Object>> consume(ActionDto action, Integer appId);
 
     /**
      * 用户取消消费提示
      * @param userId 用户ID
      * @param sceneKey 场景KEY
+     * @param appId
      * @return
      */
-    CommonDto<Map<String, Object>> cancel(String userId, String sceneKey);
+    CommonDto<Map<String, Object>> cancel(String userId, String sceneKey, Integer appId);
 
     /**
      * 支付完成之后调用
      * @param userId 用户ID（本系统）
      * @param status 支付状态
+     * @param appId
      * @return
      */
-    CommonDto<String> changeLevel(Integer userId, int status);
+    CommonDto<String> changeLevel(Integer userId, int status, Integer appId);
 
     /**
      * 获取当前获取当前用户有效等级，有多个显示等级最高的那个
      * @param token
+     * @param appId
      * @return
      */
-    CommonDto<Map<String,Object>> getUserLevel(String token);
+    CommonDto<Map<String,Object>> getUserLevel(String token, Integer appId);
 
     /**
      * 信息流里查看约谈的提示接口
      * @param body
+     * @param appId
      * @return
      */
-    CommonDto<Map<String,Object>> interviewTips(InterviewInputDto body);
+    CommonDto<Map<String,Object>> interviewTips(InterviewInputDto body, Integer appId);
 
     /**
      * 信息流里查看约谈的消费接口
      * @param body
+     * @param appId
      * @return
      */
-    CommonDto<Map<String,Object>> interviewCost(InterviewInputDto body);
+    CommonDto<Map<String,Object>> interviewCost(InterviewInputDto body, Integer appId);
 }

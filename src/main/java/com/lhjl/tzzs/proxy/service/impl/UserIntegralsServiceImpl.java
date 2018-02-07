@@ -1,7 +1,6 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,7 +14,6 @@ import javax.annotation.Resource;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserLevelService;
-import org.springframework.boot.autoconfigure.web.ConditionalOnEnabledResourceChain;
 import org.springframework.stereotype.Service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
@@ -25,7 +23,6 @@ import com.lhjl.tzzs.proxy.dto.YnumDto;
 import com.lhjl.tzzs.proxy.dto.ZengDto;
 import com.lhjl.tzzs.proxy.service.UserIntegralsService;
 
-import javassist.expr.NewArray;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -698,7 +695,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	 */
 	@Transactional
 	@Override
-	public CommonDto<String> insertGold(Integer userId,BigDecimal qj) {
+	public CommonDto<String> insertGold(Integer userId, BigDecimal qj, Integer appId) {
 		CommonDto<String> result = new CommonDto<String>();
 		Map<String,Integer> map =new HashMap<String,Integer>();
 //		Integer userId= usersMapper.findByUuid(uuids);
@@ -928,15 +925,16 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	 * @param sceneKey 场景key
 	 * @param payMoney 实际支付金额
 	 * @param status 支付状态
+	 * @param appId
 	 * @return
 	 */
 	@Override
-	public CommonDto<String> payAfter(Integer userId, String sceneKey, BigDecimal payMoney, int status) {
+	public CommonDto<String> payAfter(Integer userId, String sceneKey, BigDecimal payMoney, int status, Integer appId) {
 		CommonDto<String> result = new CommonDto<>();
 		if(TWO.equals(sceneKey) || THREE.equals(sceneKey) || FOUR.equals(sceneKey)){
-			result = userLevelService.changeLevel(userId, status);
+			result = userLevelService.changeLevel(userId, status,appId);
 		}else{
-			result = this.insertGold(userId, payMoney);
+			result = this.insertGold(userId, payMoney, appId);
 		}
 		return result;
 	}
