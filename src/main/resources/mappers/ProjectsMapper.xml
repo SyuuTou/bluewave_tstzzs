@@ -588,32 +588,22 @@ SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.calculation_amou
     </select>
 
     <select id="findInstitutionProject" resultType="java.util.HashMap">
-
-        select
-        p.id,p.city,p.project_logo,p.kernel_desc,p.commet,p.short_name,p.full_name,pfl.stage,pfl.financing_time,pfl.financing_time_year
-        from investment_institutions_project iip
-        left join (select * from(
-        select * from project_financing_log
-        order by financing_time desc) pfl
-        group by pfl.project_id) pfl on pfl.id = iip.project_id
-        <if test="segmentationName != null and segmentationName!=''">
-            right join project_segmentation ps on pfl.project_id = ps.project_id
-        </if>
+        select p.id,p.city,p.project_logo,p.kernel_desc,p.commet,p.short_name,
+        p.full_name,pfl.stage,pfl.financing_time,pfl.financing_time_year from project_financing_log pfl
         left join projects p on pfl.project_id = p.id
-        where iip.investment_institutions_id = #{institutionId}
-        and p.short_name != ""
-        and p.short_name is not null
-        <if test="segmentationName != null and segmentationName!=''">
+        right join project_segmentation ps on ps.project_id = p.id
+        right join investment_institutions_project iip  on  iip.project_id = pfl.id
+        where iip.investment_institutions_id =  #{institutionId}
+        and ps.segmentation_name is not null
+        <if test="segmentationName != null and segmentationName.length &gt; 0">
             and ps.segmentation_name in
-            <foreach close=")" collection="segmentationName" index="index" item="item" open="(" separator=",">#{item}
-            </foreach>
+            <foreach close=")" collection="segmentationName" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
-        <if test="financingTime != null and financingTime != ''">
+        <if test="financingTime != null and financingTime.length &gt; 0">
             and pfl.financing_time_year in
-            <foreach close=")" collection="financingTime" index="index" item="item" open="(" separator=",">#{item}
-            </foreach>
+            <foreach close=")" collection="financingTime" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
-        group by p.short_name
+        group by p.full_name,ps.segmentation_name
         order by pfl.financing_time desc,p.id asc
         limit #{startNum},#{pageSize}
     </select>
