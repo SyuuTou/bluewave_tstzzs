@@ -63,6 +63,7 @@ public class CollectProjectAuditBasicInfoServiceImpl implements CollectProjectAu
         collectProjectAuditBasicInfoDto.setCompanyFullName(projectSendB.getFullName());
         collectProjectAuditBasicInfoDto.setKernelDesc(projectSendB.getKernelDesc());
         collectProjectAuditBasicInfoDto.setUrl(projectSendB.getUrl());
+        collectProjectAuditBasicInfoDto.setCompanyCity(projectSendB.getCity());
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
