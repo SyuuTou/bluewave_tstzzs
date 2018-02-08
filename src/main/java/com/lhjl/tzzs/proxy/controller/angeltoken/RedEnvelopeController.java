@@ -154,6 +154,7 @@ public class RedEnvelopeController extends GenericController {
      * @param token
      * @return
      */
+    @GetMapping("/v{appId}/reredenvelope/{unionId}/info")
     public CommonDto<RedEnvelopeResDto> getRedEnvelopeInfo(@PathVariable Integer appId, @PathVariable String unionId, String token){
         CommonDto<RedEnvelopeResDto> result = null;
 
