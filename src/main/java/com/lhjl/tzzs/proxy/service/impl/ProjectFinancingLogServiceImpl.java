@@ -223,7 +223,7 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 		CommonDto<List<Projects>> result=new CommonDto<>();
 		List<Projects> projects=new ArrayList<>();
 		if(keyword != null && !(keyword.equals(""))) {
-			projects = projectsMapper.blurScanProjectByShortName(keyword);
+			projects = projectsMapper.blurScanProjectByShortName(keyword);  
 		}
 		
 		result.setData(projects==null || projects.size()==0 ? null : projects);
