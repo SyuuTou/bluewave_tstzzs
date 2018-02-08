@@ -34,10 +34,28 @@
     <result column="yn" jdbcType="INTEGER" property="yn" />
   </resultMap>
   
-	
-	<select id="fetchFinancingStatus" resultType="String">  
-		select distinct(stage) from project_financing_log where stage is not null and stage !=""
-    </select>
+  <resultMap id="ProjectFinancingLogHeadOutputDtoMap" type="com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutputDto">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="short_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="submitor_token" jdbcType="VARCHAR" property="submitorToken" />
+    <result column="meta_follow_status_id" jdbcType="INTEGER" property="followStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  
+	<select id="echoProjectFinancingLogHead" resultMap="ProjectFinancingLogHeadOutputDtoMap" parameterType="Integer">  
+		SELECT * from(select pfl.id,pfl.serial_number,mdst.type_name,p.short_name,pflf.submitor_token,pflf.meta_follow_status_id,pflf.create_time
+    FROM project_financing_log pfl
+    left join meta_data_source_type mdst on pfl.data_soruce_type_id = mdst.id
+    left join projects p on pfl.project_id = p.ID
+	left JOIN (select * from project_financial_log_follow_status ORDER BY create_time desc) pflf on pflf.project_financial_log_id = pfl.ID GROUP BY pfl.ID) tmp
+ 	where tmp.id=#{projectFinancingLogId}
+   </select>
+   
+   <select id="fetchFinancingStatus" resultType="String">  
+	select distinct(stage) from project_financing_log where stage is not null and stage !=""
+   </select>
 	  
   <select id="selectProjectFinancingLogList" parameterType="Integer" resultMap="BaseResultMap">
     select * from project_financing_log where project_id = #{projectId} and `status`= #{projectStatus}

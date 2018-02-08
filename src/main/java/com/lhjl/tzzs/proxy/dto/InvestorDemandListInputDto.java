@@ -13,8 +13,29 @@ public class InvestorDemandListInputDto {
     /**状态*/
     private List<Integer> status;
 
+    /** 用户Token */
+    private String token;
     /**是否是后台请求*/
     private Integer isAdmin;
+
+    /** 数据类型，Featured：精选，Latest：最新，Mine：我的 */
+    private String dataType;
+
+    public String getDataType() {
+        return dataType;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+    }
 
     public Integer getPageNum() {
         return pageNum;

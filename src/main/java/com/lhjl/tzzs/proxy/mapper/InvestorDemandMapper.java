@@ -13,21 +13,25 @@ public interface InvestorDemandMapper extends OwnerMapper<InvestorDemand> {
      * 获取融资需求/投资风向标方法
      * @param startPage
      * @param pageSize
+     * @param dataType
+     * @param userId
      * @return
      */
-    List<Map<String,Object>> getInvestorDemandList(@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize,
-                                                   @Param("status") Integer[] status,@Param("isUser") Integer isUser,
-                                                   @Param("appid") Integer appid);
+    List<Map<String,Object>> getInvestorDemandList(@Param("startPage") Integer startPage, @Param("pageSize") Integer pageSize,
+                                                   @Param("status") Integer[] status, @Param("isUser") Integer isUser,
+                                                   @Param("appid") Integer appid, @Param("dataType") Integer dataType,@Param("userId") Integer userId);
 
     /**
      * 获取总数量
      * @param startPage
      * @param pageSize
+     * @param dataType
+     * @param userId
      * @return
      */
-    Integer getInvestorDemandListCount(@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize,
-                                       @Param("status") Integer[] status,@Param("isUser") Integer isUser,
-                                       @Param("appid") Integer appid);
+    Integer getInvestorDemandListCount(@Param("startPage") Integer startPage, @Param("pageSize") Integer pageSize,
+                                       @Param("status") Integer[] status, @Param("isUser") Integer isUser,
+                                       @Param("appid") Integer appid, @Param("dataType") Integer dataType,@Param("userId") Integer userId);
 
     /**
      * 根据用户id获取用户融资需求信息

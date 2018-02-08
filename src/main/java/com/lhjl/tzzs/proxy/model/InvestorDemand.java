@@ -129,6 +129,17 @@ public class InvestorDemand {
      */
     private String phonenumber;
 
+    @Column(name = "event_key")
+    private String eventKey;
+
+    public String getEventKey() {
+        return eventKey;
+    }
+
+    public void setEventKey(String eventKey) {
+        this.eventKey = eventKey;
+    }
+
     /**
      * @return id
      */
