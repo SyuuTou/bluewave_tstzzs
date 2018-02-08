@@ -491,6 +491,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         return new CommonDto<>(limitMap,"success", 200);
     }
 
+    @Transactional
     @Override
     public CommonDto<String> resolveWechatGroupId(Integer appId, String redEnvelopeId, String token, RedEnvelopeGroupDto groupDto) {
 
