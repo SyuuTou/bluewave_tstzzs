@@ -1785,7 +1785,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		founders.setUserId(body.getUserId());
 		founders.setName(body.getUserName());
 		founders.setPosition(body.getComanyDuties());
-		founders.setApprovalStatus(1);
+		founders.setApprovalStatus(2);
 		founders.setApprovalTime(now);
 		founders.setYn(1);
 
@@ -1809,7 +1809,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 		//创建审核记录表信息
 		FounderAduitRecord founderAduitRecord = new FounderAduitRecord();
-		founderAduitRecord.setAduitStatus(1);
+		founderAduitRecord.setAduitStatus(2);
 		founderAduitRecord.setAduitTime(now);
 		founderAduitRecord.setAppid(appid);
 		founderAduitRecord.setDiscription(body.getSupplementaryExplanation());
