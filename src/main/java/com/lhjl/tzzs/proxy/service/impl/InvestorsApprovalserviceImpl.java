@@ -75,13 +75,19 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	@Autowired
 	private UserLevelRelationMapper userLevelRelationMapper;
 
+	@Autowired
+	private FoundersMapper foundersMapper;
+
+	@Autowired
+	private FounderAduitRecordMapper founderAduitRecordMapper;
+
 	/**
 	 * 新后台用户列表审核接口
 	 * @param body
 	 * @return
 	 */
 	@Override
-	public CommonDto<String> adminSpecialApproval(InvestorSpecialApprovalDto body) {
+	public CommonDto<String> adminSpecialApproval(InvestorSpecialApprovalDto body,Integer appid) {
 		CommonDto<String> result = new CommonDto<>();
 		if (body.getUserId() == null){
 			result.setMessage("用户id不能为空");
@@ -107,40 +113,51 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			return result;
 		}
 
-		// 审核投资人
-		CommonDto<String> approvalResult = adimSpecialApproval(body);
-		if (approvalResult.getStatus() != 200){
-			result = approvalResult;
-
-			return result;
-		}
-
-		// 如果管理员选择升级会员等级的时候，升级会员
-		if (body.getUserLevel() != null){
-			CommonDto<String> upLevelResult = updateSpecailLevel(body.getUserLevel(),body.getUserId());
-			if (upLevelResult.getStatus() != 200){
-				result = upLevelResult;
+		if (body.getInvestorType() == 2){
+			//  审核创始人逻辑
+			CommonDto<String> resultFounderAduit = founderAduitRecord(body,appid);
+			if (resultFounderAduit.getStatus() != 200){
+				result = resultFounderAduit;
 
 				return result;
 			}
-		}
 
-		// 发模板消息
-		CommonDto<String> resultResult =  userInfoService.getUserFormid(body.getUserId());
-		if (resultResult.getStatus() == 200){
-			Integer status = 0;
-			if (null !=body.getInvestorType() && body.getInvestorType() == 0){
-				status = 3;
-			}else if (null != body.getInvestorType() &&  body.getInvestorType() == 1){
-				status = 4;
+		}else {
+			// 审核投资人
+			CommonDto<String> approvalResult = adimSpecialApproval(body);
+			if (approvalResult.getStatus() != 200){
+				result = approvalResult;
+
+				return result;
 			}
-			if (status > 0){
-				CommonDto<String> sendResult = sendTemplate(body.getUserId(),status,resultResult.getData());
-				if (sendResult.getStatus() == 200){
-					userInfoService.setUserFormid(resultResult.getData());
+
+			// 如果管理员选择升级会员等级的时候，升级会员
+			if (body.getUserLevel() != null){
+				CommonDto<String> upLevelResult = updateSpecailLevel(body.getUserLevel(),body.getUserId());
+				if (upLevelResult.getStatus() != 200){
+					result = upLevelResult;
+
+					return result;
 				}
 			}
 
+			// 发模板消息
+			CommonDto<String> resultResult =  userInfoService.getUserFormid(body.getUserId());
+			if (resultResult.getStatus() == 200){
+				Integer status = 0;
+				if (null !=body.getInvestorType() && body.getInvestorType() == 0){
+					status = 3;
+				}else if (null != body.getInvestorType() &&  body.getInvestorType() == 1){
+					status = 4;
+				}
+				if (status > 0){
+					CommonDto<String> sendResult = sendTemplate(body.getUserId(),status,resultResult.getData());
+					if (sendResult.getStatus() == 200){
+						userInfoService.setUserFormid(resultResult.getData());
+					}
+				}
+
+			}
 		}
 
 
@@ -1729,4 +1746,82 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 		return result;
 	}
+
+	/**
+	 * 审核创始人的逻辑
+	 * @param body
+	 * @return
+	 */
+	@Transactional
+	public CommonDto<String> founderAduitRecord(InvestorSpecialApprovalDto body,Integer appid){
+		CommonDto<String> result  = new CommonDto<>();
+		Date now = new Date();
+
+		if (null == body.getUserId()){
+			result.setMessage("用户id不能为空");
+			result.setData(null);
+			result.setStatus(502);
+
+			return result;
+		}
+
+		if (body.getInvestorType() == null && body.getUserLevel() == null){
+			result.setMessage("审核状态不能为空");
+			result.setStatus(502);
+			result.setData(null);
+
+			return result;
+		}
+
+		if (StringUtils.isAnyBlank(body.getComanyDuties(),body.getCompanyName(),body.getUserName())){
+			result.setMessage("用户姓名，公司职务，公司名称不能为空");
+			result.setStatus(502);
+			result.setData(null);
+
+			return result;
+		}
+
+		Founders founders = new Founders();
+		founders.setUserId(body.getUserId());
+		founders.setName(body.getUserName());
+		founders.setPosition(body.getComanyDuties());
+		founders.setApprovalStatus(1);
+		founders.setApprovalTime(now);
+		founders.setYn(1);
+
+		Example founderExample = new Example(Founders.class);
+		founderExample.and().andEqualTo("userId",body.getUserId());
+
+		Integer founderId = 1;
+
+		List<Founders> foundersList = foundersMapper.selectByExample(founderExample);
+		if (foundersList.size() > 0){
+			founders.setId(foundersList.get(0).getId());
+			foundersMapper.updateByPrimaryKeySelective(founders);
+
+			founderId = foundersList.get(0).getId();
+		}else {
+			foundersMapper.insertSelective(founders);
+
+			founderId = founders.getId();
+		}
+
+
+		//创建审核记录表信息
+		FounderAduitRecord founderAduitRecord = new FounderAduitRecord();
+		founderAduitRecord.setAduitStatus(1);
+		founderAduitRecord.setAduitTime(now);
+		founderAduitRecord.setAppid(appid);
+		founderAduitRecord.setDiscription(body.getSupplementaryExplanation());
+		founderAduitRecord.setFounderId(founderId);
+
+		founderAduitRecordMapper.insertSelective(founderAduitRecord);
+
+		result.setStatus(200);
+		result.setData(null);
+		result.setMessage("success");
+
+		return result;
+	}
+
 }
