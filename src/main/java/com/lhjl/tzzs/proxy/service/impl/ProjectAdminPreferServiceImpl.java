@@ -50,8 +50,8 @@ public class ProjectAdminPreferServiceImpl implements ProjectAdminPreferService 
 
         InvestmentInstitutionFeature investmentInstitutionFeature = investmentInstitutionFeatureService.selectByPrimaryKey(projectId);
         if(null == investmentInstitutionFeature){
-            result.setStatus(300);
-            result.setMessage("failed");
+            result.setStatus(200);
+            result.setMessage("sucess");
             result.setData(null);
             return result;
         }
