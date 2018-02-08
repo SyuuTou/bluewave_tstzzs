@@ -148,6 +148,23 @@ public class RedEnvelopeController extends GenericController {
     }
 
     /**
+     * 获取红包基本信息
+     * @param appId
+     * @param unionId
+     * @param token
+     * @return
+     */
+    public CommonDto<RedEnvelopeResDto> getRedEnvelopeInfo(@PathVariable Integer appId, @PathVariable String unionId, String token){
+        CommonDto<RedEnvelopeResDto> result = null;
+
+        result = redEnvelopeService.getRedEnvelopeInfo(appId, unionId, token);
+
+        return result;
+
+    }
+
+
+    /**
      * 领取红包
      * @param appId
      * @param

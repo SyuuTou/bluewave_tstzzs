@@ -23,6 +23,17 @@
     <result column="yn" jdbcType="INTEGER" property="yn" />
     <result column="web_switch" jdbcType="INTEGER" property="webSwitch" />
     <result column="appid" jdbcType="INTEGER" property="appid" />
+    <result column="investor_landing_page" jdbcType="VARCHAR" property="investorLandingPage" />
+    <result column="entrepreneur_landing_page" jdbcType="VARCHAR" property="entrepreneurLandingPage" />
+    <result column="orthor_landing_page" jdbcType="VARCHAR" property="orthorLandingPage" />
+    <result column="commission_publish" jdbcType="DECIMAL" property="commissionPublish" />
+    <result column="commission_receiver" jdbcType="DECIMAL" property="commissionReceiver" />
+    <result column="commission_publish_fixed" jdbcType="DECIMAL" property="commissionPublishFixed" />
+    <result column="commission_receiver_fixed" jdbcType="DECIMAL" property="commissionReceiverFixed" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_reward" jdbcType="INTEGER" property="isReward" />
+    <result column="is_lead_investor" jdbcType="INTEGER" property="isLeadInvestor" />
   </resultMap>
   <select id="findElegantServiceList" resultType="java.util.HashMap">
     select es.service_name,es.pre_vip_price_descript,es.original_price,es.vip_price,esd.description,es.unit,

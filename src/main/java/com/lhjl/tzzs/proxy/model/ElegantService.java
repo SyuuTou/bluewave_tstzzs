@@ -35,13 +35,14 @@ public class ElegantService {
     private String preVipPriceDescript;
 
     /**
-     * 价格单位，0表示人民币，1表示美元
+     * 价格单位，0表示人民币，1表示美元, 2表示令牌
      */
     @Column(name = "price_unit")
     private Integer priceUnit;
 
     /**
      * 单位，这里的单位指的是，5800/次，3800/人 中的“次”和“人”；
+季、 人、次、年、个、份、笔
      */
     private String unit;
 
@@ -107,6 +108,71 @@ public class ElegantService {
      * 应用id
      */
     private Integer appid;
+
+    /**
+     * 投资人落地页
+     */
+    @Column(name = "investor_landing_page")
+    private String investorLandingPage;
+
+    /**
+     * 创始人落地页
+     */
+    @Column(name = "entrepreneur_landing_page")
+    private String entrepreneurLandingPage;
+
+    /**
+     * 其它身份类型落地页
+     */
+    @Column(name = "orthor_landing_page")
+    private String orthorLandingPage;
+
+    /**
+     * 发布方抽成佣金
+     */
+    @Column(name = "commission_publish")
+    private BigDecimal commissionPublish;
+
+    /**
+     * 接收方抽成佣金
+     */
+    @Column(name = "commission_receiver")
+    private BigDecimal commissionReceiver;
+
+    /**
+     * 发布方固定抽成佣金
+     */
+    @Column(name = "commission_publish_fixed")
+    private BigDecimal commissionPublishFixed;
+
+    /**
+     * 接收方固定佣金
+     */
+    @Column(name = "commission_receiver_fixed")
+    private BigDecimal commissionReceiverFixed;
+
+    /**
+     * 创建人
+     */
+    private String creator;
+
+    /**
+     * 更新时间
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
+
+    /**
+     * 是否是悬赏，0:非悬赏，1:悬赏
+     */
+    @Column(name = "is_reward")
+    private Integer isReward;
+
+    /**
+     * 是否领投，0:非领投，1:领投方
+     */
+    @Column(name = "is_lead_investor")
+    private Integer isLeadInvestor;
 
     /**
      * @return id
@@ -195,18 +261,18 @@ public class ElegantService {
     }
 
     /**
-     * 获取价格单位，0表示人民币，1表示美元
+     * 获取价格单位，0表示人民币，1表示美元, 2表示令牌
      *
-     * @return price_unit - 价格单位，0表示人民币，1表示美元
+     * @return price_unit - 价格单位，0表示人民币，1表示美元, 2表示令牌
      */
     public Integer getPriceUnit() {
         return priceUnit;
     }
 
     /**
-     * 设置价格单位，0表示人民币，1表示美元
+     * 设置价格单位，0表示人民币，1表示美元, 2表示令牌
      *
-     * @param priceUnit 价格单位，0表示人民币，1表示美元
+     * @param priceUnit 价格单位，0表示人民币，1表示美元, 2表示令牌
      */
     public void setPriceUnit(Integer priceUnit) {
         this.priceUnit = priceUnit;
@@ -214,8 +280,10 @@ public class ElegantService {
 
     /**
      * 获取单位，这里的单位指的是，5800/次，3800/人 中的“次”和“人”；
+季、 人、次、年、个、份、笔
      *
      * @return unit - 单位，这里的单位指的是，5800/次，3800/人 中的“次”和“人”；
+季、 人、次、年、个、份、笔
      */
     public String getUnit() {
         return unit;
@@ -223,8 +291,10 @@ public class ElegantService {
 
     /**
      * 设置单位，这里的单位指的是，5800/次，3800/人 中的“次”和“人”；
+季、 人、次、年、个、份、笔
      *
      * @param unit 单位，这里的单位指的是，5800/次，3800/人 中的“次”和“人”；
+季、 人、次、年、个、份、笔
      */
     public void setUnit(String unit) {
         this.unit = unit;
@@ -426,5 +496,203 @@ public class ElegantService {
      */
     public void setAppid(Integer appid) {
         this.appid = appid;
+    }
+
+    /**
+     * 获取投资人落地页
+     *
+     * @return investor_landing_page - 投资人落地页
+     */
+    public String getInvestorLandingPage() {
+        return investorLandingPage;
+    }
+
+    /**
+     * 设置投资人落地页
+     *
+     * @param investorLandingPage 投资人落地页
+     */
+    public void setInvestorLandingPage(String investorLandingPage) {
+        this.investorLandingPage = investorLandingPage;
+    }
+
+    /**
+     * 获取创始人落地页
+     *
+     * @return entrepreneur_landing_page - 创始人落地页
+     */
+    public String getEntrepreneurLandingPage() {
+        return entrepreneurLandingPage;
+    }
+
+    /**
+     * 设置创始人落地页
+     *
+     * @param entrepreneurLandingPage 创始人落地页
+     */
+    public void setEntrepreneurLandingPage(String entrepreneurLandingPage) {
+        this.entrepreneurLandingPage = entrepreneurLandingPage;
+    }
+
+    /**
+     * 获取其它身份类型落地页
+     *
+     * @return orthor_landing_page - 其它身份类型落地页
+     */
+    public String getOrthorLandingPage() {
+        return orthorLandingPage;
+    }
+
+    /**
+     * 设置其它身份类型落地页
+     *
+     * @param orthorLandingPage 其它身份类型落地页
+     */
+    public void setOrthorLandingPage(String orthorLandingPage) {
+        this.orthorLandingPage = orthorLandingPage;
+    }
+
+    /**
+     * 获取发布方抽成佣金
+     *
+     * @return commission_publish - 发布方抽成佣金
+     */
+    public BigDecimal getCommissionPublish() {
+        return commissionPublish;
+    }
+
+    /**
+     * 设置发布方抽成佣金
+     *
+     * @param commissionPublish 发布方抽成佣金
+     */
+    public void setCommissionPublish(BigDecimal commissionPublish) {
+        this.commissionPublish = commissionPublish;
+    }
+
+    /**
+     * 获取接收方抽成佣金
+     *
+     * @return commission_receiver - 接收方抽成佣金
+     */
+    public BigDecimal getCommissionReceiver() {
+        return commissionReceiver;
+    }
+
+    /**
+     * 设置接收方抽成佣金
+     *
+     * @param commissionReceiver 接收方抽成佣金
+     */
+    public void setCommissionReceiver(BigDecimal commissionReceiver) {
+        this.commissionReceiver = commissionReceiver;
+    }
+
+    /**
+     * 获取发布方固定抽成佣金
+     *
+     * @return commission_publish_fixed - 发布方固定抽成佣金
+     */
+    public BigDecimal getCommissionPublishFixed() {
+        return commissionPublishFixed;
+    }
+
+    /**
+     * 设置发布方固定抽成佣金
+     *
+     * @param commissionPublishFixed 发布方固定抽成佣金
+     */
+    public void setCommissionPublishFixed(BigDecimal commissionPublishFixed) {
+        this.commissionPublishFixed = commissionPublishFixed;
+    }
+
+    /**
+     * 获取接收方固定佣金
+     *
+     * @return commission_receiver_fixed - 接收方固定佣金
+     */
+    public BigDecimal getCommissionReceiverFixed() {
+        return commissionReceiverFixed;
+    }
+
+    /**
+     * 设置接收方固定佣金
+     *
+     * @param commissionReceiverFixed 接收方固定佣金
+     */
+    public void setCommissionReceiverFixed(BigDecimal commissionReceiverFixed) {
+        this.commissionReceiverFixed = commissionReceiverFixed;
+    }
+
+    /**
+     * 获取创建人
+     *
+     * @return creator - 创建人
+     */
+    public String getCreator() {
+        return creator;
+    }
+
+    /**
+     * 设置创建人
+     *
+     * @param creator 创建人
+     */
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    /**
+     * 获取更新时间
+     *
+     * @return update_time - 更新时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param updateTime 更新时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取是否是悬赏，0:非悬赏，1:悬赏
+     *
+     * @return is_reward - 是否是悬赏，0:非悬赏，1:悬赏
+     */
+    public Integer getIsReward() {
+        return isReward;
+    }
+
+    /**
+     * 设置是否是悬赏，0:非悬赏，1:悬赏
+     *
+     * @param isReward 是否是悬赏，0:非悬赏，1:悬赏
+     */
+    public void setIsReward(Integer isReward) {
+        this.isReward = isReward;
+    }
+
+    /**
+     * 获取是否领投，0:非领投，1:领投方
+     *
+     * @return is_lead_investor - 是否领投，0:非领投，1:领投方
+     */
+    public Integer getIsLeadInvestor() {
+        return isLeadInvestor;
+    }
+
+    /**
+     * 设置是否领投，0:非领投，1:领投方
+     *
+     * @param isLeadInvestor 是否领投，0:非领投，1:领投方
+     */
+    public void setIsLeadInvestor(Integer isLeadInvestor) {
+        this.isLeadInvestor = isLeadInvestor;
     }
 }

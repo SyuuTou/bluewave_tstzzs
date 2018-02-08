@@ -68,7 +68,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
      * @return
      */
     @Override
-    public CommonDto<List<Map<String, Object>>> findElegantServiceList(ElegantServiceSearchInputDto body,Integer appid) {
+    public CommonDto<List<Map<String, Object>>> findElegantServiceList(ElegantServiceSearchInputDto body, Integer appid, String token) {
         CommonDto<List<Map<String,Object>>> result  = new CommonDto<>();
         Date now = new Date();
 

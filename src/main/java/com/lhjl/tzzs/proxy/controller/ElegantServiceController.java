@@ -26,11 +26,11 @@ public class ElegantServiceController {
      * @return
      */
     @PostMapping("/v{appid}/elegantservice/list")
-    public CommonDto<List<Map<String,Object>>> getElegantServiceList(@RequestBody ElegantServiceSearchInputDto body, @PathVariable Integer appid){
+    public CommonDto<List<Map<String,Object>>> getElegantServiceList(@RequestBody ElegantServiceSearchInputDto body, @PathVariable Integer appid, String token){
         CommonDto<List<Map<String,Object>>> result = new CommonDto<>();
 
         try {
-            result = elegantServiceService.findElegantServiceList(body,appid);
+            result = elegantServiceService.findElegantServiceList(body,appid,token);
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());
             result.setData(null);

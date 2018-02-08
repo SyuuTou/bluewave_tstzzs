@@ -8,7 +8,6 @@ import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceSearchInputDto;
 import com.lhjl.tzzs.proxy.model.MetaIdentityType;
 import com.lhjl.tzzs.proxy.model.MetaServiceType;
 
-import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ public interface ElegantServiceService {
      * 获取精选活动列表的接口
      * @return
      */
-    CommonDto<List<Map<String,Object>>> findElegantServiceList(ElegantServiceSearchInputDto body,Integer appid);
+    CommonDto<List<Map<String,Object>>> findElegantServiceList(ElegantServiceSearchInputDto body, Integer appid, String token);
 
     /**
      * 根据服务id获取服务详情的接口

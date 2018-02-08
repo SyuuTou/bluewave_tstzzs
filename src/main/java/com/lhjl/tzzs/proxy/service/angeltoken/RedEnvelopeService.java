@@ -29,4 +29,6 @@ public interface RedEnvelopeService {
     CommonDto<String> getRedEnvelopeWechatGroupKey(Integer appId, String redEnvelopeId, String token);
 
     CommonDto<List<RedEnvelopeResDto>> queryRedEnvelopeAllByToken(Integer appId, String token, Integer pageNo, Integer pageSize);
+
+    CommonDto<RedEnvelopeResDto> getRedEnvelopeInfo(Integer appId, String unionId, String token);
 }

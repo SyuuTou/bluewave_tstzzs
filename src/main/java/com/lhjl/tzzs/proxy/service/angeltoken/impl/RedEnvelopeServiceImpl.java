@@ -521,6 +521,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         return new CommonDto<>("ok","success", 200);
     }
 
+    @Transactional
     @Override
     public CommonDto<String> getRedEnvelopeWechatGroupKey(Integer appId, String redEnvelopeId, String token) {
 
@@ -566,6 +567,21 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
             redEnvelopeResDto.setQuantity(redEnvelope.getReceiveQuantity());
             redEnvelopeResDto.setTotalQuantity(redEnvelope.getQuantity());
             redEnvelopeResDto.setMessage(redEnvelope.getMessage());
+            redEnvelopeResDto.setCreateTime(redEnvelope.getCreateTime());
+            redEnvelopeResDto.setAmount(redEnvelope.getAmount());
+            redEnvelopeResDto.setTotalAmount(redEnvelope.getTotalAmount());
+            if (redEnvelope.getReceiveQuantity() == redEnvelope.getQuantity()) {
+                redEnvelopeResDto.setStatus("Finished");
+            }else{
+                RedEnvelopeLog redEnvelopeLogQuery = new RedEnvelopeLog();
+                redEnvelopeLogQuery.setToken(token);
+                redEnvelopeLogQuery.setRedEnvelopeId(redEnvelope.getId());
+                if (redEnvelopeLogMapper.selectCount(redEnvelopeLogQuery)==1){
+                    redEnvelopeResDto.setStatus("Received");
+                }else{
+                    redEnvelopeResDto.setStatus("Unreceived");
+                }
+            }
             Users temp = this.getUserInfo(appId,redEnvelope.getToken());
             if (null != temp) {
                 if (StringUtil.isNotEmpty(temp.getHeadpicReal())) {
@@ -590,6 +606,46 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         });
 
         return new CommonDto<>(redEnvelopeResDtos, "success", 200);
+    }
+
+    @Override
+    public CommonDto<RedEnvelopeResDto> getRedEnvelopeInfo(Integer appId, String unionId, String token) {
+
+        RedEnvelope redEnvelopeQuery = new RedEnvelope();
+        redEnvelopeQuery.setToken(token);
+        redEnvelopeQuery.setUnionKey(unionId);
+        redEnvelopeQuery.setAppId(appId);
+
+        RedEnvelope redEnvelope = redEnvelopeMapper.selectOne(redEnvelopeQuery);
+        RedEnvelopeResDto redEnvelopeResDto = new RedEnvelopeResDto();
+        redEnvelopeResDto.setDescription(redEnvelope.getDescription());
+        redEnvelopeResDto.setQuantity(redEnvelope.getReceiveQuantity());
+        redEnvelopeResDto.setTotalQuantity(redEnvelope.getQuantity());
+        redEnvelopeResDto.setMessage(redEnvelope.getMessage());
+        redEnvelopeResDto.setCreateTime(redEnvelope.getCreateTime());
+        redEnvelopeResDto.setAmount(redEnvelope.getAmount());
+        redEnvelopeResDto.setTotalAmount(redEnvelope.getTotalAmount());
+        Users temp = this.getUserInfo(appId,redEnvelope.getToken());
+        if (null != temp) {
+            if (StringUtil.isNotEmpty(temp.getHeadpicReal())) {
+                redEnvelopeResDto.setHeadPic(temp.getHeadpicReal());
+            } else {
+                redEnvelopeResDto.setHeadPic(temp.getHeadpic());
+            }
+            if (StringUtil.isNotEmpty(temp.getActualName())) {
+                redEnvelopeResDto.setNeckName(temp.getActualName());
+            } else {
+                UsersWeixin queryUsersWeixin = new UsersWeixin();
+                queryUsersWeixin.setUserId(temp.getId());
+                UsersWeixin usersWeixin = this.usersWeixinMapper.selectOne(queryUsersWeixin);
+                if (null != usersWeixin) {
+                    redEnvelopeResDto.setNeckName(usersWeixin.getNickName());
+                }
+            }
+        }
+
+
+        return new CommonDto<>(redEnvelopeResDto, "success", 200);
     }
 
     private BigDecimal randomAmount(Integer quantity, Integer receiveQuantity, BigDecimal totalAmount, BigDecimal receiveAmount, Integer appId) {
