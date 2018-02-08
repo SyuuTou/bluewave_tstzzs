@@ -1,7 +1,6 @@
 package com.lhjl.tzzs.proxy.controller.weixin;
 
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
-import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyCoupon;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.request.WxEntPayRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
@@ -11,18 +10,14 @@ import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
-import com.github.binarywang.wxpay.util.SignUtils;
 import com.google.gson.Gson;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.PayRequestBody;
 import com.lhjl.tzzs.proxy.service.PayService;
-import com.lhjl.tzzs.proxy.utils.ReturnModel;
 import com.lhjl.tzzs.proxy.utils.Sha1Util;
-import com.lhjl.tzzs.proxy.utils.XMLUtil;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -93,7 +88,7 @@ public class PaymentController extends GenericController {
 
 
     try {
-      commonDto = idataVCPayService.generatePayInfo(payRequestBody);
+      commonDto = idataVCPayService.generatePayInfo(payRequestBody, 1);
     } catch (Exception e) {
       e.printStackTrace();
       commonDto.setStatus(500);
@@ -104,6 +99,31 @@ public class PaymentController extends GenericController {
 
   }
 
+  /**
+   * 返回前台H5调用JS支付所需要的参数，公众号支付调用此接口
+   *
+   * @param response
+   * @param request
+   */
+  @PostMapping(value = "v{appId}/getJSSDKPayInfo")
+  public CommonDto<Map<String, String>> getJSSDKPayInfo(@RequestBody PayRequestBody payRequestBody, @PathVariable Integer appId,
+                                                        HttpServletResponse response,
+                                                        HttpServletRequest request) {
+
+    CommonDto<Map<String, String>> commonDto = new CommonDto<>();
+
+
+    try {
+      commonDto = idataVCPayService.generatePayInfo(payRequestBody,appId);
+    } catch (Exception e) {
+      e.printStackTrace();
+      commonDto.setStatus(500);
+      commonDto.setMessage(e.getMessage());
+    }
+
+    return commonDto;
+
+  }
   /**
    * 微信通知支付结果的回调地址，notify_url
    *

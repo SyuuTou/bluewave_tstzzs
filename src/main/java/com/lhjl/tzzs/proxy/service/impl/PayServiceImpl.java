@@ -65,7 +65,7 @@ public class PayServiceImpl implements PayService {
     private LogInfoService logInfoService;
 
     @Override
-    public CommonDto<Map<String, String>> generatePayInfo(PayRequestBody payRequestBody) {
+    public CommonDto<Map<String, String>> generatePayInfo(PayRequestBody payRequestBody, Integer appId) {
 
         CommonDto<Map<String, String>> result = new CommonDto<>();
         UserMoneyRecord userMoneyRecord = userMoneyRecordMapper.selectByPrimaryKey(payRequestBody.getMoneyId());
@@ -107,7 +107,7 @@ public class PayServiceImpl implements PayService {
                     .outTradeNo(tradeNo)
                     .totalFee(WxPayBaseRequest.yuanToFee(userMoneyRecord.getMoney().toString()))
                     .body(scene.getDesc())
-                    .attach(payRequestBody.getSceneKey()+"|"+sceneType)
+                    .attach(payRequestBody.getSceneKey()+"|"+sceneType+"|"+appId)
                     .spbillCreateIp("39.106.44.53")
                     .build();
             Map<String, String> payInfo =payService.getPayInfo(prepayInfo);
@@ -160,7 +160,7 @@ public class PayServiceImpl implements PayService {
 
 
         }else {
-            userIntegralsService.payAfter(usersPay.getUserId(), usersPay.getSceneKey(), new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())), 1);
+            userIntegralsService.payAfter(usersPay.getUserId(), usersPay.getSceneKey(), new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())), 1, Integer.valueOf(result.getAttach().split("\\|")[2]));
         }
         LOGGER.info("Ending notify handler........");
     }

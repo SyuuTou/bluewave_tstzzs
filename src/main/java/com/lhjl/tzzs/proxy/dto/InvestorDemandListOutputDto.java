@@ -59,6 +59,17 @@ public class InvestorDemandListOutputDto {
     /**更新时间*/
     private String updateTime;
 
+    /** 信息流事件key */
+    private String eventKey;
+
+    public String getEventKey() {
+        return eventKey;
+    }
+
+    public void setEventKey(String eventKey) {
+        this.eventKey = eventKey;
+    }
+
     public Integer getId() {
         return id;
     }

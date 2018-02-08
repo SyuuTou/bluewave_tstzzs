@@ -1,6 +1,5 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -659,10 +658,11 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	/**
 	 * 后台审核操作接口
 	 * @param body 请求对象
+	 * @param appId
 	 * @return
 	 */
 	@Override
-	public CommonDto<String> approval(InvestorsApprovalActionDto body) {
+	public CommonDto<String> approval(InvestorsApprovalActionDto body, Integer appId) {
 		CommonDto<String> result = new CommonDto<>();
 		Integer approvalId = body.getId();
 		String approveResult = body.getApproveResult();
@@ -735,7 +735,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 					UserToken userToken = new UserToken();
 					userToken.setUserId(userId);
 					userToken = userTokenMapper.selectOne(userToken);
-					userLevelService.upLevel(userToken.getToken(), 4, null);
+					userLevelService.upLevel(userToken.getToken(), 4, null, appId);
 				}
 			}
 
@@ -782,7 +782,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 					UserToken userToken = new UserToken();
 					userToken.setUserId(userId);
 					userToken = userTokenMapper.selectOne(userToken);
-					userLevelService.upLevel(userToken.getToken(), 4, null);
+					userLevelService.upLevel(userToken.getToken(), 4, null,appId);
 				}
 			}
 			newInvestors.setApprovalStatus(Integer.parseInt(approvalStatus));
@@ -1200,10 +1200,11 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 	 * @param userName 用户名
 	 * @param companyName 公司名称
 	 * @param comanyDuties 公司职位
+	 * @param appId
 	 * @return
 	 */
 	@Override
-	public CommonDto<String> specialApproval(Integer userId,Integer status,String userName,String companyName,String comanyDuties){
+	public CommonDto<String> specialApproval(Integer userId, Integer status, String userName, String companyName, String comanyDuties, Integer appId){
 		CommonDto<String> result = new CommonDto<>();
 		Date now = new Date();
 
@@ -1303,7 +1304,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				UserToken userToken = new UserToken();
 				userToken.setUserId(userId);
 				userToken = userTokenMapper.selectOne(userToken);
-				userLevelService.upLevel(userToken.getToken(), 4, "VIP_Investor");
+				userLevelService.upLevel(userToken.getToken(), 4, "VIP_Investor",appId);
 			}
 			}
 
@@ -1340,7 +1341,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				UserToken userToken = new UserToken();
 				userToken.setUserId(userId);
 				userToken = userTokenMapper.selectOne(userToken);
-				userLevelService.upLevel(userToken.getToken(), 4, "VIP_Investor");
+				userLevelService.upLevel(userToken.getToken(), 4, "VIP_Investor", appId);
 			}
 
 			//更新用户表的信息

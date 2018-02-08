@@ -16,6 +16,13 @@ public class ProjectBPController extends GenericController {
     @Resource
     private ProjectBusinessPlanService projectBusinessPlanService;
 
+    /**
+     * 商业计划书解析
+     * @param file
+     * @param projectId
+     * @param token
+     * @return
+     */
     @PostMapping("resolve/{projectId}/business/plan")
     public CommonDto<List<ProjectBusinessPlanImage>> handlerProjectBusinessPlan(@RequestParam("file") MultipartFile file, @PathVariable Integer projectId, String token){
 
@@ -31,6 +38,12 @@ public class ProjectBPController extends GenericController {
     }
 
 
+    /**
+     * 更新图片
+     * @param reqDto
+     * @param projectId
+     * @return
+     */
     @PutMapping("resolve/{projectId}/business/plan")
     public CommonDto<String> updateProjectBusinessPlanImage(@RequestBody List<ProjectBusinessPlanImage> reqDto, @PathVariable Integer projectId){
 
