@@ -155,6 +155,12 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
 
     //审核匹配查询项目相关信息
     Projects selectByProjectShortName(@Param("searchWord") String searchWord);
+	/**
+	 * 根据搜索关键字完成项目的智能搜索
+	 * @param keyword
+	 * @return
+	 */
+	List<Projects> blurScanProjectByShortName(@Param("keyword") String keyword);
 }
 
 

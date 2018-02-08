@@ -14,7 +14,7 @@ public interface InvestorsApprovalService {
 	 * @param body
 	 * @return
 	 */
-	CommonDto<String> adminSpecialApproval(InvestorSpecialApprovalDto body);
+	CommonDto<String> adminSpecialApproval(InvestorSpecialApprovalDto body,Integer appid);
 	/**
 	 * 保存认证信息
 	 * @param params

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutputDto;
+import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.service.ProjectFinancingLogService;
 
 @RestController
@@ -42,5 +43,26 @@ public class ProjectFinancingLogHeadController extends GenericController {
     	}
         return result;
     }
+    /**
+     * 根据关键字获取项目的信息
+     * @param appid
+     * @param keyword
+     * @return
+     */
+    @GetMapping("/v{appid}/echo/project/byshortname")
+    public CommonDto<List<Projects>> echoProjectByShortName(@PathVariable Integer appid,String keyword){
+    	CommonDto<List<Projects>> result =new CommonDto<>();
+    	try {
+    		result = projectFinancingLogService.blurScanProjectByShortName(appid,keyword);
+    	}catch(Exception e) {
+    		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
+    		
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);  
+    	}
+        return result;
+    }
+    
    
 }
