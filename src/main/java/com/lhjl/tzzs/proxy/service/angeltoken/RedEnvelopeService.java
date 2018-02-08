@@ -6,6 +6,7 @@ import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeGroupDto;
 import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeResDto;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 public interface RedEnvelopeService {
@@ -26,4 +27,6 @@ public interface RedEnvelopeService {
     CommonDto<String> resolveWechatGroupId(Integer appId, String redEnvelopeId, String token, RedEnvelopeGroupDto groupDto);
 
     CommonDto<String> getRedEnvelopeWechatGroupKey(Integer appId, String redEnvelopeId, String token);
+
+    CommonDto<List<RedEnvelopeResDto>> queryRedEnvelopeAllByToken(Integer appId, String token, Integer pageNo, Integer pageSize);
 }

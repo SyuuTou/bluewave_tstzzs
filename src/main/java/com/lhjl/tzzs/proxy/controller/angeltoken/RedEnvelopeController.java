@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 
@@ -24,7 +25,14 @@ public class RedEnvelopeController extends GenericController {
     private RedEnvelopeService redEnvelopeService;
 
 
-
+    /**
+     * 解析群ID
+     * @param appId
+     * @param redEnvelopeId
+     * @param token
+     * @param groupDto
+     * @return
+     */
     @PostMapping("/v{appId}/redenvelope/{redEnvelopeId}")
     public CommonDto<String> saveRedEnvelopeWechatGroupId(@PathVariable Integer appId, @PathVariable String redEnvelopeId, @RequestParam String token, @RequestBody RedEnvelopeGroupDto groupDto){
 
@@ -40,6 +48,13 @@ public class RedEnvelopeController extends GenericController {
     }
 
 
+    /**
+     * 为发送群定义一个唯一key
+     * @param appId
+     * @param redEnvelopeId
+     * @param token
+     * @return
+     */
     @GetMapping("/v{appId}/{redEnvelopeId}/redEnvelopeKey")
     public CommonDto<String> getRedEnvelopeWechatGroupKey(@PathVariable Integer appId, @PathVariable String redEnvelopeId, @RequestParam String token ){
         CommonDto<String> result = null;
@@ -152,6 +167,24 @@ public class RedEnvelopeController extends GenericController {
 
         return result;
     }
+
+    /**
+     * 获取领取红包的人发的红包列表
+     * @param appId
+     * @param token
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("/v{appId}/redenvelope")
+    public CommonDto<List<RedEnvelopeResDto>> queryRedEnvelopeAll(@PathVariable Integer appId, String token, Integer pageNo, Integer pageSize){
+        CommonDto<List<RedEnvelopeResDto>> result =null;
+
+        result = redEnvelopeService.queryRedEnvelopeAllByToken(appId, token, pageNo, pageSize);
+
+        return result;
+    }
+
 
     /**
      * 检查令牌总数量

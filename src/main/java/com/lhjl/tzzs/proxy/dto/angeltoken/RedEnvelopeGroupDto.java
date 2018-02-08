@@ -2,8 +2,17 @@ package com.lhjl.tzzs.proxy.dto.angeltoken;
 
 public class RedEnvelopeGroupDto {
 
+    /**
+     * 微信获取
+     */
     private String encryptedData;
+    /**
+     * 微信获取
+     */
     private String iv;
+    /**
+     * 微信群唯一key
+     */
     private String unionKey;
 
     public String getUnionKey() {
