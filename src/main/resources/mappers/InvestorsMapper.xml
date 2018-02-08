@@ -47,7 +47,7 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
   </resultMap>
   
-  <resultMap id="InvestorsOutputMap" type="com.lhjl.tzzs.proxy.investorDto.InvestorsOutputDto">
+  <resultMap id="InvestorsOutputMap" type="com.lhjl.tzzs.proxy.dto.investorDto.InvestorsOutputDto">
     <result column="ID" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="name" jdbcType="VARCHAR" property="name" />

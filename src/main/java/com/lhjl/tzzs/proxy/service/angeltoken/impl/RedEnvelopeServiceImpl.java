@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service.angeltoken.impl;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.util.crypt.WxMaCryptUtils;
 import cn.binarywang.wx.miniapp.util.json.WxMaGsonBuilder;
+import com.github.pagehelper.PageHelper;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.angeltoken.*;
 import com.lhjl.tzzs.proxy.mapper.*;
@@ -22,11 +23,8 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Transactional(readOnly = true)
@@ -543,6 +541,57 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         return new CommonDto<>(unionKey,"success", 200);
     }
 
+    @Override
+    public CommonDto<List<RedEnvelopeResDto>> queryRedEnvelopeAllByToken(Integer appId, String token, Integer pageNo, Integer pageSize) {
+
+        RedEnvelopeLog redEnvelopeLogRecord = new RedEnvelopeLog();
+        redEnvelopeLogRecord.setToken(token);
+
+        List<RedEnvelopeLog> redEnvelopeLogs = redEnvelopeLogMapper.select(redEnvelopeLogRecord);
+        Set<String> tokens = new HashSet<>();
+        for (RedEnvelopeLog redEnvelopeLog : redEnvelopeLogs){
+            tokens.add(redEnvelopeLog.getToken());
+        }
+
+        Example query = new Example(RedEnvelope.class);
+        query.and().andIn("token",tokens);
+        query.setOrderByClause("create_time desc");
+
+        PageHelper.offsetPage(pageNo, pageSize);
+        List<RedEnvelope> redEnvelopes = redEnvelopeMapper.selectByExample(query);
+        List<RedEnvelopeResDto> redEnvelopeResDtos = new ArrayList<>();
+        redEnvelopes.forEach(redEnvelope -> {
+            RedEnvelopeResDto redEnvelopeResDto = new RedEnvelopeResDto();
+            redEnvelopeResDto.setDescription(redEnvelope.getDescription());
+            redEnvelopeResDto.setQuantity(redEnvelope.getReceiveQuantity());
+            redEnvelopeResDto.setTotalQuantity(redEnvelope.getQuantity());
+            redEnvelopeResDto.setMessage(redEnvelope.getMessage());
+            Users temp = this.getUserInfo(appId,redEnvelope.getToken());
+            if (null != temp) {
+                if (StringUtil.isNotEmpty(temp.getHeadpicReal())) {
+                    redEnvelopeResDto.setHeadPic(temp.getHeadpicReal());
+                } else {
+                    redEnvelopeResDto.setHeadPic(temp.getHeadpic());
+                }
+                if (StringUtil.isNotEmpty(temp.getActualName())) {
+                    redEnvelopeResDto.setNeckName(temp.getActualName());
+                } else {
+                    UsersWeixin queryUsersWeixin = new UsersWeixin();
+                    queryUsersWeixin.setUserId(temp.getId());
+                    UsersWeixin usersWeixin = this.usersWeixinMapper.selectOne(queryUsersWeixin);
+                    if (null != usersWeixin) {
+                        redEnvelopeResDto.setNeckName(usersWeixin.getNickName());
+                    }
+                }
+            }
+
+
+            redEnvelopeResDtos.add(redEnvelopeResDto);
+        });
+
+        return new CommonDto<>(redEnvelopeResDtos, "success", 200);
+    }
+
     private BigDecimal randomAmount(Integer quantity, Integer receiveQuantity, BigDecimal totalAmount, BigDecimal receiveAmount, Integer appId) {
 
         RedEnvelopeLimit redEnvelopeLimit = this.getRedEnvelopeLimit(appId, "RED_ENVELOPE_LIMIT");
@@ -552,12 +601,8 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
             if (quantity - receiveQuantity == 1){
                 return totalAmount.subtract(receiveAmount);
             }else {
-
-
                 return totalAmount.subtract(receiveAmount).divide(new BigDecimal(quantity - receiveQuantity),2).multiply(new BigDecimal(Math.random())).setScale(2,BigDecimal.ROUND_HALF_DOWN);
-
             }
-
     }
 
 
