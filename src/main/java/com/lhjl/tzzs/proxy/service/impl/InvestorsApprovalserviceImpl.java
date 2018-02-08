@@ -131,16 +131,6 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				return result;
 			}
 
-			// 如果管理员选择升级会员等级的时候，升级会员
-			if (body.getUserLevel() != null){
-				CommonDto<String> upLevelResult = updateSpecailLevel(body.getUserLevel(),body.getUserId());
-				if (upLevelResult.getStatus() != 200){
-					result = upLevelResult;
-
-					return result;
-				}
-			}
-
 			// 发模板消息
 			CommonDto<String> resultResult =  userInfoService.getUserFormid(body.getUserId());
 			if (resultResult.getStatus() == 200){
@@ -160,6 +150,16 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 			}
 		}
 
+
+		// 如果管理员选择升级会员等级的时候，升级会员
+		if (body.getUserLevel() != null){
+			CommonDto<String> upLevelResult = updateSpecailLevel(body.getUserLevel(),body.getUserId());
+			if (upLevelResult.getStatus() != 200){
+				result = upLevelResult;
+
+				return result;
+			}
+		}
 
 		result.setData(null);
 		result.setStatus(200);
@@ -1814,6 +1814,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		founderAduitRecord.setAppid(appid);
 		founderAduitRecord.setDiscription(body.getSupplementaryExplanation());
 		founderAduitRecord.setFounderId(founderId);
+		founderAduitRecord.setAppid(appid);
 
 		founderAduitRecordMapper.insertSelective(founderAduitRecord);
 
