@@ -40,6 +40,12 @@ public class RedEnvelopeLog {
     private String fromToken;
 
     /**
+     * 红包发送群唯一key
+     */
+    @Column(name = "union_key")
+    private String unionKey;
+
+    /**
      * 获取红包ID
      *
      * @return red_envelope_id - 红包ID
@@ -141,5 +147,23 @@ public class RedEnvelopeLog {
      */
     public void setFromToken(String fromToken) {
         this.fromToken = fromToken;
+    }
+
+    /**
+     * 获取红包发送群唯一key
+     *
+     * @return union_key - 红包发送群唯一key
+     */
+    public String getUnionKey() {
+        return unionKey;
+    }
+
+    /**
+     * 设置红包发送群唯一key
+     *
+     * @param unionKey 红包发送群唯一key
+     */
+    public void setUnionKey(String unionKey) {
+        this.unionKey = unionKey;
     }
 }

@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.controller.angeltoken;
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeDto;
+import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeGroupDto;
 import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeResDto;
 import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,36 @@ public class RedEnvelopeController extends GenericController {
 
     @Resource(name = "redEnvelopeService")
     private RedEnvelopeService redEnvelopeService;
+
+
+
+    @PostMapping("/v{appId}/redenvelope/{redEnvelopeId}")
+    public CommonDto<String> saveRedEnvelopeWechatGroupId(@PathVariable Integer appId, @PathVariable String redEnvelopeId, @RequestParam String token, @RequestBody RedEnvelopeGroupDto groupDto){
+
+        CommonDto<String> result = null;
+
+        try {
+            result = redEnvelopeService.resolveWechatGroupId(appId, redEnvelopeId, token, groupDto);
+        } catch (Exception e) {
+            this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
+        }
+
+        return result;
+    }
+
+
+    @GetMapping("/v{appId}/{redEnvelopeId}/redEnvelopeKey")
+    public CommonDto<String> getRedEnvelopeWechatGroupKey(@PathVariable Integer appId, @PathVariable String redEnvelopeId, @RequestParam String token ){
+        CommonDto<String> result = null;
+
+        try {
+            result = redEnvelopeService.getRedEnvelopeWechatGroupKey(appId, redEnvelopeId, token);
+        } catch (Exception e) {
+            this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
+        }
+
+        return result;
+    }
 
     /**
      * 检查用户余额
@@ -109,12 +140,12 @@ public class RedEnvelopeController extends GenericController {
      * @return
      */
     @GetMapping("/v{appId}/redenvelope/{unionId}")
-    public CommonDto<RedEnvelopeResDto> getRedEnvelope(@PathVariable Integer appId, @PathVariable String unionId, String token){
+    public CommonDto<RedEnvelopeResDto> getRedEnvelope(@PathVariable Integer appId, @PathVariable String unionId, String token, String wechatGroupUnionKey){
 
         CommonDto<RedEnvelopeResDto> result = null;
 
         try {
-            result = redEnvelopeService.receiveRedEnvelope(appId, unionId, token);
+            result = redEnvelopeService.receiveRedEnvelope(appId, unionId, token, wechatGroupUnionKey);
         } catch (Exception e) {
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
         }
