@@ -83,18 +83,6 @@ public class RedEnvelope {
      */
     private String description;
 
-    /**
-     * 微信群ID
-     */
-    private String wechatGroupId;
-
-    public String getWechatGroupId() {
-        return wechatGroupId;
-    }
-
-    public void setWechatGroupId(String wechatGroupId) {
-        this.wechatGroupId = wechatGroupId;
-    }
 
     /**
      * @return id

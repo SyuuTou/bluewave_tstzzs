@@ -150,7 +150,7 @@ public class RedEnvelopeController extends GenericController {
     /**
      * 领取红包
      * @param appId
-     * @param redEnvelopeId
+     * @param
      * @param token
      * @return
      */
@@ -196,7 +196,11 @@ public class RedEnvelopeController extends GenericController {
         CommonDto<BigDecimal> result = null;
 
 
-        result = redEnvelopeService.checkMaxQuanlity(appId);
+        try {
+            result = redEnvelopeService.checkMaxQuanlity(appId);
+        } catch (Exception e) {
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+        }
 
 
         return result;
@@ -213,7 +217,11 @@ public class RedEnvelopeController extends GenericController {
         CommonDto<BigDecimal> result = null;
 
 
-        result = redEnvelopeService.checkReceiveQuantity(appId,token);
+        try {
+            result = redEnvelopeService.checkReceiveQuantity(appId,token);
+        } catch (Exception e) {
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+        }
 
 
         return result;
