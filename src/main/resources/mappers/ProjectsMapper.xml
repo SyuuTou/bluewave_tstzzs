@@ -73,6 +73,16 @@
   	<result column="stage" jdbcType="INTEGER" property="stage" />
   </resultMap>
   
+  <select id="blurScanProjectByShortName" resultMap="BaseResultMap" parameterType="String">
+  		select * from projects where 1=1 and short_name like "%"#{keyword}"%"
+  		<!-- <choose>
+  			<when test="keyword != null and keyword !=''">
+  				
+  			</when>
+  			<otherwise>
+  			</otherwise>
+  		</choose>  -->
+  </select>
   <select id="getProjectsSimpleInfos" resultMap="ProjectsSimpleInfosMap" parameterType="Integer">
   	SELECT p.ID,p.short_name,p.kernel_desc,p.segmentation,p.project_logo,p.city,case when a.approval_status = 1 then concat('正在融',a.stage) else a.stage end stage
 	FROM

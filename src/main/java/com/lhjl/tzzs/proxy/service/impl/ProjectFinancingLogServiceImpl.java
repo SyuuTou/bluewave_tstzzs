@@ -5,6 +5,8 @@ import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogInputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogOutputDto;
 import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutputDto;
 import com.lhjl.tzzs.proxy.mapper.ProjectFinancingLogMapper;
+import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
+import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.service.ProjectFinancingLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +27,8 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 
     @Autowired
     private ProjectFinancingLogMapper projectFinancingLogMapper;
+    @Autowired
+    private ProjectsMapper projectsMapper;
 
     @Override
     public CommonDto<Map<String, Object>> getProjectFinancingLogList(ProjectFinancingLogInputDto body) {
@@ -209,6 +213,20 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 		CommonDto<ProjectFinancingLogHeadOutputDto> result=new CommonDto<>();
 		ProjectFinancingLogHeadOutputDto ProjectFinancingLogHead = projectFinancingLogMapper.echoProjectFinancingLogHead(projectFinancingLogId);
 		result.setData(ProjectFinancingLogHead);
+        result.setStatus(200);
+        result.setMessage("success");
+		return result;
+	}
+
+	@Override
+	public CommonDto<List<Projects>> blurScanProjectByShortName(Integer appid, String keyword) {
+		CommonDto<List<Projects>> result=new CommonDto<>();
+		List<Projects> projects=new ArrayList<>();
+		if(keyword != null && !(keyword.equals(""))) {
+			projects = projectsMapper.blurScanProjectByShortName(keyword);
+		}
+		
+		result.setData(projects==null || projects.size()==0 ? null : projects);
         result.setStatus(200);
         result.setMessage("success");
 		return result;
