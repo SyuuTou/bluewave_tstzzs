@@ -20,5 +20,6 @@
     <result column="red_envelope_type" property="redEnvelopeType" jdbcType="INTEGER" />
     <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
     <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="wechat_group_id" property="wechatGroupId" jdbcType="VARCHAR" />
   </resultMap>
 </mapper>

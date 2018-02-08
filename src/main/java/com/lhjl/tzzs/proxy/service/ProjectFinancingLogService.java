@@ -3,7 +3,9 @@ package com.lhjl.tzzs.proxy.service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogInputDto;
 import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutputDto;
+import com.lhjl.tzzs.proxy.model.Projects;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ProjectFinancingLogService {
@@ -22,5 +24,12 @@ public interface ProjectFinancingLogService {
 	 */
 	CommonDto<ProjectFinancingLogHeadOutputDto> echoProjectFinancingLogHead(Integer appid,
 			Integer projectFinancingLogId);
+	/**
+     * 根据关键字获取项目的信息
+     * @param appid
+     * @param keyword
+     * @return
+     */
+	CommonDto<List<Projects>> blurScanProjectByShortName(Integer appid, String keyword);
     
 }

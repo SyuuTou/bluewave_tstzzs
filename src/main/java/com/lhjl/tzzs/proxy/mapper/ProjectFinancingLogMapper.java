@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.mapper;
 import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutputDto;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
+import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -52,4 +53,5 @@ public interface ProjectFinancingLogMapper extends OwnerMapper<ProjectFinancingL
      * @return
      */
 	ProjectFinancingLogHeadOutputDto echoProjectFinancingLogHead(@Param("projectFinancingLogId") Integer projectFinancingLogId);
+	
 }

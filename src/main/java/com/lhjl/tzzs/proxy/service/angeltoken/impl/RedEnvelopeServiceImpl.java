@@ -1,13 +1,15 @@
 package com.lhjl.tzzs.proxy.service.angeltoken.impl;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.util.crypt.WxMaCryptUtils;
+import cn.binarywang.wx.miniapp.util.json.WxMaGsonBuilder;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeDto;
-import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeLogDto;
-import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeResDto;
+import com.lhjl.tzzs.proxy.dto.angeltoken.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
+import com.lhjl.tzzs.proxy.service.common.SessionKeyService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
 
 import org.joda.time.DateTime;
@@ -58,6 +60,15 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
     @Autowired
     private UsersWeixinMapper usersWeixinMapper;
+
+    @Autowired
+    private SessionKeyService sessionKeyService;
+
+    @Autowired
+    private RedEnvelopeWechatgroupMapper redEnvelopeWechatgroupMapper;
+
+    @Autowired
+    private WxMaService wxService;
 
     private final static Integer obtainIntegralPeriod = 965;
 
@@ -318,7 +329,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
     @Transactional
     @Override
-    public CommonDto<RedEnvelopeResDto> receiveRedEnvelope(Integer appId, String unionId, String token) {
+    public CommonDto<RedEnvelopeResDto> receiveRedEnvelope(Integer appId, String unionId, String token, String unionKey) {
 
         CommonDto<RedEnvelopeResDto> result = new CommonDto<>();
         RedEnvelopeResDto redEnvelopeResDto = new RedEnvelopeResDto();
@@ -403,6 +414,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                             redEnvelopeLog.setCreateTime(DateTime.now().toDate());
                             redEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
                             redEnvelopeLog.setToken(token);
+                            redEnvelopeLog.setUnionKey(unionKey);
                             redEnvelopeLogMapper.insert(redEnvelopeLog);
 
 
@@ -479,6 +491,56 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
 
         return new CommonDto<>(limitMap,"success", 200);
+    }
+
+    @Override
+    public CommonDto<String> resolveWechatGroupId(Integer appId, String redEnvelopeId, String token, RedEnvelopeGroupDto groupDto) {
+
+        Users record = new Users();
+        record.setUuid(token);
+        Users users = usersMapper.selectOne(record);
+
+
+        //sessionkey加前缀
+        String redisKeyId = "sessionkey:" + users.getId();
+        //取到sessionKey
+        String sessionKey = sessionKeyService.getSessionKey(redisKeyId);
+
+        OpenGIdJsonDto openGIdJsonDto =  WxMaGsonBuilder.create().fromJson(WxMaCryptUtils.decrypt(sessionKey, groupDto.getEncryptedData(), groupDto.getIv()),OpenGIdJsonDto.class);
+
+        RedEnvelope recordRedEnvelop = new RedEnvelope();
+        recordRedEnvelop.setUnionKey(redEnvelopeId);
+
+        RedEnvelopeWechatgroup redEnvelopeWechatgroupRecord = new RedEnvelopeWechatgroup();
+        redEnvelopeWechatgroupRecord.setUnionKey(groupDto.getUnionKey());
+
+        RedEnvelopeWechatgroup redEnvelopeWechatgroup = redEnvelopeWechatgroupMapper.selectOne(redEnvelopeWechatgroupRecord);
+        redEnvelopeWechatgroup.setWechatGroupId(openGIdJsonDto.getOpenGId());
+
+        redEnvelopeWechatgroupMapper.updateByPrimaryKey(redEnvelopeWechatgroup);
+
+
+        return new CommonDto<>("ok","success", 200);
+    }
+
+    @Override
+    public CommonDto<String> getRedEnvelopeWechatGroupKey(Integer appId, String redEnvelopeId, String token) {
+
+        RedEnvelope redEnvelopeRecord = new RedEnvelope();
+        redEnvelopeRecord.setUnionKey(redEnvelopeId);
+
+        RedEnvelope redEnvelope = redEnvelopeMapper.selectOne(redEnvelopeRecord);
+
+        RedEnvelopeWechatgroup redEnvelopeWechatgroup = new RedEnvelopeWechatgroup();
+        redEnvelopeWechatgroup.setRedEnvelopeId(redEnvelope.getId());
+        redEnvelopeWechatgroup.setToken(token);
+        redEnvelopeWechatgroup.setAppId(appId);
+        String unionKey = MD5Util.md5Encode(DateTime.now().millisOfDay().getAsString(),"");
+        redEnvelopeWechatgroup.setUnionKey(unionKey);
+
+        redEnvelopeWechatgroupMapper.insert(redEnvelopeWechatgroup);
+
+        return new CommonDto<>(unionKey,"success", 200);
     }
 
     private BigDecimal randomAmount(Integer quantity, Integer receiveQuantity, BigDecimal totalAmount, BigDecimal receiveAmount, Integer appId) {
