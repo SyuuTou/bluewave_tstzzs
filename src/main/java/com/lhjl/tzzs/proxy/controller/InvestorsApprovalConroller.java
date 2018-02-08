@@ -311,12 +311,12 @@ public class InvestorsApprovalConroller {
 	 * @param body
 	 * @return
 	 */
-	@PostMapping("admin/special/approval")
-	public CommonDto<String> adminSpecialApproval(@RequestBody InvestorSpecialApprovalDto body){
+	@PostMapping("/v{appid}/admin/special/approval")
+	public CommonDto<String> adminSpecialApproval(@RequestBody InvestorSpecialApprovalDto body,Integer appid){
 		CommonDto<String> result = new CommonDto<>();
 
 		try {
-			result = investorsApprovalService.adminSpecialApproval(body);
+			result = investorsApprovalService.adminSpecialApproval(body,appid);
 		}catch (Exception e){
 			log.error(e.getMessage(),e.fillInStackTrace());
 			result.setData(null);
