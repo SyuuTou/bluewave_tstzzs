@@ -63,6 +63,14 @@ public class ElegantServiceImpl implements ElegantServiceService{
     @Autowired
     private MetaServiceTypeMapper metaServiceTypeMapper;
 
+    @Autowired
+    private ElegantServiceApproveTypeMapper elegantServiceApproveTypeMapper;
+
+    @Autowired
+    private ElegantServiceMemberTypeMapper elegantServiceMemberTypeMapper;
+
+
+
     /**
      * 获取精选活动列表的接口
      * @return
@@ -107,7 +115,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         Integer startPage = (body.getPageNum()-1)*body.getPageSize();
         List<Map<String,Object>> elegantServiceList = elegantServiceMapper.findElegantServiceList(body.getRecommendYn(),
-                body.getCreateTimeOrder(),sortOrder,appid,identityType,serviceType,body.getSearchWord(),startPage,body.getPageSize());
+                body.getCreateTimeOrder(),sortOrder,appid,identityType,serviceType,body.getSearchWord(),body.getApproveType(),body.getIsLeadInvestor(),body.getIsReward(),body.getMemberType(),startPage,body.getPageSize());
         if (elegantServiceList.size() > 0){
             for (Map<String,Object> m:elegantServiceList){
 
@@ -569,7 +577,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
         Integer startPage = (pageNum-1)*pageSize;
 
         //获取服务主要信息
-        List<Map<String,Object>> mapList = elegantServiceMapper.findBackstageElegantServiceList(body.getSearchWord(),appid,beginTime,endTime,startPage,pageSize);
+        List<Map<String,Object>> mapList = elegantServiceMapper.findBackstageElegantServiceList(body.getSearchWord(),appid,beginTime,endTime,body.getApproveType(),body.getIsLeadInvestor(),body.getIsReward(),body.getMemberType(),startPage,pageSize);
         if (mapList.size()>0){
             for (Map<String,Object> m:mapList){
                 Integer esid = (Integer) m.get("id");
@@ -621,7 +629,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         //获取数据总量
         Integer allCount =0;
-        allCount = elegantServiceMapper.selectCountBySearch(body.getSearchWord(),appid,beginTime,endTime);
+        allCount = elegantServiceMapper.selectCountBySearch(body.getSearchWord(),appid,body.getApproveType(),body.getIsLeadInvestor(),body.getIsReward(),body.getMemberType(),beginTime,endTime);
 
         //往结果里放数据
         map.put("list",mapList);
@@ -634,6 +642,16 @@ public class ElegantServiceImpl implements ElegantServiceService{
         result.setMessage("success");
 
         return result;
+    }
+
+    @Override
+    public CommonDto<ElegantService> getElegantServiceInfo(Integer appId, Integer elegantServiceId) {
+
+        ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceId);
+
+
+
+        return null;
     }
 
     /**
@@ -754,6 +772,16 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantService.setYn(1);//默认是未删除的，有效的
         elegantService.setAppid(appid);
         elegantService.setWebSwitch(body.getWebSwitch());
+        elegantService.setIsReward(body.getIsReward());
+        elegantService.setIsLeadInvestor(body.getIsLeadInvestor());
+        elegantService.setCommissionPublish(body.getCommissionPublish());
+        elegantService.setCommissionPublishFixed(body.getCommissionPublishFixed());
+        elegantService.setCommissionReceiver(body.getCommissionReceiver());
+        elegantService.setCommissionReceiverFixed(body.getCommissionReceiverFixed());
+        elegantService.setCustomButtonLabel(body.getCustomButtonLabel());
+        elegantService.setEntrepreneurLandingPage(body.getEntrepreneurLandingPage());
+        elegantService.setInvestorLandingPage(body.getInvestorLandingPage());
+        elegantService.setOrthorLandingPage(body.getOrthorLandingPage());
 
         elegantServiceMapper.insertSelective(elegantService);
 
@@ -820,6 +848,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
             elegantServiceServiceTypeMapper.insertSelective(elegantServiceServiceType);
         }
 
+        elegantServiceApproveMemberHandler(body, elegantServiceId);
 
         return result;
     }
@@ -985,10 +1014,38 @@ public class ElegantServiceImpl implements ElegantServiceService{
             elegantServiceServiceTypeMapper.insertSelective(elegantServiceServiceType);
         }
 
+
+        elegantServiceApproveMemberHandler(body, elegantServiceId);
+
         result.setStatus(200);
         result.setData(null);
         result.setMessage("success");
 
         return result;
+    }
+
+    public void elegantServiceApproveMemberHandler(ElegantServiceInputDto body, Integer elegantServiceId) {
+        ElegantServiceApproveType elegantServiceApproveTypeRecord = new ElegantServiceApproveType();
+        elegantServiceApproveTypeRecord.setElegantServiceId(elegantServiceId);
+
+        elegantServiceApproveTypeMapper.delete(elegantServiceApproveTypeRecord);
+
+        for (Integer approveType : body.getApproveTypes() ){
+            ElegantServiceApproveType elegantServiceApproveType = new ElegantServiceApproveType();
+            elegantServiceApproveType.setElegantServiceId(elegantServiceId);
+            elegantServiceApproveType.setApproveType(approveType);
+            elegantServiceApproveTypeMapper.insert(elegantServiceApproveType);
+        }
+
+        ElegantServiceMemberType elegantServiceMemberTypeRecord = new ElegantServiceMemberType();
+        elegantServiceApproveTypeRecord.setElegantServiceId(elegantServiceId);
+
+        elegantServiceMemberTypeMapper.delete(elegantServiceMemberTypeRecord);
+        for (Integer memberType : body.getMemberTypes() ){
+            ElegantServiceMemberType elegantServiceMemberType = new ElegantServiceMemberType();
+            elegantServiceMemberType.setElegantServiceId(elegantServiceId);
+            elegantServiceMemberType.setMemberTypeId(memberType);
+            elegantServiceMemberTypeMapper.insert(elegantServiceMemberType);
+        }
     }
 }

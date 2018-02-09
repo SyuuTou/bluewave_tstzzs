@@ -1,6 +1,9 @@
 package com.lhjl.tzzs.proxy.dto.ElegantServiceDto;
 
+import javax.persistence.Column;
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class ElegantServiceInputDto {
     /**
@@ -71,6 +74,157 @@ public class ElegantServiceInputDto {
      * 服务id
      */
     private Integer elegantServiceId;
+
+    /**
+     * 投资人落地页
+     */
+    private String investorLandingPage;
+
+    /**
+     * 创始人落地页
+     */
+    private String entrepreneurLandingPage;
+
+    /**
+     * 其它身份类型落地页
+     */
+    private String orthorLandingPage;
+
+    /**
+     * 发布方抽成佣金
+     */
+    private BigDecimal commissionPublish;
+
+    /**
+     * 接收方抽成佣金
+     */
+    private BigDecimal commissionReceiver;
+
+    /**
+     * 发布方固定抽成佣金
+     */
+    private BigDecimal commissionPublishFixed;
+
+    /**
+     * 接收方固定佣金
+     */
+    private BigDecimal commissionReceiverFixed;
+    /** 认证类型 */
+    private List<Integer> approveTypes;
+    /** 会员类型 */
+    private List<Integer> memberTypes;
+    /**每页显示数量*/
+    private Integer pageSize;
+    /** 是否悬赏 */
+    private Integer isReward;
+    /** 是否领投 */
+    private Integer isLeadInvestor;
+    /** 自定义按钮名称 */
+    private String customButtonLabel;
+
+    public String getCustomButtonLabel() {
+        return customButtonLabel;
+    }
+
+    public void setCustomButtonLabel(String customButtonLabel) {
+        this.customButtonLabel = customButtonLabel;
+    }
+
+    public String getInvestorLandingPage() {
+        return investorLandingPage;
+    }
+
+    public void setInvestorLandingPage(String investorLandingPage) {
+        this.investorLandingPage = investorLandingPage;
+    }
+
+    public String getEntrepreneurLandingPage() {
+        return entrepreneurLandingPage;
+    }
+
+    public void setEntrepreneurLandingPage(String entrepreneurLandingPage) {
+        this.entrepreneurLandingPage = entrepreneurLandingPage;
+    }
+
+    public String getOrthorLandingPage() {
+        return orthorLandingPage;
+    }
+
+    public void setOrthorLandingPage(String orthorLandingPage) {
+        this.orthorLandingPage = orthorLandingPage;
+    }
+
+    public BigDecimal getCommissionPublish() {
+        return commissionPublish;
+    }
+
+    public void setCommissionPublish(BigDecimal commissionPublish) {
+        this.commissionPublish = commissionPublish;
+    }
+
+    public BigDecimal getCommissionReceiver() {
+        return commissionReceiver;
+    }
+
+    public void setCommissionReceiver(BigDecimal commissionReceiver) {
+        this.commissionReceiver = commissionReceiver;
+    }
+
+    public BigDecimal getCommissionPublishFixed() {
+        return commissionPublishFixed;
+    }
+
+    public void setCommissionPublishFixed(BigDecimal commissionPublishFixed) {
+        this.commissionPublishFixed = commissionPublishFixed;
+    }
+
+    public BigDecimal getCommissionReceiverFixed() {
+        return commissionReceiverFixed;
+    }
+
+    public void setCommissionReceiverFixed(BigDecimal commissionReceiverFixed) {
+        this.commissionReceiverFixed = commissionReceiverFixed;
+    }
+
+    public List<Integer> getApproveTypes() {
+        return approveTypes;
+    }
+
+    public void setApproveTypes(List<Integer> approveTypes) {
+        this.approveTypes = approveTypes;
+    }
+
+    public List<Integer> getMemberTypes() {
+        return memberTypes;
+    }
+
+    public void setMemberTypes(List<Integer> memberTypes) {
+        this.memberTypes = memberTypes;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Integer getIsReward() {
+        return isReward;
+    }
+
+    public void setIsReward(Integer isReward) {
+        this.isReward = isReward;
+    }
+
+    public Integer getIsLeadInvestor() {
+        return isLeadInvestor;
+    }
+
+    public void setIsLeadInvestor(Integer isLeadInvestor) {
+        this.isLeadInvestor = isLeadInvestor;
+    }
 
     public Integer getElegantServiceId() {
         return elegantServiceId;

@@ -174,6 +174,20 @@ public class ElegantService {
     @Column(name = "is_lead_investor")
     private Integer isLeadInvestor;
 
+    @Column(name = "custom_button_label")
+    private String customButtonLabel;
+
+
+    private ElegantServiceApproveType elegantServiceApproveType;
+
+    public String getCustomButtonLabel() {
+        return customButtonLabel;
+    }
+
+    public void setCustomButtonLabel(String customButtonLabel) {
+        this.customButtonLabel = customButtonLabel;
+    }
+
     /**
      * @return id
      */

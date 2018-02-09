@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.*;
+import com.lhjl.tzzs.proxy.model.ElegantService;
 import com.lhjl.tzzs.proxy.model.MetaIdentityType;
 import com.lhjl.tzzs.proxy.model.MetaServiceType;
 import com.lhjl.tzzs.proxy.service.ElegantServiceService;
@@ -61,6 +62,16 @@ public class ElegantServiceController {
 
         return result;
     }
+
+    @GetMapping("/v{appId}/elegant/service/{elegantServiceId}")
+    public CommonDto<ElegantService> queryElegantServiceById(@PathVariable Integer appId, @PathVariable Integer elegantServiceId){
+        CommonDto<ElegantService> result = null;
+
+        result = elegantServiceService.getElegantServiceInfo(appId, elegantServiceId);
+
+        return result;
+    }
+
 
     /**
      * 精选活动录入和更新接口

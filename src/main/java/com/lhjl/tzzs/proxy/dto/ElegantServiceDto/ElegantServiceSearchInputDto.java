@@ -21,13 +21,33 @@ public class ElegantServiceSearchInputDto {
 
     /**页码*/
     private Integer pageNum;
-
+    /** 认证类型 */
+    private Integer approveType;
+    /** 会员类型 */
+    private Integer memberType;
     /**每页显示数量*/
     private Integer pageSize;
     /** 是否悬赏 */
     private Integer isReward;
     /** 是否领投 */
     private Integer isLeadInvestor;
+
+
+    public Integer getApproveType() {
+        return approveType;
+    }
+
+    public void setApproveType(Integer approveType) {
+        this.approveType = approveType;
+    }
+
+    public Integer getMemberType() {
+        return memberType;
+    }
+
+    public void setMemberType(Integer memberType) {
+        this.memberType = memberType;
+    }
 
     public Integer getIsReward() {
         return isReward;

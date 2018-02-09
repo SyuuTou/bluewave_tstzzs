@@ -22,6 +22,47 @@ public class BackstageElegantServiceInputDto {
      */
     private Integer currentPage;
 
+    /** 认证类型 */
+    private Integer approveType;
+    /** 会员类型 */
+    private Integer memberType;
+    /** 是否悬赏 */
+    private Integer isReward;
+    /** 是否领投 */
+    private Integer isLeadInvestor;
+
+    public Integer getApproveType() {
+        return approveType;
+    }
+
+    public void setApproveType(Integer approveType) {
+        this.approveType = approveType;
+    }
+
+    public Integer getMemberType() {
+        return memberType;
+    }
+
+    public void setMemberType(Integer memberType) {
+        this.memberType = memberType;
+    }
+
+    public Integer getIsReward() {
+        return isReward;
+    }
+
+    public void setIsReward(Integer isReward) {
+        this.isReward = isReward;
+    }
+
+    public Integer getIsLeadInvestor() {
+        return isLeadInvestor;
+    }
+
+    public void setIsLeadInvestor(Integer isLeadInvestor) {
+        this.isLeadInvestor = isLeadInvestor;
+    }
+
     public String getSearchWord() {
         return searchWord;
     }
