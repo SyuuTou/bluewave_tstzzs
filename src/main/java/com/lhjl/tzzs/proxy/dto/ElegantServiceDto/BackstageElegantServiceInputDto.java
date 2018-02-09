@@ -21,8 +21,21 @@ public class BackstageElegantServiceInputDto {
      * 当前页码
      */
     private Integer currentPage;
+    /**
+     * approveType
+     */
+    private Integer approveType;
+    
 
-    public String getSearchWord() {
+    public Integer getApproveType() {
+		return approveType;
+	}
+
+	public void setApproveType(Integer approveType) {
+		this.approveType = approveType;
+	}
+
+	public String getSearchWord() {
         return searchWord;
     }
 
