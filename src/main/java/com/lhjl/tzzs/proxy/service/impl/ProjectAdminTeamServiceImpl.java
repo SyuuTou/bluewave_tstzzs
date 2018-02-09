@@ -201,6 +201,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
                             projectTeamMemberCitys.add(projectTeamMemberCity_i.getCityName());
                         });
                         projectTeamMemberCityArr = new String[projectTeamMemberCityList.size()];
+                        projectTeamMemberCitys.toArray(projectTeamMemberCityArr);
                         projectTeamMemberOutputDto1.setCitys(projectTeamMemberCityArr);
                     }
 
@@ -354,7 +355,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         if(body.getSelfcitys() == null || body.getSelfcitys().length == 0 ){
             ProjectTeamMemberSelfcity projectTeamMemberSelfcity1 = new ProjectTeamMemberSelfcity();
             projectTeamMemberSelfcity1.setMemberId(projectTeamMember.getId());
-            projectTeamMemberSelfcity1.setCity("");
+            projectTeamMemberSelfcity1.setCity(null);
             projectTeamMemberSelfcityList.add(projectTeamMemberSelfcity1);
         }else{
             for(int i = 0; i < body.getSelfcitys().length; i++){
@@ -373,7 +374,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         if(body.getCitys() == null || body.getCitys().length == 0){
             ProjectTeamMemberCity projectTeamMemberCity1 = new ProjectTeamMemberCity();
             projectTeamMemberCity1.setMemberId(projectTeamMember.getId());
-            projectTeamMemberCity1.setCityName("");
+            projectTeamMemberCity1.setCityName(null);
             projectTeamMemberCityList.add(projectTeamMemberCity1);
         }else{
             for(int i = 0; i < body.getCitys().length; i++){
@@ -411,7 +412,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         if(body.getEducationExperience() == null || body.getEducationExperience().length == 0){
             ProjectTeamMemberEducation projectTeamMemberEducation1 = new ProjectTeamMemberEducation();
             projectTeamMemberEducation1.setProjectTeamMemberId(projectTeamMember.getId());
-            projectTeamMemberEducation1.setEducationExperience("");
+            projectTeamMemberEducation1.setEducationExperience(null);
             projectTeamMemberEducationList.add(projectTeamMemberEducation1);
         }else{
             for(int i = 0; i < body.getEducationExperience().length; i++){
@@ -430,7 +431,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         if(body.getWorkExperiences() == null || body.getWorkExperiences().length == 0){
             ProjectTeamMemberWork projectTeamMemberWork1 = new ProjectTeamMemberWork();
             projectTeamMemberWork1.setProjectTeamMemberId(projectTeamMember.getId());
-            projectTeamMemberWork1.setWorkExperience("");
+            projectTeamMemberWork1.setWorkExperience(null);
             projectTeamMemberWorkList.add(projectTeamMemberWork1);
         }else{
             for(int i = 0; i < body.getWorkExperiences().length; i++){
@@ -468,7 +469,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         if(body.getSelfDefTeam() == null || body.getSelfDefTeam().toString() == ""){
             ProjectTeamMemberSelfteam projectTeamMemberSelfteam1 = new ProjectTeamMemberSelfteam();
             projectTeamMemberSelfteam1.setMemberId(projectTeamMember.getId());
-            projectTeamMemberSelfteam1.setTeamName("");
+            projectTeamMemberSelfteam1.setTeamName(null);
             projectTeamMemberSelfteamsList.add(projectTeamMemberSelfteam1);
         }else{
             ProjectTeamMemberSelfteam projectTeamMemberSelfteam1 = new ProjectTeamMemberSelfteam();
