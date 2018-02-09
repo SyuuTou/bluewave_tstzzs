@@ -255,4 +255,23 @@ public class UserInfoController {
 
         return result;
     }
+
+    /**
+     * 获取用户会员等级，认证类型、是否领投
+     * @return
+     */
+    @GetMapping("get/user/info")
+    public CommonDto<Map<String, Object>> getUserComplexInfo(String token){
+        CommonDto<Map<String, Object>> result = new CommonDto<>();
+        try {
+            result = userInfoService.getUserInfo(token);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误，请检查");
+            result.setStatus(502);
+            result.setData(null);
+        }
+        return result;
+    }
+
 }

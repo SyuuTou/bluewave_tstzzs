@@ -114,4 +114,12 @@ public interface UserInfoService {
      * @return
      */
     CommonDto<List<UserInfoElegantOutputDto>> userInfoElegantSearch(String searchWord,Integer pageNum,Integer pageSize);
+
+    /**
+     * 获取用户会员等级，认证类型、是否领投
+     * @param token
+     * @return
+     */
+    CommonDto<Map<String, Object>> getUserInfo(String token);
+
 }

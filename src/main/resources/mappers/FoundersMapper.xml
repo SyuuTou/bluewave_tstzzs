@@ -20,5 +20,8 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
   </resultMap>
 
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      select * from founders where user_id =#{userId} and approval_status =2 and yn =0;
+  </select>
 
 </mapper>

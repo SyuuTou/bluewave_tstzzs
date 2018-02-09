@@ -240,4 +240,8 @@
     ORDER BY create_time DESC
   </select>
 
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      select * from investors where user_id =#{userId} and approval_status = 1 and yn =1;
+  </select>
+
 </mapper>
