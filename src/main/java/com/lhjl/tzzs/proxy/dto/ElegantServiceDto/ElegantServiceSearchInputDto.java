@@ -24,6 +24,26 @@ public class ElegantServiceSearchInputDto {
 
     /**每页显示数量*/
     private Integer pageSize;
+    /** 是否悬赏 */
+    private Integer isReward;
+    /** 是否领投 */
+    private Integer isLeadInvestor;
+
+    public Integer getIsReward() {
+        return isReward;
+    }
+
+    public void setIsReward(Integer isReward) {
+        this.isReward = isReward;
+    }
+
+    public Integer getIsLeadInvestor() {
+        return isLeadInvestor;
+    }
+
+    public void setIsLeadInvestor(Integer isLeadInvestor) {
+        this.isLeadInvestor = isLeadInvestor;
+    }
 
     public Integer getRecommendYn() {
         return recommendYn;

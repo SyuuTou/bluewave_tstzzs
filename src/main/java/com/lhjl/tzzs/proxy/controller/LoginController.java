@@ -42,7 +42,6 @@ public class LoginController {
 
         String  resData = commonHttpService.requestLogin(loginReqBody);
 
-        System.out.println(env.getProperty("server.port"));
         Jedis jedis = jedisCommonService.getJedis();
         jedis.set("1111","hello world");
         System.out.println(jedis.get("1111"));

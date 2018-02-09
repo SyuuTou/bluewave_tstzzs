@@ -36,6 +36,7 @@
     </if>
     and r.id is not null
     group by r.id
+    order by r.weighting_factor desc,r.create_time desc
     limit #{offset},#{limit}
   </select>
   <select id="selectReportCount" resultType="java.lang.Integer">
@@ -54,6 +55,7 @@
     </if>
     and r.id is not null
     group by r.id
+    order by r.weighting_factor desc,r.create_time desc
     )
    abc
   </select>

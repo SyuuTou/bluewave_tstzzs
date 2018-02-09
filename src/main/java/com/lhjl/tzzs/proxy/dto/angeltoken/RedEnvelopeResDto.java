@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.dto.angeltoken;
 
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public class RedEnvelopeResDto {
@@ -14,8 +15,25 @@ public class RedEnvelopeResDto {
     private Integer totalQuantity;
     private Integer quantity;
     private String description;
+    private Date createTime;
+    private BigDecimal totalAmount;
     private List<RedEnvelopeLogDto> redEnvelopeLogs;
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 
     public String getDescription() {
         return description;

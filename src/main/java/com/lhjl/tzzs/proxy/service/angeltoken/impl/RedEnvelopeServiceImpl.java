@@ -1,13 +1,16 @@
 package com.lhjl.tzzs.proxy.service.angeltoken.impl;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.util.crypt.WxMaCryptUtils;
+import cn.binarywang.wx.miniapp.util.json.WxMaGsonBuilder;
+import com.github.pagehelper.PageHelper;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeDto;
-import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeLogDto;
-import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeResDto;
+import com.lhjl.tzzs.proxy.dto.angeltoken.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
+import com.lhjl.tzzs.proxy.service.common.SessionKeyService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
 
 import org.joda.time.DateTime;
@@ -20,11 +23,8 @@ import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Transactional(readOnly = true)
@@ -58,6 +58,15 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
     @Autowired
     private UsersWeixinMapper usersWeixinMapper;
+
+    @Autowired
+    private SessionKeyService sessionKeyService;
+
+    @Autowired
+    private RedEnvelopeWechatgroupMapper redEnvelopeWechatgroupMapper;
+
+    @Autowired
+    private WxMaService wxService;
 
     private final static Integer obtainIntegralPeriod = 965;
 
@@ -318,7 +327,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
     @Transactional
     @Override
-    public CommonDto<RedEnvelopeResDto> receiveRedEnvelope(Integer appId, String unionId, String token) {
+    public CommonDto<RedEnvelopeResDto> receiveRedEnvelope(Integer appId, String unionId, String token, String unionKey) {
 
         CommonDto<RedEnvelopeResDto> result = new CommonDto<>();
         RedEnvelopeResDto redEnvelopeResDto = new RedEnvelopeResDto();
@@ -403,6 +412,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                             redEnvelopeLog.setCreateTime(DateTime.now().toDate());
                             redEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
                             redEnvelopeLog.setToken(token);
+                            redEnvelopeLog.setUnionKey(unionKey);
                             redEnvelopeLogMapper.insert(redEnvelopeLog);
 
 
@@ -481,6 +491,164 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         return new CommonDto<>(limitMap,"success", 200);
     }
 
+    @Transactional
+    @Override
+    public CommonDto<String> resolveWechatGroupId(Integer appId, String redEnvelopeId, String token, RedEnvelopeGroupDto groupDto) {
+
+        Users record = new Users();
+        record.setUuid(token);
+        Users users = usersMapper.selectOne(record);
+
+
+        //sessionkey加前缀
+        String redisKeyId = "sessionkey:" + users.getId();
+        //取到sessionKey
+        String sessionKey = sessionKeyService.getSessionKey(redisKeyId);
+
+        OpenGIdJsonDto openGIdJsonDto =  WxMaGsonBuilder.create().fromJson(WxMaCryptUtils.decrypt(sessionKey, groupDto.getEncryptedData(), groupDto.getIv()),OpenGIdJsonDto.class);
+
+        RedEnvelope recordRedEnvelop = new RedEnvelope();
+        recordRedEnvelop.setUnionKey(redEnvelopeId);
+
+        RedEnvelopeWechatgroup redEnvelopeWechatgroupRecord = new RedEnvelopeWechatgroup();
+        redEnvelopeWechatgroupRecord.setUnionKey(groupDto.getUnionKey());
+
+        RedEnvelopeWechatgroup redEnvelopeWechatgroup = redEnvelopeWechatgroupMapper.selectOne(redEnvelopeWechatgroupRecord);
+        redEnvelopeWechatgroup.setWechatGroupId(openGIdJsonDto.getOpenGId());
+
+        redEnvelopeWechatgroupMapper.updateByPrimaryKey(redEnvelopeWechatgroup);
+
+
+        return new CommonDto<>("ok","success", 200);
+    }
+
+    @Transactional
+    @Override
+    public CommonDto<String> getRedEnvelopeWechatGroupKey(Integer appId, String redEnvelopeId, String token) {
+
+        RedEnvelope redEnvelopeRecord = new RedEnvelope();
+        redEnvelopeRecord.setUnionKey(redEnvelopeId);
+
+        RedEnvelope redEnvelope = redEnvelopeMapper.selectOne(redEnvelopeRecord);
+
+        RedEnvelopeWechatgroup redEnvelopeWechatgroup = new RedEnvelopeWechatgroup();
+        redEnvelopeWechatgroup.setRedEnvelopeId(redEnvelope.getId());
+        redEnvelopeWechatgroup.setToken(token);
+        redEnvelopeWechatgroup.setAppId(appId);
+        String unionKey = MD5Util.md5Encode(DateTime.now().millisOfDay().getAsString(),"");
+        redEnvelopeWechatgroup.setUnionKey(unionKey);
+
+        redEnvelopeWechatgroupMapper.insert(redEnvelopeWechatgroup);
+
+        return new CommonDto<>(unionKey,"success", 200);
+    }
+
+    @Override
+    public CommonDto<List<RedEnvelopeResDto>> queryRedEnvelopeAllByToken(Integer appId, String token, Integer pageNo, Integer pageSize) {
+
+        RedEnvelopeLog redEnvelopeLogRecord = new RedEnvelopeLog();
+        redEnvelopeLogRecord.setToken(token);
+
+        List<RedEnvelopeLog> redEnvelopeLogs = redEnvelopeLogMapper.select(redEnvelopeLogRecord);
+        Set<String> tokens = new HashSet<>();
+        for (RedEnvelopeLog redEnvelopeLog : redEnvelopeLogs){
+            tokens.add(redEnvelopeLog.getToken());
+        }
+
+        Example query = new Example(RedEnvelope.class);
+        query.and().andIn("token",tokens);
+        query.setOrderByClause("create_time desc");
+
+        PageHelper.offsetPage(pageNo, pageSize);
+        List<RedEnvelope> redEnvelopes = redEnvelopeMapper.selectByExample(query);
+        List<RedEnvelopeResDto> redEnvelopeResDtos = new ArrayList<>();
+        redEnvelopes.forEach(redEnvelope -> {
+            RedEnvelopeResDto redEnvelopeResDto = new RedEnvelopeResDto();
+            redEnvelopeResDto.setDescription(redEnvelope.getDescription());
+            redEnvelopeResDto.setQuantity(redEnvelope.getReceiveQuantity());
+            redEnvelopeResDto.setTotalQuantity(redEnvelope.getQuantity());
+            redEnvelopeResDto.setMessage(redEnvelope.getMessage());
+            redEnvelopeResDto.setCreateTime(redEnvelope.getCreateTime());
+            redEnvelopeResDto.setAmount(redEnvelope.getAmount());
+            redEnvelopeResDto.setTotalAmount(redEnvelope.getTotalAmount());
+            if (redEnvelope.getReceiveQuantity() == redEnvelope.getQuantity()) {
+                redEnvelopeResDto.setStatus("Finished");
+            }else{
+                RedEnvelopeLog redEnvelopeLogQuery = new RedEnvelopeLog();
+                redEnvelopeLogQuery.setToken(token);
+                redEnvelopeLogQuery.setRedEnvelopeId(redEnvelope.getId());
+                if (redEnvelopeLogMapper.selectCount(redEnvelopeLogQuery)==1){
+                    redEnvelopeResDto.setStatus("Received");
+                }else{
+                    redEnvelopeResDto.setStatus("Unreceived");
+                }
+            }
+            Users temp = this.getUserInfo(appId,redEnvelope.getToken());
+            if (null != temp) {
+                if (StringUtil.isNotEmpty(temp.getHeadpicReal())) {
+                    redEnvelopeResDto.setHeadPic(temp.getHeadpicReal());
+                } else {
+                    redEnvelopeResDto.setHeadPic(temp.getHeadpic());
+                }
+                if (StringUtil.isNotEmpty(temp.getActualName())) {
+                    redEnvelopeResDto.setNeckName(temp.getActualName());
+                } else {
+                    UsersWeixin queryUsersWeixin = new UsersWeixin();
+                    queryUsersWeixin.setUserId(temp.getId());
+                    UsersWeixin usersWeixin = this.usersWeixinMapper.selectOne(queryUsersWeixin);
+                    if (null != usersWeixin) {
+                        redEnvelopeResDto.setNeckName(usersWeixin.getNickName());
+                    }
+                }
+            }
+
+
+            redEnvelopeResDtos.add(redEnvelopeResDto);
+        });
+
+        return new CommonDto<>(redEnvelopeResDtos, "success", 200);
+    }
+
+    @Override
+    public CommonDto<RedEnvelopeResDto> getRedEnvelopeInfo(Integer appId, String unionId, String token) {
+
+        RedEnvelope redEnvelopeQuery = new RedEnvelope();
+        redEnvelopeQuery.setToken(token);
+        redEnvelopeQuery.setUnionKey(unionId);
+        redEnvelopeQuery.setAppId(appId);
+
+        RedEnvelope redEnvelope = redEnvelopeMapper.selectOne(redEnvelopeQuery);
+        RedEnvelopeResDto redEnvelopeResDto = new RedEnvelopeResDto();
+        redEnvelopeResDto.setDescription(redEnvelope.getDescription());
+        redEnvelopeResDto.setQuantity(redEnvelope.getReceiveQuantity());
+        redEnvelopeResDto.setTotalQuantity(redEnvelope.getQuantity());
+        redEnvelopeResDto.setMessage(redEnvelope.getMessage());
+        redEnvelopeResDto.setCreateTime(redEnvelope.getCreateTime());
+        redEnvelopeResDto.setAmount(redEnvelope.getAmount());
+        redEnvelopeResDto.setTotalAmount(redEnvelope.getTotalAmount());
+        Users temp = this.getUserInfo(appId,redEnvelope.getToken());
+        if (null != temp) {
+            if (StringUtil.isNotEmpty(temp.getHeadpicReal())) {
+                redEnvelopeResDto.setHeadPic(temp.getHeadpicReal());
+            } else {
+                redEnvelopeResDto.setHeadPic(temp.getHeadpic());
+            }
+            if (StringUtil.isNotEmpty(temp.getActualName())) {
+                redEnvelopeResDto.setNeckName(temp.getActualName());
+            } else {
+                UsersWeixin queryUsersWeixin = new UsersWeixin();
+                queryUsersWeixin.setUserId(temp.getId());
+                UsersWeixin usersWeixin = this.usersWeixinMapper.selectOne(queryUsersWeixin);
+                if (null != usersWeixin) {
+                    redEnvelopeResDto.setNeckName(usersWeixin.getNickName());
+                }
+            }
+        }
+
+
+        return new CommonDto<>(redEnvelopeResDto, "success", 200);
+    }
+
     private BigDecimal randomAmount(Integer quantity, Integer receiveQuantity, BigDecimal totalAmount, BigDecimal receiveAmount, Integer appId) {
 
         RedEnvelopeLimit redEnvelopeLimit = this.getRedEnvelopeLimit(appId, "RED_ENVELOPE_LIMIT");
@@ -490,12 +658,8 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
             if (quantity - receiveQuantity == 1){
                 return totalAmount.subtract(receiveAmount);
             }else {
-
-
                 return totalAmount.subtract(receiveAmount).divide(new BigDecimal(quantity - receiveQuantity),2).multiply(new BigDecimal(Math.random())).setScale(2,BigDecimal.ROUND_HALF_DOWN);
-
             }
-
     }
 
 

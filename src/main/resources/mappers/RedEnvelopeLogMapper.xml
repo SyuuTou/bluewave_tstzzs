@@ -11,5 +11,6 @@
     <result column="amount" property="amount" jdbcType="DECIMAL" />
     <result column="app_id" property="appId" jdbcType="INTEGER" />
     <result column="from_token" property="fromToken" jdbcType="VARCHAR" />
+    <result column="union_key" property="unionKey" jdbcType="VARCHAR" />
   </resultMap>
 </mapper>

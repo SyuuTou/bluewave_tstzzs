@@ -2,7 +2,7 @@ package com.lhjl.tzzs.proxy.mapper;
 
 import com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
-import com.lhjl.tzzs.proxy.investorDto.InvestorsOutputDto;
+import com.lhjl.tzzs.proxy.dto.investorDto.InvestorsOutputDto;
 import com.lhjl.tzzs.proxy.model.Investors;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 import org.apache.ibatis.annotations.Param;

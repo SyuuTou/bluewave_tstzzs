@@ -76,10 +76,13 @@ public class RedEnvelope {
     @Column(name = "receive_amount")
     private BigDecimal receiveAmount;
 
+
+
     /**
      * 红包类型描述；INVITATIONED：邀请红包 ，QUOTAED：定额红包，RANDOMED：随机红包
      */
     private String description;
+
 
     /**
      * @return id

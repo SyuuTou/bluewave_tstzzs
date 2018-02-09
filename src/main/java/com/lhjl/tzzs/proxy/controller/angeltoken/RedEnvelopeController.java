@@ -3,12 +3,14 @@ package com.lhjl.tzzs.proxy.controller.angeltoken;
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeDto;
+import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeGroupDto;
 import com.lhjl.tzzs.proxy.dto.angeltoken.RedEnvelopeResDto;
 import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 
@@ -21,6 +23,50 @@ public class RedEnvelopeController extends GenericController {
 
     @Resource(name = "redEnvelopeService")
     private RedEnvelopeService redEnvelopeService;
+
+
+    /**
+     * 解析群ID
+     * @param appId
+     * @param redEnvelopeId
+     * @param token
+     * @param groupDto
+     * @return
+     */
+    @PostMapping("/v{appId}/redenvelope/{redEnvelopeId}")
+    public CommonDto<String> saveRedEnvelopeWechatGroupId(@PathVariable Integer appId, @PathVariable String redEnvelopeId, @RequestParam String token, @RequestBody RedEnvelopeGroupDto groupDto){
+
+        CommonDto<String> result = null;
+
+        try {
+            result = redEnvelopeService.resolveWechatGroupId(appId, redEnvelopeId, token, groupDto);
+        } catch (Exception e) {
+            this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
+        }
+
+        return result;
+    }
+
+
+    /**
+     * 为发送群定义一个唯一key
+     * @param appId
+     * @param redEnvelopeId
+     * @param token
+     * @return
+     */
+    @GetMapping("/v{appId}/{redEnvelopeId}/redEnvelopeKey")
+    public CommonDto<String> getRedEnvelopeWechatGroupKey(@PathVariable Integer appId, @PathVariable String redEnvelopeId, @RequestParam String token ){
+        CommonDto<String> result = null;
+
+        try {
+            result = redEnvelopeService.getRedEnvelopeWechatGroupKey(appId, redEnvelopeId, token);
+        } catch (Exception e) {
+            this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
+        }
+
+        return result;
+    }
 
     /**
      * 检查用户余额
@@ -102,25 +148,61 @@ public class RedEnvelopeController extends GenericController {
     }
 
     /**
+     * 获取红包基本信息
+     * @param appId
+     * @param unionId
+     * @param token
+     * @return
+     */
+    @GetMapping("/v{appId}/reredenvelope/{unionId}/info")
+    public CommonDto<RedEnvelopeResDto> getRedEnvelopeInfo(@PathVariable Integer appId, @PathVariable String unionId, String token){
+        CommonDto<RedEnvelopeResDto> result = null;
+
+        result = redEnvelopeService.getRedEnvelopeInfo(appId, unionId, token);
+
+        return result;
+
+    }
+
+
+    /**
      * 领取红包
      * @param appId
-     * @param redEnvelopeId
+     * @param
      * @param token
      * @return
      */
     @GetMapping("/v{appId}/redenvelope/{unionId}")
-    public CommonDto<RedEnvelopeResDto> getRedEnvelope(@PathVariable Integer appId, @PathVariable String unionId, String token){
+    public CommonDto<RedEnvelopeResDto> getRedEnvelope(@PathVariable Integer appId, @PathVariable String unionId, String token, String wechatGroupUnionKey){
 
         CommonDto<RedEnvelopeResDto> result = null;
 
         try {
-            result = redEnvelopeService.receiveRedEnvelope(appId, unionId, token);
+            result = redEnvelopeService.receiveRedEnvelope(appId, unionId, token, wechatGroupUnionKey);
         } catch (Exception e) {
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
         }
 
         return result;
     }
+
+    /**
+     * 获取领取红包的人发的红包列表
+     * @param appId
+     * @param token
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("/v{appId}/redenvelope")
+    public CommonDto<List<RedEnvelopeResDto>> queryRedEnvelopeAll(@PathVariable Integer appId, String token, Integer pageNo, Integer pageSize){
+        CommonDto<List<RedEnvelopeResDto>> result =null;
+
+        result = redEnvelopeService.queryRedEnvelopeAllByToken(appId, token, pageNo, pageSize);
+
+        return result;
+    }
+
 
     /**
      * 检查令牌总数量
@@ -132,7 +214,11 @@ public class RedEnvelopeController extends GenericController {
         CommonDto<BigDecimal> result = null;
 
 
-        result = redEnvelopeService.checkMaxQuanlity(appId);
+        try {
+            result = redEnvelopeService.checkMaxQuanlity(appId);
+        } catch (Exception e) {
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+        }
 
 
         return result;
@@ -149,7 +235,11 @@ public class RedEnvelopeController extends GenericController {
         CommonDto<BigDecimal> result = null;
 
 
-        result = redEnvelopeService.checkReceiveQuantity(appId,token);
+        try {
+            result = redEnvelopeService.checkReceiveQuantity(appId,token);
+        } catch (Exception e) {
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+        }
 
 
         return result;
