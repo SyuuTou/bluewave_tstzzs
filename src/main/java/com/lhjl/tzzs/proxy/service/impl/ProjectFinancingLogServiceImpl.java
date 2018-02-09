@@ -340,7 +340,7 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 		
 		Map<String,Object> map=new HashMap<>();
 		map.put("projectLogId", projectLogId);
-		map.put("projectId", projectId);
+		map.put("projectId", projectId);  
 		
 		result.setData(map);
         result.setStatus(200);
