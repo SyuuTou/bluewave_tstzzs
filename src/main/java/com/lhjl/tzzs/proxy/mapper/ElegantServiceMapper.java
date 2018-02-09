@@ -20,7 +20,7 @@ public interface ElegantServiceMapper extends OwnerMapper<ElegantService> {
                                                     @Param("identityType") Integer[] identityType,
                                                     @Param("serviceType") Integer[] serviceType,
                                                     @Param("searchWord") String searchWord,
-                                                    @Param("startPage") Integer startPage,
+                                                    @Param("approveType") Integer approveType, @Param("isLeadInvestor") Integer isLeadInvestor, @Param("isReward") Integer isReward, @Param("memberType") Integer memberType, @Param("startPage") Integer startPage,
                                                     @Param("pageSize") Integer pageSize);
 
     /**
@@ -34,10 +34,11 @@ public interface ElegantServiceMapper extends OwnerMapper<ElegantService> {
                                                              @Param("appid") Integer appid,
                                                              @Param("beginTime") String beginTime,
                                                              @Param("endTime") String endTime,
-                                                             @Param("startPage") Integer startPage,
+                                                             @Param("approveType") Integer approveType, @Param("isLeadInvestor") Integer isLeadInvestor, @Param("isReward") Integer isReward, @Param("memberType") Integer memberType, @Param("startPage") Integer startPage,
                                                              @Param("pageSize") Integer pageSize);
 
     Integer selectCountBySearch(@Param("searchWord") String searchWord,
                                 @Param("appid") Integer appid,
+                                @Param("approveType") Integer approveType, @Param("isLeadInvestor") Integer isLeadInvestor, @Param("isReward") Integer isReward, @Param("memberType") Integer memberType,
                                 @Param("beginTime") String beginTime,@Param("endTime") String endTime);
 }

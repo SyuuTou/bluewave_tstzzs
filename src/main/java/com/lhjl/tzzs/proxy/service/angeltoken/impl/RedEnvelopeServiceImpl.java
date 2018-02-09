@@ -535,6 +535,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         redEnvelopeWechatgroup.setRedEnvelopeId(redEnvelope.getId());
         redEnvelopeWechatgroup.setToken(token);
         redEnvelopeWechatgroup.setAppId(appId);
+        redEnvelopeWechatgroup.setCreateTime(DateTime.now().toDate());
         String unionKey = MD5Util.md5Encode(DateTime.now().millisOfDay().getAsString(),"");
         redEnvelopeWechatgroup.setUnionKey(unionKey);
 

@@ -11,4 +11,8 @@
     <result column="register_time" jdbcType="TIMESTAMP" property="registerTime" />
     <result column="meta_app_id" jdbcType="VARCHAR" property="metaAppId" />
   </resultMap>
+
+  <select id="selectUserTokenByToken" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from user_token where `token` =#{token};
+  </select>
 </mapper>

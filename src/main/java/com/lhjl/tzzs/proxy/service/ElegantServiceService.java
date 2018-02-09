@@ -5,6 +5,7 @@ import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceInputDto
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceInputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceOutputDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceSearchInputDto;
+import com.lhjl.tzzs.proxy.model.ElegantService;
 import com.lhjl.tzzs.proxy.model.MetaIdentityType;
 import com.lhjl.tzzs.proxy.model.MetaServiceType;
 
@@ -65,4 +66,12 @@ public interface ElegantServiceService {
      * @return
      */
     CommonDto<Map<String,Object>> backstageElegantServiceList(BackstageElegantServiceInputDto body,Integer appid);
+
+    /**
+     * 根据红包ID获取服务信息
+     * @param appId
+     * @param elegantServiceId
+     * @return
+     */
+    CommonDto<ElegantService> getElegantServiceInfo(Integer appId, Integer elegantServiceId);
 }
