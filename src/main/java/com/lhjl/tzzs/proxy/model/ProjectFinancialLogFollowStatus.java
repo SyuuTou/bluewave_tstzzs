@@ -35,8 +35,8 @@ public class ProjectFinancialLogFollowStatus {
     /**
      * 创建时间
      */
-    @Column(name = "creat_time")
-    private Date creatTime;
+    @Column(name = "create_time")
+    private Date createTime;
 
     /**
      * @return id
@@ -127,18 +127,18 @@ public class ProjectFinancialLogFollowStatus {
     /**
      * 获取创建时间
      *
-     * @return creat_time - 创建时间
+     * @return create_time - 创建时间
      */
-    public Date getCreatTime() {
-        return creatTime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
     /**
      * 设置创建时间
      *
-     * @param creatTime 创建时间
+     * @param createTime 创建时间
      */
-    public void setCreatTime(Date creatTime) {
-        this.creatTime = creatTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }
