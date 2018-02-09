@@ -56,6 +56,13 @@ public class ProjectBusinessPlanServiceImpl extends GenericService implements Pr
             File convFile = new File( file.getOriginalFilename());
             file.transferTo(convFile);
             List<String> imgList = PdfToImageToUpload.convert(convFile);
+
+            if(null == imgList || imgList.size() == 0){
+                result.setStatus(200);
+                result.setMessage("success");
+                result.setData(null);
+                return result;
+            }
             ProjectBusinessPlanImage projectBusinessPlanImage = null;
             List<ProjectBusinessPlanImage> imageList = new ArrayList<>();
             for (int i = 0 ; i< imgList.size(); i++ ){
