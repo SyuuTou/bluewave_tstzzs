@@ -39,7 +39,7 @@ public interface ProjectFinancingLogService {
 	 * @param body
 	 * @return
 	 */
-	CommonDto<Integer> saveOrUpdateProjectLog(Integer appid, ProjectFinancingLogHeadInputDto body);
+	CommonDto<Map<String,Object>> saveOrUpdateProjectLog(Integer appid, ProjectFinancingLogHeadInputDto body);
 	/**
      * 根据投资事件id获取投资事件的详情
      * @param appid

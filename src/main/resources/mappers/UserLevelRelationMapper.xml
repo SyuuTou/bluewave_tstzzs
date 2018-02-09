@@ -38,4 +38,9 @@
   <!--<select id="findByUserScene" parameterType="INTEGER" resultType="map">-->
     <!--SELECT-->
   <!--</select>-->
+
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from user_level_relation where user_id =#{userId} and yn =1;
+  </select>
+
 </mapper>

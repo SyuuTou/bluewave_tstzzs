@@ -15,4 +15,8 @@
   <!-- <select id="findTokenByUserid" parameterType="java.lang.Integer" resultType="java.lang.String">
     select token from user_token where user_id =#{userId};
   </select> -->
+
+  <select id="selectUserByToken" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from users_token_lts where `token` = #{token};
+  </select>
 </mapper>

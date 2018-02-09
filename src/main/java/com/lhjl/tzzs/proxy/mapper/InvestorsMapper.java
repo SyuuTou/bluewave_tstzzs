@@ -24,4 +24,7 @@ public interface InvestorsMapper extends OwnerMapper<Investors> {
      * @return
      */
     Long getInvestorsListCount(InvestorListInputDto body);
+
+
+    Investors selectByUserId(@Param("userId") Integer userId);
 }

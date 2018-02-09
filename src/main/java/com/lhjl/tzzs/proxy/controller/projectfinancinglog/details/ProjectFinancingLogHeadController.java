@@ -73,8 +73,8 @@ public class ProjectFinancingLogHeadController extends GenericController {
      * @return 投资事件的id
      */
     @PostMapping("/v{appid}/saveorupdate/projectlog/info")
-    public CommonDto<Integer> saveOrUpdateProjectLog(@PathVariable Integer appid,@RequestBody ProjectFinancingLogHeadInputDto body){
-    	CommonDto<Integer> result =new CommonDto<>();
+    public CommonDto<Map<String,Object>> saveOrUpdateProjectLog(@PathVariable Integer appid,@RequestBody ProjectFinancingLogHeadInputDto body){
+    	CommonDto<Map<String,Object>> result =new CommonDto<>();
     	try {
     		result = projectFinancingLogService.saveOrUpdateProjectLog(appid,body);
     	}catch(Exception e) {

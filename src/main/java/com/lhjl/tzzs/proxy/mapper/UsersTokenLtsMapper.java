@@ -7,4 +7,5 @@ import org.apache.ibatis.annotations.Param;
 public interface UsersTokenLtsMapper extends OwnerMapper<UsersTokenLts> {
 
 //    String findTokenByUserid(@Param("userId") Integer userId);
+    UsersTokenLts selectUserByToken(@Param("token") String token);
 }

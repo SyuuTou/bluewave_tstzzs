@@ -55,7 +55,15 @@ public class UserInfoServiceImpl implements UserInfoService{
 
     @Autowired
     private MetaUserLevelMapper metaUserLevelMapper;
-    
+
+    @Autowired
+    private UserTokenMapper userTokenMapper;
+
+    @Autowired
+    private UsersTokenLtsMapper usersTokenLtsMapper;
+
+    @Autowired
+    private UserLevelRelationMapper userLevelRelationMapper;
 
    	
     /**
@@ -955,6 +963,70 @@ public class UserInfoServiceImpl implements UserInfoService{
 		List<Users> userSplit = usersMapper.findSplit(map);
 		return userSplit;
 	}
- 
 
+    @Override
+    public CommonDto<Map<String, Object>> getUserInfo(String token) {
+	    CommonDto<Map<String, Object>> result = new CommonDto<>();
+        Map<String, Object> map = new HashMap<>();
+
+        if (null == token || "".equals(token)){
+            return new CommonDto<>(map, "没有获取到token", 502);
+        }
+
+        Integer userId = null;
+
+        UserToken userToken = userTokenMapper.selectUserTokenByToken(token);
+        UsersTokenLts usersTokenLts = usersTokenLtsMapper.selectUserByToken(token);
+        if(null == usersTokenLts && null == userToken){
+            return new CommonDto<>(map, "用户不存在", 200);
+        }
+
+        if(null != userToken){
+            userId = userToken.getUserId();
+        }
+
+        if (null != usersTokenLts){
+            userId = usersTokenLts.getUserId();
+        }
+
+        UserLevelRelation userLevelRelation = userLevelRelationMapper.selectByUserId(userId);
+
+        if (null == userLevelRelation){
+            map.put("会员等级", null);
+        }else{
+            map.put("会员等级", userLevelRelation.getLevelId());
+        }
+
+        Founders founders = foundersMapper.selectByUserId(userId);
+
+        Investors investors = investorsMapper.selectByUserId(userId);
+
+        List<Integer> certificationType = new ArrayList<>();
+
+        if (null == founders && null == investors){
+            map.put("认证类型", null);
+            map.put("是否领投", null);
+        }
+
+        if (null != founders){
+            certificationType.add(2);
+            map.put("是否领投", null);
+        }
+
+        if(null != investors){
+            certificationType.add(investors.getInvestorsType());
+            map.put("是否领投", investors.getLeaderYn());
+        }
+
+        Integer[] certificationTypeArr = null;
+
+        if(null != certificationType && certificationType.size() != 0){
+            certificationTypeArr =  new Integer[certificationType.size()];
+            certificationType.toArray(certificationTypeArr);
+        }
+
+        map.put("认证类型", certificationTypeArr);
+
+        return new CommonDto<>(map, "success", 200);
+    }
 }
