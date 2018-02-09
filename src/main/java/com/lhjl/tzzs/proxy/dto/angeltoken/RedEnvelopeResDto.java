@@ -7,6 +7,8 @@ import java.util.List;
 
 public class RedEnvelopeResDto {
 
+    private String redEnvelopeID;
+    private String token;
     private String neckName;
     private String headPic;
     private BigDecimal amount;
@@ -18,6 +20,23 @@ public class RedEnvelopeResDto {
     private Date createTime;
     private BigDecimal totalAmount;
     private List<RedEnvelopeLogDto> redEnvelopeLogs;
+
+
+    public String getRedEnvelopeID() {
+        return redEnvelopeID;
+    }
+
+    public void setRedEnvelopeID(String redEnvelopeID) {
+        this.redEnvelopeID = redEnvelopeID;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public Date getCreateTime() {
         return createTime;

@@ -13,6 +13,7 @@ import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
 import com.lhjl.tzzs.proxy.service.common.SessionKeyService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
 
+import org.apache.ibatis.session.RowBounds;
 import org.joda.time.DateTime;
 import org.joda.time.DurationFieldType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +68,8 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
     @Autowired
     private WxMaService wxService;
+
+
 
     private final static Integer obtainIntegralPeriod = 965;
 
@@ -412,7 +415,9 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                             redEnvelopeLog.setCreateTime(DateTime.now().toDate());
                             redEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
                             redEnvelopeLog.setToken(token);
-                            redEnvelopeLog.setUnionKey(unionKey);
+                            redEnvelopeLog.setFromToken(redEnvelope.getToken());
+                            redEnvelopeLog.setUnionKey(unionId);
+
                             redEnvelopeLogMapper.insert(redEnvelopeLog);
 
 
@@ -547,24 +552,29 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
     @Override
     public CommonDto<List<RedEnvelopeResDto>> queryRedEnvelopeAllByToken(Integer appId, String token, Integer pageNo, Integer pageSize) {
 
-        RedEnvelopeLog redEnvelopeLogRecord = new RedEnvelopeLog();
-        redEnvelopeLogRecord.setToken(token);
-
-        List<RedEnvelopeLog> redEnvelopeLogs = redEnvelopeLogMapper.select(redEnvelopeLogRecord);
-        Set<String> tokens = new HashSet<>();
-        for (RedEnvelopeLog redEnvelopeLog : redEnvelopeLogs){
-            tokens.add(redEnvelopeLog.getToken());
-        }
+        Set<String> tokens = getRecivedTokens(token);
 
         Example query = new Example(RedEnvelope.class);
         query.and().andIn("token",tokens);
         query.setOrderByClause("create_time desc");
-
-        PageHelper.offsetPage(pageNo, pageSize);
         List<RedEnvelope> redEnvelopes = redEnvelopeMapper.selectByExample(query);
+
+        for (String  tempToken : tokens){
+            tokens.addAll(getRecivedTokens(tempToken));
+        }
+
+
+        RowBounds rowBounds = new RowBounds((pageNo-1)*pageSize,pageSize);
+
+        redEnvelopes = redEnvelopeMapper.selectByExampleAndRowBounds(query,rowBounds);
+
+
+
         List<RedEnvelopeResDto> redEnvelopeResDtos = new ArrayList<>();
         redEnvelopes.forEach(redEnvelope -> {
             RedEnvelopeResDto redEnvelopeResDto = new RedEnvelopeResDto();
+            redEnvelopeResDto.setToken(redEnvelope.getToken());
+            redEnvelopeResDto.setRedEnvelopeID(redEnvelope.getUnionKey());
             redEnvelopeResDto.setDescription(redEnvelope.getDescription());
             redEnvelopeResDto.setQuantity(redEnvelope.getReceiveQuantity());
             redEnvelopeResDto.setTotalQuantity(redEnvelope.getQuantity());
@@ -608,6 +618,19 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         });
 
         return new CommonDto<>(redEnvelopeResDtos, "success", 200);
+    }
+
+    public Set<String> getRecivedTokens(String token) {
+
+        RedEnvelopeLog redEnvelopeLogRecord = new RedEnvelopeLog();
+        redEnvelopeLogRecord.setFromToken(token);
+
+        List<RedEnvelopeLog> redEnvelopeLogs = redEnvelopeLogMapper.select(redEnvelopeLogRecord);
+        Set<String> tokens = new HashSet<>();
+        for (RedEnvelopeLog redEnvelopeLog : redEnvelopeLogs){
+            tokens.add(redEnvelopeLog.getToken());
+        }
+        return tokens;
     }
 
     @Override

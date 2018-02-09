@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Table(name = "elegant_service")
@@ -50,7 +51,7 @@ public class ElegantService {
      * 背景图
      */
     @Column(name = "background_picture")
-    private String backgroundPicture;
+    private String backgroundPicture = "http://img.idatavc.com/static/img/serverwu.png";
 
     /**
      * 开始时间
@@ -177,8 +178,24 @@ public class ElegantService {
     @Column(name = "custom_button_label")
     private String customButtonLabel;
 
+    @Transient
+    private List<ElegantServiceApproveType> elegantServiceApproveTypes;
+    @Transient
+    private List<ElegantServiceIdentityType> elegantServiceIdentityTypes;
+    @Transient
+    private List<ElegantServiceMemberType> elegantServiceMemberTypes;
+    @Transient
+    private List<ElegantServiceServiceType> elegantServiceServiceTypes;
+    @Transient
+    private ElegantServiceCooperation elegantServiceCooperation;
+    @Transient
+    private ElegantServiceDescription elegantServiceDescription;
+    @Transient
+    private ElegantServiceDescriptionDetail elegantServiceDescriptionDetail;
 
-    private ElegantServiceApproveType elegantServiceApproveType;
+
+
+
 
     public String getCustomButtonLabel() {
         return customButtonLabel;
@@ -708,5 +725,61 @@ public class ElegantService {
      */
     public void setIsLeadInvestor(Integer isLeadInvestor) {
         this.isLeadInvestor = isLeadInvestor;
+    }
+
+    public List<ElegantServiceApproveType> getElegantServiceApproveTypes() {
+        return elegantServiceApproveTypes;
+    }
+
+    public void setElegantServiceApproveTypes(List<ElegantServiceApproveType> elegantServiceApproveTypes) {
+        this.elegantServiceApproveTypes = elegantServiceApproveTypes;
+    }
+
+    public List<ElegantServiceIdentityType> getElegantServiceIdentityTypes() {
+        return elegantServiceIdentityTypes;
+    }
+
+    public void setElegantServiceIdentityTypes(List<ElegantServiceIdentityType> elegantServiceIdentityTypes) {
+        this.elegantServiceIdentityTypes = elegantServiceIdentityTypes;
+    }
+
+    public List<ElegantServiceMemberType> getElegantServiceMemberTypes() {
+        return elegantServiceMemberTypes;
+    }
+
+    public void setElegantServiceMemberTypes(List<ElegantServiceMemberType> elegantServiceMemberTypes) {
+        this.elegantServiceMemberTypes = elegantServiceMemberTypes;
+    }
+
+    public List<ElegantServiceServiceType> getElegantServiceServiceTypes() {
+        return elegantServiceServiceTypes;
+    }
+
+    public void setElegantServiceServiceTypes(List<ElegantServiceServiceType> elegantServiceServiceTypes) {
+        this.elegantServiceServiceTypes = elegantServiceServiceTypes;
+    }
+
+    public ElegantServiceCooperation getElegantServiceCooperation() {
+        return elegantServiceCooperation;
+    }
+
+    public void setElegantServiceCooperation(ElegantServiceCooperation elegantServiceCooperation) {
+        this.elegantServiceCooperation = elegantServiceCooperation;
+    }
+
+    public ElegantServiceDescription getElegantServiceDescription() {
+        return elegantServiceDescription;
+    }
+
+    public void setElegantServiceDescription(ElegantServiceDescription elegantServiceDescription) {
+        this.elegantServiceDescription = elegantServiceDescription;
+    }
+
+    public ElegantServiceDescriptionDetail getElegantServiceDescriptionDetail() {
+        return elegantServiceDescriptionDetail;
+    }
+
+    public void setElegantServiceDescriptionDetail(ElegantServiceDescriptionDetail elegantServiceDescriptionDetail) {
+        this.elegantServiceDescriptionDetail = elegantServiceDescriptionDetail;
     }
 }

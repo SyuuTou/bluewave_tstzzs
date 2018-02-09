@@ -649,9 +649,36 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceId);
 
+        ElegantServiceDescription queryElegantServiceDescription = new ElegantServiceDescription();
+        queryElegantServiceDescription.setElegantServiceId(elegantServiceId);
+        elegantService.setElegantServiceDescription(elegantServiceDescriptionMapper.selectOne(queryElegantServiceDescription));
+
+        ElegantServiceCooperation queryElegantServiceCooperation = new ElegantServiceCooperation();
+        queryElegantServiceCooperation.setElegantServiceId(elegantServiceId);
+        elegantService.setElegantServiceCooperation(elegantServiceCooperationMapper.selectOne(queryElegantServiceCooperation));
+
+        ElegantServiceDescriptionDetail queryElegantServiceDescriptionDetail = new ElegantServiceDescriptionDetail();
+        queryElegantServiceDescriptionDetail.setElegantServiceId(elegantServiceId);
+        elegantService.setElegantServiceDescriptionDetail(elegantServiceDescriptionDetailMapper.selectOne(queryElegantServiceDescriptionDetail));
+
+        ElegantServiceApproveType queryElegantServiceApproveType = new ElegantServiceApproveType();
+        queryElegantServiceApproveType.setElegantServiceId(elegantServiceId);
+        elegantService.setElegantServiceApproveTypes(elegantServiceApproveTypeMapper.select(queryElegantServiceApproveType));
+
+        ElegantServiceIdentityType queryElegantServiceIdentityType = new ElegantServiceIdentityType();
+        queryElegantServiceApproveType.setElegantServiceId(elegantServiceId);
+        elegantService.setElegantServiceIdentityTypes(elegantServiceIdentityTypeMapper.select(queryElegantServiceIdentityType));
+
+        ElegantServiceMemberType queryElegantServiceMemberType = new ElegantServiceMemberType();
+        queryElegantServiceMemberType.setElegantServiceId(elegantServiceId);
+        elegantService.setElegantServiceMemberTypes(elegantServiceMemberTypeMapper.select(queryElegantServiceMemberType));
+
+        ElegantServiceServiceType queryElegantServiceServiceType = new ElegantServiceServiceType();
+        queryElegantServiceServiceType.setElegantServiceId(elegantServiceId);
+        elegantService.setElegantServiceServiceTypes(elegantServiceServiceTypeMapper.select(queryElegantServiceServiceType));
 
 
-        return null;
+        return new CommonDto<>(elegantService, "success", 200);
     }
 
     /**
