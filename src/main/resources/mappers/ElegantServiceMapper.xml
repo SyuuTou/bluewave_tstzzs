@@ -34,6 +34,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="is_reward" jdbcType="INTEGER" property="isReward" />
     <result column="is_lead_investor" jdbcType="INTEGER" property="isLeadInvestor" />
+    <result column="custom_button_label" jdbcType="INTEGER" property="customButtonLabel" />
   </resultMap>
   <select id="findElegantServiceList" resultType="java.util.HashMap">
     select es.service_name,es.pre_vip_price_descript,es.original_price,es.vip_price,esd.description,es.unit,
@@ -44,6 +45,8 @@
     left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
     right join elegant_service_service_type esst on esst.elegant_service_id = es.id
     left join meta_service_type mst on esst.meta_service_type_id = mst.id
+    INNER JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
+    INNER JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id
     where es.on_off = 1
     and es.yn = 1
     <if test="appid != null and appid != ''">
@@ -67,6 +70,23 @@
     <if test="recommendYn != null and recommendYn != ''">
       and es.recommend_yn = 1
     </if>
+
+    <if test="approveType != null and approveType != ''">
+      and esat.approve_type = #{approveType}
+    </if>
+
+    <if test="isLeadInvestor != null and isLeadInvestor != ''">
+      and es.is_lead_investor = #{isLeadInvestor}
+    </if>
+
+    <if test="isReward != null and isReward != ''">
+      and es.is_reward = #{isReward}
+    </if>
+
+    <if test="memberType != null and memberType != ''">
+      and esmt.member_type_id = #{memberType}
+    </if>
+
     group by es.id
     <if test="createTimeOrder != null and createTimeOrder != ''">
       order by es.create_time desc
@@ -93,6 +113,8 @@
     left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
     left join elegant_service_service_type esst on esit.elegant_service_id = esst.elegant_service_id
     left join meta_service_type mst on esit.meta_identity_type_id = mst.id
+    INNER JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
+    INNER JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id
     where es.yn = 1
     <if test="appid != null and appid != ''">
      and es.appid = #{appid}
@@ -102,12 +124,31 @@
 
       #{beginTime} and #{endTime}
     </if>
+
+    <if test="approveType != null and approveType != ''">
+      and esat.approve_type = #{approveType}
+    </if>
+
+    <if test="isLeadInvestor != null and isLeadInvestor != ''">
+      and es.is_lead_investor = #{isLeadInvestor}
+    </if>
+
+    <if test="isReward != null and isReward != ''">
+      and es.is_reward = #{isReward}
+    </if>
+
+    <if test="memberType != null and memberType != ''">
+      and esmt.member_type_id = #{memberType}
+    </if>
+
     <if test="searchWord != null and searchWord !=''">
       and (mit.type_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
       or es.service_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
       or mst.service_type_name like  CONCAT(CONCAT('%', #{searchWord}), '%')
       or esc.cooperation_name like  CONCAT(CONCAT('%', #{searchWord}), '%'))
     </if>
+
+
     group by es.id
     ) as a
     order by a.sort
@@ -122,6 +163,8 @@
     left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
     left join elegant_service_service_type esst on esit.elegant_service_id = esst.elegant_service_id
     left join meta_service_type mst on esit.meta_identity_type_id = mst.id
+    INNER JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
+    INNER JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id
     where es.yn = 1
     <if test="appid != null and appid != ''">
       and es.appid = #{appid}
@@ -130,6 +173,21 @@
       and  date(es.begin_time)between
 
       #{beginTime} and #{endTime}
+    </if>
+    <if test="approveType != null and approveType != ''">
+      and esat.approve_type = #{approveType}
+    </if>
+
+    <if test="isLeadInvestor != null and isLeadInvestor != ''">
+      and es.is_lead_investor = #{isLeadInvestor}
+    </if>
+
+    <if test="isReward != null and isReward != ''">
+      and es.is_reward = #{isReward}
+    </if>
+
+    <if test="memberType != null and memberType != ''">
+      and esmt.member_type_id = #{memberType}
     </if>
     <if test="searchWord != null and searchWord !=''">
       and (mit.type_name like  CONCAT(CONCAT('%', #{searchWord}), '%')

@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogInputDto;
 import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadInputDto;
 import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutputDto;
+import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.Projects;
 
 import java.util.List;
@@ -38,6 +39,13 @@ public interface ProjectFinancingLogService {
 	 * @param body
 	 * @return
 	 */
-	CommonDto<Integer> saveOrUpdateProjectLog(Integer appid, ProjectFinancingLogHeadInputDto body);
+	CommonDto<Map<String,Object>> saveOrUpdateProjectLog(Integer appid, ProjectFinancingLogHeadInputDto body);
+	/**
+     * 根据投资事件id获取投资事件的详情
+     * @param appid
+     * @param projectFinancingLogId
+     * @return
+     */
+	CommonDto<ProjectFinancingLog> echoProjectFinancingLogById(Integer appid, Integer projectFinancingLogId);
     
 }

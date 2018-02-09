@@ -240,8 +240,8 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 	
 	@Transactional
 	@Override
-	public CommonDto<Integer> saveOrUpdateProjectLog(Integer appid, ProjectFinancingLogHeadInputDto body) {
-		CommonDto<Integer> result=new CommonDto<>();
+	public CommonDto<Map<String,Object>> saveOrUpdateProjectLog(Integer appid, ProjectFinancingLogHeadInputDto body) {
+		CommonDto<Map<String,Object>> result=new CommonDto<>();
 		
 		if(body.getShortName() == null || body.getShortName().equals("")) {//如果没有关联相关的项目，那么直接返回提示信息
 			result.setData(null);
@@ -260,8 +260,14 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 	        result.setMessage("数据库数据存在问题，项目简称不唯一");
 	        return result;
 		}
+		
 		//用于获取最终的投资事件id
 		Integer projectLogId = body.getProjectFinancingLogId();
+		//用于获取最终的项目id
+		Integer projectId=null;
+//		if(pro != null) {
+//			projectId=pro.getId();
+//		}
 		
 		if(body.getProjectFinancingLogId() == null) {//执行投资事件增加 ,
 			if(pro != null) {//该项目存在项目表中，为该项目增加一条投资事件
@@ -272,9 +278,9 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 				pfl.setYn(0);
 				
 				projectFinancingLogMapper.insertSelective(pfl);
-				//获取该投资时间的id
+				//获取该投资事件的id
 				projectLogId=pfl.getId();
-				System.err.println(projectLogId+"111");
+				projectId=pro.getId();
 			}else {//该项目不存在项目表中，新建一个项目，并增加一条投资事件，获取该投资事件的id
 				Projects projectsInsertEntity = new Projects();
 				projectsInsertEntity.setShortName(body.getShortName());
@@ -282,6 +288,9 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 //				projectsInsertEntity.setYn(1);
 				projectsInsertEntity.setUpdateTime(new Date());//create_time指的是公司的创建事件，而此处应该是新增记录的时间
 				projectsMapper.insertSelective(projectsInsertEntity);
+				
+				projectId=projectsInsertEntity.getId();
+				
 				//进行投资事件的增加
 				ProjectFinancingLog pfl=new ProjectFinancingLog();
 				pfl.setProjectId(projectsInsertEntity.getId());
@@ -292,7 +301,6 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 				projectFinancingLogMapper.insertSelective(pfl);
 				//获取该投资事件的id
 				projectLogId=pfl.getId();
-				System.err.println(projectLogId+"222");
 			}
 		}else {//执行投资事件执行关联项目的简称的更新
 			//根据id获取投资事件的实体
@@ -302,10 +310,7 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 			if(pfl != null) {
 				projects = projectsMapper.selectByPrimaryKey(pfl.getProjectId());
 			}
-			System.err.println(projects);
 			//如果该投资事件所对应的项目实体简称和输入的简称一致,或者输入简称所对应的项目在项目表中不存在，那么更换该投资时间所对应的项目简称即可
-			System.err.println(projects.getShortName().equals(body.getShortName()));
-			System.err.println(pro == null);
 			if(projects!=null) {
 				if(pro == null) {//输入简称所代表的项目在数据表projects中不存在
 					//Projects更新实体的作成
@@ -314,6 +319,8 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 					projectsUpdateEntity.setShortName(body.getShortName());
 					//更新projects表中该项目的简称
 					projectsMapper.updateByPrimaryKeySelective(projectsUpdateEntity);
+					//设置项目的主键id
+					projectId=projectsUpdateEntity.getId();
 				}else if(! projects.getShortName().equals(body.getShortName())){
 					result.setData(null);
 			        result.setStatus(500);
@@ -331,7 +338,21 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 		pflfs.setCreateTime(new Date());
 		projectFinancialLogFollowStatusMapper.insertSelective(pflfs);
 		
-		result.setData(projectLogId);
+		Map<String,Object> map=new HashMap<>();
+		map.put("projectLogId", projectLogId);
+		map.put("projectId", projectId);  
+		
+		result.setData(map);
+        result.setStatus(200);
+        result.setMessage("success");
+		return result;
+	}
+
+	@Override
+	public CommonDto<ProjectFinancingLog> echoProjectFinancingLogById(Integer appid, Integer projectFinancingLogId) {
+		CommonDto<ProjectFinancingLog> result=new CommonDto<>();
+		ProjectFinancingLog projectFinancingLog = projectFinancingLogMapper.selectByPrimaryKey(projectFinancingLogId);
+		result.setData(projectFinancingLog);
         result.setStatus(200);
         result.setMessage("success");
 		return result;

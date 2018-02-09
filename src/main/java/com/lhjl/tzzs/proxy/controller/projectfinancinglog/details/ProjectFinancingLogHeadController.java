@@ -16,6 +16,8 @@ import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadInputDto;
 import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutputDto;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsProject;
+import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.service.ProjectFinancingLogService;
 
@@ -67,12 +69,12 @@ public class ProjectFinancingLogHeadController extends GenericController {
     /**
      * 保存或者更新投资事件的信息
      * @param appid
-     * @param body
-     * @return
+     * @param body 
+     * @return 投资事件的id
      */
     @PostMapping("/v{appid}/saveorupdate/projectlog/info")
-    public CommonDto<Integer> saveOrUpdateProjectLog(@PathVariable Integer appid,@RequestBody ProjectFinancingLogHeadInputDto body){
-    	CommonDto<Integer> result =new CommonDto<>();
+    public CommonDto<Map<String,Object>> saveOrUpdateProjectLog(@PathVariable Integer appid,@RequestBody ProjectFinancingLogHeadInputDto body){
+    	CommonDto<Map<String,Object>> result =new CommonDto<>();
     	try {
     		result = projectFinancingLogService.saveOrUpdateProjectLog(appid,body);
     	}catch(Exception e) {
@@ -84,6 +86,7 @@ public class ProjectFinancingLogHeadController extends GenericController {
     	}
         return result;
     }
+    
     
    
 }
