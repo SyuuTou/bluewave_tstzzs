@@ -272,7 +272,7 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 				pfl.setYn(0);
 				
 				projectFinancingLogMapper.insertSelective(pfl);
-				//获取该投资时间的id
+				//获取该投资事件的id
 				projectLogId=pfl.getId();
 				System.err.println(projectLogId+"111");
 			}else {//该项目不存在项目表中，新建一个项目，并增加一条投资事件，获取该投资事件的id
@@ -332,6 +332,16 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 		projectFinancialLogFollowStatusMapper.insertSelective(pflfs);
 		
 		result.setData(projectLogId);
+        result.setStatus(200);
+        result.setMessage("success");
+		return result;
+	}
+
+	@Override
+	public CommonDto<ProjectFinancingLog> echoProjectFinancingLogById(Integer appid, Integer projectFinancingLogId) {
+		CommonDto<ProjectFinancingLog> result=new CommonDto<>();
+		ProjectFinancingLog projectFinancingLog = projectFinancingLogMapper.selectByPrimaryKey(projectFinancingLogId);
+		result.setData(projectFinancingLog);
         result.setStatus(200);
         result.setMessage("success");
 		return result;

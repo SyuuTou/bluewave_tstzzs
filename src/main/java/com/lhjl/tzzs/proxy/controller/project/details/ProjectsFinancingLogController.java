@@ -55,14 +55,14 @@ public class ProjectsFinancingLogController extends GenericController{
 	 * @param body 融资历史单阶段对应的投资机构信息
 	 * @return
 	 */
-    @PutMapping("/v{appid}/editrelativeincest")
+    @PutMapping("/v{appid}/editrelativeinvest")
     public CommonDto<Boolean> editRelativeInvestmentInfo(@PathVariable("appid") Integer appid,@RequestBody InvestmentInstitutionsProject body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
     		result=projectsService.updateRelativeInvestmentInfo(appid,body);
 	    }catch(Exception e) {
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
-    		  
+    		
     		result.setData(false);
     		result.setMessage("fail");
     		result.setStatus(500);
@@ -111,7 +111,7 @@ public class ProjectsFinancingLogController extends GenericController{
     }
     
     /**
-     * 保存和更新融资历史的相关信息
+     * 更新融资历史的单条信息，保存和更新融资历史的相关信息
      * @param appid
      * @param body 融资历史的请求体
      * @return
