@@ -44,14 +44,14 @@ public class ProjectAdminMangeServiceImpl implements ProjectAdminManageService {
 
         if(companyId == null){
             result.setStatus(300);
-            result.setMessage("failed");
+            result.setMessage("项目ID");
             result.setData(null);
             return result;
         }
         InvestmentInstitutionFundManage investmentInstitutionFundManage = investmentInstitutionFundManageService.selectByPrimaryKey(companyId);
         if(null == investmentInstitutionFundManage){
-            result.setStatus(300);
-            result.setMessage("failed");
+            result.setStatus(200);
+            result.setMessage("success");
             result.setData(null);
             return result;
         }
