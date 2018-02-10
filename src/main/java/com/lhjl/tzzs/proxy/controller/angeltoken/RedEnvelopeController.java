@@ -164,6 +164,19 @@ public class RedEnvelopeController extends GenericController {
 
     }
 
+    /**
+     * 统计数据
+     * @return
+     */
+    @GetMapping("/v{appId}/redenvelope/statistices")
+    public CommonDto<Map<String, Integer>>  getStatisticesRedEnvelope(@PathVariable Integer appId){
+
+        CommonDto<Map<String, Integer>> result = null;
+
+        result = redEnvelopeService.getStatisticesRedEnvelope();
+
+        return result;
+    }
 
     /**
      * 领取红包

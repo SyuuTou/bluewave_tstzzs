@@ -19,6 +19,8 @@ public class RedEnvelopeResDto {
     private String description;
     private Date createTime;
     private BigDecimal totalAmount;
+    private String companyName;
+    private String companyDuties;
     private List<RedEnvelopeLogDto> redEnvelopeLogs;
 
 
@@ -36,6 +38,22 @@ public class RedEnvelopeResDto {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCompanyDuties() {
+        return companyDuties;
+    }
+
+    public void setCompanyDuties(String companyDuties) {
+        this.companyDuties = companyDuties;
     }
 
     public Date getCreateTime() {

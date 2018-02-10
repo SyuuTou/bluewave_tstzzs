@@ -582,6 +582,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
             redEnvelopeResDto.setCreateTime(redEnvelope.getCreateTime());
             redEnvelopeResDto.setAmount(redEnvelope.getAmount());
             redEnvelopeResDto.setTotalAmount(redEnvelope.getTotalAmount());
+
             if (redEnvelope.getReceiveQuantity() == redEnvelope.getQuantity()) {
                 redEnvelopeResDto.setStatus("Finished");
             }else{
@@ -611,6 +612,8 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                         redEnvelopeResDto.setNeckName(usersWeixin.getNickName());
                     }
                 }
+                redEnvelopeResDto.setCompanyDuties(temp.getCompanyDuties());
+                redEnvelopeResDto.setCompanyName(temp.getCompanyName());
             }
 
 
@@ -667,10 +670,24 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                     redEnvelopeResDto.setNeckName(usersWeixin.getNickName());
                 }
             }
+            redEnvelopeResDto.setCompanyDuties(temp.getCompanyDuties());
+            redEnvelopeResDto.setCompanyName(temp.getCompanyName());
         }
 
 
         return new CommonDto<>(redEnvelopeResDto, "success", 200);
+    }
+
+    @Override
+    public CommonDto<Map<String, Integer>> getStatisticesRedEnvelope() {
+
+        Map<String, Integer> map = new HashMap<>();
+
+        map.put("peoples", redEnvelopeMapper.getRedEnvelopePeopleNums());
+        map.put("contacts", redEnvelopeMapper.getRecivedRedEnvelopePeopleNums());
+        map.put("sendRedNum", redEnvelopeMapper.getRedEnvelopeNums());
+
+        return new CommonDto<>(map, "success", 200);
     }
 
     private BigDecimal randomAmount(Integer quantity, Integer receiveQuantity, BigDecimal totalAmount, BigDecimal receiveAmount, Integer appId) {

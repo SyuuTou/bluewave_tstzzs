@@ -31,4 +31,7 @@ public interface RedEnvelopeService {
     CommonDto<List<RedEnvelopeResDto>> queryRedEnvelopeAllByToken(Integer appId, String token, Integer pageNo, Integer pageSize);
 
     CommonDto<RedEnvelopeResDto> getRedEnvelopeInfo(Integer appId, String unionId, String token);
+
+    CommonDto<Map<String,Integer>> getStatisticesRedEnvelope();
+
 }
