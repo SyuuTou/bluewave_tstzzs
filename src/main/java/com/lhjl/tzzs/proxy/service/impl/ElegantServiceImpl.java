@@ -1050,8 +1050,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
 		}
         
         ElegantServiceMemberType elegantServiceMemberTypeRecord = new ElegantServiceMemberType();
-        elegantServiceApproveTypeRecord.setElegantServiceId(elegantServiceId);
-
+        elegantServiceMemberTypeRecord.setElegantServiceId(elegantServiceId);
         elegantServiceMemberTypeMapper.delete(elegantServiceMemberTypeRecord);
         if(body.getMemberTypes() != null) {
         	for (Integer memberType : body.getMemberTypes() ){
