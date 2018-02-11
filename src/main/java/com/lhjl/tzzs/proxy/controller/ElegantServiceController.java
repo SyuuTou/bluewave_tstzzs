@@ -63,6 +63,12 @@ public class ElegantServiceController {
         return result;
     }
 
+    /**
+     * 新的根据服务ID获取服务详情
+     * @param appId
+     * @param elegantServiceId
+     * @return
+     */
     @GetMapping("/v{appId}/elegant/service/{elegantServiceId}")
     public CommonDto<ElegantService> queryElegantServiceById(@PathVariable Integer appId, @PathVariable Integer elegantServiceId){
         CommonDto<ElegantService> result = null;
