@@ -34,7 +34,9 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="is_reward" jdbcType="INTEGER" property="isReward" />
     <result column="is_lead_investor" jdbcType="INTEGER" property="isLeadInvestor" />
-    <result column="custom_button_label" jdbcType="INTEGER" property="customButtonLabel" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="custom_button_label" jdbcType="VARCHAR" property="customButtonLabel" />
+
   </resultMap>
   <select id="findElegantServiceList" resultType="java.util.HashMap">
     select es.service_name,es.pre_vip_price_descript,es.original_price,es.vip_price,esd.description,es.unit,
