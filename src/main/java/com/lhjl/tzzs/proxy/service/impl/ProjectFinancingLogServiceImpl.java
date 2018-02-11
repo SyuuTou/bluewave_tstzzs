@@ -265,9 +265,9 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 		Integer projectLogId = body.getProjectFinancingLogId();
 		//用于获取最终的项目id
 		Integer projectId=null;
-//		if(pro != null) {
-//			projectId=pro.getId();
-//		}
+		if(pro != null) {
+			projectId=pro.getId();
+		}
 		
 		if(body.getProjectFinancingLogId() == null) {//执行投资事件增加 ,
 			if(pro != null) {//该项目存在项目表中，为该项目增加一条投资事件
@@ -320,15 +320,21 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
 					//更新projects表中该项目的简称
 					projectsMapper.updateByPrimaryKeySelective(projectsUpdateEntity);
 					//设置项目的主键id
-					projectId=projectsUpdateEntity.getId();
+					projectId = projectsUpdateEntity.getId();
 				}else if(! projects.getShortName().equals(body.getShortName())){
 					result.setData(null);
 			        result.setStatus(500);
 			        result.setMessage("输入简称所对应的项目在项目表中存在，但不是该投资事件所对应的原项目");
 			        return result;
 				}
+			}else {
+				result.setData(null);
+		        result.setStatus(500);
+		        result.setMessage("DB数据存在错误，该投资事件关联的项目在项目表中不存在");
+				return result;
 			}
 		}
+		
 		//在获取投资事件的基础之上， 增加投资事件的跟进状态（只是插入就可以了）
 		ProjectFinancialLogFollowStatus pflfs=new ProjectFinancialLogFollowStatus();
 		pflfs.setProjectFinancialLogId(projectLogId);
