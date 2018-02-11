@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.dto.flow.FlowModel;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.*;
@@ -12,8 +13,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
@@ -25,13 +30,16 @@ import java.util.*;
  * Created by 蓝海巨浪 on 2017/10/24.
  */
 @Service
-public class InvestorsDemandServiceImpl implements InvestorsDemandService{
+public class InvestorsDemandServiceImpl extends GenericService implements InvestorsDemandService{
 
     @Value("${pageNum}")
     private Integer defaultPageNum;
 
     @Value("${pageSize}")
     private Integer defaultPageSize;
+
+    @Value("${event.trigger.url}")
+    private String eventTriggerUrl;
 
     @Resource
     private CommonUserService commonUserService;
@@ -75,12 +83,17 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
     @Autowired
     private UsersMapper usersMapper;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     //投资阶段
     private static final String[] ROUNDNAME = {"种子轮","天使轮","Pre-A轮","A轮","B轮","C轮","Pre-IPO轮","战略投资","并购"};
 
     //地域偏好
     private static final String[] SECTION = {"全球","中国","海外","硅谷","华南","华东","华北","西南","北京","上海","广州","深圳","成都","厦门","福州","长沙"
             ,"武汉","西安","大连","天津","杭州","南京","苏州","青岛"};
+
+    private final static String EVENT_KEY_URL = "/event/message/%s";
 
     @Override
     public CommonDto<String> newulingyu(Integer appId, InvestorsDemandDto body) {
@@ -902,6 +915,26 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
                     investorDemandListOutputDto.setEventKey(investorDemand.getEventKey());
                 }else{
                     investorDemandListOutputDto.setEventKey(String.valueOf(inverstorMap.get("event_key")));
+
+                    try {
+                        String url = eventTriggerUrl+EVENT_KEY_URL;
+                        HttpHeaders headers = new HttpHeaders();
+                        headers.setContentType(MediaType.APPLICATION_JSON);
+
+                        HttpEntity entity = new HttpEntity<>( headers);
+                        url = String.format(url,String.valueOf(inverstorMap.get("event_key")));
+
+                        ResponseEntity<CommonDto<FlowModel>> commonDto = restTemplate.exchange(url, HttpMethod.GET, entity,new ParameterizedTypeReference<CommonDto<FlowModel>>(){} );
+                        investorDemandListOutputDto.setFlowModel(commonDto.getBody().getData());
+
+                        commonDto.getBody().getData().getLikers().forEach(v -> {
+                            if (v.getToken().equals(body.getToken())){
+                                investorDemandListOutputDto.setCurrentUserLikeStatus(1);
+                            }
+                        });
+                    } catch (RestClientException e) {
+                        this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+                    }
                 }
 
                 list.add(investorDemandListOutputDto);
@@ -1110,4 +1143,5 @@ public class InvestorsDemandServiceImpl implements InvestorsDemandService{
 
         return result;
     }
+
 }

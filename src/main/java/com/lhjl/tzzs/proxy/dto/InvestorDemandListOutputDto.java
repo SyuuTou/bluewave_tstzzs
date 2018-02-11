@@ -1,5 +1,7 @@
 package com.lhjl.tzzs.proxy.dto;
 
+import com.lhjl.tzzs.proxy.dto.flow.FlowModel;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -61,6 +63,26 @@ public class InvestorDemandListOutputDto {
 
     /** 信息流事件key */
     private String eventKey;
+
+    private FlowModel flowModel;
+
+    private Integer currentUserLikeStatus = 0;
+
+    public Integer getCurrentUserLikeStatus() {
+        return currentUserLikeStatus;
+    }
+
+    public void setCurrentUserLikeStatus(Integer currentUserLikeStatus) {
+        this.currentUserLikeStatus = currentUserLikeStatus;
+    }
+
+    public FlowModel getFlowModel() {
+        return flowModel;
+    }
+
+    public void setFlowModel(FlowModel flowModel) {
+        this.flowModel = flowModel;
+    }
 
     public String getEventKey() {
         return eventKey;

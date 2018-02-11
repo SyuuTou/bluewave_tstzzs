@@ -10,6 +10,24 @@ public class RedEnvelopeLogDto {
     private Date createTime;
     private BigDecimal amount;
     private String token;
+    private String companyName;
+    private String companyDuties;
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCompanyDuties() {
+        return companyDuties;
+    }
+
+    public void setCompanyDuties(String companyDuties) {
+        this.companyDuties = companyDuties;
+    }
 
     public String getName() {
         return name;
