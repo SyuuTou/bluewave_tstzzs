@@ -308,7 +308,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
             return result;
         }
 
-
         //开始判断值的合理性
         BigDecimal originalPrice = new BigDecimal(body.getOriginalPrice());
         originalPrice = originalPrice.setScale(2,BigDecimal.ROUND_HALF_UP);
@@ -318,7 +317,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         int orig = originalPrice.compareTo(BigDecimal.ZERO);
         int vipc = vipPrice.compareTo(BigDecimal.ZERO);
-
         if (orig < 0){
             result.setMessage("原价必须大于0");
             result.setStatus(502);
@@ -326,24 +324,21 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
             return result;
         }
-
         if (vipc < 0){
             result.setMessage("vip价格必须大于0");
-            result.setData(null);
+            result.setStatus(502);
             result.setData(null);
 
             return result;
         }
-
         //判断是更新还是新建
         if (body.getElegantServiceId() == null || "".equals(body.getElegantServiceId())){
             //新建
             result = createElegantService(body,appid);
         }else {
             //更新
-            result = updateElegantService(body,appid);
+            result = updateElegantService(body,appid); 
         }
-
 
         result.setData(null);
         result.setMessage("success");
@@ -714,7 +709,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         BigDecimal vipPrice = new BigDecimal(body.getVipPrice());
         vipPrice = vipPrice.setScale(2,BigDecimal.ROUND_HALF_UP);
-
         //上下架时间转化
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date beginTime = null;
@@ -732,7 +726,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
             return result;
         }
-
         //生成场景码
         String sceneKey = getRandomString(8);
         //保险起见先看看有没重复的scenceKey
@@ -743,7 +736,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
         if (metaSceneList.size() > 0){
             sceneKey = getRandomString(8);
         }
-
         //先创建场景信息
         MetaScene metaScene = new MetaScene();
         metaScene.setCreateTime(now);
@@ -752,7 +744,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
         metaScene.setYn(0);
 
         metaSceneMapper.insertSelective(metaScene);
-
 
          float one = 1;
         //创建场景获取积分场景表信息
@@ -779,7 +770,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
             return result;
         }
-
         //创建精选活动表
         ElegantService elegantService = new ElegantService();
         elegantService.setServiceName(body.getServiceName());
@@ -809,7 +799,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantService.setEntrepreneurLandingPage(body.getEntrepreneurLandingPage());
         elegantService.setInvestorLandingPage(body.getInvestorLandingPage());
         elegantService.setOrthorLandingPage(body.getOrthorLandingPage());
-
         elegantServiceMapper.insertSelective(elegantService);
 
         //拿到服务表的id
@@ -823,7 +812,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantServiceCooperation.setYn(1);//默认没被删除
 
         elegantServiceCooperationMapper.insertSelective(elegantServiceCooperation);
-
         //创建描述表
         ElegantServiceDescription elegantServiceDescription = new ElegantServiceDescription();
         elegantServiceDescription.setElegantServiceId(elegantServiceId);
@@ -832,7 +820,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantServiceDescription.setYn(1);//默认有效
 
         elegantServiceDescriptionMapper.insertSelective(elegantServiceDescription);
-
         //创建详细描述表
         ElegantServiceDescriptionDetail elegantServiceDescriptionDetail = new ElegantServiceDescriptionDetail();
         elegantServiceDescriptionDetail.setCreateTime(now);
@@ -846,7 +833,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantServiceDescriptionDetail.setYn(1);//默认有效
 
         elegantServiceDescriptionDetailMapper.insertSelective(elegantServiceDescriptionDetail);
-
         //创建服务-身份类型关系表
           //解析输入参数
         String[] identityType = body.getIdentityType().split(",");
@@ -862,7 +848,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
             elegantServiceIdentityTypeMapper.insertSelective(elegantServiceIdentityType);
         }
 
-
         //创建服务-服务类型关系表
           //解析服务类型
         String[] serviceType = body.getServiceType().split(",");
@@ -874,7 +859,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
             elegantServiceServiceTypeMapper.insertSelective(elegantServiceServiceType);
         }
-
         elegantServiceApproveMemberHandler(body, elegantServiceId);
 
         return result;
@@ -1056,23 +1040,26 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantServiceApproveTypeRecord.setElegantServiceId(elegantServiceId);
 
         elegantServiceApproveTypeMapper.delete(elegantServiceApproveTypeRecord);
-
-        for (Integer approveType : body.getApproveTypes() ){
-            ElegantServiceApproveType elegantServiceApproveType = new ElegantServiceApproveType();
-            elegantServiceApproveType.setElegantServiceId(elegantServiceId);
-            elegantServiceApproveType.setApproveType(approveType);
-            elegantServiceApproveTypeMapper.insert(elegantServiceApproveType);
-        }
-
+		if(body.getApproveTypes() != null) {
+			for (Integer approveType : body.getApproveTypes() ){
+	            ElegantServiceApproveType elegantServiceApproveType = new ElegantServiceApproveType();
+	            elegantServiceApproveType.setElegantServiceId(elegantServiceId);
+	            elegantServiceApproveType.setApproveType(approveType);
+	            elegantServiceApproveTypeMapper.insert(elegantServiceApproveType);
+	        }
+		}
+        
         ElegantServiceMemberType elegantServiceMemberTypeRecord = new ElegantServiceMemberType();
         elegantServiceApproveTypeRecord.setElegantServiceId(elegantServiceId);
 
         elegantServiceMemberTypeMapper.delete(elegantServiceMemberTypeRecord);
-        for (Integer memberType : body.getMemberTypes() ){
-            ElegantServiceMemberType elegantServiceMemberType = new ElegantServiceMemberType();
-            elegantServiceMemberType.setElegantServiceId(elegantServiceId);
-            elegantServiceMemberType.setMemberTypeId(memberType);
-            elegantServiceMemberTypeMapper.insert(elegantServiceMemberType);
+        if(body.getMemberTypes() != null) {
+        	for (Integer memberType : body.getMemberTypes() ){
+                ElegantServiceMemberType elegantServiceMemberType = new ElegantServiceMemberType();
+                elegantServiceMemberType.setElegantServiceId(elegantServiceId);
+                elegantServiceMemberType.setMemberTypeId(memberType);
+                elegantServiceMemberTypeMapper.insert(elegantServiceMemberType);
+            }
         }
     }
 }
