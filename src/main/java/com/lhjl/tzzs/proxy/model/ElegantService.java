@@ -178,6 +178,10 @@ public class ElegantService {
     @Column(name = "custom_button_label")
     private String customButtonLabel;
 
+    private Integer quantity;
+
+
+
     @Transient
     private List<ElegantServiceApproveType> elegantServiceApproveTypes;
     @Transient
@@ -194,8 +198,13 @@ public class ElegantService {
     private ElegantServiceDescriptionDetail elegantServiceDescriptionDetail;
 
 
+    public Integer getQuantity() {
+        return quantity;
+    }
 
-
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 
     public String getCustomButtonLabel() {
         return customButtonLabel;
