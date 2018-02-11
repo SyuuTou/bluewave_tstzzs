@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.dto.angeltoken.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
+import com.lhjl.tzzs.proxy.service.UserInfoService;
 import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
 import com.lhjl.tzzs.proxy.service.common.SessionKeyService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
@@ -69,6 +70,8 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
     @Autowired
     private WxMaService wxService;
+    @Autowired
+    private UserInfoService userInfoService;
 
 
 
@@ -375,13 +378,28 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
             RedEnvelopeLog queryRedEnvelopeLog = new RedEnvelopeLog();
             queryRedEnvelopeLog.setAppId(appId);
             queryRedEnvelopeLog.setToken(token);
-            queryRedEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
 
+
+            queryRedEnvelopeLog.setRedEnvelopeId(redEnvelope.getId());
             RedEnvelopeLog checkRedEnvelopeLog = redEnvelopeLogMapper.selectOne(queryRedEnvelopeLog);
-            if (null != checkRedEnvelopeLog){
-                redEnvelopeResDto.setStatus("Completed");
-                redEnvelopeResDto.setMessage(redEnvelope.getMessage());
-                redEnvelopeResDto.setAmount(checkRedEnvelopeLog.getAmount());
+            if (redEnvelope.getDescription().equals("INVITATIONED")){
+
+                Users newUser = this.getUserInfo(appId,token);
+
+                if (null != newUser&& newUser.getPhonenumber().length() > 0){
+                    redEnvelopeResDto.setStatus("NewCompleted");
+                    redEnvelopeResDto.setMessage(redEnvelope.getMessage());
+                }else if (redEnvelopeMapper.checkNewPeopleByToken(token) == 1){
+                    redEnvelopeResDto.setStatus("NewCompleted");
+                    redEnvelopeResDto.setMessage(redEnvelope.getMessage());
+                }
+
+            }else if (null != checkRedEnvelopeLog){
+
+                    redEnvelopeResDto.setStatus("Completed");
+                    redEnvelopeResDto.setMessage(redEnvelope.getMessage());
+                    redEnvelopeResDto.setAmount(checkRedEnvelopeLog.getAmount());
+
             }else {
                 //尝试3次获取红包
                 for (int i = 0; i < 3; i++) {
@@ -431,8 +449,8 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                             redEnvelopeLogMapper.insert(redEnvelopeLog);
 
 
-
-                            this.addUserIntegralsLog(appId, "GET_ANGEL_TOKEN", users.getId(), reciveAmount, obtainIntegralPeriod, true, new BigDecimal(1));
+                            Users reciveUser = this.getUserInfo(appId, token);
+                            this.addUserIntegralsLog(appId, "GET_ANGEL_TOKEN", reciveUser.getId(), reciveAmount, obtainIntegralPeriod, true, new BigDecimal(1));
 
                             break;
                         }
