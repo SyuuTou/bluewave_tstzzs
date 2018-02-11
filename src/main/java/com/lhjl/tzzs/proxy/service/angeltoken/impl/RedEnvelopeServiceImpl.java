@@ -337,6 +337,9 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         RedEnvelopeResDto redEnvelopeResDto = new RedEnvelopeResDto();
 
         try {
+            if(StringUtil.isEmpty(token)){
+                return  new CommonDto<>(null, "用户不存在", 200);
+            }
             RedEnvelope queryRedEnvelope = new RedEnvelope();
             queryRedEnvelope.setUnionKey(unionId);
             RedEnvelope redEnvelope = redEnvelopeMapper.selectOne(queryRedEnvelope);
@@ -706,8 +709,12 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
     private BigDecimal randomAmount(Integer quantity, Integer receiveQuantity, BigDecimal totalAmount, BigDecimal receiveAmount, Integer appId) {
 
         RedEnvelopeLimit redEnvelopeLimit = this.getRedEnvelopeLimit(appId, "RED_ENVELOPE_LIMIT");
-        if (totalAmount.divide(redEnvelopeLimit.getLimitValue()).compareTo(new BigDecimal(0)) == 0){
+        if (totalAmount.compareTo(redEnvelopeLimit.getLimitValue().multiply(new BigDecimal(quantity))) == 0){
             return redEnvelopeLimit.getLimitValue();
+        }
+        BigDecimal minValue = new BigDecimal(0.01);
+        if (totalAmount.compareTo(minValue.multiply(new BigDecimal(quantity))) == 0){
+            return minValue;
         }
             if (quantity - receiveQuantity == 1){
                 return totalAmount.subtract(receiveAmount);
@@ -736,5 +743,8 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 //        System.out.println(DateTime.now().withTime(23,59,59,999).toString("yyyy-MM-dd HH:mm:ss"));
 //        Random random = new Random();
 //        System.out.println(String.valueOf());
+
+//        System.out.println(new BigDecimal(1000).compareTo(new BigDecimal(500).multiply(new BigDecimal(2))));
+
     }
 }
