@@ -26,7 +26,7 @@ public class InvestorListController extends GenericController {
 	private InvestorService investorService;
 	
 	/**
-	 * 投资人列表（包括投资人审核列表）
+	 * 投资人列表（包括投资人审核列表,一个接口两用）
 	 * @param appid
 	 * @param body 投资人列表请求体
 	 * @return

@@ -70,14 +70,13 @@ public class InvestorServiceImpl implements InvestorService {
 	public CommonDto<Map<String,Object>> listInvestorsInfos(Integer appid, InvestorListInputDto body) {
 
     	if (StringUtil.isEmpty(body.getToken())){
-    		return new CommonDto<>(null, "Token 不能为空。", 200);
+    		return new CommonDto<>(null, "Token 不能为空。", 500);
 		}
-
+    	//根据token获取当前用户
 		UserToken query = new UserToken();
     	query.setToken(body.getToken());
-
     	UserToken userToken = userTokenMapper.selectOne(query);
-
+    	
 		Users users = usersMapper.selectByPrimaryKey(userToken.getUserId());
 
 
@@ -141,6 +140,19 @@ public class InvestorServiceImpl implements InvestorService {
         	if(e.getCreateTime() !=null) {
         		e.setCreateTimeStr(sdf.format(e.getCreateTime()));  
         	}
+        	if(e.getCheckTime() !=null) {
+        		e.setCheckTimeOutputStr(sdf.format(e.getCheckTime()));  
+        	}
+        	/*if(e.getSubmitter() !=null) {  
+        		
+        		UserToken ut = new UserToken();
+        		ut.setToken(e.getSubmitter());
+        		
+        		ut = userTokenMapper.selectOne(ut);
+        			
+        		Users user = usersMapper.selectByPrimaryKey(ut.getUserId());
+        		e.setSubmitterName(user.getActualName());
+        	}*/
         });
         Long total = investorsMapper.getInvestorsListCount(body);
         

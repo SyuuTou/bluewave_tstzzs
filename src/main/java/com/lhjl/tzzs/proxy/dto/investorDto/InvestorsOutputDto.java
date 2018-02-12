@@ -100,21 +100,31 @@ public class InvestorsOutputDto {
 	 */
 	private Date updateTime;
 	/**
-	 * 提交者token--供审核列表使用
+	 * 提交者姓名--供审核列表使用
 	 */
 	private String submitter;
+	/**
+	 * 提交人姓名
+	 */
+//	@Transient
+//	private String submitterName;
 	/**
 	 * 采集编号--供审核列表使用
 	 */
 	private String serialNumber;
 	/**
 	 * 审核结果--供审核列表使用
+	 * 审核结果可能有多个，要重写sql里面的case进行匹配
 	 */
 	private Integer approvalStatus;
 	/**
 	 * 审核时间--供审核列表使用
 	 */
 	private Date checkTime;
+	/**
+	 * 一句话介绍
+	 */
+	private String kernelDescription;
 	/**
 	 * 审核时间输出字符串--供审核列表使用
 	 */
@@ -130,6 +140,15 @@ public class InvestorsOutputDto {
 	 */
 	@Transient
 	private String updateTimeStr;
+	
+	
+	
+	public String getKernelDescription() {
+		return kernelDescription;
+	}
+	public void setKernelDescription(String kernelDescription) {
+		this.kernelDescription = kernelDescription;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -293,6 +312,7 @@ public class InvestorsOutputDto {
 	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
+
 	public Integer getApprovalStatus() {
 		return approvalStatus;
 	}

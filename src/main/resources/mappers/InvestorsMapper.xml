@@ -77,6 +77,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <!-- 供审核列表使用 -->
+    <result column="kernel_description" jdbcType="VARCHAR" property="kernelDescription" />
     <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
     <result column="submitter" jdbcType="VARCHAR" property="submitter" />
     <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
@@ -84,7 +85,7 @@
   </resultMap>
   
    <select id="listInvestorsInfos" resultMap="InvestorsOutputMap">
-    	SELECT i.ID,i.user_id,i.name,
+    	SELECT i.ID,i.user_id,i.name,i.kernel_description,
 	ii.short_name,i.position,ide.phonenumber,
 	mgt.weChatGroupId, mgt.irPrincipal, mgt.cooperativeRelationship,
 	mdst.type_name,iit.type,funds.currency,
@@ -93,7 +94,14 @@
 	ide.demand,city.citys,
 	i.create_time,i.update_time,
 	<!-- 供审核列表使用 -->
-	i.serial_number,i.submitter,i.approval_status,i.check_time
+	i.serial_number,i.submitter,
+	i.approval_status,
+	<!-- case 
+		when i.approval_status = 0 then "未通过" 
+		when i.approval_status = 1 then "通过" 
+		when i.approval_status = 2 then "待审核"
+	end approval_status, -->
+	i.check_time
 	FROM investors i
 	LEFT JOIN meta_data_source_type mdst ON i.investor_source_type = mdst.id
 	LEFT JOIN investment_institutions ii ON i.investment_institutions_id = ii.ID
@@ -123,7 +131,8 @@
 				or mdst.type_name like "%"#{keyWords}"%" or iit.type like "%"#{keyWords}"%" or seg.segmentations like "%"#{keyWords}"%"
 				or speedway.speedways like "%"#{keyWords}"%" or stage.stages like "%"#{keyWords}"%"
 				or ide.demand like "%"#{keyWords}"%" or city.citys like "%"#{keyWords}"%" or mgt.irPrincipal like "%"#{keyWords}"%"
-				or mgt.weChatGroupId like "%"#{keyWords}"%" )
+				or mgt.weChatGroupId like "%"#{keyWords}"%" or i.submitter like "%"#{keyWords}"%" 
+				or i.kernel_description like "%"#{keyWords}"%")
   </if>
   <!-- 范围搜索 -->
   <!-- 查询条件：创建开始时间 -->
@@ -133,6 +142,9 @@
   <!-- 查询条件：创建结束时间 -->
   <if test="endTime !=null ">
       AND i.create_time &lt;= #{endTime}
+  </if>
+  <if test="approvalStatus !=null and approvalStatus !=''">
+      AND i.approval_status = #{approvalStatus}
   </if>
   <if test="amountBeginRmb !=null and amountBeginRmb !=''">
       AND ide.investment_amount_low &gt;= #{amountBeginRmb}
@@ -208,7 +220,9 @@
 				or mdst.type_name like "%"#{keyWords}"%" or iit.type like "%"#{keyWords}"%" or seg.segmentations like "%"#{keyWords}"%"
 				or speedway.speedways like "%"#{keyWords}"%" or stage.stages like "%"#{keyWords}"%"
 				or ide.demand like "%"#{keyWords}"%" or city.citys like "%"#{keyWords}"%"
-				or mgt.irPrincipal like "%"#{keyWords}"%" or mgt.weChatGroupId like "%"#{keyWords}"%")
+				or mgt.irPrincipal like "%"#{keyWords}"%" or mgt.weChatGroupId like "%"#{keyWords}"%"
+				or i.submitter like "%"#{keyWords}"%"
+				or i.kernel_description like "%"#{keyWords}"%")
   </if>
   <!-- 查询条件：创建开始时间 -->
   <if test="startTime !=null">
@@ -217,6 +231,9 @@
   <!-- 查询条件：创建结束时间 -->
   <if test="endTime !=null">
       AND i.create_time &lt;= #{endTime}
+  </if>
+  <if test="approvalStatus !=null and approvalStatus !=''">
+      AND i.approval_status = #{approvalStatus}
   </if>
   <if test="amountBeginRmb !=null and amountBeginRmb !=''">
       AND ide.investment_amount_low &gt;= #{amountBeginRmb}

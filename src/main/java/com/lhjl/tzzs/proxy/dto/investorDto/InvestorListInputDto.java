@@ -13,7 +13,7 @@ public class InvestorListInputDto {
 	 */
 	private Integer adminType;
 	/**
-	 * 类型
+	 * 负责人姓名
 	 */
 	private String adminName;
 	/**
@@ -84,7 +84,7 @@ public class InvestorListInputDto {
      * 默认按照更新时间进行排序
      * 此处根据实际情况可考虑将列值传递过来
      * 但是应该考虑到一个问题，就是如何将该列和排序的标志位结合起来
-     * 此处传递的是 create_time,update_time这两个值
+     * 此处传递的是 create_time,update_time,check_time这三个值
      */
     private String column;
 
@@ -103,6 +103,7 @@ public class InvestorListInputDto {
      * 每页显示数量
      */
     private Integer pageSize;
+    
     /**
      * 当前管理员的token
      */
@@ -112,6 +113,23 @@ public class InvestorListInputDto {
      * 起始索引
      */
     private Long start;
+    /**
+	 * 审核标志位
+	 */
+	private Integer approvalStatus;
+	/**
+	 * 审核标志位
+	 */
+	private String submitter;
+	
+
+	public String getSubmitter() {
+		return submitter;
+	}
+
+	public void setSubmitter(String submitter) {
+		this.submitter = submitter;
+	}
 
 	public String getToken() {
 		return token;
@@ -263,6 +281,15 @@ public class InvestorListInputDto {
 	public void setAdminName(String adminName) {
 		this.adminName = adminName;
 	}
+	
+	public Integer getApprovalStatus() {
+		return approvalStatus;
+	}
+
+	public void setApprovalStatus(Integer approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "InvestorListInputDto [userId=" + userId + ", adminType=" + adminType + ", adminName=" + adminName
