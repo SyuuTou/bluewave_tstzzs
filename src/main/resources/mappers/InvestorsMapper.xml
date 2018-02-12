@@ -41,6 +41,11 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="leader_yn" jdbcType="INTEGER" property="leaderYn" />
+    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
+    <result column="submitter" jdbcType="VARCHAR" property="submitter" />
+    <result column="invest_case_description" jdbcType="VARCHAR" property="investCaseDescription" />
+    <result column="single_invest_amount" jdbcType="VARCHAR" property="singleInvestAmount" />
+    <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
   </resultMap>
 
   <resultMap id="newInvestortMap" type="com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto">
@@ -71,6 +76,11 @@
     <result column="citys" jdbcType="VARCHAR" property="citys" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <!-- 供审核列表使用 -->
+    <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
+    <result column="submitter" jdbcType="VARCHAR" property="submitter" />
+    <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
+    <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
   </resultMap>
   
    <select id="listInvestorsInfos" resultMap="InvestorsOutputMap">
@@ -81,7 +91,9 @@
 	seg.segmentations,speedway.speedways,stage.stages,
 	ide.investment_amount_low,ide.investment_amount_high,ide.investment_amount_low_dollars,ide.investment_amount_high_dollars,
 	ide.demand,city.citys,
-	i.create_time,i.update_time
+	i.create_time,i.update_time,
+	<!-- 供审核列表使用 -->
+	i.serial_number,i.submitter,i.approval_status,i.check_time
 	FROM investors i
 	LEFT JOIN meta_data_source_type mdst ON i.investor_source_type = mdst.id
 	LEFT JOIN investment_institutions ii ON i.investment_institutions_id = ii.ID

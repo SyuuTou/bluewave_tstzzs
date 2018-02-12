@@ -100,6 +100,27 @@ public class InvestorsOutputDto {
 	 */
 	private Date updateTime;
 	/**
+	 * 提交者token--供审核列表使用
+	 */
+	private String submitter;
+	/**
+	 * 采集编号--供审核列表使用
+	 */
+	private String serialNumber;
+	/**
+	 * 审核结果--供审核列表使用
+	 */
+	private Integer approvalStatus;
+	/**
+	 * 审核时间--供审核列表使用
+	 */
+	private Date checkTime;
+	/**
+	 * 审核时间输出字符串--供审核列表使用
+	 */
+	@Transient
+	private String checkTimeOutputStr;
+	/**
 	 * 创建时间出输出字符串
 	 */
 	@Transient
@@ -260,6 +281,36 @@ public class InvestorsOutputDto {
 	public void setUpdateTimeStr(String updateTimeStr) {
 		this.updateTimeStr = updateTimeStr;
 	}
+	public String getSubmitter() {
+		return submitter;
+	}
+	public void setSubmitter(String submitter) {
+		this.submitter = submitter;
+	}
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
+	}
+	public Integer getApprovalStatus() {
+		return approvalStatus;
+	}
+	public void setApprovalStatus(Integer approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
+	public Date getCheckTime() {
+		return checkTime;
+	}
+	public void setCheckTime(Date checkTime) {
+		this.checkTime = checkTime;
+	}
+	public String getCheckTimeOutputStr() {
+		return checkTimeOutputStr;
+	}
+	public void setCheckTimeOutputStr(String checkTimeOutputStr) {
+		this.checkTimeOutputStr = checkTimeOutputStr;
+	}
 	@Override
 	public String toString() {
 		return "InvestorsOutputDto [id=" + id + ", userId=" + userId + ", name=" + name + ", shortName=" + shortName
@@ -270,7 +321,9 @@ public class InvestorsOutputDto {
 				+ investmentAmountLow + ", investmentAmountHigh=" + investmentAmountHigh
 				+ ", investmentAmountLowDollars=" + investmentAmountLowDollars + ", investmentAmountHighDollars="
 				+ investmentAmountHighDollars + ", demand=" + demand + ", citys=" + citys + ", createTime=" + createTime
-				+ ", updateTime=" + updateTime + ", createTimeStr=" + createTimeStr + ", updateTimeStr=" + updateTimeStr
-				+ "]";
+				+ ", updateTime=" + updateTime + ", submitter=" + submitter + ", serialNumber=" + serialNumber
+				+ ", approvalStatus=" + approvalStatus + ", checkTime=" + checkTime + ", checkTimeOutputStr="
+				+ checkTimeOutputStr + ", createTimeStr=" + createTimeStr + ", updateTimeStr=" + updateTimeStr + "]";
 	}
+	
 }

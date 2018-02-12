@@ -103,7 +103,9 @@ public class InvestorListInputDto {
      * 每页显示数量
      */
     private Integer pageSize;
-
+    /**
+     * 当前管理员的token
+     */
     private String token;
 
     /**
