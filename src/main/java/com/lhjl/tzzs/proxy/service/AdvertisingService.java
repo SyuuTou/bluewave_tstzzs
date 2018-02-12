@@ -14,17 +14,19 @@ public interface AdvertisingService {
 
     /**
      * 获取广告列表接口
+     *
+     * @param appId
      * @param body
      * @return
      */
-    CommonDto<List<AdvertisingOutputDto>> getAdvertisingList(AdvertisingInputDto body);
+    CommonDto<List<AdvertisingOutputDto>> getAdvertisingList(Integer appId, AdvertisingInputDto body);
 
     /**
      * 后台获取广告列表的接口
      * @param body
      * @return
      */
-    CommonDto<Map<String,Object>> getAdvertisingAdminList(AdvertisingInputDto body);
+    CommonDto<Map<String,Object>> getAdvertisingAdminList(Integer appId, AdvertisingInputDto body);
 
     /**
      * 实现广告信息的增加或者更新操作

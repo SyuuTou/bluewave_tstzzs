@@ -75,12 +75,12 @@ public class AdvertisingController {
      * @param body
      * @return
      */
-    @PostMapping("get/advertising/list")
+    @PostMapping("/get/advertising/list")
     public CommonDto<List<AdvertisingOutputDto>> getAdvertisingList(@RequestBody AdvertisingInputDto body){
      CommonDto<List<AdvertisingOutputDto>> result = new CommonDto<>();
 
      try {
-        result = advertisingService.getAdvertisingList(body);
+        result = advertisingService.getAdvertisingList(1, body);
      }catch (Exception e){
          log.error(e.getMessage(),e.fillInStackTrace());
          result.setData(null);
@@ -89,6 +89,27 @@ public class AdvertisingController {
      }
 
      return result;
+    }
+
+    /**
+     * 获取广告列表接口
+     * @param body
+     * @return
+     */
+    @PostMapping("/v{appId}/get/advertising/list")
+    public CommonDto<List<AdvertisingOutputDto>> getAdvertisingList(Integer appId,@RequestBody AdvertisingInputDto body){
+        CommonDto<List<AdvertisingOutputDto>> result = new CommonDto<>();
+
+        try {
+            result = advertisingService.getAdvertisingList(appId,body);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+            result.setData(null);
+            result.setMessage("服务器端发生错误");
+            result.setStatus(502);
+        }
+
+        return result;
     }
     /**
      * 指定appid广告信息的增加
@@ -112,13 +133,13 @@ public class AdvertisingController {
      return result;
     }
 
-    @PostMapping("get/advertising/admin/list")
-    public CommonDto<Map<String,Object>> getAdvertisingAdminList(@RequestBody AdvertisingInputDto body){
+    @PostMapping("/v{appId}/get/advertising/admin/list")
+    public CommonDto<Map<String,Object>> getAdvertisingAdminList(@PathVariable Integer appId,@RequestBody AdvertisingInputDto body){
 
         CommonDto<Map<String,Object>> result = new CommonDto<>();
 
         try {
-            result = advertisingService.getAdvertisingAdminList(body);
+            result = advertisingService.getAdvertisingAdminList(appId,body);
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");

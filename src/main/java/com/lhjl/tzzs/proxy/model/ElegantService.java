@@ -196,7 +196,17 @@ public class ElegantService {
     private ElegantServiceDescription elegantServiceDescription;
     @Transient
     private ElegantServiceDescriptionDetail elegantServiceDescriptionDetail;
+    @Transient
+    private ElegantServiceRelevantProject elegantServiceRelevantProject;
 
+
+    public ElegantServiceRelevantProject getElegantServiceRelevantProject() {
+        return elegantServiceRelevantProject;
+    }
+
+    public void setElegantServiceRelevantProject(ElegantServiceRelevantProject elegantServiceRelevantProject) {
+        this.elegantServiceRelevantProject = elegantServiceRelevantProject;
+    }
 
     public Integer getQuantity() {
         return quantity;

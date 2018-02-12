@@ -752,7 +752,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 					UserToken userToken = new UserToken();
 					userToken.setUserId(userId);
 					userToken = userTokenMapper.selectOne(userToken);
-					userLevelService.upLevel(userToken.getToken(), 4, null, appId);
+					userLevelService.upLevel(appId, userToken.getToken(), 4, null, appId);
 				}
 			}
 
@@ -799,7 +799,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 					UserToken userToken = new UserToken();
 					userToken.setUserId(userId);
 					userToken = userTokenMapper.selectOne(userToken);
-					userLevelService.upLevel(userToken.getToken(), 4, null,appId);
+					userLevelService.upLevel(appId, userToken.getToken(), 4, null,appId);
 				}
 			}
 			newInvestors.setApprovalStatus(Integer.parseInt(approvalStatus));
@@ -1321,7 +1321,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				UserToken userToken = new UserToken();
 				userToken.setUserId(userId);
 				userToken = userTokenMapper.selectOne(userToken);
-				userLevelService.upLevel(userToken.getToken(), 4, "VIP_Investor",appId);
+				userLevelService.upLevel(appId, userToken.getToken(), 4, "VIP_Investor",appId);
 			}
 			}
 
@@ -1358,7 +1358,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				UserToken userToken = new UserToken();
 				userToken.setUserId(userId);
 				userToken = userTokenMapper.selectOne(userToken);
-				userLevelService.upLevel(userToken.getToken(), 4, "VIP_Investor", appId);
+				userLevelService.upLevel(appId, userToken.getToken(), 4, "VIP_Investor", appId);
 			}
 
 			//更新用户表的信息

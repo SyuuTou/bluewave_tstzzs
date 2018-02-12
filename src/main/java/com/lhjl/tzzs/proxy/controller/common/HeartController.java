@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,22 +17,22 @@ public class HeartController extends GenericController {
 
     @Autowired
     private RestTemplate restTemplate;
-    @GetMapping("/heart")
-    public String heart(){
-        return "ok";
+    @GetMapping("/v{appId}/heart")
+    public String heart(@PathVariable Integer appId){
+        return String.valueOf(appId)+"blue";
     }
 
-    @GetMapping("/test")
-    public String test() {
-
-        String url = "https://tws.idatavc.com/event/message/%s";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity entity = new HttpEntity<>( headers);
-        url = String.format(url,"51cdc44f66049d4e14cd1ce2db4feca0");
-
-        ResponseEntity<CommonDto<FlowModel>> commonDto = restTemplate.exchange(url, HttpMethod.GET, entity,new ParameterizedTypeReference<CommonDto<FlowModel>>(){} );
-        return JsonUtils.toJson(commonDto.getBody());
-    }
+//    @GetMapping("/test")
+//    public String test() {
+//
+//        String url = "https://tws.idatavc.com/event/message/%s";
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//
+//        HttpEntity entity = new HttpEntity<>( headers);
+//        url = String.format(url,"51cdc44f66049d4e14cd1ce2db4feca0");
+//
+//        ResponseEntity<CommonDto<FlowModel>> commonDto = restTemplate.exchange(url, HttpMethod.GET, entity,new ParameterizedTypeReference<CommonDto<FlowModel>>(){} );
+//        return JsonUtils.toJson(commonDto.getBody());
+//    }
 }

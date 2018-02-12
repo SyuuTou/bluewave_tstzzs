@@ -1,11 +1,9 @@
 package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.BackstageElegantServiceInputDto;
-import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceInputDto;
-import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceOutputDto;
-import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.ElegantServiceSearchInputDto;
+import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.*;
 import com.lhjl.tzzs.proxy.model.ElegantService;
+import com.lhjl.tzzs.proxy.model.ElegantServiceParticipate;
 import com.lhjl.tzzs.proxy.model.MetaIdentityType;
 import com.lhjl.tzzs.proxy.model.MetaServiceType;
 
@@ -74,4 +72,12 @@ public interface ElegantServiceService {
      * @return
      */
     CommonDto<ElegantService> getElegantServiceInfo(Integer appId, Integer elegantServiceId);
+
+    CommonDto<String> saveOrUpdateParticipate(ElegantServiceParticipate body, Integer appId, String token);
+
+    CommonDto<List<ElegantServiceParticipate>> queryParticipate(Integer appId, Integer elegantServiceId, Integer pageNo, Integer pageSize);
+
+    CommonDto<ElegantServiceParticipate> queryParticipate(Integer appId, Integer elegantServiceId, String token);
+
+    CommonDto<String> saveOrUpdateParticipateFeedback(ElegantServiceParticipateDto body, Integer appId, String token);
 }

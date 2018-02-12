@@ -1,10 +1,12 @@
 package com.lhjl.tzzs.proxy.dto.ElegantServiceDto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
+@JsonIgnoreProperties
 public class ElegantServiceInputDto {
     /**
      * 产品名称
@@ -22,6 +24,10 @@ public class ElegantServiceInputDto {
      * vip会员价
      */
     private String vipPrice;
+    /**
+     * 数量
+     */
+    private Integer quantity;
     /**
      * 限制单位
      */
@@ -121,6 +127,44 @@ public class ElegantServiceInputDto {
     private Integer isLeadInvestor;
     /** 自定义按钮名称 */
     private String customButtonLabel;
+
+    /** 详情图片列表 */
+    private List<String> detailUrls;
+
+    private Integer projectId;
+    private String projectShortName;
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getProjectShortName() {
+        return projectShortName;
+    }
+
+    public void setProjectShortName(String projectShortName) {
+        this.projectShortName = projectShortName;
+    }
+
+    public List<String> getDetailUrls() {
+        return detailUrls;
+    }
+
+    public void setDetailUrls(List<String> detailUrls) {
+        this.detailUrls = detailUrls;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 
     public String getCustomButtonLabel() {
         return customButtonLabel;

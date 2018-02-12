@@ -3,10 +3,10 @@ package com.lhjl.tzzs.proxy.controller;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.*;
 import com.lhjl.tzzs.proxy.model.ElegantService;
+import com.lhjl.tzzs.proxy.model.ElegantServiceParticipate;
 import com.lhjl.tzzs.proxy.model.MetaIdentityType;
 import com.lhjl.tzzs.proxy.model.MetaServiceType;
 import com.lhjl.tzzs.proxy.service.ElegantServiceService;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +41,8 @@ public class ElegantServiceController {
 
         return result;
     }
+
+
 
     /**
      * 根据服务id获取服务详情的接口
@@ -134,6 +136,36 @@ public class ElegantServiceController {
             result.setData(null);
             result.setStatus(502);
         }
+
+        return result;
+    }
+
+    @PostMapping("/v{appId}/participate")
+    public CommonDto<String> participate(@RequestBody ElegantServiceParticipate body, @PathVariable Integer appId, String token){
+        CommonDto<String> result = null;
+            result = elegantServiceService.saveOrUpdateParticipate(body, appId, token);
+        return result;
+    }
+
+    @GetMapping("/v{appId}/participate/list/{elegantServiceId}")
+    public CommonDto<List<ElegantServiceParticipate>> queryParticipate(@PathVariable Integer appId, @PathVariable Integer elegantServiceId, @RequestParam Integer pageNo, @RequestParam(defaultValue = "10") Integer pageSize){
+        CommonDto<List<ElegantServiceParticipate>> result = null;
+        result = elegantServiceService.queryParticipate(appId,elegantServiceId,pageNo,pageSize);
+        return result;
+    }
+
+    @GetMapping("/v{appId}/participate/{elegantServiceId}")
+    public CommonDto<ElegantServiceParticipate> queryParticipateById(@PathVariable Integer appId, @PathVariable Integer elegantServiceId, String token){
+        CommonDto<ElegantServiceParticipate> result = null;
+        result = elegantServiceService.queryParticipate(appId,elegantServiceId,token);
+        return result;
+    }
+
+    @PostMapping("/v{appId}/participate/feedback/{participateId}")
+    public CommonDto<String>  handlerFeedback(@RequestBody ElegantServiceParticipateDto body, @PathVariable Integer appId, String token){
+        CommonDto<String> result = null;
+
+        result = elegantServiceService.saveOrUpdateParticipateFeedback(body, appId, token);
 
         return result;
     }

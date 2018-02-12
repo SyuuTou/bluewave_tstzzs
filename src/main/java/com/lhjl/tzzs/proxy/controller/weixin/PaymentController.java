@@ -32,7 +32,7 @@ import java.util.Map;
  * Email:liumingbo2008@gmail.com
  */
 @RestController
-@RequestMapping(value = "wxPay")
+@RequestMapping(value = "/v{appId}/wxPay")
 public class PaymentController extends GenericController {
 
   @Resource(name = "idataVCPayService")
@@ -51,7 +51,7 @@ public class PaymentController extends GenericController {
    * @param request
    * @throws WxErrorException
    */
-  @RequestMapping(value = "getPrepayIdResult")
+  @RequestMapping(value = "/getPrepayIdResult")
   public void getPrepayId(HttpServletResponse response,
                           HttpServletRequest request) throws WxErrorException, WxPayException {
     WxPayUnifiedOrderRequest payInfo = WxPayUnifiedOrderRequest.newBuilder()
@@ -73,39 +73,39 @@ public class PaymentController extends GenericController {
 
   }
 
+//  /**
+//   * 返回前台H5调用JS支付所需要的参数，公众号支付调用此接口
+//   *
+//   * @param response
+//   * @param request
+//   */
+//  @PostMapping(value = "/getJSSDKPayInfo")
+//  public CommonDto<Map<String, String>> getJSSDKPayInfo(@RequestBody PayRequestBody payRequestBody,
+//                                   HttpServletResponse response,
+//                                   HttpServletRequest request) {
+//
+//    CommonDto<Map<String, String>> commonDto = new CommonDto<>();
+//
+//
+//    try {
+//      commonDto = idataVCPayService.generatePayInfo(payRequestBody, 1);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//      commonDto.setStatus(500);
+//      commonDto.setMessage(e.getMessage());
+//    }
+//
+//    return commonDto;
+//
+//  }
+
   /**
    * 返回前台H5调用JS支付所需要的参数，公众号支付调用此接口
    *
    * @param response
    * @param request
    */
-  @PostMapping(value = "getJSSDKPayInfo")
-  public CommonDto<Map<String, String>> getJSSDKPayInfo(@RequestBody PayRequestBody payRequestBody,
-                                   HttpServletResponse response,
-                                   HttpServletRequest request) {
-
-    CommonDto<Map<String, String>> commonDto = new CommonDto<>();
-
-
-    try {
-      commonDto = idataVCPayService.generatePayInfo(payRequestBody, 1);
-    } catch (Exception e) {
-      e.printStackTrace();
-      commonDto.setStatus(500);
-      commonDto.setMessage(e.getMessage());
-    }
-
-    return commonDto;
-
-  }
-
-  /**
-   * 返回前台H5调用JS支付所需要的参数，公众号支付调用此接口
-   *
-   * @param response
-   * @param request
-   */
-  @PostMapping(value = "v{appId}/getJSSDKPayInfo")
+  @PostMapping(value = "/getJSSDKPayInfo")
   public CommonDto<Map<String, String>> getJSSDKPayInfo(@RequestBody PayRequestBody payRequestBody, @PathVariable Integer appId,
                                                         HttpServletResponse response,
                                                         HttpServletRequest request) {

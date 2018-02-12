@@ -61,6 +61,18 @@ public class MetaObtainIntegral {
     @Column(name = "projects_type")
     private Integer projectsType;
 
+    @Column(name = "app_id")
+    private Integer appId;
+
+
+    public Integer getAppId() {
+        return appId;
+    }
+
+    public void setAppId(Integer appId) {
+        this.appId = appId;
+    }
+
     /**
      * @return ID
      */

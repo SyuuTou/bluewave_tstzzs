@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.ArrayList;
@@ -42,12 +41,14 @@ public class AdertisingServiceImpl implements AdvertisingService{
 
     /**
      * 获取广告列表接口,尽量适用于各种场合
+     *
+     * @param appId
      * @param body
      * @return
      */
     @Transactional(readOnly = true)
     @Override
-    public CommonDto<List<AdvertisingOutputDto>> getAdvertisingList(AdvertisingInputDto body) {
+    public CommonDto<List<AdvertisingOutputDto>> getAdvertisingList(Integer appId, AdvertisingInputDto body) {
 
         CommonDto<List<AdvertisingOutputDto>> result  = new CommonDto<>();
         List<AdvertisingOutputDto> list = new ArrayList<>();
@@ -76,7 +77,7 @@ public class AdertisingServiceImpl implements AdvertisingService{
             body.setOrderSortDesc(1);
         }
 
-        List<Map<String,Object>> advertisingList  = advertisingMapper.findAdvertisingList(body.getEditStatus(),hides,body.getAppId(),
+        List<Map<String,Object>> advertisingList  = advertisingMapper.findAdvertisingList(body.getEditStatus(),hides,appId,
                 body.getPositionId(),body.getStartTime(),body.getEndTime(),body.getTimeYn(),body.getBeginTimeSort(),
                 body.getBeginTimeSortDesc(),body.getOrderSort(),body.getOrderSortDesc(),body.getEndTimeSort(),body.getEndTimeSortDesc(),
                 startPage,pageSize);
@@ -171,10 +172,10 @@ public class AdertisingServiceImpl implements AdvertisingService{
      * @return
      */
     @Override
-    public CommonDto<Map<String, Object>> getAdvertisingAdminList(AdvertisingInputDto body) {
+    public CommonDto<Map<String, Object>> getAdvertisingAdminList(Integer appId,AdvertisingInputDto body) {
         CommonDto<Map<String, Object>> result  = new CommonDto<>();
         Map<String,Object> map = new HashMap<>();
-        CommonDto<List<AdvertisingOutputDto>> jieguo = getAdvertisingList(body);
+        CommonDto<List<AdvertisingOutputDto>> jieguo = getAdvertisingList(appId, body);
 
         List<AdvertisingOutputDto> jieguoList = jieguo.getData();
         map.put("advertisingList",jieguoList);
@@ -196,7 +197,7 @@ public class AdertisingServiceImpl implements AdvertisingService{
         }
         Integer startPage = (pageNum-1)*pageSize;
 
-        Integer allcount = advertisingMapper.findAdvertisingListCount(body.getEditStatus(),hides,body.getAppId(),
+        Integer allcount = advertisingMapper.findAdvertisingListCount(body.getEditStatus(),hides,appId,
                 body.getPositionId(),body.getStartTime(),body.getEndTime(),body.getTimeYn(),body.getBeginTimeSort(),
                 body.getBeginTimeSortDesc(),body.getOrderSort(),body.getOrderSortDesc(),body.getEndTimeSort(),body.getEndTimeSortDesc(),
                 startPage,pageSize);
@@ -275,7 +276,7 @@ public class AdertisingServiceImpl implements AdvertisingService{
 		CommonDto<List<MetaAdvertisingPosition>> result =new CommonDto<>();
 		
 		MetaAdvertisingPosition map =new MetaAdvertisingPosition();
-		map.setAppid(3);
+		map.setAppid(appid);
 		List<MetaAdvertisingPosition> maps = metaAdvertisingPositionMapper.select(map);
 		
 		result.setData(maps);
@@ -288,7 +289,6 @@ public class AdertisingServiceImpl implements AdvertisingService{
 	@Override
 	public CommonDto<Advertising> getAdvertisingInfoById(Integer appid, Integer id) {
 		CommonDto<Advertising> result =new CommonDto<>();
-		
 		Advertising advertising = advertisingMapper.selectByPrimaryKey(id);
 		
 		result.setData(advertising);

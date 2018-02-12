@@ -10,31 +10,39 @@ import com.lhjl.tzzs.proxy.model.MetaObtainIntegral;
 public interface UserIntegralsService {
      /**
       * 查询余额
+      *
+      * @param appId
       * @param body
       * @return
       */
-	CommonDto<Map<String,Integer>> findIntegralsY( YnumDto body);
+	CommonDto<Map<String,Integer>> findIntegralsY(Integer appId, YnumDto body);
 	/**
 	 * 页面显示查询页面固定选择值的接口
+	 *
+	 * @param appId
 	 * @param body
 	 * @return
 	 */
-	CommonDto<Map<String,Object>>findIntegralsZeng(ZengDto body);
+	CommonDto<Map<String,Object>>findIntegralsZeng(Integer appId, ZengDto body);
 	/**
 	 * 
 	 * 页面显示查询其他金额选择
+	 *
+	 * @param appId
 	 * @param body
 	 * @return
 	 */
-	CommonDto<Map<String,Object>> findIntegralsQzeng(QzengDto body);
+	CommonDto<Map<String,Object>> findIntegralsQzeng(Integer appId, QzengDto body);
 	/**
 	 * 交易明细
-	 * @param uuids
-	 * @param pageNum
-	 * @param pageSize
-	 * @return
+	 *
+     * @param appId
+     * @param uuids
+     * @param pageNum
+     * @param pageSize
+     * @return
 	 */
-	CommonDto<List<Map<String, Object>>>findIntegralsDetailed(String uuids,Integer pageNum,Integer pageSize);
+	CommonDto<List<Map<String, Object>>>findIntegralsDetailed(Integer appId, String uuids, Integer pageNum, Integer pageSize);
 	/**
 	 * 购买金币支付成功后插入金币记录表数据接口
 	 * service接口：UserIntegralsService
@@ -52,8 +60,9 @@ public interface UserIntegralsService {
 	/**
 	 * 查询固定金额的接口
 	 * @return
+	 * @param appId
 	 */
-	CommonDto <List<MetaObtainIntegral>>findMoney();
+	CommonDto <List<MetaObtainIntegral>>findMoney(Integer appId);
 
 	/**
 	 * 支付之后调用

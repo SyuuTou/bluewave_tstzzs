@@ -19,17 +19,17 @@ public class UserLevelServiceImpl  implements UserLevelService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserLevelService.class);
 
     @Override
-    public CommonDto<List<UserLevelDto>> findUserLevelList(String userId) {
+    public CommonDto<List<UserLevelDto>> findUserLevelList(Integer appId, String userId) {
         return null;
     }
 
     @Override
-    public CommonDto<UserLevelDto> findLevelInfo(String userStr, int levelId) {
+    public CommonDto<UserLevelDto> findLevelInfo(String userStr, int levelId, Integer appId) {
         return null;
     }
 
     @Override
-    public CommonDto<Map<String, Object>> upLevel(String userStr, int levelId, String presentedType, Integer appId) {
+    public CommonDto<Map<String, Object>> upLevel(Integer id, String userStr, int levelId, String presentedType, Integer appId) {
         return null;
     }
 

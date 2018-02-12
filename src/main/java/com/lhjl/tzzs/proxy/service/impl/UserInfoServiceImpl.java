@@ -992,9 +992,9 @@ public class UserInfoServiceImpl implements UserInfoService{
         UserLevelRelation userLevelRelation = userLevelRelationMapper.selectByUserId(userId);
 
         if (null == userLevelRelation){
-            map.put("会员等级", null);
+            map.put("levelId", null);
         }else{
-            map.put("会员等级", userLevelRelation.getLevelId());
+            map.put("levelId", userLevelRelation.getLevelId());
         }
 
         Founders founders = foundersMapper.selectByUserId(userId);
@@ -1004,18 +1004,18 @@ public class UserInfoServiceImpl implements UserInfoService{
         List<Integer> certificationType = new ArrayList<>();
 
         if (null == founders && null == investors){
-            map.put("认证类型", null);
-            map.put("是否领投", null);
+            map.put("approveId", null);
+            map.put("isLeadInvestor", null);
         }
 
         if (null != founders){
             certificationType.add(2);
-            map.put("是否领投", null);
+            map.put("isLeadInvestor", null);
         }
 
         if(null != investors){
             certificationType.add(investors.getInvestorsType());
-            map.put("是否领投", investors.getLeaderYn());
+            map.put("isLeadInvestor", investors.getLeaderYn());
         }
 
         Integer[] certificationTypeArr = null;
@@ -1025,7 +1025,7 @@ public class UserInfoServiceImpl implements UserInfoService{
             certificationType.toArray(certificationTypeArr);
         }
 
-        map.put("认证类型", certificationTypeArr);
+        map.put("approveId", certificationTypeArr);
 
         return new CommonDto<>(map, "success", 200);
     }

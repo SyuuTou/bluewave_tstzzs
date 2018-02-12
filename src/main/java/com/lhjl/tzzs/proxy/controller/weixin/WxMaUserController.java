@@ -35,7 +35,7 @@ import java.util.Map;
  * @author <a href="https://github.com/binarywang">Binary Wang</a>
  */
 @RestController
-@RequestMapping("/wechat/user")
+@RequestMapping("/v{appid}/wechat/user")
 public class WxMaUserController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -55,7 +55,7 @@ public class WxMaUserController {
      * 登陆接口
      */
 
-    @GetMapping("/v{appid}/login")
+    @GetMapping("/login")
     public CommonDto<UserExsitJudgmentDto> login(String code,@PathVariable Integer appid) {
         CommonDto<UserExsitJudgmentDto> result = new CommonDto<>();
         UserExsitJudgmentDto userExsitJudgmentDto =new UserExsitJudgmentDto();

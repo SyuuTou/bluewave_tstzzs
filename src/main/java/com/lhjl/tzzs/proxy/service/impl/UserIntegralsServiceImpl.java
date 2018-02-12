@@ -56,7 +56,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	 * 查询余额的接口
 	 */
 	@Override
-	public CommonDto<Map<String,Integer>> findIntegralsY( YnumDto body) {
+	public CommonDto<Map<String,Integer>> findIntegralsY(Integer appId, YnumDto body) {
 		CommonDto<Map<String, Integer>> result = new CommonDto<Map<String, Integer>>();
 		Map<String,Integer> map =new HashMap<String,Integer>();
 		String uuids = body.getUuids();
@@ -64,7 +64,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		if(userId !=null){
 			/*Integer z =userIntegralsMapper.findIntegralsZ(userId);
 			Integer x =userIntegralsMapper.findIntegralsX(userId);*/
-			Map<String, Object> u = userIntegralsMapper.findIntegralsU(userId);
+			Map<String, Object> u = userIntegralsMapper.findIntegralsU(appId,userId);
 			BigDecimal xnum = (BigDecimal) u.get("xnum");
 			BigDecimal znum = (BigDecimal) u.get("znum");
 			Integer z = xnum.intValue();
@@ -80,11 +80,13 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	}
 	/**
 	 * 页面显示固定金额
+	 *
+	 * @param appId
 	 * @param body
 	 * @return
 	 */
 	@Override
-	public CommonDto<Map<String,Object>> findIntegralsZeng(ZengDto body) {
+	public CommonDto<Map<String,Object>> findIntegralsZeng(Integer appId, ZengDto body) {
 		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
 		Map<String,Object>map =new HashMap<String,Object>();
 		String uuids = body.getUuids();
@@ -119,6 +121,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 
@@ -141,6 +144,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 
@@ -164,6 +168,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 
@@ -187,6 +192,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 
@@ -210,6 +216,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 
@@ -233,6 +240,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 
@@ -256,6 +264,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 					}
@@ -277,6 +286,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 					}
@@ -303,6 +313,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 					}
@@ -322,6 +333,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 
@@ -342,6 +354,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 
@@ -362,6 +375,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 
@@ -382,6 +396,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 
@@ -402,6 +417,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 					}
@@ -421,6 +437,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 					}
@@ -440,6 +457,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						userMoneyRecord.setMoney(jnum );
 						userMoneyRecord.setSceneKey(skey);
 						userMoneyRecord.setUserId(userId);
+						userMoneyRecord.setAppId(appId);
 						userMoneyRecordMapper.insert(userMoneyRecord);
 						map.put("Money_ID",userMoneyRecord.getId());
 					}
@@ -457,7 +475,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	/**
 	 * 其他金额充值页面显示
 	 */
-	public CommonDto<Map<String,Object>> findIntegralsQzeng(QzengDto body) {
+	public CommonDto<Map<String,Object>> findIntegralsQzeng(Integer appId, QzengDto body) {
 		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
 		Map<String,Object> map =new HashMap<String,Object>();
 		String uuids = body.getUuids();
@@ -490,6 +508,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
                     userMoneyRecord.setMoney(dnum);
                     userMoneyRecord.setSceneKey("dpGXuIqb");
                     userMoneyRecord.setUserId(userId);
+					userMoneyRecord.setAppId(appId);
                     userMoneyRecordMapper.insert(userMoneyRecord);
                     map.put("Money_ID", userMoneyRecord.getId());
                 } else {
@@ -516,6 +535,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userMoneyRecord.setMoney(dnum);
 					userMoneyRecord.setSceneKey("dpGXuIqb");
 					userMoneyRecord.setUserId(userId);
+					userMoneyRecord.setAppId(appId);
 					userMoneyRecordMapper.insert(userMoneyRecord);
 					map.put("Money_ID",userMoneyRecord.getId());
 				}
@@ -534,7 +554,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	/**
 	 * 查询交易明细接口
 	 */
-	public  CommonDto<List<Map<String, Object>>> findIntegralsDetailed(String uuids,Integer pageNum,Integer pageSize) {
+	public  CommonDto<List<Map<String, Object>>> findIntegralsDetailed(Integer appId, String uuids, Integer pageNum, Integer pageSize) {
 		CommonDto<List<Map<String, Object>>> result = new CommonDto<List<Map<String, Object>>>();
 		List<Map<String, Object>> list =new ArrayList<Map<String, Object>>();
 		Map<String, Object> map =new HashMap<>();
@@ -549,7 +569,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
             pageSize = (100 - beginNum)>=pageSize?pageSize:(100-beginNum);
         }*/
 		if(userId !=0 && userId !=null){
-			list=userLevelRelationMapper.findByMing(userId, beginNum, pageSize);
+			list=userLevelRelationMapper.findByMing(appId,userId, beginNum, pageSize);
 			Integer leId =usersMapper.findByUserid(userId);
 			if(leId !=null){
 				Float bei =usersMapper.findByBei(leId);
@@ -900,13 +920,15 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	}
 /**
  * 查询页面固定金额
+ * @param appId
  */
 	@Override
-	public CommonDto <List<MetaObtainIntegral>>findMoney(){
+	public CommonDto <List<MetaObtainIntegral>>findMoney(Integer appId){
 		CommonDto <List<MetaObtainIntegral>> result = new CommonDto <List<MetaObtainIntegral>>();
 		List<MetaObtainIntegral> list =new ArrayList<MetaObtainIntegral>();
 		List<MetaObtainIntegral> list2 =new ArrayList<MetaObtainIntegral>();
 		MetaObtainIntegral obtainIntegral =new MetaObtainIntegral();
+		obtainIntegral.setAppId(appId);
 		list = metaObtainIntegralMapper.select(obtainIntegral);
 		for(MetaObtainIntegral o : list){
 			if(o.getUserLevel() == null){

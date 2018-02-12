@@ -54,7 +54,7 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
         CommonDto<String> result = new CommonDto<>();
         ReportComment reportComment = new ReportComment();
         reportComment.setColumnId(reportCommentInputDto.getColumnId());
-        reportComment.setAppId(reportCommentInputDto.getAppId());
+        reportComment.setAppId(appId);
         long now = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String createTime = null;

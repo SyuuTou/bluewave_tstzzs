@@ -37,6 +37,28 @@ public class MetaUserLevel {
      */
     private BigDecimal amount;
 
+    @Column(name = "app_id")
+    private Integer appId;
+
+    @Column(name = "level_id")
+    private Integer levelId;
+
+    public Integer getLevelId() {
+        return levelId;
+    }
+
+    public void setLevelId(Integer levelId) {
+        this.levelId = levelId;
+    }
+
+    public Integer getAppId() {
+        return appId;
+    }
+
+    public void setAppId(Integer appId) {
+        this.appId = appId;
+    }
+
     /**
      * @return ID
      */

@@ -22,7 +22,7 @@ public class ElegantServiceSearchInputDto {
     /**页码*/
     private Integer pageNum;
     /** 认证类型 */
-    private Integer approveType;
+    private List<Integer> approveType;
     /** 会员类型 */
     private Integer memberType;
     /**每页显示数量*/
@@ -33,11 +33,11 @@ public class ElegantServiceSearchInputDto {
     private Integer isLeadInvestor;
 
 
-    public Integer getApproveType() {
+    public List<Integer> getApproveType() {
         return approveType;
     }
 
-    public void setApproveType(Integer approveType) {
+    public void setApproveType(List<Integer> approveType) {
         this.approveType = approveType;
     }
 

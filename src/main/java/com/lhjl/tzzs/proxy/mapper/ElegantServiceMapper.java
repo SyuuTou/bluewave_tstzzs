@@ -20,7 +20,7 @@ public interface ElegantServiceMapper extends OwnerMapper<ElegantService> {
                                                     @Param("identityType") Integer[] identityType,
                                                     @Param("serviceType") Integer[] serviceType,
                                                     @Param("searchWord") String searchWord,
-                                                    @Param("approveType") Integer approveType, @Param("isLeadInvestor") Integer isLeadInvestor, @Param("isReward") Integer isReward, @Param("memberType") Integer memberType, @Param("startPage") Integer startPage,
+                                                    @Param("approveType") List<Integer> approveType, @Param("isLeadInvestor") Integer isLeadInvestor, @Param("isReward") Integer isReward, @Param("memberType") Integer memberType, @Param("startPage") Integer startPage,
                                                     @Param("pageSize") Integer pageSize);
 
     /**

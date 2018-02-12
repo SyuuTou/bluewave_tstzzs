@@ -1,5 +1,7 @@
 package com.lhjl.tzzs.proxy.model;
 
+import io.swagger.models.auth.In;
+
 import java.util.Date;
 import javax.persistence.*;
 
@@ -31,6 +33,17 @@ public class MetaUserRightsInterests {
      * 是否有效
      */
     private Integer yn;
+
+    @Column(name = "app_id")
+    private Integer appId;
+
+    public Integer getAppId() {
+        return appId;
+    }
+
+    public void setAppId(Integer appId) {
+        this.appId = appId;
+    }
 
     /**
      * @return ID

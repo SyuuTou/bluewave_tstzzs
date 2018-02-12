@@ -84,11 +84,13 @@ public class UserLevelServiceImpl implements UserLevelService {
 
     /**
      * 查找会员等级信息
+     *
+     * @param appId
      * @param userId 用户ID
      * @return
      */
     @Override
-    public CommonDto<List<UserLevelDto>> findUserLevelList(String userId) {
+    public CommonDto<List<UserLevelDto>> findUserLevelList(Integer appId, String userId) {
         CommonDto<List<UserLevelDto>> result = new CommonDto<List<UserLevelDto>>();
 
         Integer localUserId = this.getLocalUserId(userId);
@@ -100,6 +102,7 @@ public class UserLevelServiceImpl implements UserLevelService {
 
         //获取会员信息
         Example userLevelExample = new Example(MetaUserLevel.class);
+        userLevelExample.and().andEqualTo("appId", appId);
         userLevelExample.setOrderByClause("id asc");
         List<MetaUserLevel> userLevels = metaUserLevelMapper.selectByExample(userLevelExample);
 
@@ -108,7 +111,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         if(userLevels.size() > 0){
             for(MetaUserLevel userLevel : userLevels){
                 Example example = new Example(MetaUserRightsInterests.class);
-                example.and().andEqualTo("userLevelId", userLevel.getId());
+                example.and().andEqualTo("userLevelId", userLevel.getLevelId()).andEqualTo("appId",appId);
                 //获取权益描述
                 List<MetaUserRightsInterests> metaUserRightsInterests = metaUserRightsInterestsMapper.selectByExample(example);
                 List<String> descs = new ArrayList<String>();
@@ -125,7 +128,7 @@ public class UserLevelServiceImpl implements UserLevelService {
 
                 //组合返回信息
                 UserLevelDto userLevelDto = new UserLevelDto();
-                userLevelDto.setId(userLevel.getId());
+                userLevelDto.setId(userLevel.getLevelId());
                 userLevelDto.setName(userLevel.getName());
                 userLevelDto.setAmount(userLevel.getAmount().intValue());
                 userLevelDto.setDescs(descs);
@@ -145,7 +148,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 //获取原价
                 MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
                 metaObtainIntegral.setSceneKey("EWJkiU7Q");
-                metaObtainIntegral.setUserLevel(userLevel.getId());
+                metaObtainIntegral.setUserLevel(userLevel.getLevelId());
                 metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
                 BigDecimal originalCost = metaObtainIntegral.getIntegral();
                 userLevelDto.setOriginalCost(originalCost);
@@ -177,13 +180,13 @@ public class UserLevelServiceImpl implements UserLevelService {
                 //权限信息
                 MetaObtainIntegral send = new MetaObtainIntegral();
                 send.setSceneKey("PnLUE0m4");
-                send.setUserLevel(userLevel.getId());
+                send.setUserLevel(userLevel.getLevelId());
                 send = metaObtainIntegralMapper.selectOne(send);
                 userLevelDto.setSendsNum(send.getDeliverNum());
 
                 MetaObtainIntegral condition = new MetaObtainIntegral();
                 condition.setSceneKey("cIQwmmX7");
-                condition.setUserLevel(userLevel.getId());
+                condition.setUserLevel(userLevel.getLevelId());
                 condition = metaObtainIntegralMapper.selectOne(condition);
                 userLevelDto.setConditionNum(condition.getDeliverNum());
 
@@ -210,10 +213,11 @@ public class UserLevelServiceImpl implements UserLevelService {
      * 进入会员等级购买页
      * @param userStr 用户ID（字符串）
      * @param levelId 当前页面会员等级
+     * @param appId
      * @return
      */
     @Override
-    public CommonDto<UserLevelDto> findLevelInfo(String userStr, int levelId) {
+    public CommonDto<UserLevelDto> findLevelInfo(String userStr, int levelId, Integer appId) {
         CommonDto<UserLevelDto> result = new CommonDto<UserLevelDto>();
 
         //测试开关
@@ -230,18 +234,19 @@ public class UserLevelServiceImpl implements UserLevelService {
         //获取当前会员信息
         MetaUserLevel userLevel = new MetaUserLevel();
         userLevel.setId(levelId);
+
         userLevel = metaUserLevelMapper.selectOne(userLevel);
         if(userLevel == null){
             result.setStatus(203);
             result.setMessage("当前会员信息不存在");
             return result;
         }
-        userLevelDto.setId(userLevel.getId());
+        userLevelDto.setId(userLevel.getLevelId());
         userLevelDto.setName(userLevel.getName());
 
         //获取权益描述
         Example example = new Example(MetaUserRightsInterests.class);
-        example.and().andEqualTo("userLevelId", userLevel.getId());
+        example.and().andEqualTo("userLevelId", userLevel.getLevelId()).andEqualTo("appId",appId);
         List<MetaUserRightsInterests> metaUserRightsInterests = metaUserRightsInterestsMapper.selectByExample(example);
         List<String> descs = new ArrayList<String>();
         if(metaUserRightsInterests.size() > 0){
@@ -316,7 +321,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         //获取原价
         MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
         metaObtainIntegral.setSceneKey("EWJkiU7Q");
-        metaObtainIntegral.setUserLevel(userLevel.getId());
+        metaObtainIntegral.setUserLevel(userLevel.getLevelId());
         metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
         BigDecimal originalCost = metaObtainIntegral.getIntegral();
         userLevelDto.setOriginalCost(originalCost);
@@ -348,13 +353,13 @@ public class UserLevelServiceImpl implements UserLevelService {
         //权限信息
         MetaObtainIntegral send = new MetaObtainIntegral();
         send.setSceneKey("PnLUE0m4");
-        send.setUserLevel(userLevel.getId());
+        send.setUserLevel(userLevel.getLevelId());
         send = metaObtainIntegralMapper.selectOne(send);
         userLevelDto.setSendsNum(send.getDeliverNum());
 
         MetaObtainIntegral condition = new MetaObtainIntegral();
         condition.setSceneKey("cIQwmmX7");
-        condition.setUserLevel(userLevel.getId());
+        condition.setUserLevel(userLevel.getLevelId());
         condition = metaObtainIntegralMapper.selectOne(condition);
         userLevelDto.setConditionNum(condition.getDeliverNum());
 
@@ -395,6 +400,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             userMoneyRecord.setMoney(jnum);
             userMoneyRecord.setSceneKey(sceneKey);
             userMoneyRecord.setUserId(localUserId);
+            userMoneyRecord.setAppId(appId);
             userMoneyRecordMapper.insert(userMoneyRecord);
             userLevelDto.setMoneyId(userMoneyRecord.getId());
         }
@@ -434,7 +440,7 @@ public class UserLevelServiceImpl implements UserLevelService {
 
             //更新新的等级记录信息
             Example example = new Example(UserLevelRelation.class);
-            example.and().andEqualTo("userId", userId).andEqualTo("yn", 0).andEqualTo("status", 0);
+            example.and().andEqualTo("userId", userId).andEqualTo("yn", 0).andEqualTo("status", 0).andEqualTo("appId", appId);
             example.setOrderByClause("create_time desc");
             List<UserLevelRelation> olds = userLevelRelationMapper.selectByExample(example);
             if(olds.size() > 0){
@@ -449,7 +455,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         }else{
             //更新新的等级记录信息
             Example example = new Example(UserLevelRelation.class);
-            example.and().andEqualTo("userId", userId).andEqualTo("yn", 0).andEqualTo("status", 0);
+            example.and().andEqualTo("userId", userId).andEqualTo("yn", 0).andEqualTo("status", 0).andEqualTo("appId", appId);
             example.setOrderByClause("create_time desc");
             List<UserLevelRelation> olds = userLevelRelationMapper.selectByExample(example);
             if(olds.size() > 0){
@@ -467,6 +473,8 @@ public class UserLevelServiceImpl implements UserLevelService {
 
     /**
      * 会员升级(不通过支付使用)
+     *
+     * @param id
      * @param userStr 用户ID（字符串）
      * @param levelId 要升级的会员等级
      * @param presentedType
@@ -474,7 +482,7 @@ public class UserLevelServiceImpl implements UserLevelService {
      */
     @Transactional
     @Override
-    public CommonDto<Map<String, Object>> upLevel(String userStr, int levelId, String presentedType, Integer appId) {
+    public CommonDto<Map<String, Object>> upLevel(Integer id, String userStr, int levelId, String presentedType, Integer appId) {
         CommonDto<Map<String, Object>> result = new CommonDto<>();
         try {
             Integer localUserId = this.getLocalUserId(userStr);
@@ -616,13 +624,14 @@ public class UserLevelServiceImpl implements UserLevelService {
         userLevelRelation.setUserId(localUserId);
         userLevelRelation.setYn(1);
         userLevelRelation.setStatus(1);
+        userLevelRelation.setAppId(appId);
         userLevelRelation = userLevelRelationMapper.selectOne(userLevelRelation);
         int userLevel = 0;
         if(userLevelRelation != null){
             userLevel = userLevelRelation.getLevelId();
 
             Example userLevelRelationForTime = new Example(UserLevelRelation.class);
-            userLevelRelationForTime.and().andEqualTo("userId",localUserId).andGreaterThan("endTime",DateTime.now().toDate()).andLessThan("beginTime",DateTime.now().toDate());
+            userLevelRelationForTime.and().andEqualTo("userId",localUserId).andEqualTo("appId", appId).andGreaterThan("endTime",DateTime.now().toDate()).andLessThan("beginTime",DateTime.now().toDate());
             userLevelRelationForTime.setOrderByClause("end_time asc");
             List<UserLevelRelation> userLevelRelationList = userLevelRelationMapper.selectByExample(userLevelRelationForTime);
             if (userLevelRelationList.size() > 0){
@@ -639,7 +648,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             }
         }
         DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        List<String> sceneKeys = userLevelRelationMapper.findByUserIdLeid(localUserId,action.getSceneKey(),dateFormat.format(DateTime.now().toDate()));
+        List<String> sceneKeys = userLevelRelationMapper.findByUserIdLeid(appId,localUserId,action.getSceneKey(),dateFormat.format(DateTime.now().toDate()));
         data.put("levelId", userLevel);
         //查询当前用户金币余额
         BigDecimal z =userIntegralsMapper.findIntegralsZ(localUserId);
@@ -670,6 +679,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
             metaObtainIntegral.setSceneKey(sceneKey);
             metaObtainIntegral.setUserLevel(4);
+            metaObtainIntegral.setAppId(appId);
             metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
             BigDecimal consumeNum = metaObtainIntegral.getIntegral();
 
@@ -677,6 +687,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             UserIntegralConsume userIntegralConsume = new UserIntegralConsume();
             userIntegralConsume.setSceneKey(sceneKey);
             userIntegralConsume.setUserId(localUserId);
+            userIntegralConsume.setAppId(appId);
             List<UserIntegralConsume> userIntegralsList = userIntegralConsumeMapper.select(userIntegralConsume);
             //有效数据
             List<UserIntegralConsume> valid = new ArrayList<UserIntegralConsume>();
@@ -1202,7 +1213,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             }else {
 
                 //判断用户账户余额是否充足
-                if (jugeCoinsIsEnough(userId,costNum)){
+                if (jugeCoinsIsEnough(appId,userId,costNum)){
                     result.setStatus(204);
                     result.setMessage("查看约谈内容，共消费"+(costNum.multiply(new BigDecimal(-1)))+"金币，一次性收费后不再计费");
                     result.setData(data);
@@ -1213,7 +1224,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             }
         }else {
             //判断用户账户余额是否充足
-            if (jugeCoinsIsEnough(userId,costNum)){
+            if (jugeCoinsIsEnough(appId,userId,costNum)){
                 result.setStatus(204);
                 result.setMessage("查看约谈内容，共消费"+(costNum.multiply(new BigDecimal(-1)))+"金币，一次性收费后不再计费");
                 result.setData(data);
@@ -1233,10 +1244,10 @@ public class UserLevelServiceImpl implements UserLevelService {
      * @param costNum 花费数量
      * @return
      */
-    private boolean jugeCoinsIsEnough(Integer userId, BigDecimal costNum){
+    private boolean jugeCoinsIsEnough(Integer appId, Integer userId, BigDecimal costNum){
         boolean jieguo = false;
         //查询当前用户金币余额
-        Map<String, Object> u = userIntegralsMapper.findIntegralsU(userId);
+        Map<String, Object> u = userIntegralsMapper.findIntegralsU(appId, userId);
         BigDecimal z = new BigDecimal(String.valueOf(u.get("xnum")));
         BigDecimal x = new BigDecimal(String.valueOf(u.get("znum")));
         BigDecimal totalCoins = z.add(x);
@@ -1410,6 +1421,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         userLevelRelation.setUserId(localUserId);
         userLevelRelation.setYn(1);
         userLevelRelation.setStatus(1);
+        userLevelRelation.setAppId(appId);
         userLevelRelation = userLevelRelationMapper.selectOne(userLevelRelation);
         int userLevel = 0;
         if(userLevelRelation != null){
@@ -1424,6 +1436,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
             metaObtainIntegral.setSceneKey(sceneKey);
             metaObtainIntegral.setUserLevel(4);
+            metaObtainIntegral.setAppId(appId);
             metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
             BigDecimal consumeNum = metaObtainIntegral.getIntegral();
 
@@ -1443,6 +1456,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             userIntegralConsume.setBeginTime(now);
             userIntegralConsume.setCreateTime(now);
             userIntegralConsume.setEndTime(end);
+            userIntegralConsume.setAppId(appId);
             userIntegralConsumeMapper.insert(userIntegralConsume);
 
             //更新金币记录表
@@ -1521,6 +1535,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
             metaObtainIntegral.setSceneKey(sceneKey);
             metaObtainIntegral.setUserLevel(userLevel);
+            metaObtainIntegral.setAppId(appId);
             metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
 
             //普通会员
@@ -1541,6 +1556,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegralConsume.setBeginTime(now);
                 userIntegralConsume.setCreateTime(now);
                 userIntegralConsume.setEndTime(end);
+                userIntegralConsume.setAppId(appId);
                 userIntegralConsumeMapper.insert(userIntegralConsume);
                 int consumeId = userIntegralConsume.getId();
 
@@ -1554,6 +1570,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 newUserIntegralConsumeDatas.setDatasId(roundName);
                 newUserIntegralConsumeDatas.setConsumeDate(new Date());
                 newUserIntegralConsumeDatas.setUserIntegralConsumeId(consumeId);
+                newUserIntegralConsumeDatas.setAppId(appId);
                 userIntegralConsumeDatasMapper.insert(newUserIntegralConsumeDatas);
 
                 result.setStatus(200);
@@ -1611,6 +1628,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegralConsume.setBeginTime(now);
                 userIntegralConsume.setCreateTime(now);
                 userIntegralConsume.setEndTime(end);
+                userIntegralConsume.setAppId(appId);
                 userIntegralConsumeMapper.insert(userIntegralConsume);
                 int consumeId = userIntegralConsume.getId();
 
@@ -1625,6 +1643,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                     newUserIntegralConsumeDatas.setDatasId(string);
                     newUserIntegralConsumeDatas.setConsumeDate(new Date());
                     newUserIntegralConsumeDatas.setUserIntegralConsumeId(consumeId);
+                    newUserIntegralConsumeDatas.setAppId(appId);
                     userIntegralConsumeDatasMapper.insert(newUserIntegralConsumeDatas);
                 }
 
@@ -1672,6 +1691,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             userIntegralConsume.setBeginTime(now);
             userIntegralConsume.setCreateTime(now);
             userIntegralConsume.setEndTime(end);
+            userIntegralConsume.setAppId(appId);
             userIntegralConsumeMapper.insert(userIntegralConsume);
             int consumeId = userIntegralConsume.getId();
 
@@ -1686,6 +1706,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 newUserIntegralConsumeDatas.setDatasId(string);
                 newUserIntegralConsumeDatas.setConsumeDate(new Date());
                 newUserIntegralConsumeDatas.setUserIntegralConsumeId(consumeId);
+                newUserIntegralConsumeDatas.setAppId(appId);
                 userIntegralConsumeDatasMapper.insert(newUserIntegralConsumeDatas);
             }
 
@@ -1750,6 +1771,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         userScene.setUserId(localUserId);
         userScene.setSceneKey(sceneKey);
         userScene.setYn(0);
+        userScene.setAppId(appId);
         userScene = userSceneMapper.selectOne(userScene);
         if(userScene != null){
             //更新取消标识
@@ -1763,6 +1785,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             newUserScene.setFlag(1);
             newUserScene.setYn(0);
             newUserScene.setCreateTime(new Date());
+            newUserScene.setAppId(appId);
             userSceneMapper.insert(newUserScene);
         }
 
@@ -2136,7 +2159,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         }
 
         Example userLevelExample = new Example(UserLevelRelation.class);
-        userLevelExample.and().andEqualTo("userId",userId).andEqualTo("yn",1).andEqualTo("status",1);
+        userLevelExample.and().andEqualTo("userId",userId).andEqualTo("yn",1).andEqualTo("status",1).andEqualTo("appId",appId);
         userLevelExample.setOrderByClause("level_id desc");
         PageHelper.offsetPage(0,1);
 

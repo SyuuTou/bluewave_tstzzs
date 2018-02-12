@@ -592,13 +592,18 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
     @Override
     public CommonDto<List<RedEnvelopeResDto>> queryRedEnvelopeAllByToken(Integer appId, String token, Integer pageNo, Integer pageSize) {
 
-        Set<String> tokens = getRecivedTokens(token);
+//        Set<String> friendToken = getFriendToken(token);
+        Set<String> tempTokens = null;
+        Set<String> tokens = null;
+//        for (String temp : friendToken) {
+            tokens = getRecivedTokens(token);
 
 
-        Set<String> tempTokens = new ConcurrentSkipListSet<>();
-        for (String  tempToken : tokens){
-            tempTokens.addAll(getRecivedTokens(tempToken));
-        }
+            tempTokens = new ConcurrentSkipListSet<>();
+            for (String tempToken : tokens) {
+                tempTokens.addAll(getRecivedTokens(tempToken));
+            }
+//        }
         tokens = tempTokens;
 
         if (null == tokens || tokens.size() <= 0){
@@ -663,6 +668,26 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         });
 
         return new CommonDto<>(redEnvelopeResDtos, "success", 200);
+    }
+
+    private Set<String> getFriendToken(String token) {
+        RedEnvelopeLog redEnvelopeLogRecord = new RedEnvelopeLog();
+        redEnvelopeLogRecord.setToken(token);
+
+        List<RedEnvelopeLog> redEnvelopeLogs = redEnvelopeLogMapper.select(redEnvelopeLogRecord);
+        Set<String> tokens = new HashSet<>();
+        List<RedEnvelopeLog> temp = null;
+        for (RedEnvelopeLog redEnvelopeLog : redEnvelopeLogs){
+            redEnvelopeLogRecord = new RedEnvelopeLog();
+            redEnvelopeLogRecord.setFromToken(redEnvelopeLog.getFromToken());
+            temp = redEnvelopeLogMapper.select(redEnvelopeLogRecord);
+            tokens.add(redEnvelopeLog.getFromToken());
+            for (RedEnvelopeLog rel : temp) {
+                tokens.add(rel.getToken());
+            }
+        }
+        return tokens;
+
     }
 
     public Set<String> getRecivedTokens(String token) {

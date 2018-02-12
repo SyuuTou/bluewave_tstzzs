@@ -64,8 +64,18 @@ public class UserLevelRelation {
 	 */
     @Transient
 	private String EndTimeStr;
-    
-    
+
+    @Column(name = "app_id")
+    private Integer appId;
+
+    public Integer getAppId() {
+        return appId;
+    }
+
+    public void setAppId(Integer appId) {
+        this.appId = appId;
+    }
+
     public String getBeginTimeStr() {
 		return beginTimeStr;
 	}

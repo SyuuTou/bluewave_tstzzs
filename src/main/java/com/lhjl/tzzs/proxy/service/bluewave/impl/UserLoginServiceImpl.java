@@ -406,23 +406,24 @@ public class UserLoginServiceImpl implements UserLoginService{
             return result;
         }
 
-        if (appid != 1){
-            UsersTokenLts usersTokenLts = new UsersTokenLts();
-            usersTokenLts.setToken(token);
-
-            List<UsersTokenLts> usersTokenLtsList = usersTokenLtsMapper.select(usersTokenLts);
-            if (usersTokenLtsList.size() > 0){
-                result = usersTokenLtsList.get(0).getUserId();
-            }
-        }else {
+//        if (appid != 1){
+//            UsersTokenLts usersTokenLts = new UsersTokenLts();
+//            usersTokenLts.setToken(token);
+//
+//            List<UsersTokenLts> usersTokenLtsList = usersTokenLtsMapper.select(usersTokenLts);
+//            if (usersTokenLtsList.size() > 0){
+//                result = usersTokenLtsList.get(0).getUserId();
+//            }
+//        }else {
             UserToken userToken = new UserToken();
             userToken.setToken(token);
+            userToken.setMetaAppId(String.valueOf(appid));
 
             List<UserToken> userTokenList = userTokenMapper.select(userToken);
             if (userTokenList.size() > 0){
                 result = userTokenList.get(0).getUserId();
             }
-        }
+//        }
 
         return result;
     }

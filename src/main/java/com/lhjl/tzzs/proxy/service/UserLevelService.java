@@ -14,27 +14,32 @@ import java.util.Map;
 public interface UserLevelService {
     /**
      * 查找会员等级信息
+     *
+     * @param appId
      * @param userId 用户ID
      * @return
      */
-    CommonDto<List<UserLevelDto>> findUserLevelList(String userId);
+    CommonDto<List<UserLevelDto>> findUserLevelList(Integer appId, String userId);
 
     /**
      * 进入会员等级购买页
      * @param userStr 用户ID（字符串）
      * @param levelId 当前页面会员等级
+     * @param appId
      * @return
      */
-    CommonDto<UserLevelDto> findLevelInfo(String userStr, int levelId);
+    CommonDto<UserLevelDto> findLevelInfo(String userStr, int levelId, Integer appId);
 
     /**
      * 会员升级
+     *
+     * @param id
      * @param userStr 用户ID（字符串）
      * @param levelId 要升级的会员等级
      * @param presentedType
      * @return
      */
-    CommonDto<Map<String, Object>> upLevel(String userStr, int levelId, String presentedType, Integer appId);
+    CommonDto<Map<String, Object>> upLevel(Integer id, String userStr, int levelId, String presentedType, Integer appId);
 
     /**
      * 消费金币提醒

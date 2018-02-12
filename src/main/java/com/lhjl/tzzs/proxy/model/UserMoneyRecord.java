@@ -31,6 +31,18 @@ public class UserMoneyRecord {
     @Column(name = "scene_key")
     private String sceneKey;
 
+    @Column(name = "app_id")
+    private Integer appId;
+
+
+    public Integer getAppId() {
+        return appId;
+    }
+
+    public void setAppId(Integer appId) {
+        this.appId = appId;
+    }
+
     /**
      * 获取记录id
      *

@@ -3,7 +3,6 @@ package com.lhjl.tzzs.proxy.controller;
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.service.UserIntegralsService;
 import com.lhjl.tzzs.proxy.service.UserLevelService;
-import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +34,7 @@ public class UserLevelController {
         CommonDto<List<UserLevelDto>> result = new CommonDto<List<UserLevelDto>>();
         String userId = body.getUserId();
         try{
-            result = userLevelService.findUserLevelList(userId);
+            result = userLevelService.findUserLevelList(1, userId);
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("查询会员信息异常");
@@ -45,6 +44,25 @@ public class UserLevelController {
         return result;
     }
 
+    /**
+     * 获取会员等级信息
+     * @param body 请求对象
+     * @return
+     */
+    @PostMapping("/v{appId}/finduserlevel")
+    public CommonDto<List<UserLevelDto>> findUserLevel(@PathVariable Integer appId,@RequestBody ActionDto body){
+        CommonDto<List<UserLevelDto>> result = new CommonDto<List<UserLevelDto>>();
+        String userId = body.getUserId();
+        try{
+            result = userLevelService.findUserLevelList(appId, userId);
+        }catch(Exception e){
+            result.setStatus(501);
+            result.setMessage("查询会员信息异常");
+            logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+
+        return result;
+    }
     /**
      * 进入会员购买页
      * @param body 请求对象
@@ -56,7 +74,27 @@ public class UserLevelController {
         String userStr = body.getUserId();
         int levelId = body.getLevelId();
         try{
-            result = userLevelService.findLevelInfo(userStr, levelId);
+            result = userLevelService.findLevelInfo(userStr, levelId, 1);
+        }catch(Exception e){
+            result.setStatus(501);
+            result.setMessage("查询会员信息异常");
+            logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+        return result;
+    }
+
+    /**
+     * 进入会员购买页
+     * @param body 请求对象
+     * @return
+     */
+    @PostMapping("/v{appId}/buylevel")
+    public CommonDto<UserLevelDto> userLevelForBuy(@PathVariable Integer appId,@RequestBody ActionDto body){
+        CommonDto<UserLevelDto> result = new CommonDto<UserLevelDto>();
+        String userStr = body.getUserId();
+        int levelId = body.getLevelId();
+        try{
+            result = userLevelService.findLevelInfo(userStr, levelId, appId);
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("查询会员信息异常");
@@ -76,7 +114,7 @@ public class UserLevelController {
         String userStr = body.getUserId();
         int levelId = body.getLevelId();
         try{
-            result = userLevelService.upLevel(userStr, levelId,body.getPresentedType(), 1); //默认
+            result = userLevelService.upLevel(1, userStr, levelId,body.getPresentedType(), 1); //默认
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("升级会员异常");
@@ -84,6 +122,7 @@ public class UserLevelController {
         }
         return result;
     }
+
 
     /**
      * 升级会员等级（包括购买会员）
@@ -96,7 +135,7 @@ public class UserLevelController {
         String userStr = body.getUserId();
         int levelId = body.getLevelId();
         try{
-            result = userLevelService.upLevel(userStr, levelId,body.getPresentedType(), appId); //默认
+            result = userLevelService.upLevel(appId, userStr, levelId,body.getPresentedType(), appId); //默认
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("升级会员异常");
