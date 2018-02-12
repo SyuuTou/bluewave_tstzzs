@@ -1,5 +1,7 @@
 package com.lhjl.tzzs.proxy.mapper;
 
+import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogInputDto;
+import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogOutputDto;
 import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutputDto;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
@@ -14,33 +16,17 @@ public interface ProjectFinancingLogMapper extends OwnerMapper<ProjectFinancingL
     List<ProjectFinancingLog> selectProjectFinancingLogList(@Param("projectId") Integer projectId,@Param("projectStatus") Integer projectStatus);
     List<String> selectInvestors(@Param("pflid") Integer pflid);
     /**
-     * 项目融资历史查询
-     * @param searchWord
-     * @param begainTime
-     * @param endTime
-     * @param dataSource
-     * @param stage
-     * @param currency
-     * @param creatTimeOrder
-     * @param creatTimeOrderDesc
-     * @param updateTimeOrder
-     * @param updateTimeOrderDesc
-     * @param startPage
-     * @param pageSize
+     * 获取投资事件所有的实体list
+     * @param body
      * @return
      */
-    List<Map<String,Object>> getProjectFinancingLogList(@Param("searchWord") String searchWord,@Param("begainTime") String begainTime,
-                                                        @Param("endTime") String endTime,@Param("dataSource") Integer[] dataSource,
-                                                        @Param("stage") String[] stage,@Param("currency") Integer[] currency,
-                                                        @Param("creatTimeOrder") Integer creatTimeOrder,@Param("creatTimeOrderDesc") Integer creatTimeOrderDesc,
-                                                        @Param("updateTimeOrder") Integer updateTimeOrder,@Param("updateTimeOrderDesc") Integer updateTimeOrderDesc,
-                                                        @Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
-    Integer getProjectFinancingLogListCount(@Param("searchWord") String searchWord,@Param("begainTime") String begainTime,
-                                                        @Param("endTime") String endTime,@Param("dataSource") Integer[] dataSource,
-                                                        @Param("stage") String[] stage,@Param("currency") Integer[] currency,
-                                                        @Param("creatTimeOrder") Integer creatTimeOrder,@Param("creatTimeOrderDesc") Integer creatTimeOrderDesc,
-                                                        @Param("updateTimeOrder") Integer updateTimeOrder,@Param("updateTimeOrderDesc") Integer updateTimeOrderDesc,
-                                                        @Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
+    List<ProjectFinancingLogOutputDto> getProjectFinancingLogList(ProjectFinancingLogInputDto body);
+    /**
+     * 获取投资事件记录数
+     * @param body
+     * @return
+     */
+    Integer getProjectFinancingLogListCount(ProjectFinancingLogInputDto body);
     /**
      * 获取所有的融资状态
      * @return
