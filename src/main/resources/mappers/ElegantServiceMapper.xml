@@ -47,8 +47,9 @@
     left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
     right join elegant_service_service_type esst on esst.elegant_service_id = es.id
     left join meta_service_type mst on esst.meta_service_type_id = mst.id
-    INNER JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
-    INNER JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id
+    LEFT JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
+    LEFT JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id
+
     where es.on_off = 1
     and es.yn = 1
     <if test="appid != null and appid != ''">
@@ -73,8 +74,9 @@
       and es.recommend_yn = 1
     </if>
 
-    <if test="approveType != null and approveType != ''">
-      and esat.approve_type = #{approveType}
+    <if test="approveType != null and approveType.length &gt; 0">
+      and esat.approve_type in
+      <foreach close=")" collection="identityType" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
 
     <if test="isLeadInvestor != null and isLeadInvestor != ''">
@@ -115,8 +117,8 @@
     left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
     left join elegant_service_service_type esst on esit.elegant_service_id = esst.elegant_service_id
     left join meta_service_type mst on esit.meta_identity_type_id = mst.id
-    INNER JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
-    INNER JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id
+    LEFT JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
+    LEFT JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id
     where es.yn = 1
     <if test="appid != null and appid != ''">
      and es.appid = #{appid}
@@ -165,8 +167,8 @@
     left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
     left join elegant_service_service_type esst on esit.elegant_service_id = esst.elegant_service_id
     left join meta_service_type mst on esit.meta_identity_type_id = mst.id
-    INNER JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
-    INNER JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id
+    LEFT JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
+    LEFT JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id
     where es.yn = 1
     <if test="appid != null and appid != ''">
       and es.appid = #{appid}

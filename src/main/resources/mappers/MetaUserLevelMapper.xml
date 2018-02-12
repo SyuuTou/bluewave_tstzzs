@@ -11,6 +11,8 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="yn" property="yn" jdbcType="INTEGER" />
     <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="app_id" property="appId" jdbcType="INTEGER" />
+    <result column="level_id" property="levelId" jdbcType="INTEGER" />
   </resultMap>
 
   <select id="selectByLevelId" parameterType="java.lang.Integer" resultType="java.lang.String">

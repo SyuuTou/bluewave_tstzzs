@@ -18,7 +18,7 @@
     select * from report_comment
     where app_id= #{appId}
     and report_id =#{reportId}
-    order by create_time
+    order by create_time DESC
     limit #{offset},#{limit}
   </select>
 </mapper>

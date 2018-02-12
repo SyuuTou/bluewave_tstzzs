@@ -33,9 +33,9 @@
       and a.hides in
       <foreach close=")" collection="hides" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="appId != null and appId != ''">
+
       and a.appid = #{appId}
-    </if>
+
     <if test="startTime !=null and startTime !=''">
       and a.begin_time between #{startTime} and #{endTime}
     </if>

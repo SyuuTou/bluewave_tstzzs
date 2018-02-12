@@ -10,6 +10,7 @@
     <result column="scene_key" jdbcType="VARCHAR" property="sceneKey" />
     <result column="flag" jdbcType="INTEGER" property="flag" />
     <result column="yn" jdbcType="INTEGER" property="yn" />
+    <result column="app_id" jdbcType="INTEGER" property="appId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
 </mapper>

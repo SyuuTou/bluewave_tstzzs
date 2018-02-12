@@ -32,6 +32,6 @@
     </select>
     <select id="findIntegralsU" parameterType="INTEGER" resultType="java.util.HashMap" >
         SELECT  IFNULL(SUM(integral_num),0) znum ,IFNULL(SUM(consume_num),0) xnum  
-        FROM user_integrals c WHERE user_id=#{userId,jdbcType=INTEGER}  AND c.`end_time` >NOW()
+        FROM user_integrals c WHERE user_id=#{userId,jdbcType=INTEGER} AND app_id = #{appId} AND c.`end_time` >NOW()
     </select>
 </mapper>

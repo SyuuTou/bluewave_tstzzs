@@ -10,5 +10,6 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="yn" property="yn" jdbcType="INTEGER" />
+    <result column="app_id" property="appId" jdbcType="INTEGER" />
   </resultMap>
 </mapper>

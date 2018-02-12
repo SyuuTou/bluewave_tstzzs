@@ -13,6 +13,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="yn" jdbcType="INTEGER" property="yn" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="app_id" jdbcType="INTEGER" property="appId" />
   </resultMap>
   <select id="findByMing" parameterType="INTEGER" resultType="java.util.HashMap">
     <!--SELECT a.*,SUM(a.`cost_num`)num FROM user_integral_consume a WHERE a.user_id=#{userId}
@@ -23,7 +24,7 @@
     SELECT * FROM (
     SELECT a.*,SUM(a.`cost_num`)num FROM user_integral_consume a WHERE a.user_id=#{userId}
     GROUP BY a.create_time ORDER BY a.create_time DESC) b
-    WHERE b.scene_key NOT IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
+    WHERE b.scene_key NOT IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L') and app_id = #{appId}
     LIMIT #{beginNum},#{ pageSize}
   </select>
   <select id="findByUserIdLeid"  resultType="string">
