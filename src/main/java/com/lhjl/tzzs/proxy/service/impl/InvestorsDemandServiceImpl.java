@@ -783,22 +783,24 @@ public class InvestorsDemandServiceImpl extends GenericService implements Invest
 
         Integer startPage = (body.getPageNum() -1)*body.getPageSize();
         Integer dataType = null;
-        Integer userId = null;
-
-        switch (body.getDataType()){
-            case "Featured":
-                dataType = 1;
-                break;
-            case "Latest":
-
-                break;
-            case "Mine":
-                Users record = new Users();
-                record.setUuid(body.getToken());
-                Users users = usersMapper.selectOne(record);
-                userId = users.getId();
-                break;
-        }
+        Integer userId = null; 
+		this.LOGGER.info(body+"body");
+		if(body.getDataType() != null) {
+			switch (body.getDataType()){
+		    case "Featured":
+		        dataType = 1;
+		        break;
+		    case "Latest":
+		        break;
+		    case "Mine":
+		        Users record = new Users();
+		        record.setUuid(body.getToken());
+		        Users users = usersMapper.selectOne(record);
+		        userId = users.getId();
+		        break;
+		}
+	}
+        
 
 
 

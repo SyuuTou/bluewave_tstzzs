@@ -68,4 +68,11 @@ public class InvestorDemandListInputDto {
     public void setIsAdmin(Integer isAdmin) {
         this.isAdmin = isAdmin;
     }
+
+	@Override
+	public String toString() {
+		return "InvestorDemandListInputDto [pageNum=" + pageNum + ", pageSize=" + pageSize + ", status=" + status
+				+ ", token=" + token + ", isAdmin=" + isAdmin + ", dataType=" + dataType + "]";
+	}
+    
 }
