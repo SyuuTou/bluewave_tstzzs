@@ -11,6 +11,7 @@ import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
 import com.lhjl.tzzs.proxy.model.ProjectFinancialLogFollowStatus;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.Projects;
+import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.ProjectFinancingLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
-public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogService {
+public class ProjectFinancingLogServiceImpl extends GenericService implements ProjectFinancingLogService {
 
     @Value("${pageNum}")
     private Integer defalutPageNum;
@@ -70,7 +71,8 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
         if (body.getPageSize() == null){
             body.setPageSize(defalutPageSize);  
         }
-        body.setStartPage( (body.getPageNum()-1) * body.getPageSize() );
+        body.setStart( (body.getPageNum()-1) * body.getPageSize() );
+        this.LOGGER.error("**"+body);
         //数据输出
         List<ProjectFinancingLogOutputDto> projectFinancingLogList = projectFinancingLogMapper.getProjectFinancingLogList(body);
         Integer totalcount = projectFinancingLogMapper.getProjectFinancingLogListCount(body);

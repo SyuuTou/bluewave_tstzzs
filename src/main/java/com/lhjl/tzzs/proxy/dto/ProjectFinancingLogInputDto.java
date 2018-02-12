@@ -44,7 +44,7 @@ public class ProjectFinancingLogInputDto {
     private Integer pageSize;
     
     /**数据开始索引*/
-    private Integer startPage;
+    private Integer start;
 
 	public String getSearchWord() {
 		return searchWord;
@@ -142,12 +142,12 @@ public class ProjectFinancingLogInputDto {
 		this.pageSize = pageSize;
 	}
 
-	public Integer getStartPage() {
-		return startPage;
+	public Integer getStart() {
+		return start;
 	}
 
-	public void setStartPage(Integer startPage) {
-		this.startPage = startPage;
+	public void setStart(Integer start) {
+		this.start = start;
 	}
 
 	@Override
@@ -155,8 +155,7 @@ public class ProjectFinancingLogInputDto {
 		return "ProjectFinancingLogInputDto [searchWord=" + searchWord + ", beginTimeInputStr=" + beginTimeInputStr
 				+ ", beginTime=" + beginTime + ", endTimeInputStr=" + endTimeInputStr + ", endTime=" + endTime
 				+ ", dataSource=" + dataSource + ", stage=" + stage + ", currency=" + currency + ", column=" + column
-				+ ", order=" + order + ", pageNum=" + pageNum + ", pageSize=" + pageSize + ", startPage=" + startPage
-				+ "]";
+				+ ", order=" + order + ", pageNum=" + pageNum + ", pageSize=" + pageSize + ", start=" + start + "]";
 	}
 
 	
