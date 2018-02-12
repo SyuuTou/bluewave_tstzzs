@@ -1,16 +1,23 @@
 package com.lhjl.tzzs.proxy.dto;
 
+import java.util.Date;
 import java.util.List;
 
 public class ProjectFinancingLogInputDto {
     /**搜索词*/
     private String searchWord;
 
+    /**搜索开始时间输入字符串*/
+    private String beginTimeInputStr;
+    
     /**搜索开始时间*/
-    private String begainTime;
+    private Date beginTime;
 
+    /**搜索结束时间输入字符串*/
+    private String endTimeInputStr;
+    
     /**搜索结束时间*/
-    private String endTime;
+    private Date endTime;
 
     /**数据来源*/
     private List<Integer> dataSource;
@@ -20,118 +27,136 @@ public class ProjectFinancingLogInputDto {
 
     /**币种*/
     private List<Integer> currency;
-
-    /**提交时间排序*/
-    private Integer creatTimeOrder;
-
-    /**提交时间降序*/
-    private Integer creatTimeOrderDesc;
-
-    /**更新时间排序*/
-    private Integer updateTimeOrder;
-
-    /**更新时间降序*/
-    private Integer updateTimeOrderDesc;
-
+    
+    /**
+     * 排序字段
+     */
+    private String column;
+    /**
+     * asc;desc
+     */
+    private String order;
+    
     /**当前页码*/
     private Integer pageNum;
 
     /**每页显示数量*/
     private Integer pageSize;
+    
+    /**数据开始索引*/
+    private Integer start;
 
-    public String getSearchWord() {
-        return searchWord;
-    }
+	public String getSearchWord() {
+		return searchWord;
+	}
 
-    public void setSearchWord(String searchWord) {
-        this.searchWord = searchWord;
-    }
+	public void setSearchWord(String searchWord) {
+		this.searchWord = searchWord;
+	}
 
-    public String getBegainTime() {
-        return begainTime;
-    }
+	public String getBeginTimeInputStr() {
+		return beginTimeInputStr;
+	}
 
-    public void setBegainTime(String begainTime) {
-        this.begainTime = begainTime;
-    }
+	public void setBeginTimeInputStr(String beginTimeInputStr) {
+		this.beginTimeInputStr = beginTimeInputStr;
+	}
 
-    public String getEndTime() {
-        return endTime;
-    }
+	public Date getBeginTime() {
+		return beginTime;
+	}
 
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
+	public void setBeginTime(Date beginTime) {
+		this.beginTime = beginTime;
+	}
 
-    public List<Integer> getDataSource() {
-        return dataSource;
-    }
+	public String getEndTimeInputStr() {
+		return endTimeInputStr;
+	}
 
-    public void setDataSource(List<Integer> dataSource) {
-        this.dataSource = dataSource;
-    }
+	public void setEndTimeInputStr(String endTimeInputStr) {
+		this.endTimeInputStr = endTimeInputStr;
+	}
 
-    public List<String> getStage() {
-        return stage;
-    }
+	public Date getEndTime() {
+		return endTime;
+	}
 
-    public void setStage(List<String> stage) {
-        this.stage = stage;
-    }
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
 
-    public List<Integer> getCurrency() {
-        return currency;
-    }
+	public List<Integer> getDataSource() {
+		return dataSource;
+	}
 
-    public void setCurrency(List<Integer> currency) {
-        this.currency = currency;
-    }
+	public void setDataSource(List<Integer> dataSource) {
+		this.dataSource = dataSource;
+	}
 
-    public Integer getCreatTimeOrder() {
-        return creatTimeOrder;
-    }
+	public List<String> getStage() {
+		return stage;
+	}
 
-    public void setCreatTimeOrder(Integer creatTimeOrder) {
-        this.creatTimeOrder = creatTimeOrder;
-    }
+	public void setStage(List<String> stage) {
+		this.stage = stage;
+	}
 
-    public Integer getCreatTimeOrderDesc() {
-        return creatTimeOrderDesc;
-    }
+	public List<Integer> getCurrency() {
+		return currency;
+	}
 
-    public void setCreatTimeOrderDesc(Integer creatTimeOrderDesc) {
-        this.creatTimeOrderDesc = creatTimeOrderDesc;
-    }
+	public void setCurrency(List<Integer> currency) {
+		this.currency = currency;
+	}
 
-    public Integer getUpdateTimeOrder() {
-        return updateTimeOrder;
-    }
+	public String getColumn() {
+		return column;
+	}
 
-    public void setUpdateTimeOrder(Integer updateTimeOrder) {
-        this.updateTimeOrder = updateTimeOrder;
-    }
+	public void setColumn(String column) {
+		this.column = column;
+	}
 
-    public Integer getUpdateTimeOrderDesc() {
-        return updateTimeOrderDesc;
-    }
+	public String getOrder() {
+		return order;
+	}
 
-    public void setUpdateTimeOrderDesc(Integer updateTimeOrderDesc) {
-        this.updateTimeOrderDesc = updateTimeOrderDesc;
-    }
+	public void setOrder(String order) {
+		this.order = order;
+	}
 
-    public Integer getPageNum() {
-        return pageNum;
-    }
+	public Integer getPageNum() {
+		return pageNum;
+	}
 
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-    }
+	public void setPageNum(Integer pageNum) {
+		this.pageNum = pageNum;
+	}
 
-    public Integer getPageSize() {
-        return pageSize;
-    }
+	public Integer getPageSize() {
+		return pageSize;
+	}
 
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public Integer getStart() {
+		return start;
+	}
+
+	public void setStart(Integer start) {
+		this.start = start;
+	}
+
+	@Override
+	public String toString() {
+		return "ProjectFinancingLogInputDto [searchWord=" + searchWord + ", beginTimeInputStr=" + beginTimeInputStr
+				+ ", beginTime=" + beginTime + ", endTimeInputStr=" + endTimeInputStr + ", endTime=" + endTime
+				+ ", dataSource=" + dataSource + ", stage=" + stage + ", currency=" + currency + ", column=" + column
+				+ ", order=" + order + ", pageNum=" + pageNum + ", pageSize=" + pageSize + ", start=" + start + "]";
+	}
+
+	
 }

@@ -11,6 +11,7 @@ import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
 import com.lhjl.tzzs.proxy.model.ProjectFinancialLogFollowStatus;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.Projects;
+import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.ProjectFinancingLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,11 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
-public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogService {
+public class ProjectFinancingLogServiceImpl extends GenericService implements ProjectFinancingLogService {
 
     @Value("${pageNum}")
     private Integer defalutPageNum;
@@ -40,172 +42,61 @@ public class ProjectFinancingLogServiceImpl implements ProjectFinancingLogServic
     @Override
     public CommonDto<Map<String, Object>> getProjectFinancingLogList(ProjectFinancingLogInputDto body) {
         CommonDto<Map<String,Object>> result = new CommonDto<>();
+        
         SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         Map<String,Object> map = new HashMap<>();
-        List<ProjectFinancingLogOutputDto> list = new ArrayList<>();
-
-        if (body.getSearchWord() == null){
-            body.setSearchWord("");
+        
+        //格式化输入时间字符串
+        if (body.getBeginTimeInputStr() != null){
+            try {
+				body.setBeginTime(sdf2.parse(body.getBeginTimeInputStr()));
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+			}
         }
-
+        if (body.getEndTimeInputStr() != null){
+            try {
+				body.setEndTime(sdf2.parse(body.getEndTimeInputStr()));
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+			}
+        }
+      //格式化页码的默认值
         if (body.getPageNum() == null){
             body.setPageNum(defalutPageNum);
         }
 
         if (body.getPageSize() == null){
-            body.setPageSize(defalutPageSize);
+            body.setPageSize(defalutPageSize);  
         }
-        //list转数组
-        Integer[] dataSource = {};
-        if(body.getDataSource() != null){
-            Integer[] dataSourceInt =new  Integer[body.getDataSource().size()];
-            for (int i = 0;i<body.getDataSource().size();i++){
-                dataSourceInt[i] = body.getDataSource().get(i);
-            }
-            dataSource = dataSourceInt;
-        }
-
-        String[] stage = {};
-        if (body.getStage() != null){
-            String[] stageString = new String[body.getStage().size()];
-            for (int i = 0; i < body.getStage().size();i++){
-                stageString[i] = body.getStage().get(i);
-            }
-            stage = stageString;
-        }
-
-        Integer[] currency={};
-        if (body.getCurrency() != null){
-            Integer[] currencyInt = new Integer[body.getCurrency().size()];
-            for (int i= 0;i<body.getCurrency().size();i++){
-                currencyInt[i] = body.getCurrency().get(i);
-            }
-        }
-        List<Map<String,Object>> projectFinancingLogList = projectFinancingLogMapper.getProjectFinancingLogList(body.getSearchWord(),body.getBegainTime(),
-                body.getEndTime(),dataSource,stage,currency,body.getCreatTimeOrder(),body.getCreatTimeOrderDesc(),
-                body.getUpdateTimeOrder(),body.getUpdateTimeOrderDesc(),body.getPageNum(),body.getPageSize());
-        Integer totalcount = projectFinancingLogMapper.getProjectFinancingLogListCount(body.getSearchWord(),body.getBegainTime(),
-                body.getEndTime(),dataSource,stage,currency,body.getCreatTimeOrder(),body.getCreatTimeOrderDesc(),
-                body.getUpdateTimeOrder(),body.getUpdateTimeOrderDesc(),body.getPageNum(),body.getPageSize());
-
-        //整理返回数据
-        if (projectFinancingLogList.size() > 0){
-            for (Map<String,Object> maps:projectFinancingLogList){
-                ProjectFinancingLogOutputDto projectFinancingLogOutputDto = new ProjectFinancingLogOutputDto();
-                
-                if (maps.get("ID") != null){
-                	projectFinancingLogOutputDto.setId((Integer) maps.get("ID"));
-                }
-                
-                Integer serialNumber = 0;
-                if (maps.get("serial_number") != null){
-                    serialNumber = (Integer) maps.get("serial_number");
-                }
-                projectFinancingLogOutputDto.setSerialNumber(serialNumber);
-                String typeName = "";
-                if (maps.get("type_name") !=null){
-                    typeName = (String)maps.get("type_name");
-                }
-                projectFinancingLogOutputDto.setTypeName(typeName);
-                Integer investmentInstitutionId = 0;
-                if (maps.get("investment_institution_id") != null){
-                    investmentInstitutionId = (Integer) maps.get("investment_institution_id");
-                }
-                projectFinancingLogOutputDto.setInvestmentInstitutionId(investmentInstitutionId);
-                String institutionName = "";
-                if (maps.get("institution_name") !=null){
-                    institutionName = (String)maps.get("institution_name");
-                }
-                projectFinancingLogOutputDto.setInstitutionName(institutionName);
-                Integer projectId = 0;
-                if (maps.get("project_id") != null){
-                    projectId = (Integer) maps.get("project_id");
-                }
-                projectFinancingLogOutputDto.setProjectId(projectId);
-                String projectName = "";
-                if (maps.get("project_name") !=null){
-                    projectName = (String)maps.get("project_name");
-                }
-                projectFinancingLogOutputDto.setProjectName(projectName);
-                String segmentationName = "";
-                if (maps.get("segmentation_name") !=null){
-                    segmentationName = (String)maps.get("segmentation_name");
-                }
-                projectFinancingLogOutputDto.setSegmentationName(segmentationName);
-                String stageS = "";
-                if (maps.get("stage") !=null){
-                    stageS = (String)maps.get("stage");
-                }
-                projectFinancingLogOutputDto.setStage(stageS);
-                BigDecimal amount = BigDecimal.ZERO;
-                if (maps.get("amount") !=null){
-                    amount = (BigDecimal)maps.get("amount");
-                }
-                projectFinancingLogOutputDto.setAmount(amount);
-                Integer currencys = 0;
-                if (maps.get("currency") !=null){
-                    currencys = (Integer)maps.get("currency");
-                }
-                projectFinancingLogOutputDto.setCurrency(currencys);
-                String shareDivest = "";
-                if (maps.get("share_divest") !=null){
-                    shareDivest = (String) maps.get("share_divest");
-                }
-                projectFinancingLogOutputDto.setShareDivest(shareDivest);
-                BigDecimal valuation = BigDecimal.ZERO;
-                if (maps.get("valuation") !=null){
-                    valuation = (BigDecimal)maps.get("valuation");
-                }
-                projectFinancingLogOutputDto.setValuation(valuation);
-                BigDecimal totalAmount = BigDecimal.ZERO;
-                if (maps.get("total_amount") !=null){
-                    totalAmount = (BigDecimal)maps.get("total_amount");
-                }
-                projectFinancingLogOutputDto.setTotalAmount(totalAmount);
-                BigDecimal prAmount = BigDecimal.ZERO;
-                if (maps.get("pr_amount") !=null){
-                    prAmount = (BigDecimal)maps.get("pr_amount");
-                }
-                projectFinancingLogOutputDto.setPrAmount(prAmount);
-                String financingTime = "";
-                if (maps.get("financing_time") !=null){
-                    Date financingTimeD = (Date) maps.get("financing_time");
-                    financingTime = sdf.format(financingTimeD);
-                }
-                projectFinancingLogOutputDto.setFinancingTime(financingTime);
-                String investmentInstitutionsList = "";
-                if (maps.get("Investment_institutions_list") !=null){
-                    investmentInstitutionsList = (String)maps.get("Investment_institutions_list");
-                }
-                projectFinancingLogOutputDto.setInvestmentInstitutionsList(investmentInstitutionsList);
-                String proportionList = "";
-                if (maps.get("proportion_list") !=null){
-                    proportionList = (String)maps.get("proportion_list");
-                }
-                projectFinancingLogOutputDto.setProportionList(proportionList);
-                String createTime = "";
-                if (maps.get("create_time") !=null){
-                    Date createTimeD = (Date)maps.get("create_time");
-                    createTime  = sdf.format(createTimeD);
-                }
-                projectFinancingLogOutputDto.setCreateTime(createTime);
-                String updateTime = "";
-                if (maps.get("update_time") !=null){
-                    Date updateTimeD = (Date)maps.get("update_time");
-                    updateTime  = sdf.format(updateTimeD);
-                }
-                projectFinancingLogOutputDto.setUpdateTime(updateTime);
-
-                list.add(projectFinancingLogOutputDto);
-            }
-        }
-
-        map.put("currentPage",body.getPageNum());
-        map.put("pageSize",body.getPageSize());
+        body.setStart( (body.getPageNum()-1) * body.getPageSize() );
+        this.LOGGER.error("**"+body);
+        //数据输出
+        List<ProjectFinancingLogOutputDto> projectFinancingLogList = projectFinancingLogMapper.getProjectFinancingLogList(body);
+        Integer totalcount = projectFinancingLogMapper.getProjectFinancingLogListCount(body);
+        /**
+         * 格式化输出时间转换为字符串
+         */
+        projectFinancingLogList.forEach((e)->{
+        	if(e.getFinancingTime() != null) {
+        		e.setFinancingTimeOutputStr(sdf.format(e.getFinancingTime()));
+        	}
+			if(e.getCreateTime() != null) {
+				e.setCreateTimeOutputStr(sdf2.format(e.getCreateTime()));	
+		  	}
+			if(e.getUpdateTime() != null) {
+				e.setUpdateTimeOutputStr(sdf2.format(e.getUpdateTime()));
+			}
+        });
+        
         map.put("total",totalcount);
-
-        map.put("list",list);
+        map.put("list",projectFinancingLogList);
+        
+        map.put("currentPage",body.getPageNum()); 
+        map.put("pageSize",body.getPageSize());
+        
 
         result.setData(map);
         result.setStatus(200);
