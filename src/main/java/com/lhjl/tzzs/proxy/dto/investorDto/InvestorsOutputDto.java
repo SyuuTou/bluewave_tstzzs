@@ -122,7 +122,7 @@ public class InvestorsOutputDto {
 	 */
 	private Date checkTime;
 	/**
-	 * 一句话介绍
+	 * 一句话介绍--供审核列表使用
 	 */
 	private String kernelDescription;
 	/**

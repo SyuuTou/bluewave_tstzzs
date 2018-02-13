@@ -64,7 +64,59 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  
+  <select id="getProjectFinancingLogList" resultMap="ProjectFinancingLogOutputDtoMap">
+    SELECT pfl.ID,pfl.serial_number,mdst.type_name,ii.id as investment_institution_id,ii.short_name as institution_name,
+    p.id as project_id,p.short_name as project_name,ps.segmentation_name,pfl.stage,pfl.amount,pfl.currency,
+    pfl.share_divest,pfl.valuation,pfl.total_amount,pfl.pr_amount,pfl.financing_time,pfl.Investment_institutions_list,
+    pfl.proportion_list,pfl.create_time,pfl.update_time
+    FROM project_financing_log pfl
+    left join meta_data_source_type mdst on pfl.data_soruce_type_id = mdst.id
+    left join investment_institutions_project iip on pfl.id = iip.project_id
+    left join investment_institutions ii on iip.investment_institutions_id = ii.id
+    left join projects p on pfl.project_id = p.id
+    left join
+    (select project_id,group_concat(segmentation_name) segmentation_name from project_segmentation group by project_id) ps
+    on p.id = ps.project_id
+    where 1=1
+    
+     <if test="searchWord != null and searchWord !=''">
+      and
+        (ii.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or p.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or ps.segmentation_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or pfl.stage like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or pfl.Investment_institutions_list like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or pfl.proportion_list like CONCAT("%",CONCAT(#{searchWord},"%")))
+    </if>
+    <if test="beginTime !=null">
+     AND (pfl.create_time &gt;= #{beginTime} 
+     or pfl.update_time &gt;= #{beginTime}
+     )
+     
+    </if>
+    
+    <if test="endTime !=null">
+     AND (pfl.create_time &lt;= #{endTime}
+     or pfl.update_time &lt;= #{beginTime}
+     )
+    </if>
+    <if test="stage != null and stage.size &gt; 0">
+      and pfl.stage in 
+	<foreach collection="stage" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
+    </if>
+    <if test="currency != null and currency.size &gt; 0">
+      and pfl.currency in 
+      <foreach collection="currency" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
+    </if>
+    <if test="dataSource != null and dataSource.size &gt; 0">
+      and pfl.data_soruce_type_id in  
+      <foreach collection="dataSource" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
+    </if>
+    <if test="column != null and column !='' and order != null and order != ''">
+      order by pfl.${column} ${order}
+    </if> 
+   LIMIT #{start},#{pageSize}
+   </select>
 	
   
   <select id="getProjectFinancingLogListCount" resultType="java.lang.Integer">
@@ -122,59 +174,7 @@
     </if>
   </select>
   
-  <select id="getProjectFinancingLogList" resultMap="ProjectFinancingLogOutputDtoMap">
-    SELECT pfl.ID,pfl.serial_number,mdst.type_name,ii.id as investment_institution_id,ii.short_name as institution_name,
-    p.id as project_id,p.short_name as project_name,ps.segmentation_name,pfl.stage,pfl.amount,pfl.currency,
-    pfl.share_divest,pfl.valuation,pfl.total_amount,pfl.pr_amount,pfl.financing_time,pfl.Investment_institutions_list,
-    pfl.proportion_list,pfl.create_time,pfl.update_time
-    FROM project_financing_log pfl
-    left join meta_data_source_type mdst on pfl.data_soruce_type_id = mdst.id
-    left join investment_institutions_project iip on pfl.id = iip.project_id
-    left join investment_institutions ii on iip.investment_institutions_id = ii.id
-    left join projects p on pfl.project_id = p.id
-    left join
-    (select project_id,group_concat(segmentation_name) segmentation_name from project_segmentation group by project_id) ps
-    on p.id = ps.project_id
-    where 1=1
-    
-     <if test="searchWord != null and searchWord !=''">
-      and
-        (ii.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
-      or p.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
-      or ps.segmentation_name like CONCAT("%",CONCAT(#{searchWord},"%"))
-      or pfl.stage like CONCAT("%",CONCAT(#{searchWord},"%"))
-      or pfl.Investment_institutions_list like CONCAT("%",CONCAT(#{searchWord},"%"))
-      or pfl.proportion_list like CONCAT("%",CONCAT(#{searchWord},"%")))
-    </if>
-    <if test="beginTime !=null">
-     AND (pfl.create_time &gt;= #{beginTime} 
-     or pfl.update_time &gt;= #{beginTime}
-     )
-     
-    </if>
-    
-    <if test="endTime !=null">
-     AND (pfl.create_time &lt;= #{endTime}
-     or pfl.update_time &lt;= #{beginTime}
-     )
-    </if>
-    <if test="stage != null and stage.size &gt; 0">
-      and pfl.stage in 
-	<foreach collection="stage" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
-    </if>
-    <if test="currency != null and currency.size &gt; 0">
-      and pfl.currency in 
-      <foreach collection="currency" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
-    </if>
-    <if test="dataSource != null and dataSource.size &gt; 0">
-      and pfl.data_soruce_type_id in  
-      <foreach collection="dataSource" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
-    </if>
-    <if test="column != null and column !='' and order != null and order != ''">
-      order by pfl.${column} ${order}
-    </if> 
-   <!-- LIMIT #{start},#{pageSize} -->
-   </select>
+  
   
   <select id="echoProjectFinancingLogHead" resultMap="ProjectFinancingLogHeadOutputDtoMap" parameterType="Integer">  
 	SELECT * from(select pfl.id,pfl.serial_number,mdst.type_name,p.short_name,pflf.submitor_token,pflf.meta_follow_status_id,pflf.create_time
