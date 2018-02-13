@@ -1891,7 +1891,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         Map<String,Integer> map =new HashMap<String,Integer>();
         if(userId !=null){
             //当前会员状态总的金币
-            Integer leId1 =usersMapper.findByUserid(userId);
+            Integer leId1 =usersMapper.findByUserid(userId, appId);
             if(leId1 != null){
 
                 //Integer dnum1 = userIntegralsMapper.findByQnum(leId1);
@@ -2017,7 +2017,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         Map<String,Integer> map =new HashMap<String,Integer>();
         if(userId !=null){
             //当前会员状态总的金币
-            Integer leId1 =usersMapper.findByUserid(userId);
+            Integer leId1 =usersMapper.findByUserid(userId, appId);
 //            if(leId1 != null){
 //                //购买或购买升级的
 //                //Integer dnum1 = userIntegralsMapper.findByQnum(leId1);
@@ -2086,7 +2086,7 @@ public class UserLevelServiceImpl implements UserLevelService {
 //                userIntegralConsumeMapper.insert(userIntegrals3);
 //                //购买金币赠送的记录
 //            }else{
-                leId1=usersMapper.findByUserid(userId);
+                leId1=usersMapper.findByUserid(userId, appId);
                 Integer hnum1 = 0;
                 //购买或升级买的金币
                 Float bei2 =usersMapper.findByBei(appId, leId1);

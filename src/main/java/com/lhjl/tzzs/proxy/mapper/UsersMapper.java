@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ public interface UsersMapper extends OwnerMapper<Users> {
 	//获取分页数据
 	List<Users> findSplit(Map<String,Integer> map);
 
-	Integer findByUserid(@Param("userId") Integer userId);
+	Integer findByUserid(@Param("userId") Integer userId, @Param("appId") Integer appId);
 	Float findByBei(@Param("appId") Integer appId, @Param("leId") Integer leId);
 	Integer findByJinE(@Param("appId") Integer appId,@Param("skey") String skey);
 	String findByUserLevel(@Param("appId") Integer appId,@Param("leId") Integer leId);
