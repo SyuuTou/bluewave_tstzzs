@@ -3,9 +3,15 @@ package com.lhjl.tzzs.proxy.service.angeltoken.impl;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.util.crypt.WxMaCryptUtils;
 import cn.binarywang.wx.miniapp.util.json.WxMaGsonBuilder;
+import com.github.binarywang.wxpay.bean.request.WxEntPayRequest;
+import com.github.binarywang.wxpay.bean.result.WxEntPayResult;
+import com.github.binarywang.wxpay.config.WxPayConfig;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.pagehelper.PageHelper;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.angeltoken.*;
+import com.lhjl.tzzs.proxy.dto.flow.User;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
@@ -14,10 +20,12 @@ import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
 import com.lhjl.tzzs.proxy.service.common.SessionKeyService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.joda.time.DateTime;
 import org.joda.time.DurationFieldType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,10 +80,18 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
     private WxMaService wxService;
     @Autowired
     private UserInfoService userInfoService;
-
+    @Autowired
+    private WxPayConfig payConfig;
+    @Autowired
+    private WxPayService payService;
+    @Value("${wechat.pay.entPayDescription}")
+    private String entPayDescription;
+    @Value("${wechat.pay.spbillCreateIp}")
+    private String spbillCreateIp;
 
 
     private final static Integer obtainIntegralPeriod = 965;
+    private String partnerTradeNo;
 
 
     public Integer getUserId(Integer appId, String token){
@@ -250,7 +266,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         redEnvelope.setMessage(redEnvelopeDto.getMessage());
         redEnvelope.setRedEnvelopeType(redEnvelopeDto.getRedEnvelopeType());
         redEnvelope.setDescription(redEnvelopeDto.getDescription());
-
+        redEnvelope.setCurrency(redEnvelopeDto.getCurrency());
         redEnvelopeMapper.insert(redEnvelope);
 
         Users users = this.getUserInfo(appId, redEnvelopeDto.getToken());
@@ -340,13 +356,25 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         RedEnvelopeResDto redEnvelopeResDto = new RedEnvelopeResDto();
 
         try {
+            Users users = null;
             if(StringUtil.isEmpty(token)){
                 return  new CommonDto<>(null, "用户不存在", 200);
+            }else {
+               users = this.getUserInfo(appId, token);
+                if (StringUtils.isEmpty(users.getActualName())) {
+                    UsersWeixin query = new UsersWeixin();
+                    query.setUserId(users.getId());
+                    UsersWeixin usersWeixin = this.usersWeixinMapper.selectOne(query);
+                    if (StringUtils.isEmpty(usersWeixin.getNickName())){
+
+                        return new CommonDto<>(null, "用户不存在", 200);
+                    }
+                }
             }
             RedEnvelope queryRedEnvelope = new RedEnvelope();
             queryRedEnvelope.setUnionKey(unionId);
             RedEnvelope redEnvelope = redEnvelopeMapper.selectOne(queryRedEnvelope);
-            Users users = this.getUserInfo(appId,redEnvelope.getToken());
+             users = this.getUserInfo(appId,redEnvelope.getToken());
             if (null == users){
                 return  new CommonDto<>(null, "用户不存在", 200);
             }
@@ -375,7 +403,13 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
             redEnvelopeResDto.setMessage(redEnvelope.getMessage());
             redEnvelopeResDto.setRedEnvelopeID(redEnvelope.getUnionKey());
             redEnvelopeResDto.setToken(redEnvelope.getToken());
-
+            if (null != redEnvelope.getCurrency()) {
+                if (redEnvelope.getCurrency() == 0) {
+                    redEnvelopeResDto.setCurrency("元");
+                } else if (redEnvelope.getCurrency() == 1) {
+                    redEnvelopeResDto.setCurrency("令牌");
+                }
+            }
 
             if (null != redEnvelope.getDescription() && redEnvelope.getDescription().equals("INVITATIONED")){
 
@@ -411,6 +445,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                     redEnvelopeLogDto.setAmount(item.getAmount());
                     redEnvelopeLogDto.setCreateTime(item.getCreateTime());
                     redEnvelopeLogDto.setToken(item.getToken());
+                    handlerCurrency(redEnvelope, redEnvelopeLogDto);
                     Users temp = this.getUserInfo(appId,item.getToken());
                     if (null != temp) {
                         if (StringUtil.isNotEmpty(temp.getHeadpicReal())) {
@@ -447,6 +482,16 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         }
 
         return result;
+    }
+
+    public void handlerCurrency(RedEnvelope redEnvelope, RedEnvelopeLogDto redEnvelopeLogDto) {
+        if (null != redEnvelope.getCurrency()) {
+            if (redEnvelope.getCurrency() == 0) {
+                redEnvelopeLogDto.setCurrency("元");
+            } else if (redEnvelope.getCurrency() == 1) {
+                redEnvelopeLogDto.setCurrency("令牌");
+            }
+        }
     }
 
     public void recived(Integer appId, String unionId, String token, RedEnvelopeResDto redEnvelopeResDto, RedEnvelope redEnvelope) {
@@ -508,14 +553,39 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                         redEnvelopeLog.setToken(token);
                         redEnvelopeLog.setFromToken(redEnvelope.getToken());
                         redEnvelopeLog.setUnionKey(unionId);
+                        redEnvelopeLog.setCurrency(redEnvelope.getCurrency());
+                        redEnvelopeLog.setPayStatus(0);
 
                         redEnvelopeLogMapper.insert(redEnvelopeLog);
-
-
                         Users reciveUser = this.getUserInfo(appId, token);
                         this.addUserIntegralsLog(appId, "GET_ANGEL_TOKEN", reciveUser.getId(), reciveAmount, obtainIntegralPeriod, true, new BigDecimal(1));
 
-                        break;
+
+                        if (null != redEnvelope.getCurrency() && redEnvelope.getCurrency()==0) {
+                            UsersWeixin query = new UsersWeixin();
+                            query.setUserId(reciveUser.getId());
+                            UsersWeixin userToken = usersWeixinMapper.selectOne(query);
+                            WxEntPayRequest wxEntPayRequest = new WxEntPayRequest();
+                            wxEntPayRequest.setAmount(redEnvelopeLog.getAmount().multiply(new BigDecimal(100)).intValue());
+                            wxEntPayRequest.setCheckName("NO_CHECK");
+                            wxEntPayRequest.setOpenid(userToken.getOpenid());
+                            wxEntPayRequest.setDescription("蓝海巨浪资本");
+                            wxEntPayRequest.setPartnerTradeNo(getPartnerTradeNo());
+                            wxEntPayRequest.setSpbillCreateIp(spbillCreateIp);
+                            try {
+                                WxEntPayResult wxEntPayResult = payService.entPay(wxEntPayRequest);
+                                if (null != wxEntPayResult){
+                                    redEnvelopeLog.setPayStatus(1);
+                                    redEnvelopeLog.setPayTime(wxEntPayResult.getPaymentTime());
+                                    redEnvelopeLog.setPayTradeNo(wxEntPayResult.getPartnerTradeNo());
+                                    redEnvelopeLogMapper.updateByPrimaryKey(redEnvelopeLog);
+                                }
+                            } catch (WxPayException e) {
+                                this.LOGGER.error(e.getXmlString());
+                            }
+                        }
+
+                       break;
                     }
                 }
             }
@@ -630,6 +700,13 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
             redEnvelopeResDto.setAmount(redEnvelope.getAmount());
             redEnvelopeResDto.setTotalAmount(redEnvelope.getTotalAmount());
 
+            if (null != redEnvelope.getCurrency()) {
+                if (redEnvelope.getCurrency() == 0) {
+                    redEnvelopeResDto.setCurrency("元");
+                } else if (redEnvelope.getCurrency() == 1) {
+                    redEnvelopeResDto.setCurrency("令牌");
+                }
+            }
             if (redEnvelope.getReceiveQuantity() == redEnvelope.getQuantity()) {
                 redEnvelopeResDto.setStatus("Finished");
             }else{
@@ -642,26 +719,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                     redEnvelopeResDto.setStatus("Unreceived");
                 }
             }
-            Users temp = this.getUserInfo(appId,redEnvelope.getToken());
-            if (null != temp) {
-                if (StringUtil.isNotEmpty(temp.getHeadpicReal())) {
-                    redEnvelopeResDto.setHeadPic(temp.getHeadpicReal());
-                } else {
-                    redEnvelopeResDto.setHeadPic(temp.getHeadpic());
-                }
-                if (StringUtil.isNotEmpty(temp.getActualName())) {
-                    redEnvelopeResDto.setNeckName(temp.getActualName());
-                } else {
-                    UsersWeixin queryUsersWeixin = new UsersWeixin();
-                    queryUsersWeixin.setUserId(temp.getId());
-                    UsersWeixin usersWeixin = this.usersWeixinMapper.selectOne(queryUsersWeixin);
-                    if (null != usersWeixin) {
-                        redEnvelopeResDto.setNeckName(usersWeixin.getNickName());
-                    }
-                }
-                redEnvelopeResDto.setCompanyDuties(temp.getCompanyDuties());
-                redEnvelopeResDto.setCompanyName(temp.getCompanyName());
-            }
+            editUserInfo(appId, redEnvelope, redEnvelopeResDto);
 
 
             redEnvelopeResDtos.add(redEnvelopeResDto);
@@ -722,6 +780,21 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         redEnvelopeResDto.setTotalAmount(redEnvelope.getTotalAmount());
         redEnvelopeResDto.setRedEnvelopeID(redEnvelope.getUnionKey());
         redEnvelopeResDto.setToken(redEnvelope.getToken());
+        if (null != redEnvelope.getCurrency()) {
+            if (redEnvelope.getCurrency() == 0){
+                redEnvelopeResDto.setCurrency("元");
+            }else if (redEnvelope.getCurrency() == 1){
+                redEnvelopeResDto.setCurrency("令牌");
+            }
+        }
+
+        editUserInfo(appId, redEnvelope, redEnvelopeResDto);
+
+
+        return new CommonDto<>(redEnvelopeResDto, "success", 200);
+    }
+
+    public void editUserInfo(Integer appId, RedEnvelope redEnvelope, RedEnvelopeResDto redEnvelopeResDto) {
         Users temp = this.getUserInfo(appId,redEnvelope.getToken());
         if (null != temp) {
             if (StringUtil.isNotEmpty(temp.getHeadpicReal())) {
@@ -742,9 +815,6 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
             redEnvelopeResDto.setCompanyDuties(temp.getCompanyDuties());
             redEnvelopeResDto.setCompanyName(temp.getCompanyName());
         }
-
-
-        return new CommonDto<>(redEnvelopeResDto, "success", 200);
     }
 
     @Override
@@ -797,7 +867,13 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 //        Random random = new Random();
 //        System.out.println(String.valueOf());
 
-//        System.out.println(new BigDecimal(1000).compareTo(new BigDecimal(500).multiply(new BigDecimal(2))));
+        System.out.println(DateTime.now().millisOfDay().getAsString().length());
 
+    }
+
+    public String getPartnerTradeNo() {
+         String timestamp = DateTime.now().millisOfDay().getAsShortText();
+         StringBuffer stringBuffer = new StringBuffer(MD5Util.md5Encode(timestamp,"").substring(0,24)).append(timestamp);
+        return stringBuffer.toString();
     }
 }

@@ -22,7 +22,16 @@ public class RedEnvelopeResDto {
     private String companyName;
     private String companyDuties;
     private List<RedEnvelopeLogDto> redEnvelopeLogs;
+    private String currency;
 
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
 
     public String getRedEnvelopeID() {
         return redEnvelopeID;

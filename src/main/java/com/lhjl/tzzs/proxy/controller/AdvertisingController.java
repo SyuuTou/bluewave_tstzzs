@@ -97,7 +97,7 @@ public class AdvertisingController {
      * @return
      */
     @PostMapping("/v{appId}/get/advertising/list")
-    public CommonDto<List<AdvertisingOutputDto>> getAdvertisingList(Integer appId,@RequestBody AdvertisingInputDto body){
+    public CommonDto<List<AdvertisingOutputDto>> getAdvertisingList(@PathVariable Integer appId,@RequestBody AdvertisingInputDto body){
         CommonDto<List<AdvertisingOutputDto>> result = new CommonDto<>();
 
         try {

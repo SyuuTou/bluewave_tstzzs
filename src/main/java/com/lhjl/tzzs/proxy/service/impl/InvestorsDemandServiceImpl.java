@@ -911,36 +911,38 @@ public class InvestorsDemandServiceImpl extends GenericService implements Invest
                     investorDemandListOutputDto.setUpdateTime(updateTime);
 
 
-                    if (inverstorMap.get("event_key") == null || String.valueOf(inverstorMap.get("event_key")).equals("")){
-                         InvestorDemand investorDemand = investorDemandMapper.selectByPrimaryKey(inverstorMap.get("id"));
-                         investorDemand.setEventKey(MD5Util.md5Encode(DateTime.now().millisOfDay().getAsString(),""));
-                         investorDemandMapper.updateByPrimaryKey(investorDemand);
-                        investorDemandListOutputDto.setEventKey(investorDemand.getEventKey());
-                    }else{
-                        investorDemandListOutputDto.setEventKey(String.valueOf(inverstorMap.get("event_key")));
-
-                        try {
-                            String url = eventTriggerUrl+EVENT_KEY_URL;
-                            HttpHeaders headers = new HttpHeaders();
-                            headers.setContentType(MediaType.APPLICATION_JSON);
-
-                            HttpEntity entity = new HttpEntity<>( headers);
-                            url = String.format(url,String.valueOf(inverstorMap.get("event_key")));
-
-                            ResponseEntity<CommonDto<FlowModel>> commonDto = restTemplate.exchange(url, HttpMethod.GET, entity,new ParameterizedTypeReference<CommonDto<FlowModel>>(){} );
-                            investorDemandListOutputDto.setFlowModel(commonDto.getBody().getData());
-
-                            if (null != commonDto.getBody().getData()) {
-                            commonDto.getBody().getData().getLikers().forEach(v -> {
-                                if (v.getToken().equals(body.getToken())){
-                                    investorDemandListOutputDto.setCurrentUserLikeStatus(1);
-                                }
-                            });
-                            }
-                        } catch (RestClientException e) {
-                            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
-                        }
-                    }
+//                    if (inverstorMap.get("event_key") == null || String.valueOf(inverstorMap.get("event_key")).equals("")){
+//                         InvestorDemand investorDemand = investorDemandMapper.selectByPrimaryKey(inverstorMap.get("id"));
+//                         investorDemand.setEventKey(MD5Util.md5Encode(DateTime.now().millisOfDay().getAsString(),""));
+//                         investorDemandMapper.updateByPrimaryKey(investorDemand);
+//                        investorDemandListOutputDto.setEventKey(investorDemand.getEventKey());
+//                    }else{
+//                        investorDemandListOutputDto.setEventKey(String.valueOf(inverstorMap.get("event_key")));
+//
+//                        try {
+//                            String url = eventTriggerUrl+EVENT_KEY_URL;
+//                            HttpHeaders headers = new HttpHeaders();
+//                            headers.setContentType(MediaType.APPLICATION_JSON);
+//
+//                            HttpEntity entity = new HttpEntity<>( headers);
+//                            url = String.format(url,String.valueOf(inverstorMap.get("event_key")));
+//
+//                            ResponseEntity<CommonDto<FlowModel>> commonDto = restTemplate.exchange(url, HttpMethod.GET, entity,new ParameterizedTypeReference<CommonDto<FlowModel>>(){} );
+//                            investorDemandListOutputDto.setFlowModel(commonDto.getBody().getData());
+//
+//                            if (null != commonDto.getBody().getData()) {
+//                            commonDto.getBody().getData().getLikers().forEach(v -> {
+//                                if (null != v && null != v.getToken()) {
+//                                    if (v.getToken().equals(body.getToken())) {
+//                                        investorDemandListOutputDto.setCurrentUserLikeStatus(1);
+//                                    }
+//                                }
+//                            });
+//                            }
+//                        } catch (RestClientException e) {
+//                            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+//                        }
+//                    }
 
                     list.add(investorDemandListOutputDto);
                 }

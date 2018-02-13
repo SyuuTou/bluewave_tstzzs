@@ -68,7 +68,12 @@ public class PayServiceImpl implements PayService {
     public CommonDto<Map<String, String>> generatePayInfo(PayRequestBody payRequestBody, Integer appId) {
 
         CommonDto<Map<String, String>> result = new CommonDto<>();
-        UserMoneyRecord userMoneyRecord = userMoneyRecordMapper.selectByPrimaryKey(payRequestBody.getMoneyId());
+
+        UserMoneyRecord userMoneyRecord = new UserMoneyRecord();
+        userMoneyRecord.setAppId(appId);
+        userMoneyRecord.setId(payRequestBody.getMoneyId());
+
+        userMoneyRecord = userMoneyRecordMapper.selectOne(userMoneyRecord);
 
         Users query = new Users();
         query.setUuid(payRequestBody.getUuid());

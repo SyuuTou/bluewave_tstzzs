@@ -149,6 +149,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
                 metaObtainIntegral.setSceneKey("EWJkiU7Q");
                 metaObtainIntegral.setUserLevel(userLevel.getLevelId());
+                metaObtainIntegral.setAppId(appId);
                 metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
                 BigDecimal originalCost = metaObtainIntegral.getIntegral();
                 userLevelDto.setOriginalCost(originalCost);
@@ -181,12 +182,14 @@ public class UserLevelServiceImpl implements UserLevelService {
                 MetaObtainIntegral send = new MetaObtainIntegral();
                 send.setSceneKey("PnLUE0m4");
                 send.setUserLevel(userLevel.getLevelId());
+                send.setAppId(appId);
                 send = metaObtainIntegralMapper.selectOne(send);
                 userLevelDto.setSendsNum(send.getDeliverNum());
 
                 MetaObtainIntegral condition = new MetaObtainIntegral();
                 condition.setSceneKey("cIQwmmX7");
                 condition.setUserLevel(userLevel.getLevelId());
+                condition.setAppId(appId);
                 condition = metaObtainIntegralMapper.selectOne(condition);
                 userLevelDto.setConditionNum(condition.getDeliverNum());
 
@@ -322,6 +325,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
         metaObtainIntegral.setSceneKey("EWJkiU7Q");
         metaObtainIntegral.setUserLevel(userLevel.getLevelId());
+        metaObtainIntegral.setAppId(appId);
         metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
         BigDecimal originalCost = metaObtainIntegral.getIntegral();
         userLevelDto.setOriginalCost(originalCost);
@@ -354,12 +358,14 @@ public class UserLevelServiceImpl implements UserLevelService {
         MetaObtainIntegral send = new MetaObtainIntegral();
         send.setSceneKey("PnLUE0m4");
         send.setUserLevel(userLevel.getLevelId());
+        send.setAppId(appId);
         send = metaObtainIntegralMapper.selectOne(send);
         userLevelDto.setSendsNum(send.getDeliverNum());
 
         MetaObtainIntegral condition = new MetaObtainIntegral();
         condition.setSceneKey("cIQwmmX7");
         condition.setUserLevel(userLevel.getLevelId());
+        condition.setAppId(appId);
         condition = metaObtainIntegralMapper.selectOne(condition);
         userLevelDto.setConditionNum(condition.getDeliverNum());
 
@@ -381,6 +387,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             //获取失效周期
             MetaUserLevel metaUserLevel = new MetaUserLevel();
             metaUserLevel.setId(levelId);
+            metaUserLevel.setAppId(appId);
             metaUserLevel = metaUserLevelMapper.selectOne(metaUserLevel);
             int period = metaUserLevel.getPeriod();
 
@@ -390,6 +397,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             calendar.add(Calendar.DAY_OF_YEAR, period);
             Date end = calendar.getTime();
             newOne.setEndTime(end);
+            newOne.setAppId(appId);
             newOne.setStatus(0);//未支付状态
             userLevelRelationMapper.insertSelective(newOne);
 
@@ -1893,10 +1901,10 @@ public class UserLevelServiceImpl implements UserLevelService {
             	MetaUserLevel m2 = metaUserLevelMapper.selectByPrimaryKey(userLevel11);
                 BigDecimal qj2=m2.getAmount();
                 Integer dnum1=qj2.intValue();
-                Float bei1 =usersMapper.findByBei(leId1);
+                Float bei1 =usersMapper.findByBei(appId, leId1);
                 Integer hnum1 =(int)(dnum1*(1+bei1));
                 //购买或升级买的金币
-                Float bei2 =usersMapper.findByBei(leId);
+                Float bei2 =usersMapper.findByBei(appId, leId);
                 //Integer qj = userIntegralsMapper.findByQnum(leId);
                 MetaUserLevel userLevel1 =new MetaUserLevel();
                 userLevel1.setId(leId);
@@ -1948,7 +1956,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 leId1=1;
                 Integer hnum1 = 0;
                 //购买或升级买的金币
-                Float bei2 =usersMapper.findByBei(leId);
+                Float bei2 =usersMapper.findByBei(appId, leId);
                 //Integer qj = userIntegralsMapper.findByQnum(leId);
                 MetaUserLevel userLevel1 =new MetaUserLevel();
                 userLevel1.setId(leId);
@@ -2081,7 +2089,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 leId1=usersMapper.findByUserid(userId);
                 Integer hnum1 = 0;
                 //购买或升级买的金币
-                Float bei2 =usersMapper.findByBei(leId1);
+                Float bei2 =usersMapper.findByBei(appId, leId1);
                 //Integer qj = userIntegralsMapper.findByQnum(leId1);
                 MetaUserLevel userLevel =new MetaUserLevel();
                 userLevel.setId(leId1);

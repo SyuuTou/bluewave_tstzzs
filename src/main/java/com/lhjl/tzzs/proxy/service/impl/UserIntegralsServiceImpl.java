@@ -95,19 +95,19 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 			//获取用户id
 			Integer leId =usersMapper.findByUserid(userId);
 			if(leId != null){
-				Float bei =usersMapper.findByBei(leId);
+				Float bei =usersMapper.findByBei(appId,leId);
 				String skey =body.getsKey();
 				//下个等级
 				leId=leId+1;
-				Float xbei =usersMapper.findByBei(leId);
-				double dnum = usersMapper.findByJinE(skey);
+				Float xbei =usersMapper.findByBei(appId, leId);
+				double dnum = usersMapper.findByJinE(appId,skey);
 				if(skey !=null){
 					if("okuF3LQg".equals(skey)){
 						map.put("dnum",dnum);
 						map.put("snum",(int) (bei*dnum));
 						map.put("hnum",(int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -131,7 +131,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -155,7 +155,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -179,7 +179,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -203,7 +203,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -227,7 +227,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -251,7 +251,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -273,7 +273,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -293,18 +293,18 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				}
 			}else{
 				leId=0;
-				Float bei =usersMapper.findByBei(leId+1);
+				Float bei =usersMapper.findByBei(appId, leId+1);
 				String skey =body.getsKey();
-				Integer dnum = usersMapper.findByJinE(skey);
+				Integer dnum = usersMapper.findByJinE(appId,skey);
 				if(skey !=null){
 					if("okuF3LQg".equals(skey)){
 						map.put("dnum",dnum);
 						map.put("snum",(int) (bei*dnum));
 						map.put("hnum",(int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -322,9 +322,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -343,9 +343,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -364,9 +364,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -385,9 +385,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -406,9 +406,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -426,9 +426,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -446,9 +446,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -483,10 +483,10 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		if(userId !=0 && userId !=null){
 			Integer leId =usersMapper.findByUserid(userId);
 			if(leId !=null) {
-                Float bei = usersMapper.findByBei(leId);
+                Float bei = usersMapper.findByBei(appId, leId);
                 BigDecimal dnum = body.getQj();
                 Integer dnum1 = dnum.intValue();
-                if (dnum1 >= 188) {
+                if (dnum1 >= 1) {
                     map.put("dnum", dnum);
 
                     map.put("snum", (int) (bei * dnum1));
@@ -495,8 +495,8 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
                     System.out.println(dnum);
                     if (leId < 4) {
                         leId = leId + 1;
-                        Float xbei = usersMapper.findByBei(leId);
-                        String userName = usersMapper.findByUserLevel(leId);
+                        Float xbei = usersMapper.findByBei(appId, leId);
+                        String userName = usersMapper.findByUserLevel(appId,leId);
                         map.put("xnum", (int) (xbei * dnum1));
                         map.put("userName", userName);
                     } else {
@@ -517,17 +517,17 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
                 }
 			}else{
 				leId=0;
-				Float bei =usersMapper.findByBei(leId+1);
+				Float bei =usersMapper.findByBei(appId, leId+1);
 				BigDecimal dnum = body.getQj();
                 Integer dnum1=dnum.intValue();
-				if(dnum1>=188){
+				if(dnum1>=1){
 					map.put("dnum",dnum);
 
 					map.put("snum",(int)(bei*dnum1));
 					map.put("hnum",(int)(((bei+1)*dnum1)));
-					String userName = usersMapper.findByUserLevel(leId+1);
+					String userName = usersMapper.findByUserLevel(appId,leId+1);
 					leId=leId+1;
-					Float xbei =usersMapper.findByBei(leId);
+					Float xbei =usersMapper.findByBei(appId, leId);
 					map.put("xnum",(int) (xbei*dnum1));
 					map.put("userName",userName);
 					UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -572,7 +572,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 			list=userLevelRelationMapper.findByMing(appId,userId, beginNum, pageSize);
 			Integer leId =usersMapper.findByUserid(userId);
 			if(leId !=null){
-				Float bei =usersMapper.findByBei(leId);
+				Float bei =usersMapper.findByBei(appId, leId);
 				for (Map<String, Object> obj : list){
 					//UserIntegralConsume u =new  UserIntegralConsume();
 					if(new BigDecimal(obj.get("cost_num").toString()).compareTo(new BigDecimal(0))>=0){
@@ -634,7 +634,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	
 			}else{
 				leId=1;
-				Float bei =usersMapper.findByBei(leId);
+				Float bei =usersMapper.findByBei(appId, leId);
 				for (Map<String, Object> obj : list) {
 					UserIntegrals u = new UserIntegrals();
 					if (new BigDecimal(obj.get("cost_num").toString()).compareTo(new BigDecimal(0))>=0) {
@@ -722,7 +722,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		if(userId !=0 && userId !=null){
 			Integer leId =usersMapper.findByUserid(userId);
 			if(leId !=null){
-				Float bei =usersMapper.findByBei(leId);
+				Float bei =usersMapper.findByBei(appId, leId);
 				UserIntegrals userIntegrals =new UserIntegrals();
 				userIntegrals.setUserId(userId);
 				userIntegrals.setSceneKey("xHwofbNs");
@@ -806,7 +806,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				}
 			}else {
 					leId = 0;
-					Float bei = usersMapper.findByBei(leId + 1);
+					Float bei = usersMapper.findByBei(appId, leId + 1);
 					UserIntegrals userIntegrals = new UserIntegrals();
 					userIntegrals.setUserId(userId);
 					userIntegrals.setSceneKey("xHwofbNs");

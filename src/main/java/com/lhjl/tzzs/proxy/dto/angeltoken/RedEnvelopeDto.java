@@ -21,6 +21,16 @@ public class RedEnvelopeDto {
     private Integer redEnvelopeType;
     /** 红包类型描述；INVITATIONED：邀请红包 ，QUOTAED：定额红包，RANDOMED：随机红包*/
     private String description;
+    /**   */
+    private Integer currency;
+
+    public Integer getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Integer currency) {
+        this.currency = currency;
+    }
 
 
     public String getDescription() {

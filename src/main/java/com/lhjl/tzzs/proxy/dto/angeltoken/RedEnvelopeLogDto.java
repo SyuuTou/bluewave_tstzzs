@@ -12,7 +12,16 @@ public class RedEnvelopeLogDto {
     private String token;
     private String companyName;
     private String companyDuties;
+    private String currency;
 
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
     public String getCompanyName() {
         return companyName;
     }

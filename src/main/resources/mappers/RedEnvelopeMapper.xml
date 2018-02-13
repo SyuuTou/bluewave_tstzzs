@@ -20,5 +20,6 @@
     <result column="red_envelope_type" property="redEnvelopeType" jdbcType="INTEGER" />
     <result column="receive_amount" property="receiveAmount" jdbcType="DECIMAL" />
     <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="currency" property="currency" jdbcType="INTEGER" />
   </resultMap>
 </mapper>
