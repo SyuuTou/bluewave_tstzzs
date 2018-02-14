@@ -17,7 +17,7 @@ import java.util.Map;
 public class InstitutionsProjectController {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(InstitutionsProjectController.class);
 
-    @Resource
+    @Resource  
     private InstitutionsProjectService institutionsProjectService;
 
     /**
