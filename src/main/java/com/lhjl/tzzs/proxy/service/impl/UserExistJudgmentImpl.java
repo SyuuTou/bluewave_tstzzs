@@ -10,6 +10,7 @@ import com.lhjl.tzzs.proxy.model.UserToken;
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.model.UsersWeixin;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
+import com.lhjl.tzzs.proxy.service.bluewave.BlueUserInfoService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,9 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
 
     @Resource
     private UserTokenMapper userTokenMapper;
+
+    @Resource
+    private BlueUserInfoService blueUserInfoService;
 
     //判断用户是否注册过，没有即注册。
     @Transactional
@@ -102,6 +106,15 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
                 }else {
                     userExsitJudgmentDto.setHaspassword(1);
                 }
+
+                //获取用户是否有头像
+                Integer headpicYn = blueUserInfoService.checkUserHeadpic(token,appid).getData();
+                if (headpicYn != 1){
+                    userExsitJudgmentDto.setHasHeadpic(0);
+                }else {
+                    userExsitJudgmentDto.setHasHeadpic(1);
+                }
+
                 userExsitJudgmentDto.setYhid(userId);
                 userExsitJudgmentDto.setToken(token);
                 userExsitJudgmentDto.setSuccess(true);
@@ -160,6 +173,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
 
                 userExsitJudgmentDto.setHaspassword(0);
                 userExsitJudgmentDto.setHasphonenumber(0);
+                userExsitJudgmentDto.setHasHeadpic(0);
                 userExsitJudgmentDto.setSuccess(true);
                 userExsitJudgmentDto.setToken(token);
                 userExsitJudgmentDto.setYhid(userid);
@@ -211,6 +225,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
 
             userExsitJudgmentDto.setHaspassword(0);
             userExsitJudgmentDto.setHasphonenumber(0);
+            userExsitJudgmentDto.setHasHeadpic(0);
             userExsitJudgmentDto.setSuccess(true);
             userExsitJudgmentDto.setToken(token);
             userExsitJudgmentDto.setYhid(userid);

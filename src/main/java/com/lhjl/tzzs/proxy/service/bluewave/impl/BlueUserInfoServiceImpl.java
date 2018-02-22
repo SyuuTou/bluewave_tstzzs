@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.bluewave.UserHeadPicOutputDto;
 import com.lhjl.tzzs.proxy.dto.bluewave.UserInfomationInputDto;
 import com.lhjl.tzzs.proxy.dto.bluewave.UserInformationOutputDto;
+import com.lhjl.tzzs.proxy.dto.flow.User;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.bluewave.BlueUserInfoService;
@@ -399,6 +400,66 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
         result.setData(null);
 
         return result;
+    }
+
+    /**
+     * 检查手机号的接口
+     * @param token
+     * @param appid
+     * @return
+     */
+    @Override
+    public CommonDto<Integer> checkUserPonenumber(String token, Integer appid) {
+
+
+        if (StringUtils.isEmpty(token)){
+            return  new CommonDto<>(null,"用户token不能为空",502);
+        }
+        if (null == appid){
+            return  new CommonDto<>(null,"appid不能为空",502);
+        }
+
+        Integer userId = userLoginService.getUserIdByToken(token, appid);
+        if (userId == -1){
+            return  new CommonDto<>(null,"用户token失效",502);
+        }
+
+        Users users = usersMapper.selectByPrimaryKey(userId);
+        if (null == users.getPhonenumber()){
+            return new CommonDto<>(0,"没有手机号",200);
+        }
+
+        return new CommonDto<>(1,"success",200);
+    }
+
+    /**
+     * 检查用户头像的接口
+     * @param token
+     * @param appid
+     * @return
+     */
+    @Override
+    public CommonDto<Integer> checkUserHeadpic(String token, Integer appid) {
+
+        if (StringUtils.isEmpty(token)){
+            return  new CommonDto<>(null,"用户token不能为空",502);
+        }
+        if (null == appid){
+            return  new CommonDto<>(null,"appid不能为空",502);
+        }
+
+        Integer userId = userLoginService.getUserIdByToken(token, appid);
+        if (userId == -1){
+            return  new CommonDto<>(null,"用户token失效",502);
+        }
+
+        Users users = usersMapper.selectByPrimaryKey(userId);
+
+        if (null == users.getHeadpic() && null == users.getHeadpicReal()){
+            return new CommonDto<>(0,"用户没有头像",200);
+        }
+
+        return new CommonDto<>(1,"success",200);
     }
 
     /**

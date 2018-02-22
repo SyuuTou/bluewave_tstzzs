@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.dto;
 public class UserExsitJudgmentDto {
     private int hasphonenumber;
     private int haspassword;
+    private int hasHeadpic;/*是否有头像,0表示没有,1表示有*/
     private String token;
     private Boolean success;
     private int yhid;
@@ -45,5 +46,13 @@ public class UserExsitJudgmentDto {
 
     public void setYhid(int yhid) {
         this.yhid = yhid;
+    }
+
+    public int getHasHeadpic() {
+        return hasHeadpic;
+    }
+
+    public void setHasHeadpic(int hasHeadpic) {
+        this.hasHeadpic = hasHeadpic;
     }
 }

@@ -108,4 +108,36 @@ public class BlueUserInfoController extends GenericService{
 
         return result;
     }
+
+    /**
+     * 检查手机号是否存在接口
+     * @param appid
+     * @param token
+     * @return
+     */
+    @GetMapping("/v{appid}/check/phonenumber")
+    public CommonDto<Integer> checkUserPhonenumber(@PathVariable Integer appid,String token){
+        try {
+            return blueUserInfoService.checkUserPonenumber(token,appid);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            return new CommonDto<>(0,"服务器端发生错误",502);
+        }
+    }
+
+    /**
+     * 检查用户头像是否存在的接口
+     * @param appid
+     * @param token
+     * @return
+     */
+    @GetMapping("/v{appid}/check/headpic")
+    public CommonDto<Integer> checkUserHeadpic(@PathVariable Integer appid,String token){
+        try {
+            return blueUserInfoService.checkUserHeadpic(token, appid);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            return new CommonDto<>(0,"服务器端发生错误",502);
+        }
+    }
 }
