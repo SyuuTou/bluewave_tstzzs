@@ -141,6 +141,9 @@
     left join
     (select project_id,group_concat(segmentation_name) segmentation_name from project_segmentation group by project_id) ps
     on p.id = ps.project_id
+    <!-- 取得提交人姓名 -->
+    left join user_token ut on pfl.submitter = ut.token
+    left join users u on ut.user_id = u.ID
     where 1=1
     <if test="searchWord != null and searchWord !=''">
       and
