@@ -90,6 +90,10 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
 			if(e.getUpdateTime() != null) {
 				e.setUpdateTimeOutputStr(sdf2.format(e.getUpdateTime()));
 			}
+//			格式化审核时间输出字符串
+			if(e.getApprovalTime() != null) {
+				e.setApprovalTimeOutputStr(sdf2.format(e.getApprovalTime()));
+			}
         });
         
         map.put("total",totalcount);

@@ -20,6 +20,12 @@ public class ProjectFinancingLog {
     private Integer projectId;
 
     /**
+     * 投资事件采集编号
+     */
+    @Column(name = "serial_number")
+    private Integer serialNumber;
+
+    /**
      * 投／融资时间
      */
     @Column(name = "financing_time")
@@ -128,12 +134,6 @@ public class ProjectFinancingLog {
     private String projectFinancingUseful;
 
     /**
-     * 编号，流水号
-     */
-    @Column(name = "serial_number")
-    private Integer serialNumber;
-
-    /**
      * 数据来源类型表id
      */
     @Column(name = "data_soruce_type_id")
@@ -149,6 +149,12 @@ public class ProjectFinancingLog {
      * 删除标志:0代表有效；1代表无效
      */
     private Integer yn;
+
+    /**
+     * 提交人token
+     */
+    private String submitter;
+    
     /**
 	 * 关联的相关机构
 	 */
@@ -165,13 +171,13 @@ public class ProjectFinancingLog {
 	@Transient
 	private String financingStr;
 	
-	
-    public String getFinancingStr() {
-		return financingStr;
+
+    public List<InvestmentInstitutions> getInstitutions() {
+		return institutions;
 	}
 
-	public void setFinancingStr(String financingStr) {
-		this.financingStr = financingStr;
+	public void setInstitutions(List<InvestmentInstitutions> institutions) {
+		this.institutions = institutions;
 	}
 
 	public List<String> getInstitutionsShortNames() {
@@ -182,12 +188,12 @@ public class ProjectFinancingLog {
 		this.institutionsShortNames = institutionsShortNames;
 	}
 
-	public List<InvestmentInstitutions> getInstitutions() {
-		return institutions;
+	public String getFinancingStr() {
+		return financingStr;
 	}
 
-	public void setInstitutions(List<InvestmentInstitutions> institutions) {
-		this.institutions = institutions;
+	public void setFinancingStr(String financingStr) {
+		this.financingStr = financingStr;
 	}
 
 	/**
@@ -220,6 +226,24 @@ public class ProjectFinancingLog {
      */
     public void setProjectId(Integer projectId) {
         this.projectId = projectId;
+    }
+
+    /**
+     * 获取投资事件采集编号
+     *
+     * @return serial_number - 投资事件采集编号
+     */
+    public Integer getSerialNumber() {
+        return serialNumber;
+    }
+
+    /**
+     * 设置投资事件采集编号
+     *
+     * @param serialNumber 投资事件采集编号
+     */
+    public void setSerialNumber(Integer serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     /**
@@ -585,24 +609,6 @@ public class ProjectFinancingLog {
     }
 
     /**
-     * 获取编号，流水号
-     *
-     * @return serial_number - 编号，流水号
-     */
-    public Integer getSerialNumber() {
-        return serialNumber;
-    }
-
-    /**
-     * 设置编号，流水号
-     *
-     * @param serialNumber 编号，流水号
-     */
-    public void setSerialNumber(Integer serialNumber) {
-        this.serialNumber = serialNumber;
-    }
-
-    /**
      * 获取数据来源类型表id
      *
      * @return data_soruce_type_id - 数据来源类型表id
@@ -656,19 +662,38 @@ public class ProjectFinancingLog {
         this.yn = yn;
     }
 
+    /**
+     * 获取提交人token
+     *
+     * @return submitter - 提交人token
+     */
+    public String getSubmitter() {
+        return submitter;
+    }
+
+    /**
+     * 设置提交人token
+     *
+     * @param submitter 提交人token
+     */
+    public void setSubmitter(String submitter) {
+        this.submitter = submitter;
+    }
+
 	@Override
 	public String toString() {
-		return "ProjectFinancingLog [id=" + id + ", projectId=" + projectId + ", financingTime=" + financingTime
-				+ ", stage=" + stage + ", amount=" + amount + ", calculationAmountStatus=" + calculationAmountStatus
-				+ ", currency=" + currency + ", stockRight=" + stockRight + ", prAmount=" + prAmount + ", totalAmount="
-				+ totalAmount + ", rate=" + rate + ", shareDivest=" + shareDivest + ", valuation=" + valuation
-				+ ", investmentInstitutionsList=" + investmentInstitutionsList + ", proportionList=" + proportionList
-				+ ", createTime=" + createTime + ", status=" + status + ", approvalStatus=" + approvalStatus
-				+ ", approvalTime=" + approvalTime + ", amountStatus=" + amountStatus + ", totalAmountStatus="
-				+ totalAmountStatus + ", financingTimeYear=" + financingTimeYear + ", projectFinancingUseful="
-				+ projectFinancingUseful + ", serialNumber=" + serialNumber + ", dataSoruceTypeId=" + dataSoruceTypeId
-				+ ", updateTime=" + updateTime + ", yn=" + yn + ", institutions=" + institutions
-				+ ", institutionsShortNames=" + institutionsShortNames + ", financingStr=" + financingStr + "]";
+		return "ProjectFinancingLog [id=" + id + ", projectId=" + projectId + ", serialNumber=" + serialNumber
+				+ ", financingTime=" + financingTime + ", stage=" + stage + ", amount=" + amount
+				+ ", calculationAmountStatus=" + calculationAmountStatus + ", currency=" + currency + ", stockRight="
+				+ stockRight + ", prAmount=" + prAmount + ", totalAmount=" + totalAmount + ", rate=" + rate
+				+ ", shareDivest=" + shareDivest + ", valuation=" + valuation + ", investmentInstitutionsList="
+				+ investmentInstitutionsList + ", proportionList=" + proportionList + ", createTime=" + createTime
+				+ ", status=" + status + ", approvalStatus=" + approvalStatus + ", approvalTime=" + approvalTime
+				+ ", amountStatus=" + amountStatus + ", totalAmountStatus=" + totalAmountStatus + ", financingTimeYear="
+				+ financingTimeYear + ", projectFinancingUseful=" + projectFinancingUseful + ", dataSoruceTypeId="
+				+ dataSoruceTypeId + ", updateTime=" + updateTime + ", yn=" + yn + ", submitter=" + submitter
+				+ ", institutions=" + institutions + ", institutionsShortNames=" + institutionsShortNames
+				+ ", financingStr=" + financingStr + "]";
 	}
-
+    
 }
