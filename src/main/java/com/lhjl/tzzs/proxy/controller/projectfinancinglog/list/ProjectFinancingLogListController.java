@@ -19,7 +19,8 @@ public class ProjectFinancingLogListController extends GenericController{
     private ProjectFinancingLogService projectFinancingLogService;
 
     /**
-     * 后台读取项目融资历史列表的接口
+     * 后台读取项目融资历史(以及审核)列表的接口
+     * 一个接口两用
      * @param body
      * @return
      */

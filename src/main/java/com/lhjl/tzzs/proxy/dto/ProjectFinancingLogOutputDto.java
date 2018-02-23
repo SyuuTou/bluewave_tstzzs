@@ -65,7 +65,7 @@ public class ProjectFinancingLogOutputDto {
     /**提交时间*/
     private Date createTime;
     
-    /**提交时间*/
+    /**提交时间输出字符串*/
     private String createTimeOutputStr;
 
     /**更新时间*/
