@@ -8,10 +8,8 @@ import com.github.binarywang.wxpay.bean.result.WxEntPayResult;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
-import com.github.pagehelper.PageHelper;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.angeltoken.*;
-import com.lhjl.tzzs.proxy.dto.flow.User;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
@@ -149,7 +147,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
             MetaObtainIntegral obtainIntegral = metaObtainIntegralMapper.selectOne(queryObtainIntegral);
 
 
-            addUserIntegralsLog(appId, senceKey, userId, obtainIntegral.getIntegral(), obtainIntegralPeriod,true, new BigDecimal(1));
+            addUserIntegralsLog(appId, senceKey, userId, obtainIntegral.getIntegral(), obtainIntegralPeriod,true, new BigDecimal(1), 1);
 
 
 
@@ -162,7 +160,17 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 //        return null;
     }
 
-    public void addUserIntegralsLog(Integer appId, String senceKey, Integer userId, BigDecimal obtainIntegral, Integer obtainIntegralPeriod, Boolean flag, BigDecimal plusOrMinus) {
+    /**
+     *  @param appId 系统ID
+     * @param senceKey 场景
+     * @param userId 用户ID
+     * @param obtainIntegral 积分/令牌
+     * @param obtainIntegralPeriod  有效期
+     * @param flag 标志，是否计入令牌领取限制统计
+     * @param plusOrMinus 标志，正的/负的
+     * @param currency 币种，人民币/令牌
+     */
+    public void addUserIntegralsLog(Integer appId, String senceKey, Integer userId, BigDecimal obtainIntegral, Integer obtainIntegralPeriod, Boolean flag, BigDecimal plusOrMinus, Integer currency) {
         try {
             BigDecimal obtainIntegralCopy = obtainIntegral;
             if (plusOrMinus.compareTo(new BigDecimal(0))>=0) {
@@ -174,7 +182,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                 addUserIntegrals.setIntegralNum(obtainIntegralCopy);
                 addUserIntegrals.setUserId(userId);
                 addUserIntegrals.setAppId(appId);
-
+                addUserIntegrals.setCurrency(currency);
                 userIntegralsMapper.insert(addUserIntegrals);
             }else{
                 UserIntegrals query = new UserIntegrals();
@@ -215,7 +223,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
             addUserIntegralConsume.setCostNum(obtainIntegral.multiply(plusOrMinus));
             addUserIntegralConsume.setCreateTime(DateTime.now().toDate());
             addUserIntegralConsume.setAppId(appId);
-
+            addUserIntegralConsume.setCurrency(currency);
             userIntegralConsumeMapper.insert(addUserIntegralConsume);
 
             if (flag) {
@@ -271,7 +279,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
         Users users = this.getUserInfo(appId, redEnvelopeDto.getToken());
         if (!redEnvelopeDto.getDescription().equals("INVITATIONED")) {
-            this.addUserIntegralsLog(appId, "SEND_ANGEL_TOKEN ", users.getId(), redEnvelope.getTotalAmount(), obtainIntegralPeriod, false, new BigDecimal(-1));
+            this.addUserIntegralsLog(appId, "SEND_ANGEL_TOKEN ", users.getId(), redEnvelope.getTotalAmount(), obtainIntegralPeriod, false, new BigDecimal(-1), redEnvelope.getCurrency());
         }
         return new CommonDto<>(redEnvelope.getUnionKey(),"succcess", 200);
     }
@@ -374,6 +382,8 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
             RedEnvelope queryRedEnvelope = new RedEnvelope();
             queryRedEnvelope.setUnionKey(unionId);
             RedEnvelope redEnvelope = redEnvelopeMapper.selectOne(queryRedEnvelope);
+
+
              users = this.getUserInfo(appId,redEnvelope.getToken());
             if (null == users){
                 return  new CommonDto<>(null, "用户不存在", 200);
@@ -411,7 +421,11 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                 }
             }
 
-            if (null != redEnvelope.getDescription() && redEnvelope.getDescription().equals("INVITATIONED")){
+
+            if (overTime24HourHandler(appId,redEnvelope)){
+                    redEnvelopeResDto.setStatus("OverTimed24");
+                    redEnvelopeResDto.setMessage(redEnvelope.getMessage());
+            }else if (null != redEnvelope.getDescription() && redEnvelope.getDescription().equals("INVITATIONED")){
 
                 Users newUser = this.getUserInfo(appId,token);
 
@@ -482,6 +496,22 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         }
 
         return result;
+    }
+
+    private boolean overTime24HourHandler(Integer appId, RedEnvelope redEnvelope) {
+
+        Date endDate = new DateTime(redEnvelope.getCreateTime()).plusDays(1).toDate();
+        if (endDate.before(DateTime.now().toDate())) {
+
+            //超24时，不可领取红包，退回剩余金额
+            BigDecimal residueMoney = redEnvelope.getTotalAmount().subtract(redEnvelope.getReceiveAmount());
+            Users users = this.getUserInfo(appId, redEnvelope.getToken());
+            this.addUserIntegralsLog(appId, "RED_ENVELOPE_RETURN", users.getId(), residueMoney, obtainIntegralPeriod, false, new BigDecimal(1), redEnvelope.getCurrency());
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
     public void handlerCurrency(RedEnvelope redEnvelope, RedEnvelopeLogDto redEnvelopeLogDto) {
@@ -558,8 +588,12 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
                         redEnvelopeLogMapper.insert(redEnvelopeLog);
                         Users reciveUser = this.getUserInfo(appId, token);
-                        this.addUserIntegralsLog(appId, "GET_ANGEL_TOKEN", reciveUser.getId(), reciveAmount, obtainIntegralPeriod, true, new BigDecimal(1));
+                        if (redEnvelope.getCurrency() == 0) { //人民币没有限制，令牌每天有最高领取限制
+                            this.addUserIntegralsLog(appId, "GET_ANGEL_TOKEN", reciveUser.getId(), reciveAmount, obtainIntegralPeriod, false, new BigDecimal(1), redEnvelope.getCurrency());
+                        }else{
+                            this.addUserIntegralsLog(appId, "GET_ANGEL_TOKEN", reciveUser.getId(), reciveAmount, obtainIntegralPeriod, true, new BigDecimal(1), redEnvelope.getCurrency());
 
+                        }
 
                         if (null != redEnvelope.getCurrency() && redEnvelope.getCurrency()==0) {
                             UsersWeixin query = new UsersWeixin();
@@ -707,7 +741,9 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
                     redEnvelopeResDto.setCurrency("令牌");
                 }
             }
-            if (redEnvelope.getReceiveQuantity() == redEnvelope.getQuantity()) {
+            if (overTime24HourHandler(appId,redEnvelope)) {
+                redEnvelopeResDto.setStatus("OverTimed24");
+            }else if (redEnvelope.getReceiveQuantity() == redEnvelope.getQuantity()) {
                 redEnvelopeResDto.setStatus("Finished");
             }else{
                 RedEnvelopeLog redEnvelopeLogQuery = new RedEnvelopeLog();

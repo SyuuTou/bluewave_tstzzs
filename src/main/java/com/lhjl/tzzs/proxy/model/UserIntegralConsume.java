@@ -50,6 +50,17 @@ public class UserIntegralConsume {
     @Column(name = "app_id")
     private Integer appId;
 
+
+    private Integer currency;
+
+    public Integer getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Integer currency) {
+        this.currency = currency;
+    }
+
     public Integer getAppId() {
         return appId;
     }

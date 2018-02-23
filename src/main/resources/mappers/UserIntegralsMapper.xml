@@ -15,6 +15,7 @@
         <result column="consume_num" property="consumeNum" jdbcType="INTEGER" />
         <result column="consume_time" property="consumeTime" jdbcType="TIMESTAMP" />
         <result column="app_id" jdbcType="INTEGER" property="appId" />
+        <result column="currency" jdbcType="INTEGER" property="currency" />
     </resultMap>
     <select id="findIntegralsZ" parameterType="INTEGER" resultType="DECIMAL" >
         SELECT IFNULL(SUM(integral_num),0) znum  FROM user_integrals c
