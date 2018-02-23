@@ -8,7 +8,7 @@ public class ProjectFinancingLogOutputDto {
 	 /**投资事件主键id*/
     private Integer id;
     
-    /**投资事件编号*/
+    /**投资事件采集编号*/
     private Integer serialNumber;
 
     /**来源类型*/
