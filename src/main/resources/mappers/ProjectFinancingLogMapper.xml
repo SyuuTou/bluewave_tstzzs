@@ -151,7 +151,6 @@
      AND (pfl.create_time &gt;= #{beginTime} 
      or pfl.update_time &gt;= #{beginTime}
      )
-     
     </if>
     
     <if test="endTime !=null">
