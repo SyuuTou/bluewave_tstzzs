@@ -26,7 +26,6 @@ public class ProjectFinancingLogListController extends GenericController{
     @PostMapping("get/projectfinancinglog/list")
     public CommonDto<Map<String,Object>> getProjectFinancingLog(@RequestBody ProjectFinancingLogInputDto body){
         CommonDto<Map<String,Object>> result = new CommonDto<>();
-
         try {
             result = projectFinancingLogService.getProjectFinancingLogList(body);
         }catch (Exception e){

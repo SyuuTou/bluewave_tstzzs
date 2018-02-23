@@ -38,7 +38,7 @@ public class ProjectFinancingLogInputDto {
     private String order;
     
     /**当前页码*/
-    private Integer pageNum;
+    private Integer currentPage;
 
     /**每页显示数量*/
     private Integer pageSize;
@@ -126,12 +126,16 @@ public class ProjectFinancingLogInputDto {
 		this.order = order;
 	}
 
-	public Integer getPageNum() {
-		return pageNum;
+
+
+
+
+	public Integer getCurrentPage() {
+		return currentPage;
 	}
 
-	public void setPageNum(Integer pageNum) {
-		this.pageNum = pageNum;
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
 	}
 
 	public Integer getPageSize() {
@@ -155,8 +159,7 @@ public class ProjectFinancingLogInputDto {
 		return "ProjectFinancingLogInputDto [searchWord=" + searchWord + ", beginTimeInputStr=" + beginTimeInputStr
 				+ ", beginTime=" + beginTime + ", endTimeInputStr=" + endTimeInputStr + ", endTime=" + endTime
 				+ ", dataSource=" + dataSource + ", stage=" + stage + ", currency=" + currency + ", column=" + column
-				+ ", order=" + order + ", pageNum=" + pageNum + ", pageSize=" + pageSize + ", start=" + start + "]";
+				+ ", order=" + order + ", currentPage=" + currentPage + ", pageSize=" + pageSize + ", start=" + start
+				+ "]";
 	}
-
-	
 }

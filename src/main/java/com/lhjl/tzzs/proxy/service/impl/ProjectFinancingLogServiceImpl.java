@@ -38,7 +38,8 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
     private ProjectsMapper projectsMapper;
     @Autowired
     private ProjectFinancialLogFollowStatusMapper projectFinancialLogFollowStatusMapper;
-
+    
+    @Transactional(readOnly=true)
     @Override
     public CommonDto<Map<String, Object>> getProjectFinancingLogList(ProjectFinancingLogInputDto body) {
         CommonDto<Map<String,Object>> result = new CommonDto<>();
@@ -64,17 +65,17 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
 			}
         }
       //格式化页码的默认值
-        if (body.getPageNum() == null){
-            body.setPageNum(defalutPageNum);
+        if (body.getCurrentPage() == null){
+            body.setCurrentPage(defalutPageNum);
         }
 
         if (body.getPageSize() == null){
             body.setPageSize(defalutPageSize);  
         }
-        body.setStart( (body.getPageNum()-1) * body.getPageSize() );
+        body.setStart( (body.getCurrentPage()-1) * body.getPageSize() );
         this.LOGGER.error("**"+body);
         //数据输出
-        List<ProjectFinancingLogOutputDto> projectFinancingLogList = projectFinancingLogMapper.getProjectFinancingLogList(body);
+        List<ProjectFinancingLogOutputDto> projectFinancingLogList = projectFinancingLogMapper.getProjectFinancingLogLists(body);
         Integer totalcount = projectFinancingLogMapper.getProjectFinancingLogListCount(body);
         /**
          * 格式化输出时间转换为字符串
@@ -94,7 +95,7 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
         map.put("total",totalcount);
         map.put("list",projectFinancingLogList);
         
-        map.put("currentPage",body.getPageNum()); 
+        map.put("currentPage",body.getCurrentPage()); 
         map.put("pageSize",body.getPageSize());
         
 
