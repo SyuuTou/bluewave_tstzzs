@@ -480,7 +480,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	 * @return
 	 */
 	@Override
-	public CommonDto<Map<String, Object>> recordUserPayAmount(Integer appId, ZengDto body) {
+	public CommonDto<Map<String, Object>> recordUserPayAmountMember(Integer appId, ZengDto body) {
 
 		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
 		Map<String,Object> map =new HashMap<String,Object>();
@@ -498,11 +498,11 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		Integer userId= usersMapper.findByUuid(uuids);
 
 		if (null == userId || 0==userId){
-			return new CommonDto<>(null,"你没有此权限，请完善资料",5013);
+			return new CommonDto<>(null,"用户不存在",502);
 		}
 
 		if (null == body.getsKey()){
-			return new CommonDto<>(null,"请传入场景key",5013);
+			return new CommonDto<>(null,"请传入场景key",502);
 		}
 
 		//获取当前用户等级
@@ -523,7 +523,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		List<MetaScene> metaSceneList = metaSceneMapper.select(metaScene);
 
 		if (metaSceneList.size() < 1){
-			return new CommonDto<>(null,"场景key无效",5013);
+			return new CommonDto<>(null,"场景key无效",502);
 		}
 
 		//不同充值方式取金额方式也不同
@@ -532,6 +532,10 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 			integral = body.getQj().intValue();
 		}else{
 			integral = usersMapper.findByJinE(appId,sceneKey);//当前场景对应积分数量
+		}
+
+		if (null == integral){
+			return  new CommonDto<>(null,"场景错误",502);
 		}
 
 
@@ -549,6 +553,64 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 			result.setMessage("您已经是VIP投资人");
 		}
 
+		result.setMessage("success");
+		result.setData(map);
+		result.setStatus(200);
+
+		return result;
+	}
+
+	/**
+	 * 用户充值接口
+	 * @param appId
+	 * @param body
+	 * @return
+	 */
+	@Override
+	public CommonDto<Integer> recordUserPayAmount(Integer appId, ZengDto body) {
+
+		CommonDto<Integer> result = new CommonDto<Integer>();
+
+		//验证其他充值金额
+		if (null != body.getQj()){
+			CommonDto<Map<String,Object>> resulta =verifyLimitCount(body.getQj());
+			if (resulta.getStatus() != 200){
+				result.setMessage(resulta.getMessage());
+				result.setStatus(resulta.getStatus());
+				result.setData(null);
+				return result;
+			}
+		}
+
+		String uuids = body.getUuids();
+		Integer userId= usersMapper.findByUuid(uuids);
+
+		if (null == userId || 0==userId){
+			return new CommonDto<>(null,"你没有此权限，请完善资料",5013);
+		}
+
+		if (null == body.getsKey()){
+			return new CommonDto<>(null,"请传入场景key",5013);
+		}
+		String sceneKey = body.getsKey();//场景key
+		//查对应场景key是否存在
+		MetaScene metaScene = new MetaScene();
+		metaScene.setKey(sceneKey);
+
+		List<MetaScene> metaSceneList = metaSceneMapper.select(metaScene);
+
+		if (metaSceneList.size() < 1){
+			return new CommonDto<>(null,"场景key无效",5013);
+		}
+
+		//不同充值方式取金额方式也不同
+		Integer integral = 0;
+		if (null != body.getQj()){
+			integral = body.getQj().intValue();
+		}else{
+			integral = usersMapper.findByJinE(appId,sceneKey);//当前场景对应积分数量
+		}
+
 		UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
 		userMoneyRecord.setCreateTime(new Date());
 		BigDecimal jnum =new BigDecimal(integral);
@@ -557,10 +619,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		userMoneyRecord.setUserId(userId);
 		userMoneyRecord.setAppId(appId);
 		userMoneyRecordMapper.insert(userMoneyRecord);
-		map.put("Money_ID",userMoneyRecord.getId());
 
 		result.setMessage("success");
-		result.setData(map);
+		result.setData(userMoneyRecord.getId());
 		result.setStatus(200);
 
 		return result;
@@ -1086,13 +1147,13 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		MetaScene metaSceneResult =  metaSceneMapper.selectOne(metaScene);
 
 		if (null == metaSceneResult){
-			return new CommonDto<>(null,"最低限度场景丢失",5013);
+			return new CommonDto<>(null,"最低限度场景丢失",502);
 		}
 
 		BigDecimal limitCount =new BigDecimal(metaSceneResult.getDesc());
 
 		if (limitCount.compareTo(count) > 0){
-			return new CommonDto<>(null,"充值金额必须大于188",5013);
+			return new CommonDto<>(null,"充值金额必须大于188",502);
 		}
 
 		return new CommonDto<>(null,"success",200);

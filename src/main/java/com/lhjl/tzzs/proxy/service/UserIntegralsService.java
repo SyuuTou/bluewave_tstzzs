@@ -31,7 +31,15 @@ public interface UserIntegralsService {
 	 * @param body
 	 * @return
 	 */
-	CommonDto<Map<String,Object>>recordUserPayAmount(Integer appId, ZengDto body);
+	CommonDto<Map<String,Object>>recordUserPayAmountMember(Integer appId, ZengDto body);
+
+	/**
+	 * 充值接口
+	 * @param appId
+	 * @param body
+	 * @return
+	 */
+	CommonDto<Integer>recordUserPayAmount(Integer appId, ZengDto body);
 	/**
 	 * 
 	 * 页面显示查询其他金额选择
