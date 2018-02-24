@@ -105,7 +105,7 @@ public class UserIntegralsController {
 		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
 		try {
 
-			result =userIntegralsService.findIntegralsZeng(appId,body);
+			result =userIntegralsService.recordUserPayAmount(appId,body);
 			if(result.getStatus() == null){
 				result.setStatus(200);
 				result.setMessage("success");
@@ -146,11 +146,11 @@ public class UserIntegralsController {
 	 * @return
 	 */
 	@PostMapping("v{appId}/search/qzeng")
-	public CommonDto<Map<String,Object>> findIntegralsZeng(@PathVariable Integer appId, @RequestBody QzengDto body){
+	public CommonDto<Map<String,Object>> findIntegralsZengother(@PathVariable Integer appId, @RequestBody ZengDto body){
 		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
 		try {
 
-			result =userIntegralsService.findIntegralsQzeng(appId,body);
+			result =userIntegralsService.recordUserPayAmount(appId,body);
 			if(result.getStatus() == null){
 				result.setStatus(200);
 				result.setMessage("success");
