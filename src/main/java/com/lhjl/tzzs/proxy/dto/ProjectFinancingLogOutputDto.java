@@ -8,7 +8,7 @@ public class ProjectFinancingLogOutputDto {
 	 /**投资事件主键id*/
     private Integer id;
     
-    /**投资事件编号*/
+    /**投资事件采集编号*/
     private Integer serialNumber;
 
     /**来源类型*/
@@ -73,6 +73,74 @@ public class ProjectFinancingLogOutputDto {
     
     /**更新时间输出字符串*/
     private String updateTimeOutputStr;
+    
+//    以下字段供审核列表使用
+    /**
+     * 采集编号
+     */
+//    private String gatherNumber;
+    /**
+     * 审核结果
+     * 0表示审核未通过，1表示审核通过，默认0
+     */
+    private Integer approvalStatus;
+    /**
+     * 审核时间
+     */
+    private Date approvalTime;
+    /**
+     * 审核时间输出字符串
+     */
+    private String approvalTimeOutputStr;
+    /**
+     * 提交人token
+     */
+//    private String submitter;
+    /**
+     * 提交人姓名
+     */
+    private String actualName;
+    
+
+	public String getActualName() {
+		return actualName;
+	}
+
+	public void setActualName(String actualName) {
+		this.actualName = actualName;
+	}
+
+//	public String getSubmitter() {
+//		return submitter;
+//	}
+//
+//	public void setSubmitter(String submitter) {
+//		this.submitter = submitter;
+//	}
+
+	public Date getApprovalTime() {
+		return approvalTime;
+	}
+
+	public void setApprovalTime(Date approvalTime) {
+		this.approvalTime = approvalTime;
+	}
+
+	public String getApprovalTimeOutputStr() {
+		return approvalTimeOutputStr;
+	}
+
+	public void setApprovalTimeOutputStr(String approvalTimeOutputStr) {
+		this.approvalTimeOutputStr = approvalTimeOutputStr;
+	}
+
+	public Integer getApprovalStatus() {
+		return approvalStatus;
+	}
+
+	public void setApprovalStatus(Integer approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
 
 	public Integer getId() {
 		return id;
@@ -269,8 +337,9 @@ public class ProjectFinancingLogOutputDto {
 				+ ", financingTime=" + financingTime + ", financingTimeOutputStr=" + financingTimeOutputStr
 				+ ", InvestmentInstitutionsList=" + InvestmentInstitutionsList + ", proportionList=" + proportionList
 				+ ", createTime=" + createTime + ", createTimeOutputStr=" + createTimeOutputStr + ", updateTime="
-				+ updateTime + ", updateTimeOutputStr=" + updateTimeOutputStr + "]";
+				+ updateTime + ", updateTimeOutputStr=" + updateTimeOutputStr + ", approvalStatus=" + approvalStatus
+				+ ", approvalTime=" + approvalTime + ", approvalTimeOutputStr=" + approvalTimeOutputStr
+				+ ", actualName=" + actualName + "]";
 	}
-    
-    
+
 }
