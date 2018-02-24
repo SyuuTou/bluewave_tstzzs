@@ -45,8 +45,10 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
         CommonDto<Map<String,Object>> result = new CommonDto<>();
         
         SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd");
+        //输入实际字符串格式化对象
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+        //输出时间字符串格式化对象
+        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Map<String,Object> map = new HashMap<>();
         
         //格式化输入时间字符串
@@ -85,14 +87,14 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
         		e.setFinancingTimeOutputStr(sdf.format(e.getFinancingTime()));
         	}
 			if(e.getCreateTime() != null) {
-				e.setCreateTimeOutputStr(sdf2.format(e.getCreateTime()));	
+				e.setCreateTimeOutputStr(sdf3.format(e.getCreateTime()));	
 		  	}
 			if(e.getUpdateTime() != null) {
-				e.setUpdateTimeOutputStr(sdf2.format(e.getUpdateTime()));
+				e.setUpdateTimeOutputStr(sdf3.format(e.getUpdateTime()));
 			}
 //			格式化审核时间输出字符串
 			if(e.getApprovalTime() != null) {
-				e.setApprovalTimeOutputStr(sdf2.format(e.getApprovalTime()));
+				e.setApprovalTimeOutputStr(sdf3.format(e.getApprovalTime()));
 			}
         });
         
