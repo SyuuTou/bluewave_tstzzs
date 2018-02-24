@@ -82,7 +82,7 @@ public class UserIntegralsController {
 		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
 		try {
 
-			result =userIntegralsService.findIntegralsZeng(1, body);
+			result =userIntegralsService.recordUserPayAmount(1, body);
 			if(result.getStatus() == null){
 				result.setStatus(200);
 				result.setMessage("success");

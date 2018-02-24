@@ -24,6 +24,14 @@ public interface UserIntegralsService {
 	 * @return
 	 */
 	CommonDto<Map<String,Object>>findIntegralsZeng(Integer appId, ZengDto body);
+
+	/**
+	 * 重构版页面显示选择值的接口
+	 * @param appId
+	 * @param body
+	 * @return
+	 */
+	CommonDto<Map<String,Object>>recordUserPayAmount(Integer appId, ZengDto body);
 	/**
 	 * 
 	 * 页面显示查询其他金额选择
