@@ -1151,9 +1151,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		}
 
 		BigDecimal limitCount =new BigDecimal(metaSceneResult.getDesc());
-
+		String message = "充值金额必须大于" + limitCount;
 		if (limitCount.compareTo(count) > 0){
-			return new CommonDto<>(null,"充值金额必须大于188",502);
+			return new CommonDto<>(null,message,502);
 		}
 
 		return new CommonDto<>(null,"success",200);
