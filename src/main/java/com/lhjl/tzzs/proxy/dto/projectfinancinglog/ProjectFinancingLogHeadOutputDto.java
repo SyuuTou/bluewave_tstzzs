@@ -23,11 +23,22 @@ public class ProjectFinancingLogHeadOutputDto {
      * 提交者token
      */
     private String submitorToken;
+    
     /**
      * 提交时间
      */
     private Date createTime;
+    /**
+     * 提交人
+     */
+    private String user;
     
+	public String getUser() {
+		return user;
+	}
+	public void setUser(String user) {
+		this.user = user;
+	}
 	public Date getCreateTime() {
 		return createTime;
 	}

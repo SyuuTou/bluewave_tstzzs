@@ -8,9 +8,13 @@ import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutput
 import com.lhjl.tzzs.proxy.mapper.ProjectFinancialLogFollowStatusMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectFinancingLogMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
+import com.lhjl.tzzs.proxy.mapper.UserTokenMapper;
+import com.lhjl.tzzs.proxy.mapper.UsersMapper;
 import com.lhjl.tzzs.proxy.model.ProjectFinancialLogFollowStatus;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.Projects;
+import com.lhjl.tzzs.proxy.model.UserToken;
+import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.ProjectFinancingLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +42,10 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
     private ProjectsMapper projectsMapper;
     @Autowired
     private ProjectFinancialLogFollowStatusMapper projectFinancialLogFollowStatusMapper;
+    @Autowired
+    private UserTokenMapper userTokenMapper;
+    @Autowired
+    private UsersMapper usersMapper;
     
     @Transactional(readOnly=true)
     @Override
@@ -117,6 +125,24 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
 			Integer projectFinancingLogId) {
 		CommonDto<ProjectFinancingLogHeadOutputDto> result=new CommonDto<>();
 		ProjectFinancingLogHeadOutputDto ProjectFinancingLogHead = projectFinancingLogMapper.echoProjectFinancingLogHead(projectFinancingLogId);
+		//根据提交者token获取提交者姓名
+		UserToken query=new UserToken();
+		query.setToken(ProjectFinancingLogHead.getSubmitorToken());
+		try {
+			query = userTokenMapper.selectOne(query);
+		}catch(Exception e){
+			result.setData(null);
+	        result.setStatus(500);
+	        result.setMessage("DB数据存在异常，token不唯一");
+			return result;
+		}
+		if(query!=null) {
+			Users user = usersMapper.selectByPrimaryKey(query.getUserId());
+			if(user!=null) {
+				ProjectFinancingLogHead.setUser(user.getActualName());
+			}
+		}
+		
 		result.setData(ProjectFinancingLogHead);
         result.setStatus(200);
         result.setMessage("success");
