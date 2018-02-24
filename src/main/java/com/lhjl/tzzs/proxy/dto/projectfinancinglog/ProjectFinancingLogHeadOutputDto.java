@@ -22,7 +22,7 @@ public class ProjectFinancingLogHeadOutputDto {
     /**
      * 提交者token
      */
-    private String submitorToken;
+    private String submitter;
     
     /**
      * 提交时间
@@ -51,11 +51,11 @@ public class ProjectFinancingLogHeadOutputDto {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getSubmitorToken() {
-		return submitorToken;
+	public String getSubmitter() {
+		return submitter;
 	}
-	public void setSubmitorToken(String submitorToken) {
-		this.submitorToken = submitorToken;
+	public void setSubmitter(String submitter) {
+		this.submitter = submitter;
 	}
 	public Integer getSerialNumber() {
 		return serialNumber;
@@ -84,9 +84,7 @@ public class ProjectFinancingLogHeadOutputDto {
 	@Override
 	public String toString() {
 		return "ProjectFinancingLogHeadOutputDto [id=" + id + ", serialNumber=" + serialNumber + ", typeName="
-				+ typeName + ", projectName=" + projectName + ", followStatus=" + followStatus + ", submitorToken="
-				+ submitorToken + ", createTime=" + createTime + "]";
+				+ typeName + ", projectName=" + projectName + ", followStatus=" + followStatus + ", submitter="
+				+ submitter + ", createTime=" + createTime + ", user=" + user + "]";
 	}
-	
-    
 }

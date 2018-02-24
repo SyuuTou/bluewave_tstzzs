@@ -40,7 +40,7 @@
     <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
     <result column="type_name" jdbcType="VARCHAR" property="typeName" />
     <result column="short_name" jdbcType="VARCHAR" property="projectName" />
-    <result column="submitor_token" jdbcType="VARCHAR" property="submitorToken" />
+    <result column="submitter" jdbcType="VARCHAR" property="submitter" />
     <result column="meta_follow_status_id" jdbcType="INTEGER" property="followStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
@@ -191,7 +191,8 @@
   
   
   <select id="echoProjectFinancingLogHead" parameterType="Integer" resultMap="ProjectFinancingLogHeadOutputDtoMap">  
-	SELECT * from(select pfl.id,pfl.serial_number,mdst.type_name,p.short_name,pflf.submitor_token,pflf.meta_follow_status_id,pflf.create_time
+  <!-- pflf.submitor_token, -->
+	SELECT * from(select pfl.id,pfl.serial_number,mdst.type_name,p.short_name,pfl.submitter,pflf.meta_follow_status_id,pflf.create_time
     FROM project_financing_log pfl
     left join meta_data_source_type mdst on pfl.data_soruce_type_id = mdst.id
     left join projects p on pfl.project_id = p.ID
