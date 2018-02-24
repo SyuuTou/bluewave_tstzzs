@@ -195,7 +195,8 @@
     FROM project_financing_log pfl
     left join meta_data_source_type mdst on pfl.data_soruce_type_id = mdst.id
     left join projects p on pfl.project_id = p.ID
-	left JOIN (select * from project_financial_log_follow_status ORDER BY create_time desc) pflf on pflf.project_financial_log_id = pfl.ID GROUP BY pfl.ID) tmp
+	left join (select * from project_financial_log_follow_status ORDER BY create_time desc) pflf on pflf.project_financial_log_id = pfl.ID 
+	GROUP BY pfl.ID) tmp
  	where tmp.id=#{projectFinancingLogId}
    </select>
    

@@ -20,7 +20,11 @@ import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsProject;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.Projects;
 import com.lhjl.tzzs.proxy.service.ProjectFinancingLogService;
-
+/**
+ * 投资事件头部信息输出的接口
+ * @author IdataVC
+ *
+ */
 @RestController
 public class ProjectFinancingLogHeadController extends GenericController {
 	@Resource
