@@ -128,7 +128,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
                      investorSegmentationList.add(investorSegmentation);
                  }
 //        	}
-        }
+        } 
         investorSegmentationInsertResult = investorSegmentationService.insertList(investorSegmentationList);
 
         //所在城市
