@@ -77,7 +77,9 @@ public interface ElegantServiceService {
 
     CommonDto<List<ElegantServiceParticipate>> queryParticipate(Integer appId, Integer elegantServiceId, Integer pageNo, Integer pageSize);
 
-    CommonDto<ElegantServiceParticipate> queryParticipate(Integer appId, Integer elegantServiceId, String token);
+    CommonDto<ElegantServiceParticipate> queryParticipate(Integer appId, Integer elegantServiceParticipateId, String token);
 
     CommonDto<String> saveOrUpdateParticipateFeedback(ElegantServiceParticipateDto body, Integer appId, String token);
+
+    CommonDto<String> updateParticipateStatus(ElegantServiceParticipate body, Integer appId);
 }

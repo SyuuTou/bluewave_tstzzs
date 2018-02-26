@@ -63,7 +63,7 @@ public class InvestorCertificationInfoServiceImpl implements InvestorCertificati
         Integer investorCaseInsertResult = -1;
         List<InvestorInvestmentCase> investorInvestmentCaseList = new ArrayList<>();
         investorInvestmentCaseService.deleteAll(body.getInvestorId());
-        if(null == body.getInvestCase()){
+        if(null == body.getInvestCase()&&body.getInvestCase().length == 0){
             InvestorInvestmentCase investorInvestmentCase = new InvestorInvestmentCase();
             investorInvestmentCase.setInvestorId(body.getInvestorId());
             investorInvestmentCase.setInvestmentCase(null);

@@ -111,7 +111,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         Integer investorSegmentationInsertResult = -1;
         List<InvestorSegmentation> investorSegmentationList = new ArrayList<>();
         investorSegmentationService.deleteAll(body.getInvestorId());
-        if(null == body.getSegmentations()){
+        if(null == body.getSegmentations()&&body.getSegmentations().length == 0){
             InvestorSegmentation investorSegmentation = new InvestorSegmentation();
             investorSegmentation.setId(body.getInvestorId());
             investorSegmentation.setSegmentationId(null);
@@ -135,7 +135,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         Integer investorCityInsertResult = -1;
         List<InvestorCity> investorCityList = new ArrayList<>();
         investorCityService.deleteAll(body.getInvestorId());
-        if(null == body.getCitys()){
+        if(null == body.getCitys()&&body.getCitys().length == 0){
             InvestorCity investorCity = new InvestorCity();
             investorCity.setId(body.getInvestorId());
             investorCity.setCity(null);
@@ -154,7 +154,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         Integer investorSelfDefCityInsertResult = -1;
         List<InvestorSelfdefCity> investorSelfdefCityList = new ArrayList<>();
         investorSelfdefCityService.deleteAll(body.getInvestorId());
-        if(null == body.getSelfDefCity()){
+        if(null == body.getSelfDefCity()&&body.getSelfDefCity().length == 0){
             InvestorSelfdefCity investorSelfdefCity = new InvestorSelfdefCity();
             investorSelfdefCity.setId(body.getInvestorId());
             investorSelfdefCity.setSelfDefCity(null);
@@ -173,7 +173,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         Integer investorWorkExperienceInsertResult = -1;
         List<InvestorWorkExperience> investorWorkExperienceList = new ArrayList<>();
         investorWorkExperienceService.deleteAll(body.getInvestorId());
-        if(null == body.getWorkExperiences()){
+        if(null == body.getWorkExperiences()&&body.getWorkExperiences().length == 0){
             InvestorWorkExperience investorWorkExperience = new InvestorWorkExperience();
             investorWorkExperience.setId(body.getInvestorId());
             investorWorkExperience.setWorkExperience(null);
@@ -192,7 +192,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         Integer investorEducationExperienceInsertResult = -1;
         List<InvestorEducationExperience> investorEducationExperienceList = new ArrayList<>();
         investorEducationExperienceService.deleteAll(body.getInvestorId());
-        if(null == body.getWorkExperiences()){
+        if(null == body.getWorkExperiences()&&body.getWorkExperiences().length == 0){
             InvestorEducationExperience investorEducationExperience = new InvestorEducationExperience();
             investorEducationExperience.setId(body.getInvestorId());
             investorEducationExperience.setEducationExperience(null);
@@ -211,7 +211,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         Integer investorBusinessesInsertResult = -1;
         List<InvestorBusiness> investorBusinessList = new ArrayList<>();
         investorBusinessService.deleteAll(body.getInvestorId());
-        if(null == body.getWorkExperiences()){
+        if(null == body.getWorkExperiences()&&body.getWorkExperiences().length == 0){
             InvestorBusiness investorBusiness = new InvestorBusiness();
             investorBusiness.setId(body.getInvestorId());
             investorBusiness.setBusiness(null);

@@ -10,4 +10,5 @@ public interface ElegantServiceParticipateMapper extends OwnerMapper<ElegantServ
 
     List<ElegantServiceParticipate> getElegantServiceParticipateList(@Param("appId") Integer appId,@Param("elegantServiceId") Integer elegantServiceId,
                                                                      @Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
+    ElegantServiceParticipate getElegantServiceParticipateById(@Param("appId") Integer appId,@Param("elegantServiceParticipateId") Integer elegantServiceParticipateId);
 }
