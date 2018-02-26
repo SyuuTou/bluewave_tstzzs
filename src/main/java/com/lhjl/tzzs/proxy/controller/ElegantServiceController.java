@@ -140,36 +140,91 @@ public class ElegantServiceController {
         return result;
     }
 
+    /**
+     * 保存认领状态的接口
+     * @param body
+     * @param appId
+     * @param token
+     * @return
+     */
     @PostMapping("/v{appId}/participate")
     public CommonDto<String> participate(@RequestBody ElegantServiceParticipate body, @PathVariable Integer appId, String token){
-        CommonDto<String> result = null;
+        CommonDto<String> result = new CommonDto<>(null,"服务器端发生错误",502);
+        try {
             result = elegantServiceService.saveOrUpdateParticipate(body, appId, token);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
+
         return result;
     }
 
+    /**
+     * 读取悬赏回复列表的接口
+     * @param appId
+     * @param elegantServiceId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     @GetMapping("/v{appId}/participate/list/{elegantServiceId}")
     public CommonDto<List<ElegantServiceParticipate>> queryParticipate(@PathVariable Integer appId, @PathVariable Integer elegantServiceId, @RequestParam Integer pageNo, @RequestParam(defaultValue = "10") Integer pageSize){
-        CommonDto<List<ElegantServiceParticipate>> result = null;
-        result = elegantServiceService.queryParticipate(appId,elegantServiceId,pageNo,pageSize);
+        CommonDto<List<ElegantServiceParticipate>> result = new CommonDto<>(null,"服务器端发生错误",502);
+        try {
+            result = elegantServiceService.queryParticipate(appId,elegantServiceId,pageNo,pageSize);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
         return result;
     }
 
-    @GetMapping("/v{appId}/participate/{elegantServiceId}")
-    public CommonDto<ElegantServiceParticipate> queryParticipateById(@PathVariable Integer appId, @PathVariable Integer elegantServiceId, String token){
-        CommonDto<ElegantServiceParticipate> result = null;
-        result = elegantServiceService.queryParticipate(appId,elegantServiceId,token);
+    /**
+     * 读取单个悬赏回复内容的接口
+     * @param appId
+     * @param elegantServiceParticipateId
+     * @param token
+     * @return
+     */
+    @GetMapping("/v{appId}/participate/{elegantServiceParticipateId}")
+    public CommonDto<ElegantServiceParticipate> queryParticipateById(@PathVariable Integer appId, @PathVariable Integer elegantServiceParticipateId, String token){
+        CommonDto<ElegantServiceParticipate> result = new CommonDto<>(null,"服务器端发生错误",502);
+        try {
+            result = elegantServiceService.queryParticipate(appId,elegantServiceParticipateId,token);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
+
         return result;
     }
 
     @PostMapping("/v{appId}/participate/feedback/{participateId}")
     public CommonDto<String>  handlerFeedback(@RequestBody ElegantServiceParticipateDto body, @PathVariable Integer appId, String token){
-        CommonDto<String> result = null;
-
-        result = elegantServiceService.saveOrUpdateParticipateFeedback(body, appId, token);
-
+        CommonDto<String> result = new CommonDto<>(null,"服务器端发生错误",502);
+        try {
+            result = elegantServiceService.saveOrUpdateParticipateFeedback(body, appId, token);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
         return result;
     }
 
+    /**
+     * 设置反馈接口的审核状态的接口
+     * @param body
+     * @param appId
+     * @return
+     */
+    @PostMapping("/v{appId}/participate/handler/feedback")
+    public CommonDto<String> handlerUserFeedback(@RequestBody ElegantServiceParticipate body, @PathVariable Integer appId){
+        CommonDto<String> result = new CommonDto<>(null,"服务器端发生错误",502);
+        try {
+            result = elegantServiceService.updateParticipateStatus(body, appId);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
+
+        return result;
+    }
     /**
      * 获取精选活动回显接口
      * @param elegantServiceId 精选活动id

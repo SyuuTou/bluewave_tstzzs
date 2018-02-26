@@ -1,22 +1,27 @@
 package com.lhjl.tzzs.proxy.model;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Table(name = "elegant_service_participate")
 public class ElegantServiceParticipate {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     /**
      * 悬赏ID
 
      */
-    @Id
     @Column(name = "elegant_service_id")
     private Integer elegantServiceId;
 
     /**
      * 参与人token
      */
-    @Id
     private String token;
 
     /**
@@ -38,6 +43,45 @@ public class ElegantServiceParticipate {
 
     @Column(name = "appId")
     private Integer appid;
+
+    @Transient
+    private List<ElegantServiceParticipateFeedbackImages> feedbackImages;
+
+    @Transient
+    private List<ElegantServiceParticipateFeedbackText> feedbackTexts;
+
+    /**
+     * 用户头像
+     */
+   // @Transient
+    private String userHeadpic;
+
+    /**
+     * 用户姓名
+     */
+   // @Transient
+    private String userName;
+
+    /**
+     * 用户公司职务
+     */
+   // @Transient
+    private String companyDuties;
+
+
+    /**
+     * @return id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @param id
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     /**
      * 获取悬赏ID
@@ -145,5 +189,45 @@ public class ElegantServiceParticipate {
      */
     public void setAppid(Integer appid) {
         this.appid = appid;
+    }
+
+    public List<ElegantServiceParticipateFeedbackImages> getFeedbackImages() {
+        return feedbackImages;
+    }
+
+    public void setFeedbackImages(List<ElegantServiceParticipateFeedbackImages> feedbackImages) {
+        this.feedbackImages = feedbackImages;
+    }
+
+    public List<ElegantServiceParticipateFeedbackText> getFeedbackTexts() {
+        return feedbackTexts;
+    }
+
+    public void setFeedbackTexts(List<ElegantServiceParticipateFeedbackText> feedbackTexts) {
+        this.feedbackTexts = feedbackTexts;
+    }
+
+    public String getUserHeadpic() {
+        return userHeadpic;
+    }
+
+    public void setUserHeadpic(String userHeadpic) {
+        this.userHeadpic = userHeadpic;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getCompanyDuties() {
+        return companyDuties;
+    }
+
+    public void setCompanyDuties(String companyDuties) {
+        this.companyDuties = companyDuties;
     }
 }

@@ -8,9 +8,13 @@ import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutput
 import com.lhjl.tzzs.proxy.mapper.ProjectFinancialLogFollowStatusMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectFinancingLogMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
+import com.lhjl.tzzs.proxy.mapper.UserTokenMapper;
+import com.lhjl.tzzs.proxy.mapper.UsersMapper;
 import com.lhjl.tzzs.proxy.model.ProjectFinancialLogFollowStatus;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
 import com.lhjl.tzzs.proxy.model.Projects;
+import com.lhjl.tzzs.proxy.model.UserToken;
+import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.ProjectFinancingLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +42,21 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
     private ProjectsMapper projectsMapper;
     @Autowired
     private ProjectFinancialLogFollowStatusMapper projectFinancialLogFollowStatusMapper;
-
+    @Autowired
+    private UserTokenMapper userTokenMapper;
+    @Autowired
+    private UsersMapper usersMapper;
+    
+    @Transactional(readOnly=true)
     @Override
     public CommonDto<Map<String, Object>> getProjectFinancingLogList(ProjectFinancingLogInputDto body) {
         CommonDto<Map<String,Object>> result = new CommonDto<>();
         
         SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd");
+        //输入实际字符串格式化对象
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+        //输出时间字符串格式化对象
+        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Map<String,Object> map = new HashMap<>();
         
         //格式化输入时间字符串
@@ -64,17 +75,17 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
 			}
         }
       //格式化页码的默认值
-        if (body.getPageNum() == null){
-            body.setPageNum(defalutPageNum);
+        if (body.getCurrentPage() == null){
+            body.setCurrentPage(defalutPageNum);
         }
 
         if (body.getPageSize() == null){
             body.setPageSize(defalutPageSize);  
         }
-        body.setStart( (body.getPageNum()-1) * body.getPageSize() );
+        body.setStart( (body.getCurrentPage()-1) * body.getPageSize() );
         this.LOGGER.error("**"+body);
         //数据输出
-        List<ProjectFinancingLogOutputDto> projectFinancingLogList = projectFinancingLogMapper.getProjectFinancingLogList(body);
+        List<ProjectFinancingLogOutputDto> projectFinancingLogList = projectFinancingLogMapper.getProjectFinancingLogLists(body);
         Integer totalcount = projectFinancingLogMapper.getProjectFinancingLogListCount(body);
         /**
          * 格式化输出时间转换为字符串
@@ -84,17 +95,21 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
         		e.setFinancingTimeOutputStr(sdf.format(e.getFinancingTime()));
         	}
 			if(e.getCreateTime() != null) {
-				e.setCreateTimeOutputStr(sdf2.format(e.getCreateTime()));	
+				e.setCreateTimeOutputStr(sdf3.format(e.getCreateTime()));	
 		  	}
 			if(e.getUpdateTime() != null) {
-				e.setUpdateTimeOutputStr(sdf2.format(e.getUpdateTime()));
+				e.setUpdateTimeOutputStr(sdf3.format(e.getUpdateTime()));
+			}
+//			格式化审核时间输出字符串
+			if(e.getApprovalTime() != null) {
+				e.setApprovalTimeOutputStr(sdf3.format(e.getApprovalTime()));
 			}
         });
         
         map.put("total",totalcount);
         map.put("list",projectFinancingLogList);
         
-        map.put("currentPage",body.getPageNum()); 
+        map.put("currentPage",body.getCurrentPage()); 
         map.put("pageSize",body.getPageSize());
         
 
@@ -110,6 +125,37 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
 			Integer projectFinancingLogId) {
 		CommonDto<ProjectFinancingLogHeadOutputDto> result=new CommonDto<>();
 		ProjectFinancingLogHeadOutputDto ProjectFinancingLogHead = projectFinancingLogMapper.echoProjectFinancingLogHead(projectFinancingLogId);
+		//取得提交者的token
+		String submitterToken = ProjectFinancingLogHead.getSubmitter();
+		
+		if(submitterToken==null || "".equals(submitterToken)) {
+			ProjectFinancingLogHead.setUser("天使指数后台");
+		}else {
+			//根据提交者token获取提交者姓名
+			UserToken query=new UserToken();
+			query.setToken(submitterToken);
+			try {
+				query = userTokenMapper.selectOne(query);
+			}catch(Exception e){
+				result.setData(null);
+		        result.setStatus(500);
+		        result.setMessage("DB数据存在异常，token不唯一");
+				return result;
+			}
+			if(query!=null) {
+				Users user = usersMapper.selectByPrimaryKey(query.getUserId());
+				//设置提交人姓名
+				if(user!=null) {
+					ProjectFinancingLogHead.setUser(user.getActualName());
+					//
+				}else {
+					ProjectFinancingLogHead.setUser("无效token，平台不存在该token所对应的用户记录");
+				}
+			}else {
+				ProjectFinancingLogHead.setUser("无效token，平台不存在该token所对应的记录");
+			}
+		}
+		
 		result.setData(ProjectFinancingLogHead);
         result.setStatus(200);
         result.setMessage("success");

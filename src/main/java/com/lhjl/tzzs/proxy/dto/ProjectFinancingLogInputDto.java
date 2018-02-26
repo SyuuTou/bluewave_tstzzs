@@ -21,6 +21,11 @@ public class ProjectFinancingLogInputDto {
 
     /**数据来源*/
     private List<Integer> dataSource;
+    
+    /**
+     * 领域名称的字符串List
+     */
+    private List<String> segmentationName;
 
     /**轮次*/
     private List<String> stage;
@@ -38,13 +43,21 @@ public class ProjectFinancingLogInputDto {
     private String order;
     
     /**当前页码*/
-    private Integer pageNum;
+    private Integer currentPage;
 
     /**每页显示数量*/
     private Integer pageSize;
     
     /**数据开始索引*/
     private Integer start;
+
+	public List<String> getSegmentationName() {
+		return segmentationName;
+	}
+
+	public void setSegmentationName(List<String> segmentationName) {
+		this.segmentationName = segmentationName;
+	}
 
 	public String getSearchWord() {
 		return searchWord;
@@ -126,12 +139,16 @@ public class ProjectFinancingLogInputDto {
 		this.order = order;
 	}
 
-	public Integer getPageNum() {
-		return pageNum;
+
+
+
+
+	public Integer getCurrentPage() {
+		return currentPage;
 	}
 
-	public void setPageNum(Integer pageNum) {
-		this.pageNum = pageNum;
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
 	}
 
 	public Integer getPageSize() {
@@ -154,9 +171,10 @@ public class ProjectFinancingLogInputDto {
 	public String toString() {
 		return "ProjectFinancingLogInputDto [searchWord=" + searchWord + ", beginTimeInputStr=" + beginTimeInputStr
 				+ ", beginTime=" + beginTime + ", endTimeInputStr=" + endTimeInputStr + ", endTime=" + endTime
-				+ ", dataSource=" + dataSource + ", stage=" + stage + ", currency=" + currency + ", column=" + column
-				+ ", order=" + order + ", pageNum=" + pageNum + ", pageSize=" + pageSize + ", start=" + start + "]";
+				+ ", dataSource=" + dataSource + ", segmentationName=" + segmentationName + ", stage=" + stage
+				+ ", currency=" + currency + ", column=" + column + ", order=" + order + ", currentPage=" + currentPage
+				+ ", pageSize=" + pageSize + ", start=" + start + "]";
 	}
 
-	
+
 }

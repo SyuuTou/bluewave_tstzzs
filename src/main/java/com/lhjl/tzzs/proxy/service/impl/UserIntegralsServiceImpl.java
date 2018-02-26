@@ -472,6 +472,162 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		result.setData(map);
 		return result;
 	}
+
+	/**
+	 * 重构版页面显示选择值的接口
+	 * @param appId
+	 * @param body
+	 * @return
+	 */
+	@Override
+	public CommonDto<Map<String, Object>> recordUserPayAmountMember(Integer appId, ZengDto body) {
+
+		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
+		Map<String,Object> map =new HashMap<String,Object>();
+
+
+		//验证其他充值金额
+		if (null != body.getQj()){
+			CommonDto<Map<String,Object>> resulta =verifyLimitCount(body.getQj());
+			if (resulta.getStatus() != 200){
+				return resulta;
+			}
+		}
+
+		String uuids = body.getUuids();
+		Integer userId= usersMapper.findByUuid(uuids);
+
+		if (null == userId || 0==userId){
+			return new CommonDto<>(null,"用户不存在",502);
+		}
+
+		if (null == body.getsKey()){
+			return new CommonDto<>(null,"请传入场景key",502);
+		}
+
+		//获取当前用户等级
+		Integer userLevelId =usersMapper.findByUserid(userId, appId);
+
+		if (null == userLevelId){
+			userLevelId = 1;
+		}
+
+		float discount = usersMapper.findByBei(appId,userLevelId);//折扣
+		String sceneKey = body.getsKey();//场景key
+
+
+		//查对应场景key是否存在
+		MetaScene metaScene = new MetaScene();
+		metaScene.setKey(sceneKey);
+
+		List<MetaScene> metaSceneList = metaSceneMapper.select(metaScene);
+
+		if (metaSceneList.size() < 1){
+			return new CommonDto<>(null,"场景key无效",502);
+		}
+
+		//不同充值方式取金额方式也不同
+		Integer integral = 0;
+		if (null != body.getQj()){
+			integral = body.getQj().intValue();
+		}else{
+			integral = usersMapper.findByJinE(appId,sceneKey);//当前场景对应积分数量
+		}
+
+		if (null == integral){
+			return  new CommonDto<>(null,"场景错误",502);
+		}
+
+
+		map.put("dnum",integral);
+		map.put("snum",(int) (discount*integral));
+		map.put("hnum",(int) ((discount+1)*integral));
+		map.put("xnum",(int) (discount*integral));
+		if (userLevelId < 4){
+			String userName = usersMapper.findByUserLevel(appId,userLevelId+1);
+			Float nextDiscount =usersMapper.findByBei(appId, userLevelId+1);
+			map.put("xnum",(int) (nextDiscount*integral));
+			map.put("userName",userName);//会员名称
+		}else {
+			result.setStatus(5000);
+			result.setMessage("您已经是VIP投资人");
+		}
+
+		result.setMessage("success");
+		result.setData(map);
+		result.setStatus(200);
+
+		return result;
+	}
+
+	/**
+	 * 用户充值接口
+	 * @param appId
+	 * @param body
+	 * @return
+	 */
+	@Override
+	public CommonDto<Integer> recordUserPayAmount(Integer appId, ZengDto body) {
+
+		CommonDto<Integer> result = new CommonDto<Integer>();
+
+		//验证其他充值金额
+		if (null != body.getQj()){
+			CommonDto<Map<String,Object>> resulta =verifyLimitCount(body.getQj());
+			if (resulta.getStatus() != 200){
+				result.setMessage(resulta.getMessage());
+				result.setStatus(resulta.getStatus());
+				result.setData(null);
+				return result;
+			}
+		}
+
+		String uuids = body.getUuids();
+		Integer userId= usersMapper.findByUuid(uuids);
+
+		if (null == userId || 0==userId){
+			return new CommonDto<>(null,"你没有此权限，请完善资料",5013);
+		}
+
+		if (null == body.getsKey()){
+			return new CommonDto<>(null,"请传入场景key",5013);
+		}
+		String sceneKey = body.getsKey();//场景key
+		//查对应场景key是否存在
+		MetaScene metaScene = new MetaScene();
+		metaScene.setKey(sceneKey);
+
+		List<MetaScene> metaSceneList = metaSceneMapper.select(metaScene);
+
+		if (metaSceneList.size() < 1){
+			return new CommonDto<>(null,"场景key无效",5013);
+		}
+
+		//不同充值方式取金额方式也不同
+		Integer integral = 0;
+		if (null != body.getQj()){
+			integral = body.getQj().intValue();
+		}else{
+			integral = usersMapper.findByJinE(appId,sceneKey);//当前场景对应积分数量
+		}
+
+		UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+		userMoneyRecord.setCreateTime(new Date());
+		BigDecimal jnum =new BigDecimal(integral);
+		userMoneyRecord.setMoney(jnum );
+		userMoneyRecord.setSceneKey(sceneKey);
+		userMoneyRecord.setUserId(userId);
+		userMoneyRecord.setAppId(appId);
+		userMoneyRecordMapper.insert(userMoneyRecord);
+
+		result.setMessage("success");
+		result.setData(userMoneyRecord.getId());
+		result.setStatus(200);
+
+		return result;
+	}
+
+
 	/**
 	 * 其他金额充值页面显示
 	 */
@@ -975,5 +1131,31 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 			result = this.insertGold(userId, payMoney, appId);
 		}
 		return result;
+	}
+
+	/**
+	 * 验证其他金额是否满足最低限度
+	 * @param count
+	 * @return
+	 */
+	private CommonDto<Map<String,Object>> verifyLimitCount(BigDecimal count){
+
+		//获取最低限度
+		MetaScene metaScene = new MetaScene();
+		metaScene.setKey("RtlrV3oS");
+
+		MetaScene metaSceneResult =  metaSceneMapper.selectOne(metaScene);
+
+		if (null == metaSceneResult){
+			return new CommonDto<>(null,"最低限度场景丢失",502);
+		}
+
+		BigDecimal limitCount =new BigDecimal(metaSceneResult.getDesc());
+		String message = "充值金额必须大于" + limitCount;
+		if (limitCount.compareTo(count) > 0){
+			return new CommonDto<>(null,message,502);
+		}
+
+		return new CommonDto<>(null,"success",200);
 	}
 }
