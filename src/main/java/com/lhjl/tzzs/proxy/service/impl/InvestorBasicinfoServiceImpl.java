@@ -10,10 +10,12 @@ import com.lhjl.tzzs.proxy.service.*;
 import com.lhjl.tzzs.proxy.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +23,7 @@ import java.util.List;
  * Created by lanhaijulang on 2018/1/30.
  */
 @Service
-public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
+public class InvestorBasicinfoServiceImpl extends GenericService implements InvestorBasicinfoService{
 
     @Autowired
     private InvestorsMapper investorsMapper;
@@ -58,11 +60,12 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
 
     @Autowired
     private MetaIdentityTypeMapper metaIdentityTypeMapper;
-
+    
+    @Transactional
     @Override
     public CommonDto<String> addOrUpdateInvestorBasicInfo(InvestorBasicInfoInputDto body) {
         CommonDto<String> result = new CommonDto<>();
-
+        this.LOGGER.info("body**"+body);
         Investors investors = new Investors();
         investors.setId(body.getInvestorId());
         Integer identityType = metaIdentityTypeMapper.findIdByIdentityName(body.getIdentityType());
@@ -114,13 +117,17 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             investorSegmentation.setSegmentationId(null);
             investorSegmentationList.add(investorSegmentation);
         }else{
-            List<Integer> segmentationIds = metaSegmentationMapper.findMetaSegmentationBySegmentation(body.getSegmentations());
-            for (Integer investorSegmentationId : segmentationIds){
-                InvestorSegmentation investorSegmentation = new InvestorSegmentation();
-                investorSegmentation.setId(body.getInvestorId());
-                investorSegmentation.setSegmentationId(investorSegmentationId);
-                investorSegmentationList.add(investorSegmentation);
-            }
+        	this.LOGGER.info("body.getSegmentations()-->"+Arrays.toString(body.getSegmentations()));
+//        	if(body.getSegmentations() !=null && body.getSegmentations().length != 0) {
+        		 List<Integer> segmentationIds = metaSegmentationMapper.findMetaSegmentationBySegmentation(body.getSegmentations());
+                 this.LOGGER.info("segmentationIds-->"+segmentationIds.toString());
+                 for (Integer investorSegmentationId : segmentationIds){
+                     InvestorSegmentation investorSegmentation = new InvestorSegmentation();
+                     investorSegmentation.setId(body.getInvestorId());
+                     investorSegmentation.setSegmentationId(investorSegmentationId);
+                     investorSegmentationList.add(investorSegmentation);
+                 }
+//        	}
         }
         investorSegmentationInsertResult = investorSegmentationService.insertList(investorSegmentationList);
 

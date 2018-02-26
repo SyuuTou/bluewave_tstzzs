@@ -1,5 +1,7 @@
 package com.lhjl.tzzs.proxy.dto.investorDto;
 
+import java.util.Arrays;
+
 /**
  * Created by lanhaijulang on 2018/1/25.
  */
@@ -290,4 +292,18 @@ public class InvestorBasicInfoInputDto {
     public void setHonor(String honor) {
         this.honor = honor;
     }
+
+	@Override
+	public String toString() {
+		return "InvestorBasicInfoInputDto [investorId=" + investorId + ", identityType=" + identityType
+				+ ", segmentations=" + Arrays.toString(segmentations) + ", weiChat=" + weiChat + ", email=" + email
+				+ ", citys=" + Arrays.toString(citys) + ", selfDefCity=" + Arrays.toString(selfDefCity) + ", birthDay="
+				+ birthDay + ", sex=" + sex + ", diploma=" + diploma + ", nationality=" + nationality + ", tenureTime="
+				+ tenureTime + ", companyIntro=" + companyIntro + ", workExperiences="
+				+ Arrays.toString(workExperiences) + ", educationExperiences=" + Arrays.toString(educationExperiences)
+				+ ", businessCard=" + businessCard + ", picture=" + picture + ", businesses="
+				+ Arrays.toString(businesses) + ", bussiness=" + bussiness + ", educationExperience="
+				+ educationExperience + ", workExperience=" + workExperience + ", honor=" + honor + "]";
+	}
+    
 }
