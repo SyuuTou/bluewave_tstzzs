@@ -5,18 +5,20 @@ import javax.persistence.*;
 
 @Table(name = "elegant_service_participate")
 public class ElegantServiceParticipate {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     /**
      * 悬赏ID
 
      */
-    @Id
     @Column(name = "elegant_service_id")
     private Integer elegantServiceId;
 
     /**
      * 参与人token
      */
-    @Id
     private String token;
 
     /**
@@ -38,6 +40,20 @@ public class ElegantServiceParticipate {
 
     @Column(name = "appId")
     private Integer appid;
+
+    /**
+     * @return id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @param id
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     /**
      * 获取悬赏ID

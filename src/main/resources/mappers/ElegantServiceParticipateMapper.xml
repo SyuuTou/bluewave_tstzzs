@@ -5,8 +5,9 @@
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="elegant_service_id" jdbcType="INTEGER" property="elegantServiceId" />
-    <id column="token" jdbcType="VARCHAR" property="token" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="elegant_service_id" jdbcType="INTEGER" property="elegantServiceId" />
+    <result column="token" jdbcType="VARCHAR" property="token" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="completion_time" jdbcType="TIMESTAMP" property="completionTime" />
