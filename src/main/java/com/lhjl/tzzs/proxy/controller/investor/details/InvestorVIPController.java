@@ -19,7 +19,11 @@ import com.lhjl.tzzs.proxy.mapper.MetaSceneMapper;
 import com.lhjl.tzzs.proxy.model.MetaUserLevel;
 import com.lhjl.tzzs.proxy.model.UserLevelRelation;
 import com.lhjl.tzzs.proxy.service.InvestorService;
-
+/**
+ * 投资人详情中的会员管理模块
+ * @author IdataVC
+ *
+ */
 @RestController
 public class InvestorVIPController extends GenericController {
 	@Resource 

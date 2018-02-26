@@ -265,8 +265,8 @@ public class InvestorServiceImpl implements InvestorService {
 				datasOperationManageMapper.insertSelective(body);
 			}
 		}catch(Exception e ) {
-			result.setData(true);
-	        result.setStatus(200); 
+			result.setData(false);   
+	        result.setStatus(500); 
 	        result.setMessage("运营管理表中存在投资人冗余数据，数据存在问题");
 			return result;
 		}
