@@ -18,7 +18,7 @@ public class DatasOperationManage {
      */
     @Id
     @Column(name = "data_type")
-    private String dataType;
+    private String dataType;  
 
     /**
      * 基础推荐值
