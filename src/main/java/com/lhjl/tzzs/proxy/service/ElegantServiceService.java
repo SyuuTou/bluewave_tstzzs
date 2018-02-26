@@ -80,4 +80,6 @@ public interface ElegantServiceService {
     CommonDto<ElegantServiceParticipate> queryParticipate(Integer appId, Integer elegantServiceParticipateId, String token);
 
     CommonDto<String> saveOrUpdateParticipateFeedback(ElegantServiceParticipateDto body, Integer appId, String token);
+
+    CommonDto<String> updateParticipateStatus(ElegantServiceParticipate body, Integer appId);
 }

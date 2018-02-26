@@ -837,6 +837,21 @@ public class ElegantServiceImpl implements ElegantServiceService{
         return null;
     }
 
+    @Transactional
+    @Override
+    public CommonDto<String> updateParticipateStatus(ElegantServiceParticipate body, Integer appId) {
+
+        if (null == body.getId() || null == body.getStatus()){
+            return new CommonDto<>(null,"记录id和状态都不能为空",502);
+        }
+
+        body.setCompletionTime(DateTime.now().toDate());
+
+        elegantServiceParticipateMapper.updateByPrimaryKeySelective(body);
+
+        return new CommonDto<>(null,"success",200);
+    }
+
 
     /**
      * 随机字符生成器
