@@ -78,7 +78,7 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
         Integer investorDemandSegmentationInsertResult = -1;
         List<InvestorDemandSegmentation> investorDemandSegmentationList = new ArrayList<>();
         investorDemandSegmentationService.deleteAll(investorDemand.getId());
-        if(null == body.getFocusSegmentations()){
+        if(null == body.getFocusSegmentations()&&body.getFocusSegmentations().length ==0){
             InvestorDemandSegmentation investorDemandSegmentation = new InvestorDemandSegmentation();
             investorDemandSegmentation.setInvestorDemandId(investorDemand.getId());
             investorDemandSegmentation.setSegmentation(null);
@@ -96,7 +96,7 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
         Integer investorDemandStageInsertResult = -1;
         List<InvestorDemandStage> investorDemandStageList = new ArrayList<>();
         investorDemandStageService.deleteAll(investorDemand.getId());
-        if(null == body.getFocusStages()){
+        if(null == body.getFocusStages()&&body.getFocusStages().length ==0){
             InvestorDemandStage investorDemandStage = new InvestorDemandStage();
             investorDemandStage.setInvestorDemandId(investorDemand.getId());
             investorDemandStage.setMetaProjectStageId(null);
@@ -114,7 +114,7 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
         Integer investorDemandAreaInsertResult = -1;
         List<InvestorDemandArea> investorDemandAreaList = new ArrayList<>();
         investorDemandAreaService.deleteAll(investorDemand.getId());
-        if(null == body.getPreferCitys()){
+        if(null == body.getPreferCitys()&&body.getPreferCitys().length == 0){
             InvestorDemandArea investorDemandArea = new InvestorDemandArea();
             investorDemandArea.setInvestorDemandId(investorDemand.getId());
             investorDemandArea.setCity(null);
@@ -133,7 +133,7 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
         Integer investorDemandSpeedwayInsertResult = -1;
         List<InvestorDemandSpeedway> investorDemandSpeedwayList = new ArrayList<>();
         investorDemandSpeedwayService.deleteAll(investorDemand.getId());
-        if(null == body.getFocusSpeedway()){
+        if(null == body.getFocusSpeedway()&&body.getFocusSpeedway().length ==0){
             InvestorDemandSpeedway investorDemandSpeedway = new InvestorDemandSpeedway();
             investorDemandSpeedway.setInvestorDemandId(investorDemand.getId());
             investorDemandSpeedway.setSpeedway(null);
@@ -152,7 +152,7 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
         Integer investorDemandCharacterInsertResult = -1;
         List<InvestorDemandCharacter> investorDemandCharacterList = new ArrayList<>();
         investorDemandCharacterService.deleteAll(investorDemand.getId());
-        if(null == body.getFocusCharacters()){
+        if(null == body.getFocusCharacters()&&body.getFocusCharacters().length ==0){
             InvestorDemandCharacter investorDemandCharacter = new InvestorDemandCharacter();
             investorDemandCharacter.setInvestorDemandId(investorDemand.getId());
             investorDemandCharacter.setCharacter(null);
