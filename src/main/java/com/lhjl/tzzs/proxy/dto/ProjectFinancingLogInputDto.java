@@ -21,6 +21,11 @@ public class ProjectFinancingLogInputDto {
 
     /**数据来源*/
     private List<Integer> dataSource;
+    
+    /**
+     * 领域名称的字符串List
+     */
+    private List<String> segmentationName;
 
     /**轮次*/
     private List<String> stage;
@@ -45,6 +50,14 @@ public class ProjectFinancingLogInputDto {
     
     /**数据开始索引*/
     private Integer start;
+
+	public List<String> getSegmentationName() {
+		return segmentationName;
+	}
+
+	public void setSegmentationName(List<String> segmentationName) {
+		this.segmentationName = segmentationName;
+	}
 
 	public String getSearchWord() {
 		return searchWord;
@@ -158,8 +171,10 @@ public class ProjectFinancingLogInputDto {
 	public String toString() {
 		return "ProjectFinancingLogInputDto [searchWord=" + searchWord + ", beginTimeInputStr=" + beginTimeInputStr
 				+ ", beginTime=" + beginTime + ", endTimeInputStr=" + endTimeInputStr + ", endTime=" + endTime
-				+ ", dataSource=" + dataSource + ", stage=" + stage + ", currency=" + currency + ", column=" + column
-				+ ", order=" + order + ", currentPage=" + currentPage + ", pageSize=" + pageSize + ", start=" + start
-				+ "]";
+				+ ", dataSource=" + dataSource + ", segmentationName=" + segmentationName + ", stage=" + stage
+				+ ", currency=" + currency + ", column=" + column + ", order=" + order + ", currentPage=" + currentPage
+				+ ", pageSize=" + pageSize + ", start=" + start + "]";
 	}
+
+
 }

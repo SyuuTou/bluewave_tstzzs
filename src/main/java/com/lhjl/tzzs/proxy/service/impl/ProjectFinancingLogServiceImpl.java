@@ -125,21 +125,34 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
 			Integer projectFinancingLogId) {
 		CommonDto<ProjectFinancingLogHeadOutputDto> result=new CommonDto<>();
 		ProjectFinancingLogHeadOutputDto ProjectFinancingLogHead = projectFinancingLogMapper.echoProjectFinancingLogHead(projectFinancingLogId);
-		//根据提交者token获取提交者姓名
-		UserToken query=new UserToken();
-		query.setToken(ProjectFinancingLogHead.getSubmitorToken());
-		try {
-			query = userTokenMapper.selectOne(query);
-		}catch(Exception e){
-			result.setData(null);
-	        result.setStatus(500);
-	        result.setMessage("DB数据存在异常，token不唯一");
-			return result;
-		}
-		if(query!=null) {
-			Users user = usersMapper.selectByPrimaryKey(query.getUserId());
-			if(user!=null) {
-				ProjectFinancingLogHead.setUser(user.getActualName());
+		//取得提交者的token
+		String submitterToken = ProjectFinancingLogHead.getSubmitter();
+		
+		if(submitterToken==null || "".equals(submitterToken)) {
+			ProjectFinancingLogHead.setUser("天使指数后台");
+		}else {
+			//根据提交者token获取提交者姓名
+			UserToken query=new UserToken();
+			query.setToken(submitterToken);
+			try {
+				query = userTokenMapper.selectOne(query);
+			}catch(Exception e){
+				result.setData(null);
+		        result.setStatus(500);
+		        result.setMessage("DB数据存在异常，token不唯一");
+				return result;
+			}
+			if(query!=null) {
+				Users user = usersMapper.selectByPrimaryKey(query.getUserId());
+				//设置提交人姓名
+				if(user!=null) {
+					ProjectFinancingLogHead.setUser(user.getActualName());
+					//
+				}else {
+					ProjectFinancingLogHead.setUser("无效token，平台不存在该token所对应的用户记录");
+				}
+			}else {
+				ProjectFinancingLogHead.setUser("无效token，平台不存在该token所对应的记录");
 			}
 		}
 		
