@@ -111,14 +111,13 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         Integer investorSegmentationInsertResult = -1;
         List<InvestorSegmentation> investorSegmentationList = new ArrayList<>();
         investorSegmentationService.deleteAll(body.getInvestorId());
-        if(null == body.getSegmentations()&&body.getSegmentations().length == 0){
+        if(null == body.getSegmentations()||body.getSegmentations().length == 0){
             InvestorSegmentation investorSegmentation = new InvestorSegmentation();
             investorSegmentation.setId(body.getInvestorId());
             investorSegmentation.setSegmentationId(null);
             investorSegmentationList.add(investorSegmentation);
         }else{
         	this.LOGGER.info("body.getSegmentations()-->"+Arrays.toString(body.getSegmentations()));
-//        	if(body.getSegmentations() !=null && body.getSegmentations().length != 0) {
         		 List<Integer> segmentationIds = metaSegmentationMapper.findMetaSegmentationBySegmentation(body.getSegmentations());
                  this.LOGGER.info("segmentationIds-->"+segmentationIds.toString());
                  for (Integer investorSegmentationId : segmentationIds){
@@ -127,8 +126,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
                      investorSegmentation.setSegmentationId(investorSegmentationId);
                      investorSegmentationList.add(investorSegmentation);
                  }
-//        	}
-        } 
+        }
         investorSegmentationInsertResult = investorSegmentationService.insertList(investorSegmentationList);
 
         //所在城市
