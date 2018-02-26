@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class DatasOperationManage {
     /**
      * 数据ID
+     * 投资人id或者是项目id等等其他领域模型的id
      */
     @Id
     @Column(name = "data_id")
