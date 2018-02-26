@@ -17,7 +17,11 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.model.AdminUser;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.service.InvestorService;
-
+/**
+ * 投资人运营管理模块
+ * @author IdataVC
+ *
+ */
 @RestController
 public class InvestorManageController extends GenericController {
 	@Resource 
