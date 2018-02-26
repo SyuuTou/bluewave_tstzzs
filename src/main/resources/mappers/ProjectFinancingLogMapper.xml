@@ -84,8 +84,19 @@
     left join investment_institutions ii on iip.investment_institutions_id = ii.id
     left join projects p on pfl.project_id = p.id
     left join
-    (select project_id,group_concat(segmentation_name) segmentation_name from project_segmentation group by project_id) ps
-    on p.id = ps.project_id
+    <choose>
+    	<when test="segmentationName !=null and segmentationName.size &gt; 0">
+    		( select project_id,group_concat(segmentation_name) segmentation_name from ( select * from project_segmentation where segmentation_name in 
+    		<foreach collection="segmentationName" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+    		 ) temp 
+    		group by temp.project_id ) ps
+    		on p.id = ps.project_id
+    	</when>
+    	<otherwise>
+    		(select project_id,group_concat(segmentation_name) segmentation_name from project_segmentation group by project_id) ps
+    		on p.id = ps.project_id
+    	</otherwise>
+    </choose>
     <!-- 取得提交人姓名 -->
     left join user_token ut on pfl.submitter = ut.token
     left join users u on ut.user_id = u.ID
@@ -112,6 +123,7 @@
      or pfl.update_time &lt;= #{beginTime}
      )
     </if>
+    
     <if test="stage != null and stage.size &gt; 0">
       and pfl.stage in 
 	<foreach close=")" collection="stage" index="index" item="item" open="(" separator=",">#{item}</foreach>
@@ -139,8 +151,19 @@
     left join investment_institutions ii on iip.investment_institutions_id = ii.id
     left join projects p on pfl.project_id = p.id
     left join
-    (select project_id,group_concat(segmentation_name) segmentation_name from project_segmentation group by project_id) ps
-    on p.id = ps.project_id
+    <choose>
+    	<when test="segmentationName !=null and segmentationName.size &gt; 0">
+    		( select project_id,group_concat(segmentation_name) segmentation_name from ( select * from project_segmentation where segmentation_name in 
+    		<foreach collection="segmentationName" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+    		 ) temp 
+    		group by temp.project_id ) ps
+    		on p.id = ps.project_id
+    	</when>
+    	<otherwise>
+    		(select project_id,group_concat(segmentation_name) segmentation_name from project_segmentation group by project_id) ps
+    		on p.id = ps.project_id
+    	</otherwise>
+    </choose>
     <!-- 取得提交人姓名 -->
     left join user_token ut on pfl.submitter = ut.token
     left join users u on ut.user_id = u.ID
