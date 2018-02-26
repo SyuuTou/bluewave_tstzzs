@@ -7,6 +7,7 @@ import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.ElegantServiceService;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.joda.time.DateTime;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -778,19 +779,39 @@ public class ElegantServiceImpl implements ElegantServiceService{
     }
 
     /**
-     * 查询反馈列表的接口
+     * 查询单条反馈的接口
      * @param appId
-     * @param elegantServiceId
+     * @param elegantServiceParticipateId
      * @param token
      * @return
      */
     @Override
-    public CommonDto<ElegantServiceParticipate> queryParticipate(Integer appId, Integer elegantServiceId, String token) {
-        ElegantServiceParticipate elegantServiceParticipateRecord = new ElegantServiceParticipate();
-        elegantServiceParticipateRecord.setAppid(appId);
-        elegantServiceParticipateRecord.setElegantServiceId(elegantServiceId);
-        elegantServiceParticipateRecord.setToken(token);
-        ElegantServiceParticipate elegantServiceParticipate = elegantServiceParticipateMapper.selectOne(elegantServiceParticipateRecord);
+    public CommonDto<ElegantServiceParticipate> queryParticipate(Integer appId, Integer elegantServiceParticipateId, String token) {
+
+        if (null == elegantServiceParticipateId){
+            return new CommonDto<>(null,"精选服务反馈id不能为空",502);
+        }
+
+        ElegantServiceParticipate elegantServiceParticipate = elegantServiceParticipateMapper.getElegantServiceParticipateById(appId, elegantServiceParticipateId);
+
+        if (null == elegantServiceParticipate){
+            return new CommonDto<>(null,"没有找到当前反馈id对应的反馈内容",502);
+        }
+
+        //获取图文信息
+        ElegantServiceParticipateFeedbackImages elegantServiceParticipateFeedbackImagesForSearch = new ElegantServiceParticipateFeedbackImages();
+        elegantServiceParticipateFeedbackImagesForSearch.setElegantServiceParticipateId(elegantServiceParticipateId);
+
+        List<ElegantServiceParticipateFeedbackImages> elegantServiceParticipateFeedbackImages = elegantServiceParticipateFeedbackImagesMapper.select(elegantServiceParticipateFeedbackImagesForSearch);
+
+        ElegantServiceParticipateFeedbackText elegantServiceParticipateFeedbackTextForSearch = new ElegantServiceParticipateFeedbackText();
+        elegantServiceParticipateFeedbackTextForSearch.setElegantServiceParticipateId(elegantServiceParticipateId);
+
+        List<ElegantServiceParticipateFeedbackText> elegantServiceParticipateFeedbackText = elegantServiceParticipateFeedbackTextMapper.select(elegantServiceParticipateFeedbackTextForSearch);
+
+        elegantServiceParticipate.setFeedbackImages(elegantServiceParticipateFeedbackImages);
+        elegantServiceParticipate.setFeedbackTexts(elegantServiceParticipateFeedbackText);
+
 
         return new CommonDto<>(elegantServiceParticipate,"success", 200);
     }

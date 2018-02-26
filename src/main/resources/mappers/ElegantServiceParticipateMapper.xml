@@ -20,7 +20,8 @@
     SELECT esp.id,esp.create_time,esp.`status`,
     case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end user_name,
     case when u.headpic is null then (case when u.headpic_real is null then "" else u.headpic_real end) else u.headpic end user_headpic,
-    case when u.company_duties is null then "" else u.company_duties end company_duties
+    case when u.company_duties is null then "" else u.company_duties end company_duties,
+    esp.completion_time
     FROM idatavc.elegant_service_participate esp
     left join users u on esp.token = u.uuid
     left join users_weixin uw on u.ID = uw.user_id
@@ -29,5 +30,19 @@
     and esp.elegant_service_id = #{elegantServiceId}
     order by create_time desc
     limit #{startPage},#{pageSize};
+  </select>
+  <select id="getElegantServiceParticipateById" resultMap="BaseResultMap">
+    SELECT esp.id,esp.elegant_service_id,es.service_name,esp.token,esp.create_time,esp.`status`,
+    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end user_name,
+    case when u.headpic is null then (case when u.headpic_real is null then "" else u.headpic_real end) else u.headpic end user_headpic,
+    case when u.company_duties is null then "" else u.company_duties end company_duties,
+    esp.completion_time
+    FROM idatavc.elegant_service_participate esp
+    left join users u on esp.token = u.uuid
+    left join users_weixin uw on u.ID = uw.user_id
+    left join elegant_service es on esp.elegant_service_id = es.id
+    where
+    esp.id = #{elegantServiceParticipateId}
+    and esp.appId = #{appId}
   </select>
 </mapper>

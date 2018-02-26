@@ -142,31 +142,47 @@ public class ElegantServiceController {
 
     @PostMapping("/v{appId}/participate")
     public CommonDto<String> participate(@RequestBody ElegantServiceParticipate body, @PathVariable Integer appId, String token){
-        CommonDto<String> result = null;
+        CommonDto<String> result = new CommonDto<>(null,"服务器端发生错误",502);
+        try {
             result = elegantServiceService.saveOrUpdateParticipate(body, appId, token);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
+
         return result;
     }
 
     @GetMapping("/v{appId}/participate/list/{elegantServiceId}")
     public CommonDto<List<ElegantServiceParticipate>> queryParticipate(@PathVariable Integer appId, @PathVariable Integer elegantServiceId, @RequestParam Integer pageNo, @RequestParam(defaultValue = "10") Integer pageSize){
-        CommonDto<List<ElegantServiceParticipate>> result = null;
-        result = elegantServiceService.queryParticipate(appId,elegantServiceId,pageNo,pageSize);
+        CommonDto<List<ElegantServiceParticipate>> result = new CommonDto<>(null,"服务器端发生错误",502);
+        try {
+            result = elegantServiceService.queryParticipate(appId,elegantServiceId,pageNo,pageSize);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
         return result;
     }
 
-    @GetMapping("/v{appId}/participate/{elegantServiceId}")
-    public CommonDto<ElegantServiceParticipate> queryParticipateById(@PathVariable Integer appId, @PathVariable Integer elegantServiceId, String token){
-        CommonDto<ElegantServiceParticipate> result = null;
-        result = elegantServiceService.queryParticipate(appId,elegantServiceId,token);
+    @GetMapping("/v{appId}/participate/{elegantServiceParticipateId}")
+    public CommonDto<ElegantServiceParticipate> queryParticipateById(@PathVariable Integer appId, @PathVariable Integer elegantServiceParticipateId, String token){
+        CommonDto<ElegantServiceParticipate> result = new CommonDto<>(null,"服务器端发生错误",502);
+        try {
+            result = elegantServiceService.queryParticipate(appId,elegantServiceParticipateId,token);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
+
         return result;
     }
 
     @PostMapping("/v{appId}/participate/feedback/{participateId}")
     public CommonDto<String>  handlerFeedback(@RequestBody ElegantServiceParticipateDto body, @PathVariable Integer appId, String token){
-        CommonDto<String> result = null;
-
-        result = elegantServiceService.saveOrUpdateParticipateFeedback(body, appId, token);
-
+        CommonDto<String> result = new CommonDto<>(null,"服务器端发生错误",502);
+        try {
+            result = elegantServiceService.saveOrUpdateParticipateFeedback(body, appId, token);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
         return result;
     }
 
