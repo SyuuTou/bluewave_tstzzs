@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class DatasOperationManage {
     /**
      * 数据ID
+     * 投资人id或者是项目id等等其他领域模型的id
      */
     @Id
     @Column(name = "data_id")
@@ -17,7 +18,7 @@ public class DatasOperationManage {
      */
     @Id
     @Column(name = "data_type")
-    private String dataType;
+    private String dataType;  
 
     /**
      * 基础推荐值
