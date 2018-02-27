@@ -6,7 +6,11 @@ import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.ElegantServiceService;
+import com.lhjl.tzzs.proxy.service.FormIdService;
+import com.lhjl.tzzs.proxy.service.SendTemplateService;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
+import com.lhjl.tzzs.proxy.service.bluewave.BlueUserInfoService;
+import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.joda.time.DateTime;
 import org.slf4j.LoggerFactory;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -85,6 +90,21 @@ public class ElegantServiceImpl implements ElegantServiceService{
     private ElegantServiceParticipateFeedbackImagesMapper elegantServiceParticipateFeedbackImagesMapper;
     @Autowired
     private ElegantServiceParticipateFeedbackTextMapper elegantServiceParticipateFeedbackTextMapper;
+
+    @Resource
+    private SendTemplateService sendTemplateService;
+
+    @Resource
+    private UserLoginService userLoginService;
+
+    @Autowired
+    private UsersMapper usersMapper;
+
+    @Autowired
+    private UsersWeixinMapper usersWeixinMapper;
+
+    @Resource
+    private FormIdService formIdService;
 
     /**
      * 获取精选活动列表的接口
@@ -715,14 +735,9 @@ public class ElegantServiceImpl implements ElegantServiceService{
      * @param token
      * @return
      */
+    @Transactional
     @Override
     public CommonDto<String> saveOrUpdateParticipate(ElegantServiceParticipate body, Integer appId, String token) {
-//
-//        ElegantServiceParticipate elegantServiceParticipateRecord = new ElegantServiceParticipate();
-//        elegantServiceParticipateRecord.setElegantServiceId(body.getElegantServiceId());
-//        elegantServiceParticipateRecord.setToken(token);
-//        elegantServiceParticipateRecord.setAppid(appId);
-//        ElegantServiceParticipate elegantServiceParticipate = elegantServiceParticipateMapper.selectOne(elegantServiceParticipateRecord);
 
         Integer elegantServiceParticipateId = null;
 
@@ -744,6 +759,19 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         // 更新图片和文字
         saveOrUpdateElegantServiceParticipateFeedback(elegantServiceParticipateId,body);
+        if (null == body.getFormid()){
+            return new CommonDto<>(null,"formid不能为空",502);
+        }
+        //保存formid
+        Integer userId = userLoginService.getUserIdByToken(body.getToken(),appId);
+        if (userId == -1){
+            return new CommonDto<>(null,"token失效",502);
+        }
+
+        CommonDto<String> resultS =  formIdService.saveFormid(userId,body.getFormid(),null);
+        if (resultS.getStatus() != 200){
+            return resultS;
+        }
 
         return new CommonDto<>("ok","success",200);
     }
@@ -812,6 +840,20 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantServiceParticipate.setFeedbackImages(elegantServiceParticipateFeedbackImages);
         elegantServiceParticipate.setFeedbackTexts(elegantServiceParticipateFeedbackText);
 
+        Integer userId = userLoginService.getUserIdByToken(elegantServiceParticipate.getToken(),appId);
+        if (userId == -1){
+            return new CommonDto<>(null,"当前记录的用户tokne无效",502);
+        }
+
+        CommonDto<UserFormid> resultS = formIdService.findUserFormid(userId,null);
+        if (resultS.getStatus() != 200){
+            CommonDto<ElegantServiceParticipate> result = new CommonDto<>();
+            result.setStatus(resultS.getStatus());
+            result.setMessage(resultS.getMessage());
+            return result;
+        }
+
+        elegantServiceParticipate.setFormid(resultS.getData().getFormid());
 
         return new CommonDto<>(elegantServiceParticipate,"success", 200);
     }
@@ -848,6 +890,12 @@ public class ElegantServiceImpl implements ElegantServiceService{
         body.setCompletionTime(DateTime.now().toDate());
 
         elegantServiceParticipateMapper.updateByPrimaryKeySelective(body);
+
+        // 发模板消息
+        CommonDto<String> result = elegantServiceParticipateSendTamplate(body, appId);
+        if (result.getStatus() != 200){
+            return result;
+        }
 
         return new CommonDto<>(null,"success",200);
     }
@@ -1391,5 +1439,67 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 elegantServiceParticipateFeedbackTextMapper.insertSelective(e);
             });
         }
+    }
+
+    /**
+     * 精选服务反馈发消息接口
+     * @param body
+     * @param appId
+     * @return
+     */
+    @Transactional
+    public CommonDto<String> elegantServiceParticipateSendTamplate(ElegantServiceParticipate body, Integer appId){
+        CommonDto<String> result = new CommonDto<>();
+
+        String userName = "";
+        String formId = "";
+
+        Integer userId = userLoginService.getUserIdByToken(body.getToken(),appId);
+
+        CommonDto<UserFormid> resulta = formIdService.findUserFormid(userId,null);
+        if (resulta.getStatus() != 200){
+            result.setMessage(resulta.getMessage());
+            result.setStatus(resulta.getStatus());
+
+            return result;
+        }
+        formId = resulta.getData().getFormid();
+
+        ElegantServiceParticipate elegantServiceParticipate = elegantServiceParticipateMapper.selectByPrimaryKey(body.getId());
+        if (null == elegantServiceParticipate){
+            return new CommonDto<>(null,"当前id没有找到对应的反馈信息",502);
+        }
+
+        ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceParticipate.getElegantServiceId());
+
+        Users usersForSearch = new Users();
+        usersForSearch.setUuid(elegantService.getCreator());
+
+        Users users = usersMapper.selectOne(usersForSearch);
+        userName = users.getActualName();
+        if (null==userName){
+            UsersWeixin usersWeixinForSearch = new UsersWeixin();
+            usersWeixinForSearch.setUserId(users.getId());
+            userName = usersWeixinMapper.selectOne(usersWeixinForSearch).getNickName();
+        }
+
+        if (null == userName){
+            userName = "";
+        }
+
+        if (body.getStatus() == 2){
+            String title = "天使投资指数悬赏任务";
+            String messege = "你完成了"+userName+"的悬赏任务,奖励已入钱包,快去查看吧";
+
+            result = sendTemplateService.sendTemplateByFormId(userId,2,formId,messege,title);
+
+        }else {
+            result.setData(null);
+            result.setStatus(200);
+            result.setMessage("success");
+        }
+
+
+        return result;
     }
 }

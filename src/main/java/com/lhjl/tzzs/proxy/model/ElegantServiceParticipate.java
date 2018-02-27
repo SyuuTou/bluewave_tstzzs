@@ -68,7 +68,11 @@ public class ElegantServiceParticipate {
    // @Transient
     private String companyDuties;
 
-
+    /**
+     * formid
+     */
+    @Transient
+    private String formid;
     /**
      * @return id
      */
@@ -229,5 +233,13 @@ public class ElegantServiceParticipate {
 
     public void setCompanyDuties(String companyDuties) {
         this.companyDuties = companyDuties;
+    }
+
+    public String getFormid() {
+        return formid;
+    }
+
+    public void setFormid(String formid) {
+        this.formid = formid;
     }
 }
