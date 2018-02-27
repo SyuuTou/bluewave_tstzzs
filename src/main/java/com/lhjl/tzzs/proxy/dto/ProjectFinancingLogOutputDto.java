@@ -77,7 +77,7 @@ public class ProjectFinancingLogOutputDto {
 //    以下字段供审核列表使用
     /**
      * 审核结果
-     * 0表示审核未通过，1表示审核通过，默认0
+     * '审核状态，0表示审核未通过，1表示审核通过，2表示待审核，默认0'
      */
     private Integer approvalStatus;
     /**
