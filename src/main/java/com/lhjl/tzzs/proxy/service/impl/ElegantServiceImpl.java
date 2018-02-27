@@ -894,7 +894,11 @@ public class ElegantServiceImpl implements ElegantServiceService{
         // 发模板消息
         CommonDto<String> result = elegantServiceParticipateSendTamplate(body, appId);
         if (result.getStatus() != 200){
-            return result;
+
+            log.error(result.getMessage());
+            log.info(result.getMessage());
+
+            return  result;
         }
 
         return new CommonDto<>(null,"success",200);
