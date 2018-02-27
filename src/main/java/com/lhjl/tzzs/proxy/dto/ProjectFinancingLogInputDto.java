@@ -146,7 +146,7 @@ public class ProjectFinancingLogInputDto {
 	public void setApprovalStatus(List<Integer> approvalStatus) {
 		this.approvalStatus = approvalStatus;
 	}
-	@Override
+	@Override 
 	public String toString() {
 		return "ProjectFinancingLogInputDto [searchWord=" + searchWord + ", beginTimeInputStr=" + beginTimeInputStr
 				+ ", beginTime=" + beginTime + ", endTimeInputStr=" + endTimeInputStr + ", endTime=" + endTime
