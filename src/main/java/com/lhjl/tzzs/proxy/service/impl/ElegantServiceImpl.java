@@ -1453,8 +1453,9 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         String userName = "";
         String formId = "";
+        String token = elegantServiceParticipateMapper.selectByPrimaryKey(body.getId()).getToken();
 
-        Integer userId = userLoginService.getUserIdByToken(body.getToken(),appId);
+        Integer userId = userLoginService.getUserIdByToken(token,appId);
 
         CommonDto<UserFormid> resulta = formIdService.findUserFormid(userId,null);
         if (resulta.getStatus() != 200){
@@ -1474,6 +1475,9 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         Users usersForSearch = new Users();
         usersForSearch.setUuid(elegantService.getCreator());
+        if (null == elegantService.getCreator() || "".equals(elegantService.getCreator())){
+            return new CommonDto<>(null,"没有找到发布悬赏人的token信息",502);
+        }
 
         Users users = usersMapper.selectOne(usersForSearch);
         userName = users.getActualName();

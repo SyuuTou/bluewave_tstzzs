@@ -53,19 +53,19 @@ public class ElegantServiceParticipate {
     /**
      * 用户头像
      */
-   // @Transient
+    @Transient
     private String userHeadpic;
 
     /**
      * 用户姓名
      */
-   // @Transient
+    @Transient
     private String userName;
 
     /**
      * 用户公司职务
      */
-   // @Transient
+    @Transient
     private String companyDuties;
 
     /**
