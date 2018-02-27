@@ -64,6 +64,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
             //去获取token
             UserToken userToken = new UserToken();
             userToken.setUserId(userId);
+            userToken.setMetaAppId(String.valueOf(appid));
 
             List<UserToken> userTokens = userTokenMapper.select(userToken);
 
