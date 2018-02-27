@@ -100,7 +100,7 @@
     		on p.id = ps.project_id
     	</otherwise>
     </choose>
-    <!-- 取得提交人姓名 -->
+    <!-- 取得提交人姓名以及提交人id -->
     left join user_token ut on pfl.submitter = ut.token
     left join users u on ut.user_id = u.ID
     where 1=1
