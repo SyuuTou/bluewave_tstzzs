@@ -840,6 +840,20 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantServiceParticipate.setFeedbackImages(elegantServiceParticipateFeedbackImages);
         elegantServiceParticipate.setFeedbackTexts(elegantServiceParticipateFeedbackText);
 
+        Integer userId = userLoginService.getUserIdByToken(elegantServiceParticipate.getToken(),appId);
+        if (userId == -1){
+            return new CommonDto<>(null,"当前记录的用户tokne无效",502);
+        }
+
+        CommonDto<UserFormid> resultS = formIdService.findUserFormid(userId,null);
+        if (resultS.getStatus() != 200){
+            CommonDto<ElegantServiceParticipate> result = new CommonDto<>();
+            result.setStatus(resultS.getStatus());
+            result.setMessage(resultS.getMessage());
+            return result;
+        }
+
+        elegantServiceParticipate.setFormid(resultS.getData().getFormid());
 
         return new CommonDto<>(elegantServiceParticipate,"success", 200);
     }
