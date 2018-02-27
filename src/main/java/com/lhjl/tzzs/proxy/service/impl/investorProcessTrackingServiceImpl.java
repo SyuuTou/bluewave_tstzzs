@@ -45,6 +45,7 @@ public class investorProcessTrackingServiceImpl implements InvestorProcessTracki
         Integer investorOperationLogInsertResult = -1;
         if(null == body.getId()){
             investorOperationLog.setCreateTime(DateUtils.parse(createTime));
+            investorOperationLog.setUpdateTime(DateUtils.parse(createTime));
             investorOperationLogInsertResult =  investorOperationLogMapper.insert(investorOperationLog);
         }else{
             investorOperationLog.setUpdateTime(DateUtils.parse(createTime));

@@ -145,6 +145,6 @@
   </select>
 
   <select id="selectByInvestorId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select * from investor_demand where investor_id=#{investorId};
+    select * from investor_demand where investor_id=#{investorId} limit 0,1;
   </select>
 </mapper>
