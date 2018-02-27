@@ -88,7 +88,7 @@
     left join projects p on pfl.project_id = p.id
     left join
     <choose>
-    	<when test="segmentationName !=null and segmentationName.size &gt; 0">
+    	<when test="segmentationName !=null and segmentationName.size() &gt; 0">
     		( select project_id,group_concat(segmentation_name) segmentation_name from ( select * from project_segmentation where segmentation_name in 
     		<foreach collection="segmentationName" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
     		 ) temp 
@@ -107,12 +107,12 @@
     
      <if test="searchWord != null and searchWord !=''">
       and
-        (ii.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+        ( ii.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
       or p.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
       or ps.segmentation_name like CONCAT("%",CONCAT(#{searchWord},"%"))
       or pfl.stage like CONCAT("%",CONCAT(#{searchWord},"%"))
       or pfl.Investment_institutions_list like CONCAT("%",CONCAT(#{searchWord},"%"))
-      or pfl.proportion_list like CONCAT("%",CONCAT(#{searchWord},"%")))
+      or pfl.proportion_list like CONCAT("%",CONCAT(#{searchWord},"%")) ) 
     </if>
     <if test="beginTime !=null">
      AND (pfl.create_time &gt;= #{beginTime} 
@@ -127,15 +127,19 @@
      )
     </if>
     
-    <if test="stage != null and stage.size &gt; 0">
+    <if test="stage != null and size() &gt; 0">
       and pfl.stage in 
 	<foreach close=")" collection="stage" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="currency != null and currency.size &gt; 0">
+    <if test="currency != null and currency.size() &gt; 0">
       and pfl.currency in 
       <foreach close=")" collection="currency" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="dataSource != null and dataSource.size &gt; 0">
+    <if test="approvalStatus != null and approvalStatus.size() &gt; 0">
+      and pfl.approval_status in 
+      <foreach close=")" collection="approvalStatus" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+    <if test="dataSource != null and dataSource.size() &gt; 0">
       and pfl.data_soruce_type_id in  
       <foreach close=")" collection="dataSource" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
@@ -155,7 +159,7 @@
     left join projects p on pfl.project_id = p.id
     left join
     <choose>
-    	<when test="segmentationName !=null and segmentationName.size &gt; 0">
+    	<when test="segmentationName !=null and segmentationName.size() &gt; 0">
     		( select project_id,group_concat(segmentation_name) segmentation_name from ( select * from project_segmentation where segmentation_name in 
     		<foreach collection="segmentationName" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
     		 ) temp 
@@ -200,15 +204,19 @@
      )
     </if>
     
-    <if test="stage != null and stage.size &gt; 0">
+    <if test="stage != null and stage.size() &gt; 0">
       and pfl.stage in 
       <foreach close=")" collection="stage" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="currency != null and currency.size &gt; 0">
+    <if test="currency != null and currency.size() &gt; 0">
       and pfl.currency in 
       <foreach close=")" collection="currency" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="dataSource != null and dataSource.size &gt; 0">
+    <if test="approvalStatus != null and approvalStatus.size() &gt; 0">
+      and pfl.approval_status in 
+      <foreach close=")" collection="approvalStatus" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+    <if test="dataSource != null and dataSource.size() &gt; 0">
       and pfl.data_soruce_type_id in  
       <foreach close=")" collection="dataSource" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
