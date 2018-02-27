@@ -70,6 +70,9 @@
     <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
     <!-- 提交人token -->
 	<!-- <result column="submitter" jdbcType="VARCHAR" property="submitter" /> -->
+	
+	<!-- 用户id -->
+	<result column="user_id" jdbcType="INTEGER" property="userId" />
 	<!-- 提交人姓名 -->
 	<result column="actual_name" jdbcType="VARCHAR" property="actualName" />
   </resultMap>
@@ -77,7 +80,7 @@
     SELECT pfl.ID,pfl.serial_number,mdst.type_name,ii.id as investment_institution_id,ii.short_name as institution_name,
     p.id as project_id,p.short_name as project_name,ps.segmentation_name,pfl.stage,pfl.amount,pfl.currency,
     pfl.share_divest,pfl.valuation,pfl.total_amount,pfl.pr_amount,pfl.financing_time,pfl.Investment_institutions_list,
-    pfl.proportion_list,pfl.create_time,pfl.update_time,pfl.approval_status,pfl.approval_time,pfl.submitter,u.actual_name
+    pfl.proportion_list,pfl.create_time,pfl.update_time,pfl.approval_status,pfl.approval_time,pfl.submitter,ut.user_id,u.actual_name
     FROM project_financing_log pfl
     left join meta_data_source_type mdst on pfl.data_soruce_type_id = mdst.id
     left join investment_institutions_project iip on pfl.id = iip.project_id

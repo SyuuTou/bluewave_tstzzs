@@ -76,10 +76,6 @@ public class ProjectFinancingLogOutputDto {
     
 //    以下字段供审核列表使用
     /**
-     * 采集编号
-     */
-//    private String gatherNumber;
-    /**
      * 审核结果
      * 0表示审核未通过，1表示审核通过，默认0
      */
@@ -97,10 +93,22 @@ public class ProjectFinancingLogOutputDto {
      */
 //    private String submitter;
     /**
+     * 提交人id
+     */
+    private Integer userId;
+    /**
      * 提交人姓名
      */
     private String actualName;
     
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 
 	public String getActualName() {
 		return actualName;
@@ -338,8 +346,9 @@ public class ProjectFinancingLogOutputDto {
 				+ ", InvestmentInstitutionsList=" + InvestmentInstitutionsList + ", proportionList=" + proportionList
 				+ ", createTime=" + createTime + ", createTimeOutputStr=" + createTimeOutputStr + ", updateTime="
 				+ updateTime + ", updateTimeOutputStr=" + updateTimeOutputStr + ", approvalStatus=" + approvalStatus
-				+ ", approvalTime=" + approvalTime + ", approvalTimeOutputStr=" + approvalTimeOutputStr
-				+ ", actualName=" + actualName + "]";
+				+ ", approvalTime=" + approvalTime + ", approvalTimeOutputStr=" + approvalTimeOutputStr + ", userId="
+				+ userId + ", actualName=" + actualName + "]";
 	}
+
 
 }
