@@ -70,6 +70,7 @@ public class investorProcessTrackingServiceImpl implements InvestorProcessTracki
         CommonDto<List<InvestorOperateLogDto>> result = new CommonDto<>();
         List<InvestorOperateLogDto> investorOperateLogDtoList = new ArrayList<>();
         List<InvestorOperationLog> investorOperationLogList = investorOperationLogMapper.selectAllInvestorOperationLog(investorId);
+        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if(null == investorOperationLogList || investorOperationLogList.isEmpty()){
             result.setData(null);
             result.setStatus(200);
@@ -81,7 +82,9 @@ public class investorProcessTrackingServiceImpl implements InvestorProcessTracki
             investorOperateLogDto1.setId(investorOperationLog_i.getId());
             investorOperateLogDto1.setInvestorId(investorId);
             investorOperateLogDto1.setOperateContent(investorOperationLog_i.getOperateContent());
-            investorOperateLogDto1.setOperateTime(String.valueOf(investorOperationLog_i.getUpdateTime()));
+            if(investorOperationLog_i.getUpdateTime() != null) {
+            	investorOperateLogDto1.setOperateTime(sdf.format(investorOperationLog_i.getUpdateTime()));
+            }
             investorOperateLogDto1.setOperator(investorOperationLog_i.getOperator());
             investorOperateLogDtoList.add(investorOperateLogDto1);
         });

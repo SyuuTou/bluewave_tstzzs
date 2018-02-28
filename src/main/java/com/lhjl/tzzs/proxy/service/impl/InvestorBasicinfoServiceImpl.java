@@ -60,6 +60,8 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
 
     @Autowired
     private MetaIdentityTypeMapper metaIdentityTypeMapper;
+    @Autowired
+    private InvestorCityMapper investorCityMapper;
     
     @Transactional
     @Override
@@ -146,7 +148,16 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
                 investorCityList.add(investorCity);
             }
         }
-        investorCityInsertResult = investorCityService.insertList(investorCityList);
+        //重新执行插入-zd
+        if(investorCityList !=null && investorCityList.size()>0) {
+        	investorCityList.forEach((e)->{
+        		if(e!=null) {
+        			investorCityMapper.insert(e);
+        		}
+        	});
+        }
+//        以下方法不满足通用Mapper的list增加条件-caochuangui
+//        investorCityInsertResult = investorCityService.insertList(investorCityList);
 
         //自定义城市
         Integer investorSelfDefCityInsertResult = -1;
@@ -224,7 +235,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         }
         investorBusinessesInsertResult = investorBusinessService.insertList(investorBusinessList);
 
-        if(investorsInsertResult > 0 && investorBusinessesInsertResult > 0 &&
+        /*if(investorsInsertResult > 0 && investorBusinessesInsertResult > 0 &&
                 investorEducationExperienceInsertResult > 0 && investorWorkExperienceInsertResult > 0 &&
                 investorSelfDefCityInsertResult > 0 &&  investorCityInsertResult > 0 &&
                 investorSegmentationInsertResult > 0){
@@ -232,6 +243,16 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
             result.setMessage("success");
             result.setData("保存成功");
             return result;
+        }*/
+        //替换为以下代码
+        if(investorsInsertResult > 0 && investorBusinessesInsertResult > 0 &&
+	       investorEducationExperienceInsertResult > 0 && investorWorkExperienceInsertResult > 0 &&
+	       investorSelfDefCityInsertResult > 0 &&
+	       investorSegmentationInsertResult > 0){
+	        result.setStatus(200);
+	        result.setMessage("success");
+	        result.setData("保存成功");
+	       return result;
         }
         result.setStatus(300);
         result.setMessage("failed");

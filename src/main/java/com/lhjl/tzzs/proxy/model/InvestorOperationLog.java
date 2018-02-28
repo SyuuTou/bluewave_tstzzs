@@ -37,7 +37,11 @@ public class InvestorOperationLog {
      */
     @Column(name = "update_time")
     private Date updateTime;
-
+    /**
+     * 更新时间输出字符串
+     */
+//    @Transient
+//    private Date updateTimeOutputStr;
     /**
      * 是否删除。0:未删除；1：删除
      */
