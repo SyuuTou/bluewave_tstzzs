@@ -294,6 +294,7 @@ public class InvestorServiceImpl implements InvestorService {
 				Users user = usersMapper.selectByPrimaryKey(tmp.getUserId());
 				if(user != null) {
 					tmp.setCompanyName(user.getCompanyName());
+					tmp.setUserActualName(user.getActualName());
 					//设置用户的职位类型名称
 					Integer type = tmp.getAdminType();
 					if(metaAdminTypeMapper.selectByPrimaryKey(type)!=null) {
