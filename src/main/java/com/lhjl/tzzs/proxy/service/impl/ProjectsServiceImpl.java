@@ -1244,7 +1244,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		//获取所有的融资历史记录
 		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.select(pfl);
 		
-		if(pfls != null) {
+		if(pfls != null && pfls.size() != 0) {
 			pfls.forEach((e)->{
 				//获取融资阶段的id
 				Integer financingLogId = e.getId();

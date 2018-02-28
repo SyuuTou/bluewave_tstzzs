@@ -290,7 +290,9 @@ public class InvestorServiceImpl implements InvestorService {
 					tmp.setCompanyName(user.getCompanyName());
 					//设置用户的职位类型名称
 					Integer type = tmp.getAdminType();
-					tmp.setDutyName(metaAdminTypeMapper.selectByPrimaryKey(type).getName());
+					if(metaAdminTypeMapper.selectByPrimaryKey(type)!=null) {
+						tmp.setDutyName(metaAdminTypeMapper.selectByPrimaryKey(type).getName());
+					}
 				}
 			}
 		}
