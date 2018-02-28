@@ -92,11 +92,11 @@ public class InvestorsOutputDto {
 	 */
 	private String citys;
 	/**
-	 * 所在城市
+	 * 提交时间
 	 */
 	private Date createTime;
 	/**
-	 * 所在城市
+	 * 更新时间
 	 */
 	private Date updateTime;
 	/**
