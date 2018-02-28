@@ -131,7 +131,7 @@ public class InvestorsOutputDto {
 	@Transient
 	private String checkTimeOutputStr;
 	/**
-	 * 创建时间出输出字符串
+	 * 提交时间出输出字符串
 	 */
 	@Transient
 	private String createTimeStr;
@@ -140,8 +140,6 @@ public class InvestorsOutputDto {
 	 */
 	@Transient
 	private String updateTimeStr;
-	
-	
 	
 	public String getKernelDescription() {
 		return kernelDescription;

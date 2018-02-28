@@ -135,30 +135,30 @@ public class InvestorServiceImpl implements InvestorService {
         //日期转换为输出时间字符串
         list.forEach((e)->{  
         	
-        	//设置提交时间
-        	if(e.getCreateTime() !=null) {
-        		e.setCreateTimeStr(sdf.format(e.getCreateTime()));  
-        	}
-        	//设置更新时间,更新时间为null的时候更新时间为提交时间
-        	if(e.getUpdateTime() ==null){
-        		e.setUpdateTimeStr(sdf.format(e.getCreateTime()));
-        	}else {
-        		e.setUpdateTimeStr(sdf.format(e.getUpdateTime()));
-        	}
-        	//设置审核时间
-        	if(e.getCheckTime() !=null) {
-        		e.setCheckTimeOutputStr(sdf.format(e.getCheckTime()));  
-        	}
-        	/*if(e.getSubmitter() !=null) {  
-        		
-        		UserToken ut = new UserToken();
-        		ut.setToken(e.getSubmitter());
-        		
-        		ut = userTokenMapper.selectOne(ut);
-        			
-        		Users user = usersMapper.selectByPrimaryKey(ut.getUserId());
-        		e.setSubmitterName(user.getActualName());
-        	}*/
+        		//设置提交时间
+            	if(e.getCreateTime() !=null) {
+            		e.setCreateTimeStr(sdf.format(e.getCreateTime()));  
+            	}
+            	//设置更新时间,更新时间为null的时候更新时间为提交时间
+            	if(e.getUpdateTime() ==null){
+            		e.setUpdateTimeStr(e.getCreateTimeStr());
+            	}else {
+            		e.setUpdateTimeStr(sdf.format(e.getUpdateTime()));
+            	}
+            	//设置审核时间
+            	if(e.getCheckTime() !=null) {
+            		e.setCheckTimeOutputStr(sdf.format(e.getCheckTime()));  
+            	}
+            	/*if(e.getSubmitter() !=null) {  
+            		
+            		UserToken ut = new UserToken();
+            		ut.setToken(e.getSubmitter());
+            		
+            		ut = userTokenMapper.selectOne(ut);
+            			
+            		Users user = usersMapper.selectByPrimaryKey(ut.getUserId());
+            		e.setSubmitterName(user.getActualName());
+            	}*/
         });
         Long total = investorsMapper.getInvestorsListCount(body);
         
