@@ -62,11 +62,21 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
     private MetaIdentityTypeMapper metaIdentityTypeMapper;
     @Autowired
     private InvestorCityMapper investorCityMapper;
+    @Autowired
+    private InvestorWorkExperienceMapper investorWorkExperienceMapper;
+    @Autowired
+    private InvestorEducationExperienceMapper investorEducationExperienceMapper;
+    @Autowired
+    private InvestorBusinessMapper investorBusinessMapper;
+    @Autowired
+    private InvestorSegmentationMapper investorSegmentationMapper;
+    @Autowired
+    private InvestorSelfdefCityMapper investorSelfdefCityMapper;
     
     @Transactional
     @Override
-    public CommonDto<String> addOrUpdateInvestorBasicInfo(InvestorBasicInfoInputDto body) {
-        CommonDto<String> result = new CommonDto<>();
+    public CommonDto<Boolean> addOrUpdateInvestorBasicInfo(InvestorBasicInfoInputDto body) {
+        CommonDto<Boolean> result = new CommonDto<>();
         this.LOGGER.info("body**"+body);
         Investors investors = new Investors();
         investors.setId(body.getInvestorId());
@@ -129,7 +139,16 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
                      investorSegmentationList.add(investorSegmentation);
                  }
         }
-        investorSegmentationInsertResult = investorSegmentationService.insertList(investorSegmentationList);
+      //投资人所在领域的插入-zd
+        if(investorSegmentationList !=null && investorSegmentationList.size()>0) {
+        	investorSegmentationList.forEach((e)->{
+        		if(e!=null) {
+        			investorSegmentationMapper.insert(e);
+        		}
+        	});
+        }
+//        以下方法不满足通用Mapper的list增加条件-caochuangui
+//        investorSegmentationInsertResult = investorSegmentationService.insertList(investorSegmentationList);
 
         //所在城市
         Integer investorCityInsertResult = -1;
@@ -176,7 +195,16 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
                 investorSelfdefCityList.add(investorSelfdefCity);
             }
         }
-        investorSelfDefCityInsertResult = investorSelfdefCityService.insertList(investorSelfdefCityList);
+      //重新执行插入-zd
+        if(investorSelfdefCityList !=null && investorSelfdefCityList.size()>0) {
+        	investorSelfdefCityList.forEach((e)->{
+        		if(e!=null) {
+        			investorSelfdefCityMapper.insert(e);
+        		}
+        	});
+        }
+//        以下方法不满足通用Mapper的list增加条件-caochuangui
+//        investorSelfDefCityInsertResult = investorSelfdefCityService.insertList(investorSelfdefCityList);
 
         //工作经历
         Integer investorWorkExperienceInsertResult = -1;
@@ -195,7 +223,16 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
                 investorWorkExperienceList.add(investorWorkExperience);
             }
         }
-        investorWorkExperienceInsertResult = investorWorkExperienceService.insertList(investorWorkExperienceList);
+      //重新执行投资人工作经历插入-zd
+        if(investorWorkExperienceList !=null && investorWorkExperienceList.size()>0) {
+        	investorWorkExperienceList.forEach((e)->{
+        		if(e!=null) {
+        			investorWorkExperienceMapper.insert(e);
+        		}
+        	});
+        }
+        //此处无法使用同于mapper执行list的增加
+//        investorWorkExperienceInsertResult = investorWorkExperienceService.insertList(investorWorkExperienceList);
 
         //教育经历
         Integer investorEducationExperienceInsertResult = -1;
@@ -214,7 +251,15 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
                 investorEducationExperienceList.add(investorEducationExperience);
             }
         }
-        investorEducationExperienceInsertResult = investorEducationExperienceService.insertList(investorEducationExperienceList);
+        if(investorEducationExperienceList !=null && investorEducationExperienceList.size()>0) {
+        	investorEducationExperienceList.forEach((e)->{
+        		if(e!=null) {
+        			investorEducationExperienceMapper.insert(e);
+        		}
+        	});
+        }
+      //此处无法使用同于mapper执行list的增加
+//        investorEducationExperienceInsertResult = investorEducationExperienceService.insertList(investorEducationExperienceList);
 
         //创业经历
         Integer investorBusinessesInsertResult = -1;
@@ -233,7 +278,16 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
                 investorBusinessList.add(investorBusiness);
             }
         }
-        investorBusinessesInsertResult = investorBusinessService.insertList(investorBusinessList);
+        //投资人创业经历的重新增加-zd
+        if(investorBusinessList !=null && investorBusinessList.size()>0) {
+        	investorBusinessList.forEach((e)->{
+        		if(e!=null) {
+        			investorBusinessMapper.insert(e);
+        		}
+        	});
+        }
+//        该list不满足通用mapper的插入条件--caochuangui 
+//        investorBusinessesInsertResult = investorBusinessService.insertList(investorBusinessList);
 
         /*if(investorsInsertResult > 0 && investorBusinessesInsertResult > 0 &&
                 investorEducationExperienceInsertResult > 0 && investorWorkExperienceInsertResult > 0 &&
@@ -244,19 +298,9 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
             result.setData("保存成功");
             return result;
         }*/
-        //替换为以下代码
-        if(investorsInsertResult > 0 && investorBusinessesInsertResult > 0 &&
-	       investorEducationExperienceInsertResult > 0 && investorWorkExperienceInsertResult > 0 &&
-	       investorSelfDefCityInsertResult > 0 &&
-	       investorSegmentationInsertResult > 0){
-	        result.setStatus(200);
-	        result.setMessage("success");
-	        result.setData("保存成功");
-	       return result;
-        }
-        result.setStatus(300);
-        result.setMessage("failed");  
-        result.setData("保存失败");
+        result.setStatus(200);
+        result.setMessage("success");  
+        result.setData(true);
 
         return result;
 
