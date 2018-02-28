@@ -285,9 +285,11 @@ public class InvestorServiceImpl implements InvestorService {
 
 	@Override
 	public CommonDto<List<AdminUser>> getTstzzsAdmin(Integer appid,String keyword) {
+		System.err.println("!!"+ "".equals(keyword) +"**");
+		System.err.println(keyword.getClass());
 		CommonDto<List<AdminUser>> result =new CommonDto<>();
 		
-		List<AdminUser> tstzzsAdmins = adminUserMapper.selectTstzzsAdmins(keyword);
+		List<AdminUser> tstzzsAdmins = adminUserMapper.selectTstzzsAdminsByActualName(keyword);
 		if(tstzzsAdmins !=null && tstzzsAdmins.size()!=0) {
 			for(AdminUser tmp:tstzzsAdmins) {
 //				设置用户的公司名称
