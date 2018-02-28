@@ -255,7 +255,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
 	       return result;
         }
         result.setStatus(300);
-        result.setMessage("failed");
+        result.setMessage("failed");  
         result.setData("保存失败");
 
         return result;
