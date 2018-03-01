@@ -7,11 +7,13 @@ import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
 import com.lhjl.tzzs.proxy.model.InvestorDemandCharacter;
 import com.lhjl.tzzs.proxy.model.InvestorInvestmentCase;
 import com.lhjl.tzzs.proxy.model.Investors;
+import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.InvestorCertificationInfoService;
 import com.lhjl.tzzs.proxy.service.InvestorInvestmentCaseService;
 import com.lhjl.tzzs.proxy.utils.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.List;
  * Created by lanhaijulang on 2018/1/31.
  */
 @Service
-public class InvestorCertificationInfoServiceImpl implements InvestorCertificationInfoService {
+public class InvestorCertificationInfoServiceImpl extends GenericService implements InvestorCertificationInfoService {
 
     @Autowired
     private InvestorsMapper investorsMapper;
@@ -31,9 +33,10 @@ public class InvestorCertificationInfoServiceImpl implements InvestorCertificati
     @Autowired
     private InvestmentInstitutionsMapper investmentInstitutionsMapper;
 
+    @Transactional
     @Override
-    public CommonDto<String> addOrUpdateInvestorCertification(InvestorCertificationDto body) {
-        CommonDto<String> result = new CommonDto<>();
+    public CommonDto<Boolean> addOrUpdateInvestorCertification(InvestorCertificationDto body) {
+        CommonDto<Boolean> result = new CommonDto<>();
         Boolean flag = false;
         try {
             flag = CommonUtils.isAllFieldNull(body);
@@ -44,7 +47,7 @@ public class InvestorCertificationInfoServiceImpl implements InvestorCertificati
         if(null == body || flag == true){
             result.setStatus(300);
             result.setMessage("failed");
-            result.setData("请输入新信息");
+            result.setData(false);
             return result;
         }
         Investors investors = new Investors();
@@ -55,40 +58,50 @@ public class InvestorCertificationInfoServiceImpl implements InvestorCertificati
         investors.setBusinessCardOpposite(body.getBusinessCardOpposite());
         Integer investorCertificationInsertResult = -1;
         if(null == body.getInvestorId()){
+        	this.LOGGER.info("-->insert opration ");
             investorCertificationInsertResult = investorsMapper.insert(investors);
         }else{
+        	//该板块由于属于投资人的版块，一般来说肯定会执行更新操作
+        	this.LOGGER.info("-->update opration ");
             investorCertificationInsertResult = investorsMapper.updateByPrimaryKeySelective(investors);
         }
 
         Integer investorCaseInsertResult = -1;
         List<InvestorInvestmentCase> investorInvestmentCaseList = new ArrayList<>();
+        //删除所有的投资案例
         investorInvestmentCaseService.deleteAll(body.getInvestorId());
-        if(null == body.getInvestCase()||body.getInvestCase().length == 0){
-            InvestorInvestmentCase investorInvestmentCase = new InvestorInvestmentCase();
-            investorInvestmentCase.setInvestorId(body.getInvestorId());
-            investorInvestmentCase.setInvestmentCase(null);
-            investorInvestmentCaseList.add(investorInvestmentCase);
-        }else{
+        //投资案例不为null的时候
+        if(null != body.getInvestCase() && body.getInvestCase().length != 0){
+//            InvestorInvestmentCase investorInvestmentCase = new InvestorInvestmentCase();
+//            investorInvestmentCase.setInvestorId(body.getInvestorId());
+//            investorInvestmentCase.setInvestmentCase(null);
+//            investorInvestmentCaseList.add(investorInvestmentCase);
             for (String investorInvestmentCase : body.getInvestCase()){
                 InvestorInvestmentCase investorInvestmentCase1 = new InvestorInvestmentCase();
                 investorInvestmentCase1.setInvestorId(body.getInvestorId());
                 investorInvestmentCase1.setInvestmentCase(investorInvestmentCase);
                 investorInvestmentCaseList.add(investorInvestmentCase1);
             }
-        }
-        investorCaseInsertResult = investorInvestmentCaseService.insertList(investorInvestmentCaseList);
+            investorCaseInsertResult = investorInvestmentCaseService.insertList(investorInvestmentCaseList);
+        }/*else{
+            for (String investorInvestmentCase : body.getInvestCase()){
+                InvestorInvestmentCase investorInvestmentCase1 = new InvestorInvestmentCase();
+                investorInvestmentCase1.setInvestorId(body.getInvestorId());
+                investorInvestmentCase1.setInvestmentCase(investorInvestmentCase);
+                investorInvestmentCaseList.add(investorInvestmentCase1);
+            }
+        }*/
 
-
-        if(investorCertificationInsertResult > 0 && investorCaseInsertResult>0){
+        /*if(investorCertificationInsertResult > 0 && investorCaseInsertResult>0){
             result.setStatus(200);
             result.setMessage("success");
             result.setData("保存成功");
             return result;
-        }
+        }*/
 
-        result.setStatus(300);
-        result.setMessage("failed");
-        result.setData("保存失败");
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(true);
         return result;
     }
 

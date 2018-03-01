@@ -21,13 +21,13 @@ public class InvestorCertificationInfoController extends GenericController{
     private InvestorCertificationInfoService investorCertificationInfoService;
 
     /**
-     * 编辑投资人个人信息
+     * 保存或者更新认证投资人模块的信息
      * @param body
      * @return
      */
     @PostMapping("/addorupdateinvestorcertification")
-    public CommonDto<String> addOrUpdateInvestorCertification(@RequestBody InvestorCertificationDto body){
-        CommonDto<String> result = new CommonDto<>();
+    public CommonDto<Boolean> addOrUpdateInvestorCertification(@RequestBody InvestorCertificationDto body){
+        CommonDto<Boolean> result = new CommonDto<>();
         try {
             result = investorCertificationInfoService.addOrUpdateInvestorCertification(body);
         }catch (Exception e){
@@ -40,7 +40,7 @@ public class InvestorCertificationInfoController extends GenericController{
     }
 
     /**
-     * 得到投资人信息
+     * 获取认证投资人模块的信息
      * @param investorId
      * @return
      */
