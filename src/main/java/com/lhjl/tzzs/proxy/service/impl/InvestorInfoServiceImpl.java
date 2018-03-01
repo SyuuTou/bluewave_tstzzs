@@ -33,6 +33,7 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
     @Transactional
     @Override
     public CommonDto<Integer> addOrUpdateInvestorInfo(InvestorKernelInfoDto body) {
+    	this.LOGGER.info("++++>>>+"+body);
         CommonDto<Integer> result = new CommonDto<>();
         Boolean flag = false;
         try {
@@ -53,28 +54,36 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
         investors.setName(body.getName());
         investors.setUserId(body.getUserId());
         Integer investmentInstitutionsId = null;
-        if(null != body.getCompanyName() && body.getCompanyName() != ""){
+        if(null != body.getCompanyName() &&  !("".equals(body.getCompanyName()))){
+        	//存在该投资机构
             investmentInstitutionsId = investmentInstitutionsMapper.selectByCompanyName(body.getCompanyName());
+            //不存在该投资机构，则执行插入之后，取得自增长id
             if(null == investmentInstitutionsId){
                 InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
                 investmentInstitutions.setShortName(body.getCompanyName());
                 investmentInstitutionsMapper.insert(investmentInstitutions);
-            }
+            } 
             investmentInstitutionsId = investmentInstitutionsMapper.selectByCompanyName(body.getCompanyName());
         }
         investors.setInvestmentInstitutionsId(investmentInstitutionsId);
         investors.setPosition(body.getCompanyDuties());
-        investors.setHeadPicture(body.getHeadPicture());
+        investors.setHeadPicture(body.getHeadPicture());  
 
         Integer teamId = metaInvestmentInstitutionTeamTypeMapper.findTeamIdByName(body.getTeamName());
         investors.setTeamId(teamId);
         investors.setSelfDefTeam(body.getSelfDefTeam());
         investors.setPhone(body.getPhone());
         investors.setKernelDescription(body.getKernelDesc());
+        
 //        Integer investorInsertResult = -1;
+        //增加或者更新之后的投资人主键id
         Integer updateAfterId=0;
         if(null == body.getInvestorId()){
         	this.LOGGER.info("****insert opration****");
+        	//设置为有效数据 1
+            investors.setYn(1);
+            //设置数据来源类型
+            investors.setInvestorSourceType(3);
             investorsMapper.insert(investors);
             updateAfterId=investors.getId();
             

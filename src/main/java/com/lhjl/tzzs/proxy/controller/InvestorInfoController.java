@@ -31,7 +31,7 @@ public class InvestorInfoController extends GenericController{
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
             result.setData(null);
-            result.setStatus(502);
+            result.setStatus(502);  
         }
         return result;
     }
