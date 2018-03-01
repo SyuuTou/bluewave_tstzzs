@@ -94,51 +94,29 @@ public class InvestorCertificationInfoServiceImpl extends GenericService impleme
 			investors.setInvestmentInstitutionsId(investmentInstitutionsId);
 		}
 		
-        Integer investorCertificationInsertResult = -1;  
         if(null == body.getInvestorId()){
         	//执行增加操作，由于该板块属于投资人的级联信息，必须关联投资人id
         	this.LOGGER.info("-->insert opration ");
-            investorCertificationInsertResult = investorsMapper.insert(investors);
+            investorsMapper.insert(investors);
         }else{
         	//该板块由于属于投资人的版块，一般来说肯定会执行更新操作
         	this.LOGGER.info("-->update opration ");
-            investorCertificationInsertResult = investorsMapper.updateByPrimaryKeySelective(investors);
+            investorsMapper.updateByPrimaryKeySelective(investors);
         }
         
-        
-        
-        Integer investorCaseInsertResult = -1;
-        List<InvestorInvestmentCase> investorInvestmentCaseList = new ArrayList<>();
-        //删除所有的投资案例
+     	//删除所有的投资案例
         investorInvestmentCaseService.deleteAll(body.getInvestorId());
         //投资案例不为null的时候
         if(null != body.getInvestCase() && body.getInvestCase().length != 0){
-//            InvestorInvestmentCase investorInvestmentCase = new InvestorInvestmentCase();
-//            investorInvestmentCase.setInvestorId(body.getInvestorId());
-//            investorInvestmentCase.setInvestmentCase(null);
-//            investorInvestmentCaseList.add(investorInvestmentCase);
+        	List<InvestorInvestmentCase> investorInvestmentCaseList = new ArrayList<>();
             for (String investorInvestmentCase : body.getInvestCase()){
                 InvestorInvestmentCase investorInvestmentCase1 = new InvestorInvestmentCase();
                 investorInvestmentCase1.setInvestorId(body.getInvestorId());
                 investorInvestmentCase1.setInvestmentCase(investorInvestmentCase);
                 investorInvestmentCaseList.add(investorInvestmentCase1);
             }
-            investorCaseInsertResult = investorInvestmentCaseService.insertList(investorInvestmentCaseList);
-        }/*else{
-            for (String investorInvestmentCase : body.getInvestCase()){
-                InvestorInvestmentCase investorInvestmentCase1 = new InvestorInvestmentCase();
-                investorInvestmentCase1.setInvestorId(body.getInvestorId());
-                investorInvestmentCase1.setInvestmentCase(investorInvestmentCase);
-                investorInvestmentCaseList.add(investorInvestmentCase1);
-            }
-        }*/
-
-        /*if(investorCertificationInsertResult > 0 && investorCaseInsertResult>0){
-            result.setStatus(200);
-            result.setMessage("success");
-            result.setData("保存成功");
-            return result;
-        }*/
+            investorInvestmentCaseService.insertList(investorInvestmentCaseList);
+        }
 
         result.setStatus(200);
         result.setMessage("success");
@@ -153,17 +131,18 @@ public class InvestorCertificationInfoServiceImpl extends GenericService impleme
         InvestorCertificationDto investorCertificationDto = new InvestorCertificationDto();
 
         Investors investors = investorsMapper.selectByPrimaryKey(investorId);
+        this.LOGGER.info("--》investors--》"+investors);
         if(null == investors){
             result.setData(null);
             result.setMessage("没有该投资人");
-            result.setStatus(300);
+            result.setStatus(500);
             return result;
         }
 
         String companyName = investmentInstitutionsMapper.selectById(investors.getInvestmentInstitutionsId());
         investorCertificationDto.setCompanyName(companyName);
         investorCertificationDto.setPosition(investors.getPosition());
-        investorCertificationDto.setInvestorType(investors.getIdentityType());
+        investorCertificationDto.setInvestorType(investors.getInvestorsType());
         investorCertificationDto.setInvestorId(investors.getId());
         investorCertificationDto.setBusinessCard(investors.getBusinessCard());
         investorCertificationDto.setBusinessCardOpposite(investors.getBusinessCardOpposite());
