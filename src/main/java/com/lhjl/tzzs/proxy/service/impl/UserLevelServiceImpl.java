@@ -575,6 +575,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             newOne.setYn(1);
             newOne.setUserId(localUserId);
             newOne.setLevelId(levelId);
+            newOne.setAppId(appId);
             Date now = new Date();
             newOne.setBeginTime(beginTime);
             newOne.setCreateTime(now);
