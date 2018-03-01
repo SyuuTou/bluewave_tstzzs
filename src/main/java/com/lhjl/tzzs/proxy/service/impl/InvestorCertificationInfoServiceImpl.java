@@ -84,7 +84,7 @@ public class InvestorCertificationInfoServiceImpl extends GenericService impleme
 				investmentInstitutionsMapper.insertSelective(insertEntity);
 				
 				//设置关联的机构id
-				investmentInstitutionsId=insertEntity.getId();
+				investmentInstitutionsId=insertEntity.getId();  
 			}else {
 				//设置关联的机构id
 				investmentInstitutionsId=ii.getId();
