@@ -1977,6 +1977,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 calendar.setTime(new Date());
                 MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
                 metaObtainIntegral.setSceneKey(sKey);
+                metaObtainIntegral.setAppId(appId);
                 metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
                 calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral.getPeriod());
                 Date end= calendar.getTime();
@@ -1997,6 +1998,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 //获取该场景配置信息
                 MetaObtainIntegral metaObtainIntegral3 = new MetaObtainIntegral();
                 metaObtainIntegral3.setSceneKey(sKey);
+                metaObtainIntegral3.setAppId(appId);
                 metaObtainIntegral3 = metaObtainIntegralMapper.selectOne(metaObtainIntegral3);
                 calendar3.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
                 Date end3 = calendar3.getTime();
