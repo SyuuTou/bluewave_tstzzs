@@ -82,6 +82,8 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
         	this.LOGGER.info("****insert opration****");
         	//设置为有效数据 1
             investors.setYn(1);
+            //设置数据来源类型
+            investors.setInvestorSourceType(3);
             investorsMapper.insert(investors);
             updateAfterId=investors.getId();
             
