@@ -575,6 +575,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             newOne.setYn(1);
             newOne.setUserId(localUserId);
             newOne.setLevelId(levelId);
+            newOne.setAppId(appId);
             Date now = new Date();
             newOne.setBeginTime(beginTime);
             newOne.setCreateTime(now);
@@ -1035,6 +1036,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
             metaObtainIntegral.setSceneKey(sceneKey);
             metaObtainIntegral.setUserLevel(userLevel);
+            metaObtainIntegral.setAppId(appId);
             metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
 
             //过滤已购买机构
@@ -1977,6 +1979,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 calendar.setTime(new Date());
                 MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
                 metaObtainIntegral.setSceneKey(sKey);
+                metaObtainIntegral.setAppId(appId);
                 metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
                 calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral.getPeriod());
                 Date end= calendar.getTime();
@@ -1997,6 +2000,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 //获取该场景配置信息
                 MetaObtainIntegral metaObtainIntegral3 = new MetaObtainIntegral();
                 metaObtainIntegral3.setSceneKey(sKey);
+                metaObtainIntegral3.setAppId(appId);
                 metaObtainIntegral3 = metaObtainIntegralMapper.selectOne(metaObtainIntegral3);
                 calendar3.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
                 Date end3 = calendar3.getTime();
