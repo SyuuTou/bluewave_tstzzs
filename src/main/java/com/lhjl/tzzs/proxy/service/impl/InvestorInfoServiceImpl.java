@@ -74,6 +74,8 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
         investors.setSelfDefTeam(body.getSelfDefTeam());
         investors.setPhone(body.getPhone());
         investors.setKernelDescription(body.getKernelDesc());
+        //设置为有效数据 1
+        investors.setYn(1);
 //        Integer investorInsertResult = -1;
         //增加或者更新之后的投资人主键id
         Integer updateAfterId=0;
