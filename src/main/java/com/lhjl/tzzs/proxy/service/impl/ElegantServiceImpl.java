@@ -807,6 +807,38 @@ public class ElegantServiceImpl implements ElegantServiceService{
     }
 
     /**
+     * 根据用户token获取反馈记录信息
+     * @param appId
+     * @param token
+     * @return
+     */
+    @Override
+    public CommonDto<ElegantServiceParticipate> getParticipateByToken(Integer appId, String token,Integer elegantServiceId) {
+        if (null == token){
+            return new CommonDto<>(null,"用户token不能为空",502);
+        }
+
+        if (null == elegantServiceId){
+            return new CommonDto<>(null,"悬赏id不能为空",502);
+        }
+
+        ElegantServiceParticipate elegantServiceParticipateForSearch = new ElegantServiceParticipate();
+        elegantServiceParticipateForSearch.setToken(token);
+        elegantServiceParticipateForSearch.setElegantServiceId(elegantServiceId);
+        elegantServiceParticipateForSearch.setAppid(appId);
+
+        List<ElegantServiceParticipate> elegantServiceParticipates = elegantServiceParticipateMapper.select(elegantServiceParticipateForSearch);
+        if (elegantServiceParticipates.size() > 0){
+          return  queryParticipate(appId,elegantServiceParticipates.get(0).getId(),token);
+        }
+
+        ElegantServiceParticipate elegantServiceParticipate = new ElegantServiceParticipate();
+
+
+        return new CommonDto<>(elegantServiceParticipate,"用户还未有任何反馈",200) ;
+    }
+
+    /**
      * 查询单条反馈的接口
      * @param appId
      * @param elegantServiceParticipateId
