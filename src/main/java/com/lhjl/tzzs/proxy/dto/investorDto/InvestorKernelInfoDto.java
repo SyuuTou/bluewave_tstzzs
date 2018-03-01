@@ -38,7 +38,7 @@ public class InvestorKernelInfoDto {
     private String companyDuties;
 
     /**
-     * 团队Id
+     * 机构团队类型元数据表字符串
      */
     private String teamName;
 
@@ -137,4 +137,11 @@ public class InvestorKernelInfoDto {
         this.investorId = investorId;
     }
 
+	@Override
+	public String toString() {
+		return "InvestorKernelInfoDto [investorId=" + investorId + ", userId=" + userId + ", headPicture=" + headPicture
+				+ ", name=" + name + ", companyName=" + companyName + ", companyDuties=" + companyDuties + ", teamName="
+				+ teamName + ", selfDefTeam=" + selfDefTeam + ", phone=" + phone + ", kernelDesc=" + kernelDesc + "]";
+	}
+    
 }

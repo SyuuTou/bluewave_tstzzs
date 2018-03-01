@@ -33,6 +33,7 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
     @Transactional
     @Override
     public CommonDto<Integer> addOrUpdateInvestorInfo(InvestorKernelInfoDto body) {
+    	this.LOGGER.info("++++>>>+"+body);
         CommonDto<Integer> result = new CommonDto<>();
         Boolean flag = false;
         try {
