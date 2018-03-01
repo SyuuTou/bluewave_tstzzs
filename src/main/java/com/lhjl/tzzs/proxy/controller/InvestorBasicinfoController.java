@@ -32,16 +32,20 @@ public class InvestorBasicinfoController extends GenericController{
     //TODO 创业经历智能检索
 
     //TODO 自定义城市智能检索
-
+    /**
+     * 添加或者更新投资人的基本信息
+     * @param body
+     * @return
+     */
     @PostMapping("/addorupdateinvestorbasicinfo")
-    public CommonDto<String> addOrUpdateInvestorBasicInfo(@RequestBody InvestorBasicInfoInputDto body){
-        CommonDto<String> result = new CommonDto<>();
+    public CommonDto<Boolean> addOrUpdateInvestorBasicInfo(@RequestBody InvestorBasicInfoInputDto body){
+        CommonDto<Boolean> result = new CommonDto<>();
         try {
             result = investorBasicinfoService.addOrUpdateInvestorBasicInfo(body);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
-            result.setData(null);
+            result.setData(false);
             result.setStatus(502);
         }
         return result;

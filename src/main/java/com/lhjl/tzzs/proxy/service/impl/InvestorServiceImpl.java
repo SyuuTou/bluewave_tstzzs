@@ -134,25 +134,31 @@ public class InvestorServiceImpl implements InvestorService {
         
         //日期转换为输出时间字符串
         list.forEach((e)->{  
-        	if(e.getUpdateTime() !=null) {
-        		e.setUpdateTimeStr(sdf.format(e.getUpdateTime()));
-        	}
-        	if(e.getCreateTime() !=null) {
-        		e.setCreateTimeStr(sdf.format(e.getCreateTime()));  
-        	}
-        	if(e.getCheckTime() !=null) {
-        		e.setCheckTimeOutputStr(sdf.format(e.getCheckTime()));  
-        	}
-        	/*if(e.getSubmitter() !=null) {  
-        		
-        		UserToken ut = new UserToken();
-        		ut.setToken(e.getSubmitter());
-        		
-        		ut = userTokenMapper.selectOne(ut);
-        			
-        		Users user = usersMapper.selectByPrimaryKey(ut.getUserId());
-        		e.setSubmitterName(user.getActualName());
-        	}*/
+        	
+        		//设置提交时间
+            	if(e.getCreateTime() !=null) {
+            		e.setCreateTimeStr(sdf.format(e.getCreateTime()));  
+            	}
+            	//设置更新时间,更新时间为null的时候更新时间为提交时间
+            	if(e.getUpdateTime() ==null){
+            		e.setUpdateTimeStr(e.getCreateTimeStr());
+            	}else {
+            		e.setUpdateTimeStr(sdf.format(e.getUpdateTime()));
+            	}
+            	//设置审核时间
+            	if(e.getCheckTime() !=null) {
+            		e.setCheckTimeOutputStr(sdf.format(e.getCheckTime()));  
+            	}
+            	/*if(e.getSubmitter() !=null) {  
+            		
+            		UserToken ut = new UserToken();
+            		ut.setToken(e.getSubmitter());
+            		
+            		ut = userTokenMapper.selectOne(ut);
+            			
+            		Users user = usersMapper.selectByPrimaryKey(ut.getUserId());
+            		e.setSubmitterName(user.getActualName());
+            	}*/
         });
         Long total = investorsMapper.getInvestorsListCount(body);
         
@@ -280,17 +286,21 @@ public class InvestorServiceImpl implements InvestorService {
 	@Override
 	public CommonDto<List<AdminUser>> getTstzzsAdmin(Integer appid,String keyword) {
 		CommonDto<List<AdminUser>> result =new CommonDto<>();
-		
-		List<AdminUser> tstzzsAdmins = adminUserMapper.selectTstzzsAdmins(keyword);
+		//该处根据管理员用户名搜索使用 selectTstzzsAdmins方法
+		//该处根据管理员真实姓名搜索使用 selectTstzzsAdminsByActualName方法
+		List<AdminUser> tstzzsAdmins = adminUserMapper.selectTstzzsAdminsByActualName(keyword);
 		if(tstzzsAdmins !=null && tstzzsAdmins.size()!=0) {
 			for(AdminUser tmp:tstzzsAdmins) {
 //				设置用户的公司名称
 				Users user = usersMapper.selectByPrimaryKey(tmp.getUserId());
 				if(user != null) {
 					tmp.setCompanyName(user.getCompanyName());
+					tmp.setUserActualName(user.getActualName());
 					//设置用户的职位类型名称
 					Integer type = tmp.getAdminType();
-					tmp.setDutyName(metaAdminTypeMapper.selectByPrimaryKey(type).getName());
+					if(metaAdminTypeMapper.selectByPrimaryKey(type)!=null) {
+						tmp.setDutyName(metaAdminTypeMapper.selectByPrimaryKey(type).getName());
+					}
 				}
 			}
 		}

@@ -23,8 +23,8 @@ public class InvestorInfoController extends GenericController{
      * @return
      */
     @PostMapping("/addorupdateinvestorinfo")
-    public CommonDto<String> addOrUpdateInvestorInfo(@RequestBody InvestorKernelInfoDto body){
-        CommonDto<String> result = new CommonDto<>();
+    public CommonDto<Integer> addOrUpdateInvestorInfo(@RequestBody InvestorKernelInfoDto body){
+        CommonDto<Integer> result = new CommonDto<>();
         try {
             result = investorInfoService.addOrUpdateInvestorInfo(body);
         }catch (Exception e){

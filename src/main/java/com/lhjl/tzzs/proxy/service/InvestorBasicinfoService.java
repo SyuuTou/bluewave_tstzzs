@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface InvestorBasicinfoService {
 
-    CommonDto<String> addOrUpdateInvestorBasicInfo(InvestorBasicInfoInputDto body);
+    CommonDto<Boolean> addOrUpdateInvestorBasicInfo(InvestorBasicInfoInputDto body);
 
     CommonDto<InvestorBasicInfoOutputDto> getInvestorBasicInfo(Integer investorId);
 

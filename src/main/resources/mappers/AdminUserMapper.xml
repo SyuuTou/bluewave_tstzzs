@@ -22,6 +22,18 @@
 		and name like "%"#{keyword}"%"
 	</if>
   </select>
+  
+  <select id="selectTstzzsAdminsByActualName" resultMap="BaseResultMap">
+  	select * from admin_user where user_id in(
+		select tmp.* from (select user_id from admin_user where meta_app_id in (select id from meta_app where app_name = "天使投资指数")
+		<if test="keyword !=null and keyword !=''">
+		union all
+		select id from users where actual_name like "%"#{keyword}"%" 
+		</if>
+		) tmp GROUP BY tmp.user_id HAVING COUNT(tmp.user_id)=2 ) 
+  </select>
+  
+  
 
     <select id="selectByLoginBody" parameterType="java.lang.String" resultType="java.lang.Integer">
         select user_id from admin_user where `name` =#{username} and `password` =#{password};
