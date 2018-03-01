@@ -54,7 +54,9 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
         investors.setUserId(body.getUserId());
         Integer investmentInstitutionsId = null;
         if(null != body.getCompanyName() &&  !("".equals(body.getCompanyName()))){
+        	//存在该投资机构
             investmentInstitutionsId = investmentInstitutionsMapper.selectByCompanyName(body.getCompanyName());
+            //不存在该投资机构，则执行插入之后，取得自增长id
             if(null == investmentInstitutionsId){
                 InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
                 investmentInstitutions.setShortName(body.getCompanyName());
