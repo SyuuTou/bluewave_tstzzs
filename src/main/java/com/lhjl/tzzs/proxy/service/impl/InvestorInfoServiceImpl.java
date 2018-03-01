@@ -53,7 +53,7 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
         investors.setName(body.getName());
         investors.setUserId(body.getUserId());
         Integer investmentInstitutionsId = null;
-        if(null != body.getCompanyName() && body.getCompanyName() != ""){
+        if(null != body.getCompanyName() &&  !("".equals(body.getCompanyName()))){
             investmentInstitutionsId = investmentInstitutionsMapper.selectByCompanyName(body.getCompanyName());
             if(null == investmentInstitutionsId){
                 InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
