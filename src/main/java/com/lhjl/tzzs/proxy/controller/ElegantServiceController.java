@@ -197,6 +197,26 @@ public class ElegantServiceController {
         return result;
     }
 
+    /**
+     * 根据用户token反回反馈信息
+     * @param appId
+     * @param token
+     * @param elegantServiceId
+     * @return
+     */
+    @GetMapping("/v{appId}/participate/bytoken")
+    public CommonDto<ElegantServiceParticipate> getParticipateByUserToken(@PathVariable Integer appId,String token,Integer elegantServiceId){
+        CommonDto<ElegantServiceParticipate> result = new CommonDto<>(null,"服务器端发生错误",502);
+
+        try {
+            result = elegantServiceService.getParticipateByToken(appId, token, elegantServiceId);
+        }catch (Exception e){
+            log.error(e.getMessage(),e.fillInStackTrace());
+        }
+
+        return result;
+    }
+
     @PostMapping("/v{appId}/participate/feedback/{participateId}")
     public CommonDto<String>  handlerFeedback(@RequestBody ElegantServiceParticipateDto body, @PathVariable Integer appId, String token){
         CommonDto<String> result = new CommonDto<>(null,"服务器端发生错误",502);
