@@ -94,7 +94,7 @@ public class InvestorCertificationInfoServiceImpl extends GenericService impleme
 			investors.setInvestmentInstitutionsId(investmentInstitutionsId);
 		}
 		
-        Integer investorCertificationInsertResult = -1;
+        Integer investorCertificationInsertResult = -1;  
         if(null == body.getInvestorId()){
         	//执行增加操作，由于该板块属于投资人的级联信息，必须关联投资人id
         	this.LOGGER.info("-->insert opration ");
