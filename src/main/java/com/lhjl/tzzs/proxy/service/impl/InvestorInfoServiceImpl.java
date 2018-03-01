@@ -8,16 +8,18 @@ import com.lhjl.tzzs.proxy.mapper.MetaInvestmentInstitutionTeamTypeMapper;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.Investors;
 import com.lhjl.tzzs.proxy.model.MetaInvestmentInstitutionTeamType;
+import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.InvestorInfoService;
 import com.lhjl.tzzs.proxy.utils.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by lanhaijulang on 2018/1/30.
  */
 @Service
-public class InvestorInfoServiceImpl implements InvestorInfoService {
+public class InvestorInfoServiceImpl extends GenericService implements InvestorInfoService {
 
     @Autowired
     private InvestmentInstitutionsMapper investmentInstitutionsMapper;
@@ -28,9 +30,10 @@ public class InvestorInfoServiceImpl implements InvestorInfoService {
     @Autowired
     private MetaInvestmentInstitutionTeamTypeMapper metaInvestmentInstitutionTeamTypeMapper;
 
+    @Transactional
     @Override
-    public CommonDto<String> addOrUpdateInvestorInfo(InvestorKernelInfoDto body) {
-        CommonDto<String> result = new CommonDto<>();
+    public CommonDto<Integer> addOrUpdateInvestorInfo(InvestorKernelInfoDto body) {
+        CommonDto<Integer> result = new CommonDto<>();
         Boolean flag = false;
         try {
             flag = CommonUtils.isAllFieldNull(body);
@@ -39,9 +42,9 @@ public class InvestorInfoServiceImpl implements InvestorInfoService {
         }
 
         if(null == body || flag == true){
-            result.setStatus(300);
+            result.setStatus(500);
             result.setMessage("failed");
-            result.setData("请输入新信息");
+            result.setData(null);
             return result;
         }
 
@@ -68,24 +71,36 @@ public class InvestorInfoServiceImpl implements InvestorInfoService {
         investors.setSelfDefTeam(body.getSelfDefTeam());
         investors.setPhone(body.getPhone());
         investors.setKernelDescription(body.getKernelDesc());
-        Integer investorInsertResult = -1;
+//        Integer investorInsertResult = -1;
+        Integer updateAfterId=0;
         if(null == body.getInvestorId()){
-            investorInsertResult = investorsMapper.insert(investors);
-        }else{
-            investorInsertResult = investorsMapper.updateByPrimaryKeySelective(investors);
-        }
-
-        if(investorInsertResult > 0){
+        	this.LOGGER.info("****insert opration****");
+            investorsMapper.insert(investors);
+            updateAfterId=investors.getId();
+            
             result.setStatus(200);
-            result.setMessage("success");
-            result.setData("保存成功");
+            result.setMessage("数据新增成功");
+            result.setData(updateAfterId);
             return result;
+        }else{
+        	this.LOGGER.info("****update opration****");
+        	investorsMapper.updateByPrimaryKeySelective(investors);
+        	updateAfterId=investors.getId();
+        	
+        	 result.setStatus(200);
+             result.setMessage("数据保存成功");
+             result.setData(updateAfterId);
+             return result;
         }
 
-        result.setStatus(300);
-        result.setMessage("failed");
-        result.setData("保存失败");
-        return result;
+//        if(investorInsertResult > 0){
+//            result.setStatus(200);
+//            result.setMessage("success");
+//            result.setData("保存成功");
+//            return result;
+//        }
+
+       
     }
 
     @Override
