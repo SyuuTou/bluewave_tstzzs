@@ -59,12 +59,12 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
                 InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
                 investmentInstitutions.setShortName(body.getCompanyName());
                 investmentInstitutionsMapper.insert(investmentInstitutions);
-            }
+            } 
             investmentInstitutionsId = investmentInstitutionsMapper.selectByCompanyName(body.getCompanyName());
         }
         investors.setInvestmentInstitutionsId(investmentInstitutionsId);
         investors.setPosition(body.getCompanyDuties());
-        investors.setHeadPicture(body.getHeadPicture());
+        investors.setHeadPicture(body.getHeadPicture());  
 
         Integer teamId = metaInvestmentInstitutionTeamTypeMapper.findTeamIdByName(body.getTeamName());
         investors.setTeamId(teamId);
