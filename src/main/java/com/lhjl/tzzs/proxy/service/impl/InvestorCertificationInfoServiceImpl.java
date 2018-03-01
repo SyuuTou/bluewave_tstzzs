@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorCertificationDto;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestorDemandCharacter;
 import com.lhjl.tzzs.proxy.model.InvestorInvestmentCase;
 import com.lhjl.tzzs.proxy.model.Investors;
@@ -56,8 +57,46 @@ public class InvestorCertificationInfoServiceImpl extends GenericService impleme
         investors.setCertificationInstructions(body.getCertificationDesc());
         investors.setBusinessCard(body.getBusinessCard());
         investors.setBusinessCardOpposite(body.getBusinessCardOpposite());
+        //担任职务
+        investors.setPosition(body.getPosition());
+		if(body.getCompanyName() != null) {
+			Integer investmentInstitutionsId;
+			InvestmentInstitutions ii=new InvestmentInstitutions();
+			ii.setShortName(body.getCompanyName());
+			try {
+				ii = investmentInstitutionsMapper.selectOne(ii);
+				
+			}catch(Exception e) {
+				result.setStatus(500);
+		        result.setMessage("数据库数据投资机构简称不唯一，导致selectOne出现冗余数据");
+		        result.setData(false);
+		        return result;
+			}
+			
+			if(ii==null) {//不存在该名称对应的投资机构，执行插入操作
+				InvestmentInstitutions insertEntity=new InvestmentInstitutions();
+				insertEntity.setShortName(body.getCompanyName());
+				//需要设置该投资机构的审核状态吗
+//				insertEntity.setApprovalStatus(0);
+				insertEntity.setYn(1);
+				//设置来源类型为运营人员添加
+				insertEntity.setDataSourceType(3);
+				investmentInstitutionsMapper.insertSelective(insertEntity);
+				
+				//设置关联的机构id
+				investmentInstitutionsId=insertEntity.getId();
+			}else {
+				//设置关联的机构id
+				investmentInstitutionsId=ii.getId();
+			}
+			
+			//设置关联的投资机构id
+			investors.setInvestmentInstitutionsId(investmentInstitutionsId);
+		}
+		
         Integer investorCertificationInsertResult = -1;
         if(null == body.getInvestorId()){
+        	//执行增加操作，由于该板块属于投资人的级联信息，必须关联投资人id
         	this.LOGGER.info("-->insert opration ");
             investorCertificationInsertResult = investorsMapper.insert(investors);
         }else{
@@ -65,7 +104,9 @@ public class InvestorCertificationInfoServiceImpl extends GenericService impleme
         	this.LOGGER.info("-->update opration ");
             investorCertificationInsertResult = investorsMapper.updateByPrimaryKeySelective(investors);
         }
-
+        
+        
+        
         Integer investorCaseInsertResult = -1;
         List<InvestorInvestmentCase> investorInvestmentCaseList = new ArrayList<>();
         //删除所有的投资案例
