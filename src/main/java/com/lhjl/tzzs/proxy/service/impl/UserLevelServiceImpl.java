@@ -1036,6 +1036,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
             metaObtainIntegral.setSceneKey(sceneKey);
             metaObtainIntegral.setUserLevel(userLevel);
+            metaObtainIntegral.setAppId(appId);
             metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
 
             //过滤已购买机构
