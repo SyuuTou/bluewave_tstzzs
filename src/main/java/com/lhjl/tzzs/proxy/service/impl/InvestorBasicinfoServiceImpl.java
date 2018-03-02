@@ -324,24 +324,27 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         investorBasicInfoOutputDto.setWeiChat(investors.getWeichat());
         investorBasicInfoOutputDto.setEmail(investors.getEmail());
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
-        if(null == investors.getBirthDay() || "undefined".equals(investors.getBirthDay())){
-            investorBasicInfoOutputDto.setBirthDay("");
-        }else{
+        if(null != investors.getBirthDay()){
             investorBasicInfoOutputDto.setBirthDay(sdf.format(investors.getBirthDay()));
         }
         investorBasicInfoOutputDto.setSex(investors.getSex());
-        String diploma = metaDiplomaMapper.selectByDiplomaId(investors.getDiploma());
-        investorBasicInfoOutputDto.setDiploma(diploma);
-        String countryName = metaRegionMapper.selectByRegionId(investors.getNationality());
-        investorBasicInfoOutputDto.setNationality(countryName);
+        //学历
+        if(investors.getDiploma() != null) {
+        	 String diploma = metaDiplomaMapper.selectByDiplomaId(investors.getDiploma());
+             investorBasicInfoOutputDto.setDiploma(diploma);
+        }
+        //国籍
+        if(investors.getNationality() != null) {
+        	String countryName = metaRegionMapper.selectByRegionId(investors.getNationality());
+            investorBasicInfoOutputDto.setNationality(countryName);
+        }
         investorBasicInfoOutputDto.setBusinessCardOposite(investors.getBusinessCardOpposite());
-        if(null == investors.getTenureTime() || "undefined".equals(investors.getTenureTime())){
-            investorBasicInfoOutputDto.setTenureTime("");
-        }else{
+        //任职时间
+        if(null != investors.getTenureTime()) {
             investorBasicInfoOutputDto.setTenureTime(sdf.format(investors.getTenureTime()));
         }
         investorBasicInfoOutputDto.setCompanyIntro(investors.getCompanyIntroduction());
-        System.out.println(investors.getBusinessCard());
+//        System.out.println(investors.getBusinessCard());
         investorBasicInfoOutputDto.setBusinessCard(investors.getBusinessCard());
         investorBasicInfoOutputDto.setPicture(investors.getPicture());
         investorBasicInfoOutputDto.setBussiness(investors.getBusinessDescription());
