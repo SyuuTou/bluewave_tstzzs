@@ -98,7 +98,7 @@ public class InvestorBasicInfoInputDto {
     private String[] businesses;
 
     /**
-     * 创业描述
+     * 创业经历描述
      */
     private String bussiness;
 
