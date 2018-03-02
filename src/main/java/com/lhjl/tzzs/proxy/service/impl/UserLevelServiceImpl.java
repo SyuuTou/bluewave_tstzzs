@@ -870,6 +870,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
             metaObtainIntegral.setSceneKey(sceneKey);
             metaObtainIntegral.setUserLevel(userLevel);
+            metaObtainIntegral.setAppId(appId);
             metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
 
             //普通会员
@@ -911,7 +912,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                     //金币足够
                     if(totalCoins.add(consumeNum).compareTo(new BigDecimal(0))  > 0){
                         result.setStatus(204);
-                        result.setMessage("使用项目评估，每个选项扣除"+(consumeNum.multiply(new BigDecimal(-1)))+"金币，共消费"+(consumeNum.multiply(new BigDecimal(-1)))+"金币，24小时内可重复查看该选项");
+                        result.setMessage("使用项目评估，每个选项扣除"+(consumeNum.multiply(new BigDecimal(-1)).setScale(2))+"金币，共消费"+(consumeNum.multiply(new BigDecimal(-1)).setScale(2))+"金币，24小时内可重复查看该选项");
                         data.put("consumeNum", consumeNum.multiply(new BigDecimal(-1)));
                         //判断是否提示
                         UserScene userScene = new UserScene();
