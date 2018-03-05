@@ -49,7 +49,7 @@ public class InvestorListController extends GenericController {
      * 批量或者指定更换投资人的负责人
      * @param appid
      * @param InvestorIds 投资人的id数组
-     * @param principal 负责人
+     * @param principal 负责人姓名
      * @return
      */
     @PutMapping("/v{appid}/change/irprincipal/batchorsingle")
