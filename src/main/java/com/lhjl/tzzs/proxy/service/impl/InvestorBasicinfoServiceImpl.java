@@ -109,7 +109,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         investors.setWorkDescription(body.getWorkExperience());
         investors.setHonor(body.getHonor());
 
-        long now = System.currentTimeMillis();
+        /*long now = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String createTime = null;
         try {
@@ -124,6 +124,15 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         }else{
             investors.setUpdateTime(DateUtils.parse(createTime));
             investorsInsertResult = investorsMapper.updateByPrimaryKeySelective(investors);
+        }*/
+        
+        //TODO 
+        if(body.getInvestorId() == null){
+            investors.setCreateTime(new Date());
+            investorsMapper.insert(investors);
+        }else{
+            investors.setUpdateTime(new Date());
+            investorsMapper.updateByPrimaryKeySelective(investors);
         }
 
         //所在领域
