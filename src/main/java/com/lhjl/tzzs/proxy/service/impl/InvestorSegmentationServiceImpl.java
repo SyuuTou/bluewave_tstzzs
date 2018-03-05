@@ -3,9 +3,9 @@ package com.lhjl.tzzs.proxy.service.impl;
 import com.lhjl.tzzs.proxy.mapper.InvestorSegmentationMapper;
 import com.lhjl.tzzs.proxy.model.InvestorSegmentation;
 import com.lhjl.tzzs.proxy.service.InvestorSegmentationService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -44,4 +44,12 @@ public class InvestorSegmentationServiceImpl implements InvestorSegmentationServ
     public List<InvestorSegmentation> select(InvestorSegmentation investorSegmentation) {
         return investorSegmentationMapper.select(investorSegmentation);
     }
+    
+//    @Transactional
+	@Override
+	public Integer edit(InvestorSegmentation body)  {
+		int i = investorSegmentationMapper.insertSelective(body);
+		int b =1/0;
+		return i;
+	}
 }
