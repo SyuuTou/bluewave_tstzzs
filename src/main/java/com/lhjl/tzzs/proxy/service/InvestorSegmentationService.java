@@ -18,4 +18,7 @@ public interface InvestorSegmentationService {
     Integer insertList(List<InvestorSegmentation> investorSegmentationList);
 
     List<InvestorSegmentation> select(InvestorSegmentation investorSegmentation);
+
+	Integer edit(InvestorSegmentation body);
+    
 }

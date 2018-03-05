@@ -25,14 +25,6 @@ public class InvestorBasicinfoController extends GenericController{
 
     @Resource
     private InvestorBasicinfoService investorBasicinfoService;
-
-    //TODO 教育经历智能检索
-
-    //TODO 工作经历智能检索
-
-    //TODO 创业经历智能检索
-
-    //TODO 自定义城市智能检索
     /**
      * 添加或者更新投资人的基本信息
      * @param body
