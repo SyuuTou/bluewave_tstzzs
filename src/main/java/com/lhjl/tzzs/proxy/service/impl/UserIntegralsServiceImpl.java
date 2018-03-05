@@ -572,15 +572,27 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		CommonDto<Integer> result = new CommonDto<Integer>();
 
 		//验证其他充值金额
-		if (null != body.getQj()){
-			CommonDto<Map<String,Object>> resulta =verifyLimitCount(body.getQj());
-			if (resulta.getStatus() != 200){
-				result.setMessage(resulta.getMessage());
-				result.setStatus(resulta.getStatus());
+		if ("YCQ42NgS".equals(body.getsKey())){
+			//免验证最低金额的场景
+			if (null == body.getQj() || body.getQj().compareTo(BigDecimal.ZERO) < 0){
+				result.setMessage("支付金额非法");
+				result.setStatus(502);
 				result.setData(null);
+
 				return result;
 			}
+		}else {
+			if (null != body.getQj()){
+				CommonDto<Map<String,Object>> resulta =verifyLimitCount(body.getQj());
+				if (resulta.getStatus() != 200){
+					result.setMessage(resulta.getMessage());
+					result.setStatus(resulta.getStatus());
+					result.setData(null);
+					return result;
+				}
+			}
 		}
+
 
 		String uuids = body.getUuids();
 		Integer userId= usersMapper.findByUuid(uuids);
