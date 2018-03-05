@@ -58,6 +58,7 @@ public class DatasOperationManage {
 
     /**
      * IR负责人
+     * 此处的负责人存储的是负责人的姓名
      */
     @Column(name = "ir_principal")
     private String irPrincipal;
