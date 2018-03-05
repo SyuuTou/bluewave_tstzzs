@@ -11,6 +11,9 @@ import com.lhjl.tzzs.proxy.model.MetaInvestmentInstitutionTeamType;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.InvestorInfoService;
 import com.lhjl.tzzs.proxy.utils.CommonUtils;
+
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,11 +64,19 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
             if(null == investmentInstitutionsId){
                 InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
                 investmentInstitutions.setShortName(body.getCompanyName());
+                //设置新增机构的有效位
+                investmentInstitutions.setYn(1);
+                //设置新增机构的来源类型为运营人员后台添加，标志位为3
+                investmentInstitutions.setDataSourceType(3);
+                //设置创建时间(该创建时间指的是该条记录的创建时间)
+                investmentInstitutions.setCreateTime(new Date());
                 investmentInstitutionsMapper.insert(investmentInstitutions);
             } 
             investmentInstitutionsId = investmentInstitutionsMapper.selectByCompanyName(body.getCompanyName());
         }
+        //设置投资机构id
         investors.setInvestmentInstitutionsId(investmentInstitutionsId);
+        
         investors.setPosition(body.getCompanyDuties());
         investors.setHeadPicture(body.getHeadPicture());  
 
@@ -75,15 +86,17 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
         investors.setPhone(body.getPhone());
         investors.setKernelDescription(body.getKernelDesc());
         
-//        Integer investorInsertResult = -1;
         //增加或者更新之后的投资人主键id
         Integer updateAfterId=0;
         if(null == body.getInvestorId()){
         	this.LOGGER.info("****insert opration****");
+        	
         	//设置为有效数据 1
             investors.setYn(1);
             //设置数据来源类型
             investors.setInvestorSourceType(3);
+            //设置创建时间
+            investors.setCreateTime(new Date());
             investorsMapper.insert(investors);
             updateAfterId=investors.getId();
             
@@ -93,23 +106,18 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
             return result;
         }else{
         	this.LOGGER.info("****update opration****");
+        	
+        	//设置更新时间
+        	investors.setUpdateTime(new Date());
         	investorsMapper.updateByPrimaryKeySelective(investors);
         	updateAfterId=investors.getId();
         	
         	 result.setStatus(200);
-             result.setMessage("数据保存成功");
+             result.setMessage("数据更新成功");
              result.setData(updateAfterId);
              return result;
         }
 
-//        if(investorInsertResult > 0){
-//            result.setStatus(200);
-//            result.setMessage("success");
-//            result.setData("保存成功");
-//            return result;
-//        }
-
-       
     }
 
     @Override
