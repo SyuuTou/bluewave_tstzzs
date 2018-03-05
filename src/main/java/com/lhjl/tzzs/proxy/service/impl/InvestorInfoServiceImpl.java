@@ -57,22 +57,29 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
         investors.setName(body.getName());
         investors.setUserId(body.getUserId());
         Integer investmentInstitutionsId = null;
-        if(null != body.getCompanyName() &&  !("".equals(body.getCompanyName()))){
-        	//存在该投资机构
-            investmentInstitutionsId = investmentInstitutionsMapper.selectByCompanyName(body.getCompanyName());
-            //不存在该投资机构，则执行插入之后，取得自增长id
-            if(null == investmentInstitutionsId){
-                InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
-                investmentInstitutions.setShortName(body.getCompanyName());
-                //设置新增机构的有效位
-                investmentInstitutions.setYn(1);
-                //设置新增机构的来源类型为运营人员后台添加，标志位为3
-                investmentInstitutions.setDataSourceType(3);
-                //设置创建时间(该创建时间指的是该条记录的创建时间)
-                investmentInstitutions.setCreateTime(new Date());
-                investmentInstitutionsMapper.insert(investmentInstitutions);
-            } 
-            investmentInstitutionsId = investmentInstitutionsMapper.selectByCompanyName(body.getCompanyName());
+        try {
+        	if(null != body.getCompanyName() &&  !("".equals(body.getCompanyName()))){
+            	//存在该投资机构
+                investmentInstitutionsId = investmentInstitutionsMapper.selectByCompanyName(body.getCompanyName());
+                //不存在该投资机构，则执行插入之后，取得自增长id
+                if(null == investmentInstitutionsId){
+                    InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
+                    investmentInstitutions.setShortName(body.getCompanyName());
+                    //设置新增机构的有效位
+                    investmentInstitutions.setYn(1);
+                    //设置新增机构的来源类型为运营人员后台添加，标志位为3
+                    investmentInstitutions.setDataSourceType(3);
+                    //设置创建时间(该创建时间指的是该条记录的创建时间)
+                    investmentInstitutions.setCreateTime(new Date());
+                    investmentInstitutionsMapper.insert(investmentInstitutions);
+                } 
+                investmentInstitutionsId = investmentInstitutionsMapper.selectByCompanyName(body.getCompanyName());
+            }
+        }catch(Exception e ) {
+        	result.setData(null);
+        	result.setMessage("DB中该项目简称不唯一");
+        	result.setStatus(500);
+        	return result;
         }
         //设置投资机构id
         investors.setInvestmentInstitutionsId(investmentInstitutionsId);
@@ -95,7 +102,7 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
             investors.setYn(1);
             //设置数据来源类型
             investors.setInvestorSourceType(3);
-            //设置创建时间
+            //设置创建时间,提交时间
             investors.setCreateTime(new Date());
             investorsMapper.insert(investors);
             updateAfterId=investors.getId();
