@@ -72,10 +72,10 @@ public class ElegantServiceController {
      * @return
      */
     @GetMapping("/v{appId}/elegant/service/{elegantServiceId}")
-    public CommonDto<ElegantService> queryElegantServiceById(@PathVariable Integer appId, @PathVariable Integer elegantServiceId){
+    public CommonDto<ElegantService> queryElegantServiceById(@PathVariable Integer appId, @PathVariable Integer elegantServiceId, String token){
         CommonDto<ElegantService> result = null;
 
-        result = elegantServiceService.getElegantServiceInfo(appId, elegantServiceId);
+        result = elegantServiceService.getElegantServiceInfo(appId, elegantServiceId, token);
 
         return result;
     }

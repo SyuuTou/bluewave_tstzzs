@@ -12,6 +12,7 @@ import com.lhjl.tzzs.proxy.service.UserInfoService;
 import com.lhjl.tzzs.proxy.service.bluewave.BlueUserInfoService;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -317,21 +318,21 @@ public class ElegantServiceImpl implements ElegantServiceService{
             return result;
         }
 
-        if (body.getIdentityType() == null|| "".equals(body.getIdentityType()) || "undefined".equals(body.getIdentityType())){
-            result.setStatus(502);
-            result.setMessage("请选择身份类型");
-            result.setData(null);
+//        if (body.getIdentityType() == null|| "".equals(body.getIdentityType()) || "undefined".equals(body.getIdentityType())){
+//            result.setStatus(502);
+//            result.setMessage("请选择身份类型");
+//            result.setData(null);
+//
+//            return result;
+//        }
 
-            return result;
-        }
-
-        if (body.getServiceType() == null|| "".equals(body.getServiceType()) || "undefined".equals(body.getServiceType())){
-            result.setStatus(502);
-            result.setMessage("请选择身份类型");
-            result.setData(null);
-
-            return result;
-        }
+//        if (body.getServiceType() == null|| "".equals(body.getServiceType()) || "undefined".equals(body.getServiceType())){
+//            result.setStatus(502);
+//            result.setMessage("请选择身份类型");
+//            result.setData(null);
+//
+//            return result;
+//        }
 
         if (body.getWebSwitch() == null){
             result.setStatus(502);
@@ -381,17 +382,20 @@ public class ElegantServiceImpl implements ElegantServiceService{
             return result;
         }
         //判断是更新还是新建
-        if (body.getElegantServiceId() == null || "".equals(body.getElegantServiceId())){
-            //新建
-            result = createElegantService(body,appid);
-        }else {
-            //更新
-            result = updateElegantService(body,appid); 
+        try {
+            if (body.getElegantServiceId() == null || "".equals(body.getElegantServiceId())){
+                //新建
+                result = createElegantService(body,appid);
+            }else {
+                //更新
+                result = updateElegantService(body,appid);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        result.setData(null);
-        result.setMessage("success");
-        result.setStatus(200);
+//        result.setData(null);
+
 
         return result;
     }
@@ -689,9 +693,16 @@ public class ElegantServiceImpl implements ElegantServiceService{
     }
 
     @Override
-    public CommonDto<ElegantService> getElegantServiceInfo(Integer appId, Integer elegantServiceId) {
+    public CommonDto<ElegantService> getElegantServiceInfo(Integer appId, Integer elegantServiceId, String token) {
 
         ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceId);
+
+
+        if (elegantService.getCreator().equals(token)){
+            elegantService.setCustomButtonLabel("查看结果");
+        }else{
+            elegantService.setCustomButtonLabel("立即参与");
+        }
 
         ElegantServiceDescription queryElegantServiceDescription = new ElegantServiceDescription();
         queryElegantServiceDescription.setElegantServiceId(elegantServiceId);
@@ -964,187 +975,198 @@ public class ElegantServiceImpl implements ElegantServiceService{
         CommonDto<String> result = new CommonDto<>();
         Date now = new Date();
 
-        //价格转化
-        BigDecimal originalPrice = new BigDecimal(body.getOriginalPrice());
-        originalPrice = originalPrice.setScale(2,BigDecimal.ROUND_HALF_UP);
-
-        BigDecimal vipPrice = new BigDecimal(body.getVipPrice());
-        vipPrice = vipPrice.setScale(2,BigDecimal.ROUND_HALF_UP);
-        //上下架时间转化
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date beginTime = null;
-        Date endTime =null;
         try {
-            beginTime = sdf.parse(body.getBeginTime());
-            endTime = sdf.parse(body.getEndTime());
+            //价格转化
+            BigDecimal originalPrice = new BigDecimal(body.getOriginalPrice());
+            originalPrice = originalPrice.setScale(2,BigDecimal.ROUND_HALF_UP);
 
-        }catch (java.lang.Exception e){
-            log.error("时间解析出错");
-            log.error(e.getMessage(),e.fillInStackTrace());
-            result.setData(null);
-            result.setMessage("时间解析出错，请检查输入时间");
-            result.setStatus(502);
+            BigDecimal vipPrice = new BigDecimal(body.getVipPrice());
+            vipPrice = vipPrice.setScale(2,BigDecimal.ROUND_HALF_UP);
+            //上下架时间转化
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date beginTime = null;
+            Date endTime =null;
+            try {
+                beginTime = sdf.parse(body.getBeginTime()+" 00:00:00");
+                endTime = sdf.parse(body.getEndTime()+" 23:59:59");
 
-            return result;
-        }
-        //生成场景码
-        String sceneKey = getRandomString(8);
-        //保险起见先看看有没重复的scenceKey
-        Example sceneExample = new Example(MetaScene.class);
-        sceneExample.and().andEqualTo("key",sceneKey);
+            }catch (Exception e){
+                log.error("时间解析出错");
+                log.error(e.getMessage(),e.fillInStackTrace());
+                result.setData(null);
+                result.setMessage("时间解析出错，请检查输入时间");
+                result.setStatus(502);
 
-        List<MetaScene> metaSceneList = metaSceneMapper.selectByExample(sceneExample);
-        if (metaSceneList.size() > 0){
-            sceneKey = getRandomString(8);
-        }
-        //先创建场景信息
-        MetaScene metaScene = new MetaScene();
-        metaScene.setCreateTime(now);
-        metaScene.setDesc(body.getServiceName());
-        metaScene.setKey(sceneKey);
-        metaScene.setYn(0);
-
-        metaSceneMapper.insertSelective(metaScene);
-
-         float one = 1;
-        //创建场景获取积分场景表信息
-          //获取元数据表会员id
-          List<MetaUserLevel> metaUserLevelList = metaUserLevelMapper.selectAll();
-        if (metaUserLevelList.size() > 0){
-            for (MetaUserLevel mul: metaUserLevelList){
-                MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
-                metaObtainIntegral.setCreateTime(now);
-                metaObtainIntegral.setSceneKey(sceneKey);
-                metaObtainIntegral.setUserLevel(mul.getId());
-                metaObtainIntegral.setIntegral(originalPrice);
-                metaObtainIntegral.setPeriod(365);
-                metaObtainIntegral.setYn(0);
-                metaObtainIntegral.setRatio(one);
-
-                metaObtainIntegralMapper.insertSelective(metaObtainIntegral);
+                return result;
             }
+            //生成场景码
+            String sceneKey = getRandomString(8);
+            //保险起见先看看有没重复的scenceKey
+            Example sceneExample = new Example(MetaScene.class);
+            sceneExample.and().andEqualTo("key",sceneKey);
 
-        }else {
-            result.setMessage("用户等级元数据表被谁删了？现在没数据了");
-            result.setStatus(502);
-            result.setData(null);
-
-            return result;
-        }
-        //创建精选活动表
-        ElegantService elegantService = new ElegantService();
-        elegantService.setServiceName(body.getServiceName());
-        elegantService.setOriginalPrice(originalPrice);
-        elegantService.setVipPrice(vipPrice);
-        elegantService.setPreVipPriceDescript("VIP会员");//默认前缀
-        elegantService.setPriceUnit(0);//默认人民币
-        elegantService.setUnit(body.getUnit());
-        elegantService.setBackgroundPicture(body.getBackgroundPicture());
-        elegantService.setBeginTime(beginTime);
-        elegantService.setEndTime(endTime);
-        elegantService.setOnOff(body.getOnOff());
-        elegantService.setRecommendYn(body.getRecommendYn());
-        elegantService.setSort(body.getSort());
-        elegantService.setCreateTime(now);
-        elegantService.setScenceKey(sceneKey);
-        elegantService.setYn(1);//默认是未删除的，有效的
-        elegantService.setAppid(appid);
-        elegantService.setWebSwitch(body.getWebSwitch());
-        elegantService.setIsReward(body.getIsReward());
-        elegantService.setIsLeadInvestor(body.getIsLeadInvestor());
-        elegantService.setCommissionPublish(body.getCommissionPublish());
-        elegantService.setCommissionPublishFixed(body.getCommissionPublishFixed());
-        elegantService.setCommissionReceiver(body.getCommissionReceiver());
-        elegantService.setCommissionReceiverFixed(body.getCommissionReceiverFixed());
-        elegantService.setCustomButtonLabel(body.getCustomButtonLabel());
-        elegantService.setEntrepreneurLandingPage(body.getEntrepreneurLandingPage());
-        elegantService.setInvestorLandingPage(body.getInvestorLandingPage());
-        elegantService.setOrthorLandingPage(body.getOrthorLandingPage());
-        elegantService.setQuantity(body.getQuantity());
-        elegantServiceMapper.insertSelective(elegantService);
-
-        //拿到服务表的id
-        int elegantServiceId = elegantService.getId();
-
-        //创建合作方表
-        ElegantServiceCooperation elegantServiceCooperation = new ElegantServiceCooperation();
-        elegantServiceCooperation.setElegantServiceId(elegantServiceId);
-        elegantServiceCooperation.setCooperationName(body.getCooperationName());
-        elegantServiceCooperation.setCreateTime(now);
-        elegantServiceCooperation.setYn(1);//默认没被删除
-
-        elegantServiceCooperationMapper.insertSelective(elegantServiceCooperation);
-        //创建描述表
-        ElegantServiceDescription elegantServiceDescription = new ElegantServiceDescription();
-        elegantServiceDescription.setElegantServiceId(elegantServiceId);
-        elegantServiceDescription.setCreateTime(now);
-        elegantServiceDescription.setDescription(body.getDescription());
-        elegantServiceDescription.setYn(1);//默认有效
-
-        elegantServiceDescriptionMapper.insertSelective(elegantServiceDescription);
-        //创建详细描述表
-        if (null != body.getDetailDescription()) {
-            ElegantServiceDescriptionDetail elegantServiceDescriptionDetail = new ElegantServiceDescriptionDetail();
-            elegantServiceDescriptionDetail.setCreateTime(now);
-            elegantServiceDescriptionDetail.setElegantServiceId(elegantServiceId);
-            if (body.getWebSwitch() == 1) {
-                elegantServiceDescriptionDetail.setDescriptionType(0);
-            } else {
-                elegantServiceDescriptionDetail.setDescriptionType(1);//默认展示卡片详情
+            List<MetaScene> metaSceneList = metaSceneMapper.selectByExample(sceneExample);
+            if (metaSceneList.size() > 0){
+                sceneKey = getRandomString(8);
             }
-            elegantServiceDescriptionDetail.setDetailDescription(body.getDetailDescription());
-            elegantServiceDescriptionDetail.setYn(1);//默认有效
+            //先创建场景信息
+            MetaScene metaScene = new MetaScene();
+            metaScene.setCreateTime(now);
+            metaScene.setDesc(body.getServiceName());
+            metaScene.setKey(sceneKey);
+            metaScene.setYn(0);
 
-            elegantServiceDescriptionDetailMapper.insertSelective(elegantServiceDescriptionDetail);
-        }
-        //创建服务-身份类型关系表
-          //解析输入参数
-        String[] identityType = body.getIdentityType().split(",");
-          //找到元数据表的id
-        for (String s:identityType){
-            Integer identityTypeId = Integer.parseInt(s);
+            metaSceneMapper.insertSelective(metaScene);
 
-            ElegantServiceIdentityType elegantServiceIdentityType = new ElegantServiceIdentityType();
-            elegantServiceIdentityType.setElegantServiceId(elegantServiceId);
-            elegantServiceIdentityType.setMetaIdentityTypeId(identityTypeId);
-            elegantServiceIdentityType.setCreateTime(now);
+            float one = 1;
+            //创建场景获取积分场景表信息
+            //获取元数据表会员id
+            List<MetaUserLevel> metaUserLevelList = metaUserLevelMapper.selectAll();
+            if (metaUserLevelList.size() > 0){
+                for (MetaUserLevel mul: metaUserLevelList){
+                    MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
+                    metaObtainIntegral.setCreateTime(now);
+                    metaObtainIntegral.setSceneKey(sceneKey);
+                    metaObtainIntegral.setUserLevel(mul.getId());
+                    metaObtainIntegral.setIntegral(originalPrice);
+                    metaObtainIntegral.setPeriod(365);
+                    metaObtainIntegral.setYn(0);
+                    metaObtainIntegral.setRatio(one);
 
-            elegantServiceIdentityTypeMapper.insertSelective(elegantServiceIdentityType);
-        }
+                    metaObtainIntegralMapper.insertSelective(metaObtainIntegral);
+                }
 
-        //创建服务-服务类型关系表
-          //解析服务类型
-        String[] serviceType = body.getServiceType().split(",");
-        for (String s:serviceType){
-            Integer serviceTypeId = Integer.parseInt(s);
-            ElegantServiceServiceType elegantServiceServiceType = new ElegantServiceServiceType();
-            elegantServiceServiceType.setElegantServiceId(elegantServiceId);
-            elegantServiceServiceType.setMetaServiceTypeId(serviceTypeId);
+            }else {
+                result.setMessage("用户等级元数据表被谁删了？现在没数据了");
+                result.setStatus(502);
+                result.setData(null);
 
-            elegantServiceServiceTypeMapper.insertSelective(elegantServiceServiceType);
-        }
-        elegantServiceApproveMemberHandler(body, elegantServiceId);
-
-        if (null != body.getDetailUrls() && body.getDetailUrls().size() > 0) {
-            ElegantServiceDescriptionUrl elegantServiceDescriptionUrl = null;
-            StringBuffer stringBuffer = new StringBuffer("");
-            for (String url : body.getDetailUrls()) {
-                elegantServiceDescriptionUrl = new ElegantServiceDescriptionUrl();
-                elegantServiceDescriptionUrl.setUrl(url);
-                elegantServiceDescriptionUrl.setElegantServiceId(elegantServiceId);
-                stringBuffer.append("<p ><br></p > <p >< img src=\"").append(url).append("\"/></p >");
-                elegantServiceDescriptionUrlMapper.insert(elegantServiceDescriptionUrl);
+                return result;
             }
-            if (null == body.getDetailDescription() ) {
+            //创建精选活动表
+            ElegantService elegantService = new ElegantService();
+            elegantService.setServiceName(body.getServiceName());
+            elegantService.setOriginalPrice(originalPrice);
+            elegantService.setVipPrice(vipPrice);
+            elegantService.setPreVipPriceDescript("VIP会员");//默认前缀
+            elegantService.setPriceUnit(0);//默认人民币
+            elegantService.setUnit(body.getUnit());
+            elegantService.setBackgroundPicture(body.getBackgroundPicture());
+            elegantService.setBeginTime(beginTime);
+            elegantService.setEndTime(endTime);
+            elegantService.setOnOff(body.getOnOff());
+            elegantService.setRecommendYn(body.getRecommendYn());
+            elegantService.setSort(body.getSort());
+            elegantService.setCreateTime(now);
+            elegantService.setScenceKey(sceneKey);
+            elegantService.setYn(1);//默认是未删除的，有效的
+            elegantService.setAppid(appid);
+            elegantService.setWebSwitch(body.getWebSwitch());
+            elegantService.setIsReward(body.getIsReward());
+            elegantService.setIsLeadInvestor(body.getIsLeadInvestor());
+            elegantService.setCommissionPublish(body.getCommissionPublish());
+            elegantService.setCommissionPublishFixed(body.getCommissionPublishFixed());
+            elegantService.setCommissionReceiver(body.getCommissionReceiver());
+            elegantService.setCommissionReceiverFixed(body.getCommissionReceiverFixed());
+            elegantService.setCustomButtonLabel(body.getCustomButtonLabel());
+            elegantService.setEntrepreneurLandingPage(body.getEntrepreneurLandingPage());
+            elegantService.setInvestorLandingPage(body.getInvestorLandingPage());
+            elegantService.setOrthorLandingPage(body.getOrthorLandingPage());
+            elegantService.setQuantity(body.getQuantity());
+            elegantService.setCreator(body.getCreator());
+            elegantServiceMapper.insertSelective(elegantService);
+
+            result.setData(String.valueOf(elegantService.getId()));
+            result.setMessage("success");
+            result.setStatus(200);
+            //拿到服务表的id
+            int elegantServiceId = elegantService.getId();
+
+            //创建合作方表
+            ElegantServiceCooperation elegantServiceCooperation = new ElegantServiceCooperation();
+            elegantServiceCooperation.setElegantServiceId(elegantServiceId);
+            elegantServiceCooperation.setCooperationName(body.getCooperationName());
+            elegantServiceCooperation.setCreateTime(now);
+            elegantServiceCooperation.setYn(1);//默认没被删除
+
+            elegantServiceCooperationMapper.insertSelective(elegantServiceCooperation);
+            //创建描述表
+            ElegantServiceDescription elegantServiceDescription = new ElegantServiceDescription();
+            elegantServiceDescription.setElegantServiceId(elegantServiceId);
+            elegantServiceDescription.setCreateTime(now);
+            elegantServiceDescription.setDescription(body.getDescription());
+            elegantServiceDescription.setYn(1);//默认有效
+
+            elegantServiceDescriptionMapper.insertSelective(elegantServiceDescription);
+            //创建详细描述表
+            if (null != body.getDetailDescription()) {
                 ElegantServiceDescriptionDetail elegantServiceDescriptionDetail = new ElegantServiceDescriptionDetail();
                 elegantServiceDescriptionDetail.setCreateTime(now);
                 elegantServiceDescriptionDetail.setElegantServiceId(elegantServiceId);
-                elegantServiceDescriptionDetail.setDescriptionType(1);//默认展示卡片详情
-                elegantServiceDescriptionDetail.setDetailDescription(stringBuffer.toString());
+                if (body.getWebSwitch() == 1) {
+                    elegantServiceDescriptionDetail.setDescriptionType(0);
+                } else {
+                    elegantServiceDescriptionDetail.setDescriptionType(1);//默认展示卡片详情
+                }
+                elegantServiceDescriptionDetail.setDetailDescription(body.getDetailDescription());
                 elegantServiceDescriptionDetail.setYn(1);//默认有效
 
                 elegantServiceDescriptionDetailMapper.insertSelective(elegantServiceDescriptionDetail);
             }
+            //创建服务-身份类型关系表
+            //解析输入参数
+            String[] identityType = new String[0];
+            if (StringUtils.isNotEmpty(body.getIdentityType())) {
+                identityType = body.getIdentityType().split(",");
+            }
+            //找到元数据表的id
+            for (String s:identityType){
+                Integer identityTypeId = Integer.parseInt(s);
+
+                ElegantServiceIdentityType elegantServiceIdentityType = new ElegantServiceIdentityType();
+                elegantServiceIdentityType.setElegantServiceId(elegantServiceId);
+                elegantServiceIdentityType.setMetaIdentityTypeId(identityTypeId);
+                elegantServiceIdentityType.setCreateTime(now);
+
+                elegantServiceIdentityTypeMapper.insertSelective(elegantServiceIdentityType);
+            }
+
+            //创建服务-服务类型关系表
+            //解析服务类型
+            String[] serviceType = body.getServiceType().split(",");
+            for (String s:serviceType){
+                Integer serviceTypeId = Integer.parseInt(s);
+                ElegantServiceServiceType elegantServiceServiceType = new ElegantServiceServiceType();
+                elegantServiceServiceType.setElegantServiceId(elegantServiceId);
+                elegantServiceServiceType.setMetaServiceTypeId(serviceTypeId);
+
+                elegantServiceServiceTypeMapper.insertSelective(elegantServiceServiceType);
+            }
+            elegantServiceApproveMemberHandler(body, elegantServiceId);
+
+            if (null != body.getDetailUrls() && body.getDetailUrls().size() > 0) {
+                ElegantServiceDescriptionUrl elegantServiceDescriptionUrl = null;
+                StringBuffer stringBuffer = new StringBuffer("");
+                for (String url : body.getDetailUrls()) {
+                    elegantServiceDescriptionUrl = new ElegantServiceDescriptionUrl();
+                    elegantServiceDescriptionUrl.setUrl(url);
+                    elegantServiceDescriptionUrl.setElegantServiceId(elegantServiceId);
+                    stringBuffer.append("<p ><br></p > <p >< img src=\"").append(url).append("\"/></p >");
+                    elegantServiceDescriptionUrlMapper.insert(elegantServiceDescriptionUrl);
+                }
+                if (null == body.getDetailDescription() ) {
+                    ElegantServiceDescriptionDetail elegantServiceDescriptionDetail = new ElegantServiceDescriptionDetail();
+                    elegantServiceDescriptionDetail.setCreateTime(now);
+                    elegantServiceDescriptionDetail.setElegantServiceId(elegantServiceId);
+                    elegantServiceDescriptionDetail.setDescriptionType(1);//默认展示卡片详情
+                    elegantServiceDescriptionDetail.setDetailDescription(stringBuffer.toString());
+                    elegantServiceDescriptionDetail.setYn(1);//默认有效
+
+                    elegantServiceDescriptionDetailMapper.insertSelective(elegantServiceDescriptionDetail);
+                }
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
 
         return result;
@@ -1397,7 +1419,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
 
         result.setStatus(200);
-        result.setData(null);
+        result.setData(String.valueOf(elegantService.getId()));
         result.setMessage("success");
 
         return result;
