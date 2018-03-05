@@ -95,10 +95,17 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
 
         investors.setTenureTime(DateUtils.parse1(body.getTenureTime()));
         investors.setCompanyIntroduction(body.getCompanyIntro());
+        //设置工作名片正面
         investors.setBusinessCard(body.getBusinessCard());
+        //设置工作名片反面
+        investors.setBusinessCardOpposite(body.getBusinessCardOpposite());
+        //设置高清图片
         investors.setPicture(body.getPicture());
+        //设置创业经历描述
         investors.setBusinessDescription(body.getBussiness());
+        //设置教育经历描述
         investors.setEducationDescription(body.getEducationExperience());
+        //设置工作经历描述
         investors.setWorkDescription(body.getWorkExperience());
         investors.setHonor(body.getHonor());
 
@@ -344,8 +351,8 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
             investorBasicInfoOutputDto.setTenureTime(sdf.format(investors.getTenureTime()));
         }
         investorBasicInfoOutputDto.setCompanyIntro(investors.getCompanyIntroduction());
-//        System.out.println(investors.getBusinessCard());
         investorBasicInfoOutputDto.setBusinessCard(investors.getBusinessCard());
+        investorBasicInfoOutputDto.setBusinessCardOpposite(investors.getBusinessCardOpposite());
         investorBasicInfoOutputDto.setPicture(investors.getPicture());
         investorBasicInfoOutputDto.setBussiness(investors.getBusinessDescription());
         investorBasicInfoOutputDto.setWorkExperience(investors.getWorkDescription());

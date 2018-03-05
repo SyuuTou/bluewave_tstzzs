@@ -86,6 +86,10 @@ public class InvestorBasicInfoInputDto {
      * 工作名片
      */
     private String businessCard;
+    /**
+     * 工作名片反面
+     */
+    private String businessCardOpposite;
 
     /**
      * 图片
@@ -116,8 +120,17 @@ public class InvestorBasicInfoInputDto {
      * 社会荣誉及资质
      */
     private String honor;
+    
 
-    public Integer getInvestorId() {
+    public String getBusinessCardOpposite() {
+		return businessCardOpposite;
+	}
+
+	public void setBusinessCardOpposite(String businessCardOpposite) {
+		this.businessCardOpposite = businessCardOpposite;
+	}
+
+	public Integer getInvestorId() {
         return investorId;
     }
 

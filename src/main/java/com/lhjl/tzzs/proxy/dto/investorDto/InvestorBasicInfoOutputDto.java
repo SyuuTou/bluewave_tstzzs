@@ -84,8 +84,20 @@ public class InvestorBasicInfoOutputDto {
      * 工作名片
      */
     private String businessCard;
+    /**
+     * 工作名片反面
+     */
+    private String businessCardOpposite;
+    
+    public String getBusinessCardOpposite() {
+		return businessCardOpposite;
+	}
 
-    public String getBusinessCard() {
+	public void setBusinessCardOpposite(String businessCardOpposite) {
+		this.businessCardOpposite = businessCardOpposite;
+	}
+
+	public String getBusinessCard() {
         return businessCard;
     }
 
