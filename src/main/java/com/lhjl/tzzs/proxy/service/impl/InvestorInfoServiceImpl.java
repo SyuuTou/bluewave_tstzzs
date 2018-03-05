@@ -87,7 +87,7 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
         investors.setKernelDescription(body.getKernelDesc());
         
         //增加或者更新之后的投资人主键id
-        Integer updateAfterId=0; 
+        Integer updateAfterId=0;   
         if(null == body.getInvestorId()){
         	this.LOGGER.info("****insert opration****");
         	
