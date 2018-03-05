@@ -22,7 +22,7 @@ public class DatasOperationManage {
 
     /**
      * 基础推荐值
-     */
+     */ 
     @Column(name = "basics_recommend")
     private Integer basicsRecommend;
 
