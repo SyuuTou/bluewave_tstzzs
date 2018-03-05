@@ -17,7 +17,11 @@ public class CollectProjectAuditHistoryFinancingController extends GenericContro
 
     @Autowired
     private CollectProjectAuditHistoryFinancingService collectProjectAuditHistoryFinancingService;
-
+    /**
+     * 采集项目审核历史融资信息
+     * @param projectId
+     * @return
+     */
     @GetMapping("/getcollectprojectaudithistoryfinancing")
     public CommonDto<List<CollectProjectAuditHistoryFinancingDto>> getCollectProjectAuditHistoryFinancing(Integer projectId){
         CommonDto<List<CollectProjectAuditHistoryFinancingDto>> result = new CommonDto<>();
