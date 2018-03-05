@@ -12,11 +12,6 @@ public class InvestmentInstitutions {
     private Integer id;
 
     /**
-     * logoURl
-     */
-    private String logo;
-
-    /**
      * 机构简称
      */
     @Column(name = "short_name")
@@ -29,32 +24,15 @@ public class InvestmentInstitutions {
     private String fullName;
 
     /**
-     * 一句话介绍
+     * 唯一key
      */
-    @Column(name = "kenel_case")
-    private String kenelCase;
-
-    /**
-     * 简介
-     */
-    private String comment;
-
-    /**
-     * 官网地址
-     */
-    @Column(name = "home_url")
-    private String homeUrl;
+    @Column(name = "key_words")
+    private String keyWords;
 
     /**
      * 机构备注
      */
     private String commet;
-
-    /**
-     * 唯一key
-     */
-    @Column(name = "key_words")
-    private String keyWords;
 
     /**
      * 创建时间
@@ -68,10 +46,26 @@ public class InvestmentInstitutions {
     private Integer type;
 
     /**
+     * logoURl
+     */
+    private String logo;
+
+    /**
      * 案例网址
      */
     @Column(name = "case_url")
     private String caseUrl;
+
+    /**
+     * 一句话介绍
+     */
+    @Column(name = "kenel_case")
+    private String kenelCase;
+
+    /**
+     * 简介
+     */
+    private String comment;
 
     /**
      * 所在城市
@@ -84,7 +78,7 @@ public class InvestmentInstitutions {
     private String stage;
 
     /**
-     * 客户代表_修改了数据类型
+     * 客户代表
      */
     private String representative;
 
@@ -99,6 +93,12 @@ public class InvestmentInstitutions {
      */
     @Column(name = "approval_time")
     private Date approvalTime;
+
+    /**
+     * 官网地址
+     */
+    @Column(name = "home_url")
+    private String homeUrl;
 
     private Integer yn;
 
@@ -167,6 +167,24 @@ public class InvestmentInstitutions {
     private String recruitmentRequirement;
 
     /**
+     * 机构类型： 天使（Angell）、VC、PE
+     */
+    @Column(name = "investment_institutions_type")
+    private String investmentInstitutionsType;
+
+    /**
+     * 机构成立时间
+     */
+    @Column(name = "established_time")
+    private String establishedTime;
+
+    /**
+     * 数据来源类型（曹传桂 2018-2-6 20:33:05）
+     */
+    @Column(name = "data_source_type")
+    private Integer dataSourceType;
+
+    /**
      * @return ID
      */
     public Integer getId() {
@@ -178,24 +196,6 @@ public class InvestmentInstitutions {
      */
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    /**
-     * 获取logoURl
-     *
-     * @return logo - logoURl
-     */
-    public String getLogo() {
-        return logo;
-    }
-
-    /**
-     * 设置logoURl
-     *
-     * @param logo logoURl
-     */
-    public void setLogo(String logo) {
-        this.logo = logo;
     }
 
     /**
@@ -235,57 +235,21 @@ public class InvestmentInstitutions {
     }
 
     /**
-     * 获取一句话介绍
+     * 获取唯一key
      *
-     * @return kenel_case - 一句话介绍
+     * @return key_words - 唯一key
      */
-    public String getKenelCase() {
-        return kenelCase;
+    public String getKeyWords() {
+        return keyWords;
     }
 
     /**
-     * 设置一句话介绍
+     * 设置唯一key
      *
-     * @param kenelCase 一句话介绍
+     * @param keyWords 唯一key
      */
-    public void setKenelCase(String kenelCase) {
-        this.kenelCase = kenelCase;
-    }
-
-    /**
-     * 获取简介
-     *
-     * @return comment - 简介
-     */
-    public String getComment() {
-        return comment;
-    }
-
-    /**
-     * 设置简介
-     *
-     * @param comment 简介
-     */
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    /**
-     * 获取官网地址
-     *
-     * @return home_url - 官网地址
-     */
-    public String getHomeUrl() {
-        return homeUrl;
-    }
-
-    /**
-     * 设置官网地址
-     *
-     * @param homeUrl 官网地址
-     */
-    public void setHomeUrl(String homeUrl) {
-        this.homeUrl = homeUrl;
+    public void setKeyWords(String keyWords) {
+        this.keyWords = keyWords;
     }
 
     /**
@@ -304,24 +268,6 @@ public class InvestmentInstitutions {
      */
     public void setCommet(String commet) {
         this.commet = commet;
-    }
-
-    /**
-     * 获取唯一key
-     *
-     * @return key_words - 唯一key
-     */
-    public String getKeyWords() {
-        return keyWords;
-    }
-
-    /**
-     * 设置唯一key
-     *
-     * @param keyWords 唯一key
-     */
-    public void setKeyWords(String keyWords) {
-        this.keyWords = keyWords;
     }
 
     /**
@@ -361,6 +307,24 @@ public class InvestmentInstitutions {
     }
 
     /**
+     * 获取logoURl
+     *
+     * @return logo - logoURl
+     */
+    public String getLogo() {
+        return logo;
+    }
+
+    /**
+     * 设置logoURl
+     *
+     * @param logo logoURl
+     */
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
+    /**
      * 获取案例网址
      *
      * @return case_url - 案例网址
@@ -376,6 +340,42 @@ public class InvestmentInstitutions {
      */
     public void setCaseUrl(String caseUrl) {
         this.caseUrl = caseUrl;
+    }
+
+    /**
+     * 获取一句话介绍
+     *
+     * @return kenel_case - 一句话介绍
+     */
+    public String getKenelCase() {
+        return kenelCase;
+    }
+
+    /**
+     * 设置一句话介绍
+     *
+     * @param kenelCase 一句话介绍
+     */
+    public void setKenelCase(String kenelCase) {
+        this.kenelCase = kenelCase;
+    }
+
+    /**
+     * 获取简介
+     *
+     * @return comment - 简介
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     * 设置简介
+     *
+     * @param comment 简介
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     /**
@@ -415,18 +415,18 @@ public class InvestmentInstitutions {
     }
 
     /**
-     * 获取客户代表_修改了数据类型
+     * 获取客户代表
      *
-     * @return representative - 客户代表_修改了数据类型
+     * @return representative - 客户代表
      */
     public String getRepresentative() {
         return representative;
     }
 
     /**
-     * 设置客户代表_修改了数据类型
+     * 设置客户代表
      *
-     * @param representative 客户代表_修改了数据类型
+     * @param representative 客户代表
      */
     public void setRepresentative(String representative) {
         this.representative = representative;
@@ -466,6 +466,24 @@ public class InvestmentInstitutions {
      */
     public void setApprovalTime(Date approvalTime) {
         this.approvalTime = approvalTime;
+    }
+
+    /**
+     * 获取官网地址
+     *
+     * @return home_url - 官网地址
+     */
+    public String getHomeUrl() {
+        return homeUrl;
+    }
+
+    /**
+     * 设置官网地址
+     *
+     * @param homeUrl 官网地址
+     */
+    public void setHomeUrl(String homeUrl) {
+        this.homeUrl = homeUrl;
     }
 
     /**
@@ -690,19 +708,57 @@ public class InvestmentInstitutions {
         this.recruitmentRequirement = recruitmentRequirement;
     }
 
-	@Override
-	public String toString() {
-		return "InvestmentInstitutions [id=" + id + ", logo=" + logo + ", shortName=" + shortName + ", fullName="
-				+ fullName + ", kenelCase=" + kenelCase + ", comment=" + comment + ", homeUrl=" + homeUrl + ", commet="
-				+ commet + ", keyWords=" + keyWords + ", createTime=" + createTime + ", type=" + type + ", caseUrl="
-				+ caseUrl + ", city=" + city + ", stage=" + stage + ", representative=" + representative
-				+ ", approvalStatus=" + approvalStatus + ", approvalTime=" + approvalTime + ", yn=" + yn + ", sort="
-				+ sort + ", count=" + count + ", totalFundScale=" + totalFundScale + ", rmbFundScale=" + rmbFundScale
-				+ ", dollarFundScale=" + dollarFundScale + ", rmbInvestAmountMin=" + rmbInvestAmountMin
-				+ ", rmbInvestAmountMax=" + rmbInvestAmountMax + ", dollarInvestAmountMin=" + dollarInvestAmountMin
-				+ ", dollarInvestAmountMax=" + dollarInvestAmountMax + ", investmentIdea=" + investmentIdea
-				+ ", productRequirement=" + productRequirement + ", recruitmentRequirement=" + recruitmentRequirement
-				+ "]";
-	}
-    
+    /**
+     * 获取机构类型： 天使（Angell）、VC、PE
+     *
+     * @return investment_institutions_type - 机构类型： 天使（Angell）、VC、PE
+     */
+    public String getInvestmentInstitutionsType() {
+        return investmentInstitutionsType;
+    }
+
+    /**
+     * 设置机构类型： 天使（Angell）、VC、PE
+     *
+     * @param investmentInstitutionsType 机构类型： 天使（Angell）、VC、PE
+     */
+    public void setInvestmentInstitutionsType(String investmentInstitutionsType) {
+        this.investmentInstitutionsType = investmentInstitutionsType;
+    }
+
+    /**
+     * 获取机构成立时间
+     *
+     * @return established_time - 机构成立时间
+     */
+    public String getEstablishedTime() {
+        return establishedTime;
+    }
+
+    /**
+     * 设置机构成立时间
+     *
+     * @param establishedTime 机构成立时间
+     */
+    public void setEstablishedTime(String establishedTime) {
+        this.establishedTime = establishedTime;
+    }
+
+    /**
+     * 获取数据来源类型（曹传桂 2018-2-6 20:33:05）
+     *
+     * @return data_source_type - 数据来源类型（曹传桂 2018-2-6 20:33:05）
+     */
+    public Integer getDataSourceType() {
+        return dataSourceType;
+    }
+
+    /**
+     * 设置数据来源类型（曹传桂 2018-2-6 20:33:05）
+     *
+     * @param dataSourceType 数据来源类型（曹传桂 2018-2-6 20:33:05）
+     */
+    public void setDataSourceType(Integer dataSourceType) {
+        this.dataSourceType = dataSourceType;
+    }
 }

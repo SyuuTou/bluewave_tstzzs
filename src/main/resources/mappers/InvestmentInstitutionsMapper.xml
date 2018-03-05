@@ -6,22 +6,22 @@
       WARNING - @mbg.generated
     -->
     <id column="ID" jdbcType="INTEGER" property="id" />
-    <result column="logo" jdbcType="VARCHAR" property="logo" />
     <result column="short_name" jdbcType="VARCHAR" property="shortName" />
     <result column="full_name" jdbcType="VARCHAR" property="fullName" />
-    <result column="kenel_case" jdbcType="VARCHAR" property="kenelCase" />
-    <result column="comment" jdbcType="VARCHAR" property="comment" />
-    <result column="home_url" jdbcType="VARCHAR" property="homeUrl" />
-    <result column="commet" jdbcType="VARCHAR" property="commet" />
     <result column="key_words" jdbcType="VARCHAR" property="keyWords" />
+    <result column="commet" jdbcType="VARCHAR" property="commet" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
     <result column="case_url" jdbcType="VARCHAR" property="caseUrl" />
+    <result column="kenel_case" jdbcType="VARCHAR" property="kenelCase" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
     <result column="city" jdbcType="VARCHAR" property="city" />
     <result column="stage" jdbcType="VARCHAR" property="stage" />
     <result column="representative" jdbcType="VARCHAR" property="representative" />
     <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
     <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
+    <result column="home_url" jdbcType="VARCHAR" property="homeUrl" />
     <result column="yn" jdbcType="INTEGER" property="yn" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="count" jdbcType="INTEGER" property="count" />
@@ -35,6 +35,9 @@
     <result column="investment_idea" jdbcType="VARCHAR" property="investmentIdea" />
     <result column="product_requirement" jdbcType="VARCHAR" property="productRequirement" />
     <result column="recruitment_requirement" jdbcType="VARCHAR" property="recruitmentRequirement" />
+    <result column="investment_institutions_type" jdbcType="VARCHAR" property="investmentInstitutionsType" />
+    <result column="established_time" jdbcType="VARCHAR" property="establishedTime" />
+    <result column="data_source_type" jdbcType="INTEGER" property="dataSourceType" />
   </resultMap>
 
   <resultMap id="BaseResultMapNew" type="com.lhjl.tzzs.proxy.model.InvestmentInstitutionsNew">
@@ -84,11 +87,11 @@
         <result column="yn" jdbcType="INTEGER" property="yn" />
         <result column="sort" jdbcType="INTEGER" property="sort" />
         <result column="count" jdbcType="INTEGER" property="count" />
-        <result column="financing_time" jdbcType="VARCHAR" property="financingTime"/>
+        <result column="financing_time" jdbcType="VARCHAR" property="financingTime" />
         <result column="p_name" jdbcType="VARCHAR" property="pName" />
 
     </resultMap>
-     <select id="blurScan" resultMap="BaseResultMap" parameterType="String">
+     <select id="blurScan" parameterType="String" resultMap="BaseResultMap">
         select * from investment_institutions where short_name like "%"#{keyword}"%" group by short_name
     </select>
     <insert id="add" keyProperty="id" parameterType="com.lhjl.tzzs.proxy.model.InvestmentInstitutions" useGeneratedKeys="true">
@@ -239,13 +242,13 @@
         LIMIT #{beginNum},#{pageSize}
     </select>
 
-    <select id="serachSendProjectId"  resultType="int">
+    <select id="serachSendProjectId" resultType="int">
         SELECT investment_institution_id FROM  project_financing_investment_institution_relationship WHERE
         project_send_log_id IN
         <foreach close=")" collection="workArray1" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </select>
 
-    <select id="serachSendProjectIdZ"  resultType="int">
+    <select id="serachSendProjectIdZ" resultType="int">
         SELECT investment_institution_id FROM  project_financing_investment_institution_relationship WHERE
         project_send_log_id IN
         <foreach close=")" collection="workArray1" index="index" item="item" open="(" separator=",">#{item}</foreach>
@@ -314,13 +317,13 @@
             LIMIT #{beginNum},#{pageSize}
         </if>
     </select>
-    <select id="deliverySendProjectId"  resultType="int">
+    <select id="deliverySendProjectId" resultType="int">
        SELECT investment_institution_id FROM  project_financing_investment_institution_relationship WHERE
         project_send_log_id IN
         <foreach close=")" collection="workArray1" index="index" item="item" open="(" separator=",">#{item}</foreach>
          ORDER BY  associated_time DESC
     </select>
-    <select id="findRecommendAll"   resultMap="newDtoMap">
+    <select id="findRecommendAll" resultMap="newDtoMap">
         SELECT ii.id, ii.short_name,ii.create_time,ii.type
         ,case when ii.logo is null or ii.logo = "" then "http://img.idatavc.com/static/logo/jg_default.png" else ii.logo end logo,
         case when ii.kenel_case is null then (case when ii.`comment` is null then "" else ii.`comment` end ) else ii.kenel_case end kenel_case,
@@ -342,7 +345,7 @@
         GROUP BY ii.short_name
         ORDER BY ii.sort
     </select>
-    <select id="findRecommendInvestor"   resultMap="newDtoMap">
+    <select id="findRecommendInvestor" resultMap="newDtoMap">
         SELECT ii.id, ii.short_name,ii.create_time,ii.type,ii.logo,ii.kenel_case,ii.count,ii.sort FROM
         investment_institutions ii
         WHERE  1=1
@@ -461,5 +464,9 @@
 
     <select id="selectById" parameterType="java.lang.Integer" resultType="java.lang.String">
         select short_name from investment_institutions where ID=#{investmentInstitutionsId}
+    </select>
+
+    <select id="selectByShortName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from investment_institutions where `short_name` =#{shortName};
     </select>
 </mapper>

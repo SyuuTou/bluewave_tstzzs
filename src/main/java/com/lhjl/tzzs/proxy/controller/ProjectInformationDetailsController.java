@@ -22,9 +22,9 @@ public class ProjectInformationDetailsController {
 
     @Resource
     private ProjectInformationDetailsService projectInformationDetailsService;
+
     @Resource
     private CommonUserService commonUserService;
-
 
     /**
      * 项目详情的项目修改

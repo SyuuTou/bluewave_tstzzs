@@ -209,6 +209,29 @@ public class Investors {
     private Integer leaderYn;
 
     /**
+     * 采集编号（曹传桂2018-2-11 14:02:58）
+     */
+    @Column(name = "serial_number")
+    private Integer serialNumber;
+
+    /**
+     * 提交人（曹传桂2018-2-11 14:03:08）
+     */
+    private String submitter;
+
+    /**
+     * 投资案例描述（曹传桂2018-2-12 15:48:19）
+     */
+    @Column(name = "invest_case_description")
+    private String investCaseDescription;
+
+    /**
+     * 单笔投资金额（曹传桂2018-2-12 15:49:18）
+     */
+    @Column(name = "single_invest_amount")
+    private String singleInvestAmount;
+
+    /**
      * @return ID
      */
     public Integer getId() {
@@ -850,5 +873,77 @@ public class Investors {
      */
     public void setLeaderYn(Integer leaderYn) {
         this.leaderYn = leaderYn;
+    }
+
+    /**
+     * 获取采集编号（曹传桂2018-2-11 14:02:58）
+     *
+     * @return serial_number - 采集编号（曹传桂2018-2-11 14:02:58）
+     */
+    public Integer getSerialNumber() {
+        return serialNumber;
+    }
+
+    /**
+     * 设置采集编号（曹传桂2018-2-11 14:02:58）
+     *
+     * @param serialNumber 采集编号（曹传桂2018-2-11 14:02:58）
+     */
+    public void setSerialNumber(Integer serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    /**
+     * 获取提交人（曹传桂2018-2-11 14:03:08）
+     *
+     * @return submitter - 提交人（曹传桂2018-2-11 14:03:08）
+     */
+    public String getSubmitter() {
+        return submitter;
+    }
+
+    /**
+     * 设置提交人（曹传桂2018-2-11 14:03:08）
+     *
+     * @param submitter 提交人（曹传桂2018-2-11 14:03:08）
+     */
+    public void setSubmitter(String submitter) {
+        this.submitter = submitter;
+    }
+
+    /**
+     * 获取投资案例描述（曹传桂2018-2-12 15:48:19）
+     *
+     * @return invest_case_description - 投资案例描述（曹传桂2018-2-12 15:48:19）
+     */
+    public String getInvestCaseDescription() {
+        return investCaseDescription;
+    }
+
+    /**
+     * 设置投资案例描述（曹传桂2018-2-12 15:48:19）
+     *
+     * @param investCaseDescription 投资案例描述（曹传桂2018-2-12 15:48:19）
+     */
+    public void setInvestCaseDescription(String investCaseDescription) {
+        this.investCaseDescription = investCaseDescription;
+    }
+
+    /**
+     * 获取单笔投资金额（曹传桂2018-2-12 15:49:18）
+     *
+     * @return single_invest_amount - 单笔投资金额（曹传桂2018-2-12 15:49:18）
+     */
+    public String getSingleInvestAmount() {
+        return singleInvestAmount;
+    }
+
+    /**
+     * 设置单笔投资金额（曹传桂2018-2-12 15:49:18）
+     *
+     * @param singleInvestAmount 单笔投资金额（曹传桂2018-2-12 15:49:18）
+     */
+    public void setSingleInvestAmount(String singleInvestAmount) {
+        this.singleInvestAmount = singleInvestAmount;
     }
 }

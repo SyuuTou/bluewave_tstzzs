@@ -68,4 +68,6 @@ public interface InvestmentInstitutionsMapper extends OwnerMapper<InvestmentInst
     Integer selectByCompanyName(@Param("companyName") String companyName);
 
     String selectById(@Param("investmentInstitutionsId") Integer investmentInstitutionsId);
+
+    InvestmentInstitutions selectByShortName(@Param("shortName") String shortName);
 }

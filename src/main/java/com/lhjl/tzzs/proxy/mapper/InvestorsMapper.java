@@ -8,6 +8,7 @@ import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface InvestorsMapper extends OwnerMapper<Investors> {
 
@@ -27,4 +28,6 @@ public interface InvestorsMapper extends OwnerMapper<Investors> {
 
 
     Investors selectByUserId(@Param("userId") Integer userId);
+
+    List<Map<String, Object>> selectByInstitutionIdNameWeichatGroupId(@Param("name")String name, @Param("institutionId") Integer institutionId, @Param("weiChatGroupId") String weiChatGroupId);
 }
