@@ -94,7 +94,7 @@ public class InvestorBasicInfoOutputDto {
     }
 
     /**
-     * 图片
+     * 高清图片
      */
     private String picture;
 
