@@ -216,7 +216,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
             investorWorkExperience.setWorkExperience(null);
             investorWorkExperienceList.add(investorWorkExperience);
         }else{
-            for (String investorWorkExperience_i : body.getCitys()){
+            for (String investorWorkExperience_i : body.getWorkExperiences()){
                 InvestorWorkExperience investorWorkExperience = new InvestorWorkExperience();
                 investorWorkExperience.setId(body.getInvestorId());
                 investorWorkExperience.setWorkExperience(investorWorkExperience_i);
@@ -244,7 +244,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
             investorEducationExperience.setEducationExperience(null);
             investorEducationExperienceList.add(investorEducationExperience);
         }else{
-            for (String investorEducationExperience_i : body.getCitys()){
+            for (String investorEducationExperience_i : body.getWorkExperiences()){
                 InvestorEducationExperience investorEducationExperience = new InvestorEducationExperience();
                 investorEducationExperience.setId(body.getInvestorId());
                 investorEducationExperience.setEducationExperience(investorEducationExperience_i);
@@ -265,13 +265,13 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         Integer investorBusinessesInsertResult = -1;
         List<InvestorBusiness> investorBusinessList = new ArrayList<>();
         investorBusinessService.deleteAll(body.getInvestorId());
-        if(null == body.getWorkExperiences()||body.getWorkExperiences().length == 0){
+        if(null == body.getBusinesses()||body.getBusinesses().length == 0){
             InvestorBusiness investorBusiness = new InvestorBusiness();
             investorBusiness.setId(body.getInvestorId());
             investorBusiness.setBusiness(null);
             investorBusinessList.add(investorBusiness);
         }else{
-            for (String investorBusiness_i : body.getCitys()){
+            for (String investorBusiness_i : body.getBusinesses()){
                 InvestorBusiness investorBusiness = new InvestorBusiness();
                 investorBusiness.setId(body.getInvestorId());
                 investorBusiness.setBusiness(investorBusiness_i);
