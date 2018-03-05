@@ -698,7 +698,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
         ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceId);
 
 
-        if (elegantService.getCreator().equals(token)){
+        if (StringUtils.isNotEmpty(elegantService.getCreator())&&elegantService.getCreator().equals(token)){
             elegantService.setCustomButtonLabel("查看结果");
         }else{
             elegantService.setCustomButtonLabel("立即参与");
