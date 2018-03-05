@@ -83,11 +83,11 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
         Integer teamId = metaInvestmentInstitutionTeamTypeMapper.findTeamIdByName(body.getTeamName());
         investors.setTeamId(teamId);
         investors.setSelfDefTeam(body.getSelfDefTeam());
-        investors.setPhone(body.getPhone());
+        investors.setPhone(body.getPhone());  
         investors.setKernelDescription(body.getKernelDesc());
         
         //增加或者更新之后的投资人主键id
-        Integer updateAfterId=0;
+        Integer updateAfterId=0; 
         if(null == body.getInvestorId()){
         	this.LOGGER.info("****insert opration****");
         	
