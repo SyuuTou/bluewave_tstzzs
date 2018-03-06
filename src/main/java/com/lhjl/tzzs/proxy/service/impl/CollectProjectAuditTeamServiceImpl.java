@@ -39,9 +39,6 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
 
         List<CollectProjectAuditTeamDto.CollectProjectAuditMemberDto> collectProjectAuditMemberDtoList = new ArrayList<>();
 
-//        ProjectSendAuditB projectSendAuditB = new ProjectSendAuditB();
-//        projectSendAuditB.setId(projectId);
-        
         ProjectSendAuditB projectSendAuditB1 = projectSendAuditBMapper.selectByPrimaryKey(projectId);
 
         if(null == projectSendAuditB1){
@@ -50,25 +47,28 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
             result.setData(null);
             return result;
         }
-        //取得项目的团队介绍信息
+        //取得项目的团队介绍信息实体
         ProjectSendTeamIntroductionB projectSendTeamIntroductionB = projectSendTeamIntroductionBMapper.selectByPrimaryKey(projectSendAuditB1.getProjectSendBId());
         //取得提交项目团队成员的列表
         List<ProjectSendTeamB> projectSendTeamBList = projectSendTeamBMapper.selectByProjectId(projectSendAuditB1.getProjectSendBId());
         //将每一个项目团队成员转换为DTO
         if(null != projectSendTeamBList && projectSendTeamBList.size() != 0){
             for(ProjectSendTeamB projectSendTeamB_i : projectSendTeamBList){
-            	//设置项目审核的团队成员
+            	//设置采集项目的团队成员
                 CollectProjectAuditTeamDto.CollectProjectAuditMemberDto collectProjectAuditMemberDto = new CollectProjectAuditTeamDto.CollectProjectAuditMemberDto();
                 collectProjectAuditMemberDto.setMemberId(projectSendTeamB_i.getId());
                 collectProjectAuditMemberDto.setMemberName(projectSendTeamB_i.getMemberName());
                 collectProjectAuditMemberDto.setPosition(projectSendTeamB_i.getCompanyDuties());
                 collectProjectAuditMemberDto.setStockPer(projectSendTeamB_i.getStockRatio());
                 collectProjectAuditMemberDto.setKernelDesc(projectSendTeamB_i.getMemberDesc());
+                //TODO 团队成员的权重逻辑是否需要进一步变更
+                //设置团队成员的权重,如果权重为null的话，默认设置该权重为0
+                collectProjectAuditMemberDto.setWeight(projectSendTeamB_i.getWeight()==null ? 0 : projectSendTeamB_i.getWeight());
+                
                 collectProjectAuditMemberDtoList.add(collectProjectAuditMemberDto);
             }
         }
-
-        //对审核项目成员进行权重排序
+        //对审核项目成员进行权重排序，当排序字段为null的时候会产生异常
         Collections.sort(collectProjectAuditMemberDtoList);
         //设置前端显示的排序字段
         List<CollectProjectAuditTeamDto.CollectProjectAuditMemberDto> collectProjectAuditMemberDtoList1 = new ArrayList<>();
@@ -78,13 +78,13 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
             collectProjectAuditMemberDto.setSortId(++i);
             collectProjectAuditMemberDtoList1.add(collectProjectAuditMemberDto);
         }
+        collectProjectAuditTeamDto.setCollectProjectAuditMemberDtoList(collectProjectAuditMemberDtoList1);
         
+        //设置提交项目的团队介绍
         collectProjectAuditTeamDto.setProjectId(projectId);
         if(projectSendTeamIntroductionB != null) {
         	collectProjectAuditTeamDto.setTeamIntroduction(projectSendTeamIntroductionB.getTeamIntroduction());
         }
-        
-        collectProjectAuditTeamDto.setCollectProjectAuditMemberDtoList(collectProjectAuditMemberDtoList1);
         
         result.setStatus(200);
         result.setMessage("success");

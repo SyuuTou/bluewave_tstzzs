@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.dto;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -328,10 +329,26 @@ public class CollectProjectAuditTeamDto{
 
         @Override
         public int compareTo(CollectProjectAuditMemberDto collectProjectAuditMemberDto) {
-
-            int result = this.weight > collectProjectAuditMemberDto.weight ? 1 : (this.weight == collectProjectAuditMemberDto.weight ? 0 : -1);
+        	int result = this.weight > collectProjectAuditMemberDto.weight ? -1 : (this.weight == collectProjectAuditMemberDto.weight ? 0 : 1);
             return result;
         }
+
+		@Override
+		public String toString() {
+			return "CollectProjectAuditMemberDto [sortId=" + sortId + ", memberId=" + memberId + ", memberName="
+					+ memberName + ", position=" + position + ", kernelDesc=" + kernelDesc + ", phone=" + phone
+					+ ", workExperiences=" + Arrays.toString(workExperiences) + ", educationExperience="
+					+ Arrays.toString(educationExperience) + ", isOnJob=" + isOnJob + ", headPicture=" + headPicture
+					+ ", picture=" + picture + ", email=" + email + ", weiChat=" + weiChat + ", teamId=" + teamId
+					+ ", selfDefTeam=" + selfDefTeam + ", birthDate=" + birthDate + ", tenureTime=" + tenureTime
+					+ ", sex=" + sex + ", diploma=" + diploma + ", nationality=" + nationality + ", segmentaionIds="
+					+ Arrays.toString(segmentaionIds) + ", stockPer=" + stockPer + ", citys=" + Arrays.toString(citys)
+					+ ", selfDefCitys=" + Arrays.toString(selfDefCitys) + ", businesses=" + Arrays.toString(businesses)
+					+ ", investStages=" + investStages + ", businessDesc=" + businessDesc + ", workExperienceDesc="
+					+ workExperienceDesc + ", educationExperienceDesc=" + educationExperienceDesc + ", weight=" + weight
+					+ ", isHide=" + isHide + "]";
+		}
+        
     }
     public Integer getProjectId() {
         return projectId;
@@ -357,4 +374,10 @@ public class CollectProjectAuditTeamDto{
         this.collectProjectAuditMemberDtoList = collectProjectAuditMemberDtoList;
     }
 
+	@Override
+	public String toString() {
+		return "CollectProjectAuditTeamDto [projectId=" + projectId + ", teamIntroduction=" + teamIntroduction
+				+ ", collectProjectAuditMemberDtoList=" + collectProjectAuditMemberDtoList + "]";
+	}
+    
 }

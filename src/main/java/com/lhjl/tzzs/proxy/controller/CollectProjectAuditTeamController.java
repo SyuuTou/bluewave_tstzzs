@@ -18,7 +18,7 @@ public class CollectProjectAuditTeamController extends GenericController{
     
     /**
      * 采集项目审核团队成员
-     * @param projectId 项目id
+     * @param projectId project_send_audit_b表的id，即"审核项目记录表"的主键id
      * @return
      */
     @GetMapping("/getcollectprojectauditteam")
