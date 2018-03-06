@@ -170,7 +170,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         //自定义城市
         Integer investorSelfDefCityInsertResult = -1;
         List<InvestorSelfdefCity> investorSelfdefCityList = new ArrayList<>();
-        investorSelfdefCityService.deleteAll(body.getInvestorId());
+        investorSelfdefCityService.deleteAll(body.getInvestorId());  
         if(null != body.getSelfDefCity() && body.getSelfDefCity().length != 0){
             for (String investorSelfDefCityName : body.getSelfDefCity()){
                 InvestorSelfdefCity investorSelfdefCity = new InvestorSelfdefCity();
