@@ -698,11 +698,32 @@ public class ElegantServiceImpl implements ElegantServiceService{
         ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceId);
 
 
-        if (StringUtils.isNotEmpty(elegantService.getCreator())&&elegantService.getCreator().equals(token)){
-            elegantService.setCustomButtonLabel("查看结果");
-        }else{
-            elegantService.setCustomButtonLabel("立即参与");
-        }
+
+            if (StringUtils.isNotEmpty(elegantService.getCreator())&&elegantService.getCreator().equals(token)){
+
+                    elegantService.setCustomButtonLabel("查看结果");
+
+            }else{
+                ElegantServiceParticipate queryElegantServiceParticipate = new ElegantServiceParticipate();
+                queryElegantServiceParticipate.setToken(token);
+                queryElegantServiceParticipate.setElegantServiceId(elegantServiceId);
+
+                List<ElegantServiceParticipate> elegantServiceParticipates = elegantServiceParticipateMapper.select(queryElegantServiceParticipate);
+                if (null != elegantServiceParticipates && elegantServiceParticipates.size()==1){
+
+                    if (elegantServiceParticipates.get(0).getStatus() == 2){
+                        elegantService.setCustomButtonLabel("已采纳");
+                    }else if (elegantServiceParticipates.get(0).getStatus() == 3){
+                        elegantService.setCustomButtonLabel("不采纳");
+                    }else {
+                        elegantService.setCustomButtonLabel("待审核");
+                    }
+
+                }else {
+                    elegantService.setCustomButtonLabel("立即参与");
+                }
+            }
+
 
         ElegantServiceDescription queryElegantServiceDescription = new ElegantServiceDescription();
         queryElegantServiceDescription.setElegantServiceId(elegantServiceId);

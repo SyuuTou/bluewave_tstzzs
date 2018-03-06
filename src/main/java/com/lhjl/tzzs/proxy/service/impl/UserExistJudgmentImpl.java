@@ -55,7 +55,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
 
         if (usersWeixins.size()>0){
             usersWeixin = usersWeixins.get(0);
-            if (StringUtils.isEmpty(usersWeixin.getUnionId())){
+            if (StringUtils.isNotEmpty(usersWeixin.getUnionId())){
                 usersWeixin.setUnionId(unionid);
                 usersWeixinMapper.updateByPrimaryKey(usersWeixin);
             }
