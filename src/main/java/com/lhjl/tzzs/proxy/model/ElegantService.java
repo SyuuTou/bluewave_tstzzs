@@ -180,7 +180,9 @@ public class ElegantService {
 
     private Integer quantity;
 
-
+    /** 用户悬赏状态 */
+    @Transient
+    private String status;
 
     @Transient
     private List<ElegantServiceApproveType> elegantServiceApproveTypes;
@@ -222,6 +224,14 @@ public class ElegantService {
 
     public void setCustomButtonLabel(String customButtonLabel) {
         this.customButtonLabel = customButtonLabel;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     /**
