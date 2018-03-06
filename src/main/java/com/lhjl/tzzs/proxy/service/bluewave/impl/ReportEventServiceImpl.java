@@ -149,6 +149,10 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
 
             if (usersList.size()>0){
                for (ReportCommentOutputDto r:reportCommentOutputDtoList){
+                   int count = 0;
+                   r.setUserName("");
+                   r.setUserHeadpic("");
+                   r.setUserCompanyDuties("");
                    for (Users u :usersList){
                        if (String.valueOf(u.getUuid()).equals(String.valueOf(r.getToken()))){
                            String name = "";
@@ -167,10 +171,6 @@ public class ReportEventServiceImpl extends GenericService implements ReportEven
                            r.setUserName(name);
                            r.setUserHeadpic(headpic);
                            r.setUserCompanyDuties(companyDuties);
-                       }else {
-                           r.setUserHeadpic("");
-                           r.setUserName("");
-                           r.setUserCompanyDuties("");
                        }
                    }
                }
