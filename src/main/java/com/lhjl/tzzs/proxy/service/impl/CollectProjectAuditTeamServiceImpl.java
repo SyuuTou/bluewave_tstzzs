@@ -61,7 +61,7 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
                 collectProjectAuditMemberDto.setPosition(projectSendTeamB_i.getCompanyDuties());
                 collectProjectAuditMemberDto.setStockPer(projectSendTeamB_i.getStockRatio());
                 collectProjectAuditMemberDto.setKernelDesc(projectSendTeamB_i.getMemberDesc());
-                //TODO 团队成员的权重逻辑是否需要进一步变更
+                //TODO 团队成员的权重逻辑是否需要进一步变更  
                 //设置团队成员的权重,如果权重为null的话，默认设置该权重为0
                 collectProjectAuditMemberDto.setWeight(projectSendTeamB_i.getWeight()==null ? 0 : projectSendTeamB_i.getWeight());
                 
