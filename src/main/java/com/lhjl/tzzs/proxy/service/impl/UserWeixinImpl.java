@@ -52,62 +52,50 @@ public class UserWeixinImpl implements UserWeixinService {
         int userID = Integer.parseInt(userid);
         UsersWeixin usersWeixin = null;
         if (StringUtils.isNotEmpty(userInfo.getUnionId())) {
-            usersWeixin = new UsersWeixin();
-            usersWeixin.setUnionId(userInfo.getUnionId());
-            List<UsersWeixin> usersWeixins = usersWeixinMapper.select(usersWeixin);
-            if (null != usersWeixins&& usersWeixins.size()>0){
-                userID = usersWeixins.get(0).getUserId();
+                usersWeixin = new UsersWeixin();
+                usersWeixin.setUnionId(userInfo.getUnionId());
+                List<UsersWeixin> usersWeixins = usersWeixinMapper.select(usersWeixin);
+                if (null != usersWeixins && usersWeixins.size() > 0) {
+                    userID = usersWeixins.get(0).getUserId();
+                    UserToken userToken = new UserToken();
+                    userToken.setUserId(Integer.parseInt(userid));
 
-                UserToken userToken = new UserToken();
-                userToken.setUserId(Integer.parseInt(userid));
-
-                userToken = userTokenMapper.selectOne(userToken);
-                userToken.setUserId(userID);
-                userTokenMapper.updateByPrimaryKey(userToken);
-
-            }else {
-                //创建用户表的实体类
-                Users users =new Users();
-                users.setId(userID);
-                users.setHeadpic(userInfo.getAvatarUrl());
-
-                //更新用户表的内容（头像）
-                usersMapper.updateByPrimaryKeySelective(users);
-            }
+                    userToken = userTokenMapper.selectOne(userToken);
+                    userToken.setUserId(userID);
+                    userTokenMapper.updateByPrimaryKey(userToken);
+                }
         }
 
-        //创建用户微信表的实体类
         usersWeixin = new UsersWeixin();
-        usersWeixin.setCreateTime(now);
         usersWeixin.setOpenid(userInfo.getOpenId());
-        usersWeixin.setUserId(userID);
-        usersWeixin.setNickName(userInfo.getNickName());
-        usersWeixin.setUnionId(userInfo.getUnionId());
 
+        usersWeixin = usersWeixinMapper.selectOne(usersWeixin);
 
-
-        //先判断用户的微信信息是否存在，存在即更新，不存在即新建
-        UsersWeixin usersWeixinForSearch = new UsersWeixin();
-        usersWeixinForSearch.setUserId(userID);
-        usersWeixinForSearch.setOpenid(userInfo.getOpenId());
-
-        List<UsersWeixin> usersWeixinSearchList =usersWeixinMapper.select(usersWeixinForSearch);
-
-        if (usersWeixinSearchList.size() > 0){
-            UsersWeixin usersWeixinForId = usersWeixinSearchList.get(0);
-            int userWeixinId = usersWeixinForId.getId();
-            //补充上用户微信表的id
-            usersWeixin.setId(userWeixinId);
-
-            //开始更新用户微信表信息
-            usersWeixinMapper.updateByPrimaryKeySelective(usersWeixin);
-
+        if (null != usersWeixin){
+            usersWeixin.setOpenid(userInfo.getOpenId());
+            usersWeixin.setUserId(userID);
+            usersWeixin.setNickName(userInfo.getNickName());
+            usersWeixin.setUnionId(userInfo.getUnionId());
+            usersWeixinMapper.updateByPrimaryKey(usersWeixin);
         }else{
-            //没有用户的微信表信息那么就新建
+            //创建用户微信表的实体类
+            usersWeixin = new UsersWeixin();
+            usersWeixin.setCreateTime(now);
+            usersWeixin.setOpenid(userInfo.getOpenId());
+            usersWeixin.setUserId(userID);
+            usersWeixin.setNickName(userInfo.getNickName());
+            usersWeixin.setUnionId(userInfo.getUnionId());
 
             usersWeixinMapper.insertSelective(usersWeixin);
         }
 
+
+        Users users =new Users();
+        users.setId(userID);
+        users.setHeadpic(userInfo.getAvatarUrl());
+
+        //更新用户表的内容（头像）
+        usersMapper.updateByPrimaryKeySelective(users);
 
 
         //查找一下用户的手机号，密码是否存在

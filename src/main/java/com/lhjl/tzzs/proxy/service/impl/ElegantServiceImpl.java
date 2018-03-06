@@ -702,7 +702,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
             if (StringUtils.isNotEmpty(elegantService.getCreator())&&elegantService.getCreator().equals(token)){
 
                     elegantService.setCustomButtonLabel("查看结果");
-
+                    elegantService.setStatus("Check_Result");
             }else{
                 ElegantServiceParticipate queryElegantServiceParticipate = new ElegantServiceParticipate();
                 queryElegantServiceParticipate.setToken(token);
@@ -713,14 +713,18 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
                     if (elegantServiceParticipates.get(0).getStatus() == 2){
                         elegantService.setCustomButtonLabel("已采纳");
+                        elegantService.setStatus("Accepted");
                     }else if (elegantServiceParticipates.get(0).getStatus() == 3){
                         elegantService.setCustomButtonLabel("不采纳");
+                        elegantService.setStatus("None_Accepted");
                     }else {
                         elegantService.setCustomButtonLabel("待审核");
+                        elegantService.setStatus("Auditing");
                     }
 
                 }else {
                     elegantService.setCustomButtonLabel("立即参与");
+                    elegantService.setStatus("Now_Participate");
                 }
             }
 
