@@ -75,7 +75,7 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
         for (int i=0; i < collectProjectAuditMemberDtoList.size(); i++){
             CollectProjectAuditTeamDto.CollectProjectAuditMemberDto collectProjectAuditMemberDto = new CollectProjectAuditTeamDto.CollectProjectAuditMemberDto();
             collectProjectAuditMemberDto = collectProjectAuditMemberDtoList.get(i);
-            collectProjectAuditMemberDto.setSortId(++i);
+            collectProjectAuditMemberDto.setSortId(i+1);
             collectProjectAuditMemberDtoList1.add(collectProjectAuditMemberDto);
         }
         collectProjectAuditTeamDto.setCollectProjectAuditMemberDtoList(collectProjectAuditMemberDtoList1);
