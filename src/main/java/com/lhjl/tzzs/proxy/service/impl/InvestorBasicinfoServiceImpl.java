@@ -172,7 +172,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         List<InvestorSelfdefCity> investorSelfdefCityList = new ArrayList<>();
         investorSelfdefCityService.deleteAll(body.getInvestorId());
         if(null != body.getSelfDefCity() && body.getSelfDefCity().length != 0){
-            for (String investorSelfDefCityName : body.getCitys()){
+            for (String investorSelfDefCityName : body.getSelfDefCity()){
                 InvestorSelfdefCity investorSelfdefCity = new InvestorSelfdefCity();
                 investorSelfdefCity.setId(body.getInvestorId());
                 investorSelfdefCity.setSelfDefCity(investorSelfDefCityName);
@@ -336,10 +336,31 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
             investorBasicInfoOutputDto.setSegmentations(investorSegmentationArr);
         }
 
+        
+        //城市为选定城市以及自定义城市的总和
+        List<String> citysResult=new ArrayList<>();
+        
         InvestorCity investorCity = new InvestorCity();
         investorCity.setId(investorId);
-        List<InvestorCity> investorCityList = investorCityService.select(investorCity);
-        String[] investorCityArr = null;
+        List<InvestorCity> investorCityLists = investorCityService.select(investorCity);
+        if(investorCityLists!=null && investorCityLists.size()!=0) {
+        	investorCityLists.forEach((e)->{
+        		citysResult.add(e.getCity());
+        	});
+        }
+        InvestorSelfdefCity investorSelfdefCity =new InvestorSelfdefCity();
+        investorSelfdefCity.setId(investorId);
+        List<InvestorSelfdefCity> investorSelfdefCitys = investorSelfdefCityMapper.select(investorSelfdefCity);
+        if(investorSelfdefCitys!=null && investorSelfdefCitys.size()!=0) {
+        	investorSelfdefCitys.forEach((e)->{
+        		citysResult.add(e.getSelfDefCity());
+        	});
+        }
+        if(citysResult !=null && citysResult.size()!=0) {
+        	investorBasicInfoOutputDto.setCitys(citysResult);
+        }
+        //数组--曹传桂
+        /*String[] investorCityArr = null;
         if(null == investorCityList || investorCityList.size()==0){
             investorBasicInfoOutputDto.setCitys(investorCityArr);
         }else{
@@ -350,9 +371,9 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
             investorCityArr = new String[investorCitys.size()];
             investorCitys.toArray(investorCityArr);
             investorBasicInfoOutputDto.setCitys(investorCityArr);
-        }
-
-        InvestorSelfdefCity investorSelfdefCity = new InvestorSelfdefCity();
+        }*/
+        //自当以城市--曹传桂
+        /*InvestorSelfdefCity investorSelfdefCity = new InvestorSelfdefCity();
         investorSelfdefCity.setId(investorId);
         List<InvestorSelfdefCity> investorSelfdefCityList = investorSelfdefCityService.select(investorSelfdefCity);
         String[] investorSelfdefCityArr = null;
@@ -366,14 +387,14 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
             investorSelfdefCityArr = new String[investorSelfdefCitys.size()];
             investorSelfdefCitys.toArray(investorSelfdefCityArr);
             investorBasicInfoOutputDto.setSelfDefCity(investorSelfdefCityArr);
-        }
+        }*/
 
         InvestorBusiness investorBusiness = new InvestorBusiness();
         investorBusiness.setId(investorId);
         List<InvestorBusiness> investorBusinessesList = investorBusinessService.select(investorBusiness);
         String[] investorBusinessArr = null;
         if(null == investorBusinessesList || investorBusinessesList.size() == 0){
-            investorBasicInfoOutputDto.setCitys(investorBusinessArr);
+            investorBasicInfoOutputDto.setBusinesses(investorBusinessArr);
         }else{
             List<String> investorBusinessess = new ArrayList<>();
             investorBusinessesList.forEach(investorSelfdefCity_i -> {
@@ -381,7 +402,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
             });
             investorBusinessArr = new String[investorBusinessess.size()];
             investorBusinessess.toArray(investorBusinessArr);
-            investorBasicInfoOutputDto.setBusinesses(investorBusinessArr);
+            investorBasicInfoOutputDto.setBusinesses(investorBusinessArr);  
         }
 
         InvestorWorkExperience investorWorkExperience = new InvestorWorkExperience();

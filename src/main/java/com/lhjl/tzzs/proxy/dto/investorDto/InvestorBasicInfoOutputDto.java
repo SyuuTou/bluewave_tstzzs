@@ -1,5 +1,7 @@
 package com.lhjl.tzzs.proxy.dto.investorDto;
 
+import java.util.List;
+
 /**
  * Created by lanhaijulang on 2018/2/3.
  */
@@ -33,7 +35,7 @@ public class InvestorBasicInfoOutputDto {
     /**
      * 所在城市
      */
-    private String[] citys;
+    private List<String> citys;
 
     /**
      * 自定义城市
@@ -179,15 +181,16 @@ public class InvestorBasicInfoOutputDto {
         this.weiChat = weiChat;
     }
 
-    public String[] getCitys() {
-        return citys;
-    }
 
-    public void setCitys(String[] citys) {
-        this.citys = citys;
-    }
+    public List<String> getCitys() {
+		return citys;
+	}
 
-    public String[] getSelfDefCity() {
+	public void setCitys(List<String> citys) {
+		this.citys = citys;
+	}
+
+	public String[] getSelfDefCity() {
         return selfDefCity;
     }
 
