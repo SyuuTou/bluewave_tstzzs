@@ -962,7 +962,9 @@ public class ElegantServiceImpl implements ElegantServiceService{
             log.error(result.getMessage());
             log.info(result.getMessage());
 
-            return  result;
+           result.setStatus(200);
+
+           return result;
         }
 
         return new CommonDto<>(null,"success",200);
