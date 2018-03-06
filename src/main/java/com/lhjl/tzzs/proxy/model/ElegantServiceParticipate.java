@@ -25,7 +25,7 @@ public class ElegantServiceParticipate {
     private String token;
 
     /**
-     * 状态，0：未开始，1: 正在进行中，2: 完成
+     * 状态，0：未开始，1: 正在进行中，2: 完成（采纳）， 3：不采纳
      */
     private Integer status;
 
