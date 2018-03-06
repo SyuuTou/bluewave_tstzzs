@@ -92,17 +92,19 @@ public class InvestorBasicInfoInputDto {
     private String businessCardOpposite;
 
     /**
-     * 图片
+     * 高清图片
      */
     private String picture;
 
     /**
      * 创业经历
+     * String[]
      */
     private String[] businesses;
 
     /**
      * 创业经历描述
+     * String
      */
     private String bussiness;
 
@@ -121,190 +123,281 @@ public class InvestorBasicInfoInputDto {
      */
     private String honor;
     
+	public Integer getInvestorId() {
+		return investorId;
+	}
 
-    public String getBusinessCardOpposite() {
+
+
+	public void setInvestorId(Integer investorId) {
+		this.investorId = investorId;
+	}
+
+
+
+	public String getIdentityType() {
+		return identityType;
+	}
+
+
+
+	public void setIdentityType(String identityType) {
+		this.identityType = identityType;
+	}
+
+
+
+	public String[] getSegmentations() {
+		return segmentations;
+	}
+
+
+
+	public void setSegmentations(String[] segmentations) {
+		this.segmentations = segmentations;
+	}
+
+
+
+	public String getWeiChat() {
+		return weiChat;
+	}
+
+
+
+	public void setWeiChat(String weiChat) {
+		this.weiChat = weiChat;
+	}
+
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+
+	public String[] getCitys() {
+		return citys;
+	}
+
+
+
+	public void setCitys(String[] citys) {
+		this.citys = citys;
+	}
+
+
+
+	public String[] getSelfDefCity() {
+		return selfDefCity;
+	}
+
+
+
+	public void setSelfDefCity(String[] selfDefCity) {
+		this.selfDefCity = selfDefCity;
+	}
+
+
+
+	public String getBirthDay() {
+		return birthDay;
+	}
+
+
+
+	public void setBirthDay(String birthDay) {
+		this.birthDay = birthDay;
+	}
+
+
+
+	public Integer getSex() {
+		return sex;
+	}
+
+
+
+	public void setSex(Integer sex) {
+		this.sex = sex;
+	}
+
+
+
+	public String getDiploma() {
+		return diploma;
+	}
+
+
+
+	public void setDiploma(String diploma) {
+		this.diploma = diploma;
+	}
+
+
+
+	public String getNationality() {
+		return nationality;
+	}
+
+
+
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
+	}
+
+
+
+	public String getTenureTime() {
+		return tenureTime;
+	}
+
+
+
+	public void setTenureTime(String tenureTime) {
+		this.tenureTime = tenureTime;
+	}
+
+
+
+	public String getCompanyIntro() {
+		return companyIntro;
+	}
+
+
+
+	public void setCompanyIntro(String companyIntro) {
+		this.companyIntro = companyIntro;
+	}
+
+
+
+	public String[] getWorkExperiences() {
+		return workExperiences;
+	}
+
+
+
+	public void setWorkExperiences(String[] workExperiences) {
+		this.workExperiences = workExperiences;
+	}
+
+
+
+	public String[] getEducationExperiences() {
+		return educationExperiences;
+	}
+
+
+
+	public void setEducationExperiences(String[] educationExperiences) {
+		this.educationExperiences = educationExperiences;
+	}
+
+
+
+	public String getBusinessCard() {
+		return businessCard;
+	}
+
+
+
+	public void setBusinessCard(String businessCard) {
+		this.businessCard = businessCard;
+	}
+
+
+
+	public String getBusinessCardOpposite() {
 		return businessCardOpposite;
 	}
+
+
 
 	public void setBusinessCardOpposite(String businessCardOpposite) {
 		this.businessCardOpposite = businessCardOpposite;
 	}
 
-	public Integer getInvestorId() {
-        return investorId;
-    }
 
-    public void setInvestorId(Integer investorId) {
-        this.investorId = investorId;
-    }
 
-    public String getIdentityType() {
-        return identityType;
-    }
+	public String getPicture() {
+		return picture;
+	}
 
-    public void setIdentityType(String identityType) {
-        this.identityType = identityType;
-    }
 
-    public String[] getSegmentations() {
-        return segmentations;
-    }
 
-    public void setSegmentations(String[] segmentations) {
-        this.segmentations = segmentations;
-    }
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
 
-    public String getWeiChat() {
-        return weiChat;
-    }
 
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String[] getBusinesses() {
+		return businesses;
+	}
 
-    public void setWeiChat(String weiChat) {
-        this.weiChat = weiChat;
-    }
 
-    public String[] getCitys() {
-        return citys;
-    }
 
-    public void setCitys(String[] citys) {
-        this.citys = citys;
-    }
+	public void setBusinesses(String[] businesses) {
+		this.businesses = businesses;
+	}
 
-    public String[] getSelfDefCity() {
-        return selfDefCity;
-    }
 
-    public void setSelfDefCity(String[] selfDefCity) {
-        this.selfDefCity = selfDefCity;
-    }
 
-    public String getBirthDay() {
-        return birthDay;
-    }
+	public String getBussiness() {
+		return bussiness;
+	}
 
-    public void setBirthDay(String birthDay) {
-        this.birthDay = birthDay;
-    }
 
-    public Integer getSex() {
-        return sex;
-    }
 
-    public void setSex(Integer sex) {
-        this.sex = sex;
-    }
+	public void setBussiness(String bussiness) {
+		this.bussiness = bussiness;
+	}
 
-    public String getDiploma() {
-        return diploma;
-    }
 
-    public void setDiploma(String diploma) {
-        this.diploma = diploma;
-    }
 
-    public String getNationality() {
-        return nationality;
-    }
+	public String getEducationExperience() {
+		return educationExperience;
+	}
 
-    public void setNationality(String nationality) {
-        this.nationality = nationality;
-    }
 
-    public String getTenureTime() {
-        return tenureTime;
-    }
 
-    public void setTenureTime(String tenureTime) {
-        this.tenureTime = tenureTime;
-    }
+	public void setEducationExperience(String educationExperience) {
+		this.educationExperience = educationExperience;
+	}
 
-    public String getCompanyIntro() {
-        return companyIntro;
-    }
 
-    public void setCompanyIntro(String companyIntro) {
-        this.companyIntro = companyIntro;
-    }
 
-    public String[] getWorkExperiences() {
-        return workExperiences;
-    }
+	public String getWorkExperience() {
+		return workExperience;
+	}
 
-    public void setWorkExperiences(String[] workExperiences) {
-        this.workExperiences = workExperiences;
-    }
 
-    public String[] getEducationExperiences() {
-        return educationExperiences;
-    }
 
-    public void setEducationExperiences(String[] educationExperiences) {
-        this.educationExperiences = educationExperiences;
-    }
+	public void setWorkExperience(String workExperience) {
+		this.workExperience = workExperience;
+	}
 
-    public String getBusinessCard() {
-        return businessCard;
-    }
 
-    public void setBusinessCard(String businessCard) {
-        businessCard = businessCard;
-    }
 
-    public String getPicture() {
-        return picture;
-    }
+	public String getHonor() {
+		return honor;
+	}
 
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
 
-    public String[] getBusinesses() {
-        return businesses;
-    }
 
-    public void setBusinesses(String[] businesses) {
-        this.businesses = businesses;
-    }
+	public void setHonor(String honor) {
+		this.honor = honor;
+	}
 
-    public String getBussiness() {
-        return bussiness;
-    }
 
-    public void setBussiness(String bussiness) {
-        this.bussiness = bussiness;
-    }
-
-    public String getEducationExperience() {
-        return educationExperience;
-    }
-
-    public void setEducationExperience(String educationExperience) {
-        this.educationExperience = educationExperience;
-    }
-
-    public String getWorkExperience() {
-        return workExperience;
-    }
-
-    public void setWorkExperience(String workExperience) {
-        this.workExperience = workExperience;
-    }
-
-    public String getHonor() {
-        return honor;
-    }
-
-    public void setHonor(String honor) {
-        this.honor = honor;
-    }
 
 	@Override
 	public String toString() {
@@ -314,9 +407,10 @@ public class InvestorBasicInfoInputDto {
 				+ birthDay + ", sex=" + sex + ", diploma=" + diploma + ", nationality=" + nationality + ", tenureTime="
 				+ tenureTime + ", companyIntro=" + companyIntro + ", workExperiences="
 				+ Arrays.toString(workExperiences) + ", educationExperiences=" + Arrays.toString(educationExperiences)
-				+ ", businessCard=" + businessCard + ", picture=" + picture + ", businesses="
-				+ Arrays.toString(businesses) + ", bussiness=" + bussiness + ", educationExperience="
-				+ educationExperience + ", workExperience=" + workExperience + ", honor=" + honor + "]";
+				+ ", businessCard=" + businessCard + ", businessCardOpposite=" + businessCardOpposite + ", picture="
+				+ picture + ", businesses=" + Arrays.toString(businesses) + ", bussiness=" + bussiness
+				+ ", educationExperience=" + educationExperience + ", workExperience=" + workExperience + ", honor="
+				+ honor + "]";
 	}
-    
+
 }
