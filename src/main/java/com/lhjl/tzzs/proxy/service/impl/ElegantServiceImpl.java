@@ -837,7 +837,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
         }
 
         Integer startPage = (pageNo-1)*pageSize;
-        List<ElegantServiceParticipate> elegantServiceParticipates = elegantServiceParticipateMapper.getElegantServiceParticipateList(appId, elegantServiceId, pageNo, pageSize);
+        List<ElegantServiceParticipate> elegantServiceParticipates = elegantServiceParticipateMapper.getElegantServiceParticipateList(appId, elegantServiceId, startPage, pageSize);
 
         return new CommonDto<>(elegantServiceParticipates,"success", 200);
     }
