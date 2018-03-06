@@ -174,7 +174,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         if(null != body.getSelfDefCity() && body.getSelfDefCity().length != 0){
             for (String investorSelfDefCityName : body.getSelfDefCity()){
                 InvestorSelfdefCity investorSelfdefCity = new InvestorSelfdefCity();
-                investorSelfdefCity.setId(body.getInvestorId());
+                investorSelfdefCity.setId(body.getInvestorId());  
                 investorSelfdefCity.setSelfDefCity(investorSelfDefCityName);
                 investorSelfdefCityList.add(investorSelfdefCity);
             }
