@@ -1,9 +1,12 @@
 package com.lhjl.tzzs.proxy.dto.ElegantServiceDto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 
 import javax.persistence.Column;
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 @JsonIgnoreProperties
@@ -39,19 +42,19 @@ public class ElegantServiceInputDto {
     /**
      * 是否隐藏
      */
-    private Integer onOff;
+    private Integer onOff = 1;
     /**
      * 是否推荐
      */
-    private Integer recommendYn;
+    private Integer recommendYn = 0;
     /**
      * 排序
      */
-    private Integer sort;
+    private Integer sort = 0;
     /**
      * 是否切换原网页
      */
-    private Integer webSwitch;
+    private Integer webSwitch = 0;
     /**
      * 简介
      */
@@ -133,6 +136,17 @@ public class ElegantServiceInputDto {
 
     private Integer projectId;
     private String projectShortName;
+
+    /** 创建者 */
+    private String creator;
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
 
     public Integer getProjectId() {
         return projectId;
@@ -375,7 +389,12 @@ public class ElegantServiceInputDto {
     }
 
     public String getBeginTime() {
-        return beginTime;
+
+        if (StringUtils.isEmpty(this.beginTime)){
+            return DateTime.now().toString("yyyy-MM-dd");
+        }else {
+            return beginTime;
+        }
     }
 
     public void setBeginTime(String beginTime) {
@@ -405,4 +424,5 @@ public class ElegantServiceInputDto {
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
+
 }

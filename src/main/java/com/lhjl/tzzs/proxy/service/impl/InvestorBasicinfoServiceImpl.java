@@ -84,51 +84,47 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         investors.setIdentityType(identityType);
         investors.setWeichat(body.getWeiChat());
         investors.setEmail(body.getEmail());
-        investors.setBirthDay(DateUtils.parse1(body.getBirthDay()));
+        if(body.getBirthDay()!=null) {
+        	investors.setBirthDay(DateUtils.parse1(body.getBirthDay()));
+        }
         investors.setSex(body.getSex());
-
         Integer diplomaId = metaDiplomaMapper.findDiplomaIdBydiplomaName(body.getDiploma());
         investors.setDiploma(diplomaId);
-
         Integer nationalityId = metaRegionMapper.findNationalityIdByCountry(body.getNationality());
         investors.setNationality(nationalityId);
-
-        investors.setTenureTime(DateUtils.parse1(body.getTenureTime()));
+        if(body.getTenureTime()!=null) {
+        	investors.setTenureTime(DateUtils.parse1(body.getTenureTime()));
+        }
         investors.setCompanyIntroduction(body.getCompanyIntro());
+        //设置工作名片正面
         investors.setBusinessCard(body.getBusinessCard());
+        //设置工作名片反面
+        investors.setBusinessCardOpposite(body.getBusinessCardOpposite());
+        //设置高清图片
         investors.setPicture(body.getPicture());
+        //设置创业经历描述
         investors.setBusinessDescription(body.getBussiness());
+        //设置教育经历描述
         investors.setEducationDescription(body.getEducationExperience());
+        //设置工作经历描述
         investors.setWorkDescription(body.getWorkExperience());
         investors.setHonor(body.getHonor());
-
-        long now = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String createTime = null;
-        try {
-            createTime = sdf.format(new Date(now));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Integer investorsInsertResult = -1;
+        
+        //TODO 
         if(body.getInvestorId() == null){
-            investors.setCreateTime(DateUtils.parse(createTime));
-            investorsInsertResult = investorsMapper.insert(investors);
+            investors.setCreateTime(new Date());
+            investorsMapper.insert(investors);
         }else{
-            investors.setUpdateTime(DateUtils.parse(createTime));
-            investorsInsertResult = investorsMapper.updateByPrimaryKeySelective(investors);
+        	//肯定会执行以下代码，investorId的传输是必须的，必须建立在已有投资人的基础上
+            investors.setUpdateTime(new Date());
+            investorsMapper.updateByPrimaryKeySelective(investors);
         }
-
+        
         //所在领域
         Integer investorSegmentationInsertResult = -1;
         List<InvestorSegmentation> investorSegmentationList = new ArrayList<>();
         investorSegmentationService.deleteAll(body.getInvestorId());
-        if(null == body.getSegmentations()||body.getSegmentations().length == 0){
-            InvestorSegmentation investorSegmentation = new InvestorSegmentation();
-            investorSegmentation.setId(body.getInvestorId());
-            investorSegmentation.setSegmentationId(null);
-            investorSegmentationList.add(investorSegmentation);
-        }else{
+        if(null != body.getSegmentations() && body.getSegmentations().length != 0){
         	this.LOGGER.info("body.getSegmentations()-->"+Arrays.toString(body.getSegmentations()));
         		 List<Integer> segmentationIds = metaSegmentationMapper.findMetaSegmentationBySegmentation(body.getSegmentations());
                  this.LOGGER.info("segmentationIds-->"+segmentationIds.toString());
@@ -149,17 +145,11 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         }
 //        以下方法不满足通用Mapper的list增加条件-caochuangui
 //        investorSegmentationInsertResult = investorSegmentationService.insertList(investorSegmentationList);
-
         //所在城市
         Integer investorCityInsertResult = -1;
         List<InvestorCity> investorCityList = new ArrayList<>();
         investorCityService.deleteAll(body.getInvestorId());
-        if(null == body.getCitys()&&body.getCitys().length == 0){
-            InvestorCity investorCity = new InvestorCity();
-            investorCity.setId(body.getInvestorId());
-            investorCity.setCity(null);
-            investorCityList.add(investorCity);
-        }else{
+        if(null != body.getCitys() && body.getCitys().length != 0){
             for (String investorCityName : body.getCitys()){
                 InvestorCity investorCity = new InvestorCity();
                 investorCity.setId(body.getInvestorId());
@@ -177,17 +167,11 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         }
 //        以下方法不满足通用Mapper的list增加条件-caochuangui
 //        investorCityInsertResult = investorCityService.insertList(investorCityList);
-
         //自定义城市
         Integer investorSelfDefCityInsertResult = -1;
         List<InvestorSelfdefCity> investorSelfdefCityList = new ArrayList<>();
         investorSelfdefCityService.deleteAll(body.getInvestorId());
-        if(null == body.getSelfDefCity()||body.getSelfDefCity().length == 0){
-            InvestorSelfdefCity investorSelfdefCity = new InvestorSelfdefCity();
-            investorSelfdefCity.setId(body.getInvestorId());
-            investorSelfdefCity.setSelfDefCity(null);
-            investorSelfdefCityList.add(investorSelfdefCity);
-        }else{
+        if(null != body.getSelfDefCity() && body.getSelfDefCity().length != 0){
             for (String investorSelfDefCityName : body.getCitys()){
                 InvestorSelfdefCity investorSelfdefCity = new InvestorSelfdefCity();
                 investorSelfdefCity.setId(body.getInvestorId());
@@ -210,13 +194,8 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         Integer investorWorkExperienceInsertResult = -1;
         List<InvestorWorkExperience> investorWorkExperienceList = new ArrayList<>();
         investorWorkExperienceService.deleteAll(body.getInvestorId());
-        if(null == body.getWorkExperiences()||body.getWorkExperiences().length == 0){
-            InvestorWorkExperience investorWorkExperience = new InvestorWorkExperience();
-            investorWorkExperience.setId(body.getInvestorId());
-            investorWorkExperience.setWorkExperience(null);
-            investorWorkExperienceList.add(investorWorkExperience);
-        }else{
-            for (String investorWorkExperience_i : body.getCitys()){
+        if(null != body.getWorkExperiences() && body.getWorkExperiences().length != 0){
+            for (String investorWorkExperience_i : body.getWorkExperiences()){
                 InvestorWorkExperience investorWorkExperience = new InvestorWorkExperience();
                 investorWorkExperience.setId(body.getInvestorId());
                 investorWorkExperience.setWorkExperience(investorWorkExperience_i);
@@ -238,13 +217,8 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         Integer investorEducationExperienceInsertResult = -1;
         List<InvestorEducationExperience> investorEducationExperienceList = new ArrayList<>();
         investorEducationExperienceService.deleteAll(body.getInvestorId());
-        if(null == body.getWorkExperiences()||body.getWorkExperiences().length == 0){
-            InvestorEducationExperience investorEducationExperience = new InvestorEducationExperience();
-            investorEducationExperience.setId(body.getInvestorId());
-            investorEducationExperience.setEducationExperience(null);
-            investorEducationExperienceList.add(investorEducationExperience);
-        }else{
-            for (String investorEducationExperience_i : body.getCitys()){
+        if(null != body.getEducationExperiences() && body.getEducationExperiences().length != 0){
+            for (String investorEducationExperience_i : body.getEducationExperiences()){
                 InvestorEducationExperience investorEducationExperience = new InvestorEducationExperience();
                 investorEducationExperience.setId(body.getInvestorId());
                 investorEducationExperience.setEducationExperience(investorEducationExperience_i);
@@ -265,13 +239,8 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         Integer investorBusinessesInsertResult = -1;
         List<InvestorBusiness> investorBusinessList = new ArrayList<>();
         investorBusinessService.deleteAll(body.getInvestorId());
-        if(null == body.getWorkExperiences()||body.getWorkExperiences().length == 0){
-            InvestorBusiness investorBusiness = new InvestorBusiness();
-            investorBusiness.setId(body.getInvestorId());
-            investorBusiness.setBusiness(null);
-            investorBusinessList.add(investorBusiness);
-        }else{
-            for (String investorBusiness_i : body.getCitys()){
+        if(null != body.getBusinesses() && body.getBusinesses().length != 0){
+            for (String investorBusiness_i : body.getBusinesses()){
                 InvestorBusiness investorBusiness = new InvestorBusiness();
                 investorBusiness.setId(body.getInvestorId());
                 investorBusiness.setBusiness(investorBusiness_i);
@@ -286,18 +255,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         		}
         	});
         }
-//        该list不满足通用mapper的插入条件--caochuangui 
-//        investorBusinessesInsertResult = investorBusinessService.insertList(investorBusinessList);
-
-        /*if(investorsInsertResult > 0 && investorBusinessesInsertResult > 0 &&
-                investorEducationExperienceInsertResult > 0 && investorWorkExperienceInsertResult > 0 &&
-                investorSelfDefCityInsertResult > 0 &&  investorCityInsertResult > 0 &&
-                investorSegmentationInsertResult > 0){
-            result.setStatus(200);
-            result.setMessage("success");
-            result.setData("保存成功");
-            return result;
-        }*/
+        
         result.setStatus(200);
         result.setMessage("success");  
         result.setData(true);
@@ -338,18 +296,21 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         	String countryName = metaRegionMapper.selectByRegionId(investors.getNationality());
             investorBasicInfoOutputDto.setNationality(countryName);
         }
-        investorBasicInfoOutputDto.setBusinessCardOposite(investors.getBusinessCardOpposite());
         //任职时间
         if(null != investors.getTenureTime()) {
             investorBasicInfoOutputDto.setTenureTime(sdf.format(investors.getTenureTime()));
         }
+        
         investorBasicInfoOutputDto.setCompanyIntro(investors.getCompanyIntroduction());
-//        System.out.println(investors.getBusinessCard());
+        
         investorBasicInfoOutputDto.setBusinessCard(investors.getBusinessCard());
+        investorBasicInfoOutputDto.setBusinessCardOpposite(investors.getBusinessCardOpposite());
         investorBasicInfoOutputDto.setPicture(investors.getPicture());
+        
         investorBasicInfoOutputDto.setBussiness(investors.getBusinessDescription());
         investorBasicInfoOutputDto.setWorkExperience(investors.getWorkDescription());
         investorBasicInfoOutputDto.setEducationExperience(investors.getEducationDescription());
+        
         investorBasicInfoOutputDto.setHonor(investors.getHonor());
 
         InvestorSegmentation investorSegmentation = new InvestorSegmentation();
@@ -452,6 +413,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
             });
             investorEducationExperienceArr = new String[investorEducationExperiences.size()];
             investorEducationExperiences.toArray(investorEducationExperienceArr);
+            //转换为数组
             investorBasicInfoOutputDto.setEducationExperiences(investorEducationExperienceArr);
         }
 

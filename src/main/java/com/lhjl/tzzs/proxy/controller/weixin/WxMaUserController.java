@@ -86,7 +86,7 @@ public class WxMaUserController {
             //TODO 可以增加自己的逻辑，关联业务相关数据
             String openId = session.getOpenid();
             String sessionKey = session.getSessionKey();
-            result = userExistJudgmentService.userExistJudgment(openId,appid);
+            result = userExistJudgmentService.userExistJudgment(openId,appid,session.getUnionid());
             String userid =String.valueOf(result.getData().getYhid());
             //给sessionKey加上前缀
             String cacheKeyId = "sessionkey:" + userid;

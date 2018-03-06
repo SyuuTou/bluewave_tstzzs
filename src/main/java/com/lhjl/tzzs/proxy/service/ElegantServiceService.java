@@ -69,9 +69,10 @@ public interface ElegantServiceService {
      * 根据红包ID获取服务信息
      * @param appId
      * @param elegantServiceId
+     * @param token
      * @return
      */
-    CommonDto<ElegantService> getElegantServiceInfo(Integer appId, Integer elegantServiceId);
+    CommonDto<ElegantService> getElegantServiceInfo(Integer appId, Integer elegantServiceId, String token);
 
     CommonDto<String> saveOrUpdateParticipate(ElegantServiceParticipate body, Integer appId, String token);
 

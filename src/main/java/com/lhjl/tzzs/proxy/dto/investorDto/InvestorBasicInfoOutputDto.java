@@ -85,7 +85,8 @@ public class InvestorBasicInfoOutputDto {
      */
     private String businessCard;
 
-    public String getBusinessCard() {
+
+	public String getBusinessCard() {
         return businessCard;
     }
 
@@ -127,18 +128,18 @@ public class InvestorBasicInfoOutputDto {
      * 反面名片
      * @return
      */
-    private String businessCardOposite;
+    private String businessCardOpposite;
 
 
-    public String getBusinessCardOposite() {
-        return businessCardOposite;
-    }
+    public String getBusinessCardOpposite() {
+		return businessCardOpposite;
+	}
 
-    public void setBusinessCardOposite(String businessCardOposite) {
-        this.businessCardOposite = businessCardOposite;
-    }
+	public void setBusinessCardOpposite(String businessCardOpposite) {
+		this.businessCardOpposite = businessCardOpposite;
+	}
 
-    public Integer getInvestorId() {
+	public Integer getInvestorId() {
         return investorId;
     }
 

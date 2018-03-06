@@ -7,6 +7,7 @@ import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
 import com.lhjl.tzzs.proxy.service.UserWeixinService;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,23 +50,46 @@ public class UserWeixinImpl implements UserWeixinService {
         Date now = new Date();
         //userId转数字
         int userID = Integer.parseInt(userid);
+        UsersWeixin usersWeixin = null;
+        if (StringUtils.isNotEmpty(userInfo.getUnionId())) {
+            usersWeixin = new UsersWeixin();
+            usersWeixin.setUnionId(userInfo.getUnionId());
+            List<UsersWeixin> usersWeixins = usersWeixinMapper.select(usersWeixin);
+            if (null != usersWeixins&& usersWeixins.size()>0){
+                userID = usersWeixins.get(0).getUserId();
+
+                UserToken userToken = new UserToken();
+                userToken.setUserId(Integer.parseInt(userid));
+
+                userToken = userTokenMapper.selectOne(userToken);
+                userToken.setUserId(userID);
+                userTokenMapper.updateByPrimaryKey(userToken);
+
+            }else {
+                //创建用户表的实体类
+                Users users =new Users();
+                users.setId(userID);
+                users.setHeadpic(userInfo.getAvatarUrl());
+
+                //更新用户表的内容（头像）
+                usersMapper.updateByPrimaryKeySelective(users);
+            }
+        }
 
         //创建用户微信表的实体类
-        UsersWeixin usersWeixin = new UsersWeixin();
+        usersWeixin = new UsersWeixin();
         usersWeixin.setCreateTime(now);
         usersWeixin.setOpenid(userInfo.getOpenId());
         usersWeixin.setUserId(userID);
         usersWeixin.setNickName(userInfo.getNickName());
         usersWeixin.setUnionId(userInfo.getUnionId());
 
-        //创建用户表的实体类
-        Users users =new Users();
-        users.setId(userID);
-        users.setHeadpic(userInfo.getAvatarUrl());
+
 
         //先判断用户的微信信息是否存在，存在即更新，不存在即新建
         UsersWeixin usersWeixinForSearch = new UsersWeixin();
         usersWeixinForSearch.setUserId(userID);
+        usersWeixinForSearch.setOpenid(userInfo.getOpenId());
 
         List<UsersWeixin> usersWeixinSearchList =usersWeixinMapper.select(usersWeixinForSearch);
 
@@ -84,8 +108,7 @@ public class UserWeixinImpl implements UserWeixinService {
             usersWeixinMapper.insertSelective(usersWeixin);
         }
 
-        //更新用户表的内容（头像）
-        usersMapper.updateByPrimaryKeySelective(users);
+
 
         //查找一下用户的手机号，密码是否存在
         Users usersForTelephone = new Users();
