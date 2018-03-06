@@ -7,37 +7,13 @@ import java.util.List;
  * Created by lanhaijulang on 2018/2/1.
  */
 public class CollectProjectAuditTeamDto{
-
+	//审核项目记录表主键id
     private Integer projectId;
-
+    //团队介绍
     private String teamIntroduction;
-
+    //采集项目审核团队成员列表
     private List<CollectProjectAuditMemberDto> collectProjectAuditMemberDtoList;
-
-    public Integer getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
-    }
-
-    public String getTeamIntroduction() {
-        return teamIntroduction;
-    }
-
-    public void setTeamIntroduction(String teamIntroduction) {
-        this.teamIntroduction = teamIntroduction;
-    }
-
-    public List<CollectProjectAuditMemberDto> getCollectProjectAuditMemberDtoList() {
-        return collectProjectAuditMemberDtoList;
-    }
-
-    public void setCollectProjectAuditMemberDtoList(List<CollectProjectAuditMemberDto> collectProjectAuditMemberDtoList) {
-        this.collectProjectAuditMemberDtoList = collectProjectAuditMemberDtoList;
-    }
-
+    //定义团队成员的静态内部类
     public static class CollectProjectAuditMemberDto implements Comparable<CollectProjectAuditMemberDto>{
 
         private Integer sortId;
@@ -89,6 +65,8 @@ public class CollectProjectAuditTeamDto{
         private String[] selfDefCitys;
 
         private String[] businesses;
+//        关注的感兴趣的投资阶段
+        private List<Integer> investStages;
 
         private String businessDesc;
 
@@ -100,7 +78,15 @@ public class CollectProjectAuditTeamDto{
 
         private Integer isHide;
 
-        public Integer getMemberId() {
+		public List<Integer> getInvestStages() {
+			return investStages;
+		}
+
+		public void setInvestStages(List<Integer> investStages) {
+			this.investStages = investStages;
+		}
+
+		public Integer getMemberId() {
             return memberId;
         }
 
@@ -346,6 +332,29 @@ public class CollectProjectAuditTeamDto{
             int result = this.weight > collectProjectAuditMemberDto.weight ? 1 : (this.weight == collectProjectAuditMemberDto.weight ? 0 : -1);
             return result;
         }
+    }
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getTeamIntroduction() {
+        return teamIntroduction;
+    }
+
+    public void setTeamIntroduction(String teamIntroduction) {
+        this.teamIntroduction = teamIntroduction;
+    }
+
+    public List<CollectProjectAuditMemberDto> getCollectProjectAuditMemberDtoList() {
+        return collectProjectAuditMemberDtoList;
+    }
+
+    public void setCollectProjectAuditMemberDtoList(List<CollectProjectAuditMemberDto> collectProjectAuditMemberDtoList) {
+        this.collectProjectAuditMemberDtoList = collectProjectAuditMemberDtoList;
     }
 
 }
