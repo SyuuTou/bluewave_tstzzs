@@ -241,6 +241,7 @@
     case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name,
     case when u.headpic_real is null then (case when u.headpic is null then "" else u.headpic end) else u.headpic_real end headpic_real,
     u.company_duties,
+    u.company_name,
     u.uuid
     FROM users u
     right join users_weixin uw on u.ID = uw.user_id
