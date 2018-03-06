@@ -50,6 +50,11 @@ public class ProjectSendTeamB {
     private Integer yn;
 
     /**
+     * 团队成员权重
+     */
+    private Integer weight;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -187,5 +192,23 @@ public class ProjectSendTeamB {
      */
     public void setYn(Integer yn) {
         this.yn = yn;
+    }
+
+    /**
+     * 获取团队成员权重
+     *
+     * @return weight - 团队成员权重
+     */
+    public Integer getWeight() {
+        return weight;
+    }
+
+    /**
+     * 设置团队成员权重
+     *
+     * @param weight 团队成员权重
+     */
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 }

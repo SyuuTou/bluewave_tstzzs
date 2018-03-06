@@ -57,7 +57,7 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
         investorDemand.setInvestmentAmountHigh(body.getInvestAmountHighRmb());
         investorDemand.setInvestmentAmountLowDollars(body.getInvestAmountLowDollar());
         investorDemand.setInvestmentAmountHighDollars(body.getInvestAmountHighDollar());
-        investorDemand.setFuture(body.getPreferDesc());
+        investorDemand.setDemand(body.getPreferDesc());
         long now = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String createTime = null;
@@ -190,7 +190,7 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
         if(null != investorDemand) {
             investorInvestInfoDto.setInvestorId(investorId);
             investorInvestInfoDto.setInvestorDemandId(investorDemand.getId());
-            investorInvestInfoDto.setPreferDesc(investorDemand.getFuture());
+            investorInvestInfoDto.setPreferDesc(investorDemand.getDemand());
             investorInvestInfoDto.setInvestAmountHighDollar(investorDemand.getInvestmentAmountHighDollars());
             investorInvestInfoDto.setInvestAmountLowDollar(investorDemand.getInvestmentAmountLowDollars());
             investorInvestInfoDto.setInvestAmountLowRmb(investorDemand.getInvestmentAmountLow());

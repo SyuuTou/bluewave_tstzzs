@@ -13,6 +13,7 @@
     <result column="member_desc" jdbcType="VARCHAR" property="memberDesc" />
     <result column="appid" jdbcType="INTEGER" property="appid" />
     <result column="yn" jdbcType="INTEGER" property="yn" />
+    <result column="weight" jdbcType="INTEGER" property="weight" />
   </resultMap>
   <select id="getTeamList" resultMap="BaseResultMap">
     SELECT id,member_name,company_duties FROM project_send_team_b where project_send_b_id =#{projectSendBId}
@@ -20,7 +21,7 @@
     and yn = 0;
   </select>
 
-  <insert id="copyProjectTeamB" parameterType="com.lhjl.tzzs.proxy.dto.ProjectSendSearchCommenDto" useGeneratedKeys="true" keyProperty="id">
+  <insert id="copyProjectTeamB" keyProperty="id" parameterType="com.lhjl.tzzs.proxy.dto.ProjectSendSearchCommenDto" useGeneratedKeys="true">
     insert into project_send_team_b(project_send_b_id,member_name,company_duties,stock_ratio,member_desc,appid,yn)
     select #{newid},member_name,company_duties,stock_ratio,member_desc,appid,0 from project_send_team_b where id = #{oldid};
     <selectKey keyProperty="id" resultType="java.lang.Integer">

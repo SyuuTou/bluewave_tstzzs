@@ -296,9 +296,19 @@ public class InvestorsDemandServiceImpl extends GenericService implements Invest
             }
 
         }
+        if (startdoller.equals(BigDecimal.ZERO)){
+            data.put("startdoller","");
+        }else {
+            data.put("startdoller",startdoller);
+        }
 
-        data.put("startdoller",startdoller);
-        data.put("enddoller",enddoller);
+        if (enddoller.equals(BigDecimal.ZERO)){
+            data.put("enddoller","");
+        }else {
+            data.put("enddoller",enddoller);
+        }
+
+
 
         //行业领域(send_logs)
         List<LabelList> industrys = hotsdatas.getData().get("industryKey");
