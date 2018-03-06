@@ -200,7 +200,16 @@ public class ElegantService {
     private ElegantServiceDescriptionDetail elegantServiceDescriptionDetail;
     @Transient
     private ElegantServiceRelevantProject elegantServiceRelevantProject;
+    @Transient
+    private List<ElegantServiceDescriptionUrl> elegantServiceDescriptionUrls;
 
+    public List<ElegantServiceDescriptionUrl> getElegantServiceDescriptionUrls() {
+        return elegantServiceDescriptionUrls;
+    }
+
+    public void setElegantServiceDescriptionUrls(List<ElegantServiceDescriptionUrl> elegantServiceDescriptionUrls) {
+        this.elegantServiceDescriptionUrls = elegantServiceDescriptionUrls;
+    }
 
     public ElegantServiceRelevantProject getElegantServiceRelevantProject() {
         return elegantServiceRelevantProject;

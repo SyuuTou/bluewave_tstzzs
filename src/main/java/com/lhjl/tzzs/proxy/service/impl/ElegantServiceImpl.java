@@ -55,6 +55,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
     @Autowired 
     private ElegantServiceDescriptionDetailMapper elegantServiceDescriptionDetailMapper;
 
+
     @Autowired
     private ElegantServiceIdentityTypeMapper elegantServiceIdentityTypeMapper;
 
@@ -740,6 +741,10 @@ public class ElegantServiceImpl implements ElegantServiceService{
         ElegantServiceDescriptionDetail queryElegantServiceDescriptionDetail = new ElegantServiceDescriptionDetail();
         queryElegantServiceDescriptionDetail.setElegantServiceId(elegantServiceId);
         elegantService.setElegantServiceDescriptionDetail(elegantServiceDescriptionDetailMapper.selectOne(queryElegantServiceDescriptionDetail));
+
+        ElegantServiceDescriptionUrl queryElegantServiceDescriptionUrl = new ElegantServiceDescriptionUrl();
+        queryElegantServiceDescriptionUrl.setElegantServiceId(elegantServiceId);
+        elegantService.setElegantServiceDescriptionUrls(elegantServiceDescriptionUrlMapper.select(queryElegantServiceDescriptionUrl));
 
         ElegantServiceApproveType queryElegantServiceApproveType = new ElegantServiceApproveType();
         queryElegantServiceApproveType.setElegantServiceId(elegantServiceId);
