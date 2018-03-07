@@ -14,6 +14,7 @@ import me.chanjar.weixin.common.exception.WxErrorException;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Position;
 import org.apache.ibatis.session.RowBounds;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -474,27 +475,29 @@ public class ReportServiceImpl extends GenericService implements ReportService {
     @Override
     public InputStream generateReportShareImage(Integer reportId) {
 
-        CommonDto<String> result = new CommonDto<>();
-
+        Report report = reportMapper.selectByPrimaryKey(reportId);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
-//            File qrcode = qrcodeService.getQrcodeService().createWxCode(path,width);
-//            BufferedImage qcode = ImageIO.read(qrcode);;
-//            //处理图片将其压缩成正方形的小图
-//            BufferedImage  convertImage= scaleByPercentage(qcode, width,width);
-            //裁剪成圆形 （传入的图像必须是正方形的 才会 圆形 如果是长方形的比例则会变成椭圆的）
-            //生成的图片位置
-//            ImageIO.write(convertImage, "png", os);
-//        } catch (WxErrorException e) {
-//            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
-//        } catch (IOException e) {
-//            this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
-
-
-//            Thumbnails.of(new File("/Users/zhhu/template/a.png")).size(375,667).watermark(this.createBufferedImage(21,15,333,90,"PingFang-SC",Font.BOLD,21,Color.blue,1.0f,"李丰：从iPhone X、智能音箱到新药研发，「深科技」为什么值得期待？",3)).toFile(templatePath+"/Users/zhhu/template/b.png");
-
+            BufferedImage img = Thumbnails.of(new File("/Users/zhhu/template/a.png")).size(750,1334).asBufferedImage();
+            img = createBufferedImage(img,42,60,750,1334, 666,180,"PingFang-SC",Font.BOLD,42,Color.BLACK, 1.0f,report.getTitle(), 3);
+            img = createBufferedImage(img,42,218,750,1334, 200,32,"PingFang-SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,report.getAuthor(), 1);
+            img = createBufferedImage(img,538,218,750,1334, 200,32,"PingFang-SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f, new  DateTime(report.getCreateTime()).toString("MM-dd HH:mm"), 1);
+            img = createBufferedImage(img,42,300,750,1334, 666,262,"PingFang-SC",Font.BOLD,36,new Color(Integer.parseInt("333333",16)), 1.0f,report.getSubTitle(), 5);
+            img = Thumbnails.of(img).scale(1.0).watermark(new Position() {
+                @Override
+                public Point calculate(int enclosingWidth, int enclosingHeight, int width, int height, int insetLeft, int insetRight, int insetTop, int insetBottom) {
+                    return new Point(282,612);
+                }
+            },Thumbnails.of(new URL("http://ss-lhjl.oss-cn-zhangjiakou.aliyuncs.com/gh_03a936eae289_1280.jpg").openStream()).size(190,190).asBufferedImage(),1.0f).asBufferedImage();
+            img = Thumbnails.of(img).scale(1.0).watermark(new Position() {
+                @Override
+                public Point calculate(int enclosingWidth, int enclosingHeight, int width, int height, int insetLeft, int insetRight, int insetTop, int insetBottom) {
+                    return new Point(42,844);
+                }
+            },Thumbnails.of(new URL(report.getCoverUrl()).openStream()).size(666,400).keepAspectRatio(false).asBufferedImage(),1.0f).asBufferedImage();
+            ImageIO.write(img, "jpg", os);
         } catch (Exception e) {
-            e.printStackTrace();
+           this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
         }
         return new ByteArrayInputStream(os.toByteArray());
 
@@ -505,8 +508,8 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 //            Thumbnails.of(new File("/Users/zhhu/template/a.png")).size(375,667).watermark(createBufferedImage(21,15,333,90,"雅黑",Font.BOLD,21,Color.blue,0.0f,"李丰：从iPhone X、智能音箱到新药研发，「深科技」为什么值得期待？",1)).toFile("/Users/zhhu/template/b.png");
             BufferedImage img = Thumbnails.of(new File("/Users/zhhu/template/a.png")).size(750,1334).asBufferedImage();
             img = createBufferedImage(img,42,60,750,1334, 666,180,"PingFang-SC",Font.BOLD,42,Color.BLACK, 1.0f,"李丰：从iPhone X、智能音箱到新药研发，「深科技」为什么值得期待？", 3);
-            img = createBufferedImage(img,42,218,750,1334, 200,32,"PingFang-SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,"转载自：天天投 ", 1);
-            img = createBufferedImage(img,538,218,750,1334, 200,32,"PingFang-SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,"09-09 14:00", 1);
+            img = createBufferedImage(img,42,248,750,1334, 200,32,"PingFang-SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,"转载自：天天投 ", 1);
+            img = createBufferedImage(img,538,248,750,1334, 200,32,"PingFang-SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,"09-09 14:00", 1);
             img = createBufferedImage(img,42,300,750,1334, 666,262,"PingFang-SC",Font.BOLD,36,new Color(Integer.parseInt("333333",16)), 1.0f,"【摘要】口腔行业是市场化程度非常高的消费医疗领域，在资本的推动下，大型连锁连锁纷纷布啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊 啊啊 啊啊 啊 啊啊啊啊啊啊…", 5);
             img = Thumbnails.of(img).scale(1.0).watermark(new Position() {
                 @Override
@@ -538,23 +541,33 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 
         StringBuilder sb = new StringBuilder();
         int tempW = 0;
-        int tempLine = -1;
+        int tempLine = 0;
         for (int i = 0 ;  i < pressText.length(); i++){
             tempW += getCharLen(pressText.charAt(i), g);
             if (tempW >= wordWidth){
-                g.drawString(sb.toString(), x, y);
+                if (tempLine == lineNum){
+                    g.drawString(sb.substring(0,sb.length()-2)+"...", x, y);
+                }else{
+                    g.drawString(sb.toString(), x, y);
+                }
+
                 tempLine ++;
                 sb.delete(0,sb.length());
                 tempW = 0;
-                y = y + fontSize;
+                y = y + new Double(fontSize*1.3).intValue();
             }
-            if (tempLine > lineNum){
+            if (tempLine == lineNum){
                 break;
             }
             sb.append(pressText.charAt(i));
         }
 
-        g.drawString(sb.toString(), x, y);
+        if (tempW+2 >= wordWidth){
+            g.drawString(sb.substring(0,sb.length()-2)+"...", x, y);
+        }else{
+            g.drawString(sb.toString(), x, y);
+        }
+
         g.dispose();
 
 

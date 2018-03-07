@@ -5,9 +5,13 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendAuditBMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamBMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamIntroductionBMapper;
+import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamMemberEducationBMapper;
+import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamMemberWorkBMapper;
 import com.lhjl.tzzs.proxy.model.ProjectSendAuditB;
 import com.lhjl.tzzs.proxy.model.ProjectSendTeamB;
 import com.lhjl.tzzs.proxy.model.ProjectSendTeamIntroductionB;
+import com.lhjl.tzzs.proxy.model.ProjectSendTeamMemberEducationB;
+import com.lhjl.tzzs.proxy.model.ProjectSendTeamMemberWorkB;
 import com.lhjl.tzzs.proxy.service.CollectProjectAuditTeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +33,10 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
     private ProjectSendAuditBMapper projectSendAuditBMapper;
     @Autowired
     private ProjectSendTeamIntroductionBMapper projectSendTeamIntroductionBMapper;
-
+    @Autowired
+    private ProjectSendTeamMemberEducationBMapper projectSendTeamMemberEducationBMapper;
+    @Autowired
+    private ProjectSendTeamMemberWorkBMapper projectSendTeamMemberWorkBMapper;
     @Override
     public CommonDto<CollectProjectAuditTeamDto> getCollectProjectAuditTeam(Integer projectId) {
 
@@ -56,11 +63,46 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
             for(ProjectSendTeamB projectSendTeamB_i : projectSendTeamBList){
             	//设置采集项目的团队成员
                 CollectProjectAuditTeamDto.CollectProjectAuditMemberDto collectProjectAuditMemberDto = new CollectProjectAuditTeamDto.CollectProjectAuditMemberDto();
+                //团队成员id
                 collectProjectAuditMemberDto.setMemberId(projectSendTeamB_i.getId());
+                //成员姓名
                 collectProjectAuditMemberDto.setMemberName(projectSendTeamB_i.getMemberName());
+                //成员职务
                 collectProjectAuditMemberDto.setPosition(projectSendTeamB_i.getCompanyDuties());
+                //股份占比
                 collectProjectAuditMemberDto.setStockPer(projectSendTeamB_i.getStockRatio());
+                //简介
                 collectProjectAuditMemberDto.setKernelDesc(projectSendTeamB_i.getMemberDesc());
+                
+                //获取团队成员的教育经历
+                ProjectSendTeamMemberEducationB educationQuery=new ProjectSendTeamMemberEducationB();
+                educationQuery.setPsTeamBId(projectSendTeamB_i.getId());
+                List<ProjectSendTeamMemberEducationB> educations = projectSendTeamMemberEducationBMapper.select(educationQuery);
+                
+                //获取团队成员的工作经历
+                ProjectSendTeamMemberWorkB workQuery=new ProjectSendTeamMemberWorkB();
+                workQuery.setPsTeamBId(projectSendTeamB_i.getId());
+                List<ProjectSendTeamMemberWorkB> works = projectSendTeamMemberWorkBMapper.select(workQuery);
+                //接受教育经历以及工作经历的字符串
+                List<String> educationsStrs=new ArrayList<>();
+                List<String> worksStrs=new ArrayList<>();
+                
+                if(educations!=null&&educations.size()!=0) {
+                	educations.forEach((e)->{
+                		educationsStrs.add(e.getEducationExperience());
+                	});
+                }
+                
+                if(works!=null&&works.size()!=0) {
+                	works.forEach((e)->{
+                		worksStrs.add(e.getWorkExperience());
+                	});
+                }
+                
+                //设置工作经历以及教育经历
+                collectProjectAuditMemberDto.setWorkExperiences(worksStrs);
+                collectProjectAuditMemberDto.setEducationExperience(educationsStrs);
+                
                 //TODO 团队成员的权重逻辑是否需要进一步变更  
                 //设置团队成员的权重,如果权重为null的话，默认设置该权重为0
                 collectProjectAuditMemberDto.setWeight(projectSendTeamB_i.getWeight()==null ? 0 : projectSendTeamB_i.getWeight());

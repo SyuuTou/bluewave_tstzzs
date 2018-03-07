@@ -31,7 +31,17 @@ public class ElegantServiceSearchInputDto {
     private Integer isReward;
     /** 是否领投 */
     private Integer isLeadInvestor;
+    /** 当前访问用户的Token */
+    private String token;
 
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public List<Integer> getApproveType() {
         return approveType;

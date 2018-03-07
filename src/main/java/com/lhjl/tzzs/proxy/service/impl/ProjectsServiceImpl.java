@@ -1116,7 +1116,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	public CommonDto<Map<String, Object>> listProInfos(Integer appid, ProjectsListInputDto body) {
 		CommonDto<Map<String, Object>> result=new CommonDto<Map<String, Object>>();
 		Map<String,Object> map =new HashMap<>();
-		
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		//格式化参数
 		if(body.getCurrentPage()==null) {
 			body.setCurrentPage(pageNumDefault);
 		}
@@ -1126,7 +1127,21 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		body.setStart((long)(body.getCurrentPage()-1) * body.getPageSize());
 		
 		List<ProjectsListOutputDto> list = projectsMapper.findSplit(body);
-		
+		//设置创建时间，更新时间输出字符串格式
+		list.forEach((e)->{
+			//设置提交时间
+			if(e.getCreateTime()!=null) {
+				e.setCreateTimeOutputStr(sdf.format(e.getCreateTime()));
+			}
+			//设置更新时间,更新时间为null的时候更新时间为提交时间
+			if(e.getUpdateTime()!=null) {
+				e.setUpdateTimeOutputStr(sdf.format(e.getUpdateTime()));
+				//更新时间设置为提交时间
+			}else {
+				e.setUpdateTimeOutputStr(e.getCreateTimeOutputStr());
+			}
+			
+		});
 		Long total = projectsMapper.findSplitCount(body);
 		
 		map.put("data", list);

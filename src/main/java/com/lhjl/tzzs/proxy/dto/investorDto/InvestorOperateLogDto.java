@@ -4,7 +4,7 @@ package com.lhjl.tzzs.proxy.dto.investorDto;
  * Created by lanhaijulang on 2018/1/30.
  */
 public class InvestorOperateLogDto {
-    private Integer id;
+    private Long id;
 
     private Integer investorId;
 
@@ -14,11 +14,11 @@ public class InvestorOperateLogDto {
 
     private String operateTime;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

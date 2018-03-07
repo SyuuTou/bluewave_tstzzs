@@ -1,5 +1,6 @@
-package com.lhjl.tzzs.proxy.controller;
+package com.lhjl.tzzs.proxy.controller.project.collect;
 
+import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CollectProjectAuditFinancingDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.service.CollectProjectAuditFinancingService;

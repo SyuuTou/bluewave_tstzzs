@@ -50,9 +50,15 @@ public class ProjectSendTeamB {
     private Integer yn;
 
     /**
-     * 团队成员权重
+     * 团队成员权重-周栋
      */
     private Integer weight;
+
+    /**
+     * 是否在职，1表示在职，0表示离职-周栋
+     */
+    @Column(name = "job_status")
+    private Integer jobStatus;
 
     /**
      * @return id
@@ -195,20 +201,38 @@ public class ProjectSendTeamB {
     }
 
     /**
-     * 获取团队成员权重
+     * 获取团队成员权重-周栋
      *
-     * @return weight - 团队成员权重
+     * @return weight - 团队成员权重-周栋
      */
     public Integer getWeight() {
         return weight;
     }
 
     /**
-     * 设置团队成员权重
+     * 设置团队成员权重-周栋
      *
-     * @param weight 团队成员权重
+     * @param weight 团队成员权重-周栋
      */
     public void setWeight(Integer weight) {
         this.weight = weight;
+    }
+
+    /**
+     * 获取是否在职，1表示在职，0表示离职-周栋
+     *
+     * @return job_status - 是否在职，1表示在职，0表示离职-周栋
+     */
+    public Integer getJobStatus() {
+        return jobStatus;
+    }
+
+    /**
+     * 设置是否在职，1表示在职，0表示离职-周栋
+     *
+     * @param jobStatus 是否在职，1表示在职，0表示离职-周栋
+     */
+    public void setJobStatus(Integer jobStatus) {
+        this.jobStatus = jobStatus;
     }
 }

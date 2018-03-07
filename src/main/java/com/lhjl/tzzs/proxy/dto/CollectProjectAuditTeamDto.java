@@ -16,26 +16,28 @@ public class CollectProjectAuditTeamDto{
     private List<CollectProjectAuditMemberDto> collectProjectAuditMemberDtoList;
     //定义团队成员的静态内部类
     public static class CollectProjectAuditMemberDto implements Comparable<CollectProjectAuditMemberDto>{
-
+    	//用户前端的展示id
         private Integer sortId;
-
+        //团队成员的id
         private Integer memberId;
-
+        //成员姓名
         private String memberName;
-
+        //职务
         private String position;
-
+        /**
+         * 成员简介
+         */
         private String kernelDesc;
 
         private String phone;
 
-        private String[] workExperiences;
+        private List<String> workExperiences;
 
-        private String[] educationExperience;
-
+        private List<String> educationExperience;
+        //是否在职
         private Integer isOnJob;
 
-        private String headPicture;
+        private String headPicture;  
 
         private String picture;
 
@@ -135,23 +137,24 @@ public class CollectProjectAuditTeamDto{
             this.phone = phone;
         }
 
-        public String[] getWorkExperiences() {
-            return workExperiences;
-        }
 
-        public void setWorkExperiences(String[] workExperiences) {
-            this.workExperiences = workExperiences;
-        }
+        public List<String> getWorkExperiences() {
+			return workExperiences;
+		}
 
-        public String[] getEducationExperience() {
-            return educationExperience;
-        }
+		public void setWorkExperiences(List<String> workExperiences) {
+			this.workExperiences = workExperiences;
+		}
 
-        public void setEducationExperience(String[] educationExperience) {
-            this.educationExperience = educationExperience;
-        }
+		public List<String> getEducationExperience() {
+			return educationExperience;
+		}
 
-        public Integer getIsOnJob() {
+		public void setEducationExperience(List<String> educationExperience) {
+			this.educationExperience = educationExperience;
+		}
+
+		public Integer getIsOnJob() {
             return isOnJob;
         }
 
@@ -332,24 +335,8 @@ public class CollectProjectAuditTeamDto{
         	int result = this.weight > collectProjectAuditMemberDto.weight ? -1 : (this.weight == collectProjectAuditMemberDto.weight ? 0 : 1);
             return result;
         }
-
-		@Override
-		public String toString() {
-			return "CollectProjectAuditMemberDto [sortId=" + sortId + ", memberId=" + memberId + ", memberName="
-					+ memberName + ", position=" + position + ", kernelDesc=" + kernelDesc + ", phone=" + phone
-					+ ", workExperiences=" + Arrays.toString(workExperiences) + ", educationExperience="
-					+ Arrays.toString(educationExperience) + ", isOnJob=" + isOnJob + ", headPicture=" + headPicture
-					+ ", picture=" + picture + ", email=" + email + ", weiChat=" + weiChat + ", teamId=" + teamId
-					+ ", selfDefTeam=" + selfDefTeam + ", birthDate=" + birthDate + ", tenureTime=" + tenureTime
-					+ ", sex=" + sex + ", diploma=" + diploma + ", nationality=" + nationality + ", segmentaionIds="
-					+ Arrays.toString(segmentaionIds) + ", stockPer=" + stockPer + ", citys=" + Arrays.toString(citys)
-					+ ", selfDefCitys=" + Arrays.toString(selfDefCitys) + ", businesses=" + Arrays.toString(businesses)
-					+ ", investStages=" + investStages + ", businessDesc=" + businessDesc + ", workExperienceDesc="
-					+ workExperienceDesc + ", educationExperienceDesc=" + educationExperienceDesc + ", weight=" + weight
-					+ ", isHide=" + isHide + "]";
-		}
-        
     }
+    
     public Integer getProjectId() {
         return projectId;
     }

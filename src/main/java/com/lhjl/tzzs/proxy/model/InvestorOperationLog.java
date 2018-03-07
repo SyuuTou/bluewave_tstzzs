@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class InvestorOperationLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     /**
      * 投资人id
@@ -37,11 +37,7 @@ public class InvestorOperationLog {
      */
     @Column(name = "update_time")
     private Date updateTime;
-    /**
-     * 更新时间输出字符串
-     */
-//    @Transient
-//    private Date updateTimeOutputStr;
+
     /**
      * 是否删除。0:未删除；1：删除
      */
@@ -50,14 +46,14 @@ public class InvestorOperationLog {
     /**
      * @return id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

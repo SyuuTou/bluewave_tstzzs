@@ -61,11 +61,36 @@ public class ProjectsListOutputDto {
 	 * 创建时间
 	 */
 	private Date createTime;
+	/**
+	 * 创建时间输出字符串
+	 */
+	private String createTimeOutputStr;
 	
 	/**
 	 * 更新时间
 	 */
 	private Date updateTime;
+	/**
+	 * 更新时间输出字符串
+	 */
+	private String updateTimeOutputStr;
+	
+
+	public String getCreateTimeOutputStr() {
+		return createTimeOutputStr;
+	}
+
+	public void setCreateTimeOutputStr(String createTimeOutputStr) {
+		this.createTimeOutputStr = createTimeOutputStr;
+	}
+
+	public String getUpdateTimeOutputStr() {
+		return updateTimeOutputStr;
+	}
+
+	public void setUpdateTimeOutputStr(String updateTimeOutputStr) {
+		this.updateTimeOutputStr = updateTimeOutputStr;
+	}
 
 	public Integer getId() {
 		return id;
