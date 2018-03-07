@@ -103,7 +103,7 @@ public class CollectProjectAuditBasicInfoServiceImpl implements CollectProjectAu
                 projectSendSegmentationBLists.add(projectSendSegmentationB_i.getSegmentationName());
             });
             projectSendSegmentationBArr = new String[projectSendSegmentationBLists.size()];
-            projectSendSegmentationBLists.toArray(projectSendSegmentationBArr);
+            projectSendSegmentationBLists.toArray(projectSendSegmentationBArr);  
         }
         collectProjectAuditBasicInfoDto.setSegmentation(projectSendSegmentationBArr);
 
