@@ -5,10 +5,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
-import com.lhjl.tzzs.proxy.service.ElegantServiceService;
-import com.lhjl.tzzs.proxy.service.FormIdService;
-import com.lhjl.tzzs.proxy.service.SendTemplateService;
-import com.lhjl.tzzs.proxy.service.UserInfoService;
+import com.lhjl.tzzs.proxy.service.*;
 import com.lhjl.tzzs.proxy.service.bluewave.BlueUserInfoService;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
@@ -916,6 +913,26 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantServiceParticipate.setFeedbackImages(elegantServiceParticipateFeedbackImages);
         elegantServiceParticipate.setFeedbackTexts(elegantServiceParticipateFeedbackText);
 
+        //获取项目信息
+        ElegantServiceRelevantProject elegantServiceRelevantProjectForSearch = new ElegantServiceRelevantProject();
+        elegantServiceRelevantProjectForSearch.setElegantServiceId(elegantServiceParticipate.getElegantServiceId());
+
+        List<ElegantServiceRelevantProject> elegantServiceRelevantProject = elegantServiceRelevantProjectMapper.select(elegantServiceRelevantProjectForSearch);
+        if (elegantServiceRelevantProject.size()>0){
+            elegantServiceParticipate.setProjectName(elegantServiceRelevantProject.get(0).getProjectShortName());
+            elegantServiceParticipate.setProjectId(elegantServiceRelevantProject.get(0).getProjectId());
+        }else {
+            elegantServiceParticipate.setProjectName("");
+        }
+
+        //获取悬赏信息
+        ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceParticipate.getElegantServiceId());
+        if (null != elegantService){
+            elegantServiceParticipate.setElegantServiceName(elegantService.getServiceName());
+        }else {
+            elegantServiceParticipate.setElegantServiceName("");
+        }
+
         Integer userId = userLoginService.getUserIdByToken(elegantServiceParticipate.getToken(),appId);
         if (userId == -1){
             return new CommonDto<>(null,"当前记录的用户tokne无效",502);
@@ -1577,7 +1594,12 @@ public class ElegantServiceImpl implements ElegantServiceService{
         if (null==userName){
             UsersWeixin usersWeixinForSearch = new UsersWeixin();
             usersWeixinForSearch.setUserId(users.getId());
-            userName = usersWeixinMapper.selectOne(usersWeixinForSearch).getNickName();
+            UsersWeixin usersWeixin = usersWeixinMapper.selectOne(usersWeixinForSearch);
+            if (null != usersWeixin){
+                userName = usersWeixin.getNickName();
+            }else {
+                userName = "";
+            }
         }
 
         if (null == userName){

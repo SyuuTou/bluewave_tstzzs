@@ -197,9 +197,9 @@ public class ReportController extends GenericController {
             l = in.read(buffer);
         }
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_PNG);
+        headers.setContentType(MediaType.IMAGE_JPEG);
         headers.setContentLength(outputStream.toByteArray().length);
-        headers.set("Content-Disposition", "attachment; filename=image.png");
+        headers.set("Content-Disposition", "attachment; filename=image.jpg");
         return new HttpEntity<byte[]>(outputStream.toByteArray(), headers);
     }
 

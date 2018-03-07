@@ -54,6 +54,9 @@
 
     where es.on_off = 1
     and es.yn = 1
+    <if test="token !=null and token !='' ">
+      and creator = #{token}
+    </if>
     <if test="appid != null and appid != ''">
       and es.appid = #{appid}
     </if>

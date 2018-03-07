@@ -73,6 +73,22 @@ public class ElegantServiceParticipate {
      */
     @Transient
     private String formid;
+
+    /**
+     * 项目名称
+     */
+    @Transient
+    private String projectName;
+
+    /**
+     * 项目id
+     */
+    @Transient
+    private Integer projectId;
+
+    @Transient
+    private String elegantServiceName;
+
     /**
      * @return id
      */
@@ -241,5 +257,29 @@ public class ElegantServiceParticipate {
 
     public void setFormid(String formid) {
         this.formid = formid;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getElegantServiceName() {
+        return elegantServiceName;
+    }
+
+    public void setElegantServiceName(String elegantServiceName) {
+        this.elegantServiceName = elegantServiceName;
     }
 }
