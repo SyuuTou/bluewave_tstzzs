@@ -18,7 +18,12 @@ public class CollectProjectAuditBasicInfoController extends GenericController{
 
     @Autowired
     private CollectProjectAuditBasicInfoService collectProjectAuditBasicInfoService;
-
+    
+    /**
+     * 采集项目审核基本信息
+     * @param projectId
+     * @return
+     */
     @GetMapping("/getcollectprojectauditbasicinfo")
     public CommonDto<CollectProjectAuditBasicInfoDto> getCollectProjectAuditBasicInfo(Integer projectId){
         CommonDto<CollectProjectAuditBasicInfoDto> result = new CommonDto<>();
