@@ -27,7 +27,7 @@ public class CollectProjectAuditBasicInfoController extends GenericController{
     @GetMapping("/getcollectprojectauditbasicinfo")
     public CommonDto<CollectProjectAuditBasicInfoDto> getCollectProjectAuditBasicInfo(Integer projectId){
         CommonDto<CollectProjectAuditBasicInfoDto> result = new CommonDto<>();
-        try {
+        try {  
             result = collectProjectAuditBasicInfoService.getCollectProjectAuditBasicInfo(projectId);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
