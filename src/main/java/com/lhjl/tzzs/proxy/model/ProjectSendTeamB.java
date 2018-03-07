@@ -55,10 +55,21 @@ public class ProjectSendTeamB {
     private Integer weight;
 
     /**
-     * 是否在职，1表示在职，0表示离职-周栋
+     * 是否在职，0表示在职，1表示离职-周栋
      */
     @Column(name = "job_status")
     private Integer jobStatus;
+
+    /**
+     * 手机号-周栋
+     */
+    private String phone;
+
+    /**
+     * 是否隐藏:0 显示 1 隐藏-周栋
+     */
+    @Column(name = "is_hide")
+    private Integer isHide;
 
     /**
      * @return id
@@ -219,20 +230,56 @@ public class ProjectSendTeamB {
     }
 
     /**
-     * 获取是否在职，1表示在职，0表示离职-周栋
+     * 获取是否在职，0表示在职，1表示离职-周栋
      *
-     * @return job_status - 是否在职，1表示在职，0表示离职-周栋
+     * @return job_status - 是否在职，0表示在职，1表示离职-周栋
      */
     public Integer getJobStatus() {
         return jobStatus;
     }
 
     /**
-     * 设置是否在职，1表示在职，0表示离职-周栋
+     * 设置是否在职，0表示在职，1表示离职-周栋
      *
-     * @param jobStatus 是否在职，1表示在职，0表示离职-周栋
+     * @param jobStatus 是否在职，0表示在职，1表示离职-周栋
      */
     public void setJobStatus(Integer jobStatus) {
         this.jobStatus = jobStatus;
+    }
+
+    /**
+     * 获取手机号-周栋
+     *
+     * @return phone - 手机号-周栋
+     */
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     * 设置手机号-周栋
+     *
+     * @param phone 手机号-周栋
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    /**
+     * 获取是否隐藏:0 显示 1 隐藏-周栋
+     *
+     * @return is_hide - 是否隐藏:0 显示 1 隐藏-周栋
+     */
+    public Integer getIsHide() {
+        return isHide;
+    }
+
+    /**
+     * 设置是否隐藏:0 显示 1 隐藏-周栋
+     *
+     * @param isHide 是否隐藏:0 显示 1 隐藏-周栋
+     */
+    public void setIsHide(Integer isHide) {
+        this.isHide = isHide;
     }
 }

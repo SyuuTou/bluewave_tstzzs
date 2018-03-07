@@ -362,7 +362,12 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
         if (body.getCity() != null){
             projects.setCity(body.getCity());
         }
+        /**
+         * 理论上来说，写入到平台库中的项目是没有采集编号的
+         * 下面的代码仅仅用于暂且保留
+         */
         Integer projectNumber = 1000000;
+        
         List<Projects> projectsListForSerialNumber = projectsMapper.maxSerialNumber();
         if (projectsListForSerialNumber.size() > 0){
             projectNumber = projectsListForSerialNumber.get(0).getSerialNumber() + 1;

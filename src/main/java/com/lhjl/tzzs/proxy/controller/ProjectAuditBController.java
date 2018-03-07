@@ -36,11 +36,15 @@ public class ProjectAuditBController extends GenericService{
 
         return result;
     }
-
+    /**
+     * 提交项目审核接口
+     * @param body
+     * @param appid
+     * @return
+     */
     @PostMapping("/v{appid}/send/project/audit")
     public CommonDto<String> auditProjectSend(@RequestBody ProjectSendAuditBInputDto body, @PathVariable Integer appid){
         CommonDto<String> result  = new CommonDto<>();
-
         try {
             result = projectAuditBService.auditProjectSend(body, appid);
         }catch (Exception e){
