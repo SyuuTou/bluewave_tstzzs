@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.service.bluewave.impl;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
 import com.github.pagehelper.PageRowBounds;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.CommonTotal;
@@ -86,6 +87,9 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 
     @Value("${report.template.path}")
     private String templatePath;
+
+    @Autowired
+    private WxMaService qrcodeService;
 
 
     @Transactional(readOnly = true)
@@ -478,17 +482,17 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         Report report = reportMapper.selectByPrimaryKey(reportId);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
-            BufferedImage img = Thumbnails.of(new File("/Users/zhhu/template/a.png")).size(750,1334).asBufferedImage();
-            img = createBufferedImage(img,42,60,750,1334, 666,180,"PingFang-SC",Font.BOLD,42,Color.BLACK, 1.0f,report.getTitle(), 3);
-            img = createBufferedImage(img,42,218,750,1334, 200,32,"PingFang-SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,report.getAuthor(), 1);
-            img = createBufferedImage(img,538,218,750,1334, 200,32,"PingFang-SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f, new  DateTime(report.getCreateTime()).toString("MM-dd HH:mm"), 1);
-            img = createBufferedImage(img,42,300,750,1334, 666,262,"PingFang-SC",Font.BOLD,36,new Color(Integer.parseInt("333333",16)), 1.0f,report.getSubTitle(), 5);
+            BufferedImage img = Thumbnails.of(new URL("http://img.idatavc.com/template/share_pic.png").openStream()).size(750,1334).asBufferedImage();
+            img = createBufferedImage(img,42,60,750,1334, 666,180,"PingFang SC",Font.BOLD,42,Color.BLACK, 1.0f,report.getTitle(), 3);
+            img = createBufferedImage(img,42,218,750,1334, 200,32,"PingFang SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,report.getAuthor(), 1);
+            img = createBufferedImage(img,538,218,750,1334, 200,32,"PingFang SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f, new  DateTime(report.getCreateTime()).toString("MM-dd HH:mm"), 1);
+            img = createBufferedImage(img,42,300,750,1334, 666,262,"PingFang SC",Font.PLAIN,36,new Color(Integer.parseInt("333333",16)), 1.0f,report.getSubTitle(), 5);
             img = Thumbnails.of(img).scale(1.0).watermark(new Position() {
                 @Override
                 public Point calculate(int enclosingWidth, int enclosingHeight, int width, int height, int insetLeft, int insetRight, int insetTop, int insetBottom) {
                     return new Point(282,612);
                 }
-            },Thumbnails.of(new URL("http://ss-lhjl.oss-cn-zhangjiakou.aliyuncs.com/gh_03a936eae289_1280.jpg").openStream()).size(190,190).asBufferedImage(),1.0f).asBufferedImage();
+            },Thumbnails.of( qrcodeService.getQrcodeService().createWxCode("pages/reference/reference",200)).size(190,190).asBufferedImage(),1.0f).asBufferedImage();
             img = Thumbnails.of(img).scale(1.0).watermark(new Position() {
                 @Override
                 public Point calculate(int enclosingWidth, int enclosingHeight, int width, int height, int insetLeft, int insetRight, int insetTop, int insetBottom) {
@@ -503,41 +507,42 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 
     }
 
-    public static void main(String[] args) {
-        try {
-//            Thumbnails.of(new File("/Users/zhhu/template/a.png")).size(375,667).watermark(createBufferedImage(21,15,333,90,"雅黑",Font.BOLD,21,Color.blue,0.0f,"李丰：从iPhone X、智能音箱到新药研发，「深科技」为什么值得期待？",1)).toFile("/Users/zhhu/template/b.png");
-            BufferedImage img = Thumbnails.of(new File("/Users/zhhu/template/a.png")).size(750,1334).asBufferedImage();
-            img = createBufferedImage(img,42,60,750,1334, 666,180,"PingFang-SC",Font.BOLD,42,Color.BLACK, 1.0f,"李丰：从iPhone X、智能音箱到新药研发，「深科技」为什么值得期待？", 3);
-            img = createBufferedImage(img,42,248,750,1334, 200,32,"PingFang-SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,"转载自：天天投 ", 1);
-            img = createBufferedImage(img,538,248,750,1334, 200,32,"PingFang-SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,"09-09 14:00", 1);
-            img = createBufferedImage(img,42,300,750,1334, 666,262,"PingFang-SC",Font.BOLD,36,new Color(Integer.parseInt("333333",16)), 1.0f,"【摘要】口腔行业是市场化程度非常高的消费医疗领域，在资本的推动下，大型连锁连锁纷纷布啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊 啊啊 啊啊 啊 啊啊啊啊啊啊…", 5);
-            img = Thumbnails.of(img).scale(1.0).watermark(new Position() {
-                @Override
-                public Point calculate(int enclosingWidth, int enclosingHeight, int width, int height, int insetLeft, int insetRight, int insetTop, int insetBottom) {
-                    return new Point(282,612);
-                }
-            },Thumbnails.of(new URL("http://ss-lhjl.oss-cn-zhangjiakou.aliyuncs.com/gh_03a936eae289_1280.jpg").openStream()).size(190,190).asBufferedImage(),1.0f).asBufferedImage();
-            img = Thumbnails.of(img).scale(1.0).watermark(new Position() {
-                @Override
-                public Point calculate(int enclosingWidth, int enclosingHeight, int width, int height, int insetLeft, int insetRight, int insetTop, int insetBottom) {
-                    return new Point(42,844);
-                }
-            },Thumbnails.of(new URL("https://img.idatavc.com/upload/b495ce63ede0f4efc9eec62cb947c162_848_index.jpg").openStream()).size(666,400).keepAspectRatio(false).asBufferedImage(),1.0f).asBufferedImage();
-
-            Thumbnails.of(img).size(750,1334).toFile("/Users/zhhu/template/b.png");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//        try {
+////            Thumbnails.of(new File("/Users/zhhu/template/a.png")).size(375,667).watermark(createBufferedImage(21,15,333,90,"雅黑",Font.BOLD,21,Color.blue,0.0f,"李丰：从iPhone X、智能音箱到新药研发，「深科技」为什么值得期待？",1)).toFile("/Users/zhhu/template/b.png");
+//            BufferedImage img = Thumbnails.of(new URL("http://img.idatavc.com/template/share_pic.png").openStream()).size(750,1334).asBufferedImage();
+//            img = createBufferedImage(img,42,60,750,1334, 666,180,"PingFang SC",Font.BOLD,42,Color.BLACK, 1.0f,"李丰：从iPhone X、智能音箱到新药研发，「深科技」为什么值得期待？", 3);
+//            img = createBufferedImage(img,42,248,750,1334, 200,32,"PingFang SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,"转载自：天天投 ", 1);
+//            img = createBufferedImage(img,538,248,750,1334, 200,32,"PingFang SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,"09-09 14:00", 1);
+//            img = createBufferedImage(img,42,300,750,1334, 666,262,"PingFang SC",Font.PLAIN,36,new Color(Integer.parseInt("333333",16)), 1.0f,"【摘要】口腔行业是市场化程度非常高的消费医疗领域，在资本的推动下，大型连锁连锁纷纷布啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊 啊啊 啊啊 啊 啊啊啊啊啊啊…", 5);
+//            img = Thumbnails.of(img).scale(1.0).watermark(new Position() {
+//                @Override
+//                public Point calculate(int enclosingWidth, int enclosingHeight, int width, int height, int insetLeft, int insetRight, int insetTop, int insetBottom) {
+//                    return new Point(282,612);
+//                }
+//            },Thumbnails.of(new URL("http://ss-lhjl.oss-cn-zhangjiakou.aliyuncs.com/gh_03a936eae289_1280.jpg").openStream()).size(190,190).asBufferedImage(),1.0f).asBufferedImage();
+//            img = Thumbnails.of(img).scale(1.0).watermark(new Position() {
+//                @Override
+//                public Point calculate(int enclosingWidth, int enclosingHeight, int width, int height, int insetLeft, int insetRight, int insetTop, int insetBottom) {
+//                    return new Point(42,844);
+//                }
+//            },Thumbnails.of(new URL("https://img.idatavc.com/upload/b495ce63ede0f4efc9eec62cb947c162_848_index.jpg").openStream()).size(666,400).keepAspectRatio(false).asBufferedImage(),1.0f).asBufferedImage();
+//
+//            Thumbnails.of(img).size(750,1334).toFile("/Users/zhhu/template/b.jpg");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private static BufferedImage createBufferedImage(BufferedImage img, Integer x, Integer y, Integer width, Integer height, Integer wordWidth, Integer wordHeight, String fontName, Integer fontStyle, Integer fontSize, Color color, Float alpha, String pressText, Integer lineNum){
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = bufferedImage.createGraphics();
         g.drawImage(img,0,0, 750, 1334,null);
-        g.setFont(new Font(fontName, fontStyle, fontSize));
-        g.setColor(color);
         g.setStroke(new BasicStroke(1f));
-
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setColor(color);
+        g.setFont(new Font(fontName, fontStyle, fontSize));
 
         StringBuilder sb = new StringBuilder();
         int tempW = 0;
@@ -545,16 +550,17 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         for (int i = 0 ;  i < pressText.length(); i++){
             tempW += getCharLen(pressText.charAt(i), g);
             if (tempW >= wordWidth){
+                tempLine ++;
                 if (tempLine == lineNum){
                     g.drawString(sb.substring(0,sb.length()-2)+"...", x, y);
                 }else{
                     g.drawString(sb.toString(), x, y);
                 }
 
-                tempLine ++;
+
                 sb.delete(0,sb.length());
                 tempW = 0;
-                y = y + new Double(fontSize*1.3).intValue();
+                y = y + new Double(fontSize*1.4).intValue();
             }
             if (tempLine == lineNum){
                 break;
