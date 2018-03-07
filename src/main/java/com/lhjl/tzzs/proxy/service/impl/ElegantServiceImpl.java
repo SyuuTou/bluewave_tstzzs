@@ -925,6 +925,14 @@ public class ElegantServiceImpl implements ElegantServiceService{
             elegantServiceParticipate.setProjectName("");
         }
 
+        //获取悬赏信息
+        ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceParticipate.getElegantServiceId());
+        if (null != elegantService){
+            elegantServiceParticipate.setElegantServiceName(elegantService.getServiceName());
+        }else {
+            elegantServiceParticipate.setElegantServiceName("");
+        }
+
         Integer userId = userLoginService.getUserIdByToken(elegantServiceParticipate.getToken(),appId);
         if (userId == -1){
             return new CommonDto<>(null,"当前记录的用户tokne无效",502);
