@@ -85,6 +85,10 @@ public class ElegantServiceParticipate {
      */
     @Transient
     private Integer projectId;
+
+    @Transient
+    private String elegantServiceName;
+
     /**
      * @return id
      */
@@ -269,5 +273,13 @@ public class ElegantServiceParticipate {
 
     public void setProjectId(Integer projectId) {
         this.projectId = projectId;
+    }
+
+    public String getElegantServiceName() {
+        return elegantServiceName;
+    }
+
+    public void setElegantServiceName(String elegantServiceName) {
+        this.elegantServiceName = elegantServiceName;
     }
 }
