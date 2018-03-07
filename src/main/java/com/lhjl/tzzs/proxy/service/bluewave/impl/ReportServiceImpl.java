@@ -483,10 +483,10 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
             BufferedImage img = Thumbnails.of(new URL("http://img.idatavc.com/template/share_pic.png").openStream()).size(750,1334).asBufferedImage();
-            img = createBufferedImage(img,42,60,750,1334, 666,180,"PingFang SC",Font.BOLD,42,Color.BLACK, 1.0f,report.getTitle(), 3);
-            img = createBufferedImage(img,42,218,750,1334, 200,32,"PingFang SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,report.getAuthor(), 1);
-            img = createBufferedImage(img,538,218,750,1334, 200,32,"PingFang SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f, new  DateTime(report.getCreateTime()).toString("MM-dd HH:mm"), 1);
-            img = createBufferedImage(img,42,300,750,1334, 666,262,"PingFang SC",Font.PLAIN,36,new Color(Integer.parseInt("333333",16)), 1.0f,report.getSubTitle(), 5);
+            img = createBufferedImage(img,42,60,750,1334, 666,180,"PingFang SC Regular",Font.BOLD,42,Color.BLACK, 1.0f,report.getTitle(), 3);
+            img = createBufferedImage(img,42,218,750,1334, 200,32,"PingFang SC Regular",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,report.getAuthor(), 1);
+            img = createBufferedImage(img,538,218,750,1334, 200,32,"PingFang SC Regular",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f, new  DateTime(report.getCreateTime()).toString("MM-dd HH:mm"), 1);
+            img = createBufferedImage(img,42,300,750,1334, 666,262,"PingFang SC Regular",Font.PLAIN,36,new Color(Integer.parseInt("333333",16)), 1.0f,report.getSubTitle(), 5);
             img = Thumbnails.of(img).scale(1.0).watermark(new Position() {
                 @Override
                 public Point calculate(int enclosingWidth, int enclosingHeight, int width, int height, int insetLeft, int insetRight, int insetTop, int insetBottom) {
