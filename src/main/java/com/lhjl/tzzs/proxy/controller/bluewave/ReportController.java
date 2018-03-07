@@ -37,7 +37,7 @@ public class ReportController extends GenericController {
     private ReportService reportService;
     /**
      * 文章报告-栏目元数据表
-     * @param appId
+     * @param appId  
      * @return
      */
     @GetMapping("/v{appid}/columns")
