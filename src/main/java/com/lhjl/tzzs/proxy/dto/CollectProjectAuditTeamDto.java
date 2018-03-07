@@ -37,7 +37,7 @@ public class CollectProjectAuditTeamDto{
         //是否在职
         private Integer isOnJob;
 
-        private String headPicture;
+        private String headPicture;  
 
         private String picture;
 
