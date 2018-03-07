@@ -110,6 +110,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
     /**
      * 获取精选活动列表的接口
+     * @param token 查询我的发布时，传递的Token
      * @return
      */
     @Override
@@ -130,42 +131,44 @@ public class ElegantServiceImpl implements ElegantServiceService{
         if (body.getPageSize() == null){
             body.setPageSize(pageSizeDefault);
         }
-
-
-        CommonDto<Map<String, Object>> userInfo = userInfoService.getUserInfo(token);
-        if (null != userInfo.getData().get("approveId")) {
-            Integer[] approveIds = (Integer[]) userInfo.getData().get("approveId");
-            body.setApproveType(Arrays.asList(approveIds));
-        }
-        if (null != userInfo.getData().get("levelId")){
-            body.setMemberType((Integer)userInfo.getData().get("levelId"));
-        }
-        if (null != userInfo.getData().get("isLeadInvestor")){
-            body.setIsLeadInvestor((Integer)userInfo.getData().get("isLeadInvestor"));
-        }
-
-
         //转数组
         Integer[] identityType = {};
-        if (null != body.getIdentityType() && body.getIdentityType().size()>0){
-            Integer[] identityTypeA  = new Integer[body.getIdentityType().size()];
-            for (int i = 0;i<body.getIdentityType().size();i++){
-                identityTypeA[i] = body.getIdentityType().get(i);
-            }
-            identityType = identityTypeA;
-        }
-
         Integer[] serviceType = {};
-        if (null != body.getServiceType() && body.getServiceType().size()>0){
-            Integer[] serviceTypeA = new Integer[body.getServiceType().size()];
-            for (int i=0;i<body.getServiceType().size();i++){
-                serviceTypeA[i] = body.getServiceType().get(i);
-            }
-            serviceType = serviceTypeA;
-        }
+        if (body.getIsReward() == 0) {
 
+            CommonDto<Map<String, Object>> userInfo = userInfoService.getUserInfo(body.getToken());
+            if (null != userInfo.getData().get("approveId")) {
+                Integer[] approveIds = (Integer[]) userInfo.getData().get("approveId");
+                body.setApproveType(Arrays.asList(approveIds));
+            }
+            if (null != userInfo.getData().get("levelId")) {
+                body.setMemberType((Integer) userInfo.getData().get("levelId"));
+            }
+            if (null != userInfo.getData().get("isLeadInvestor")) {
+                body.setIsLeadInvestor((Integer) userInfo.getData().get("isLeadInvestor"));
+            }
+
+
+
+            if (null != body.getIdentityType() && body.getIdentityType().size() > 0) {
+                Integer[] identityTypeA = new Integer[body.getIdentityType().size()];
+                for (int i = 0; i < body.getIdentityType().size(); i++) {
+                    identityTypeA[i] = body.getIdentityType().get(i);
+                }
+                identityType = identityTypeA;
+            }
+
+
+            if (null != body.getServiceType() && body.getServiceType().size() > 0) {
+                Integer[] serviceTypeA = new Integer[body.getServiceType().size()];
+                for (int i = 0; i < body.getServiceType().size(); i++) {
+                    serviceTypeA[i] = body.getServiceType().get(i);
+                }
+                serviceType = serviceTypeA;
+            }
+        }
         Integer startPage = (body.getPageNum()-1)*body.getPageSize();
-        List<Map<String,Object>> elegantServiceList = elegantServiceMapper.findElegantServiceList(body.getRecommendYn(),
+        List<Map<String,Object>> elegantServiceList = elegantServiceMapper.findElegantServiceList(token,body.getRecommendYn(),
                 body.getCreateTimeOrder(),sortOrder,appid,identityType,serviceType,body.getSearchWord(),body.getApproveType(),body.getIsLeadInvestor(),body.getIsReward(),body.getMemberType(),startPage,body.getPageSize());
         if (elegantServiceList.size() > 0){
             for (Map<String,Object> m:elegantServiceList){
@@ -247,13 +250,13 @@ public class ElegantServiceImpl implements ElegantServiceService{
             return result;
         }
 
-        if (body.getUnit() == null || "".equals(body.getUnit()) || "undefined".equals(body.getUnit())){
-            result.setStatus(502);
-            result.setMessage("请输入限制单位");
-            result.setData(null);
-
-            return result;
-        }
+//        if (body.getUnit() == null || "".equals(body.getUnit()) || "undefined".equals(body.getUnit())){
+//            result.setStatus(502);
+//            result.setMessage("请输入限制单位");
+//            result.setData(null);
+//
+//            return result;
+//        }
 
         if (body.getOriginalPrice() == null || "".equals(body.getOriginalPrice()) || "undefined".equals(body.getOriginalPrice()) ){
             result.setStatus(502);
