@@ -63,16 +63,22 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
             for(ProjectSendTeamB projectSendTeamB_i : projectSendTeamBList){
             	//设置采集项目的团队成员
                 CollectProjectAuditTeamDto.CollectProjectAuditMemberDto collectProjectAuditMemberDto = new CollectProjectAuditTeamDto.CollectProjectAuditMemberDto();
+                //团队成员id
                 collectProjectAuditMemberDto.setMemberId(projectSendTeamB_i.getId());
+                //成员姓名
                 collectProjectAuditMemberDto.setMemberName(projectSendTeamB_i.getMemberName());
+                //成员职务
                 collectProjectAuditMemberDto.setPosition(projectSendTeamB_i.getCompanyDuties());
+                //股份占比
                 collectProjectAuditMemberDto.setStockPer(projectSendTeamB_i.getStockRatio());
+                //简介
                 collectProjectAuditMemberDto.setKernelDesc(projectSendTeamB_i.getMemberDesc());
                 
                 //获取团队成员的教育经历
                 ProjectSendTeamMemberEducationB educationQuery=new ProjectSendTeamMemberEducationB();
                 educationQuery.setPsTeamBId(projectSendTeamB_i.getId());
                 List<ProjectSendTeamMemberEducationB> educations = projectSendTeamMemberEducationBMapper.select(educationQuery);
+                
                 //获取团队成员的工作经历
                 ProjectSendTeamMemberWorkB workQuery=new ProjectSendTeamMemberWorkB();
                 workQuery.setPsTeamBId(projectSendTeamB_i.getId());

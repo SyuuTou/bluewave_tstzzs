@@ -16,15 +16,17 @@ public class CollectProjectAuditTeamDto{
     private List<CollectProjectAuditMemberDto> collectProjectAuditMemberDtoList;
     //定义团队成员的静态内部类
     public static class CollectProjectAuditMemberDto implements Comparable<CollectProjectAuditMemberDto>{
-
+    	//用户前端的展示id
         private Integer sortId;
-
+        //团队成员的id
         private Integer memberId;
-
+        //成员姓名
         private String memberName;
-
+        //职务
         private String position;
-
+        /**
+         * 成员简介
+         */
         private String kernelDesc;
 
         private String phone;
@@ -32,7 +34,7 @@ public class CollectProjectAuditTeamDto{
         private List<String> workExperiences;
 
         private List<String> educationExperience;
-
+        //是否在职
         private Integer isOnJob;
 
         private String headPicture;
