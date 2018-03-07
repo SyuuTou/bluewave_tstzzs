@@ -913,6 +913,18 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantServiceParticipate.setFeedbackImages(elegantServiceParticipateFeedbackImages);
         elegantServiceParticipate.setFeedbackTexts(elegantServiceParticipateFeedbackText);
 
+        //获取项目信息
+        ElegantServiceRelevantProject elegantServiceRelevantProjectForSearch = new ElegantServiceRelevantProject();
+        elegantServiceRelevantProjectForSearch.setElegantServiceId(elegantServiceParticipate.getElegantServiceId());
+
+        List<ElegantServiceRelevantProject> elegantServiceRelevantProject = elegantServiceRelevantProjectMapper.select(elegantServiceRelevantProjectForSearch);
+        if (elegantServiceRelevantProject.size()>0){
+            elegantServiceParticipate.setProjectName(elegantServiceRelevantProject.get(0).getProjectShortName());
+            elegantServiceParticipate.setProjectId(elegantServiceRelevantProject.get(0).getProjectId());
+        }else {
+            elegantServiceParticipate.setProjectName("");
+        }
+
         Integer userId = userLoginService.getUserIdByToken(elegantServiceParticipate.getToken(),appId);
         if (userId == -1){
             return new CommonDto<>(null,"当前记录的用户tokne无效",502);
