@@ -303,8 +303,8 @@ public class CollectProjectAuditTeamDto{
          */
         private Integer weight;
         /**
-         * 0 在职
-         * 1 离职
+         * 0 离职
+         * 1 在职
          * null 无
          */
         private Integer isOnJob;
