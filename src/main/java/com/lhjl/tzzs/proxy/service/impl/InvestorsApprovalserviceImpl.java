@@ -921,7 +921,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 		investorsForInsert.setInvestorsType(body.getInvestorType());
 		investorsForInsert.setApprovalTime(now);
 		investorsForInsert.setName(body.getUserName());
-		investorsForInsert.setPosition(body.getCompanyName());
+		investorsForInsert.setPosition(body.getComanyDuties());
 		investorsForInsert.setYn(1);
 		investorsForInsert.setInvestmentInstitutionsId(jgid);
 		if (null != body.getLeader()){
@@ -1552,7 +1552,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 				investorsForInsert.setInvestorsType(body.getInvestorType());
 				investorsForInsert.setApprovalTime(now);
 				investorsForInsert.setName(body.getUserName());
-				investorsForInsert.setPosition(body.getCompanyName());
+				investorsForInsert.setPosition(body.getComanyDuties());
 				investorsForInsert.setYn(1);
 				investorsForInsert.setInvestmentInstitutionsId(jgid);
 				if (investorsForSearch != null){
