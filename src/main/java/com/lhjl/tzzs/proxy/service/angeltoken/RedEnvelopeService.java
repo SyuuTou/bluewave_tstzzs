@@ -18,7 +18,7 @@ public interface RedEnvelopeService {
 
     CommonDto<BigDecimal> checkReceiveQuantity(Integer appId, String token);
 
-    CommonDto<BigDecimal> checkRemainingBalance(Integer appId, String token);
+    CommonDto<BigDecimal> checkRemainingBalance(Integer appId, String token, Integer currency);
 
     CommonDto<RedEnvelopeResDto> receiveRedEnvelope(Integer appId, String unionId, String token, String unionKey);
 
@@ -33,5 +33,7 @@ public interface RedEnvelopeService {
     CommonDto<RedEnvelopeResDto> getRedEnvelopeInfo(Integer appId, String unionId, String token);
 
     CommonDto<Map<String,Integer>> getStatisticesRedEnvelope();
+
+    void addUserIntegralsLog(Integer appId, String senceKey, Integer userId, BigDecimal obtainIntegral, Integer obtainIntegralPeriod, Boolean flag, BigDecimal plusOrMinus, Integer currency);
 
 }

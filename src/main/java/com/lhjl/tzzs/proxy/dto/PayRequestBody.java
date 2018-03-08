@@ -6,6 +6,15 @@ public class PayRequestBody {
     private Integer moneyId;//支付金额记录ID
     private String localIp;// 本地用户IP
     private String sceneType;
+    private Integer businessId;
+
+    public Integer getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(Integer businessId) {
+        this.businessId = businessId;
+    }
 
     public String getSceneType() {
         return sceneType;

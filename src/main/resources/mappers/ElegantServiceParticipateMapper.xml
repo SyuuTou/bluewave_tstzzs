@@ -16,6 +16,7 @@
     <result column="user_name" jdbcType="VARCHAR" property="userName"/>
     <result column="company_duties" jdbcType="VARCHAR" property="companyDuties"/>
     <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="collection_status" jdbcType="INTEGER" property="collectionStatus" />
     <result column="project_short_name" jdbcType="VARCHAR" property="projectName" />
   </resultMap>
   <select id="getElegantServiceParticipateList" resultMap="BaseResultMap">

@@ -69,17 +69,38 @@ public class RedEnvelopeController extends GenericController {
     }
 
     /**
-     * 检查用户余额
+     * 检查用户令牌余额
      * @param appId
      * @param token parameter的方式传递
      * @return
      */
     @GetMapping("/v{appId}/check/remaining/balance")
-    public CommonDto<BigDecimal> checkRemainingBalance(@PathVariable Integer appId, String token){
+    public CommonDto<BigDecimal> checkRemainingBalance(@PathVariable Integer appId , String token){
         CommonDto<BigDecimal> result = null;
 
         try {
-            result = redEnvelopeService.checkRemainingBalance(appId, token);
+            result = redEnvelopeService.checkRemainingBalance(appId, token, 1);
+        } catch (Exception e) {
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+        }
+
+        return result;
+
+    }
+
+    /**
+     * 检查用户余额
+     * @param appId
+     * @param currency 币种，0：人民币，1：令牌
+     * @param token parameter的方式传递
+     * @return
+     */
+    @GetMapping("/v{appId}/check/{currency}/remaining/balance")
+    public CommonDto<BigDecimal> checkRemainingBalance(@PathVariable Integer appId,@PathVariable Integer currency, String token){
+        CommonDto<BigDecimal> result = null;
+
+        try {
+            result = redEnvelopeService.checkRemainingBalance(appId, token, currency);
         } catch (Exception e) {
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
         }

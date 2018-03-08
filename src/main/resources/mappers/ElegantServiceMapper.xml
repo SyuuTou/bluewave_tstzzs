@@ -35,6 +35,7 @@
     <result column="is_reward" jdbcType="INTEGER" property="isReward" />
     <result column="is_lead_investor" jdbcType="INTEGER" property="isLeadInvestor" />
     <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
     <result column="custom_button_label" jdbcType="VARCHAR" property="customButtonLabel" />
 
   </resultMap>

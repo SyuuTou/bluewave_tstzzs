@@ -180,6 +180,9 @@ public class ElegantService {
 
     private Integer quantity;
 
+    @Column(name = "pay_status")
+    private Integer payStatus;
+
     /** 用户悬赏状态 */
     @Transient
     private String status;
@@ -202,6 +205,15 @@ public class ElegantService {
     private ElegantServiceRelevantProject elegantServiceRelevantProject;
     @Transient
     private List<ElegantServiceDescriptionUrl> elegantServiceDescriptionUrls;
+
+
+    public Integer getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(Integer payStatus) {
+        this.payStatus = payStatus;
+    }
 
     public List<ElegantServiceDescriptionUrl> getElegantServiceDescriptionUrls() {
         return elegantServiceDescriptionUrls;
