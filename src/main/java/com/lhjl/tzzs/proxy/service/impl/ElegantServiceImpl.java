@@ -6,6 +6,7 @@ import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.*;
+import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
 import com.lhjl.tzzs.proxy.service.bluewave.BlueUserInfoService;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
@@ -104,6 +105,11 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
     @Resource
     private FormIdService formIdService;
+
+    @Resource
+    private RedEnvelopeService redEnvelopeService;
+    @Autowired
+    private UserTokenMapper userTokenMapper;
 
     /**
      * 获取精选活动列表的接口
@@ -387,6 +393,22 @@ public class ElegantServiceImpl implements ElegantServiceService{
             if (body.getElegantServiceId() == null || "".equals(body.getElegantServiceId())){
                 //新建
                 result = createElegantService(body,appid);
+
+                // 扣除令牌
+                UserToken userToken = new UserToken();
+                userToken.setToken(body.getCreator());
+                userToken = userTokenMapper.selectOne(userToken);
+                BigDecimal amount = new BigDecimal(body.getOriginalPrice()).multiply(new BigDecimal(body.getQuantity())).setScale(2);
+                if (body.getPriceUnit() == 2){
+                    // 扣除令牌
+                    redEnvelopeService.addUserIntegralsLog(appid,"LOCK",userToken.getUserId(),amount,965,false,new BigDecimal(-1),1);
+
+                }else if (body.getPriceUnit() == 0){
+                    // 锁定人民币
+                    redEnvelopeService.addUserIntegralsLog(appid,"LOCK",userToken.getUserId(),amount,965,false,new BigDecimal(-1),0);
+
+                }
+
             }else {
                 //更新
                 result = updateElegantService(body,appid);
@@ -1100,8 +1122,8 @@ public class ElegantServiceImpl implements ElegantServiceService{
             elegantService.setServiceName(body.getServiceName());
             elegantService.setOriginalPrice(originalPrice);
             elegantService.setVipPrice(vipPrice);
-            elegantService.setPreVipPriceDescript("VIP会员");//默认前缀
-            elegantService.setPriceUnit(0);//默认人民币
+            elegantService.setPreVipPriceDescript("VIP会员"); //默认前缀
+            elegantService.setPriceUnit(body.getPriceUnit()); //默认人民币
             elegantService.setUnit(body.getUnit());
             elegantService.setBackgroundPicture(body.getBackgroundPicture());
             elegantService.setBeginTime(beginTime);

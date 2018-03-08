@@ -61,6 +61,7 @@ public class UserIntegrals {
 
     private Integer currency;
 
+
     public Integer getCurrency() {
         return currency;
     }

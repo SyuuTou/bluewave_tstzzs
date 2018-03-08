@@ -170,6 +170,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
      * @param plusOrMinus 标志，正的/负的
      * @param currency 币种，人民币/令牌
      */
+    @Override
     public void addUserIntegralsLog(Integer appId, String senceKey, Integer userId, BigDecimal obtainIntegral, Integer obtainIntegralPeriod, Boolean flag, BigDecimal plusOrMinus, Integer currency) {
         try {
             BigDecimal obtainIntegralCopy = obtainIntegral;
@@ -332,7 +333,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
 
     @Override
-    public CommonDto<BigDecimal> checkRemainingBalance(Integer appId, String token) {
+    public CommonDto<BigDecimal> checkRemainingBalance(Integer appId, String token, Integer currency) {
 
         //获取用户ID
         Integer userId = this.getUserId(appId, token);
@@ -340,16 +341,8 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         if (null == userId){
             return new CommonDto<>(new BigDecimal(0), "未找到用户", 200);
         }
-        UserIntegralConsume userIntegralConsumeQuery = new UserIntegralConsume();
-        userIntegralConsumeQuery.setAppId(appId);
-        userIntegralConsumeQuery.setUserId(userId);
+        BigDecimal totalAmount = userIntegralConsumeMapper.selectSumIntegralConsume(appId, userId, currency);
 
-        List<UserIntegralConsume> userIntegralConsumes = userIntegralConsumeMapper.select(userIntegralConsumeQuery);
-        BigDecimal totalAmount = new BigDecimal("0.00");
-
-        for (UserIntegralConsume userIntegralConsume: userIntegralConsumes){
-            totalAmount = totalAmount.add(userIntegralConsume.getCostNum());
-        }
 
 
         return new CommonDto<>(totalAmount, "success", 200);

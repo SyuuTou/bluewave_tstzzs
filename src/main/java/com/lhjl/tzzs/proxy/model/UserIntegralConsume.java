@@ -50,7 +50,6 @@ public class UserIntegralConsume {
     @Column(name = "app_id")
     private Integer appId;
 
-
     private Integer currency;
 
     public Integer getCurrency() {

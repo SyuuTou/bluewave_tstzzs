@@ -4,6 +4,7 @@ import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.request.WxPayBaseRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayBaseResult;
+import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
@@ -25,8 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service("idataVCPayService")
 public class PayServiceImpl implements PayService {
@@ -63,6 +63,11 @@ public class PayServiceImpl implements PayService {
 
     @Resource
     private LogInfoService logInfoService;
+
+    @Autowired
+    private UserIntegralsMapper userIntegralsMapper;
+    @Autowired
+    private UserIntegralConsumeMapper userIntegralConsumeMapper;
 
     @Override
     public CommonDto<Map<String, String>> generatePayInfo(PayRequestBody payRequestBody, Integer appId) {
@@ -107,18 +112,20 @@ public class PayServiceImpl implements PayService {
             usersPay.setUserId(usersWeixin.getUserId());
             usersPay.setTradeNo(tradeNo);
             usersPayMapper.insert(usersPay);
+            StringBuilder sb = new StringBuilder(payRequestBody.getSceneKey());
+            sb.append("|").append(sceneType).append("|").append(appId).append("|").append(payRequestBody.getBusinessId());
             WxPayUnifiedOrderRequest prepayInfo = WxPayUnifiedOrderRequest.newBuilder()
                     .openid(usersWeixin.getOpenid())
                     .outTradeNo(tradeNo)
                     .totalFee(WxPayBaseRequest.yuanToFee(userMoneyRecord.getMoney().toString()))
                     .body(scene.getDesc())
-                    .attach(payRequestBody.getSceneKey()+"|"+sceneType+"|"+appId)
+                    .attach(sb.toString())
                     .spbillCreateIp("39.106.44.53")
                     .build();
-            Map<String, String> payInfo =payService.getPayInfo(prepayInfo);
+            WxPayUnifiedOrderResult payInfo =payService.unifiedOrder(prepayInfo);
 
 
-            result.setData(payInfo);
+            result.setData(payInfo.toMap());
             result.setMessage("success");
             result.setStatus(200);
         } catch (WxPayException e) {
@@ -144,7 +151,32 @@ public class PayServiceImpl implements PayService {
         usersPay.setPayTime(DateTime.now().toDate());
         usersPay.setReceived(new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())));
         usersPayMapper.updateByPrimaryKey(usersPay);
-        if (result.getAttach().split("\\|")[1].equals("SERVICES")){
+
+        if (result.getAttach().split("\\|")[0].equals("RMB_PAYMENT")) {
+            //悬赏支付的人民币金额进行锁定，锁定状态dataStatus=1
+            UserIntegrals userIntegrals =new UserIntegrals();
+            userIntegrals.setUserId(usersPay.getUserId());
+            userIntegrals.setAppId(Integer.valueOf(result.getAttach().split("\\|")[2]));
+            userIntegrals.setSceneKey(result.getAttach().split("\\|")[0]);
+
+            userIntegrals.setConsumeNum(new BigDecimal(0));
+            userIntegrals.setIntegralNum(new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())));
+            userIntegrals.setCreateTime(DateTime.now().toDate());
+            userIntegrals.setCurrency(0);//0 代表人民币
+            userIntegralsMapper.insert(userIntegrals);
+
+            UserIntegralConsume userIntegralConsume=new UserIntegralConsume();
+            userIntegralConsume.setUserId(usersPay.getUserId());
+            userIntegralConsume.setAppId(Integer.valueOf(result.getAttach().split("\\|")[2]));
+            userIntegralConsume.setSceneKey(result.getAttach().split("\\|")[0]);
+//			Integer jb1=qj.intValue();
+            //if(jb>=100){
+            userIntegralConsume.setCostNum(new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())));
+            userIntegralConsume.setCreateTime(DateTime.now().toDate());
+
+            userIntegralConsumeMapper.insert(userIntegralConsume);
+
+        } else if (result.getAttach().split("\\|")[1].equals("SERVICES")){
 
             UserToken queryToken = new UserToken();
             queryToken.setUserId(usersPay.getUserId());
