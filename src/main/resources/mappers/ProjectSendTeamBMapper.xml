@@ -15,6 +15,21 @@
     <result column="yn" jdbcType="INTEGER" property="yn" />
     <result column="weight" jdbcType="INTEGER" property="weight" />
     <result column="job_status" jdbcType="INTEGER" property="jobStatus" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="is_hide" jdbcType="INTEGER" property="isHide" />
+    <result column="head_picture" jdbcType="VARCHAR" property="headPicture" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="weiChat" jdbcType="VARCHAR" property="weichat" />
+    <result column="team_id" jdbcType="INTEGER" property="teamId" />
+    <result column="birth_day" jdbcType="TIMESTAMP" property="birthDay" />
+    <result column="tenure_time" jdbcType="TIMESTAMP" property="tenureTime" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="diploma" jdbcType="INTEGER" property="diploma" />
+    <result column="nationality" jdbcType="INTEGER" property="nationality" />
+    <result column="business_experience_desc" jdbcType="VARCHAR" property="businessExperienceDesc" />
+    <result column="work_experience_desc" jdbcType="VARCHAR" property="workExperienceDesc" />
+    <result column="education_experience_desc" jdbcType="VARCHAR" property="educationExperienceDesc" />
   </resultMap>
   <select id="getTeamList" resultMap="BaseResultMap">
     SELECT id,member_name,company_duties FROM project_send_team_b where project_send_b_id =#{projectSendBId}

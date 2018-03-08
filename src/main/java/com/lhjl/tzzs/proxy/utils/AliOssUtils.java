@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.utils;
 
 import com.aliyun.oss.OSSClient;
 import com.lhjl.tzzs.proxy.service.GenericService;
+import org.joda.time.DateTime;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -25,16 +26,11 @@ public class AliOssUtils  {
     }
 
     public static String upload(MultipartFile file) throws IOException {
-        int randomnum = (int)(Math.random()*10000);
-        int randomnum1 = (int)(Math.random()*9000);
-
-        String randomnumString = String.valueOf(randomnum);
-        String randomnumString1 = String.valueOf(randomnum1);
-
-        String md5String =  MD5Util.md5Encode(randomnumString,"utf-8");
 
         String name = file.getOriginalFilename();
-        String path = "upload/"+md5String+"_"+randomnumString1+"_"+name;
+        String md5String =  MD5Util.md5Encode(name,"utf-8");
+
+        String path = "upload/"+md5String+"_"+DateTime.now().millisOfDay().getAsString()+".jpg";
         try {
             if (!file.isEmpty()) {
                 AliOssUtils.putObject(path, file.getInputStream());

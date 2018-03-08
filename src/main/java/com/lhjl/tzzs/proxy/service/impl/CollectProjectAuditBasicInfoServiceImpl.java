@@ -40,10 +40,10 @@ public class CollectProjectAuditBasicInfoServiceImpl implements CollectProjectAu
 
         CollectProjectAuditBasicInfoDto collectProjectAuditBasicInfoDto = new CollectProjectAuditBasicInfoDto();
 
-        ProjectSendAuditB projectSendAuditB = new ProjectSendAuditB();
-        projectSendAuditB.setId(projectId);
+//        ProjectSendAuditB projectSendAuditB = new ProjectSendAuditB();
+//        projectSendAuditB.setId(projectId);
 
-        ProjectSendAuditB projectSendAuditB1 = projectSendAuditBMapper.selectByPrimaryKey(projectSendAuditB);
+        ProjectSendAuditB projectSendAuditB1 = projectSendAuditBMapper.selectByPrimaryKey(projectId);
 
         if(null == projectSendAuditB1){
             result.setStatus(300);
@@ -64,10 +64,12 @@ public class CollectProjectAuditBasicInfoServiceImpl implements CollectProjectAu
         collectProjectAuditBasicInfoDto.setKernelDesc(projectSendB.getKernelDesc());
         collectProjectAuditBasicInfoDto.setUrl(projectSendB.getUrl());
         collectProjectAuditBasicInfoDto.setCompanyCity(projectSendB.getCity());
-
+        
+        //设置成立时间
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        collectProjectAuditBasicInfoDto.setEstablishedTime(sdf.format(projectSendB.getCreateTime()));
+        if(projectSendB.getEstablishTime() != null) {
+        	collectProjectAuditBasicInfoDto.setEstablishedTime(sdf.format(projectSendB.getEstablishTime()));
+        }
 
         List<ProjectSendTagsB> projectSendTagsBList = projectSendTagsBMapper.selectByProjectId(projectSendAuditB1.getProjectSendBId());
         List<String> projectSendTagsBLists = new ArrayList<>();
@@ -101,7 +103,7 @@ public class CollectProjectAuditBasicInfoServiceImpl implements CollectProjectAu
                 projectSendSegmentationBLists.add(projectSendSegmentationB_i.getSegmentationName());
             });
             projectSendSegmentationBArr = new String[projectSendSegmentationBLists.size()];
-            projectSendSegmentationBLists.toArray(projectSendSegmentationBArr);
+            projectSendSegmentationBLists.toArray(projectSendSegmentationBArr);  
         }
         collectProjectAuditBasicInfoDto.setSegmentation(projectSendSegmentationBArr);
 
