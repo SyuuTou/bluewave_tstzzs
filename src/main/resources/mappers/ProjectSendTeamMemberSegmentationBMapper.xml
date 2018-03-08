@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ProjectSendTeamMemberSegmentationBMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ProjectSendTeamMemberSegmentationB" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ps_team_b_id" property="psTeamBId" jdbcType="INTEGER" />
+    <result column="segmentation_id" property="segmentationId" jdbcType="INTEGER" />
+  </resultMap>
+</mapper>
