@@ -649,9 +649,11 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 serviceTypeList =elegantServiceServiceTypeMapper.getServiceTypeByServiceId(esid);
 
                 String serviceType = "";
-                for (Map<String,Object> st:serviceTypeList){
-                    String jieguo = (String) st.get("service_type_name");
-                    serviceType = serviceType + jieguo + ",";
+                if (serviceTypeList.size()>0){
+                    for (Map<String,Object> st:serviceTypeList){
+                        String jieguo = (String) st.get("service_type_name");
+                        serviceType = serviceType + jieguo + ",";
+                    }
                 }
                 if (serviceType.length() > 1){
                     serviceType = serviceType.substring(0,serviceType.length()-1);

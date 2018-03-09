@@ -13,5 +13,6 @@
     select mst.service_type_name from elegant_service_service_type esst
     left join meta_service_type mst on esst.meta_service_type_id = mst.id
     where esst.elegant_service_id = #{serviceId}
+    and mst.service_type_name is not null
   </select>
 </mapper>
