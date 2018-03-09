@@ -122,10 +122,11 @@ public class PayServiceImpl implements PayService {
                     .attach(sb.toString())
                     .spbillCreateIp("39.106.44.53")
                     .build();
-            WxPayUnifiedOrderResult payInfo =payService.unifiedOrder(prepayInfo);
+            Map<String,String> payInfo = payService.getPayInfo(prepayInfo);
+//            WxPayUnifiedOrderResult payInfo =payService.unifiedOrder(prepayInfo);
 
 
-            result.setData(payInfo.toMap());
+            result.setData(payInfo);
             result.setMessage("success");
             result.setStatus(200);
         } catch (WxPayException e) {
@@ -173,7 +174,7 @@ public class PayServiceImpl implements PayService {
             //if(jb>=100){
             userIntegralConsume.setCostNum(new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())));
             userIntegralConsume.setCreateTime(DateTime.now().toDate());
-
+            userIntegralConsume.setCurrency(0);//0 代表人民币
             userIntegralConsumeMapper.insert(userIntegralConsume);
 
         } else if (result.getAttach().split("\\|")[1].equals("SERVICES")){

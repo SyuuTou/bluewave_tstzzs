@@ -1468,6 +1468,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             userIntegralConsume.setCreateTime(now);
             userIntegralConsume.setEndTime(end);
             userIntegralConsume.setAppId(appId);
+            userIntegralConsume.setCurrency(1);// 1是积分或令牌
             userIntegralConsumeMapper.insert(userIntegralConsume);
 
             //更新金币记录表
@@ -1568,6 +1569,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegralConsume.setCreateTime(now);
                 userIntegralConsume.setEndTime(end);
                 userIntegralConsume.setAppId(appId);
+                userIntegralConsume.setCurrency(1);// 1是积分或令牌
                 userIntegralConsumeMapper.insert(userIntegralConsume);
                 int consumeId = userIntegralConsume.getId();
 
@@ -1640,6 +1642,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegralConsume.setCreateTime(now);
                 userIntegralConsume.setEndTime(end);
                 userIntegralConsume.setAppId(appId);
+                userIntegralConsume.setCurrency(1);// 1是积分或令牌
                 userIntegralConsumeMapper.insert(userIntegralConsume);
                 int consumeId = userIntegralConsume.getId();
 
@@ -1704,6 +1707,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             userIntegralConsume.setCreateTime(now);
             userIntegralConsume.setEndTime(end);
             userIntegralConsume.setAppId(appId);
+            userIntegralConsume.setCurrency(1);// 1是积分或令牌
             userIntegralConsumeMapper.insert(userIntegralConsume);
             int consumeId = userIntegralConsume.getId();
 
@@ -1923,6 +1927,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setUserId(userId);
                 userIntegrals.setSceneKey(sKey);
                 userIntegrals.setAppId(appId);
+                userIntegrals.setCurrency(1); // 1是积分或令牌
                 userIntegrals.setIntegralNum(qj1.multiply(new BigDecimal(1+bei2)));
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
@@ -1941,6 +1946,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals3.setUserId(userId);
                 userIntegrals3.setSceneKey(sKey);
                 userIntegrals3.setAppId(appId);
+                userIntegrals3.setCurrency(1);// 1是积分或令牌
                 userIntegrals3.setCostNum(new BigDecimal(hnum));
                 //if(jb>=100){
                 userIntegrals3.setCreateTime(new Date());
@@ -1975,6 +1981,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setUserId(userId);
                 userIntegrals.setSceneKey(sKey);
                 userIntegrals.setAppId(appId);
+                userIntegrals.setCurrency(1); // 1是积分或令牌
                 userIntegrals.setIntegralNum(qj1.multiply(new BigDecimal(1+bei2)));
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
@@ -1993,6 +2000,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals3.setUserId(userId);
                 userIntegrals3.setSceneKey(sKey);
                 userIntegrals3.setAppId(appId);
+                userIntegrals3.setCurrency(1);// 1是积分或令牌
                 userIntegrals3.setCostNum(qj1.multiply(new BigDecimal(1+bei2)));
                 //if(jb>=100){
                 userIntegrals3.setCreateTime(new Date());
@@ -2111,6 +2119,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setUserId(userId);
                 userIntegrals.setSceneKey(sKey);
                 userIntegrals.setAppId(appId);
+                userIntegrals.setCurrency(1);// 1是积分或令牌
                 userIntegrals.setIntegralNum(qj2.multiply(new BigDecimal(1+bei2)));
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
@@ -2129,6 +2138,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals3.setUserId(userId);
                 userIntegrals3.setSceneKey(sKey);
                 userIntegrals3.setAppId(appId);
+                userIntegrals3.setCurrency(1);// 1是积分或令牌
                 userIntegrals3.setCostNum(qj2.multiply(new BigDecimal(1+bei2)));
                 //if(jb>=100){
                 userIntegrals3.setCreateTime(new Date());

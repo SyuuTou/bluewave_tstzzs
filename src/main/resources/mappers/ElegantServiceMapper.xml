@@ -40,7 +40,7 @@
 
   </resultMap>
   <select id="findElegantServiceList" resultType="java.util.HashMap">
-    select es.service_name,es.pre_vip_price_descript,es.original_price,es.vip_price,esd.description,es.unit,
+    select es.service_name,es.pre_vip_price_descript,es.original_price,es.vip_price,esd.description,es.unit,es.price_unit,
     es.background_picture,es.id,es.scence_key,es.begin_time,es.end_time,es.recommend_yn,es.create_time
     from elegant_service es
     left join elegant_service_description esd on es.id = esd.elegant_service_id
@@ -55,6 +55,8 @@
 
     where es.on_off = 1
     and es.yn = 1
+    AND es.begin_time &lt;= #{now}
+    and es.end_time &gt;= #{now}
     <if test="token !=null and token !='' ">
       and creator = #{token}
     </if>
@@ -108,7 +110,7 @@
   </select>
 
   <select id="findElegantServiceById" resultType="java.util.HashMap">
-    select es.service_name,es.original_price,es.vip_price,es.pre_vip_price_descript,es.unit,es.background_picture,es.scence_key,esdd.detail_description,esdd.description_type
+    select es.service_name,es.original_price,es.vip_price,es.pre_vip_price_descript,es.price_unit,es.unit,es.background_picture,es.scence_key,esdd.detail_description,esdd.description_type
     from elegant_service es
     left join elegant_service_description_detail esdd on es.id = esdd.elegant_service_id
     where es.id=#{elegantServiceId}

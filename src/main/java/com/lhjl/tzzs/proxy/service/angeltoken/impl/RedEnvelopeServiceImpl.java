@@ -343,9 +343,11 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
         }
         BigDecimal totalAmount = userIntegralConsumeMapper.selectSumIntegralConsume(appId, userId, currency);
 
-
-
-        return new CommonDto<>(totalAmount, "success", 200);
+        if (null == totalAmount){
+            return new CommonDto<>(new BigDecimal(0), "success", 200);
+        }else {
+            return new CommonDto<>(totalAmount, "success", 200);
+        }
     }
 
 

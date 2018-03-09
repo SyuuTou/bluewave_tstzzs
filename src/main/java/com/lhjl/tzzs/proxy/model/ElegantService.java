@@ -36,7 +36,7 @@ public class ElegantService {
     private String preVipPriceDescript;
 
     /**
-     * 价格单位，0表示人民币，1表示美元, 2表示令牌
+     * 价格单位，0表示人民币，1表示令牌
      */
     @Column(name = "price_unit")
     private Integer priceUnit;

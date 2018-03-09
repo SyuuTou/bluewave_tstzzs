@@ -21,7 +21,7 @@ public interface ElegantServiceMapper extends OwnerMapper<ElegantService> {
                                                     @Param("serviceType") Integer[] serviceType,
                                                     @Param("searchWord") String searchWord,
                                                     @Param("approveType") List<Integer> approveType, @Param("isLeadInvestor") Integer isLeadInvestor, @Param("isReward") Integer isReward, @Param("memberType") Integer memberType, @Param("startPage") Integer startPage,
-                                                    @Param("pageSize") Integer pageSize);
+                                                    @Param("pageSize") Integer pageSize, @Param("now") Date now);
 
     /**
      * 根据服务id获取服务详情
