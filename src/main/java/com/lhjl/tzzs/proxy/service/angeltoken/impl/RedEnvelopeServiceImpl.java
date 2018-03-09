@@ -501,12 +501,21 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
             //超24时，不可领取红包，退回剩余金额
             BigDecimal residueMoney = redEnvelope.getTotalAmount().subtract(redEnvelope.getReceiveAmount());
             Users users = this.getUserInfo(appId, redEnvelope.getToken());
-            this.addUserIntegralsLog(appId, "RED_ENVELOPE_RETURN", users.getId(), residueMoney, obtainIntegralPeriod, false, new BigDecimal(1), redEnvelope.getCurrency());
+            if (null != users) {
+                Integer currency = redEnvelope.getCurrency();
+                if (null == currency){
+                    currency = 1;
+                }
+                if (!redEnvelope.getDescription().equals("INVITATIONED")) {
+                    this.addUserIntegralsLog(appId, "RED_ENVELOPE_RETURN", users.getId(), residueMoney, obtainIntegralPeriod, false, new BigDecimal(1), currency);
+                }
+                redEnvelope.setStatus(3);//红包状态过期
+                this.redEnvelopeMapper.updateByPrimaryKey(redEnvelope);
+            }
             return true;
         }else{
             return false;
         }
-
     }
 
     public void handlerCurrency(RedEnvelope redEnvelope, RedEnvelopeLogDto redEnvelopeLogDto) {
