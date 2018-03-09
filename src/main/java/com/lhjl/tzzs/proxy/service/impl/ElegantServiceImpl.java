@@ -1540,6 +1540,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
             elegantServiceRelevantProjectMapper.delete(elegantServiceRelevantProjectRecord);
             elegantServiceRelevantProjectRecord.setProjectId(body.getProjectId());
             elegantServiceRelevantProjectRecord.setProjectShortName(body.getProjectShortName());
+            elegantServiceRelevantProjectRecord.setDataType(body.getDataType());
             elegantServiceRelevantProjectMapper.insert(elegantServiceRelevantProjectRecord);
         }
 

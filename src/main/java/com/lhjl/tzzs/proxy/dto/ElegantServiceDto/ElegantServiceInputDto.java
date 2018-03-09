@@ -141,10 +141,18 @@ public class ElegantServiceInputDto {
 
     private Integer projectId;
     private String projectShortName;
+    private Integer dataType;
 
     /** 创建者 */
     private String creator;
 
+    public Integer getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(Integer dataType) {
+        this.dataType = dataType;
+    }
 
     public Integer getPriceUnit() {
         return priceUnit;
