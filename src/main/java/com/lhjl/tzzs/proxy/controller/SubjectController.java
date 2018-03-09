@@ -24,14 +24,15 @@ public class SubjectController {
      * @param inputsWords 输入内容
      * @param pageSize 一页返回数量
      * @param inputsType 搜全程还是搜简称
+     * @param projectType 项目类型,1是项目,2是机构
      * @return
      */
     @GetMapping("company/intelligent/search")
-    public CommonDto<List<CompanyIntelligentOutputDto>> getCompanyIntelligentSearch(String inputsWords, Integer pageSize,Integer inputsType){
+    public CommonDto<List<CompanyIntelligentOutputDto>> getCompanyIntelligentSearch(String inputsWords, Integer pageSize,Integer inputsType,Integer projectType){
         CommonDto<List<CompanyIntelligentOutputDto>> result = new CommonDto<>();
 
         try {
-            result = subjectService.getCompanyIntelligent(inputsWords,pageSize,inputsType);
+            result = subjectService.getCompanyIntelligent(inputsWords,pageSize,inputsType,projectType);
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());
 

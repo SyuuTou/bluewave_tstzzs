@@ -9,9 +9,11 @@ import java.util.Map;
 
 public interface SubjectMapper extends OwnerMapper<Subject> {
 
-    List<Subject> getIntelligentSearchInfo(@Param("inputsWords") String inputsWords,@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
+    List<Subject> getIntelligentSearchInfo(@Param("inputsWords") String inputsWords,@Param("startPage") Integer startPage,
+                                           @Param("pageSize") Integer pageSize,@Param("projectType") Integer projectType);
 
-    List<Subject> getIntelligentSearchInfoFullName(@Param("inputsWords") String inputsWords,@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
+    List<Subject> getIntelligentSearchInfoFullName(@Param("inputsWords") String inputsWords,@Param("startPage") Integer startPage,
+                                                   @Param("pageSize") Integer pageSize,@Param("projectType") Integer projectType);
 
     Map<String,Object> getSubejectType(@Param("userCompanyName") String userCompanyName);
 

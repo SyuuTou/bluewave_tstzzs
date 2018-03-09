@@ -3,7 +3,9 @@ package com.lhjl.tzzs.proxy.service.impl;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.CompanyIntelligentOutputDto;
 import com.lhjl.tzzs.proxy.mapper.SubjectMapper;
+import com.lhjl.tzzs.proxy.mapper.SubjectTypeRelationalMapper;
 import com.lhjl.tzzs.proxy.model.Subject;
+import com.lhjl.tzzs.proxy.model.SubjectTypeRelational;
 import com.lhjl.tzzs.proxy.service.SubjectService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class SubjectServiceImpl implements SubjectService {
     @Autowired
     private SubjectMapper subjectMapper;
 
+    @Autowired
+    private SubjectTypeRelationalMapper subjectTypeRelationalMapper;
+
     /**
      * 公司检索接口
      * @param inputsWords 输入内容
@@ -27,7 +32,7 @@ public class SubjectServiceImpl implements SubjectService {
      * @return
      */
     @Override
-    public CommonDto<List<CompanyIntelligentOutputDto>> getCompanyIntelligent(String inputsWords, Integer pageSize,Integer inputsType){
+    public CommonDto<List<CompanyIntelligentOutputDto>> getCompanyIntelligent(String inputsWords, Integer pageSize,Integer inputsType,Integer projectType){
         CommonDto<List<CompanyIntelligentOutputDto>> result =new CommonDto<>();
 
         if (inputsWords == null){
@@ -48,26 +53,46 @@ public class SubjectServiceImpl implements SubjectService {
         List<CompanyIntelligentOutputDto> list = new ArrayList<>();
 
         if (inputsType == 0){
-            List<Subject> subjectList = subjectMapper.getIntelligentSearchInfo(inputsWords,startPage,pageSize);
+            List<Subject> subjectList = subjectMapper.getIntelligentSearchInfo(inputsWords,startPage,pageSize,projectType);
             if (subjectList.size() > 0){
                 for (Subject s:subjectList){
                     CompanyIntelligentOutputDto companyIntelligentOutputDto = new CompanyIntelligentOutputDto();
                     companyIntelligentOutputDto.setCompanyFullName(s.getFullName());
                     companyIntelligentOutputDto.setCompanyName(s.getShortName());
                     companyIntelligentOutputDto.setCompanyId(s.getId());
+                    companyIntelligentOutputDto.setSourceId(s.getSourceid());
+
+                    SubjectTypeRelational subjectTypeRelationalForSearch = new SubjectTypeRelational();
+                    subjectTypeRelationalForSearch.setSubjectId(s.getId());
+                    SubjectTypeRelational subjectTypeRelational = subjectTypeRelationalMapper.selectOne(subjectTypeRelationalForSearch);
+                    if (null != subjectTypeRelational){
+                        companyIntelligentOutputDto.setSourceType(subjectTypeRelational.getSubjectTypeId());
+                    }else {
+                        companyIntelligentOutputDto.setSourceType(1);
+                    }
 
                     list.add(companyIntelligentOutputDto);
                 }
             }
 
         }else if (inputsType == 1){
-            List<Subject> subjectList = subjectMapper.getIntelligentSearchInfoFullName(inputsWords,startPage,pageSize);
+            List<Subject> subjectList = subjectMapper.getIntelligentSearchInfoFullName(inputsWords,startPage,pageSize,projectType);
             if (subjectList.size()>0){
                 for (Subject s:subjectList){
                     CompanyIntelligentOutputDto companyIntelligentOutputDto = new CompanyIntelligentOutputDto();
                     companyIntelligentOutputDto.setCompanyFullName(s.getFullName());
                     companyIntelligentOutputDto.setCompanyName(s.getShortName());
                     companyIntelligentOutputDto.setCompanyId(s.getId());
+                    companyIntelligentOutputDto.setSourceId(s.getSourceid());
+
+                    SubjectTypeRelational subjectTypeRelationalForSearch = new SubjectTypeRelational();
+                    subjectTypeRelationalForSearch.setSubjectId(s.getId());
+                    SubjectTypeRelational subjectTypeRelational = subjectTypeRelationalMapper.selectOne(subjectTypeRelationalForSearch);
+                    if (null != subjectTypeRelational){
+                        companyIntelligentOutputDto.setSourceType(subjectTypeRelational.getSubjectTypeId());
+                    }else {
+                        companyIntelligentOutputDto.setSourceType(1);
+                    }
 
                     list.add(companyIntelligentOutputDto);
                 }
