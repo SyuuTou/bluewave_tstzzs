@@ -72,11 +72,11 @@ public class UserIntelligentSearchController extends GenericService{
     }
 
     @GetMapping("/v{appid}/company/intelligent/search")
-    public CommonDto<List<CompanyIntelligentOutputDto>> getCompanyIntelligentSearchV2(@PathVariable Integer appid,String inputsWords, Integer pageSize,Integer inputsType){
+    public CommonDto<List<CompanyIntelligentOutputDto>> getCompanyIntelligentSearchV2(@PathVariable Integer appid,String inputsWords, Integer pageSize,Integer inputsType,Integer projectType){
         CommonDto<List<CompanyIntelligentOutputDto>> result =new CommonDto<>();
 
         try {
-            result = subjectService.getCompanyIntelligent(inputsWords, pageSize, inputsType);
+            result = subjectService.getCompanyIntelligent(inputsWords, pageSize, inputsType,projectType);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
 
