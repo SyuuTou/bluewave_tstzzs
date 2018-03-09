@@ -43,6 +43,8 @@ public class ElegantServiceParticipate {
 
     @Column(name = "appId")
     private Integer appid;
+    @Column(name = "collection_status")
+    private Integer collectionStatus;
 
     @Transient
     private List<ElegantServiceParticipateFeedbackImages> feedbackImages;
@@ -88,6 +90,15 @@ public class ElegantServiceParticipate {
 
     @Transient
     private String elegantServiceName;
+
+
+    public Integer getCollectionStatus() {
+        return collectionStatus;
+    }
+
+    public void setCollectionStatus(Integer collectionStatus) {
+        this.collectionStatus = collectionStatus;
+    }
 
     /**
      * @return id

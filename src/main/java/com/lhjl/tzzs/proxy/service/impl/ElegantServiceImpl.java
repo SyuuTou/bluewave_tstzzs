@@ -6,6 +6,7 @@ import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.*;
+import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
 import com.lhjl.tzzs.proxy.service.bluewave.BlueUserInfoService;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
@@ -105,6 +106,11 @@ public class ElegantServiceImpl implements ElegantServiceService{
     @Resource
     private FormIdService formIdService;
 
+    @Resource
+    private RedEnvelopeService redEnvelopeService;
+    @Autowired
+    private UserTokenMapper userTokenMapper;
+
     /**
      * 获取精选活动列表的接口
      * @param token 查询我的发布时，传递的Token
@@ -164,9 +170,10 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 serviceType = serviceTypeA;
             }
         }
+
         Integer startPage = (body.getPageNum()-1)*body.getPageSize();
         List<Map<String,Object>> elegantServiceList = elegantServiceMapper.findElegantServiceList(token,body.getRecommendYn(),
-                body.getCreateTimeOrder(),sortOrder,appid,identityType,serviceType,body.getSearchWord(),body.getApproveType(),body.getIsLeadInvestor(),body.getIsReward(),body.getMemberType(),startPage,body.getPageSize());
+                body.getCreateTimeOrder(),sortOrder,appid,identityType,serviceType,body.getSearchWord(),body.getApproveType(),body.getIsLeadInvestor(),body.getIsReward(),body.getMemberType(),startPage,body.getPageSize(), DateTime.now().toDate());
         if (elegantServiceList.size() > 0){
             for (Map<String,Object> m:elegantServiceList){
 
@@ -174,15 +181,15 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 m.putIfAbsent("background_picture","http://img.idatavc.com/static/img/serverwu.png");
 
                 //判断是否在时间范围
-                if (m.get("begin_time") != null && m.get("end_time") != null){
-                    Date beginTime = (Date)m.get("begin_time");
-                    Date endTime = (Date)m.get("end_time");
-                    if (beginTime.getTime()<now.getTime()  && now.getTime()<endTime.getTime()){
-                        list.add(m);
-                    }
-                }else {
+//                if (m.get("begin_time") != null && m.get("end_time") != null){
+//                    Date beginTime = (Date)m.get("begin_time");
+//                    Date endTime = (Date)m.get("end_time");
+//                    if (beginTime.getTime()<now.getTime()  && now.getTime()<endTime.getTime()){
+//                        list.add(m);
+//                    }
+//                }else {
                     list.add(m);
-                }
+//                }
             }
         }
 
@@ -382,11 +389,28 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
             return result;
         }
+
         //判断是更新还是新建
         try {
             if (body.getElegantServiceId() == null || "".equals(body.getElegantServiceId())){
                 //新建
                 result = createElegantService(body,appid);
+
+                // 扣除令牌
+                UserToken userToken = new UserToken();
+                userToken.setToken(body.getCreator());
+                userToken = userTokenMapper.selectOne(userToken);
+                BigDecimal amount = new BigDecimal(body.getOriginalPrice()).multiply(new BigDecimal(body.getQuantity())).setScale(2);
+                if (body.getPriceUnit() == 1){
+                    // 扣除令牌
+                    redEnvelopeService.addUserIntegralsLog(appid,"LOCK",userToken.getUserId(),amount,965,false,new BigDecimal(-1),1);
+
+                }else if (body.getPriceUnit() == 0){
+                    // 锁定人民币
+                    redEnvelopeService.addUserIntegralsLog(appid,"LOCK",userToken.getUserId(),amount,965,false,new BigDecimal(-1),0);
+
+                }
+
             }else {
                 //更新
                 result = updateElegantService(body,appid);
@@ -785,12 +809,17 @@ public class ElegantServiceImpl implements ElegantServiceService{
         Integer elegantServiceParticipateId = null;
 
         if (null != body.getId()){
-            ElegantServiceParticipate elegantServiceParticipate = new ElegantServiceParticipate();
-            elegantServiceParticipate.setStatus(1);
+            ElegantServiceParticipate elegantServiceParticipate = elegantServiceParticipateMapper.selectByPrimaryKey(body.getId());
+            elegantServiceParticipate.setStatus(body.getStatus());
             elegantServiceParticipate.setCompletionTime(DateTime.now().toDate());
             elegantServiceParticipate.setId(body.getId());
-            elegantServiceParticipateMapper.updateByPrimaryKeySelective(elegantServiceParticipate);
+            elegantServiceParticipateMapper.updateByPrimaryKey(elegantServiceParticipate);
 
+            ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceParticipate.getElegantServiceId());
+            UserToken userToken = new UserToken();
+            userToken.setToken(elegantServiceParticipate.getToken());
+            userToken = userTokenMapper.selectOne(userToken);
+            redEnvelopeService.addUserIntegralsLog(appId,"REWARD_COLLECTION",userToken.getUserId(),elegantService.getOriginalPrice(),965,false,new BigDecimal(1),elegantService.getPriceUnit());
             elegantServiceParticipateId = body.getId();
         }else {
             body.setAppid(appId);
@@ -1102,8 +1131,8 @@ public class ElegantServiceImpl implements ElegantServiceService{
             elegantService.setServiceName(body.getServiceName());
             elegantService.setOriginalPrice(originalPrice);
             elegantService.setVipPrice(vipPrice);
-            elegantService.setPreVipPriceDescript("VIP会员");//默认前缀
-            elegantService.setPriceUnit(0);//默认人民币
+            elegantService.setPreVipPriceDescript("VIP会员"); //默认前缀
+            elegantService.setPriceUnit(body.getPriceUnit()); //默认人民币
             elegantService.setUnit(body.getUnit());
             elegantService.setBackgroundPicture(body.getBackgroundPicture());
             elegantService.setBeginTime(beginTime);

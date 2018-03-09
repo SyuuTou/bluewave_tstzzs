@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CollectProjectAuditTeamController extends GenericController{
 
     @Autowired
-    private CollectProjectAuditTeamService collectProjectAuditTeamService;
+    private CollectProjectAuditTeamService collectProjectAuditTeamService;  
     
     /**
      * 回显采集项目审核团队成员

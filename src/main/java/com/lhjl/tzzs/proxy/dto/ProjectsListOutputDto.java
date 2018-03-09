@@ -8,7 +8,7 @@ public class ProjectsListOutputDto {
 	 */
 	private Integer id;
 	/**
-	 * 项目编号
+	 * 项目采集编号
 	 */
 	private Integer serialNumber;
 	/**
@@ -36,7 +36,7 @@ public class ProjectsListOutputDto {
 	private Integer ratingStage;
 	/**
 	 * 融资状态
-	 * 改值返回为null字段的时候表示正在融A轮
+	 * 该值返回为null字段的时候表示正在融A轮
 	 */
 	private String stage;
 	/**

@@ -42,7 +42,7 @@ public class ProjectAdminTeamController extends  GenericController{
     }
 
     /**
-     * 获取团队成员列表
+     * 获取平台项目团队成员列表
      * @param projectId
      * @return
      */

@@ -31,6 +31,11 @@ public class ElegantServiceInputDto {
      * 数量
      */
     private Integer quantity;
+
+    /**
+     * 币种单位
+     */
+    private Integer priceUnit;
     /**
      * 限制单位
      */
@@ -139,6 +144,15 @@ public class ElegantServiceInputDto {
 
     /** 创建者 */
     private String creator;
+
+
+    public Integer getPriceUnit() {
+        return priceUnit;
+    }
+
+    public void setPriceUnit(Integer priceUnit) {
+        this.priceUnit = priceUnit;
+    }
 
     public String getCreator() {
         return creator;
