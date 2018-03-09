@@ -49,7 +49,7 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
         ProjectSendAuditB projectSendAuditB1 = projectSendAuditBMapper.selectByPrimaryKey(projectId);
 
         if(null == projectSendAuditB1){
-            result.setStatus(300);
+            result.setStatus(500);
             result.setMessage("failed");
             result.setData(null);
             return result;
@@ -115,8 +115,20 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
                 //TODO 团队成员的权重逻辑是否需要进一步变更  
                 //设置团队成员的权重,如果权重为null的话，默认设置该权重为0
                 collectProjectAuditMemberDto.setWeight(projectSendTeamB_i.getWeight()==null ? 0 : projectSendTeamB_i.getWeight());
+                /**
+                 * 以上属于列表显示内容
+                 * =========================================
+                 * 以下属于团队成员详细信息内容
+                 */
+                //设置头像
+                collectProjectAuditMemberDto.setHeadPicture(projectSendTeamB_i.getHeadPicture());
+                //设置高清图片
+                collectProjectAuditMemberDto.setPicture(projectSendTeamB_i.getPicture());
+//                collectProjectAuditMemberDto.set
+                
                 //设置是否隐藏
                 collectProjectAuditMemberDto.setIsHide(projectSendTeamB_i.getIsHide());
+                
                 collectProjectAuditMemberDtoList.add(collectProjectAuditMemberDto);
             }
         }
