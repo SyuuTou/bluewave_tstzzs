@@ -81,7 +81,7 @@
     select u.actual_name,u.headpic,u.headpic_real,u.company_name,u.company_duties,w.nick_name from users u
     right join user_token t on u.ID = t.user_id
     left join users_weixin w on t.user_id = w.user_id
-    where t.token = #{token}
+    where t.token = #{token} limit 0,1
   </select>
   <select id="findAdminList" resultType="java.util.HashMap">
     select aa.id,
