@@ -137,7 +137,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
         //转数组
         Integer[] identityType = {};
         Integer[] serviceType = {};
-        if (body.getIsReward() == 0) {
+        if (body.getIsReward()!=null && body.getIsReward() == 0) {
 
             CommonDto<Map<String, Object>> userInfo = userInfoService.getUserInfo(body.getToken());
             if (null != userInfo.getData().get("approveId")) {
@@ -151,7 +151,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 body.setIsLeadInvestor((Integer) userInfo.getData().get("isLeadInvestor"));
             }
 
-
+        }
 
             if (null != body.getIdentityType() && body.getIdentityType().size() > 0) {
                 Integer[] identityTypeA = new Integer[body.getIdentityType().size()];
@@ -169,7 +169,6 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 }
                 serviceType = serviceTypeA;
             }
-        }
 
         Integer startPage = (body.getPageNum()-1)*body.getPageSize();
         List<Map<String,Object>> elegantServiceList = elegantServiceMapper.findElegantServiceList(token,body.getRecommendYn(),
@@ -390,6 +389,21 @@ public class ElegantServiceImpl implements ElegantServiceService{
             return result;
         }
 
+        if (body.getIsReward() == 1){
+            body.setIdentityType("1,2,3,4,5,6");
+            List<Integer> approveType = new ArrayList<>();
+            approveType.add(0);
+            approveType.add(1);
+            approveType.add(2);
+            body.setApproveTypes(approveType);
+            List<Integer> memberType = new ArrayList<>();
+            memberType.add(1);
+            memberType.add(2);
+            memberType.add(3);
+            memberType.add(4);
+            body.setMemberTypes(memberType);
+        }
+
         //判断是更新还是新建
         try {
             if (body.getElegantServiceId() == null || "".equals(body.getElegantServiceId())){
@@ -404,11 +418,9 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 if (body.getPriceUnit() == 1){
                     // 扣除令牌
                     redEnvelopeService.addUserIntegralsLog(appid,"LOCK",userToken.getUserId(),amount,965,false,new BigDecimal(-1),1);
-
                 }else if (body.getPriceUnit() == 0){
                     // 锁定人民币
                     redEnvelopeService.addUserIntegralsLog(appid,"LOCK",userToken.getUserId(),amount,965,false,new BigDecimal(-1),0);
-
                 }
 
             }else {

@@ -31,7 +31,8 @@ public class ElegantServiceController {
         CommonDto<List<Map<String,Object>>> result = new CommonDto<>();
 
         try {
-            result = elegantServiceService.findElegantServiceList(body,appid,token);
+            CommonDto<List<Map<String, Object>>> elegantServiceList = elegantServiceService.findElegantServiceList(body, appid, token);
+            result = elegantServiceList;
         }catch (Exception e){
             log.error(e.getMessage(),e.fillInStackTrace());
             result.setData(null);
