@@ -447,7 +447,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
      * 获取基础服务类型的方法
      * @return
      */
-    @Cacheable(value = "getMetaServiceType", keyGenerator = "wiselyKeyGenerator")
+   // @Cacheable(value = "getMetaServiceType", keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<MetaServiceType>> getMetaServiceType() {
         CommonDto<List<MetaServiceType>> result = new CommonDto<>();
@@ -1540,6 +1540,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
             elegantServiceRelevantProjectMapper.delete(elegantServiceRelevantProjectRecord);
             elegantServiceRelevantProjectRecord.setProjectId(body.getProjectId());
             elegantServiceRelevantProjectRecord.setProjectShortName(body.getProjectShortName());
+            elegantServiceRelevantProjectRecord.setDataType(body.getDataType());
             elegantServiceRelevantProjectMapper.insert(elegantServiceRelevantProjectRecord);
         }
 

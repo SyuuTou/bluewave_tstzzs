@@ -1426,7 +1426,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
 		iip.setProjectId(financingLogId);
 		//设置有效标志为有效
-		iip.setYn(0);
+//		iip.setYn(0);
 		List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
 		//融资历史记录的详细信息进行进一步的输出格式化
 		if(iips !=null) {  

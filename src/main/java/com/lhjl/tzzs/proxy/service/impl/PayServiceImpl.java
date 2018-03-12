@@ -195,8 +195,6 @@ public class PayServiceImpl implements PayService {
             parms1.put("sceneKey",result.getAttach().split("\\|")[0]);
             parms1.put("actionType",3);
             logInfoService.saveElegantServiceLog(parms1);
-
-
         }else {
             userIntegralsService.payAfter(usersPay.getUserId(), usersPay.getSceneKey(), new BigDecimal(WxPayBaseResult.feeToYuan(result.getTotalFee())), 1, Integer.valueOf(result.getAttach().split("\\|")[2]));
         }

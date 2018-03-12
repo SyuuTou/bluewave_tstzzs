@@ -337,9 +337,10 @@ public class CollectProjectAuditTeamDto{
         /**
          * 自定义团队
          */
-        private String selfDefTeam;
+        private List<String> selfDefTeam;
         /**
-         * 出生年月
+         * 出生年月返回字符串
+         * 
          */
         private String birthDate;
         /**
@@ -357,7 +358,7 @@ public class CollectProjectAuditTeamDto{
         /**
          * 关注领域
          */
-        private Integer[] segmentaionIds;
+        private List<Integer> segmentaionIds;
         /**
          * 投资阶段
          */
@@ -365,13 +366,13 @@ public class CollectProjectAuditTeamDto{
         /**
          * 所在城市
          */
-        private String[] citys;
+        private List<String> citys;
         
-        private String[] selfDefCitys;
+        private List<String> selfDefCitys;
         /**
          * 创业经历
          */
-        private String[] businesses;
+        private List<String> businesses;
         /**
          * 创业经历描述
          */
@@ -517,11 +518,12 @@ public class CollectProjectAuditTeamDto{
 			this.teamId = teamId;
 		}
 
-		public String getSelfDefTeam() {
+
+		public List<String> getSelfDefTeam() {
 			return selfDefTeam;
 		}
 
-		public void setSelfDefTeam(String selfDefTeam) {
+		public void setSelfDefTeam(List<String> selfDefTeam) {
 			this.selfDefTeam = selfDefTeam;
 		}
 
@@ -565,13 +567,6 @@ public class CollectProjectAuditTeamDto{
 			this.nationality = nationality;
 		}
 
-		public Integer[] getSegmentaionIds() {
-			return segmentaionIds;
-		}
-
-		public void setSegmentaionIds(Integer[] segmentaionIds) {
-			this.segmentaionIds = segmentaionIds;
-		}
 
 		public List<Integer> getInvestStages() {
 			return investStages;
@@ -579,30 +574,6 @@ public class CollectProjectAuditTeamDto{
 
 		public void setInvestStages(List<Integer> investStages) {
 			this.investStages = investStages;
-		}
-
-		public String[] getCitys() {
-			return citys;
-		}
-
-		public void setCitys(String[] citys) {
-			this.citys = citys;
-		}
-
-		public String[] getSelfDefCitys() {
-			return selfDefCitys;
-		}
-
-		public void setSelfDefCitys(String[] selfDefCitys) {
-			this.selfDefCitys = selfDefCitys;
-		}
-
-		public String[] getBusinesses() {
-			return businesses;
-		}
-
-		public void setBusinesses(String[] businesses) {
-			this.businesses = businesses;
 		}
 
 		public String getBusinessDesc() {
@@ -628,6 +599,39 @@ public class CollectProjectAuditTeamDto{
 		public void setWorkExperienceDesc(String workExperienceDesc) {
 			this.workExperienceDesc = workExperienceDesc;
 		}
+		
+
+		public List<Integer> getSegmentaionIds() {
+			return segmentaionIds;
+		}
+
+		public void setSegmentaionIds(List<Integer> segmentaionIds) {
+			this.segmentaionIds = segmentaionIds;
+		}
+
+		public List<String> getCitys() {
+			return citys;
+		}
+
+		public void setCitys(List<String> citys) {
+			this.citys = citys;
+		}
+
+		public List<String> getSelfDefCitys() {
+			return selfDefCitys;
+		}
+
+		public void setSelfDefCitys(List<String> selfDefCitys) {
+			this.selfDefCitys = selfDefCitys;
+		}
+
+		public List<String> getBusinesses() {
+			return businesses;
+		}
+
+		public void setBusinesses(List<String> businesses) {
+			this.businesses = businesses;
+		}
 
 		/**
 		 * 比较器
@@ -647,13 +651,10 @@ public class CollectProjectAuditTeamDto{
 					+ ", headPicture=" + headPicture + ", picture=" + picture + ", email=" + email + ", weiChat="
 					+ weiChat + ", teamId=" + teamId + ", selfDefTeam=" + selfDefTeam + ", birthDate=" + birthDate
 					+ ", tenureTime=" + tenureTime + ", sex=" + sex + ", diploma=" + diploma + ", nationality="
-					+ nationality + ", segmentaionIds=" + Arrays.toString(segmentaionIds) + ", investStages="
-					+ investStages + ", citys=" + Arrays.toString(citys) + ", selfDefCitys="
-					+ Arrays.toString(selfDefCitys) + ", businesses=" + Arrays.toString(businesses) + ", businessDesc="
+					+ nationality + ", segmentaionIds=" + segmentaionIds + ", investStages=" + investStages + ", citys="
+					+ citys + ", selfDefCitys=" + selfDefCitys + ", businesses=" + businesses + ", businessDesc="
 					+ businessDesc + ", educationExperienceDesc=" + educationExperienceDesc + ", workExperienceDesc="
 					+ workExperienceDesc + "]";
 		}
-
     }
-    
 }

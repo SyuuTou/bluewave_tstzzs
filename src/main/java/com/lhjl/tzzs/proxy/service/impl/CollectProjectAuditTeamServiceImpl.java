@@ -5,17 +5,30 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendAuditBMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamBMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamIntroductionBMapper;
+import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamMemberBusinessBMapper;
+import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamMemberCityBMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamMemberEducationBMapper;
+import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamMemberSegmentationBMapper;
+import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamMemberSelfcityBMapper;
+import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamMemberSelfteamBMapper;
+import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamMemberStageBMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSendTeamMemberWorkBMapper;
 import com.lhjl.tzzs.proxy.model.ProjectSendAuditB;
 import com.lhjl.tzzs.proxy.model.ProjectSendTeamB;
 import com.lhjl.tzzs.proxy.model.ProjectSendTeamIntroductionB;
+import com.lhjl.tzzs.proxy.model.ProjectSendTeamMemberBusinessB;
+import com.lhjl.tzzs.proxy.model.ProjectSendTeamMemberCityB;
 import com.lhjl.tzzs.proxy.model.ProjectSendTeamMemberEducationB;
+import com.lhjl.tzzs.proxy.model.ProjectSendTeamMemberSegmentationB;
+import com.lhjl.tzzs.proxy.model.ProjectSendTeamMemberSelfcityB;
+import com.lhjl.tzzs.proxy.model.ProjectSendTeamMemberSelfteamB;
+import com.lhjl.tzzs.proxy.model.ProjectSendTeamMemberStageB;
 import com.lhjl.tzzs.proxy.model.ProjectSendTeamMemberWorkB;
 import com.lhjl.tzzs.proxy.service.CollectProjectAuditTeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +50,27 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
     private ProjectSendTeamMemberEducationBMapper projectSendTeamMemberEducationBMapper;
     @Autowired
     private ProjectSendTeamMemberWorkBMapper projectSendTeamMemberWorkBMapper;
+    
+  //关注领域
+    @Autowired
+    private ProjectSendTeamMemberSegmentationBMapper projectSendTeamMemberSegmentationBMapper;
+    //投资阶段
+    @Autowired
+    private ProjectSendTeamMemberStageBMapper projectSendTeamMemberStageBMapper;
+    //所在城市
+    @Autowired
+    private ProjectSendTeamMemberCityBMapper projectSendTeamMemberCityBMapper;
+    //自定义城市
+    @Autowired
+    private ProjectSendTeamMemberSelfcityBMapper projectSendTeamMemberSelfcityBMapper;
+    //创业经历
+    @Autowired
+    private ProjectSendTeamMemberBusinessBMapper projectSendTeamMemberBusinessBMapper;
+    
+    @Autowired
+    private ProjectSendTeamMemberSelfteamBMapper projectSendTeamMemberSelfteamBMapper;
+    
+    
     @Override
     public CommonDto<CollectProjectAuditTeamDto> getCollectProjectAuditTeam(Integer projectId) {
 
@@ -68,10 +102,11 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
         //将每一个项目团队成员转换为DTO
         if(null != projectSendTeamBList && projectSendTeamBList.size() != 0){
             for(ProjectSendTeamB projectSendTeamB_i : projectSendTeamBList){
+            	Integer teamMemberId = projectSendTeamB_i.getId();
             	//设置采集项目的团队成员
                 CollectProjectAuditTeamDto.CollectProjectAuditMemberDto collectProjectAuditMemberDto = new CollectProjectAuditTeamDto.CollectProjectAuditMemberDto();
                 //团队成员id
-                collectProjectAuditMemberDto.setMemberId(projectSendTeamB_i.getId());
+                collectProjectAuditMemberDto.setMemberId(teamMemberId);
                 //成员姓名
                 collectProjectAuditMemberDto.setMemberName(projectSendTeamB_i.getMemberName());
                 //成员职务
@@ -124,7 +159,119 @@ public class CollectProjectAuditTeamServiceImpl implements CollectProjectAuditTe
                 collectProjectAuditMemberDto.setHeadPicture(projectSendTeamB_i.getHeadPicture());
                 //设置高清图片
                 collectProjectAuditMemberDto.setPicture(projectSendTeamB_i.getPicture());
-//                collectProjectAuditMemberDto.set
+                collectProjectAuditMemberDto.setPhone(projectSendTeamB_i.getPhone());
+                collectProjectAuditMemberDto.setEmail(projectSendTeamB_i.getEmail());
+                collectProjectAuditMemberDto.setTeamId(projectSendTeamB_i.getTeamId());
+                
+                collectProjectAuditMemberDto.setWeiChat(projectSendTeamB_i.getWeichat());
+                //设置出生年月
+                if(projectSendTeamB_i.getBirthDay() !=null) {
+                	collectProjectAuditMemberDto.setBirthDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(projectSendTeamB_i.getBirthDay()));
+                }
+                //任职时间
+                if(projectSendTeamB_i.getTenureTime() !=null) {
+                	collectProjectAuditMemberDto.setTenureTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(projectSendTeamB_i.getTenureTime()));
+                }
+                //性别
+                collectProjectAuditMemberDto.setSex(projectSendTeamB_i.getSex());
+                //学历
+                collectProjectAuditMemberDto.setDiploma(projectSendTeamB_i.getDiploma());
+                //国籍
+                collectProjectAuditMemberDto.setNationality(projectSendTeamB_i.getNationality());
+                //股份占比
+                collectProjectAuditMemberDto.setStockPer(projectSendTeamB_i.getStockRatio());
+                //创业经历详细描述
+                collectProjectAuditMemberDto.setBusinessDesc(projectSendTeamB_i.getBusinessExperienceDesc());
+                //教育背景详细描述
+                collectProjectAuditMemberDto.setEducationExperienceDesc(projectSendTeamB_i.getEducationExperienceDesc());
+                //工作背景详细描述
+                collectProjectAuditMemberDto.setWorkExperienceDesc(projectSendTeamB_i.getWorkExperienceDesc());
+                
+                ProjectSendTeamMemberSelfteamB projectSendTeamMemberSelfteamB =new ProjectSendTeamMemberSelfteamB();
+                projectSendTeamMemberSelfteamB.setPsTeamBId(teamMemberId);
+                List<ProjectSendTeamMemberSelfteamB> projectSendTeamMemberSelfteamBs = projectSendTeamMemberSelfteamBMapper.select(projectSendTeamMemberSelfteamB);
+                //用于接受自定义团队
+                List<String> selfTeams=null;
+                if(projectSendTeamMemberSelfteamBs != null && projectSendTeamMemberSelfteamBs.size() != 0) {
+                	selfTeams=new ArrayList<>();
+                	for(ProjectSendTeamMemberSelfteamB e: projectSendTeamMemberSelfteamBs){
+                		selfTeams.add(e.getTeamName());
+                	};
+                }
+                collectProjectAuditMemberDto.setSelfDefTeam(selfTeams);
+                
+                //关注领域--ok
+                ProjectSendTeamMemberSegmentationB projectSendTeamMemberSegmentationB =new ProjectSendTeamMemberSegmentationB();
+                projectSendTeamMemberSegmentationB.setPsTeamBId(teamMemberId);
+                List<ProjectSendTeamMemberSegmentationB> projectSendTeamMemberSegmentationBs = projectSendTeamMemberSegmentationBMapper.select(projectSendTeamMemberSegmentationB);
+                //用于接受领域id
+                List<Integer> segmentations=null;
+                if(projectSendTeamMemberSegmentationBs!=null && projectSendTeamMemberSegmentationBs.size()!=0) {
+                	segmentations=new ArrayList<>();
+                	for(ProjectSendTeamMemberSegmentationB e: projectSendTeamMemberSegmentationBs){
+                		segmentations.add(e.getSegmentationId());
+                	};
+                }
+                collectProjectAuditMemberDto.setSegmentaionIds(segmentations);
+                
+                //投资阶段--ok
+                ProjectSendTeamMemberStageB projectSendTeamMemberStageB =new ProjectSendTeamMemberStageB();
+                projectSendTeamMemberStageB.setPsTeamBId(teamMemberId);
+                List<ProjectSendTeamMemberStageB> projectSendTeamMemberStageBs = projectSendTeamMemberStageBMapper.select(projectSendTeamMemberStageB);
+                
+                //用于接受投资阶段id
+                List<Integer> stages=null;
+                if(projectSendTeamMemberStageBs!=null && projectSendTeamMemberStageBs.size()!=0) {
+                	stages=new ArrayList<>();
+                	for(ProjectSendTeamMemberStageB e: projectSendTeamMemberStageBs){
+                		stages.add(e.getStageId());
+                	};
+                }
+                collectProjectAuditMemberDto.setInvestStages(stages);
+                //所在城市--ok
+                ProjectSendTeamMemberCityB projectSendTeamMemberCityB =new ProjectSendTeamMemberCityB();
+                projectSendTeamMemberCityB.setPsTeamBId(teamMemberId);
+                List<ProjectSendTeamMemberCityB> projectSendTeamMemberCityBs = projectSendTeamMemberCityBMapper.select(projectSendTeamMemberCityB);
+                
+              //用于接受成员所在城市
+                List<String> citys=null;
+                if(projectSendTeamMemberCityBs!=null && projectSendTeamMemberCityBs.size()!=0) {
+                	citys=new ArrayList<>();
+                	for(ProjectSendTeamMemberCityB e: projectSendTeamMemberCityBs){
+                		citys.add(e.getCityName());
+                	};
+                }
+                collectProjectAuditMemberDto.setCitys(citys);
+                
+                //自定义城市
+                ProjectSendTeamMemberSelfcityB projectSendTeamMemberSelfcityB =new ProjectSendTeamMemberSelfcityB();
+                projectSendTeamMemberSelfcityB.setPsTeamBId(teamMemberId);
+                List<ProjectSendTeamMemberSelfcityB> projectSendTeamMemberSelfcityBs = projectSendTeamMemberSelfcityBMapper.select(projectSendTeamMemberSelfcityB);
+                
+              //用于接受成员所在自定义城市
+                List<String> selfCitys=null;
+                if(projectSendTeamMemberSelfcityBs!=null && projectSendTeamMemberSelfcityBs.size()!=0) {
+                	selfCitys=new ArrayList<>();
+                	for(ProjectSendTeamMemberSelfcityB e: projectSendTeamMemberSelfcityBs){
+                		selfCitys.add(e.getCity());
+                	};
+                }
+                collectProjectAuditMemberDto.setSelfDefCitys(selfCitys);
+                
+                //创业经历
+                ProjectSendTeamMemberBusinessB projectSendTeamMemberBusinessB =new ProjectSendTeamMemberBusinessB();
+                projectSendTeamMemberBusinessB.setPsTeamBId(teamMemberId);
+                List<ProjectSendTeamMemberBusinessB> projectSendTeamMemberBusinessBs = projectSendTeamMemberBusinessBMapper.select(projectSendTeamMemberBusinessB);
+                
+              //用于接受成员创业经历
+                List<String> business=null;
+                if(projectSendTeamMemberBusinessBs!=null && projectSendTeamMemberBusinessBs.size()!=0) {
+                	business=new ArrayList<>();
+                	for(ProjectSendTeamMemberBusinessB e: projectSendTeamMemberBusinessBs){
+                		business.add(e.getCompanyName());
+                	};
+                }
+                collectProjectAuditMemberDto.setBusinesses(business);
                 
                 //设置是否隐藏
                 collectProjectAuditMemberDto.setIsHide(projectSendTeamB_i.getIsHide());
