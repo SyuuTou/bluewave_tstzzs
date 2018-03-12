@@ -5,6 +5,9 @@ import javax.persistence.*;
 @Table(name = "elegant_service_description_url")
 public class ElegantServiceDescriptionUrl {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     @Column(name = "elegant_service_id")
     private Integer elegantServiceId;
 
@@ -12,6 +15,20 @@ public class ElegantServiceDescriptionUrl {
      * 详情图片地址
      */
     private String url;
+
+    /**
+     * @return id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @param id
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     /**
      * @return elegant_service_id

@@ -18,6 +18,18 @@ public class ElegantServiceRelevantProject {
     @Column(name = "project_short_name")
     private String projectShortName;
 
+    @Column(name = "data_type")
+    private Integer dataType;
+
+
+    public Integer getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(Integer dataType) {
+        this.dataType = dataType;
+    }
+
     /**
      * 获取精选
      *

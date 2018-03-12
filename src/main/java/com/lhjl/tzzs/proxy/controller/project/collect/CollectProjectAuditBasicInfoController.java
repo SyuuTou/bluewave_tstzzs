@@ -20,7 +20,7 @@ public class CollectProjectAuditBasicInfoController extends GenericController{
     private CollectProjectAuditBasicInfoService collectProjectAuditBasicInfoService;
     
     /**
-     * 回显采集项目审核基本信息
+     * 回显采集项目审核基本信息 
      * @param projectId
      * @return
      */

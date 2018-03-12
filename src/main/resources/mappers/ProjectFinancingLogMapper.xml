@@ -253,6 +253,6 @@
   </select>
   
   <select id="selectByProjectId" resultMap="BaseResultMap">
-    select * from project_financing_log where project_id=#{projectId};
+   select * from project_financing_log where project_id=#{projectId} and financing_time is null and approval_status =1
   </select>
 </mapper>
