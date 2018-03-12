@@ -74,8 +74,10 @@
     <if test="searchWord != null and searchWord !=''">
       and (
          es.service_name like CONCAT(CONCAT('%', #{searchWord}), '%')
-         or mit.type_name like CONCAT(CONCAT('%', #{searchWord}), '%')
-         or mst.service_type_name like CONCAT(CONCAT('%', #{searchWord}), '%')
+        <if test="isReward != null and isReward != 1 " >
+          or mit.type_name like CONCAT(CONCAT('%', #{searchWord}), '%')
+          or mst.service_type_name like CONCAT(CONCAT('%', #{searchWord}), '%')
+        </if>
          or esd.description like CONCAT(CONCAT('%', #{searchWord}), '%'))
     </if>
     <if test="recommendYn != null and recommendYn != ''">
