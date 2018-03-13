@@ -299,9 +299,9 @@ public class CollectProjectAuditTeamDto{
         private List<String> educationExperience;
         
         /**
-         * 团队成员权重权重
+         * 手机号
          */
-        private Integer weight;
+        private String phone;
         /**
          * 0 离职
          * 1 在职
@@ -309,9 +309,9 @@ public class CollectProjectAuditTeamDto{
          */
         private Integer isOnJob;
         /**
-         * 手机号
+         * 团队成员权重权重
          */
-        private String phone;
+        private Integer weight;
         /**
          * 是否隐藏
          * 1 隐藏
@@ -344,7 +344,7 @@ public class CollectProjectAuditTeamDto{
          */
         private String birthDate;
         /**
-         * 任职时间
+         * 任职时间输入字符串
          */
         private String tenureTime;
 
