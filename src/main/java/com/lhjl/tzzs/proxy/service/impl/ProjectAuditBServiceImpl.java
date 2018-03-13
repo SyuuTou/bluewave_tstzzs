@@ -348,7 +348,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
             projects.setFullName(body.getFullName());
         }
         if (body.getKernelDesc() != null){
-            projects.setKernelDesc(body.getFullName());
+        	projects.setKernelDesc(body.getKernelDesc());
         }
         if (body.getProjectInvestmentHighlights() != null){
             projects.setProjectInvestmentHighlights(body.getProjectInvestmentHighlights());
