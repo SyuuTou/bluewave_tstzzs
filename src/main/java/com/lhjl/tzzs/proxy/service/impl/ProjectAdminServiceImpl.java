@@ -432,7 +432,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
             }
             projectAdminLogoOutputDto.setProjectAdmin(adminName);
             projectAdminLogoOutputDto.setClaimStatus("未认领");
-            projectAdminLogoOutputDto.setType("产业公司");
+            projectAdminLogoOutputDto.setType("创业公司");
 
             result.setMessage("success");
             result.setData(projectAdminLogoOutputDto);
