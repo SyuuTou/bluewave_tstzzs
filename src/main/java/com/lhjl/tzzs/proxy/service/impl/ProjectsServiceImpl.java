@@ -1257,7 +1257,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		pfl.setProjectId(projectId);
 		pfl.setYn(0);
 		//获取所有的融资历史记录
-		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.select(pfl);
+//		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.select(pfl);
+		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.selectAllHistoryFinancing(projectId);
 		
 		if(pfls != null && pfls.size() != 0) {
 			pfls.forEach((e)->{

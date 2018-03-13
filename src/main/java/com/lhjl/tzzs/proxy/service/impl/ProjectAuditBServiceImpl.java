@@ -273,7 +273,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
             return result;
         }
 
-        //判断项目是否已经存在
+        //该项目还没有进行对比
         if (body.getComparedStatus() == 0){
             Projects projects = new Projects();
             projects.setShortName(body.getShortName());
@@ -286,6 +286,12 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
 
                 return result;
             }
+        }else {//
+        	result.setMessage("当前项目在平台项目库已存在,且已经对比完毕，请务必确认");
+            result.setData(null);
+            result.setStatus(502);
+
+            return result;
         }
 
         // 审核项目主体信息
