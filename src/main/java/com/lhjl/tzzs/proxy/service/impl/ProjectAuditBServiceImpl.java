@@ -657,6 +657,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
 
         // 删除原来的融资历史
         Example financingExample = new Example(ProjectFinancingLog.class);
+        //融资时间不为null的属于该项目的历史融资
         financingExample.and().andIsNotNull("financingTime").andEqualTo("projectId",projectId);
 
         List<ProjectFinancingLog> projectFinancingLogList = projectFinancingLogMapper.selectByExample(financingExample);
@@ -664,8 +665,9 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
             for (ProjectFinancingLog pfl:projectFinancingLogList){
                 InvestmentInstitutionsProject investmentInstitutionsProject = new InvestmentInstitutionsProject();
                 investmentInstitutionsProject.setProjectId(pfl.getId());
-
+                //删除"机构和项目融资阶段关联表"中对应的机构信息
                 investmentInstitutionsProjectMapper.delete(investmentInstitutionsProject);
+                //删除项目的融资历史信息
                 projectFinancingLogMapper.deleteByPrimaryKey(pfl.getId());
             }
         }

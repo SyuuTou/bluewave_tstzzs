@@ -1253,12 +1253,23 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	public CommonDto<List<ProjectFinancingLog>> getFinancingLogs(Integer appid, Integer projectId) {
 		CommonDto<List<ProjectFinancingLog>> result =new CommonDto<>();
 		
-		ProjectFinancingLog pfl=new ProjectFinancingLog();
+		
+		Example example=new Example(ProjectFinancingLog.class);
+		example.and()
+		.andIsNotNull("financingTime")
+		.andEqualTo("projectId",projectId)
+		.andEqualTo("yn",0)
+		.andEqualTo("approvalStatus",1);
+		
+		/*ProjectFinancingLog pfl=new ProjectFinancingLog();
 		pfl.setProjectId(projectId);
 		pfl.setYn(0);
 		//获取所有的融资历史记录
-//		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.select(pfl);
-		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.selectAllHistoryFinancing(projectId);
+		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.select(pfl);*/
+		
+//		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.selectAllHistoryFinancing(projectId);
+		
+		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.selectByExample(example);
 		
 		if(pfls != null && pfls.size() != 0) {
 			pfls.forEach((e)->{
@@ -1356,9 +1367,22 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		//保存在融资历史保存或者更新后的主键id
 		Integer afterUpdateLogId=null;
 		if(body.getId() !=null) { //执行相关的更新操作
+			body.setUpdateTime(new Date());
+			
 			projectFinancingLogMapper.updateByPrimaryKeySelective(body);
 			afterUpdateLogId=body.getId();
 		}else {//执行相关的插入操作,增加的话肯定会传递一个projectId作为body的属性
+			Date now=new Date();
+			
+			body.setYn(0);
+			body.setCreateTime(now);
+			//设置审核状态,创建即默认审核通过
+			body.setApprovalStatus(1);
+			body.setApprovalTime(now);;
+			
+			//数据来源为运营人员后台添加
+			body.setDataSoruceTypeId(3);
+			
 			projectFinancingLogMapper.insertSelective(body);
 			afterUpdateLogId=body.getId();
 		}

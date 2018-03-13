@@ -59,14 +59,9 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
         }
         ProjectFinancingLog projectFinancingLog = new ProjectFinancingLog();
         projectFinancingLog.setProjectId(body.getProjectId());
-        long now = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String createTime = null;
-        try {
-            createTime = sdf.format(new Date(now));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        
+        Date now = new Date();
+        
         projectFinancingLog.setAmount(body.getAmount());
         projectFinancingLog.setCurrency(body.getCurrencyType());
         projectFinancingLog.setStage(body.getStage());
@@ -78,20 +73,12 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
         projectFinancingLog.setYn(0);
         
         Integer projectFinancingLogInsertResult = null;
-        /*if(null == body.getId()){
-            projectFinancingLog.setCreateTime(DateUtils.parse(createTime));
-            projectFinancingLogInsertResult = projectFinancingLogMapper.insert(projectFinancingLog);
-        }else{
-            projectFinancingLog.setUpdateTime(DateUtils.parse(createTime));
-            projectFinancingLogInsertResult = projectFinancingLogMapper.updateByPrimaryKey(projectFinancingLog);
-        }*/
         
-        //曹传桂替换
         if(null == body.getId()){
-            projectFinancingLog.setCreateTime(DateUtils.parse(createTime));
+            projectFinancingLog.setCreateTime(now);
             projectFinancingLogInsertResult = projectFinancingLogMapper.insertSelective(projectFinancingLog);
         }else{
-            projectFinancingLog.setUpdateTime(DateUtils.parse(createTime));
+            projectFinancingLog.setUpdateTime(now);
             projectFinancingLogInsertResult = projectFinancingLogMapper.updateByPrimaryKeySelective(projectFinancingLog);
         }
         
