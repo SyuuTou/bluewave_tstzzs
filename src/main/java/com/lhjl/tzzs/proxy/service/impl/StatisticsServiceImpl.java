@@ -1,8 +1,11 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
-import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.StatisticsDto;
 import com.lhjl.tzzs.proxy.dto.HistogramList;
+import com.lhjl.tzzs.proxy.dto.StatisticsDto;
+import com.lhjl.tzzs.proxy.mapper.OpStatisticsNameMapper;
 import com.lhjl.tzzs.proxy.mapper.StatisticsMapper;
+import com.lhjl.tzzs.proxy.model.OpStatisticsName;
 import com.lhjl.tzzs.proxy.service.StatisticsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +29,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Autowired
     private StatisticsMapper statisticsMapper;
+    @Autowired
+    private OpStatisticsNameMapper opStatisticsNameMapper;
 
     @Cacheable(value = "financingCountDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public CommonDto<List<HistogramList>> financingCountDistributed(String institutionType,String from ,String size) {
+    public StatisticsDto<List<HistogramList>> financingCountDistributed(String institutionType, String from , String size) {
 
         int from1  = Integer.parseInt(from);
         int size1 = Integer.parseInt(size);
@@ -37,13 +42,16 @@ public class StatisticsServiceImpl implements StatisticsService {
         int froma = from1*size1;
         int sizea = size1;
 
-        CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
+        StatisticsDto<List<HistogramList>> result = new StatisticsDto<List<HistogramList>>();
         Integer type = null;
         if (institutionType.equals("50")){
             type = 1;
         }
         List<HistogramList>  histogramLists = statisticsMapper.financingCountDistributed(type,beginTime,endTime,froma,sizea);
         result.setData(histogramLists);
+        OpStatisticsName query = new OpStatisticsName();
+        query.setKey("count");
+        result.setStatisticsName(opStatisticsNameMapper.selectOne(query));
         result.setMessage("success");
         result.setStatus(200);
         return result;
@@ -51,7 +59,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Cacheable(value = "financingAmountDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public CommonDto<List<HistogramList>> financingAmountDistributed(String institutionType,String from, String size) {
+    public StatisticsDto<List<HistogramList>> financingAmountDistributed(String institutionType, String from, String size) {
 
         int from1  = Integer.parseInt(from);
         int size1 = Integer.parseInt(size);
@@ -59,7 +67,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         int froma = from1*size1;
         int sizea = size1;
 
-        CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
+        StatisticsDto<List<HistogramList>> result = new StatisticsDto<List<HistogramList>>();
         Integer type = null;
         String flag = null;
         if (institutionType.equals("50")){
@@ -70,6 +78,9 @@ public class StatisticsServiceImpl implements StatisticsService {
         }
         List<HistogramList>  histogramLists = statisticsMapper.financingAmountDistributed(type,beginTime,endTime, flag,froma,sizea);
         result.setData(histogramLists);
+        OpStatisticsName query = new OpStatisticsName();
+        query.setKey("amount");
+        result.setStatisticsName(opStatisticsNameMapper.selectOne(query));
         result.setMessage("success");
         result.setStatus(200);
         return result;
@@ -77,7 +88,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Cacheable(value = "financingSegmentationDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public CommonDto<List<HistogramList>> financingSegmentationDistributed(String institutionType,String from, String size) {
+    public StatisticsDto<List<HistogramList>> financingSegmentationDistributed(String institutionType, String from, String size) {
 
         int from1  = Integer.parseInt(from);
         int size1 = Integer.parseInt(size);
@@ -85,13 +96,16 @@ public class StatisticsServiceImpl implements StatisticsService {
         int froma = from1*size1;
         int sizea = size1;
 
-        CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
+        StatisticsDto<List<HistogramList>> result = new StatisticsDto<List<HistogramList>>();
         Integer type = null;
         if (institutionType.equals("50")){
             type = 1;
         }
         List<HistogramList>  histogramLists = statisticsMapper.financingSegmentationDistributed(type,beginTime,endTime,froma,sizea);
         result.setData(histogramLists);
+        OpStatisticsName query = new OpStatisticsName();
+        query.setKey("segmentation");
+        result.setStatisticsName(opStatisticsNameMapper.selectOne(query));
         result.setMessage("success");
         result.setStatus(200);
         return result;
@@ -99,7 +113,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Cacheable(value = "financingCityDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public CommonDto<List<HistogramList>> financingCityDistributed(String institutionType,String from, String size) {
+    public StatisticsDto<List<HistogramList>> financingCityDistributed(String institutionType, String from, String size) {
 
         int from1  = Integer.parseInt(from);
         int size1 = Integer.parseInt(size);
@@ -107,13 +121,16 @@ public class StatisticsServiceImpl implements StatisticsService {
         int froma = from1*size1;
         int sizea = size1;
 
-        CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
+        StatisticsDto<List<HistogramList>> result = new StatisticsDto<List<HistogramList>>();
         Integer type = null;
         if (institutionType.equals("50")){
             type = 1;
         }
         List<HistogramList>  histogramLists = statisticsMapper.financingCityDistributed(type,beginTime,endTime,froma,sizea);
         result.setData(histogramLists);
+        OpStatisticsName query = new OpStatisticsName();
+        query.setKey("city");
+        result.setStatisticsName(opStatisticsNameMapper.selectOne(query));
         result.setMessage("success");
         result.setStatus(200);
         return result;
@@ -121,7 +138,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Cacheable(value = "financingEducationExperienceDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public CommonDto<List<HistogramList>> financingEducationExperienceDistributed(String institutionType, String from, String size) {
+    public StatisticsDto<List<HistogramList>> financingEducationExperienceDistributed(String institutionType, String from, String size) {
 
         int from1  = Integer.parseInt(from);
         int size1 = Integer.parseInt(size);
@@ -129,13 +146,16 @@ public class StatisticsServiceImpl implements StatisticsService {
         int froma = from1*size1;
         int sizea = size1;
 
-        CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
+        StatisticsDto<List<HistogramList>> result = new StatisticsDto<List<HistogramList>>();
         Integer type = null;
         if (institutionType.equals("50")){
             type = 1;
         }
         List<HistogramList>  histogramLists = statisticsMapper.financingEducationExperienceDistributed(type,beginTime,endTime,froma,sizea);
         result.setData(histogramLists);
+        OpStatisticsName query = new OpStatisticsName();
+        query.setKey("education_experience");
+        result.setStatisticsName(opStatisticsNameMapper.selectOne(query));
         result.setMessage("success");
         result.setStatus(200);
         return result;
@@ -143,7 +163,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Cacheable(value = "financingWorkExperienceDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public CommonDto<List<HistogramList>> financingWorkExperienceDistributed(String institutionType, String from, String size) {
+    public StatisticsDto<List<HistogramList>> financingWorkExperienceDistributed(String institutionType, String from, String size) {
 
         int from1  = Integer.parseInt(from);
         int size1 = Integer.parseInt(size);
@@ -151,13 +171,16 @@ public class StatisticsServiceImpl implements StatisticsService {
         int froma = from1*size1;
         int sizea = size1;
 
-        CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
+        StatisticsDto<List<HistogramList>> result = new StatisticsDto<List<HistogramList>>();
         Integer type = null;
         if (institutionType.equals("50")){
             type = 1;
         }
         List<HistogramList>  histogramLists = statisticsMapper.financingWorkExperienceDistributed(type,beginTime,endTime,froma,sizea);
         result.setData(histogramLists);
+        OpStatisticsName query = new OpStatisticsName();
+        query.setKey("work_experience");
+        result.setStatisticsName(opStatisticsNameMapper.selectOne(query));
         result.setMessage("success");
         result.setStatus(200);
         return result;
@@ -165,7 +188,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 //    @Cacheable(value = "financingInvestmentDistributed",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public CommonDto<List<HistogramList>> financingInvestmentDistributed(String institutionType, String from, String size) {
+    public StatisticsDto<List<HistogramList>> financingInvestmentDistributed(String institutionType, String from, String size) {
 
         int from1  = Integer.parseInt(from);
         int size1 = Integer.parseInt(size);
@@ -173,7 +196,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         int froma = from1*size1;
         int sizea = size1;
 
-        CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
+        StatisticsDto<List<HistogramList>> result = new StatisticsDto<List<HistogramList>>();
         Integer type = null;
         if (institutionType.equals("50")){
             type = 1;
@@ -196,46 +219,55 @@ public class StatisticsServiceImpl implements StatisticsService {
             histogramLists.get(histogramLists.size() - 1).setX(String.valueOf(Integer.valueOf(histogramLists.get(histogramLists.size() - 1).getX()) + (citySum - sum)));
         }
         result.setData(histogramLists);
+        OpStatisticsName query = new OpStatisticsName();
+        query.setKey("investment_allocation");
+        result.setStatisticsName(opStatisticsNameMapper.selectOne(query));
         result.setMessage("success");
         result.setStatus(200);
         return result;
     }
 
     @Override
-    public CommonDto<List<HistogramList>> financingInvestmentCharacteristicDistributed(String institutionType, String from, String size) {
+    public StatisticsDto<List<HistogramList>> financingInvestmentCharacteristicDistributed(String institutionType, String from, String size) {
         int from1  = Integer.parseInt(from);
         int size1 = Integer.parseInt(size);
 
         int froma = from1*size1;
         int sizea = size1;
 
-        CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
+        StatisticsDto<List<HistogramList>> result = new StatisticsDto<List<HistogramList>>();
         Integer type = null;
         if (institutionType.equals("50")){
             type = 1;
         }
         List<HistogramList>  histogramLists = statisticsMapper.financingInvestmentCharacteristicDistributed(type,beginTime,endTime,froma,sizea);
         result.setData(histogramLists);
+        OpStatisticsName query = new OpStatisticsName();
+        query.setKey("racing_track");
+        result.setStatisticsName(opStatisticsNameMapper.selectOne(query));
         result.setMessage("success");
         result.setStatus(200);
         return result;
     }
 
     @Override
-    public CommonDto<List<HistogramList>> financingInvestmentSegmentationDistributed(String institutionType, String from, String size) {
+    public StatisticsDto<List<HistogramList>> financingInvestmentSegmentationDistributed(String institutionType, String from, String size) {
         int from1  = Integer.parseInt(from);
         int size1 = Integer.parseInt(size);
 
         int froma = from1*size1;
         int sizea = size1;
 
-        CommonDto<List<HistogramList>> result = new CommonDto<List<HistogramList>>();
+        StatisticsDto<List<HistogramList>> result = new StatisticsDto<List<HistogramList>>();
         Integer type = null;
         if (institutionType.equals("50")){
             type = 1;
         }
         List<HistogramList>  histogramLists = statisticsMapper.financingInvestmentFocsSegmentationDistributed(type,beginTime,endTime,froma,sizea);
         result.setData(histogramLists);
+        OpStatisticsName query = new OpStatisticsName();
+        query.setKey("characteristic");
+        result.setStatisticsName(opStatisticsNameMapper.selectOne(query));
         result.setMessage("success");
         result.setStatus(200);
         return result;

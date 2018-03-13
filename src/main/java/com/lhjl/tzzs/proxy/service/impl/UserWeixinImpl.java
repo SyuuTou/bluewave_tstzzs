@@ -140,7 +140,11 @@ public class UserWeixinImpl implements UserWeixinService {
             queryWx.setUserId(userToken.getUserId());
             UsersWeixin usersWeixin = usersWeixinMapper.selectOne(queryWx);
             String nickName = usersWeixin.getNickName();
+            if (StringUtils.isEmpty(nickName)){
+                return new CommonDto<>(null,"success",200);
+            }
             Integer startIndex = 0;
+
             for (int i = 0; i< nickName.length();i++){
                 if (nickName.substring(i,i+1).getBytes("UTF-8").length == 3){
                     startIndex = i;
