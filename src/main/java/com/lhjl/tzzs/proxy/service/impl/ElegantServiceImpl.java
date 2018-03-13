@@ -178,7 +178,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
         if (elegantServiceList.size() > 0){
             for (Map<String,Object> m:elegantServiceList){
 
-//                m.putIfAbsent("original_price","");
+                m.putIfAbsent("original_price","");
                 m.putIfAbsent("background_picture","http://img.idatavc.com/static/img/serverwu.png");
 
                 //判断是否在时间范围
@@ -220,7 +220,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         Map<String,Object> map = elegantServiceMapper.findElegantServiceById(elegantServiceId);
         map.putIfAbsent("background_picture","http://img.idatavc.com/static/img/serverwu.png");
-//        map.putIfAbsent("original_price","");
+        map.putIfAbsent("original_price","");
 
         result.setStatus(200);
         result.setMessage("success");
