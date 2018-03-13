@@ -50,9 +50,11 @@
     right join elegant_service_service_type esst on esst.elegant_service_id = es.id
     left join meta_service_type mst on esst.meta_service_type_id = mst.id
 
-    LEFT JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
-    LEFT JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id
-
+    RIGHT JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
+    RIGHT JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id
+    <if test="isLeadInvestor != null and isLeadInvestor != ''">
+    RIGHT JOIN elegant_service_lead_investor esli on esli.elegant_service_id =  es.id
+    </if>
     where es.on_off = 1
     and es.yn = 1
     AND es.begin_time &lt;= #{now}
@@ -90,7 +92,7 @@
     </if>
 
     <if test="isLeadInvestor != null and isLeadInvestor != ''">
-      and es.is_lead_investor = #{isLeadInvestor}
+      and esli.lead_investor_type = #{isLeadInvestor}
     </if>
 
     <if test="isReward != null ">
