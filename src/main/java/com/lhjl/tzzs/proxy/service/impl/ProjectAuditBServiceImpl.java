@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -67,6 +68,24 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
 
     @Autowired
     private InvestmentInstitutionsMapper investmentInstitutionsMapper;
+    
+    @Autowired
+    private ProjectTeamMemberSelfteamMapper projectTeamMemberSelfteamMapper;
+    
+    @Autowired
+    private ProjectTeamMemberSegmentationMapper projectTeamMemberSegmentationMapper;
+    
+    @Autowired
+    private ProjectTeamMemberSelfcityMapper projectTeamMemberSelfcityMapper;
+    
+    @Autowired
+    private ProjectTeamMemberCityMapper ProjectTeamMemberCityMapper;
+    
+    @Autowired
+    private ProjectTeamMemberStageMapper projectTeamMemberStageMapper;
+    
+    @Autowired
+    private ProjectTeamMemberBusinessMapper projectTeamMemberBusinessMapper;
 
     /**
      * 读取项目审核列表接口
@@ -348,7 +367,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
             projects.setFullName(body.getFullName());
         }
         if (body.getKernelDesc() != null){
-            projects.setKernelDesc(body.getFullName());
+        	projects.setKernelDesc(body.getKernelDesc());
         }
         if (body.getProjectInvestmentHighlights() != null){
             projects.setProjectInvestmentHighlights(body.getProjectInvestmentHighlights());
@@ -384,14 +403,10 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
         Integer projectId =null;
         if (body.getProjectId() == null){
             projectsMapper.insertSelective(projects);
-
             projectId = projects.getId();
-
         }else {
             projects.setId(body.getProjectId());
-
             projectsMapper.updateByPrimaryKeySelective(projects);
-
             projectId= body.getProjectId();
 
         }
@@ -595,12 +610,15 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
         projectFinancingLog.setProjectId(projectId);
         projectFinancingLog.setAmount(body.getAmount());
         projectFinancingLog.setCurrency(body.getCurrency());
-        BigDecimal stockRight = BigDecimal.ZERO;
-        if (body.getShareDivest() != null){
-            stockRight = new BigDecimal(body.getShareDivest());
-        }
+//        BigDecimal stockRight = BigDecimal.ZERO;
+//        if (body.getShareDivest() != null){
+//            stockRight = new BigDecimal(body.getShareDivest());
+//        }
+//      projectFinancingLog.setStockRight(stockRight);
+        
+        //本轮总出让股份
+        projectFinancingLog.setShareDivest(body.getShareDivest());
 
-        projectFinancingLog.setStockRight(stockRight);
         if (body.getProjectFinancingUseful() != null){
             projectFinancingLog.setProjectFinancingUseful(body.getProjectFinancingUseful());
         }
@@ -687,6 +705,9 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
                 projectFinancingLog.setAmount(body.getAmount());
                 projectFinancingLog.setCurrency(psfh.getCurrency());
                 projectFinancingLog.setTotalAmount(psfh.getTotalAmount());
+                //曹传贵
+                projectFinancingLog.setYn(0);
+                
                 try {
                     Date financingTime = sdf.parse(psfh.getFinancingTime());
                     projectFinancingLog.setFinancingTime(financingTime);
@@ -746,7 +767,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
     }
 
     /**
-     * 审核团队成员
+     * 审核采集项目的团队成员
      * @param body
      * @param projectId
      * @param appid
@@ -775,18 +796,56 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
 
         if (body.getTeamMember().size() > 0){
             for (ProjectSendTeamBDto pstb:body.getTeamMember()){
+            	//设置ProjectTeamMember表的主体信息
                 ProjectTeamMember projectTeamMember = new ProjectTeamMember();
 
-                projectTeamMember.setYn(0);
+                //设置关联的项目id
                 projectTeamMember.setProjectId(projectId);
-                projectTeamMember.setShareRatio(pstb.getStockRatio());
+                
+                //设置团队成员的id
+                projectTeamMember.setId(pstb.getProjectSendMemberId());
+                
                 projectTeamMember.setMumberName(pstb.getMemberName());
                 projectTeamMember.setMumberDuties(pstb.getCompanyDuties());
+                projectTeamMember.setShareRatio(pstb.getStockRatio());
                 projectTeamMember.setMumberDesc(pstb.getMemberDesc());
+                projectTeamMember.setPhone(pstb.getPhone());
+                projectTeamMember.setIsonjob(pstb.getIsOnJob());
+                projectTeamMember.setWeight(pstb.getWeight());
+                projectTeamMember.setHeadPicture(pstb.getHeadPicture());
+                projectTeamMember.setPicture(pstb.getPicture());
+                projectTeamMember.setEmail(pstb.getEmail());
+                projectTeamMember.setWeichat(pstb.getWeichat());
+                projectTeamMember.setBusinessExperienceDesc(pstb.getBusinessExperienceDesc());
+                projectTeamMember.setWorkExperienceDesc(pstb.getWorkExperienceDesc());
+                projectTeamMember.setEducationExperienceDesc(pstb.getEducationExperienceDesc());
+                projectTeamMember.setTeamId(pstb.getTeamId());
+                //前端传递的是字符串
+                try {
+                	if(pstb.getBirthDay()!=null) {
+						projectTeamMember.setBirthDay(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(pstb.getBirthDay()));
+                	}
+                	if(pstb.getTenureTime()!=null) {
+						projectTeamMember.setBirthDay(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(pstb.getTenureTime()));
+                	}
+                } catch (ParseException e) {
+					result.setData("ParseException");
+					result.setMessage("字符串解析异常");
+					result.setStatus(500);
+					return result;
+				}
+                projectTeamMember.setSex(pstb.getSex());
+                projectTeamMember.setDiploma(pstb.getDiploma());
+                projectTeamMember.setNationality(pstb.getNationality());
+                
                 projectTeamMember.setCreateTime(now);
-
+                projectTeamMember.setYn(0);
+                
+                //获取项目团队成员的成员id
                 projectTeamMemberMapper.insertSelective(projectTeamMember);
                 Integer projectTeamId = projectTeamMember.getId();
+                
+                //设置工作经历
                 if (pstb.getWorkExperience() != null){
                     if (pstb.getWorkExperience().size() > 0){
                         for (String s:pstb.getWorkExperience()){
@@ -798,7 +857,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
                         }
                     }
                 }
-
+                //设置教育经历
                 if (pstb.getEducationExperience() != null){
                     if (pstb.getWorkExperience().size() > 0){
                         for (String s:pstb.getEducationExperience()){
@@ -810,6 +869,70 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
                         }
                     }
                 }
+                
+                //设置自定义团队
+                if(pstb.getSelfDefTeam() != null && pstb.getSelfDefTeam().size() >0) {
+                	for(String e:pstb.getSelfDefTeam()) {
+                		ProjectTeamMemberSelfteam ProjectTeamMemberSelfteam=new ProjectTeamMemberSelfteam(); 
+                		ProjectTeamMemberSelfteam.setMemberId(projectTeamId);
+                		ProjectTeamMemberSelfteam.setTeamName(e);
+                		
+                		projectTeamMemberSelfteamMapper.insertSelective(ProjectTeamMemberSelfteam);
+                	}
+                }
+                //设置关注领域
+                if(pstb.getSegmentaionIds() != null && pstb.getSegmentaionIds().size() >0) {
+                	for(Integer e:pstb.getSegmentaionIds()) {
+                		ProjectTeamMemberSegmentation projectTeamMemberSegmentation=new ProjectTeamMemberSegmentation();
+                		projectTeamMemberSegmentation.setMemberId(projectTeamId);
+                		projectTeamMemberSegmentation.setSegmentationId(e);
+                		
+                		projectTeamMemberSegmentationMapper.insertSelective(projectTeamMemberSegmentation);
+                	}
+                }
+                //设置投资阶段
+                if(pstb.getInvestStages() != null && pstb.getInvestStages().size() >0) {
+                	for(Integer e:pstb.getInvestStages()) {
+                		ProjectTeamMemberStage projectTeamMemberStage=new ProjectTeamMemberStage();
+                		projectTeamMemberStage.setMemberId(projectTeamId);
+                		projectTeamMemberStage.setStageId(e);
+                		
+                		projectTeamMemberStageMapper.insertSelective(projectTeamMemberStage);
+                	}
+                }
+                //设置城市
+                if(pstb.getCitys() != null && pstb.getCitys().size() >0) {
+                	for(String e:pstb.getCitys()) {
+                		ProjectTeamMemberCity projectTeamMemberCity=new ProjectTeamMemberCity();
+                		projectTeamMemberCity.setMemberId(projectTeamId);
+                		projectTeamMemberCity.setCityName(e);
+                		
+                		ProjectTeamMemberCityMapper.insertSelective(projectTeamMemberCity);
+                	}
+                }
+                //设置自定义城市
+                if(pstb.getSelfDefCitys() != null && pstb.getSelfDefCitys().size() >0) {
+                	for(String e:pstb.getSelfDefCitys()) {
+                		ProjectTeamMemberSelfcity projectTeamMemberSelfcity=new ProjectTeamMemberSelfcity();
+                		projectTeamMemberSelfcity.setMemberId(projectTeamId);
+                		projectTeamMemberSelfcity.setCity(e);
+                		
+                		projectTeamMemberSelfcityMapper.insertSelective(projectTeamMemberSelfcity);
+                	}
+                }
+                
+                //设置创业经历businesses
+                if(pstb.getBusinesses() != null && pstb.getBusinesses().size() >0) {
+                	for(String e:pstb.getBusinesses()) {
+                		ProjectTeamMemberBusiness projectTeamMemberBusiness=new ProjectTeamMemberBusiness();
+                		projectTeamMemberBusiness.setMemberId(projectTeamId);
+                		projectTeamMemberBusiness.setCompanyName(e);
+                		
+                		projectTeamMemberBusinessMapper.insertSelective(projectTeamMemberBusiness);
+                	}
+                }
+                
+                
             }
         }
 

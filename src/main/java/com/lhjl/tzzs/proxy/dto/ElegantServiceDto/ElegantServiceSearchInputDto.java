@@ -33,7 +33,16 @@ public class ElegantServiceSearchInputDto {
     private Integer isLeadInvestor;
     /** 当前访问用户的Token */
     private String token;
+    /** 业务类型：Filter：筛选 */
+    private String businessType;
 
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
 
     public String getToken() {
         return token;

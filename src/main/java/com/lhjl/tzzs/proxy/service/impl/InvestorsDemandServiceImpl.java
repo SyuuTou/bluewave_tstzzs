@@ -818,36 +818,36 @@ public class InvestorsDemandServiceImpl extends GenericService implements Invest
             List<Map<String,Object>> inverstorDemandList = investorDemandMapper.getInvestorDemandList(startPage,
                     body.getPageSize(),status,isUser,null,dataType,userId);
             if (inverstorDemandList.size() > 0){
-                for (Map<String,Object> inverstorMap:inverstorDemandList){
-                    InvestorDemandListOutputDto investorDemandListOutputDto = new InvestorDemandListOutputDto();
-                    investorDemandListOutputDto.setId((Integer)inverstorMap.get("id"));
-                    if (body.getIsAdmin() != null && body.getIsAdmin() == 1){
-                        investorDemandListOutputDto.setUserid((Integer)inverstorMap.get("userid"));
-                    }
-                    String userName = "";
-                    if (inverstorMap.get("user_name") != null){
-                        userName = (String)inverstorMap.get("user_name");
-                    }
-                    investorDemandListOutputDto.setUserName(userName);
-                    String headpic = "";
-                    if (inverstorMap.get("headpic") != null){
-                        headpic = (String)inverstorMap.get("headpic");
-                    }
-                    investorDemandListOutputDto.setHeadpic(headpic);
-                    String companyName = "";
-                    if (inverstorMap.get("company_name") != null){
-                        companyName = (String)inverstorMap.get("company_name");
-                    }
-                    investorDemandListOutputDto.setCompanyName(companyName);
-                    String companyDuties = "";
-                    if (inverstorMap.get("company_duties") != null){
-                        companyDuties = (String) inverstorMap.get("company_duties");
-                    }
-                    investorDemandListOutputDto.setCompanyDuties(companyDuties);
-                    String phonenumber = "";
-                    if (inverstorMap.get("phonenumber") != null){
-                        phonenumber = (String)inverstorMap.get("phonenumber");
-                    }
+            	for (Map<String,Object> inverstorMap:inverstorDemandList){
+            	    InvestorDemandListOutputDto investorDemandListOutputDto = new InvestorDemandListOutputDto();
+            	    investorDemandListOutputDto.setId((Integer)inverstorMap.get("id"));
+            	    if (body.getIsAdmin() != null && body.getIsAdmin() == 1){
+            	        investorDemandListOutputDto.setUserid((Integer)inverstorMap.get("userid"));
+            	    }
+            	    String userName = "";
+            	    if (inverstorMap.get("name") != null){
+            	        userName = (String)inverstorMap.get("name");
+            	    }
+            	    investorDemandListOutputDto.setUserName(userName);
+            	    String headpic = "";
+            	    if (inverstorMap.get("headpic") != null){
+            	        headpic = (String)inverstorMap.get("headpic");
+            	    }
+            	    investorDemandListOutputDto.setHeadpic(headpic);
+            	    String companyName = "";
+            	    if (inverstorMap.get("short_name") != null){
+            	        companyName = (String)inverstorMap.get("short_name");
+            	    }
+            	    investorDemandListOutputDto.setCompanyName(companyName);
+            	    String companyDuties = "";
+            	    if (inverstorMap.get("position") != null){
+            	        companyDuties = (String) inverstorMap.get("position");
+            	    }
+            	    investorDemandListOutputDto.setCompanyDuties(companyDuties);
+            	    String phonenumber = "";
+            	    if (inverstorMap.get("phone") != null){
+            	        phonenumber = (String)inverstorMap.get("phone");
+            	    }
                     investorDemandListOutputDto.setPhoneNum(phonenumber);
                     List<String> segmentation = new ArrayList<>();
                     if (inverstorMap.get("segmentation") != null){

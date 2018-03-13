@@ -73,14 +73,28 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
         projectFinancingLog.setProjectFinancingUseful(body.getFinancingApplication());
         projectFinancingLog.setShareDivest(body.getShareDivest());
         projectFinancingLog.setId(body.getId());
+        //曹传桂添加
+        projectFinancingLog.setApprovalStatus(1);
+        projectFinancingLog.setYn(0);
+        
         Integer projectFinancingLogInsertResult = null;
-        if(null == body.getId()){
+        /*if(null == body.getId()){
             projectFinancingLog.setCreateTime(DateUtils.parse(createTime));
             projectFinancingLogInsertResult = projectFinancingLogMapper.insert(projectFinancingLog);
         }else{
             projectFinancingLog.setUpdateTime(DateUtils.parse(createTime));
             projectFinancingLogInsertResult = projectFinancingLogMapper.updateByPrimaryKey(projectFinancingLog);
+        }*/
+        
+        //曹传桂替换
+        if(null == body.getId()){
+            projectFinancingLog.setCreateTime(DateUtils.parse(createTime));
+            projectFinancingLogInsertResult = projectFinancingLogMapper.insertSelective(projectFinancingLog);
+        }else{
+            projectFinancingLog.setUpdateTime(DateUtils.parse(createTime));
+            projectFinancingLogInsertResult = projectFinancingLogMapper.updateByPrimaryKeySelective(projectFinancingLog);
         }
+        
         if(projectFinancingLogInsertResult > 0){
             result.setStatus(200);
             result.setMessage("success");
