@@ -446,6 +446,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
                     break;
                 case 15:
                 case 19:
+                case 21:
                     if (StringUtils.isEmpty(body.getIdentityType())){
                         body.setIdentityType("1,3,4,5,6");
                     }

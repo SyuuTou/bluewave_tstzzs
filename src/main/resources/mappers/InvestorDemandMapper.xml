@@ -32,7 +32,9 @@
   </resultMap>
   
   <select id="getInvestorDemandList" resultType="java.util.HashMap">
-    SELECT b.id,iii.name,b.userid,
+    SELECT b.id,u.actual_name user_name,name,
+    u.company_duties,
+    u.company_name,u.phonenumber,b.userid,
 case when u.headpic_real is null then (case when u.headpic is null then "" else u.headpic end) else u.headpic_real end headpic,
 iii.short_name,iii.position,iii.phone,
 ids.segmentation,idsw.speedway,a.stage,b.investment_amount_low,b.investment_amount_high,

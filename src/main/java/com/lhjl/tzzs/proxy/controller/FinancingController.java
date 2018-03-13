@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.controller;
 
 
+import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.StatisticsDto;
 import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.dto.LabelList;
@@ -30,12 +31,12 @@ public class FinancingController {
      * @return
      */
     @GetMapping("hotData")
-    public StatisticsDto<Map<String,List<LabelList>>> hotData(){
-        StatisticsDto<Map<String,List<LabelList>>> result = null;
+    public CommonDto<Map<String,List<LabelList>>> hotData(){
+        CommonDto<Map<String,List<LabelList>>> result = null;
         try {
             result = evaluateService.queryHotData();
         }catch (Exception e){
-            result = new StatisticsDto<Map<String, List<LabelList>>>();
+            result = new CommonDto<Map<String, List<LabelList>>>();
             result.setStatus(510);
             result.setMessage("数据检索异常，请稍后再试");
             log.error(e.getMessage(),e.fillInStackTrace());
@@ -44,12 +45,12 @@ public class FinancingController {
 }
 
     @GetMapping("hotIndustry")
-    public StatisticsDto<List<LabelList>> hotIndustry(){
-        StatisticsDto<List<LabelList>> result = null;
+    public CommonDto<List<LabelList>> hotIndustry(){
+        CommonDto<List<LabelList>> result = null;
         try {
             result = evaluateService.queryHotIndustry();
         }catch (Exception e){
-            result = new StatisticsDto<>();
+            result = new CommonDto<>();
             result.setStatus(510);
             result.setMessage("数据检索异常，请稍后再试");
             log.error(e.getMessage(),e.fillInStackTrace());

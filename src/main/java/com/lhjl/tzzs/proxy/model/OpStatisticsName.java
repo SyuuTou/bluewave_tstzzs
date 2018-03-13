@@ -8,7 +8,7 @@ public class OpStatisticsName {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    @Column(name = "`key`")
     private String key;
 
     @Column(name = "title_name")

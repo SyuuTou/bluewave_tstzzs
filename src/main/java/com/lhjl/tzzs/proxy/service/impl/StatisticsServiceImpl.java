@@ -243,7 +243,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         List<HistogramList>  histogramLists = statisticsMapper.financingInvestmentCharacteristicDistributed(type,beginTime,endTime,froma,sizea);
         result.setData(histogramLists);
         OpStatisticsName query = new OpStatisticsName();
-        query.setKey("racing_track");
+        query.setKey("characteristic");
         result.setStatisticsName(opStatisticsNameMapper.selectOne(query));
         result.setMessage("success");
         result.setStatus(200);
@@ -266,7 +266,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         List<HistogramList>  histogramLists = statisticsMapper.financingInvestmentFocsSegmentationDistributed(type,beginTime,endTime,froma,sizea);
         result.setData(histogramLists);
         OpStatisticsName query = new OpStatisticsName();
-        query.setKey("characteristic");
+        query.setKey("racing_track");
         result.setStatisticsName(opStatisticsNameMapper.selectOne(query));
         result.setMessage("success");
         result.setStatus(200);

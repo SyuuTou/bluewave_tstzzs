@@ -44,9 +44,9 @@ public class EvaluateServiceImpl implements EvaluateService {
 
     @Cacheable(value = "queryHotData",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public StatisticsDto<Map<String, List<LabelList>>> queryHotData() {
+    public CommonDto<Map<String, List<LabelList>>> queryHotData() {
 
-        StatisticsDto<Map<String, List<LabelList>>> result = new StatisticsDto<Map<String, List<LabelList>>>();
+        CommonDto<Map<String, List<LabelList>>> result = new CommonDto<Map<String, List<LabelList>>>();
         Map<String, List<LabelList>> dataMap = new HashMap<String, List<LabelList>>();
         List<LabelList> labelLists = new ArrayList<LabelList>();
         // 热点城市
@@ -177,7 +177,7 @@ public class EvaluateServiceImpl implements EvaluateService {
     @Cacheable(value = "financingAmount",keyGenerator = "wiselyKeyGenerator")
     @Transactional(readOnly = true)
     @Override
-    public StatisticsDto<List<HistogramList>> financingAmount(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
+    public DistributedCommonDto<List<HistogramList>> financingAmount(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
 //        roundName= "Pre-A轮";
 //        industryName="游戏";
@@ -303,8 +303,8 @@ public class EvaluateServiceImpl implements EvaluateService {
 
     @Cacheable(value = "queryHotIndustry",keyGenerator = "wiselyKeyGenerator")
     @Override
-    public StatisticsDto<List<LabelList>> queryHotIndustry() {
-        StatisticsDto<List<LabelList>> result = new StatisticsDto<List<LabelList>>();
+    public CommonDto<List<LabelList>> queryHotIndustry() {
+        CommonDto<List<LabelList>> result = new CommonDto<List<LabelList>>();
         List<LabelList> labelLists = financingMapper.queryHotIndustry();
 
         result.setData(labelLists);
