@@ -595,12 +595,15 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
         projectFinancingLog.setProjectId(projectId);
         projectFinancingLog.setAmount(body.getAmount());
         projectFinancingLog.setCurrency(body.getCurrency());
-        BigDecimal stockRight = BigDecimal.ZERO;
-        if (body.getShareDivest() != null){
-            stockRight = new BigDecimal(body.getShareDivest());
-        }
+//        BigDecimal stockRight = BigDecimal.ZERO;
+//        if (body.getShareDivest() != null){
+//            stockRight = new BigDecimal(body.getShareDivest());
+//        }
+//      projectFinancingLog.setStockRight(stockRight);
+        
+        //本轮总出让股份
+        projectFinancingLog.setShareDivest(body.getShareDivest());
 
-        projectFinancingLog.setStockRight(stockRight);
         if (body.getProjectFinancingUseful() != null){
             projectFinancingLog.setProjectFinancingUseful(body.getProjectFinancingUseful());
         }
@@ -687,6 +690,9 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
                 projectFinancingLog.setAmount(body.getAmount());
                 projectFinancingLog.setCurrency(psfh.getCurrency());
                 projectFinancingLog.setTotalAmount(psfh.getTotalAmount());
+                //曹传贵
+                projectFinancingLog.setYn(0);
+                
                 try {
                     Date financingTime = sdf.parse(psfh.getFinancingTime());
                     projectFinancingLog.setFinancingTime(financingTime);
