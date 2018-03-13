@@ -803,7 +803,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
                 projectTeamMember.setProjectId(projectId);
                 
                 //设置团队成员的id
-                projectTeamMember.setId(pstb.getId());
+                projectTeamMember.setId(pstb.getProjectSendMemberId());
                 
                 projectTeamMember.setMumberName(pstb.getMemberName());
                 projectTeamMember.setMumberDuties(pstb.getCompanyDuties());

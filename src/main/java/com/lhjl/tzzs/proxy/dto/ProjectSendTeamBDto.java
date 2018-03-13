@@ -12,7 +12,7 @@ public class ProjectSendTeamBDto {
      * 提交项目成员id
      * 主键id
      */
-    private Integer id;
+    private Integer projectSendMemberId;
     
     /**提交项目id*/
     private Integer projectSendBId;
@@ -337,12 +337,13 @@ public class ProjectSendTeamBDto {
     }
 
 
-    public Integer getId() {
-		return id;
+
+	public Integer getProjectSendMemberId() {
+		return projectSendMemberId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setProjectSendMemberId(Integer projectSendMemberId) {
+		this.projectSendMemberId = projectSendMemberId;
 	}
 
 	public String getMemberName() {
