@@ -134,12 +134,12 @@ SELECT b.id,b.user_name,b.userid,
     <if test="appid != null and appid !=''">
       and b.appid = #{appid}
     </if>
-    <!-- <if test="dataType != null and dataType !=''">
+    <if test="dataType != null and dataType !=''">
       and b.demand_status = #{dataType}
     </if>
     <if test="userId != null and userId !=''">
       and b.userid = #{userId}
-    </if> -->
+    </if>
     order by creat_time desc
     limit #{startPage},#{pageSize}
   </select>
