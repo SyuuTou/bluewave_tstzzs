@@ -167,7 +167,7 @@
 
     group by es.id
     ) as a
-    order by a.sort
+    order by a.sort,a.begin_time
     limit #{startPage},#{pageSize}
   </select>
 
