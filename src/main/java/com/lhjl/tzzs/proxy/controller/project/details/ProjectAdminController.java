@@ -1,5 +1,6 @@
-package com.lhjl.tzzs.proxy.controller;
+package com.lhjl.tzzs.proxy.controller.project.details;
 
+import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.service.ProjectAdminService;
 import org.springframework.web.bind.annotation.GetMapping;
