@@ -2,38 +2,38 @@ package com.lhjl.tzzs.proxy.dto;
 
 public class UsersInfoInputDto {
     //头像
-    String headpic;
+    private String headpic;
     //真实姓名
-    String user7realname_cn;
+    private String user7realname_cn;
     //身份类型
-    String user7excessfield;
+    private String user7excessfield;
     //简介
-    String desc;
+    private String desc;
     //职业名称
-    String user7jobtitle;
+    private String user7jobtitle;
     //公司简介
-    String user7excessfield3;
+    private String user7excessfield3;
     //城市
-    String city;
+    private String city;
     //需求
-    String user7excessfield4;
+    private String user7excessfield4;
     //教育经历
-    String user7educatione_noana;
+    private String user7educatione_noana;
     //邮箱
-    String email;
+    private String email;
     //微信号
-    String user7wechatnumb_noana;
+    private String user7wechatnumb_noana;
     //行业领域
-    String industrycl7tradename;
+    private String industrycl7tradename;
     //公司名称
-    String xiangmubiao7companyful;
+    private String xiangmubiao7companyful;
     //工作经历
-    String user7workexperi_noana;
+    private String user7workexperi_noana;
     //工作名片
-    String user7businesscaa_noana;
+    private String user7businesscaa_noana;
 
     //token
-    String token;
+    private String token;
 
     public String getToken() {
         return token;
