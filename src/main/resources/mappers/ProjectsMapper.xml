@@ -97,9 +97,9 @@
 		p.create_time,p.update_time
 		from projects p
 		left join admin_project_rating_log aprl on p.ID = aprl.project_id 
-		left join (select projects_id ,count(*) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
-		left join (select projects_id ,count(*) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
-		left join (select project_id ,count(*) viewcount from project_views  where yn =1 group by project_id) proviewtemp on p.ID = proviewtemp.project_id
+		left join (select projects_id ,count(user_id) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
+		left join (select projects_id ,count(user_id) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
+		left join (select project_id ,count(user_id) viewcount from project_views  where yn =1 group by project_id) proviewtemp on p.ID = proviewtemp.project_id
 		left join project_follow_status pfs on p.ID = pfs.project_id
 		right join (
 					SELECT * FROM project_financing_log
@@ -135,9 +135,9 @@
     <select id="findSplitCount" parameterType="com.lhjl.tzzs.proxy.dto.ProjectsListInputDto" resultType="Long">
      	select count(*) from (select count(*) from projects p
 		left join admin_project_rating_log aprl on p.ID = aprl.project_id 
-		left join (select projects_id ,count(*) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
-		left join (select projects_id ,count(*) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
-		left join (select project_id ,count(*) viewcount from project_views  where yn =1 group by project_id) proviewtemp on p.ID = proviewtemp.project_id
+		left join (select projects_id ,count(user_id) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
+		left join (select projects_id ,count(user_id) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
+		left join (select project_id ,count(user_id) viewcount from project_views  where yn =1 group by project_id) proviewtemp on p.ID = proviewtemp.project_id
 		left join project_follow_status pfs on p.ID = pfs.project_id
 		right join (SELECT * FROM project_financing_log
 				    WHERE stage IN ('种子轮' , '天使轮', 'Pre-A轮')
