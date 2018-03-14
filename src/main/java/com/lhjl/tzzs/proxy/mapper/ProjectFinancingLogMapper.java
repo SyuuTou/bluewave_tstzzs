@@ -39,5 +39,11 @@ public interface ProjectFinancingLogMapper extends OwnerMapper<ProjectFinancingL
      * @return
      */
 	ProjectFinancingLogHeadOutputDto echoProjectFinancingLogHead(@Param("projectFinancingLogId") Integer projectFinancingLogId);
+	/**
+	 * 获取所有融资历史记录
+	 * @param projectId
+	 * @return
+	 */
+	List<ProjectFinancingLog> selectAllHistoryFinancing(@Param("projectId") Integer projectId);
 	
 }

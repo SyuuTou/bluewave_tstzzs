@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.controller;
 
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.StatisticsDto;
 import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.dto.LabelList;
 import com.lhjl.tzzs.proxy.service.EvaluateService;
@@ -68,14 +69,14 @@ public class FinancingController {
      * @return
      */
     @GetMapping("financing/amount/list")
-    public CommonDto<List<HistogramList>> financingAmount(@RequestParam(required = false,defaultValue = "-1") String investment, @RequestParam(required = false) String roundName, @RequestParam(required = false) String industryName , @RequestParam(required = false) String cityName, @RequestParam(required = false) String educationName, @RequestParam(required = false) String workName, @RequestParam(required = false,defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size){
+    public StatisticsDto<List<HistogramList>> financingAmount(@RequestParam(required = false,defaultValue = "-1") String investment, @RequestParam(required = false) String roundName, @RequestParam(required = false) String industryName , @RequestParam(required = false) String cityName, @RequestParam(required = false) String educationName, @RequestParam(required = false) String workName, @RequestParam(required = false,defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size){
 
-        CommonDto<List<HistogramList>> result = null;
+        StatisticsDto<List<HistogramList>> result = null;
 
         try {
             result = evaluateService.financingAmount(investment,roundName,industryName,cityName,educationName,workName,from,size);
         } catch (Exception e) {
-            result = new CommonDto<>();
+            result = new StatisticsDto<>();
             result.setStatus(510);
             result.setMessage("数据检索异常，请稍后再试");
             log.error(e.getMessage(),e.fillInStackTrace());
@@ -85,15 +86,15 @@ public class FinancingController {
     }
 
     @PostMapping("financing/amount/list")
-    public CommonDto<List<HistogramList>> financingAmountPost(@RequestBody Map<String, String> body, @RequestParam(required = false,defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size){
+    public StatisticsDto<List<HistogramList>> financingAmountPost(@RequestBody Map<String, String> body, @RequestParam(required = false,defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size){
 
-        CommonDto<List<HistogramList>> result = null;
+        StatisticsDto<List<HistogramList>> result = null;
 
         try {
             result = evaluateService.financingAmount(body.get("investment"), body.get("roundName"),body.get("industryName"),body.get("cityName"),body.get("educationName"),body.get("workName"),from,size);
         } catch (Exception e) {
             e.printStackTrace();
-            result = new CommonDto<>();
+            result = new StatisticsDto<>();
             result.setStatus(510);
             result.setMessage("数据检索异常，请稍后再试");
             log.error(e.getMessage(),e.fillInStackTrace());
@@ -113,13 +114,13 @@ public class FinancingController {
      * @return
      */
     @GetMapping("valuation/list")
-    public CommonDto<List<HistogramList>> valuation(@RequestParam(required = false,defaultValue = "-1") String investment,@RequestParam(required = false) String roundName, @RequestParam(required = false) String industryName , @RequestParam(required = false) String cityName, @RequestParam(required = false) String educationName, @RequestParam(required = false) String workName, @RequestParam(required = false,defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size ){
+    public StatisticsDto<List<HistogramList>> valuation(@RequestParam(required = false,defaultValue = "-1") String investment,@RequestParam(required = false) String roundName, @RequestParam(required = false) String industryName , @RequestParam(required = false) String cityName, @RequestParam(required = false) String educationName, @RequestParam(required = false) String workName, @RequestParam(required = false,defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size ){
 
-        CommonDto<List<HistogramList>> result = null;
+        StatisticsDto<List<HistogramList>> result = null;
         try {
             result = evaluateService.valuation(investment,roundName,industryName,cityName,educationName,workName,from,size);
         } catch (Exception e) {
-            result = new CommonDto<>();
+            result = new StatisticsDto<>();
             result.setStatus(510);
             result.setMessage("数据检索异常，请稍后再试");
             log.error(e.getMessage(),e.fillInStackTrace());
@@ -129,13 +130,13 @@ public class FinancingController {
     }
 
     @PostMapping("valuation/list")
-    public CommonDto<List<HistogramList>> valuation(@RequestBody Map<String,String> body, @RequestParam(required = false,defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size ){
+    public StatisticsDto<List<HistogramList>> valuation(@RequestBody Map<String,String> body, @RequestParam(required = false,defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size ){
 
-        CommonDto<List<HistogramList>> result = null;
+        StatisticsDto<List<HistogramList>> result = null;
         try {
             result = evaluateService.valuation(body.get("investment"), body.get("roundName"),body.get("industryName"),body.get("cityName"),body.get("educationName"),body.get("workName"),from,size);
         } catch (Exception e) {
-            result = new CommonDto<>();
+            result = new StatisticsDto<>();
             result.setStatus(510);
             result.setMessage("数据检索异常，请稍后再试");
             log.error(e.getMessage(),e.fillInStackTrace());
@@ -148,11 +149,11 @@ public class FinancingController {
     //    @GetMapping("users/list")
 //    @GetMapping("users/{id}")
     @GetMapping("users/list")
-    public CommonDto<String> users(@RequestParam String name, @RequestParam Integer id){
+    public StatisticsDto<String> users(@RequestParam String name, @RequestParam Integer id){
         log.info("name={}",name);
         log.info("id={}", id);
 
-        CommonDto<String> result = new CommonDto<String>();
+        StatisticsDto<String> result = new StatisticsDto<String>();
         result.setData("Hello World");
         result.setStatus(200);
         result.setMessage("success.");
@@ -162,12 +163,12 @@ public class FinancingController {
 
 
     @PostMapping("users/post")
-    public CommonDto<String> users(@RequestBody Map<String, Object> body){
+    public StatisticsDto<String> users(@RequestBody Map<String, Object> body){
 
         log.info("name={}",body.get("name"));
         log.info("id={}", body.get("id"));
 
-        CommonDto<String> result = new CommonDto<String>();
+        StatisticsDto<String> result = new StatisticsDto<String>();
         result.setData("Hello World");
         result.setStatus(200);
         result.setMessage("success.");

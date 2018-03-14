@@ -96,7 +96,7 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
 
         UserToken query = new UserToken();
         query.setToken(token);
-        query.setMetaAppId(String.valueOf(appId));
+//        query.setMetaAppId(String.valueOf(appId));
 
         UserToken userToken = userTokenMapper.selectOne(query);
 
