@@ -909,9 +909,11 @@ public class ElegantServiceImpl implements ElegantServiceService{
         }
 
         // 更新图片和文字
-        saveOrUpdateElegantServiceParticipateFeedback(elegantServiceParticipateId,body);
-        if (null == body.getFormid()){
-            return new CommonDto<>(null,"formid不能为空",502);
+        if(body.getStatus() !=2 && body.getStatus() != 3 ){
+            saveOrUpdateElegantServiceParticipateFeedback(elegantServiceParticipateId,body);
+            if (null == body.getFormid()){
+                return new CommonDto<>(null,"formid不能为空",502);
+            }
         }
         //保存formid
         Integer userId = userLoginService.getUserIdByToken(body.getToken(),appId);
