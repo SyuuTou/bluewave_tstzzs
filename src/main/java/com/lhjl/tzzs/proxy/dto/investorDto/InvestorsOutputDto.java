@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.dto.investorDto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Transient;
@@ -70,19 +71,19 @@ public class InvestorsOutputDto {
 	/**
 	 * 单笔投资金额人民币最低
 	 */
-	private Double investmentAmountLow;
+	private BigDecimal investmentAmountLow;
 	/**
 	 * 单笔投资金额人民币最高
 	 */
-	private Double investmentAmountHigh;
+	private BigDecimal investmentAmountHigh;
 	/**
 	 * 单笔投资金额美元最低
 	 */
-	private Double investmentAmountLowDollars;
+	private BigDecimal investmentAmountLowDollars;
 	/**
 	 * 单笔投资金额美元最高
 	 */
-	private Double investmentAmountHighDollars;
+	private BigDecimal investmentAmountHighDollars;
 	/**
 	 * 偏好描述
 	 */
@@ -238,28 +239,28 @@ public class InvestorsOutputDto {
 	public void setStages(String stages) {
 		this.stages = stages;
 	}
-	public Double getInvestmentAmountLow() {
+	public BigDecimal getInvestmentAmountLow() {
 		return investmentAmountLow;
 	}
-	public void setInvestmentAmountLow(Double investmentAmountLow) {
+	public void setInvestmentAmountLow(BigDecimal investmentAmountLow) {
 		this.investmentAmountLow = investmentAmountLow;
 	}
-	public Double getInvestmentAmountHigh() {
+	public BigDecimal getInvestmentAmountHigh() {
 		return investmentAmountHigh;
 	}
-	public void setInvestmentAmountHigh(Double investmentAmountHigh) {
+	public void setInvestmentAmountHigh(BigDecimal investmentAmountHigh) {
 		this.investmentAmountHigh = investmentAmountHigh;
 	}
-	public Double getInvestmentAmountLowDollars() {
+	public BigDecimal getInvestmentAmountLowDollars() {
 		return investmentAmountLowDollars;
 	}
-	public void setInvestmentAmountLowDollars(Double investmentAmountLowDollars) {
+	public void setInvestmentAmountLowDollars(BigDecimal investmentAmountLowDollars) {
 		this.investmentAmountLowDollars = investmentAmountLowDollars;
 	}
-	public Double getInvestmentAmountHighDollars() {
+	public BigDecimal getInvestmentAmountHighDollars() {
 		return investmentAmountHighDollars;
 	}
-	public void setInvestmentAmountHighDollars(Double investmentAmountHighDollars) {
+	public void setInvestmentAmountHighDollars(BigDecimal investmentAmountHighDollars) {
 		this.investmentAmountHighDollars = investmentAmountHighDollars;
 	}
 	public String getDemand() {
@@ -335,13 +336,11 @@ public class InvestorsOutputDto {
 				+ ", position=" + position + ", phonenumber=" + phonenumber + ", weChatGroupId=" + weChatGroupId
 				+ ", irPrincipal=" + irPrincipal + ", typeName=" + typeName + ", cooperativeRelationship="
 				+ cooperativeRelationship + ", type=" + type + ", currency=" + currency + ", segmentations="
-				+ segmentations + ", speedways=" + speedways + ", stages=" + stages + ", investmentAmountLow="
-				+ investmentAmountLow + ", investmentAmountHigh=" + investmentAmountHigh
-				+ ", investmentAmountLowDollars=" + investmentAmountLowDollars + ", investmentAmountHighDollars="
-				+ investmentAmountHighDollars + ", demand=" + demand + ", citys=" + citys + ", createTime=" + createTime
-				+ ", updateTime=" + updateTime + ", submitter=" + submitter + ", serialNumber=" + serialNumber
-				+ ", approvalStatus=" + approvalStatus + ", checkTime=" + checkTime + ", checkTimeOutputStr="
-				+ checkTimeOutputStr + ", createTimeStr=" + createTimeStr + ", updateTimeStr=" + updateTimeStr + "]";
+				+ segmentations + ", speedways=" + speedways + ", stages=" + stages + ", demand=" + demand + ", citys="
+				+ citys + ", createTime=" + createTime + ", updateTime=" + updateTime + ", submitter=" + submitter
+				+ ", serialNumber=" + serialNumber + ", approvalStatus=" + approvalStatus + ", checkTime=" + checkTime
+				+ ", kernelDescription=" + kernelDescription + ", checkTimeOutputStr=" + checkTimeOutputStr
+				+ ", createTimeStr=" + createTimeStr + ", updateTimeStr=" + updateTimeStr + "]";
 	}
 	
 }
