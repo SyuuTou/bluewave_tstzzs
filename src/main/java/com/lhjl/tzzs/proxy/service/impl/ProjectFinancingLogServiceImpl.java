@@ -58,7 +58,6 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
         //输出时间字符串格式化对象
         SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Map<String,Object> map = new HashMap<>();
-        
         //格式化输入时间字符串
         if (body.getBeginTimeInputStr() != null){
             try {
@@ -83,7 +82,7 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
             body.setPageSize(defalutPageSize);  
         }
         body.setStart( (body.getCurrentPage()-1) * body.getPageSize() );
-        this.LOGGER.error("**"+body);
+        this.LOGGER.info("**"+body);
         //数据输出
         List<ProjectFinancingLogOutputDto> projectFinancingLogList = projectFinancingLogMapper.getProjectFinancingLogLists(body);
         Integer totalcount = projectFinancingLogMapper.getProjectFinancingLogListCount(body);

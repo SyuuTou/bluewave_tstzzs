@@ -3,10 +3,13 @@ package com.lhjl.tzzs.proxy.dto;
 public class UserSetPasswordInputDto {
     private String securitycode;
     private String verify;
+    /*真实姓名*/
     private String user7realname_cn;
     private String password;
     private String token;
+    /*手机号获取，1是获取微信的，0是其他*/
     private String isWeixin;
+    /*身份类型*/
     private String idType;
     private String companyShortName;
     private String companyDuties;

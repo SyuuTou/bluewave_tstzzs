@@ -828,33 +828,29 @@ public class InvestorsDemandServiceImpl extends GenericService implements Invest
             	        investorDemandListOutputDto.setUserid((Integer)inverstorMap.get("userid"));
             	    }
             	    String userName = "";
-                    if (inverstorMap.get("user_name") != null){
-                        userName = (String)inverstorMap.get("user_name");
-                    }
-                    investorDemandListOutputDto.setUserName(userName);
-                    String headpic = "";
-                    if (inverstorMap.get("headpic") != null){
-                        headpic = (String)inverstorMap.get("headpic");
-                    }
-                    investorDemandListOutputDto.setHeadpic(headpic);
-                    String companyName = "";
-                    if (inverstorMap.get("company_name") != null){
-                        companyName = (String)inverstorMap.get("company_name");
-                    }
-                    investorDemandListOutputDto.setCompanyName(companyName);
-                    String companyDuties = "";
-                    if (inverstorMap.get("company_duties") != null){
-                        companyDuties = (String) inverstorMap.get("company_duties");
-                    }
-                    investorDemandListOutputDto.setCompanyDuties(companyDuties);
-                    String phonenumber = "";
-                    if (inverstorMap.get("phonenumber") != null){
-                        phonenumber = (String)inverstorMap.get("phonenumber");
-                    }
-            	    if (inverstorMap.get("name") != null){
-            	        userName = (String)inverstorMap.get("name");
+            	    if (inverstorMap.get("user_name") != null){
+            	        userName = (String)inverstorMap.get("user_name");
             	    }
             	    investorDemandListOutputDto.setUserName(userName);
+            	    String headpic = "";
+            	    if (inverstorMap.get("headpic") != null){
+            	        headpic = (String)inverstorMap.get("headpic");
+            	    }
+            	    investorDemandListOutputDto.setHeadpic(headpic);
+            	    String companyName = "";
+            	    if (inverstorMap.get("company_name") != null){
+            	        companyName = (String)inverstorMap.get("company_name");
+            	    }
+            	    investorDemandListOutputDto.setCompanyName(companyName);
+            	    String companyDuties = "";
+            	    if (inverstorMap.get("company_duties") != null){
+            	        companyDuties = (String) inverstorMap.get("company_duties");
+            	    }
+            	    investorDemandListOutputDto.setCompanyDuties(companyDuties);
+            	    String phonenumber = "";
+            	    if (inverstorMap.get("phonenumber") != null){
+            	        phonenumber = (String)inverstorMap.get("phonenumber");
+            	    }
 //            	    String headpic = "";
 //            	    if (inverstorMap.get("headpic") != null){
 //            	        headpic = (String)inverstorMap.get("headpic");
