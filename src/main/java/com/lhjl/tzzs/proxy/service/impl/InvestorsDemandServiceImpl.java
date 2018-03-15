@@ -742,6 +742,9 @@ public class InvestorsDemandServiceImpl extends GenericService implements Invest
 
         if (body.getCharacter().size() > 0){
             for (String s1:body.getCharacter()){
+                if (StringUtils.isEmpty(s1)){
+                    continue;
+                }
                 InvestorDemandCharacter investorDemandCharacterForInsert = new InvestorDemandCharacter();
                 investorDemandCharacterForInsert.setInvestorDemandId(investorDemandId);
                 investorDemandCharacterForInsert.setCharacter(s1);

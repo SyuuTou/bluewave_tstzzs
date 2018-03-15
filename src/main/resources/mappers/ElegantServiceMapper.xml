@@ -41,14 +41,14 @@
   </resultMap>
   <select id="findElegantServiceList" resultType="java.util.HashMap">
     select es.service_name,es.pre_vip_price_descript,es.original_price,es.vip_price,esd.description,es.unit,es.price_unit,
-    es.background_picture,es.id,es.scence_key,es.begin_time,es.end_time,es.recommend_yn,es.create_time
+    es.background_picture,es.id,es.scence_key,es.begin_time,es.end_time,es.recommend_yn,es.create_time,es.web_switch
     from elegant_service es
     left join elegant_service_description esd on es.id = esd.elegant_service_id
 
     right join elegant_service_identity_type esit on esit.elegant_service_id = es.id
-    left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
+    RIGHT join meta_identity_type mit on esit.meta_identity_type_id = mit.id
     right join elegant_service_service_type esst on esst.elegant_service_id = es.id
-    left join meta_service_type mst on esst.meta_service_type_id = mst.id
+    RIGHT join meta_service_type mst on esst.meta_service_type_id = mst.id
 
     RIGHT JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
     RIGHT JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id

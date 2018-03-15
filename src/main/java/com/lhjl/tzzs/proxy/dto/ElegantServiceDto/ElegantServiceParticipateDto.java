@@ -8,17 +8,35 @@ import java.util.List;
 
 public class ElegantServiceParticipateDto {
 
-    private ElegantServiceParticipate elegantServiceParticipate;
+    private Integer elegantServiceParticipateId;
+    private String token;
+    private String formId;
     private ElegantServiceParticipateFeedbackText elegantServiceParticipateFeedbackText;
     private List<ElegantServiceParticipateFeedbackImages> elegantServiceParticipateFeedbackImages;
 
 
-    public ElegantServiceParticipate getElegantServiceParticipate() {
-        return elegantServiceParticipate;
+    public String getToken() {
+        return token;
     }
 
-    public void setElegantServiceParticipate(ElegantServiceParticipate elegantServiceParticipate) {
-        this.elegantServiceParticipate = elegantServiceParticipate;
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getFormId() {
+        return formId;
+    }
+
+    public void setFormId(String formId) {
+        this.formId = formId;
+    }
+
+    public Integer getElegantServiceParticipateId() {
+        return elegantServiceParticipateId;
+    }
+
+    public void setElegantServiceParticipateId(Integer elegantServiceParticipateId) {
+        this.elegantServiceParticipateId = elegantServiceParticipateId;
     }
 
     public ElegantServiceParticipateFeedbackText getElegantServiceParticipateFeedbackText() {

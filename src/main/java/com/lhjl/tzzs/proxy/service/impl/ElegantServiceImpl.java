@@ -442,7 +442,14 @@ public class ElegantServiceImpl implements ElegantServiceService{
                         approveType.add(1);
                         body.setApproveTypes(approveType);
                     }
-
+                            if (body.getMemberTypes()==null || body.getMemberTypes().size() == 0){
+                                List<Integer> memberType = new ArrayList<>();
+                                memberType.add(1);
+                                memberType.add(2);
+                                memberType.add(3);
+                                memberType.add(4);
+                                body.setMemberTypes(memberType);
+                            }
                     break;
                 case 15:
                 case 19:
@@ -455,6 +462,14 @@ public class ElegantServiceImpl implements ElegantServiceService{
                         approveType.add(0);
                         approveType.add(1);
                         body.setApproveTypes(approveType);
+                    }
+                    if (body.getMemberTypes()==null || body.getMemberTypes().size() == 0){
+                        List<Integer> memberType = new ArrayList<>();
+                        memberType.add(1);
+                        memberType.add(2);
+                        memberType.add(3);
+                        memberType.add(4);
+                        body.setMemberTypes(memberType);
                     }
                     if (body.getIsLeadInvestor() == null){
                         body.setIsLeadInvestor(1);
@@ -860,7 +875,8 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         ElegantServiceRelevantProject elegantServiceRelevantProject = new ElegantServiceRelevantProject();
         elegantServiceRelevantProject.setElegantServiceId(elegantServiceId);
-        elegantService.setElegantServiceRelevantProject(elegantServiceRelevantProjectMapper.selectOne(elegantServiceRelevantProject));
+        elegantServiceRelevantProject = elegantServiceRelevantProjectMapper.selectOne(elegantServiceRelevantProject);
+            elegantService.setElegantServiceRelevantProject(elegantServiceRelevantProject);
 
         ElegantServiceLeadInvestor elegantServiceLeadInvestor = new ElegantServiceLeadInvestor();
         elegantServiceLeadInvestor.setElegantServiceId(elegantServiceId);
@@ -893,12 +909,13 @@ public class ElegantServiceImpl implements ElegantServiceService{
             elegantServiceParticipate.setCompletionTime(DateTime.now().toDate());
             elegantServiceParticipate.setId(body.getId());
             elegantServiceParticipateMapper.updateByPrimaryKey(elegantServiceParticipate);
-
-            ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceParticipate.getElegantServiceId());
-            UserToken userToken = new UserToken();
-            userToken.setToken(elegantServiceParticipate.getToken());
-            userToken = userTokenMapper.selectOne(userToken);
-            redEnvelopeService.addUserIntegralsLog(appId,"REWARD_COLLECTION",userToken.getUserId(),elegantService.getOriginalPrice(),965,false,new BigDecimal(1),elegantService.getPriceUnit());
+            if(null != body.getStatus() && body.getStatus() == 2) {
+                ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceParticipate.getElegantServiceId());
+                UserToken userToken = new UserToken();
+                userToken.setToken(elegantServiceParticipate.getToken());
+                userToken = userTokenMapper.selectOne(userToken);
+                redEnvelopeService.addUserIntegralsLog(appId, "REWARD_COLLECTION", userToken.getUserId(), elegantService.getOriginalPrice(), 965, false, new BigDecimal(1), elegantService.getPriceUnit());
+            }
             elegantServiceParticipateId = body.getId();
         }else {
             body.setAppid(appId);

@@ -417,7 +417,7 @@ public class UserLoginServiceImpl implements UserLoginService{
 //        }else {
             UserToken userToken = new UserToken();
             userToken.setToken(token);
-            userToken.setMetaAppId(String.valueOf(appid));
+//            userToken.setMetaAppId(String.valueOf(appid));
 
             List<UserToken> userTokenList = userTokenMapper.select(userToken);
             if (userTokenList.size() > 0){

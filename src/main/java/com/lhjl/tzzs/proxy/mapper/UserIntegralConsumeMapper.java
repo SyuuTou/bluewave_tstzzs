@@ -18,7 +18,7 @@ public interface UserIntegralConsumeMapper extends OwnerMapper<UserIntegralConsu
 	 */
 	Integer getCostNum(@Param("userId") Integer UserId);
 
-	@Select("select sum(cost_num) from  user_integral_consume where user_id = #{userId}  and app_id= #{appId} and currency = #{currency}")
+	@Select("select sum(cost_num) from  user_integral_consume where user_id = #{userId}  and currency = #{currency}")
 	@ResultType(BigDecimal.class)
     BigDecimal selectSumIntegralConsume(@Param("appId") Integer appId, @Param("userId") Integer userId, @Param("currency") Integer currency);
 }
