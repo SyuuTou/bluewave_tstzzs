@@ -15,4 +15,5 @@
   		<foreach collection="segmentation" index="index" item="item" close=")" open="(" separator=",">#{item}</foreach>
   	</if>
   </select>
+
 </mapper>

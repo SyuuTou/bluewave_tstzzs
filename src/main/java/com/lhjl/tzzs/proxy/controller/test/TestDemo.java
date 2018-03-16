@@ -1,6 +1,8 @@
 package com.lhjl.tzzs.proxy.controller.test;
 
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import com.lhjl.tzzs.proxy.dto.Test;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorSegmentationMapper;
+import com.lhjl.tzzs.proxy.mapper.MetaDataSourceTypeMapper;
 import com.lhjl.tzzs.proxy.model.InvestorSegmentation;
+import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.service.InvestorSegmentationService;
 
 
@@ -27,6 +31,8 @@ public class TestDemo {
 	
 	@Resource
 	private InvestorSegmentationService investorSegmentationService;
+	@Resource
+	private MetaDataSourceTypeMapper metaDataSourceTypeMapper;
 	
 	@PostMapping("getSegmentations")
 	public Object getSegmentations(@RequestBody Test body){
@@ -34,6 +40,7 @@ public class TestDemo {
 		return investorSegmentationMapper.getInvestorSegmentations(body.getSegs());
 //		return "qwe";
 	}
+	
 	//测试事务
 	@PostMapping("test/Transantion")
 	public Object testTransantion(@RequestBody InvestorSegmentation body){
@@ -58,5 +65,11 @@ public class TestDemo {
 			return "false";
 		}
 		return ids;
+	}
+	//获取实体映射
+	@GetMapping("getEntityMap")
+	public Object getMap() {
+		List<MetaDataSourceType> result = metaDataSourceTypeMapper.getEntityTest();
+		return result;
 	}
 }

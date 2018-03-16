@@ -9,4 +9,5 @@ import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 
 public interface InvestorSegmentationMapper extends OwnerMapper<InvestorSegmentation> {
 	InvestorSegmentation[] getInvestorSegmentations(@Param(value = "segmentation") Integer[] segmentation);
+	
 }
