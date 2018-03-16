@@ -20,6 +20,10 @@ public class ProjectsListOutputDto {
 	 */
 	private String kernelDesc;
 	/**
+	 * 所属领域
+	 */
+	private String segmentations;
+	/**
 	 * 所在城市
 	 */
 	private String city;
@@ -74,7 +78,66 @@ public class ProjectsListOutputDto {
 	 * 更新时间输出字符串
 	 */
 	private String updateTimeOutputStr;
+	//原有项目列表的新增字段
+	/**
+	 * 是否对外投资
+	 */
+	private Integer foreignInvestmentYn;
+	/**
+	 * 全称
+	 */
+	private String fullName;
+	/**
+	 * 项目类型
+	 */
+	private Integer projectType;
+	/**
+	 * 认领状态
+	 * @return
+	 */
+	private Integer claimStatus;
 	
+	
+
+	public Integer getClaimStatus() {
+		return claimStatus;
+	}
+
+	public void setClaimStatus(Integer claimStatus) {
+		this.claimStatus = claimStatus;
+	}
+
+	public Integer getProjectType() {
+		return projectType;
+	}
+
+	public void setProjectType(Integer projectType) {
+		this.projectType = projectType;
+	}
+
+	public Integer getForeignInvestmentYn() {
+		return foreignInvestmentYn;
+	}
+
+	public void setForeignInvestmentYn(Integer foreignInvestmentYn) {
+		this.foreignInvestmentYn = foreignInvestmentYn;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public String getSegmentations() {
+		return segmentations;
+	}
+
+	public void setSegmentations(String segmentations) {
+		this.segmentations = segmentations;
+	}
 
 	public String getCreateTimeOutputStr() {
 		return createTimeOutputStr;
