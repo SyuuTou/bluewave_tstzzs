@@ -123,7 +123,6 @@
      AND (pfl.create_time &gt;= #{beginTime} 
      or pfl.update_time &gt;= #{beginTime}
      )
-     
     </if>
     
     <if test="endTime !=null">
@@ -176,11 +175,11 @@
     		on p.id = ps.project_id
     	</otherwise>
     </choose>
-    <!-- 取得提交人姓名 -->
-    left join user_token ut on pfl.submitter = ut.token
-    left join users u on ut.user_id = u.ID
+    <!-- 取得提交人姓名 ,此处为了避免笛卡儿积的产生，可以将下面代码注释-->
+    <!-- left join user_token ut on pfl.submitter = ut.token
+    left join users u on ut.user_id = u.ID -->
     where 1=1
-    <if test="searchWord != null and searchWord !=''">
+    <if test="searchWord != null and searchWord !=''">  
       and
       (ii.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
       or p.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
@@ -196,19 +195,16 @@
       ( pfl.create_time between #{beginTime} and #{endTime}
       or pfl.update_time between #{beginTime} and #{endTime} )
     </if> -->
-    
     <if test="beginTime !=null">
      AND (pfl.create_time &gt;= #{beginTime} 
      or pfl.update_time &gt;= #{beginTime}
      )
     </if>
-    
     <if test="endTime !=null">
      AND (pfl.create_time &lt;= #{endTime}
      or pfl.update_time &lt;= #{beginTime}
      )
     </if>
-    
     <if test="stage != null and stage.size() &gt; 0">
       and pfl.stage in 
       <foreach close=")" collection="stage" index="index" item="item" open="(" separator=",">#{item}</foreach>
