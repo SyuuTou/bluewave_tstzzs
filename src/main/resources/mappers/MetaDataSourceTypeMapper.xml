@@ -10,7 +10,4 @@
     <result column="sort" property="sort" jdbcType="INTEGER" />
   </resultMap>
   
-   <select id="getEntityTest" resultMap="BaseResultMap">
-	  	select '' as id,'' as type_name  from investor_segmentation 
-	  </select>
 </mapper>
