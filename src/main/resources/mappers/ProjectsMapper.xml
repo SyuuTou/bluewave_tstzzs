@@ -88,7 +88,6 @@
 	FROM
 	    (SELECT * 
 	    FROM project_financing_log
-
 	    order by ISNULL(financing_time) desc ,financing_time desc 
 	    ) a 
     LEFT JOIN projects p ON a.project_id = p.ID 
@@ -111,7 +110,6 @@
 		left join project_follow_status pfs on p.ID = pfs.project_id
 		right join (
 					SELECT * FROM project_financing_log
-					
 				    order by ISNULL(financing_time) desc ,financing_time desc
     				) statemp on p.ID = statemp.project_id
 		GROUP BY p.short_name 
@@ -168,7 +166,6 @@
 		left join project_follow_status pfs on p.ID = pfs.project_id
 		right join (
 					SELECT * FROM project_financing_log
-					
 				    order by ISNULL(financing_time) desc ,financing_time desc
     				) statemp on p.ID = statemp.project_id
 		GROUP BY p.short_name 
