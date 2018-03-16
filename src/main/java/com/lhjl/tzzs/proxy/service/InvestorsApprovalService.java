@@ -92,4 +92,6 @@ public interface InvestorsApprovalService {
 	 * @return
 	 */
 	CommonDto<String> specialApproval(Integer userId, Integer status, String userName, String companyName, String comanyDuties, Integer appId);
+
+	CommonDto<String> sendCommonTemplate(Integer userId, String title, String msg);
 }

@@ -87,6 +87,7 @@ public class PayServiceImpl implements PayService {
 
         UsersWeixin queryWX = new UsersWeixin();
         queryWX.setUserId(users.getId());
+        queryWX.setMetaAppId(appId);
 
         UsersWeixin usersWeixin = usersWeixinMapper.selectOne(queryWX);
 

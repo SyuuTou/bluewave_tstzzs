@@ -112,6 +112,8 @@ public class ElegantServiceImpl implements ElegantServiceService{
     private UserTokenMapper userTokenMapper;
     @Autowired
     private ElegantServiceLeadInvestorMapper elegantServiceLeadInvestorMapper;
+    @Resource
+    private InvestorsApprovalService investorsApprovalService;
 
     /**
      * 获取精选活动列表的接口
@@ -154,6 +156,11 @@ public class ElegantServiceImpl implements ElegantServiceService{
             }
 
         }
+
+        if (null == body.getIsLeadInvestor()){
+            body.setIsLeadInvestor(0);
+        }
+
 
             if (null != body.getIdentityType() && body.getIdentityType().size() > 0) {
                 Integer[] identityTypeA = new Integer[body.getIdentityType().size()];
@@ -491,9 +498,15 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 if (body.getPriceUnit() == 1){
                     // 扣除令牌
                     redEnvelopeService.addUserIntegralsLog(appid,"LOCK",userToken.getUserId(),amount,965,false,new BigDecimal(-1),1);
+                    String title = "发布悬赏";
+                    String msg = "锁定"+amount+"令牌";
+                    investorsApprovalService.sendCommonTemplate(userToken.getUserId(),title,msg);
                 }else if (body.getPriceUnit() == 0){
                     // 锁定人民币
                     redEnvelopeService.addUserIntegralsLog(appid,"LOCK",userToken.getUserId(),amount,965,false,new BigDecimal(-1),0);
+                    String title = "发布悬赏";
+                    String msg = "锁定"+amount+"人民币";
+                    investorsApprovalService.sendCommonTemplate(userToken.getUserId(),title,msg);
                 }
 
             }else {
@@ -911,10 +924,33 @@ public class ElegantServiceImpl implements ElegantServiceService{
             elegantServiceParticipateMapper.updateByPrimaryKey(elegantServiceParticipate);
             if(null != body.getStatus() && body.getStatus() == 2) {
                 ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceParticipate.getElegantServiceId());
-                UserToken userToken = new UserToken();
-                userToken.setToken(elegantServiceParticipate.getToken());
-                userToken = userTokenMapper.selectOne(userToken);
-                redEnvelopeService.addUserIntegralsLog(appId, "REWARD_COLLECTION", userToken.getUserId(), elegantService.getOriginalPrice(), 965, false, new BigDecimal(1), elegantService.getPriceUnit());
+                if(elegantService.getIsReward() == 1) {
+                    UserToken userToken = new UserToken();
+                    userToken.setToken(elegantServiceParticipate.getToken());
+                    userToken = userTokenMapper.selectOne(userToken);
+                    redEnvelopeService.addUserIntegralsLog(appId, "REWARD_COLLECTION", userToken.getUserId(), elegantService.getOriginalPrice(), 965, false, new BigDecimal(1), elegantService.getPriceUnit());
+                    String title = "参与悬赏奖励";
+                    String msg = "";
+                    if (elegantService.getPriceUnit() == 0) {
+                         msg = "奖励" + elegantService.getOriginalPrice() + "人民币";
+                    }else{
+                         msg = "奖励" + elegantService.getOriginalPrice() + "令牌";
+                    }
+                    investorsApprovalService.sendCommonTemplate(userToken.getUserId(),title,msg);
+                }else if (elegantService.getIsReward() ==0 ){
+                    UserToken userToken = new UserToken();
+                    userToken.setToken(elegantService.getCreator());
+                    userToken = userTokenMapper.selectOne(userToken);
+                    String title = "发布服务收款";
+                    String msg = "";
+                    if (elegantService.getPriceUnit() == 0) {
+                        msg = "收款" + elegantService.getOriginalPrice() + "人民币";
+                    }else{
+                        msg = "收款" + elegantService.getOriginalPrice() + "令牌";
+                    }
+                    investorsApprovalService.sendCommonTemplate(userToken.getUserId(),title,msg);
+                    redEnvelopeService.addUserIntegralsLog(appId, "REWARD_COLLECTION", userToken.getUserId(), elegantService.getOriginalPrice(), 965, false, new BigDecimal(1), elegantService.getPriceUnit());
+                }
             }
             elegantServiceParticipateId = body.getId();
         }else {
@@ -922,6 +958,13 @@ public class ElegantServiceImpl implements ElegantServiceService{
             body.setCreateTime(DateTime.now().toDate());
             elegantServiceParticipateMapper.insertSelective(body);
 
+            ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(body.getElegantServiceId());
+            if (elegantService.getIsReward() == 0) {
+                UserToken userToken = new UserToken();
+                userToken.setToken(body.getToken());
+                userToken = userTokenMapper.selectOne(userToken);
+                redEnvelopeService.addUserIntegralsLog(appId, "PAY_SERVICE", userToken.getUserId(), elegantService.getOriginalPrice(), 965, false, new BigDecimal(-1), elegantService.getPriceUnit());
+            }
             elegantServiceParticipateId = body.getId();
         }
 
@@ -1414,7 +1457,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantService.setOriginalPrice(originalPrice);
         elegantService.setVipPrice(vipPrice);
         elegantService.setPreVipPriceDescript("VIP会员");//默认前缀
-        elegantService.setPriceUnit(0);//默认人民币
+        elegantService.setPriceUnit(body.getPriceUnit());//默认人民币
         elegantService.setUnit(body.getUnit());
         elegantService.setBackgroundPicture(body.getBackgroundPicture());
         elegantService.setBeginTime(beginTime);
