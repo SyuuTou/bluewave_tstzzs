@@ -77,71 +77,41 @@ and b.demand_status in
 </if>
 order by b.creat_time desc
 limit #{startPage},#{pageSize} -->
-SELECT b.id,b.user_name,b.userid,
-    case when u.headpic_real is null then (case when u.headpic is null then "" else u.headpic end) else u.headpic_real end headpic,
-    b.company_name,b.company_duties,b.phonenumber,
-    ids.segmentation,idsw.speedway,a.stage,b.investment_amount_low,b.investment_amount_high,
-    b.investment_amount_low_dollars,b.investment_amount_high_dollars,idc.user_character,
-    b.future,b.demand_status,b.creat_time,b.update_time,b.event_key
-    FROM investor_demand b
-    left join users u on b.userid = u.id
-    left join
-    (SELECT investor_demand_id,group_concat(`character`) as user_character FROM investor_demand_character
-    group by investor_demand_id) idc on b.id = idc.investor_demand_id
-    left join
-    (SELECT investor_demand_id,group_concat(segmentation) segmentation FROM investor_demand_segmentation
-    group by investor_demand_id) ids on b.id = ids.investor_demand_id
-    left join
-    (SELECT investor_demand_id,group_concat(speedway) speedway FROM investor_demand_speedway
-    group by investor_demand_id) idsw on b.id = idsw.investor_demand_id
-    left join
-    (SELECT investor_demand_id,group_concat(mps.`name`) stage FROM investor_demand_stage idse
-    left join meta_project_stage mps on idse.meta_project_stage_id = mps.id
-    group by investor_demand_id) a on b.id = a.investor_demand_id
-    UNION ALL
-    SELECT b.id,iii.name,b.userid,
-    case when u.headpic_real is null then (case when u.headpic is null then "" else u.headpic end) else u.headpic_real end headpic,
-    iii.short_name,iii.position,iii.phone,
-    ids.segmentation,idsw.speedway,a.stage,b.investment_amount_low,b.investment_amount_high,
-    b.investment_amount_low_dollars,b.investment_amount_high_dollars,idc.user_character,
-    b.future,b.demand_status,b.creat_time,b.update_time,b.event_key
-    FROM investor_demand b
-    left join
-    (SELECT i.ID, ii.short_name, i.name, i.position, i.phone from investors i
-    left join investment_institutions ii on i.investment_institutions_id = ii.ID) iii on b.investor_id = iii.ID
-    left join users u on b.userid = u.id
-    left join
-    (SELECT investor_demand_id,group_concat(`character`) as user_character FROM investor_demand_character
-    group by investor_demand_id) idc on b.id = idc.investor_demand_id
-    left join
-    (SELECT investor_demand_id,group_concat(segmentation) segmentation FROM investor_demand_segmentation
-    group by investor_demand_id) ids on b.id = ids.investor_demand_id
-    left join
-    (SELECT investor_demand_id,group_concat(speedway) speedway FROM investor_demand_speedway
-    group by investor_demand_id) idsw on b.id = idsw.investor_demand_id
-    left join
-    (SELECT investor_demand_id,group_concat(mps.`name`) stage FROM investor_demand_stage idse
-    left join meta_project_stage mps on idse.meta_project_stage_id = mps.id
-    group by investor_demand_id) a on b.id = a.investor_demand_id
-    where 1=1
-    <if test="status != null and status.length &gt; 0">
-    and b.demand_status in
-      <foreach close=")" collection="status" index="index" item="item" open="(" separator=",">#{item}</foreach>
-    </if>
-    <if test="isUser != null and isUser != ''">
-      and b.demand_status != 3
-    </if>
-    <if test="appid != null and appid !=''">
-      and b.appid = #{appid}
-    </if>
-    <if test="dataType != null and dataType !=''">
-      and b.demand_status = #{dataType}
-    </if>
-    <if test="userId != null and userId !=''">
-      and b.userid = #{userId}
-    </if>
-    order by creat_time desc
-    limit #{startPage},#{pageSize}
+      SELECT b.id,b.user_name,b.userid,
+      case when u.headpic_real is null then (case when u.headpic is null then "" else u.headpic end) else u.headpic_real end headpic,
+      b.company_name,b.company_duties,b.phonenumber,
+      ids.segmentation,idsw.speedway,a.stage,b.investment_amount_low,b.investment_amount_high,
+      b.investment_amount_low_dollars,b.investment_amount_high_dollars,idc.user_character,
+      b.future,b.demand_status,b.update_time
+      FROM investor_demand b
+      left join users u on b.userid = u.id
+      left join
+      (SELECT investor_demand_id,group_concat(`character`) as user_character FROM investor_demand_character
+      group by investor_demand_id) idc on b.id = idc.investor_demand_id
+      left join
+      (SELECT investor_demand_id,group_concat(segmentation) segmentation FROM investor_demand_segmentation
+      group by investor_demand_id) ids on b.id = ids.investor_demand_id
+      left join
+      (SELECT investor_demand_id,group_concat(speedway) speedway FROM investor_demand_speedway
+      group by investor_demand_id) idsw on b.id = idsw.investor_demand_id
+      left join
+      (SELECT investor_demand_id,group_concat(mps.`name`) stage FROM investor_demand_stage idse
+      left join meta_project_stage mps on idse.meta_project_stage_id = mps.id
+      group by investor_demand_id) a on b.id = a.investor_demand_id
+      where 1=1
+      <if test="status != null and status.length &gt; 0">
+          and b.demand_status in
+          <foreach close=")" collection="status" index="index" item="item" open="(" separator=",">#{item}</foreach>
+      </if>
+      <if test="isUser != null and isUser != ''">
+          and b.demand_status != 3
+      </if>
+      <if test="appid != null and appid !=''">
+          and b.appid = #{appid}
+      </if>
+
+      order by b.creat_time desc
+      limit #{startPage},#{pageSize}
   </select>
   <select id="getInvestorDemandListCount" resultType="java.lang.Integer">
     Select count(*) ct from(
