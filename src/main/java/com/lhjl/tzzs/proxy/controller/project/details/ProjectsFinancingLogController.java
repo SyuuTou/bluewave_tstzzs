@@ -178,7 +178,7 @@ public class ProjectsFinancingLogController extends GenericController{
      * @return
      */
     @GetMapping("/v{appid}/list/financingstatus")
-    public CommonDto<List<String>> getFinancingStatu(@PathVariable("appid") Integer appid){
+    public CommonDto<List<String>> getFinancingStatus(@PathVariable("appid") Integer appid){
     	CommonDto<List<String>> result =new CommonDto<>();
     	try {
     		result=projectsService.getFinancingStatus(appid);
