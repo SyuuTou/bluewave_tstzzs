@@ -12,7 +12,7 @@ public class ProjectsListInputDto {
 	 * 排序的方式
 	 * asc  desc
 	 */
-	private String order;
+	private String order;  
 	
 	private String keyword;
 	

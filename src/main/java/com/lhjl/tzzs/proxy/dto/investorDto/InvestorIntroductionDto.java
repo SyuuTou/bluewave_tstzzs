@@ -24,4 +24,11 @@ public class InvestorIntroductionDto {
     public void setInvestorIntroduction(String investorIntroduction) {
         this.investorIntroduction = investorIntroduction;
     }
+
+	@Override
+	public String toString() {
+		return "InvestorIntroductionDto [investorId=" + investorId + ", investorIntroduction=" + investorIntroduction
+				+ "]";
+	}
+    
 }

@@ -1,5 +1,6 @@
-package com.lhjl.tzzs.proxy.controller;
+package com.lhjl.tzzs.proxy.controller.investor.details;
 
+import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorKernelInfoDto;
 import com.lhjl.tzzs.proxy.service.InvestorInfoService;
@@ -23,15 +24,15 @@ public class InvestorInfoController extends GenericController{
      * @return
      */
     @PostMapping("/addorupdateinvestorinfo")
-    public CommonDto<String> addOrUpdateInvestorInfo(@RequestBody InvestorKernelInfoDto body){
-        CommonDto<String> result = new CommonDto<>();
+    public CommonDto<Integer> addOrUpdateInvestorInfo(@RequestBody InvestorKernelInfoDto body){
+        CommonDto<Integer> result = new CommonDto<>();
         try {
             result = investorInfoService.addOrUpdateInvestorInfo(body);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
             result.setData(null);
-            result.setStatus(502);
+            result.setStatus(502);  
         }
         return result;
     }

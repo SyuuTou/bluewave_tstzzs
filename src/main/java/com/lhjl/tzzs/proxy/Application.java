@@ -55,10 +55,9 @@ public class Application  {
     @Autowired
     private RestTemplateBuilder builder;   
 
-    // 使用RestTemplateBuilder来实例化RestTemplate对象，spring默认已经注入了RestTemplateBuilder实例
+    // 使用RestTemplateBuilder来实例化RstTemplate对象，spring默认已经注入了RestTemplateBuilder实例
     @Bean
-    public RestTemplate restTemplate() {  
-
+    public RestTemplate restTemplate() {
         return builder.build();
     }
 

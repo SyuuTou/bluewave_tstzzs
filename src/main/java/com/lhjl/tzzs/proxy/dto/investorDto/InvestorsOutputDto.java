@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.dto.investorDto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Transient;
@@ -70,19 +71,19 @@ public class InvestorsOutputDto {
 	/**
 	 * 单笔投资金额人民币最低
 	 */
-	private Double investmentAmountLow;
+	private BigDecimal investmentAmountLow;
 	/**
 	 * 单笔投资金额人民币最高
 	 */
-	private Double investmentAmountHigh;
+	private BigDecimal investmentAmountHigh;
 	/**
 	 * 单笔投资金额美元最低
 	 */
-	private Double investmentAmountLowDollars;
+	private BigDecimal investmentAmountLowDollars;
 	/**
 	 * 单笔投资金额美元最高
 	 */
-	private Double investmentAmountHighDollars;
+	private BigDecimal investmentAmountHighDollars;
 	/**
 	 * 偏好描述
 	 */
@@ -92,15 +93,46 @@ public class InvestorsOutputDto {
 	 */
 	private String citys;
 	/**
-	 * 所在城市
+	 * 提交时间
 	 */
 	private Date createTime;
 	/**
-	 * 所在城市
+	 * 更新时间
 	 */
 	private Date updateTime;
 	/**
-	 * 创建时间出输出字符串
+	 * 提交者姓名--供审核列表使用
+	 */
+	private String submitter;
+	/**
+	 * 提交人姓名
+	 */
+//	@Transient
+//	private String submitterName;
+	/**
+	 * 采集编号--供审核列表使用
+	 */
+	private String serialNumber;
+	/**
+	 * 审核结果--供审核列表使用
+	 * 审核结果可能有多个，要重写sql里面的case进行匹配
+	 */
+	private Integer approvalStatus;
+	/**
+	 * 审核时间--供审核列表使用
+	 */
+	private Date checkTime;
+	/**
+	 * 一句话介绍--供审核列表使用
+	 */
+	private String kernelDescription;
+	/**
+	 * 审核时间输出字符串--供审核列表使用
+	 */
+	@Transient
+	private String checkTimeOutputStr;
+	/**
+	 * 提交时间出输出字符串
 	 */
 	@Transient
 	private String createTimeStr;
@@ -109,6 +141,13 @@ public class InvestorsOutputDto {
 	 */
 	@Transient
 	private String updateTimeStr;
+	
+	public String getKernelDescription() {
+		return kernelDescription;
+	}
+	public void setKernelDescription(String kernelDescription) {
+		this.kernelDescription = kernelDescription;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -200,28 +239,28 @@ public class InvestorsOutputDto {
 	public void setStages(String stages) {
 		this.stages = stages;
 	}
-	public Double getInvestmentAmountLow() {
+	public BigDecimal getInvestmentAmountLow() {
 		return investmentAmountLow;
 	}
-	public void setInvestmentAmountLow(Double investmentAmountLow) {
+	public void setInvestmentAmountLow(BigDecimal investmentAmountLow) {
 		this.investmentAmountLow = investmentAmountLow;
 	}
-	public Double getInvestmentAmountHigh() {
+	public BigDecimal getInvestmentAmountHigh() {
 		return investmentAmountHigh;
 	}
-	public void setInvestmentAmountHigh(Double investmentAmountHigh) {
+	public void setInvestmentAmountHigh(BigDecimal investmentAmountHigh) {
 		this.investmentAmountHigh = investmentAmountHigh;
 	}
-	public Double getInvestmentAmountLowDollars() {
+	public BigDecimal getInvestmentAmountLowDollars() {
 		return investmentAmountLowDollars;
 	}
-	public void setInvestmentAmountLowDollars(Double investmentAmountLowDollars) {
+	public void setInvestmentAmountLowDollars(BigDecimal investmentAmountLowDollars) {
 		this.investmentAmountLowDollars = investmentAmountLowDollars;
 	}
-	public Double getInvestmentAmountHighDollars() {
+	public BigDecimal getInvestmentAmountHighDollars() {
 		return investmentAmountHighDollars;
 	}
-	public void setInvestmentAmountHighDollars(Double investmentAmountHighDollars) {
+	public void setInvestmentAmountHighDollars(BigDecimal investmentAmountHighDollars) {
 		this.investmentAmountHighDollars = investmentAmountHighDollars;
 	}
 	public String getDemand() {
@@ -260,17 +299,48 @@ public class InvestorsOutputDto {
 	public void setUpdateTimeStr(String updateTimeStr) {
 		this.updateTimeStr = updateTimeStr;
 	}
+	public String getSubmitter() {
+		return submitter;
+	}
+	public void setSubmitter(String submitter) {
+		this.submitter = submitter;
+	}
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
+	}
+
+	public Integer getApprovalStatus() {
+		return approvalStatus;
+	}
+	public void setApprovalStatus(Integer approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
+	public Date getCheckTime() {
+		return checkTime;
+	}
+	public void setCheckTime(Date checkTime) {
+		this.checkTime = checkTime;
+	}
+	public String getCheckTimeOutputStr() {
+		return checkTimeOutputStr;
+	}
+	public void setCheckTimeOutputStr(String checkTimeOutputStr) {
+		this.checkTimeOutputStr = checkTimeOutputStr;
+	}
 	@Override
 	public String toString() {
 		return "InvestorsOutputDto [id=" + id + ", userId=" + userId + ", name=" + name + ", shortName=" + shortName
 				+ ", position=" + position + ", phonenumber=" + phonenumber + ", weChatGroupId=" + weChatGroupId
 				+ ", irPrincipal=" + irPrincipal + ", typeName=" + typeName + ", cooperativeRelationship="
 				+ cooperativeRelationship + ", type=" + type + ", currency=" + currency + ", segmentations="
-				+ segmentations + ", speedways=" + speedways + ", stages=" + stages + ", investmentAmountLow="
-				+ investmentAmountLow + ", investmentAmountHigh=" + investmentAmountHigh
-				+ ", investmentAmountLowDollars=" + investmentAmountLowDollars + ", investmentAmountHighDollars="
-				+ investmentAmountHighDollars + ", demand=" + demand + ", citys=" + citys + ", createTime=" + createTime
-				+ ", updateTime=" + updateTime + ", createTimeStr=" + createTimeStr + ", updateTimeStr=" + updateTimeStr
-				+ "]";
+				+ segmentations + ", speedways=" + speedways + ", stages=" + stages + ", demand=" + demand + ", citys="
+				+ citys + ", createTime=" + createTime + ", updateTime=" + updateTime + ", submitter=" + submitter
+				+ ", serialNumber=" + serialNumber + ", approvalStatus=" + approvalStatus + ", checkTime=" + checkTime
+				+ ", kernelDescription=" + kernelDescription + ", checkTimeOutputStr=" + checkTimeOutputStr
+				+ ", createTimeStr=" + createTimeStr + ", updateTimeStr=" + updateTimeStr + "]";
 	}
+	
 }

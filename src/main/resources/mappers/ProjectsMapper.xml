@@ -42,13 +42,16 @@
     <result column="company_email" jdbcType="VARCHAR" property="companyEmail" />
     <result column="company_hr_email" jdbcType="VARCHAR" property="companyHrEmail" />
     <result column="foreign_investment_yn" jdbcType="INTEGER" property="foreignInvestmentYn" />
+    <result column="claim_status" jdbcType="INTEGER" property="claimStatus" />
   </resultMap>
   
   <resultMap id="ProjectsListOutputDtoMap" type="com.lhjl.tzzs.proxy.dto.ProjectsListOutputDto">
   	<result column="ID" jdbcType="INTEGER" property="id" />
   	<result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
   	<result column="short_name" jdbcType="VARCHAR" property="shortName" />
+  	<result column="full_name" jdbcType="VARCHAR" property="fullName" />
   	<result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc" />
+  	<result column="segmentations" jdbcType="VARCHAR" property="segmentations" />
   	<result column="city" jdbcType="VARCHAR" property="city" />
   	<result column="project_source" jdbcType="INTEGER" property="projectSource" />
   	<result column="rating_stage" jdbcType="INTEGER" property="ratingStage" />
@@ -61,6 +64,9 @@
   	
   	<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   	<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  	<result column="foreign_investment_yn" jdbcType="INTEGER" property="foreignInvestmentYn" />
+  	<result column="project_type" jdbcType="INTEGER" property="projectType" />
+  	<result column="claim_status" jdbcType="INTEGER" property="claimStatus" />
   </resultMap>
   
   <resultMap id="ProjectsSimpleInfosMap" type="com.lhjl.tzzs.proxy.dto.ProInfoDto">
@@ -73,21 +79,17 @@
   	<result column="stage" jdbcType="INTEGER" property="stage" />
   </resultMap>
   
-  <select id="blurScanProjectByShortName" resultMap="BaseResultMap" parameterType="String">
+  <select id="blurScanProjectByShortName" parameterType="String" resultMap="BaseResultMap">
   		select * from projects where 1=1 and short_name like "%"#{keyword}"%"
   </select>
   
-  <select id="getProjectsSimpleInfos" resultMap="ProjectsSimpleInfosMap" parameterType="Integer">
-  	SELECT p.ID,p.short_name,p.kernel_desc,p.segmentation,p.project_logo,p.city,case when a.approval_status = 1 then concat('正在融',a.stage) else a.stage end stage
+  <select id="getProjectsSimpleInfos" parameterType="Integer" resultMap="ProjectsSimpleInfosMap">
+  	SELECT p.ID,p.short_name,p.kernel_desc,p.segmentation,p.project_logo,p.city,case when a.financing_time is null then concat('正在融',a.stage) else a.stage end stage
 	FROM
-	    (SELECT 
-	        * 
-	    FROM
-	        project_financing_log
-	    WHERE
-	        financing_time BETWEEN '2017-01-01' AND '2017-12-31' 
-	            AND stage IN ('种子轮' , '天使轮', 'Pre-A轮') 
-	            order by financing_time desc 
+	    (SELECT * 
+	    FROM project_financing_log
+	    WHERE stage IN ('种子轮' , '天使轮', 'Pre-A轮') 
+	    order by ISNULL(financing_time) desc ,financing_time desc 
 	    ) a 
     LEFT JOIN projects p ON a.project_id = p.ID 
     where p.ID =#{projectId}
@@ -95,17 +97,21 @@
   </select>
     <!-- 用户关注的项目 -->
 	<select id="findSplit" parameterType="com.lhjl.tzzs.proxy.dto.ProjectsListInputDto" resultMap="ProjectsListOutputDtoMap">
-     select p.ID,p.serial_number,p.short_name,p.kernel_desc,p.city,p.project_source,aprl.rating_stage,
-		statemp.stage,followtemp.focuscount,interviewtemp.interviewcount,proviewtemp.viewcount, pfs.meta_follow_status_id followstatus,
-		p.create_time,p.update_time
+     select p.ID,p.serial_number,p.short_name,p.kernel_desc,segs.segmentations,p.city,p.project_source,aprl.rating_stage,
+		case when statemp.financing_time is null then concat('正在融',statemp.stage) else statemp.stage end stage,
+		followtemp.focuscount,interviewtemp.interviewcount,proviewtemp.viewcount, pfs.meta_follow_status_id followstatus,
+		p.create_time,p.update_time,p.foreign_investment_yn,p.project_type,p.claim_status
 		from projects p
 		left join admin_project_rating_log aprl on p.ID = aprl.project_id 
-		left join (select projects_id ,count(*) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
-		left join (select projects_id ,count(*) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
-		left join (select project_id ,count(*) viewcount from project_views  where yn =1 group by project_id) proviewtemp on p.ID = proviewtemp.project_id
+		left join (select project_id,GROUP_CONCAT(segmentation_name) segmentations from project_segmentation GROUP BY project_id) segs on p.ID=segs.project_id
+		left join (select projects_id ,count(user_id) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
+		left join (select projects_id ,count(user_id) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
+		left join (select project_id ,count(user_id) viewcount from project_views  where yn =1 group by project_id) proviewtemp on p.ID = proviewtemp.project_id
 		left join project_follow_status pfs on p.ID = pfs.project_id
-		right join (SELECT * FROM project_financing_log
-				    order by financing_time  desc
+		right join (
+					SELECT * FROM project_financing_log
+					WHERE stage IN ('种子轮' , '天使轮', 'Pre-A轮')
+				    order by ISNULL(financing_time) desc ,financing_time desc
     				) statemp on p.ID = statemp.project_id
 		where 1=1 
 		<if test="keyword !=null and keyword != ''">
@@ -134,16 +140,17 @@
     </select>
     
     <select id="findSplitCount" parameterType="com.lhjl.tzzs.proxy.dto.ProjectsListInputDto" resultType="Long">
-     	select count(*) from (select count(*) from projects p
+     	select count(*) from (
+     	select count(*) from projects p
 		left join admin_project_rating_log aprl on p.ID = aprl.project_id 
-		left join (select projects_id ,count(*) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
-		left join (select projects_id ,count(*) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
-		left join (select project_id ,count(*) viewcount from project_views  where yn =1 group by project_id) proviewtemp on p.ID = proviewtemp.project_id
+		left join (select project_id,GROUP_CONCAT(segmentation_name) segmentations from project_segmentation GROUP BY project_id) segs on p.ID=segs.project_id
+		left join (select projects_id ,count(user_id) focuscount from follow  where status =1 group by projects_id) followtemp on p.ID = followtemp.projects_id
+		left join (select projects_id ,count(user_id) interviewcount from interview group by projects_id) interviewtemp on p.ID = interviewtemp.projects_id
+		left join (select project_id ,count(user_id) viewcount from project_views  where yn =1 group by project_id) proviewtemp on p.ID = proviewtemp.project_id
 		left join project_follow_status pfs on p.ID = pfs.project_id
 		right join (SELECT * FROM project_financing_log
-				    WHERE financing_time BETWEEN '2017-01-01' AND '2017-12-31'
-				    AND stage IN ('种子轮' , '天使轮', 'Pre-A轮')
-				    order by financing_time  desc
+				    WHERE stage IN ('种子轮' , '天使轮', 'Pre-A轮')
+				    order by ISNULL(financing_time) desc ,financing_time desc
     				) statemp on p.ID = statemp.project_id
 		where 1=1
 		<if test="keyword !=null and keyword != ''">
@@ -625,7 +632,7 @@ SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.calculation_amou
         <result column="interviewNum" jdbcType="INTEGER" property="interviewNum" />
         <result column="yn" jdbcType="INTEGER" property="yn" />
         <result column="project_logo" jdbcType="VARCHAR" property="projectLogo" />
-        <result column="financing_time" jdbcType="VARCHAR" property="financingTime"/>
+        <result column="financing_time" jdbcType="VARCHAR" property="financingTime" />
     </resultMap>
 
     <select id="projectFilter" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="projectFilterMap">

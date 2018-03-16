@@ -5,11 +5,48 @@
     <!--
       WARNING - @mbg.generated
     -->
-    <id column="elegant_service_id" jdbcType="INTEGER" property="elegantServiceId" />
-    <id column="token" jdbcType="VARCHAR" property="token" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="elegant_service_id" jdbcType="INTEGER" property="elegantServiceId" />
+    <result column="token" jdbcType="VARCHAR" property="token" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="completion_time" jdbcType="TIMESTAMP" property="completionTime" />
     <result column="appId" jdbcType="INTEGER" property="appid" />
+    <result column="user_headpic" jdbcType="VARCHAR" property="userHeadpic"/>
+    <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+    <result column="company_duties" jdbcType="VARCHAR" property="companyDuties"/>
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="collection_status" jdbcType="INTEGER" property="collectionStatus" />
+    <result column="project_short_name" jdbcType="VARCHAR" property="projectName" />
   </resultMap>
+  <select id="getElegantServiceParticipateList" resultMap="BaseResultMap">
+    SELECT esp.id,esp.create_time,esp.`status`,
+    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end user_name,
+    case when u.headpic is null then (case when u.headpic_real is null then "" else u.headpic_real end) else u.headpic end user_headpic,
+    case when u.company_duties is null then "" else u.company_duties end company_duties,
+    esp.completion_time
+    FROM idatavc.elegant_service_participate esp
+    left join users u on esp.token = u.uuid
+    left join users_weixin uw on u.ID = uw.user_id
+    where
+    esp.appId = #{appId}
+    and esp.elegant_service_id = #{elegantServiceId}
+    order by create_time desc
+    limit #{startPage},#{pageSize};
+  </select>
+  <select id="getElegantServiceParticipateById" resultMap="BaseResultMap">
+    SELECT esp.id,esp.elegant_service_id,es.service_name,esp.token,esp.create_time,esp.`status`,
+    case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end user_name,
+    case when u.headpic is null then (case when u.headpic_real is null then "" else u.headpic_real end) else u.headpic end user_headpic,
+    case when u.company_duties is null then "" else u.company_duties end company_duties,
+    esp.completion_time,esrp.project_id,esrp.project_short_name
+    FROM idatavc.elegant_service_participate esp
+    left join users u on esp.token = u.uuid
+    left join users_weixin uw on u.ID = uw.user_id
+    left join elegant_service es on esp.elegant_service_id = es.id
+    left join elegant_service_relevant_project esrp on esp.elegant_service_id = esrp.elegant_service_id
+    where
+    esp.id = #{elegantServiceParticipateId}
+    and esp.appId = #{appId}
+  </select>
 </mapper>

@@ -1,26 +1,31 @@
 package com.lhjl.tzzs.proxy.model;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Table(name = "elegant_service_participate")
 public class ElegantServiceParticipate {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     /**
      * 悬赏ID
 
      */
-    @Id
     @Column(name = "elegant_service_id")
     private Integer elegantServiceId;
 
     /**
      * 参与人token
      */
-    @Id
     private String token;
 
     /**
-     * 状态，0：未开始，1: 正在进行中，2: 完成
+     * 状态，0：未开始，1: 正在进行中，2: 完成（采纳）， 3：不采纳
      */
     private Integer status;
 
@@ -38,6 +43,76 @@ public class ElegantServiceParticipate {
 
     @Column(name = "appId")
     private Integer appid;
+    @Column(name = "collection_status")
+    private Integer collectionStatus;
+
+    @Transient
+    private List<ElegantServiceParticipateFeedbackImages> feedbackImages;
+
+    @Transient
+    private List<ElegantServiceParticipateFeedbackText> feedbackTexts;
+
+    /**
+     * 用户头像
+     */
+    @Transient
+    private String userHeadpic;
+
+    /**
+     * 用户姓名
+     */
+    @Transient
+    private String userName;
+
+    /**
+     * 用户公司职务
+     */
+    @Transient
+    private String companyDuties;
+
+    /**
+     * formid
+     */
+    @Transient
+    private String formid;
+
+    /**
+     * 项目名称
+     */
+    @Transient
+    private String projectName;
+
+    /**
+     * 项目id
+     */
+    @Transient
+    private Integer projectId;
+
+    @Transient
+    private String elegantServiceName;
+
+
+    public Integer getCollectionStatus() {
+        return collectionStatus;
+    }
+
+    public void setCollectionStatus(Integer collectionStatus) {
+        this.collectionStatus = collectionStatus;
+    }
+
+    /**
+     * @return id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @param id
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     /**
      * 获取悬赏ID
@@ -145,5 +220,77 @@ public class ElegantServiceParticipate {
      */
     public void setAppid(Integer appid) {
         this.appid = appid;
+    }
+
+    public List<ElegantServiceParticipateFeedbackImages> getFeedbackImages() {
+        return feedbackImages;
+    }
+
+    public void setFeedbackImages(List<ElegantServiceParticipateFeedbackImages> feedbackImages) {
+        this.feedbackImages = feedbackImages;
+    }
+
+    public List<ElegantServiceParticipateFeedbackText> getFeedbackTexts() {
+        return feedbackTexts;
+    }
+
+    public void setFeedbackTexts(List<ElegantServiceParticipateFeedbackText> feedbackTexts) {
+        this.feedbackTexts = feedbackTexts;
+    }
+
+    public String getUserHeadpic() {
+        return userHeadpic;
+    }
+
+    public void setUserHeadpic(String userHeadpic) {
+        this.userHeadpic = userHeadpic;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getCompanyDuties() {
+        return companyDuties;
+    }
+
+    public void setCompanyDuties(String companyDuties) {
+        this.companyDuties = companyDuties;
+    }
+
+    public String getFormid() {
+        return formid;
+    }
+
+    public void setFormid(String formid) {
+        this.formid = formid;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getElegantServiceName() {
+        return elegantServiceName;
+    }
+
+    public void setElegantServiceName(String elegantServiceName) {
+        this.elegantServiceName = elegantServiceName;
     }
 }

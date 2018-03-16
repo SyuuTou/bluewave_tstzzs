@@ -69,15 +69,20 @@ public interface ElegantServiceService {
      * 根据红包ID获取服务信息
      * @param appId
      * @param elegantServiceId
+     * @param token
      * @return
      */
-    CommonDto<ElegantService> getElegantServiceInfo(Integer appId, Integer elegantServiceId);
+    CommonDto<ElegantService> getElegantServiceInfo(Integer appId, Integer elegantServiceId, String token);
 
     CommonDto<String> saveOrUpdateParticipate(ElegantServiceParticipate body, Integer appId, String token);
 
     CommonDto<List<ElegantServiceParticipate>> queryParticipate(Integer appId, Integer elegantServiceId, Integer pageNo, Integer pageSize);
 
-    CommonDto<ElegantServiceParticipate> queryParticipate(Integer appId, Integer elegantServiceId, String token);
+    CommonDto<ElegantServiceParticipate> getParticipateByToken(Integer appId,String token,Integer elegantServiceId);
+
+    CommonDto<ElegantServiceParticipate> queryParticipate(Integer appId, Integer elegantServiceParticipateId, String token);
 
     CommonDto<String> saveOrUpdateParticipateFeedback(ElegantServiceParticipateDto body, Integer appId, String token);
+
+    CommonDto<String> updateParticipateStatus(ElegantServiceParticipate body, Integer appId);
 }

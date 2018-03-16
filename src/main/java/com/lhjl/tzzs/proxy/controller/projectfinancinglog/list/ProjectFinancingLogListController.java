@@ -19,14 +19,14 @@ public class ProjectFinancingLogListController extends GenericController{
     private ProjectFinancingLogService projectFinancingLogService;
 
     /**
-     * 后台读取项目融资历史列表的接口
+     * 后台读取项目融资历史(以及审核)列表的接口
+     * 一个接口两用
      * @param body
      * @return
      */
     @PostMapping("get/projectfinancinglog/list")
     public CommonDto<Map<String,Object>> getProjectFinancingLog(@RequestBody ProjectFinancingLogInputDto body){
         CommonDto<Map<String,Object>> result = new CommonDto<>();
-
         try {
             result = projectFinancingLogService.getProjectFinancingLogList(body);
         }catch (Exception e){

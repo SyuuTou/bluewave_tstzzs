@@ -33,25 +33,16 @@ public class investorProcessTrackingServiceImpl implements InvestorProcessTracki
         investorOperationLog.setOperateContent(body.getOperateContent());
         investorOperationLog.setYn(0);
 
-        long now = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String createTime = null;
-        try {
-            createTime = sdf.format(new Date(now));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+       
         Integer investorOperationLogInsertResult = -1;
         if(null == body.getId()){
-            investorOperationLog.setCreateTime(DateUtils.parse(createTime));
+            investorOperationLog.setCreateTime(new Date());
             investorOperationLogInsertResult =  investorOperationLogMapper.insert(investorOperationLog);
         }else{
-            investorOperationLog.setUpdateTime(DateUtils.parse(createTime));
+            investorOperationLog.setUpdateTime(new Date());
             investorOperationLogInsertResult =  investorOperationLogMapper.updateByPrimaryKey(investorOperationLog);
         }
 
-        //TODO 怎么拿到investor_ID
         if(investorOperationLogInsertResult > 0){
             result.setMessage("success");
             result.setStatus(200);
@@ -69,6 +60,7 @@ public class investorProcessTrackingServiceImpl implements InvestorProcessTracki
         CommonDto<List<InvestorOperateLogDto>> result = new CommonDto<>();
         List<InvestorOperateLogDto> investorOperateLogDtoList = new ArrayList<>();
         List<InvestorOperationLog> investorOperationLogList = investorOperationLogMapper.selectAllInvestorOperationLog(investorId);
+        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if(null == investorOperationLogList || investorOperationLogList.isEmpty()){
             result.setData(null);
             result.setStatus(200);
@@ -80,7 +72,9 @@ public class investorProcessTrackingServiceImpl implements InvestorProcessTracki
             investorOperateLogDto1.setId(investorOperationLog_i.getId());
             investorOperateLogDto1.setInvestorId(investorId);
             investorOperateLogDto1.setOperateContent(investorOperationLog_i.getOperateContent());
-            investorOperateLogDto1.setOperateTime(String.valueOf(investorOperationLog_i.getUpdateTime()));
+            if(investorOperationLog_i.getUpdateTime() != null) {
+            	investorOperateLogDto1.setOperateTime(sdf.format(investorOperationLog_i.getUpdateTime()));
+            }
             investorOperateLogDto1.setOperator(investorOperationLog_i.getOperator());
             investorOperateLogDtoList.add(investorOperateLogDto1);
         });

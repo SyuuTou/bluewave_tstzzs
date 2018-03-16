@@ -1116,7 +1116,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	public CommonDto<Map<String, Object>> listProInfos(Integer appid, ProjectsListInputDto body) {
 		CommonDto<Map<String, Object>> result=new CommonDto<Map<String, Object>>();
 		Map<String,Object> map =new HashMap<>();
-		
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		//格式化参数
 		if(body.getCurrentPage()==null) {
 			body.setCurrentPage(pageNumDefault);
 		}
@@ -1126,7 +1127,21 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		body.setStart((long)(body.getCurrentPage()-1) * body.getPageSize());
 		
 		List<ProjectsListOutputDto> list = projectsMapper.findSplit(body);
-		
+		//设置创建时间，更新时间输出字符串格式
+		list.forEach((e)->{
+			//设置提交时间
+			if(e.getCreateTime()!=null) {
+				e.setCreateTimeOutputStr(sdf.format(e.getCreateTime()));
+			}
+			//设置更新时间,更新时间为null的时候更新时间为提交时间
+			if(e.getUpdateTime()!=null) {
+				e.setUpdateTimeOutputStr(sdf.format(e.getUpdateTime()));
+				//更新时间设置为提交时间
+			}else {
+				e.setUpdateTimeOutputStr(e.getCreateTimeOutputStr());
+			}
+			
+		});
 		Long total = projectsMapper.findSplitCount(body);
 		
 		map.put("data", list);
@@ -1238,13 +1253,25 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	public CommonDto<List<ProjectFinancingLog>> getFinancingLogs(Integer appid, Integer projectId) {
 		CommonDto<List<ProjectFinancingLog>> result =new CommonDto<>();
 		
-		ProjectFinancingLog pfl=new ProjectFinancingLog();
+		
+		Example example=new Example(ProjectFinancingLog.class);
+		example.and()
+		.andIsNotNull("financingTime")
+		.andEqualTo("projectId",projectId)
+		.andEqualTo("yn",0)
+		.andEqualTo("approvalStatus",1);
+		
+		/*ProjectFinancingLog pfl=new ProjectFinancingLog();
 		pfl.setProjectId(projectId);
 		pfl.setYn(0);
 		//获取所有的融资历史记录
-		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.select(pfl);
+		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.select(pfl);*/
 		
-		if(pfls != null) {
+//		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.selectAllHistoryFinancing(projectId);
+		
+		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.selectByExample(example);
+		
+		if(pfls != null && pfls.size() != 0) {
 			pfls.forEach((e)->{
 				//获取融资阶段的id
 				Integer financingLogId = e.getId();
@@ -1340,9 +1367,22 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		//保存在融资历史保存或者更新后的主键id
 		Integer afterUpdateLogId=null;
 		if(body.getId() !=null) { //执行相关的更新操作
+			body.setUpdateTime(new Date());
+			
 			projectFinancingLogMapper.updateByPrimaryKeySelective(body);
 			afterUpdateLogId=body.getId();
 		}else {//执行相关的插入操作,增加的话肯定会传递一个projectId作为body的属性
+			Date now=new Date();
+			
+			body.setYn(0);
+			body.setCreateTime(now);
+			//设置审核状态,创建即默认审核通过
+			body.setApprovalStatus(1);
+			body.setApprovalTime(now);;
+			
+			//数据来源为运营人员后台添加
+			body.setDataSoruceTypeId(3);
+			
 			projectFinancingLogMapper.insertSelective(body);
 			afterUpdateLogId=body.getId();
 		}
@@ -1411,7 +1451,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
 		iip.setProjectId(financingLogId);
 		//设置有效标志为有效
-		iip.setYn(0);
+//		iip.setYn(0);
 		List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
 		//融资历史记录的详细信息进行进一步的输出格式化
 		if(iips !=null) {  

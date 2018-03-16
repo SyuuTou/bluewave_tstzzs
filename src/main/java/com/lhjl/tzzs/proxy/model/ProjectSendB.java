@@ -84,6 +84,12 @@ public class ProjectSendB {
     private Integer appid;
 
     /**
+     * 项目成立时间，而不是提交时间-周栋
+     */
+    @Column(name = "establish_time")
+    private Date establishTime;
+
+    /**
      * @return id
      */
     public Integer getId() {
@@ -329,5 +335,23 @@ public class ProjectSendB {
      */
     public void setAppid(Integer appid) {
         this.appid = appid;
+    }
+
+    /**
+     * 获取项目成立时间，而不是提交时间-周栋
+     *
+     * @return establish_time - 项目成立时间，而不是提交时间-周栋
+     */
+    public Date getEstablishTime() {
+        return establishTime;
+    }
+
+    /**
+     * 设置项目成立时间，而不是提交时间-周栋
+     *
+     * @param establishTime 项目成立时间，而不是提交时间-周栋
+     */
+    public void setEstablishTime(Date establishTime) {
+        this.establishTime = establishTime;
     }
 }

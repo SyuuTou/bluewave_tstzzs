@@ -273,6 +273,50 @@ public class UserIntegralsController {
 
 	}
 
+	/**
+	 * 用户充值接口
+	 * @param appId
+	 * @param body
+	 * @return
+	 */
+	@PostMapping("v{appId}/recharge")
+	public CommonDto<Integer> userRecharge(@PathVariable Integer appId,@RequestBody ZengDto body){
+		CommonDto<Integer> result = new CommonDto<>();
+
+		try {
+			result = userIntegralsService.recordUserPayAmount(appId,body);
+		}catch (Exception e){
+			log.error(e.getMessage(),e.fillInStackTrace());
+			result.setStatus(502);
+			result.setData(null);
+			result.setMessage("服务器端发生错误");
+		}
+
+		return result;
+	}
+
+	/**
+	 * 获取优惠信息的接口
+	 * @param appId
+	 * @param body
+	 * @return
+	 */
+	@PostMapping("v{appId}/discount/information")
+	public CommonDto<Map<String,Object>> discountInformation(@PathVariable Integer appId,@RequestBody ZengDto body){
+		CommonDto<Map<String,Object>> result = new CommonDto<>();
+
+		try {
+			result = userIntegralsService.recordUserPayAmountMember(appId,body);
+		}catch (Exception e){
+			log.error(e.getMessage(),e.fillInStackTrace());
+			result.setStatus(502);
+			result.setData(null);
+			result.setMessage("服务器端发生错误");
+		}
+
+		return result;
+	}
+
 //	@PostMapping("integrals/save")
 //	public CommonDto<String> insertGold(@RequestBody QzengDto body){
 //		CommonDto<String> result = new CommonDto<String>();

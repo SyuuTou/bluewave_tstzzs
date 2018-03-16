@@ -22,15 +22,16 @@
   </select>
 
   <select id="selectAllCountry" resultMap="BaseResultMap">
-    SELECT * FROM idatavc.meta_region where shengid = 0 and gid != 45055 and (id = 45055 or id > 45062) order by convert(ming using gbk) asc
+    SELECT * FROM meta_region where shengid = 0 and gid != 45055 and (id = 45055 or id > 45062) order by convert(ming using gbk) asc
+    <!-- SELECT * FROM meta_region where shengid = 0 and gid != 45055 and (id = 45055 or id > 45062) order by ming asc -->
   </select>
 
   <select id="selectByRegionId" parameterType="java.lang.Integer" resultType="java.lang.String">
-    SELECT ming FROM idatavc.meta_region where id =#{regionId};
+    SELECT ming FROM meta_region where id =#{regionId};
   </select>
 
   <select id="findNationalityIdByCountry" parameterType="java.lang.String" resultType="java.lang.Integer">
-      select id from idatavc.meta_region where `ming` =#{nationalityName};
+      select id from meta_region where `ming` =#{nationalityName};
   </select>
 
 </mapper>

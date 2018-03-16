@@ -16,6 +16,15 @@ public class WxPayProperties {
 
     private String tradeType;
 
+    private String keyPath;
+
+    public String getKeyPath() {
+        return keyPath;
+    }
+
+    public void setKeyPath(String keyPath) {
+        this.keyPath = keyPath;
+    }
 
     public String getAppId() {
         return appId;

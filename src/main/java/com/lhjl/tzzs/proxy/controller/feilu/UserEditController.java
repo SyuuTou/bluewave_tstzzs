@@ -31,7 +31,7 @@ public class UserEditController {
 
 
     /*
-     * 设置账号密码接口
+     * 设置账号密码接口,包括保存注册信息
      */
 
     @PostMapping("user/editmessage")

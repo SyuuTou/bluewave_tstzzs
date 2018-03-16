@@ -12,9 +12,16 @@ import com.lhjl.tzzs.proxy.service.bluewave.ReportService;
 import com.lhjl.tzzs.proxy.service.bluewave.SegmentationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +37,7 @@ public class ReportController extends GenericController {
     private ReportService reportService;
     /**
      * 文章报告-栏目元数据表
-     * @param appId
+     * @param appId  
      * @return
      */
     @GetMapping("/v{appid}/columns")
@@ -169,6 +176,31 @@ public class ReportController extends GenericController {
 
         return  result;
 
+    }
+
+    @GetMapping("report/image/generate/{reportId}")
+    public HttpEntity<byte[]> generateReportShareImage( @PathVariable Integer reportId) throws IOException {
+
+        CommonDto<String> result = null;
+        InputStream in = null;
+        try {
+            in = reportService.generateReportShareImage(reportId);
+        } catch (Exception e) {
+            this.logger.error(e.getMessage(),e.fillInStackTrace());
+        }
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[512];
+        int l = in.read(buffer);
+        while(l >= 0) {
+            outputStream.write(buffer, 0, l);
+            l = in.read(buffer);
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        headers.setContentLength(outputStream.toByteArray().length);
+        headers.set("Content-Disposition", "attachment; filename=image.jpg");
+        return new HttpEntity<byte[]>(outputStream.toByteArray(), headers);
     }
 
 }

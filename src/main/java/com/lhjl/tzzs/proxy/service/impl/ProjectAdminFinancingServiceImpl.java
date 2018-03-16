@@ -59,28 +59,29 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
         }
         ProjectFinancingLog projectFinancingLog = new ProjectFinancingLog();
         projectFinancingLog.setProjectId(body.getProjectId());
-        long now = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String createTime = null;
-        try {
-            createTime = sdf.format(new Date(now));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        
+        Date now = new Date();
+        
         projectFinancingLog.setAmount(body.getAmount());
         projectFinancingLog.setCurrency(body.getCurrencyType());
         projectFinancingLog.setStage(body.getStage());
         projectFinancingLog.setProjectFinancingUseful(body.getFinancingApplication());
         projectFinancingLog.setShareDivest(body.getShareDivest());
         projectFinancingLog.setId(body.getId());
+        //曹传桂添加
+        projectFinancingLog.setApprovalStatus(1);
+        projectFinancingLog.setYn(0);
+        
         Integer projectFinancingLogInsertResult = null;
+        
         if(null == body.getId()){
-            projectFinancingLog.setCreateTime(DateUtils.parse(createTime));
-            projectFinancingLogInsertResult = projectFinancingLogMapper.insert(projectFinancingLog);
+            projectFinancingLog.setCreateTime(now);
+            projectFinancingLogInsertResult = projectFinancingLogMapper.insertSelective(projectFinancingLog);
         }else{
-            projectFinancingLog.setUpdateTime(DateUtils.parse(createTime));
-            projectFinancingLogInsertResult = projectFinancingLogMapper.updateByPrimaryKey(projectFinancingLog);
+            projectFinancingLog.setUpdateTime(now);
+            projectFinancingLogInsertResult = projectFinancingLogMapper.updateByPrimaryKeySelective(projectFinancingLog);
         }
+        
         if(projectFinancingLogInsertResult > 0){
             result.setStatus(200);
             result.setMessage("success");

@@ -1,5 +1,6 @@
-package com.lhjl.tzzs.proxy.controller;
+package com.lhjl.tzzs.proxy.controller.project.collect;
 
+import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CollectProjectAuditBasicInfoDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.service.CollectProjectAuditBasicInfoService;
@@ -17,11 +18,16 @@ public class CollectProjectAuditBasicInfoController extends GenericController{
 
     @Autowired
     private CollectProjectAuditBasicInfoService collectProjectAuditBasicInfoService;
-
+    
+    /**
+     * 回显采集项目审核基本信息 
+     * @param projectId
+     * @return
+     */
     @GetMapping("/getcollectprojectauditbasicinfo")
     public CommonDto<CollectProjectAuditBasicInfoDto> getCollectProjectAuditBasicInfo(Integer projectId){
         CommonDto<CollectProjectAuditBasicInfoDto> result = new CommonDto<>();
-        try {
+        try {  
             result = collectProjectAuditBasicInfoService.getCollectProjectAuditBasicInfo(projectId);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());

@@ -4,14 +4,17 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorCertificationDto;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestorDemandCharacter;
 import com.lhjl.tzzs.proxy.model.InvestorInvestmentCase;
 import com.lhjl.tzzs.proxy.model.Investors;
+import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.InvestorCertificationInfoService;
 import com.lhjl.tzzs.proxy.service.InvestorInvestmentCaseService;
 import com.lhjl.tzzs.proxy.utils.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +23,7 @@ import java.util.List;
  * Created by lanhaijulang on 2018/1/31.
  */
 @Service
-public class InvestorCertificationInfoServiceImpl implements InvestorCertificationInfoService {
+public class InvestorCertificationInfoServiceImpl extends GenericService implements InvestorCertificationInfoService {
 
     @Autowired
     private InvestorsMapper investorsMapper;
@@ -31,9 +34,10 @@ public class InvestorCertificationInfoServiceImpl implements InvestorCertificati
     @Autowired
     private InvestmentInstitutionsMapper investmentInstitutionsMapper;
 
+    @Transactional
     @Override
-    public CommonDto<String> addOrUpdateInvestorCertification(InvestorCertificationDto body) {
-        CommonDto<String> result = new CommonDto<>();
+    public CommonDto<Boolean> addOrUpdateInvestorCertification(InvestorCertificationDto body) {
+        CommonDto<Boolean> result = new CommonDto<>();
         Boolean flag = false;
         try {
             flag = CommonUtils.isAllFieldNull(body);
@@ -44,7 +48,7 @@ public class InvestorCertificationInfoServiceImpl implements InvestorCertificati
         if(null == body || flag == true){
             result.setStatus(300);
             result.setMessage("failed");
-            result.setData("请输入新信息");
+            result.setData(false);
             return result;
         }
         Investors investors = new Investors();
@@ -53,42 +57,70 @@ public class InvestorCertificationInfoServiceImpl implements InvestorCertificati
         investors.setCertificationInstructions(body.getCertificationDesc());
         investors.setBusinessCard(body.getBusinessCard());
         investors.setBusinessCardOpposite(body.getBusinessCardOpposite());
-        Integer investorCertificationInsertResult = -1;
+        //担任职务
+        investors.setPosition(body.getPosition());
+		if(body.getCompanyName() != null) {
+			Integer investmentInstitutionsId;
+			InvestmentInstitutions ii=new InvestmentInstitutions();
+			ii.setShortName(body.getCompanyName());
+			try {
+				ii = investmentInstitutionsMapper.selectOne(ii);
+				
+			}catch(Exception e) {
+				result.setStatus(500);
+		        result.setMessage("数据库数据投资机构简称不唯一，导致selectOne出现冗余数据");
+		        result.setData(false);
+		        return result;
+			}
+			
+			if(ii==null) {//不存在该名称对应的投资机构，执行插入操作
+				InvestmentInstitutions insertEntity=new InvestmentInstitutions();
+				insertEntity.setShortName(body.getCompanyName());
+				//需要设置该投资机构的审核状态吗
+//				insertEntity.setApprovalStatus(0);
+				insertEntity.setYn(1);
+				//设置来源类型为运营人员添加
+				insertEntity.setDataSourceType(3);
+				investmentInstitutionsMapper.insertSelective(insertEntity);
+				
+				//设置关联的机构id
+				investmentInstitutionsId=insertEntity.getId();  
+			}else {
+				//设置关联的机构id
+				investmentInstitutionsId=ii.getId();
+			}
+			
+			//设置关联的投资机构id
+			investors.setInvestmentInstitutionsId(investmentInstitutionsId);
+		}
+		
         if(null == body.getInvestorId()){
-            investorCertificationInsertResult = investorsMapper.insert(investors);
+        	//执行增加操作，由于该板块属于投资人的级联信息，必须关联投资人id
+        	this.LOGGER.info("-->insert opration ");
+            investorsMapper.insert(investors);
         }else{
-            investorCertificationInsertResult = investorsMapper.updateByPrimaryKeySelective(investors);
+        	//该板块由于属于投资人的版块，一般来说肯定会执行更新操作
+        	this.LOGGER.info("-->update opration ");
+            investorsMapper.updateByPrimaryKeySelective(investors);
         }
-
-        Integer investorCaseInsertResult = -1;
-        List<InvestorInvestmentCase> investorInvestmentCaseList = new ArrayList<>();
+        
+     	//删除所有的投资案例
         investorInvestmentCaseService.deleteAll(body.getInvestorId());
-        if(null == body.getInvestCase()){
-            InvestorInvestmentCase investorInvestmentCase = new InvestorInvestmentCase();
-            investorInvestmentCase.setInvestorId(body.getInvestorId());
-            investorInvestmentCase.setInvestmentCase(null);
-            investorInvestmentCaseList.add(investorInvestmentCase);
-        }else{
+        //投资案例不为null的时候
+        if(null != body.getInvestCase() && body.getInvestCase().length != 0){
+        	List<InvestorInvestmentCase> investorInvestmentCaseList = new ArrayList<>();
             for (String investorInvestmentCase : body.getInvestCase()){
                 InvestorInvestmentCase investorInvestmentCase1 = new InvestorInvestmentCase();
                 investorInvestmentCase1.setInvestorId(body.getInvestorId());
                 investorInvestmentCase1.setInvestmentCase(investorInvestmentCase);
                 investorInvestmentCaseList.add(investorInvestmentCase1);
             }
-        }
-        investorCaseInsertResult = investorInvestmentCaseService.insertList(investorInvestmentCaseList);
-
-
-        if(investorCertificationInsertResult > 0 && investorCaseInsertResult>0){
-            result.setStatus(200);
-            result.setMessage("success");
-            result.setData("保存成功");
-            return result;
+            investorInvestmentCaseService.insertList(investorInvestmentCaseList);
         }
 
-        result.setStatus(300);
-        result.setMessage("failed");
-        result.setData("保存失败");
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(true);
         return result;
     }
 
@@ -99,17 +131,18 @@ public class InvestorCertificationInfoServiceImpl implements InvestorCertificati
         InvestorCertificationDto investorCertificationDto = new InvestorCertificationDto();
 
         Investors investors = investorsMapper.selectByPrimaryKey(investorId);
+        this.LOGGER.info("--》investors--》"+investors);
         if(null == investors){
             result.setData(null);
             result.setMessage("没有该投资人");
-            result.setStatus(300);
+            result.setStatus(500);
             return result;
         }
 
         String companyName = investmentInstitutionsMapper.selectById(investors.getInvestmentInstitutionsId());
         investorCertificationDto.setCompanyName(companyName);
         investorCertificationDto.setPosition(investors.getPosition());
-        investorCertificationDto.setInvestorType(investors.getIdentityType());
+        investorCertificationDto.setInvestorType(investors.getInvestorsType());
         investorCertificationDto.setInvestorId(investors.getId());
         investorCertificationDto.setBusinessCard(investors.getBusinessCard());
         investorCertificationDto.setBusinessCardOpposite(investors.getBusinessCardOpposite());

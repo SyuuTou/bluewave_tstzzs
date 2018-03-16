@@ -10,10 +10,12 @@ import com.lhjl.tzzs.proxy.service.*;
 import com.lhjl.tzzs.proxy.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +23,7 @@ import java.util.List;
  * Created by lanhaijulang on 2018/1/30.
  */
 @Service
-public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
+public class InvestorBasicinfoServiceImpl extends GenericService implements InvestorBasicinfoService{
 
     @Autowired
     private InvestorsMapper investorsMapper;
@@ -58,82 +60,96 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
 
     @Autowired
     private MetaIdentityTypeMapper metaIdentityTypeMapper;
-
+    @Autowired
+    private InvestorCityMapper investorCityMapper;
+    @Autowired
+    private InvestorWorkExperienceMapper investorWorkExperienceMapper;
+    @Autowired
+    private InvestorEducationExperienceMapper investorEducationExperienceMapper;
+    @Autowired
+    private InvestorBusinessMapper investorBusinessMapper;
+    @Autowired
+    private InvestorSegmentationMapper investorSegmentationMapper;
+    @Autowired
+    private InvestorSelfdefCityMapper investorSelfdefCityMapper;
+    
+    @Transactional
     @Override
-    public CommonDto<String> addOrUpdateInvestorBasicInfo(InvestorBasicInfoInputDto body) {
-        CommonDto<String> result = new CommonDto<>();
-
+    public CommonDto<Boolean> addOrUpdateInvestorBasicInfo(InvestorBasicInfoInputDto body) {
+        CommonDto<Boolean> result = new CommonDto<>();
+        this.LOGGER.info("body**"+body);
         Investors investors = new Investors();
         investors.setId(body.getInvestorId());
         Integer identityType = metaIdentityTypeMapper.findIdByIdentityName(body.getIdentityType());
         investors.setIdentityType(identityType);
         investors.setWeichat(body.getWeiChat());
         investors.setEmail(body.getEmail());
-        investors.setBirthDay(DateUtils.parse1(body.getBirthDay()));
+        if(body.getBirthDay()!=null) {
+        	investors.setBirthDay(DateUtils.parse1(body.getBirthDay()));
+        }
         investors.setSex(body.getSex());
-
         Integer diplomaId = metaDiplomaMapper.findDiplomaIdBydiplomaName(body.getDiploma());
         investors.setDiploma(diplomaId);
-
         Integer nationalityId = metaRegionMapper.findNationalityIdByCountry(body.getNationality());
         investors.setNationality(nationalityId);
-
-        investors.setTenureTime(DateUtils.parse1(body.getTenureTime()));
+        if(body.getTenureTime()!=null) {
+        	investors.setTenureTime(DateUtils.parse1(body.getTenureTime()));
+        }
         investors.setCompanyIntroduction(body.getCompanyIntro());
+        //设置工作名片正面
         investors.setBusinessCard(body.getBusinessCard());
+        //设置工作名片反面
+        investors.setBusinessCardOpposite(body.getBusinessCardOpposite());
+        //设置高清图片
         investors.setPicture(body.getPicture());
+        //设置创业经历描述
         investors.setBusinessDescription(body.getBussiness());
+        //设置教育经历描述
         investors.setEducationDescription(body.getEducationExperience());
+        //设置工作经历描述
         investors.setWorkDescription(body.getWorkExperience());
         investors.setHonor(body.getHonor());
-
-        long now = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String createTime = null;
-        try {
-            createTime = sdf.format(new Date(now));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Integer investorsInsertResult = -1;
+        
+        //TODO 
         if(body.getInvestorId() == null){
-            investors.setCreateTime(DateUtils.parse(createTime));
-            investorsInsertResult = investorsMapper.insert(investors);
+            investors.setCreateTime(new Date());
+            investorsMapper.insert(investors);
         }else{
-            investors.setUpdateTime(DateUtils.parse(createTime));
-            investorsInsertResult = investorsMapper.updateByPrimaryKeySelective(investors);
+        	//肯定会执行以下代码，investorId的传输是必须的，必须建立在已有投资人的基础上
+            investors.setUpdateTime(new Date());
+            investorsMapper.updateByPrimaryKeySelective(investors);
         }
-
+        
         //所在领域
         Integer investorSegmentationInsertResult = -1;
         List<InvestorSegmentation> investorSegmentationList = new ArrayList<>();
         investorSegmentationService.deleteAll(body.getInvestorId());
-        if(null == body.getSegmentations()){
-            InvestorSegmentation investorSegmentation = new InvestorSegmentation();
-            investorSegmentation.setId(body.getInvestorId());
-            investorSegmentation.setSegmentationId(null);
-            investorSegmentationList.add(investorSegmentation);
-        }else{
-            List<Integer> segmentationIds = metaSegmentationMapper.findMetaSegmentationBySegmentation(body.getSegmentations());
-            for (Integer investorSegmentationId : segmentationIds){
-                InvestorSegmentation investorSegmentation = new InvestorSegmentation();
-                investorSegmentation.setId(body.getInvestorId());
-                investorSegmentation.setSegmentationId(investorSegmentationId);
-                investorSegmentationList.add(investorSegmentation);
-            }
+        if(null != body.getSegmentations() && body.getSegmentations().length != 0){
+        	this.LOGGER.info("body.getSegmentations()-->"+Arrays.toString(body.getSegmentations()));
+        		 List<Integer> segmentationIds = metaSegmentationMapper.findMetaSegmentationBySegmentation(body.getSegmentations());
+                 this.LOGGER.info("segmentationIds-->"+segmentationIds.toString());
+                 for (Integer investorSegmentationId : segmentationIds){
+                     InvestorSegmentation investorSegmentation = new InvestorSegmentation();
+                     investorSegmentation.setId(body.getInvestorId());
+                     investorSegmentation.setSegmentationId(investorSegmentationId);
+                     investorSegmentationList.add(investorSegmentation);
+                 }
         }
-        investorSegmentationInsertResult = investorSegmentationService.insertList(investorSegmentationList);
-
+      //投资人所在领域的插入-zd
+        if(investorSegmentationList !=null && investorSegmentationList.size()>0) {
+        	investorSegmentationList.forEach((e)->{
+        		if(e!=null) {
+        			investorSegmentationMapper.insert(e);
+        		}
+        	});
+        }
+//        以下方法不满足通用Mapper的list增加条件-caochuangui
+//        investorSegmentationInsertResult = investorSegmentationService.insertList(investorSegmentationList);
         //所在城市
         Integer investorCityInsertResult = -1;
         List<InvestorCity> investorCityList = new ArrayList<>();
         investorCityService.deleteAll(body.getInvestorId());
-        if(null == body.getCitys()){
-            InvestorCity investorCity = new InvestorCity();
-            investorCity.setId(body.getInvestorId());
-            investorCity.setCity(null);
-            investorCityList.add(investorCity);
-        }else{
+        if(null != body.getCitys() && body.getCitys().length != 0){
             for (String investorCityName : body.getCitys()){
                 InvestorCity investorCity = new InvestorCity();
                 investorCity.setId(body.getInvestorId());
@@ -141,96 +157,108 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
                 investorCityList.add(investorCity);
             }
         }
-        investorCityInsertResult = investorCityService.insertList(investorCityList);
-
+        //重新执行插入-zd
+        if(investorCityList !=null && investorCityList.size()>0) {
+        	investorCityList.forEach((e)->{
+        		if(e!=null) {
+        			investorCityMapper.insert(e);
+        		}
+        	});
+        }
+//        以下方法不满足通用Mapper的list增加条件-caochuangui
+//        investorCityInsertResult = investorCityService.insertList(investorCityList);
         //自定义城市
         Integer investorSelfDefCityInsertResult = -1;
         List<InvestorSelfdefCity> investorSelfdefCityList = new ArrayList<>();
-        investorSelfdefCityService.deleteAll(body.getInvestorId());
-        if(null == body.getSelfDefCity()){
-            InvestorSelfdefCity investorSelfdefCity = new InvestorSelfdefCity();
-            investorSelfdefCity.setId(body.getInvestorId());
-            investorSelfdefCity.setSelfDefCity(null);
-            investorSelfdefCityList.add(investorSelfdefCity);
-        }else{
-            for (String investorSelfDefCityName : body.getCitys()){
+        investorSelfdefCityService.deleteAll(body.getInvestorId());  
+        if(null != body.getSelfDefCity() && body.getSelfDefCity().length != 0){
+            for (String investorSelfDefCityName : body.getSelfDefCity()){
                 InvestorSelfdefCity investorSelfdefCity = new InvestorSelfdefCity();
-                investorSelfdefCity.setId(body.getInvestorId());
+                investorSelfdefCity.setId(body.getInvestorId());  
                 investorSelfdefCity.setSelfDefCity(investorSelfDefCityName);
                 investorSelfdefCityList.add(investorSelfdefCity);
             }
         }
-        investorSelfDefCityInsertResult = investorSelfdefCityService.insertList(investorSelfdefCityList);
+      //重新执行插入-zd
+        if(investorSelfdefCityList !=null && investorSelfdefCityList.size()>0) {
+        	investorSelfdefCityList.forEach((e)->{
+        		if(e!=null) {
+        			investorSelfdefCityMapper.insert(e);
+        		}
+        	});
+        }
+//        以下方法不满足通用Mapper的list增加条件-caochuangui
+//        investorSelfDefCityInsertResult = investorSelfdefCityService.insertList(investorSelfdefCityList);
 
         //工作经历
         Integer investorWorkExperienceInsertResult = -1;
         List<InvestorWorkExperience> investorWorkExperienceList = new ArrayList<>();
         investorWorkExperienceService.deleteAll(body.getInvestorId());
-        if(null == body.getWorkExperiences()){
-            InvestorWorkExperience investorWorkExperience = new InvestorWorkExperience();
-            investorWorkExperience.setId(body.getInvestorId());
-            investorWorkExperience.setWorkExperience(null);
-            investorWorkExperienceList.add(investorWorkExperience);
-        }else{
-            for (String investorWorkExperience_i : body.getCitys()){
+        if(null != body.getWorkExperiences() && body.getWorkExperiences().length != 0){
+            for (String investorWorkExperience_i : body.getWorkExperiences()){
                 InvestorWorkExperience investorWorkExperience = new InvestorWorkExperience();
                 investorWorkExperience.setId(body.getInvestorId());
                 investorWorkExperience.setWorkExperience(investorWorkExperience_i);
                 investorWorkExperienceList.add(investorWorkExperience);
             }
         }
-        investorWorkExperienceInsertResult = investorWorkExperienceService.insertList(investorWorkExperienceList);
+      //重新执行投资人工作经历插入-zd
+        if(investorWorkExperienceList !=null && investorWorkExperienceList.size()>0) {
+        	investorWorkExperienceList.forEach((e)->{
+        		if(e!=null) {
+        			investorWorkExperienceMapper.insert(e);
+        		}
+        	});
+        }
+        //此处无法使用同于mapper执行list的增加
+//        investorWorkExperienceInsertResult = investorWorkExperienceService.insertList(investorWorkExperienceList);
 
         //教育经历
         Integer investorEducationExperienceInsertResult = -1;
         List<InvestorEducationExperience> investorEducationExperienceList = new ArrayList<>();
         investorEducationExperienceService.deleteAll(body.getInvestorId());
-        if(null == body.getWorkExperiences()){
-            InvestorEducationExperience investorEducationExperience = new InvestorEducationExperience();
-            investorEducationExperience.setId(body.getInvestorId());
-            investorEducationExperience.setEducationExperience(null);
-            investorEducationExperienceList.add(investorEducationExperience);
-        }else{
-            for (String investorEducationExperience_i : body.getCitys()){
+        if(null != body.getEducationExperiences() && body.getEducationExperiences().length != 0){
+            for (String investorEducationExperience_i : body.getEducationExperiences()){
                 InvestorEducationExperience investorEducationExperience = new InvestorEducationExperience();
                 investorEducationExperience.setId(body.getInvestorId());
                 investorEducationExperience.setEducationExperience(investorEducationExperience_i);
                 investorEducationExperienceList.add(investorEducationExperience);
             }
         }
-        investorEducationExperienceInsertResult = investorEducationExperienceService.insertList(investorEducationExperienceList);
+        if(investorEducationExperienceList !=null && investorEducationExperienceList.size()>0) {
+        	investorEducationExperienceList.forEach((e)->{
+        		if(e!=null) {
+        			investorEducationExperienceMapper.insert(e);
+        		}
+        	});
+        }
+      //此处无法使用同于mapper执行list的增加
+//        investorEducationExperienceInsertResult = investorEducationExperienceService.insertList(investorEducationExperienceList);
 
         //创业经历
         Integer investorBusinessesInsertResult = -1;
         List<InvestorBusiness> investorBusinessList = new ArrayList<>();
         investorBusinessService.deleteAll(body.getInvestorId());
-        if(null == body.getWorkExperiences()){
-            InvestorBusiness investorBusiness = new InvestorBusiness();
-            investorBusiness.setId(body.getInvestorId());
-            investorBusiness.setBusiness(null);
-            investorBusinessList.add(investorBusiness);
-        }else{
-            for (String investorBusiness_i : body.getCitys()){
+        if(null != body.getBusinesses() && body.getBusinesses().length != 0){
+            for (String investorBusiness_i : body.getBusinesses()){
                 InvestorBusiness investorBusiness = new InvestorBusiness();
                 investorBusiness.setId(body.getInvestorId());
                 investorBusiness.setBusiness(investorBusiness_i);
                 investorBusinessList.add(investorBusiness);
             }
         }
-        investorBusinessesInsertResult = investorBusinessService.insertList(investorBusinessList);
-
-        if(investorsInsertResult > 0 && investorBusinessesInsertResult > 0 &&
-                investorEducationExperienceInsertResult > 0 && investorWorkExperienceInsertResult > 0 &&
-                investorSelfDefCityInsertResult > 0 &&  investorCityInsertResult > 0 &&
-                investorSegmentationInsertResult > 0){
-            result.setStatus(200);
-            result.setMessage("success");
-            result.setData("保存成功");
-            return result;
+        //投资人创业经历的重新增加-zd
+        if(investorBusinessList !=null && investorBusinessList.size()>0) {
+        	investorBusinessList.forEach((e)->{
+        		if(e!=null) {
+        			investorBusinessMapper.insert(e);
+        		}
+        	});
         }
-        result.setStatus(300);
-        result.setMessage("failed");
-        result.setData("保存失败");
+        
+        result.setStatus(200);
+        result.setMessage("success");  
+        result.setData(true);
 
         return result;
 
@@ -254,29 +282,35 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
         investorBasicInfoOutputDto.setWeiChat(investors.getWeichat());
         investorBasicInfoOutputDto.setEmail(investors.getEmail());
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
-        if(null == investors.getBirthDay() || "undefined".equals(investors.getBirthDay())){
-            investorBasicInfoOutputDto.setBirthDay("");
-        }else{
+        if(null != investors.getBirthDay()){
             investorBasicInfoOutputDto.setBirthDay(sdf.format(investors.getBirthDay()));
         }
         investorBasicInfoOutputDto.setSex(investors.getSex());
-        String diploma = metaDiplomaMapper.selectByDiplomaId(investors.getDiploma());
-        investorBasicInfoOutputDto.setDiploma(diploma);
-        String countryName = metaRegionMapper.selectByRegionId(investors.getNationality());
-        investorBasicInfoOutputDto.setNationality(countryName);
-        investorBasicInfoOutputDto.setBusinessCardOposite(investors.getBusinessCardOpposite());
-        if(null == investors.getTenureTime() || "undefined".equals(investors.getTenureTime())){
-            investorBasicInfoOutputDto.setTenureTime("");
-        }else{
+        //学历
+        if(investors.getDiploma() != null) {
+        	 String diploma = metaDiplomaMapper.selectByDiplomaId(investors.getDiploma());
+             investorBasicInfoOutputDto.setDiploma(diploma);
+        }
+        //国籍
+        if(investors.getNationality() != null) {
+        	String countryName = metaRegionMapper.selectByRegionId(investors.getNationality());
+            investorBasicInfoOutputDto.setNationality(countryName);
+        }
+        //任职时间
+        if(null != investors.getTenureTime()) {
             investorBasicInfoOutputDto.setTenureTime(sdf.format(investors.getTenureTime()));
         }
+        
         investorBasicInfoOutputDto.setCompanyIntro(investors.getCompanyIntroduction());
-        System.out.println(investors.getBusinessCard());
+        
         investorBasicInfoOutputDto.setBusinessCard(investors.getBusinessCard());
+        investorBasicInfoOutputDto.setBusinessCardOpposite(investors.getBusinessCardOpposite());
         investorBasicInfoOutputDto.setPicture(investors.getPicture());
+        
         investorBasicInfoOutputDto.setBussiness(investors.getBusinessDescription());
         investorBasicInfoOutputDto.setWorkExperience(investors.getWorkDescription());
         investorBasicInfoOutputDto.setEducationExperience(investors.getEducationDescription());
+        
         investorBasicInfoOutputDto.setHonor(investors.getHonor());
 
         InvestorSegmentation investorSegmentation = new InvestorSegmentation();
@@ -302,10 +336,31 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             investorBasicInfoOutputDto.setSegmentations(investorSegmentationArr);
         }
 
+        
+        //城市为选定城市以及自定义城市的总和
+        List<String> citysResult=new ArrayList<>();
+        
         InvestorCity investorCity = new InvestorCity();
         investorCity.setId(investorId);
-        List<InvestorCity> investorCityList = investorCityService.select(investorCity);
-        String[] investorCityArr = null;
+        List<InvestorCity> investorCityLists = investorCityService.select(investorCity);
+        if(investorCityLists!=null && investorCityLists.size()!=0) {
+        	investorCityLists.forEach((e)->{
+        		citysResult.add(e.getCity());
+        	});
+        }
+        InvestorSelfdefCity investorSelfdefCity =new InvestorSelfdefCity();
+        investorSelfdefCity.setId(investorId);
+        List<InvestorSelfdefCity> investorSelfdefCitys = investorSelfdefCityMapper.select(investorSelfdefCity);
+        if(investorSelfdefCitys!=null && investorSelfdefCitys.size()!=0) {
+        	investorSelfdefCitys.forEach((e)->{
+        		citysResult.add(e.getSelfDefCity());
+        	});
+        }
+        if(citysResult !=null && citysResult.size()!=0) {
+        	investorBasicInfoOutputDto.setCitys(citysResult);
+        }
+        //数组--曹传桂
+        /*String[] investorCityArr = null;
         if(null == investorCityList || investorCityList.size()==0){
             investorBasicInfoOutputDto.setCitys(investorCityArr);
         }else{
@@ -316,9 +371,9 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             investorCityArr = new String[investorCitys.size()];
             investorCitys.toArray(investorCityArr);
             investorBasicInfoOutputDto.setCitys(investorCityArr);
-        }
-
-        InvestorSelfdefCity investorSelfdefCity = new InvestorSelfdefCity();
+        }*/
+        //自当以城市--曹传桂
+        /*InvestorSelfdefCity investorSelfdefCity = new InvestorSelfdefCity();
         investorSelfdefCity.setId(investorId);
         List<InvestorSelfdefCity> investorSelfdefCityList = investorSelfdefCityService.select(investorSelfdefCity);
         String[] investorSelfdefCityArr = null;
@@ -332,14 +387,14 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             investorSelfdefCityArr = new String[investorSelfdefCitys.size()];
             investorSelfdefCitys.toArray(investorSelfdefCityArr);
             investorBasicInfoOutputDto.setSelfDefCity(investorSelfdefCityArr);
-        }
+        }*/
 
         InvestorBusiness investorBusiness = new InvestorBusiness();
         investorBusiness.setId(investorId);
         List<InvestorBusiness> investorBusinessesList = investorBusinessService.select(investorBusiness);
         String[] investorBusinessArr = null;
         if(null == investorBusinessesList || investorBusinessesList.size() == 0){
-            investorBasicInfoOutputDto.setCitys(investorBusinessArr);
+            investorBasicInfoOutputDto.setBusinesses(investorBusinessArr);
         }else{
             List<String> investorBusinessess = new ArrayList<>();
             investorBusinessesList.forEach(investorSelfdefCity_i -> {
@@ -347,7 +402,7 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             });
             investorBusinessArr = new String[investorBusinessess.size()];
             investorBusinessess.toArray(investorBusinessArr);
-            investorBasicInfoOutputDto.setBusinesses(investorBusinessArr);
+            investorBasicInfoOutputDto.setBusinesses(investorBusinessArr);  
         }
 
         InvestorWorkExperience investorWorkExperience = new InvestorWorkExperience();
@@ -379,6 +434,7 @@ public class InvestorBasicinfoServiceImpl implements InvestorBasicinfoService{
             });
             investorEducationExperienceArr = new String[investorEducationExperiences.size()];
             investorEducationExperiences.toArray(investorEducationExperienceArr);
+            //转换为数组
             investorBasicInfoOutputDto.setEducationExperiences(investorEducationExperienceArr);
         }
 

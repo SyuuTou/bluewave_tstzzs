@@ -46,6 +46,23 @@ public class RedEnvelopeLog {
     private String unionKey;
 
     /**
+     * 币种；0：人民币，1: 令牌
+     */
+    private Integer currency;
+
+    /**
+     * 付款状态  0，未付款，1，已付款，2，付款失败
+     */
+    @Column(name = "pay_status")
+    private Integer payStatus;
+
+    @Column(name = "pay_trade_no")
+    private String payTradeNo;
+
+    @Column(name = "pay_time")
+    private String payTime;
+
+    /**
      * 获取红包ID
      *
      * @return red_envelope_id - 红包ID
@@ -165,5 +182,69 @@ public class RedEnvelopeLog {
      */
     public void setUnionKey(String unionKey) {
         this.unionKey = unionKey;
+    }
+
+    /**
+     * 获取币种；0：人民币，1: 令牌
+     *
+     * @return currency - 币种；0：人民币，1: 令牌
+     */
+    public Integer getCurrency() {
+        return currency;
+    }
+
+    /**
+     * 设置币种；0：人民币，1: 令牌
+     *
+     * @param currency 币种；0：人民币，1: 令牌
+     */
+    public void setCurrency(Integer currency) {
+        this.currency = currency;
+    }
+
+    /**
+     * 获取付款状态  0，未付款，1，已付款，2，付款失败
+     *
+     * @return pay_status - 付款状态  0，未付款，1，已付款，2，付款失败
+     */
+    public Integer getPayStatus() {
+        return payStatus;
+    }
+
+    /**
+     * 设置付款状态  0，未付款，1，已付款，2，付款失败
+     *
+     * @param payStatus 付款状态  0，未付款，1，已付款，2，付款失败
+     */
+    public void setPayStatus(Integer payStatus) {
+        this.payStatus = payStatus;
+    }
+
+    /**
+     * @return pay_trade_no
+     */
+    public String getPayTradeNo() {
+        return payTradeNo;
+    }
+
+    /**
+     * @param payTradeNo
+     */
+    public void setPayTradeNo(String payTradeNo) {
+        this.payTradeNo = payTradeNo;
+    }
+
+    /**
+     * @return pay_time
+     */
+    public String getPayTime() {
+        return payTime;
+    }
+
+    /**
+     * @param payTime
+     */
+    public void setPayTime(String payTime) {
+        this.payTime = payTime;
     }
 }

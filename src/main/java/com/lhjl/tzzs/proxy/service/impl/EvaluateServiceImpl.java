@@ -1,11 +1,10 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.DistributedCommonDto;
-import com.lhjl.tzzs.proxy.dto.HistogramList;
-import com.lhjl.tzzs.proxy.dto.LabelList;
+import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.mapper.MetaFinancingMapper;
+import com.lhjl.tzzs.proxy.mapper.OpStatisticsNameMapper;
+import com.lhjl.tzzs.proxy.model.OpStatisticsName;
 import com.lhjl.tzzs.proxy.service.EvaluateService;
 import com.lhjl.tzzs.proxy.utils.ComparatorHistogramList;
 import org.slf4j.Logger;
@@ -27,6 +26,9 @@ public class EvaluateServiceImpl implements EvaluateService {
 
     @Autowired
     private MetaFinancingMapper financingMapper;
+
+    @Autowired
+    private OpStatisticsNameMapper opStatisticsNameMapper;
 
     @Value("${statistics.beginTime}")
     private String beginTime ;
@@ -76,7 +78,7 @@ public class EvaluateServiceImpl implements EvaluateService {
     @Cacheable(value = "valuation",keyGenerator = "wiselyKeyGenerator")
     @Transactional(readOnly = true)
     @Override
-    public CommonDto<List<HistogramList>> valuation(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
+    public StatisticsDto<List<HistogramList>> valuation(String investment, String roundName, String industryName, String cityName, String educationName, String workName, Integer from, Integer size) {
 
         DistributedCommonDto<List<HistogramList>> result = new DistributedCommonDto<List<HistogramList>>();
 //        roundName= "Pre-A轮";
@@ -288,6 +290,9 @@ public class EvaluateServiceImpl implements EvaluateService {
             LOGGER.info("valuation:investment:{},roundName:{},evaluateAmount:{},avg:{},flag{},beginTime:{},endTime:{}",investment,roundName,evaluateAmount,avg,flag,beginTime,endTime);
             result.setAvgMoney(avg.intValue());
             result.setMessage("success");
+            OpStatisticsName query = new OpStatisticsName();
+            query.setKey("amount_distribution");
+            result.setStatisticsName(opStatisticsNameMapper.selectOne(query));
             result.setStatus(200);
             result.setData(dataList);
         } catch (NumberFormatException e) {

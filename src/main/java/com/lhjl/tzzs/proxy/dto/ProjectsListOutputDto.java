@@ -8,7 +8,7 @@ public class ProjectsListOutputDto {
 	 */
 	private Integer id;
 	/**
-	 * 项目编号
+	 * 项目采集编号
 	 */
 	private Integer serialNumber;
 	/**
@@ -19,6 +19,10 @@ public class ProjectsListOutputDto {
 	 * 一句话介绍
 	 */
 	private String kernelDesc;
+	/**
+	 * 所属领域
+	 */
+	private String segmentations;
 	/**
 	 * 所在城市
 	 */
@@ -36,7 +40,7 @@ public class ProjectsListOutputDto {
 	private Integer ratingStage;
 	/**
 	 * 融资状态
-	 * 改值返回为null字段的时候表示正在融A轮
+	 * 该值返回为null字段的时候表示正在融A轮
 	 */
 	private String stage;
 	/**
@@ -61,11 +65,95 @@ public class ProjectsListOutputDto {
 	 * 创建时间
 	 */
 	private Date createTime;
+	/**
+	 * 创建时间输出字符串
+	 */
+	private String createTimeOutputStr;
 	
 	/**
 	 * 更新时间
 	 */
 	private Date updateTime;
+	/**
+	 * 更新时间输出字符串
+	 */
+	private String updateTimeOutputStr;
+	//原有项目列表的新增字段
+	/**
+	 * 是否对外投资
+	 */
+	private Integer foreignInvestmentYn;
+	/**
+	 * 全称
+	 */
+	private String fullName;
+	/**
+	 * 项目类型
+	 */
+	private Integer projectType;
+	/**
+	 * 认领状态
+	 * @return
+	 */
+	private Integer claimStatus;
+	
+	
+
+	public Integer getClaimStatus() {
+		return claimStatus;
+	}
+
+	public void setClaimStatus(Integer claimStatus) {
+		this.claimStatus = claimStatus;
+	}
+
+	public Integer getProjectType() {
+		return projectType;
+	}
+
+	public void setProjectType(Integer projectType) {
+		this.projectType = projectType;
+	}
+
+	public Integer getForeignInvestmentYn() {
+		return foreignInvestmentYn;
+	}
+
+	public void setForeignInvestmentYn(Integer foreignInvestmentYn) {
+		this.foreignInvestmentYn = foreignInvestmentYn;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public String getSegmentations() {
+		return segmentations;
+	}
+
+	public void setSegmentations(String segmentations) {
+		this.segmentations = segmentations;
+	}
+
+	public String getCreateTimeOutputStr() {
+		return createTimeOutputStr;
+	}
+
+	public void setCreateTimeOutputStr(String createTimeOutputStr) {
+		this.createTimeOutputStr = createTimeOutputStr;
+	}
+
+	public String getUpdateTimeOutputStr() {
+		return updateTimeOutputStr;
+	}
+
+	public void setUpdateTimeOutputStr(String updateTimeOutputStr) {
+		this.updateTimeOutputStr = updateTimeOutputStr;
+	}
 
 	public Integer getId() {
 		return id;

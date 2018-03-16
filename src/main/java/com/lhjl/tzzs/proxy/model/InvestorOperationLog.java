@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class InvestorOperationLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     /**
      * 投资人id
@@ -46,14 +46,14 @@ public class InvestorOperationLog {
     /**
      * @return id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -13,6 +13,7 @@
     <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="app_id" jdbcType="INTEGER" property="appId" />
+    <result column="currency" jdbcType="INTEGER" property="currency" />
   </resultMap>
   <select id="getCostNum" resultType="Integer">
   	select sum(cost_num) from user_integral_consume where user_id = #{userId}

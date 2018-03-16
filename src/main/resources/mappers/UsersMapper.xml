@@ -48,16 +48,16 @@
     SELECT u.ID FROM users u WHERE u.uuid=#{uuids}
   </select>
   <select id="findByUserid" parameterType="INTEGER" resultType="INTEGER">
-    SELECT c.level_id FROM user_level_relation c WHERE c.user_id =#{userId} AND c.yn=1 AND c.status =1
+    SELECT c.level_id FROM user_level_relation c WHERE c.user_id =#{userId} and app_id = #{appId} AND c.yn=1 AND c.status =1
   </select>
-  <select id="findByBei" parameterType="INTEGER" resultType="Float">
-    SELECT m.ratio FROM meta_obtain_integral m WHERE m.user_level=#{leId} AND m.scene_key IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
+  <select id="findByBei"  resultType="Float">
+    SELECT m.ratio FROM meta_obtain_integral m WHERE m.user_level=#{leId} and app_id = #{appId} AND m.scene_key IN('iQMrkC4L','sdQbEZSe','rgJt3Vnk','D8TKEd9L')
   </select>
-  <select id="findByJinE" parameterType="String" resultType="INTEGER">
-    SELECT integral FROM meta_obtain_integral WHERE scene_key=#{skey}
+  <select id="findByJinE"  resultType="INTEGER">
+    SELECT integral FROM meta_obtain_integral WHERE scene_key=#{skey} and app_id = #{appId}
   </select>
-  <select id="findByUserLevel" parameterType="INTEGER" resultType="String">
-    SELECT c.name FROM meta_user_level c WHERE c.ID=#{leId}
+  <select id="findByUserLevel"  resultType="String">
+    SELECT c.name FROM meta_user_level c WHERE c.ID=#{leId} and app_id = #{appId}
   </select>
 
   <select id="findUserList" parameterType="INTEGER" resultType="java.util.HashMap">
@@ -81,7 +81,7 @@
     select u.actual_name,u.headpic,u.headpic_real,u.company_name,u.company_duties,w.nick_name from users u
     right join user_token t on u.ID = t.user_id
     left join users_weixin w on t.user_id = w.user_id
-    where t.token = #{token}
+    where t.token = #{token} limit 0,1
   </select>
   <select id="findAdminList" resultType="java.util.HashMap">
     select aa.id,
@@ -241,6 +241,7 @@
     case when u.actual_name is null then (case when uw.nick_name is null then "" else uw.nick_name end) else u.actual_name end actual_name,
     case when u.headpic_real is null then (case when u.headpic is null then "" else u.headpic end) else u.headpic_real end headpic_real,
     u.company_duties,
+    u.company_name,
     u.uuid
     FROM users u
     right join users_weixin uw on u.ID = uw.user_id

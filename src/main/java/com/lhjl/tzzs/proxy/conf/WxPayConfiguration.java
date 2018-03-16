@@ -37,7 +37,7 @@ public class WxPayConfiguration {
 		payConfig.setMchKey(this.properties.getMchKey());
 		payConfig.setNotifyUrl(this.properties.getNotifyUrl());
 		payConfig.setTradeType(this.properties.getTradeType());
-
+		payConfig.setKeyPath(this.properties.getKeyPath());
 		LOGGER.info("WxPayConfiguration.payConfig: {} ", "||"+ payConfig.getAppId()+"||"+payConfig.getMchId()+"||");
 		return payConfig;
 	}

@@ -36,7 +36,7 @@ public class ElegantService {
     private String preVipPriceDescript;
 
     /**
-     * 价格单位，0表示人民币，1表示美元, 2表示令牌
+     * 价格单位，0表示人民币，1表示令牌
      */
     @Column(name = "price_unit")
     private Integer priceUnit;
@@ -180,7 +180,12 @@ public class ElegantService {
 
     private Integer quantity;
 
+    @Column(name = "pay_status")
+    private Integer payStatus;
 
+    /** 用户悬赏状态 */
+    @Transient
+    private String status;
 
     @Transient
     private List<ElegantServiceApproveType> elegantServiceApproveTypes;
@@ -198,7 +203,25 @@ public class ElegantService {
     private ElegantServiceDescriptionDetail elegantServiceDescriptionDetail;
     @Transient
     private ElegantServiceRelevantProject elegantServiceRelevantProject;
+    @Transient
+    private List<ElegantServiceDescriptionUrl> elegantServiceDescriptionUrls;
 
+
+    public Integer getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(Integer payStatus) {
+        this.payStatus = payStatus;
+    }
+
+    public List<ElegantServiceDescriptionUrl> getElegantServiceDescriptionUrls() {
+        return elegantServiceDescriptionUrls;
+    }
+
+    public void setElegantServiceDescriptionUrls(List<ElegantServiceDescriptionUrl> elegantServiceDescriptionUrls) {
+        this.elegantServiceDescriptionUrls = elegantServiceDescriptionUrls;
+    }
 
     public ElegantServiceRelevantProject getElegantServiceRelevantProject() {
         return elegantServiceRelevantProject;
@@ -222,6 +245,14 @@ public class ElegantService {
 
     public void setCustomButtonLabel(String customButtonLabel) {
         this.customButtonLabel = customButtonLabel;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     /**

@@ -1,5 +1,6 @@
-package com.lhjl.tzzs.proxy.controller;
+package com.lhjl.tzzs.proxy.controller.investor.details;
 
+import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorCertificationDto;
 import com.lhjl.tzzs.proxy.service.InvestorCertificationInfoService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
+ * 认证投资人模块
  * @author caochuangui
  * @date 2018-1-30 17:24:30
  */
@@ -21,13 +23,13 @@ public class InvestorCertificationInfoController extends GenericController{
     private InvestorCertificationInfoService investorCertificationInfoService;
 
     /**
-     * 编辑投资人个人信息
+     * 保存或者更新认证投资人模块的信息
      * @param body
      * @return
      */
     @PostMapping("/addorupdateinvestorcertification")
-    public CommonDto<String> addOrUpdateInvestorCertification(@RequestBody InvestorCertificationDto body){
-        CommonDto<String> result = new CommonDto<>();
+    public CommonDto<Boolean> addOrUpdateInvestorCertification(@RequestBody InvestorCertificationDto body){
+        CommonDto<Boolean> result = new CommonDto<>();
         try {
             result = investorCertificationInfoService.addOrUpdateInvestorCertification(body);
         }catch (Exception e){
@@ -40,7 +42,7 @@ public class InvestorCertificationInfoController extends GenericController{
     }
 
     /**
-     * 得到投资人信息
+     * 获取认证投资人模块的信息
      * @param investorId
      * @return
      */

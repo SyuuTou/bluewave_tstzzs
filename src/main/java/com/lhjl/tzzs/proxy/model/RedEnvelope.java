@@ -83,6 +83,15 @@ public class RedEnvelope {
      */
     private String description;
 
+    private Integer currency;
+
+    public Integer getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Integer currency) {
+        this.currency = currency;
+    }
 
     /**
      * @return id

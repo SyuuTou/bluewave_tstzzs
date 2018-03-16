@@ -1,5 +1,6 @@
-package com.lhjl.tzzs.proxy.controller;
+package com.lhjl.tzzs.proxy.controller.investor.details;
 
+import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorBasicInfoInputDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorBasicInfoOutputDto;
@@ -24,29 +25,29 @@ public class InvestorBasicinfoController extends GenericController{
 
     @Resource
     private InvestorBasicinfoService investorBasicinfoService;
-
-    //TODO 教育经历智能检索
-
-    //TODO 工作经历智能检索
-
-    //TODO 创业经历智能检索
-
-    //TODO 自定义城市智能检索
-
+    /**
+     * 添加或者更新投资人的基本信息
+     * @param body
+     * @return
+     */
     @PostMapping("/addorupdateinvestorbasicinfo")
-    public CommonDto<String> addOrUpdateInvestorBasicInfo(@RequestBody InvestorBasicInfoInputDto body){
-        CommonDto<String> result = new CommonDto<>();
+    public CommonDto<Boolean> addOrUpdateInvestorBasicInfo(@RequestBody InvestorBasicInfoInputDto body){
+        CommonDto<Boolean> result = new CommonDto<>();
         try {
             result = investorBasicinfoService.addOrUpdateInvestorBasicInfo(body);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
-            result.setData(null);
+            result.setData(false);
             result.setStatus(502);
         }
         return result;
     }
-
+    /**
+     * 获取投资人基本信息
+     * @param investorId
+     * @return
+     */
     @GetMapping("/getinvestorbasicinfo")
     public CommonDto<InvestorBasicInfoOutputDto> getInvestorBasicInfo(Integer investorId){
         CommonDto<InvestorBasicInfoOutputDto> result = new CommonDto<>();
@@ -61,35 +62,10 @@ public class InvestorBasicinfoController extends GenericController{
         return result;
     }
 
-    @GetMapping("/getinvestorintroduction")
-    public CommonDto<InvestorIntroductionDto> getInvestorIntroduction(Integer investorId){
-        CommonDto<InvestorIntroductionDto> result = new CommonDto<>();
-        try {
-            result = investorBasicinfoService.getInvestorIntroduction(investorId);
-        }catch (Exception e){
-            LOGGER.error(e.getMessage(),e.fillInStackTrace());
-            result.setMessage("服务器端发生错误");
-            result.setData(null);
-            result.setStatus(502);
-        }
-        return result;
-    }
-
-    @PostMapping("/addorupdateinvestorintroduction")
-    public CommonDto<String> addOrUpdateInvestorIntroduction(@RequestBody InvestorIntroductionDto body){
-        CommonDto<String> result = new CommonDto<>();
-        try {
-            result = investorBasicinfoService.addOrUpdateInvestorIntroduction(body);
-        }catch (Exception e){
-            LOGGER.error(e.getMessage(),e.fillInStackTrace());
-            result.setMessage("服务器端发生错误");
-            result.setData(null);
-            result.setStatus(502);
-        }
-        return result;
-    }
-
-
+    /**
+     * 获取城市信息元数据
+     * @return
+     */
     @GetMapping("/getallcontry")
     public CommonDto<List<MetaRegion>> getAllContry(){
         CommonDto<List<MetaRegion>> result = new CommonDto<>();
@@ -103,7 +79,10 @@ public class InvestorBasicinfoController extends GenericController{
         }
         return result;
     }
-
+    /**
+     * 获取学历元数据
+     * @return
+     */
     @GetMapping("/getalldiploma")
     public CommonDto<List<MetaDiploma>> getAllDiploma(){
         CommonDto<List<MetaDiploma>> result = new CommonDto<>();

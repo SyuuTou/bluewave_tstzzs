@@ -47,4 +47,20 @@ public interface BlueUserInfoService {
      * @return
      */
     CommonDto<String> editUserInfo(UserInfomationInputDto body,Integer appid);
+
+    /**
+     * 检查手机号接口
+     * @param token
+     * @param appid
+     * @return
+     */
+    CommonDto<Integer> checkUserPonenumber(String token,Integer appid);
+
+    /**
+     * 检查用户头像的接口
+     * @param token
+     * @param appid
+     * @return
+     */
+    CommonDto<Integer> checkUserHeadpic(String token,Integer appid);
 }

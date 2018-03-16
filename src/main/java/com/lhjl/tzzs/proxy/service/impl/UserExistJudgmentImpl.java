@@ -10,7 +10,9 @@ import com.lhjl.tzzs.proxy.model.UserToken;
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.model.UsersWeixin;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
+import com.lhjl.tzzs.proxy.service.bluewave.BlueUserInfoService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,20 +38,27 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
     @Resource
     private UserTokenMapper userTokenMapper;
 
+    @Resource
+    private BlueUserInfoService blueUserInfoService;
+
     //判断用户是否注册过，没有即注册。
     @Transactional
     @Override
-    public CommonDto<UserExsitJudgmentDto> userExistJudgment(String oppenId,Integer appid){
+    public CommonDto<UserExsitJudgmentDto> userExistJudgment(String oppenId, Integer appid, String unionid){
         CommonDto<UserExsitJudgmentDto> result =new CommonDto<UserExsitJudgmentDto>();
         UserExsitJudgmentDto userExsitJudgmentDto =new UserExsitJudgmentDto();
-
+        List<UsersWeixin> usersWeixins = null;
         UsersWeixin usersWeixin = new UsersWeixin();
         usersWeixin.setOpenid(oppenId);
-        List<UsersWeixin> usersWeixins = usersWeixinMapper.select(usersWeixin);
 
-        log.info("进入用户登录注册实现方法中");
+        usersWeixins = usersWeixinMapper.select(usersWeixin);
 
-        if (usersWeixins.size() > 0){
+        if (usersWeixins.size()>0){
+            usersWeixin = usersWeixins.get(0);
+            if (StringUtils.isNotEmpty(usersWeixin.getUnionId())){
+                usersWeixin.setUnionId(unionid);
+                usersWeixinMapper.updateByPrimaryKey(usersWeixin);
+            }
             //token存在的情况，返回token,返回用户手机号是否存在
             UsersWeixin usersWeixinForId = usersWeixins.get(0);
             int userId = usersWeixinForId.getUserId();
@@ -60,106 +69,96 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
             //去获取token
             UserToken userToken = new UserToken();
             userToken.setUserId(userId);
+            userToken.setMetaAppId(String.valueOf(appid));
 
             List<UserToken> userTokens = userTokenMapper.select(userToken);
 
-          //  log.info("你在这里呀！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
-            if (userTokens.size() > 0){
-                //获取到token
-                UserToken userTokenForToken = userTokens.get(0);
-                String token = userTokenForToken.getToken();
+            //  log.info("你在这里呀！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
+            if (handlerUserInfo(oppenId, appid, unionid, result, userExsitJudgmentDto, usersWeixinForId, userId, userTokens))
+                return result;
 
-                log.info("获取到用户token,token为：");
-                log.info(token);
 
-                //检查用户的手机号，密码
-                Users users =new Users();
-                users.setId(userId);
+//        }
+//
+//
+//
+//        log.info("进入用户登录注册实现方法中");
+//
+//        if (usersWeixins.size() > 0){
 
-                Users getUser =usersMapper.selectByPrimaryKey(users.getId());
-                if (getUser == null){
 
-                    log.info("获取用户信息出现异常,此时的用户id为：");
-                    log.info("userId={}",userId);
+        }else{
+            usersWeixin = new UsersWeixin();
+            usersWeixin.setUnionId(unionid);
 
-                    result.setData(null);
-                    result.setMessage("获取用户信息出现异常");
-                    result.setStatus(401);
+            usersWeixins = usersWeixinMapper.select(usersWeixin);
+            if (usersWeixins.size()>0){
+                usersWeixin = usersWeixins.get(0);
+                usersWeixin.setOpenid(oppenId);
+                usersWeixin.setId(null);
+                usersWeixin.setMetaAppId(appid);
+                usersWeixinMapper.insert(usersWeixin);
 
+                //token存在的情况，返回token,返回用户手机号是否存在
+                UsersWeixin usersWeixinForId = usersWeixins.get(0);
+                int userId = usersWeixinForId.getUserId();
+
+                log.info("用户微信号已存在，对应的用户id为：");
+                log.info("userId={}",userId);
+
+                //去获取token
+                UserToken userToken = new UserToken();
+                userToken.setUserId(userId);
+                userToken.setMetaAppId(String.valueOf(appid));
+
+                List<UserToken> userTokens = userTokenMapper.select(userToken);
+
+                //  log.info("你在这里呀！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
+                if (handlerUserInfo(oppenId, appid, unionid, result, userExsitJudgmentDto, usersWeixinForId, userId, userTokens))
                     return result;
-                }
-                String phonenumber = getUser.getPhonenumber();
-                String password = getUser.getPassword();
 
-                if(phonenumber == null){
-                    userExsitJudgmentDto.setHasphonenumber(0);
-                }else{
-                    userExsitJudgmentDto.setHasphonenumber(1);
-                }
+            }else {
 
-                if (password == null){
-                    userExsitJudgmentDto.setHaspassword(0);
-                }else {
-                    userExsitJudgmentDto.setHaspassword(1);
-                }
-                userExsitJudgmentDto.setYhid(userId);
-                userExsitJudgmentDto.setToken(token);
-                userExsitJudgmentDto.setSuccess(true);
-
-                result.setData(userExsitJudgmentDto);
-                result.setStatus(200);
-                result.setMessage("success");
-
-            }else{
-
-                log.info("当前用户的token信息不存在，请检查,当前用户的oppenId为：");
-                log.info(oppenId);
-                log.info("token不存在的话，删掉微信信息，重新创建用户");
-
-                Integer userweixinId = usersWeixinForId.getId();
-
-                //删掉微信表的信息
-                usersWeixinMapper.deleteByPrimaryKey(userweixinId);
-
-                //创建用户返回手机号信息
+                //token不存在的情况，创建用户返回手机号信息
                 String token = encode();
 
                 Date now = new Date();
-                log.info("创建用户，及相关表");
+                log.info("当前用户的微信号不存在，创建用户，及相关表");
 
                 //创建用户
-                Users users =new Users();
+                Users users = new Users();
                 users.setCreateTime(now);
                 String uuid = token;
                 users.setUuid(uuid);
                 users.setMetaAppId(appid);
-
+                users.setUnionid(unionid);
                 usersMapper.insertSelective(users);
 
                 Integer userid = users.getId();
                 //创建用户token
-                UserToken userToken1 = new UserToken();
-                userToken1.setUserId(userid);
-                userToken1.setToken(token);
-                userToken1.setRegisterTime(now);
-                userToken1.setMetaAppId(String.valueOf(appid));
+                UserToken userToken = new UserToken();
+                userToken.setUserId(userid);
+                userToken.setToken(token);
+                userToken.setRegisterTime(now);
+                userToken.setMetaAppId(String.valueOf(appid));
 
-                userTokenMapper.insert(userToken1);
+                userTokenMapper.insert(userToken);
 
                 //创建用户微信信息表
-                UsersWeixin usersWeixinForInsert1 = new UsersWeixin();
-                usersWeixinForInsert1.setOpenid(oppenId);
-                usersWeixinForInsert1.setUserId(userid);
-                usersWeixinForInsert1.setCreateTime(now);
-                usersWeixinForInsert1.setMetaAppId(appid);
-
-                usersWeixinMapper.insertSelective(usersWeixinForInsert1);
+                UsersWeixin usersWeixinForInsert = new UsersWeixin();
+                usersWeixinForInsert.setOpenid(oppenId);
+                usersWeixinForInsert.setUserId(userid);
+                usersWeixinForInsert.setCreateTime(now);
+                usersWeixinForInsert.setMetaAppId(appid);
+                usersWeixinForInsert.setUnionId(unionid);
+                usersWeixinMapper.insertSelective(usersWeixinForInsert);
 
 
                 //数据插入成功，返回结果
 
                 userExsitJudgmentDto.setHaspassword(0);
                 userExsitJudgmentDto.setHasphonenumber(0);
+                userExsitJudgmentDto.setHasHeadpic(0);
                 userExsitJudgmentDto.setSuccess(true);
                 userExsitJudgmentDto.setToken(token);
                 userExsitJudgmentDto.setYhid(userid);
@@ -167,16 +166,86 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
                 result.setMessage("success");
                 result.setStatus(200);
                 result.setData(userExsitJudgmentDto);
+            }
+        }
 
+
+        return result;
+
+    }
+
+    public boolean handlerUserInfo(String oppenId, Integer appid, String unionid, CommonDto<UserExsitJudgmentDto> result, UserExsitJudgmentDto userExsitJudgmentDto, UsersWeixin usersWeixinForId, int userId, List<UserToken> userTokens) {
+        if (userTokens.size() > 0){
+            //获取到token
+            UserToken userTokenForToken = userTokens.get(0);
+            String token = userTokenForToken.getToken();
+
+            log.info("获取到用户token,token为：");
+            log.info(token);
+
+            //检查用户的手机号，密码
+            Users users =new Users();
+            users.setId(userId);
+
+            Users getUser =usersMapper.selectByPrimaryKey(users.getId());
+            if (getUser == null){
+
+                log.info("获取用户信息出现异常,此时的用户id为：");
+                log.info("userId={}",userId);
+
+                result.setData(null);
+                result.setMessage("获取用户信息出现异常");
+                result.setStatus(401);
+
+                return true;
+            }
+            String phonenumber = getUser.getPhonenumber();
+            String password = getUser.getPassword();
+
+            if(phonenumber == null){
+                userExsitJudgmentDto.setHasphonenumber(0);
+            }else{
+                userExsitJudgmentDto.setHasphonenumber(1);
             }
 
+            if (password == null){
+                userExsitJudgmentDto.setHaspassword(0);
+            }else {
+                userExsitJudgmentDto.setHaspassword(1);
+            }
+
+            //获取用户是否有头像
+            Integer headpicYn = blueUserInfoService.checkUserHeadpic(token,appid).getData();
+            if (headpicYn != 1){
+                userExsitJudgmentDto.setHasHeadpic(0);
+            }else {
+                userExsitJudgmentDto.setHasHeadpic(1);
+            }
+
+            userExsitJudgmentDto.setYhid(userId);
+            userExsitJudgmentDto.setToken(token);
+            userExsitJudgmentDto.setSuccess(true);
+
+            result.setData(userExsitJudgmentDto);
+            result.setStatus(200);
+            result.setMessage("success");
 
         }else{
-            //token不存在的情况，创建用户返回手机号信息
+
+            log.info("当前用户的token信息不存在，请检查,当前用户的oppenId为：");
+            log.info(oppenId);
+            log.info("token不存在的话，删掉微信信息，重新创建用户");
+
+            Integer userweixinId = usersWeixinForId.getId();
+
+            //删掉微信表的信息
+            usersWeixinMapper.deleteByPrimaryKey(userweixinId);
+
+            //创建用户返回手机号信息
             String token = encode();
 
             Date now = new Date();
-            log.info("当前用户的微信号不存在，创建用户，及相关表");
+            log.info("创建用户，及相关表");
 
             //创建用户
             Users users =new Users();
@@ -189,28 +258,30 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
 
             Integer userid = users.getId();
             //创建用户token
-            UserToken userToken = new UserToken();
-            userToken.setUserId(userid);
-            userToken.setToken(token);
-            userToken.setRegisterTime(now);
-            userToken.setMetaAppId(String.valueOf(appid));
+            UserToken userToken1 = new UserToken();
+            userToken1.setUserId(userid);
+            userToken1.setToken(token);
+            userToken1.setRegisterTime(now);
+            userToken1.setMetaAppId(String.valueOf(appid));
 
-            userTokenMapper.insert(userToken);
+            userTokenMapper.insert(userToken1);
 
             //创建用户微信信息表
-            UsersWeixin usersWeixinForInsert = new UsersWeixin();
-            usersWeixinForInsert.setOpenid(oppenId);
-            usersWeixinForInsert.setUserId(userid);
-            usersWeixinForInsert.setCreateTime(now);
-            usersWeixinForInsert.setMetaAppId(appid);
+            UsersWeixin usersWeixinForInsert1 = new UsersWeixin();
+            usersWeixinForInsert1.setOpenid(oppenId);
+            usersWeixinForInsert1.setUserId(userid);
+            usersWeixinForInsert1.setCreateTime(now);
+            usersWeixinForInsert1.setUnionId(unionid);
+            usersWeixinForInsert1.setMetaAppId(appid);
 
-            usersWeixinMapper.insertSelective(usersWeixinForInsert);
+            usersWeixinMapper.insertSelective(usersWeixinForInsert1);
 
 
             //数据插入成功，返回结果
 
             userExsitJudgmentDto.setHaspassword(0);
             userExsitJudgmentDto.setHasphonenumber(0);
+            userExsitJudgmentDto.setHasHeadpic(0);
             userExsitJudgmentDto.setSuccess(true);
             userExsitJudgmentDto.setToken(token);
             userExsitJudgmentDto.setYhid(userid);
@@ -220,10 +291,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
             result.setData(userExsitJudgmentDto);
 
         }
-
-
-        return result;
-
+        return false;
     }
 
     //token生成方法

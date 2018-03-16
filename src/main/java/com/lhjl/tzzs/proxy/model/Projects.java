@@ -11,7 +11,7 @@ public class Projects {
     private Integer id;
 
     /**
-     * 项目编号
+     * 项目采集编号
      */
     @Column(name = "serial_number")
     private Integer serialNumber;
@@ -196,6 +196,12 @@ CHANGE COLUMN `project_type` `project_type` INT(11) NULL DEFAULT NULL COMMENT '�
     private Integer foreignInvestmentYn;
 
     /**
+     * 认领状态:0未认领 1已认领（曹传桂）
+     */
+    @Column(name = "claim_status")
+    private Integer claimStatus;
+
+    /**
      * @return ID
      */
     public Integer getId() {
@@ -210,18 +216,18 @@ CHANGE COLUMN `project_type` `project_type` INT(11) NULL DEFAULT NULL COMMENT '�
     }
 
     /**
-     * 获取项目编号
+     * 获取项目采集编号
      *
-     * @return serial_number - 项目编号
+     * @return serial_number - 项目采集编号
      */
     public Integer getSerialNumber() {
         return serialNumber;
     }
 
     /**
-     * 设置项目编号
+     * 设置项目采集编号
      *
-     * @param serialNumber 项目编号
+     * @param serialNumber 项目采集编号
      */
     public void setSerialNumber(Integer serialNumber) {
         this.serialNumber = serialNumber;
@@ -837,21 +843,21 @@ CHANGE COLUMN `project_type` `project_type` INT(11) NULL DEFAULT NULL COMMENT '�
         this.foreignInvestmentYn = foreignInvestmentYn;
     }
 
-	@Override
-	public String toString() {
-		return "Projects [id=" + id + ", serialNumber=" + serialNumber + ", shortName=" + shortName + ", fullName="
-				+ fullName + ", kernelDesc=" + kernelDesc + ", commet=" + commet + ", url=" + url + ", establishedTime="
-				+ establishedTime + ", segmentation=" + segmentation + ", itemLabel=" + itemLabel + ", address="
-				+ address + ", territory=" + territory + ", createTime=" + createTime + ", continent=" + continent
-				+ ", country=" + country + ", province=" + province + ", city=" + city + ", region=" + region
-				+ ", investmentInstitutionsId=" + investmentInstitutionsId + ", approvalStatus=" + approvalStatus
-				+ ", approvalTime=" + approvalTime + ", yn=" + yn + ", userid=" + userid + ", kernelDescStatus="
-				+ kernelDescStatus + ", cityCount=" + cityCount + ", evaluationRecommend=" + evaluationRecommend
-				+ ", projectType=" + projectType + ", projectSource=" + projectSource + ", projectLogo=" + projectLogo
-				+ ", projectInvestmentHighlights=" + projectInvestmentHighlights + ", cityCountMax=" + cityCountMax
-				+ ", cityCountMin=" + cityCountMin + ", totalAmount=" + totalAmount + ", updateTime=" + updateTime
-				+ ", companyEmail=" + companyEmail + ", companyHrEmail=" + companyHrEmail + ", foreignInvestmentYn="
-				+ foreignInvestmentYn + "]";
-	}
-    
+    /**
+     * 获取认领状态:0未认领 1已认领（曹传桂）
+     *
+     * @return claim_status - 认领状态:0未认领 1已认领（曹传桂）
+     */
+    public Integer getClaimStatus() {
+        return claimStatus;
+    }
+
+    /**
+     * 设置认领状态:0未认领 1已认领（曹传桂）
+     *
+     * @param claimStatus 认领状态:0未认领 1已认领（曹传桂）
+     */
+    public void setClaimStatus(Integer claimStatus) {
+        this.claimStatus = claimStatus;
+    }
 }

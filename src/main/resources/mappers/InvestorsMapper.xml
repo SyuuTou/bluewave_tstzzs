@@ -45,6 +45,7 @@
     <result column="submitter" jdbcType="VARCHAR" property="submitter" />
     <result column="invest_case_description" jdbcType="VARCHAR" property="investCaseDescription" />
     <result column="single_invest_amount" jdbcType="VARCHAR" property="singleInvestAmount" />
+    <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
   </resultMap>
 
   <resultMap id="newInvestortMap" type="com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto">
@@ -246,10 +247,6 @@
 
   <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
       select * from investors where user_id =#{userId} and approval_status = 1 and yn =1;
-  </select>
-
-  <select id="selectByInstitutionIdNameWeichatGroupId" resultType="java.util.Map">
-    SELECT * from investors i LEFT JOIN datas_operation_manage d on (i.ID =d.data_id AND d.data_type="INVESTOR") where `name` =#{name} and investment_institutions_id =#{institutionId} and `wechat_group_id` =#{weiChatGroupId};
   </select>
 
 </mapper>

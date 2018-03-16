@@ -35,23 +35,33 @@
     <result column="is_reward" jdbcType="INTEGER" property="isReward" />
     <result column="is_lead_investor" jdbcType="INTEGER" property="isLeadInvestor" />
     <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
     <result column="custom_button_label" jdbcType="VARCHAR" property="customButtonLabel" />
 
   </resultMap>
   <select id="findElegantServiceList" resultType="java.util.HashMap">
-    select es.service_name,es.pre_vip_price_descript,es.original_price,es.vip_price,esd.description,es.unit,
-    es.background_picture,es.id,es.scence_key,es.begin_time,es.end_time,es.recommend_yn,es.create_time
+    select es.service_name,es.pre_vip_price_descript,es.original_price,es.vip_price,esd.description,es.unit,es.price_unit,
+    es.background_picture,es.id,es.scence_key,es.begin_time,es.end_time,es.recommend_yn,es.create_time,es.web_switch
     from elegant_service es
     left join elegant_service_description esd on es.id = esd.elegant_service_id
-    right join elegant_service_identity_type esit on esit.elegant_service_id = es.id
-    left join meta_identity_type mit on esit.meta_identity_type_id = mit.id
-    right join elegant_service_service_type esst on esst.elegant_service_id = es.id
-    left join meta_service_type mst on esst.meta_service_type_id = mst.id
-    LEFT JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
-    LEFT JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id
 
+    right join elegant_service_identity_type esit on esit.elegant_service_id = es.id
+    RIGHT join meta_identity_type mit on esit.meta_identity_type_id = mit.id
+    right join elegant_service_service_type esst on esst.elegant_service_id = es.id
+    RIGHT join meta_service_type mst on esst.meta_service_type_id = mst.id
+
+    RIGHT JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
+    RIGHT JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id
+    <if test="isLeadInvestor != null and isLeadInvestor != ''">
+    RIGHT JOIN elegant_service_lead_investor esli on esli.elegant_service_id =  es.id
+    </if>
     where es.on_off = 1
     and es.yn = 1
+    AND es.begin_time &lt;= #{now}
+    and es.end_time &gt;= #{now}
+    <if test="token !=null and token !='' ">
+      and creator = #{token}
+    </if>
     <if test="appid != null and appid != ''">
       and es.appid = #{appid}
     </if>
@@ -66,8 +76,10 @@
     <if test="searchWord != null and searchWord !=''">
       and (
          es.service_name like CONCAT(CONCAT('%', #{searchWord}), '%')
-         or mit.type_name like CONCAT(CONCAT('%', #{searchWord}), '%')
-         or mst.service_type_name like CONCAT(CONCAT('%', #{searchWord}), '%')
+        <if test="isReward != null and isReward != 1 " >
+          or mit.type_name like CONCAT(CONCAT('%', #{searchWord}), '%')
+          or mst.service_type_name like CONCAT(CONCAT('%', #{searchWord}), '%')
+        </if>
          or esd.description like CONCAT(CONCAT('%', #{searchWord}), '%'))
     </if>
     <if test="recommendYn != null and recommendYn != ''">
@@ -80,10 +92,10 @@
     </if>
 
     <if test="isLeadInvestor != null and isLeadInvestor != ''">
-      and es.is_lead_investor = #{isLeadInvestor}
+      and esli.lead_investor_type = #{isLeadInvestor}
     </if>
 
-    <if test="isReward != null and isReward != ''">
+    <if test="isReward != null ">
       and es.is_reward = #{isReward}
     </if>
 
@@ -102,7 +114,7 @@
   </select>
 
   <select id="findElegantServiceById" resultType="java.util.HashMap">
-    select es.service_name,es.original_price,es.vip_price,es.pre_vip_price_descript,es.unit,es.background_picture,es.scence_key,esdd.detail_description,esdd.description_type
+    select es.service_name,es.original_price,es.vip_price,es.pre_vip_price_descript,es.price_unit,es.unit,es.background_picture,es.scence_key,esdd.detail_description,esdd.description_type
     from elegant_service es
     left join elegant_service_description_detail esdd on es.id = esdd.elegant_service_id
     where es.id=#{elegantServiceId}
@@ -155,7 +167,7 @@
 
     group by es.id
     ) as a
-    order by a.sort
+    order by a.sort,a.begin_time
     limit #{startPage},#{pageSize}
   </select>
 

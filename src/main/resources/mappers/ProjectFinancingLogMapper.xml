@@ -7,6 +7,7 @@
     -->
     <id column="ID" jdbcType="INTEGER" property="id" />
     <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
     <result column="financing_time" jdbcType="DATE" property="financingTime" />
     <result column="stage" jdbcType="VARCHAR" property="stage" />
     <result column="amount" jdbcType="DECIMAL" property="amount" />
@@ -28,10 +29,10 @@
     <result column="total_amount_status" jdbcType="INTEGER" property="totalAmountStatus" />
     <result column="financing_time_year" jdbcType="VARCHAR" property="financingTimeYear" />
     <result column="project_financing_useful" jdbcType="VARCHAR" property="projectFinancingUseful" />
-    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
     <result column="data_soruce_type_id" jdbcType="INTEGER" property="dataSoruceTypeId" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="yn" jdbcType="INTEGER" property="yn" />
+    <result column="submitter" jdbcType="VARCHAR" property="submitter" />
   </resultMap>
   
   <resultMap id="ProjectFinancingLogHeadOutputDtoMap" type="com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutputDto">
@@ -39,7 +40,7 @@
     <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
     <result column="type_name" jdbcType="VARCHAR" property="typeName" />
     <result column="short_name" jdbcType="VARCHAR" property="projectName" />
-    <result column="submitor_token" jdbcType="VARCHAR" property="submitorToken" />
+    <result column="submitter" jdbcType="VARCHAR" property="submitter" />
     <result column="meta_follow_status_id" jdbcType="INTEGER" property="followStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
@@ -63,8 +64,95 @@
     <result column="proportion_list" jdbcType="VARCHAR" property="proportionList" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <!-- 审核状态 -->
+    <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
+    <!-- 审核时间 -->
+    <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
+    <!-- 提交人token -->
+	<!-- <result column="submitter" jdbcType="VARCHAR" property="submitter" /> -->
+	
+	<!-- 用户id -->
+	<result column="user_id" jdbcType="INTEGER" property="userId" />
+	<!-- 提交人姓名 -->
+	<result column="actual_name" jdbcType="VARCHAR" property="actualName" />
   </resultMap>
   
+  <select id="selectAllHistoryFinancing" resultMap="BaseResultMap">
+  select * from project_financing_log where project_id=#{projectId} and financing_time is not null and approval_status = 1 and yn =0;
+  </select>
+	
+  <select id="getProjectFinancingLogLists" resultMap="ProjectFinancingLogOutputDtoMap">
+    SELECT pfl.ID,pfl.serial_number,mdst.type_name,ii.id as investment_institution_id,ii.short_name as institution_name,
+    p.id as project_id,p.short_name as project_name,ps.segmentation_name,pfl.stage,pfl.amount,pfl.currency,
+    pfl.share_divest,pfl.valuation,pfl.total_amount,pfl.pr_amount,pfl.financing_time,pfl.Investment_institutions_list,
+    pfl.proportion_list,pfl.create_time,pfl.update_time,pfl.approval_status,pfl.approval_time,pfl.submitter,ut.user_id,u.actual_name
+    FROM project_financing_log pfl
+    left join meta_data_source_type mdst on pfl.data_soruce_type_id = mdst.id
+    left join investment_institutions_project iip on pfl.id = iip.project_id
+    left join investment_institutions ii on iip.investment_institutions_id = ii.id
+    left join projects p on pfl.project_id = p.id
+    left join
+    <choose>
+    	<when test="segmentationName !=null and segmentationName.size() &gt; 0">
+    		( select project_id,group_concat(segmentation_name) segmentation_name from ( select * from project_segmentation where segmentation_name in 
+    		<foreach collection="segmentationName" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+    		 ) temp 
+    		group by temp.project_id ) ps
+    		on p.id = ps.project_id
+    	</when>
+    	<otherwise>
+    		(select project_id,group_concat(segmentation_name) segmentation_name from project_segmentation group by project_id) ps
+    		on p.id = ps.project_id
+    	</otherwise>
+    </choose>
+    <!-- 取得提交人姓名以及提交人id -->
+    left join user_token ut on pfl.submitter = ut.token
+    left join users u on ut.user_id = u.ID
+    where 1=1
+    
+     <if test="searchWord != null and searchWord !=''">
+      and
+        ( ii.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or p.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or ps.segmentation_name like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or pfl.stage like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or pfl.Investment_institutions_list like CONCAT("%",CONCAT(#{searchWord},"%"))
+      or pfl.proportion_list like CONCAT("%",CONCAT(#{searchWord},"%")) ) 
+    </if>
+    <if test="beginTime !=null">
+     AND (pfl.create_time &gt;= #{beginTime} 
+     or pfl.update_time &gt;= #{beginTime}
+     )
+     
+    </if>
+    
+    <if test="endTime !=null">
+     AND (pfl.create_time &lt;= #{endTime}
+     or pfl.update_time &lt;= #{beginTime}
+     )
+    </if>
+    
+    <if test="stage != null and size() &gt; 0">
+      and pfl.stage in 
+	<foreach close=")" collection="stage" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+    <if test="currency != null and currency.size() &gt; 0">
+      and pfl.currency in 
+      <foreach close=")" collection="currency" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+    <if test="approvalStatus != null and approvalStatus.size() &gt; 0">
+      and pfl.approval_status in 
+      <foreach close=")" collection="approvalStatus" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+    <if test="dataSource != null and dataSource.size() &gt; 0">
+      and pfl.data_soruce_type_id in  
+      <foreach close=")" collection="dataSource" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+    <if test="column != null and column !='' and order != null and order != ''">
+      order by pfl.${column} ${order}
+    </if> 
+   LIMIT #{start},#{pageSize}
+   </select>
 	
   
   <select id="getProjectFinancingLogListCount" resultType="java.lang.Integer">
@@ -75,8 +163,22 @@
     left join investment_institutions ii on iip.investment_institutions_id = ii.id
     left join projects p on pfl.project_id = p.id
     left join
-    (select project_id,group_concat(segmentation_name) segmentation_name from project_segmentation group by project_id) ps
-    on p.id = ps.project_id
+    <choose>
+    	<when test="segmentationName !=null and segmentationName.size() &gt; 0">
+    		( select project_id,group_concat(segmentation_name) segmentation_name from ( select * from project_segmentation where segmentation_name in 
+    		<foreach collection="segmentationName" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+    		 ) temp 
+    		group by temp.project_id ) ps
+    		on p.id = ps.project_id
+    	</when>
+    	<otherwise>
+    		(select project_id,group_concat(segmentation_name) segmentation_name from project_segmentation group by project_id) ps
+    		on p.id = ps.project_id
+    	</otherwise>
+    </choose>
+    <!-- 取得提交人姓名 -->
+    left join user_token ut on pfl.submitter = ut.token
+    left join users u on ut.user_id = u.ID
     where 1=1
     <if test="searchWord != null and searchWord !=''">
       and
@@ -99,7 +201,6 @@
      AND (pfl.create_time &gt;= #{beginTime} 
      or pfl.update_time &gt;= #{beginTime}
      )
-     
     </if>
     
     <if test="endTime !=null">
@@ -108,80 +209,34 @@
      )
     </if>
     
-    <if test="stage != null and stage.size &gt; 0">
+    <if test="stage != null and stage.size() &gt; 0">
       and pfl.stage in 
-      <foreach collection="stage" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
+      <foreach close=")" collection="stage" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="currency != null and currency.size &gt; 0">
+    <if test="currency != null and currency.size() &gt; 0">
       and pfl.currency in 
-      <foreach collection="currency" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
+      <foreach close=")" collection="currency" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="dataSource != null and dataSource.size &gt; 0">
+    <if test="approvalStatus != null and approvalStatus.size() &gt; 0">
+      and pfl.approval_status in 
+      <foreach close=")" collection="approvalStatus" index="index" item="item" open="(" separator=",">#{item}</foreach>
+    </if>
+    <if test="dataSource != null and dataSource.size() &gt; 0">
       and pfl.data_soruce_type_id in  
-      <foreach collection="dataSource" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
+      <foreach close=")" collection="dataSource" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
   </select>
   
-  <select id="getProjectFinancingLogList" resultMap="ProjectFinancingLogOutputDtoMap">
-    SELECT pfl.ID,pfl.serial_number,mdst.type_name,ii.id as investment_institution_id,ii.short_name as institution_name,
-    p.id as project_id,p.short_name as project_name,ps.segmentation_name,pfl.stage,pfl.amount,pfl.currency,
-    pfl.share_divest,pfl.valuation,pfl.total_amount,pfl.pr_amount,pfl.financing_time,pfl.Investment_institutions_list,
-    pfl.proportion_list,pfl.create_time,pfl.update_time
-    FROM project_financing_log pfl
-    left join meta_data_source_type mdst on pfl.data_soruce_type_id = mdst.id
-    left join investment_institutions_project iip on pfl.id = iip.project_id
-    left join investment_institutions ii on iip.investment_institutions_id = ii.id
-    left join projects p on pfl.project_id = p.id
-    left join
-    (select project_id,group_concat(segmentation_name) segmentation_name from project_segmentation group by project_id) ps
-    on p.id = ps.project_id
-    where 1=1
-    
-     <if test="searchWord != null and searchWord !=''">
-      and
-        (ii.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
-      or p.short_name like CONCAT("%",CONCAT(#{searchWord},"%"))
-      or ps.segmentation_name like CONCAT("%",CONCAT(#{searchWord},"%"))
-      or pfl.stage like CONCAT("%",CONCAT(#{searchWord},"%"))
-      or pfl.Investment_institutions_list like CONCAT("%",CONCAT(#{searchWord},"%"))
-      or pfl.proportion_list like CONCAT("%",CONCAT(#{searchWord},"%")))
-    </if>
-    <if test="beginTime !=null">
-     AND (pfl.create_time &gt;= #{beginTime} 
-     or pfl.update_time &gt;= #{beginTime}
-     )
-     
-    </if>
-    
-    <if test="endTime !=null">
-     AND (pfl.create_time &lt;= #{endTime}
-     or pfl.update_time &lt;= #{beginTime}
-     )
-    </if>
-    <if test="stage != null and stage.size &gt; 0">
-      and pfl.stage in 
-	<foreach collection="stage" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
-    </if>
-    <if test="currency != null and currency.size &gt; 0">
-      and pfl.currency in 
-      <foreach collection="currency" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
-    </if>
-    <if test="dataSource != null and dataSource.size &gt; 0">
-      and pfl.data_soruce_type_id in  
-      <foreach collection="dataSource" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
-    </if>
-    <if test="column != null and column !='' and order != null and order != ''">
-      order by pfl.${column} ${order}
-    </if> 
-   <!-- LIMIT #{start},#{pageSize} -->
-   </select>
   
-  <select id="echoProjectFinancingLogHead" resultMap="ProjectFinancingLogHeadOutputDtoMap" parameterType="Integer">  
-	SELECT * from(select pfl.id,pfl.serial_number,mdst.type_name,p.short_name,pflf.submitor_token,pflf.meta_follow_status_id,pflf.create_time
+  
+  <select id="echoProjectFinancingLogHead" parameterType="Integer" resultMap="ProjectFinancingLogHeadOutputDtoMap">  
+  <!-- pflf.submitor_token, -->
+	SELECT * from(select pfl.id,pfl.serial_number,mdst.type_name,p.short_name,pfl.submitter,pflf.meta_follow_status_id,pflf.create_time
     FROM project_financing_log pfl
     left join meta_data_source_type mdst on pfl.data_soruce_type_id = mdst.id
     left join projects p on pfl.project_id = p.ID
-	left JOIN (select * from project_financial_log_follow_status ORDER BY create_time desc) pflf on pflf.project_financial_log_id = pfl.ID GROUP BY pfl.ID) tmp
+	left join (select * from project_financial_log_follow_status ORDER BY create_time desc) pflf on pflf.project_financial_log_id = pfl.ID 
+	GROUP BY pfl.ID) tmp
  	where tmp.id=#{projectFinancingLogId}
    </select>
    
@@ -203,6 +258,6 @@
   </select>
   
   <select id="selectByProjectId" resultMap="BaseResultMap">
-    select * from project_financing_log where project_id=#{projectId};
+   select * from project_financing_log where project_id=#{projectId} and financing_time is null and approval_status =1
   </select>
 </mapper>

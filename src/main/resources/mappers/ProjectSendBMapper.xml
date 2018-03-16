@@ -19,13 +19,14 @@
     <result column="prepare_id" jdbcType="INTEGER" property="prepareId" />
     <result column="edit_status" jdbcType="INTEGER" property="editStatus" />
     <result column="appid" jdbcType="INTEGER" property="appid" />
+    <result column="establish_time" jdbcType="TIMESTAMP" property="establishTime" />
   </resultMap>
   <select id="getLastCreateProject" resultMap="BaseResultMap">
     SELECT * FROM project_send_b where user_id = #{userId} and appid = #{appid}
     order by create_time desc
     limit 0,3;
   </select>
-  <insert id="copyProjectSendB" keyProperty="id" useGeneratedKeys="true" parameterType="com.lhjl.tzzs.proxy.dto.ProjectSendSearchDto">
+  <insert id="copyProjectSendB" keyProperty="id" parameterType="com.lhjl.tzzs.proxy.dto.ProjectSendSearchDto" useGeneratedKeys="true">
     insert into project_send_b(project_logo,short_name,full_name,kernel_desc,project_investment_highlights,commet,url,city,user_id,appid,create_time,prepare_id,edit_status)
     select project_logo,short_name,full_name,kernel_desc,project_investment_highlights,commet,url,city,user_id,appid,now(),#{newprepareid},0 from project_send_b
     where prepare_id=#{prepareid}

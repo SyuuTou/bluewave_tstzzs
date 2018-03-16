@@ -63,10 +63,21 @@ public class AdminUser {
      */
     @Transient
     private String token;
+    /**
+     * 用户的真实姓名
+     */
+    @Transient
+    private String userActualName;
     
+    public String getUserActualName() {
+		return userActualName;
+	}
 
+	public void setUserActualName(String userActualName) {
+		this.userActualName = userActualName;
+	}
 
-    public String getToken() {
+	public String getToken() {
 		return token;
 	}
 
@@ -245,9 +256,8 @@ public class AdminUser {
 		return "AdminUser [id=" + id + ", userId=" + userId + ", adminType=" + adminType + ", metaAppId=" + metaAppId
 				+ ", password=" + password + ", createTime=" + createTime + ", yn=" + yn + ", phonenumber="
 				+ phonenumber + ", name=" + name + ", companyName=" + companyName + ", dutyName=" + dutyName
-				+ ", token=" + token + "]";
+				+ ", token=" + token + ", userActualName=" + userActualName + "]";
 	}
-    
-	
+
     
 }

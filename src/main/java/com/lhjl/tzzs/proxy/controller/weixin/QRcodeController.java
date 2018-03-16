@@ -67,12 +67,12 @@ public class QRcodeController extends GenericController {
     }
 
     @GetMapping("qrcode/generate")
-    public HttpEntity<byte[]> generateQrcode(String path, Integer width, HttpServletResponse response) throws IOException {
+    public HttpEntity<byte[]> generateQrcode(String path, String id, Integer width , String token, HttpServletResponse response) throws IOException {
 
         CommonDto<String> result = null;
         InputStream in = null;
         try {
-            in = commonQRCodeService.createWXaQRCode(path,width);
+            in = commonQRCodeService.createWXaQRCode(path+"?id="+id+"&token="+token,width);
         } catch (Exception e) {
             this.logger.error(e.getMessage(),e.fillInStackTrace());
         }

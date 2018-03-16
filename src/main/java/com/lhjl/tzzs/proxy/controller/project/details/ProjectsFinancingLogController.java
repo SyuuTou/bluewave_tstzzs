@@ -72,7 +72,8 @@ public class ProjectsFinancingLogController extends GenericController{
     /**
      * 移除项目的融资历史单阶段对应的投资机构信息
      * @param appid
-     * @param id  investment_institutions_project表中的主键id
+     * @param projectId  融资历史表中的主键id
+     * @param investmentInstitutionsId  投资机构id
      * @return
      */
     @DeleteMapping("/v{appid}/removesingleinvest")  
@@ -177,7 +178,7 @@ public class ProjectsFinancingLogController extends GenericController{
      * @return
      */
     @GetMapping("/v{appid}/list/financingstatus")
-    public CommonDto<List<String>> getFinancingStatu(@PathVariable("appid") Integer appid){
+    public CommonDto<List<String>> getFinancingStatus(@PathVariable("appid") Integer appid){
     	CommonDto<List<String>> result =new CommonDto<>();
     	try {
     		result=projectsService.getFinancingStatus(appid);

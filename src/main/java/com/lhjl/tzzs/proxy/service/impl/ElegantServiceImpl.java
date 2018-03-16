@@ -5,8 +5,12 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ElegantServiceDto.*;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
-import com.lhjl.tzzs.proxy.service.ElegantServiceService;
-import com.lhjl.tzzs.proxy.service.UserInfoService;
+import com.lhjl.tzzs.proxy.service.*;
+import com.lhjl.tzzs.proxy.service.angeltoken.RedEnvelopeService;
+import com.lhjl.tzzs.proxy.service.bluewave.BlueUserInfoService;
+import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -47,6 +52,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
     @Autowired 
     private ElegantServiceDescriptionDetailMapper elegantServiceDescriptionDetailMapper;
+
 
     @Autowired
     private ElegantServiceIdentityTypeMapper elegantServiceIdentityTypeMapper;
@@ -85,8 +91,31 @@ public class ElegantServiceImpl implements ElegantServiceService{
     @Autowired
     private ElegantServiceParticipateFeedbackTextMapper elegantServiceParticipateFeedbackTextMapper;
 
+    @Resource
+    private SendTemplateService sendTemplateService;
+
+    @Resource
+    private UserLoginService userLoginService;
+
+    @Autowired
+    private UsersMapper usersMapper;
+
+    @Autowired
+    private UsersWeixinMapper usersWeixinMapper;
+
+    @Resource
+    private FormIdService formIdService;
+
+    @Resource
+    private RedEnvelopeService redEnvelopeService;
+    @Autowired
+    private UserTokenMapper userTokenMapper;
+    @Autowired
+    private ElegantServiceLeadInvestorMapper elegantServiceLeadInvestorMapper;
+
     /**
      * 获取精选活动列表的接口
+     * @param token 查询我的发布时，传递的Token
      * @return
      */
     @Override
@@ -107,43 +136,45 @@ public class ElegantServiceImpl implements ElegantServiceService{
         if (body.getPageSize() == null){
             body.setPageSize(pageSizeDefault);
         }
-
-
-        CommonDto<Map<String, Object>> userInfo = userInfoService.getUserInfo(token);
-        if (null != userInfo.getData().get("approveId")) {
-            Integer[] approveIds = (Integer[]) userInfo.getData().get("approveId");
-            body.setApproveType(Arrays.asList(approveIds));
-        }
-        if (null != userInfo.getData().get("levelId")){
-            body.setMemberType((Integer)userInfo.getData().get("levelId"));
-        }
-        if (null != userInfo.getData().get("isLeadInvestor")){
-            body.setIsLeadInvestor((Integer)userInfo.getData().get("isLeadInvestor"));
-        }
-
-
         //转数组
         Integer[] identityType = {};
-        if (null != body.getIdentityType() && body.getIdentityType().size()>0){
-            Integer[] identityTypeA  = new Integer[body.getIdentityType().size()];
-            for (int i = 0;i<body.getIdentityType().size();i++){
-                identityTypeA[i] = body.getIdentityType().get(i);
+        Integer[] serviceType = {};
+        if (body.getIsReward()!=null && body.getIsReward() == 0) {
+
+            CommonDto<Map<String, Object>> userInfo = userInfoService.getUserInfo(body.getToken());
+            if (null != userInfo.getData().get("approveId")) {
+                Integer[] approveIds = (Integer[]) userInfo.getData().get("approveId");
+                body.setApproveType(Arrays.asList(approveIds));
             }
-            identityType = identityTypeA;
+            if (null != userInfo.getData().get("levelId")) {
+                body.setMemberType((Integer) userInfo.getData().get("levelId"));
+            }
+            if (null != userInfo.getData().get("isLeadInvestor")) {
+                body.setIsLeadInvestor((Integer) userInfo.getData().get("isLeadInvestor"));
+            }
+
         }
 
-        Integer[] serviceType = {};
-        if (null != body.getServiceType() && body.getServiceType().size()>0){
-            Integer[] serviceTypeA = new Integer[body.getServiceType().size()];
-            for (int i=0;i<body.getServiceType().size();i++){
-                serviceTypeA[i] = body.getServiceType().get(i);
+            if (null != body.getIdentityType() && body.getIdentityType().size() > 0) {
+                Integer[] identityTypeA = new Integer[body.getIdentityType().size()];
+                for (int i = 0; i < body.getIdentityType().size(); i++) {
+                    identityTypeA[i] = body.getIdentityType().get(i);
+                }
+                identityType = identityTypeA;
             }
-            serviceType = serviceTypeA;
-        }
+
+
+            if (null != body.getServiceType() && body.getServiceType().size() > 0) {
+                Integer[] serviceTypeA = new Integer[body.getServiceType().size()];
+                for (int i = 0; i < body.getServiceType().size(); i++) {
+                    serviceTypeA[i] = body.getServiceType().get(i);
+                }
+                serviceType = serviceTypeA;
+            }
 
         Integer startPage = (body.getPageNum()-1)*body.getPageSize();
-        List<Map<String,Object>> elegantServiceList = elegantServiceMapper.findElegantServiceList(body.getRecommendYn(),
-                body.getCreateTimeOrder(),sortOrder,appid,identityType,serviceType,body.getSearchWord(),body.getApproveType(),body.getIsLeadInvestor(),body.getIsReward(),body.getMemberType(),startPage,body.getPageSize());
+        List<Map<String,Object>> elegantServiceList = elegantServiceMapper.findElegantServiceList(token,body.getRecommendYn(),
+                body.getCreateTimeOrder(),sortOrder,appid,identityType,serviceType,body.getSearchWord(),body.getApproveType(),body.getIsLeadInvestor(),body.getIsReward(),body.getMemberType(),startPage,body.getPageSize(), DateTime.now().toDate());
         if (elegantServiceList.size() > 0){
             for (Map<String,Object> m:elegantServiceList){
 
@@ -151,15 +182,15 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 m.putIfAbsent("background_picture","http://img.idatavc.com/static/img/serverwu.png");
 
                 //判断是否在时间范围
-                if (m.get("begin_time") != null && m.get("end_time") != null){
-                    Date beginTime = (Date)m.get("begin_time");
-                    Date endTime = (Date)m.get("end_time");
-                    if (beginTime.getTime()<now.getTime()  && now.getTime()<endTime.getTime()){
-                        list.add(m);
-                    }
-                }else {
+//                if (m.get("begin_time") != null && m.get("end_time") != null){
+//                    Date beginTime = (Date)m.get("begin_time");
+//                    Date endTime = (Date)m.get("end_time");
+//                    if (beginTime.getTime()<now.getTime()  && now.getTime()<endTime.getTime()){
+//                        list.add(m);
+//                    }
+//                }else {
                     list.add(m);
-                }
+//                }
             }
         }
 
@@ -224,13 +255,13 @@ public class ElegantServiceImpl implements ElegantServiceService{
             return result;
         }
 
-        if (body.getUnit() == null || "".equals(body.getUnit()) || "undefined".equals(body.getUnit())){
-            result.setStatus(502);
-            result.setMessage("请输入限制单位");
-            result.setData(null);
-
-            return result;
-        }
+//        if (body.getUnit() == null || "".equals(body.getUnit()) || "undefined".equals(body.getUnit())){
+//            result.setStatus(502);
+//            result.setMessage("请输入限制单位");
+//            result.setData(null);
+//
+//            return result;
+//        }
 
         if (body.getOriginalPrice() == null || "".equals(body.getOriginalPrice()) || "undefined".equals(body.getOriginalPrice()) ){
             result.setStatus(502);
@@ -256,13 +287,13 @@ public class ElegantServiceImpl implements ElegantServiceService{
             return result;
         }
 
-        if (body.getBackgroundPicture() == null|| "".equals(body.getBackgroundPicture()) || "undefined".equals(body.getBackgroundPicture())){
-            result.setStatus(502);
-            result.setMessage("请选择封面");
-            result.setData(null);
-
-            return result;
-        }
+//        if (body.getBackgroundPicture() == null|| "".equals(body.getBackgroundPicture()) || "undefined".equals(body.getBackgroundPicture())){
+//            result.setStatus(502);
+//            result.setMessage("请选择封面");
+//            result.setData(null);
+//
+//            return result;
+//        }
 
         if (body.getDescription() == null|| "".equals(body.getDescription()) || "undefined".equals(body.getDescription())){
             result.setStatus(502);
@@ -296,21 +327,21 @@ public class ElegantServiceImpl implements ElegantServiceService{
             return result;
         }
 
-        if (body.getIdentityType() == null|| "".equals(body.getIdentityType()) || "undefined".equals(body.getIdentityType())){
-            result.setStatus(502);
-            result.setMessage("请选择身份类型");
-            result.setData(null);
+//        if (body.getIdentityType() == null|| "".equals(body.getIdentityType()) || "undefined".equals(body.getIdentityType())){
+//            result.setStatus(502);
+//            result.setMessage("请选择身份类型");
+//            result.setData(null);
+//
+//            return result;
+//        }
 
-            return result;
-        }
-
-        if (body.getServiceType() == null|| "".equals(body.getServiceType()) || "undefined".equals(body.getServiceType())){
-            result.setStatus(502);
-            result.setMessage("请选择身份类型");
-            result.setData(null);
-
-            return result;
-        }
+//        if (body.getServiceType() == null|| "".equals(body.getServiceType()) || "undefined".equals(body.getServiceType())){
+//            result.setStatus(502);
+//            result.setMessage("请选择身份类型");
+//            result.setData(null);
+//
+//            return result;
+//        }
 
         if (body.getWebSwitch() == null){
             result.setStatus(502);
@@ -359,18 +390,122 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
             return result;
         }
+
+//        if (body.getIsReward() == 1){
+//            body.setIdentityType("1,2,3,4,5,6");
+//            List<Integer> approveType = new ArrayList<>();
+//            approveType.add(0);
+//            approveType.add(1);
+//            approveType.add(2);
+//            body.setApproveTypes(approveType);
+//            List<Integer> memberType = new ArrayList<>();
+//            memberType.add(1);
+//            memberType.add(2);
+//            memberType.add(3);
+//            memberType.add(4);
+//            body.setMemberTypes(memberType);
+//        }
+
+        if (body.getServiceType().indexOf(",")<0) {
+            Integer serviceType = Integer.valueOf(body.getServiceType());
+            switch (serviceType) {
+                case 17:
+                case 12:
+                    if (StringUtils.isEmpty(body.getIdentityType())){
+                        body.setIdentityType("1,2,3,4,5,6");
+                    }
+                    if (body.getApproveTypes()== null || body.getApproveTypes().size() == 0 ){
+                        List<Integer> approveType = new ArrayList<>();
+                        approveType.add(0);
+                        approveType.add(1);
+                        approveType.add(2);
+                        body.setApproveTypes(approveType);
+                    }
+                    if (body.getMemberTypes()==null || body.getMemberTypes().size() == 0){
+                        List<Integer> memberType = new ArrayList<>();
+                        memberType.add(1);
+                        memberType.add(2);
+                        memberType.add(3);
+                        memberType.add(4);
+                        body.setMemberTypes(memberType);
+                    }
+                    break;
+                case 13:
+                    case 16:
+                        case 18:
+                    if (StringUtils.isEmpty(body.getIdentityType())){
+                        body.setIdentityType("1,3,4,5,6");
+                    }
+                    if (body.getApproveTypes()== null || body.getApproveTypes().size() == 0 ){
+                        List<Integer> approveType = new ArrayList<>();
+                        approveType.add(0);
+                        approveType.add(1);
+                        body.setApproveTypes(approveType);
+                    }
+                            if (body.getMemberTypes()==null || body.getMemberTypes().size() == 0){
+                                List<Integer> memberType = new ArrayList<>();
+                                memberType.add(1);
+                                memberType.add(2);
+                                memberType.add(3);
+                                memberType.add(4);
+                                body.setMemberTypes(memberType);
+                            }
+                    break;
+                case 15:
+                case 19:
+                case 21:
+                    if (StringUtils.isEmpty(body.getIdentityType())){
+                        body.setIdentityType("1,3,4,5,6");
+                    }
+                    if (body.getApproveTypes()== null || body.getApproveTypes().size() == 0 ){
+                        List<Integer> approveType = new ArrayList<>();
+                        approveType.add(0);
+                        approveType.add(1);
+                        body.setApproveTypes(approveType);
+                    }
+                    if (body.getMemberTypes()==null || body.getMemberTypes().size() == 0){
+                        List<Integer> memberType = new ArrayList<>();
+                        memberType.add(1);
+                        memberType.add(2);
+                        memberType.add(3);
+                        memberType.add(4);
+                        body.setMemberTypes(memberType);
+                    }
+                    if (body.getIsLeadInvestor() == null){
+                        body.setIsLeadInvestor(1);
+                    }
+                    break;
+            }
+        }
         //判断是更新还是新建
-        if (body.getElegantServiceId() == null || "".equals(body.getElegantServiceId())){
-            //新建
-            result = createElegantService(body,appid);
-        }else {
-            //更新
-            result = updateElegantService(body,appid); 
+        try {
+            if (body.getElegantServiceId() == null || "".equals(body.getElegantServiceId())){
+                //新建
+                result = createElegantService(body,appid);
+
+                // 扣除令牌
+                UserToken userToken = new UserToken();
+                userToken.setToken(body.getCreator());
+                userToken = userTokenMapper.selectOne(userToken);
+                BigDecimal amount = new BigDecimal(body.getOriginalPrice()).multiply(new BigDecimal(body.getQuantity())).setScale(2);
+                if (body.getPriceUnit() == 1){
+                    // 扣除令牌
+                    redEnvelopeService.addUserIntegralsLog(appid,"LOCK",userToken.getUserId(),amount,965,false,new BigDecimal(-1),1);
+                }else if (body.getPriceUnit() == 0){
+                    // 锁定人民币
+                    redEnvelopeService.addUserIntegralsLog(appid,"LOCK",userToken.getUserId(),amount,965,false,new BigDecimal(-1),0);
+                }
+
+            }else {
+                //更新
+                result = updateElegantService(body,appid);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        result.setData(null);
-        result.setMessage("success");
-        result.setStatus(200);
+//        result.setData(null);
+
 
         return result;
     }
@@ -397,7 +532,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
      * 获取基础服务类型的方法
      * @return
      */
-    @Cacheable(value = "getMetaServiceType", keyGenerator = "wiselyKeyGenerator")
+   // @Cacheable(value = "getMetaServiceType", keyGenerator = "wiselyKeyGenerator")
     @Override
     public CommonDto<List<MetaServiceType>> getMetaServiceType() {
         CommonDto<List<MetaServiceType>> result = new CommonDto<>();
@@ -623,9 +758,11 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 serviceTypeList =elegantServiceServiceTypeMapper.getServiceTypeByServiceId(esid);
 
                 String serviceType = "";
-                for (Map<String,Object> st:serviceTypeList){
-                    String jieguo = (String) st.get("service_type_name");
-                    serviceType = serviceType + jieguo + ",";
+                if (serviceTypeList.size()>0){
+                    for (Map<String,Object> st:serviceTypeList){
+                        String jieguo = (String) st.get("service_type_name");
+                        serviceType = serviceType + jieguo + ",";
+                    }
                 }
                 if (serviceType.length() > 1){
                     serviceType = serviceType.substring(0,serviceType.length()-1);
@@ -668,9 +805,41 @@ public class ElegantServiceImpl implements ElegantServiceService{
     }
 
     @Override
-    public CommonDto<ElegantService> getElegantServiceInfo(Integer appId, Integer elegantServiceId) {
+    public CommonDto<ElegantService> getElegantServiceInfo(Integer appId, Integer elegantServiceId, String token) {
 
         ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceId);
+
+
+
+            if (StringUtils.isNotEmpty(elegantService.getCreator())&&elegantService.getCreator().equals(token)){
+
+                    elegantService.setCustomButtonLabel("查看结果");
+                    elegantService.setStatus("Check_Result");
+            }else{
+                ElegantServiceParticipate queryElegantServiceParticipate = new ElegantServiceParticipate();
+                queryElegantServiceParticipate.setToken(token);
+                queryElegantServiceParticipate.setElegantServiceId(elegantServiceId);
+
+                List<ElegantServiceParticipate> elegantServiceParticipates = elegantServiceParticipateMapper.select(queryElegantServiceParticipate);
+                if (null != elegantServiceParticipates && elegantServiceParticipates.size()==1){
+
+                    if (elegantServiceParticipates.get(0).getStatus() == 2){
+                        elegantService.setCustomButtonLabel("已采纳");
+                        elegantService.setStatus("Accepted");
+                    }else if (elegantServiceParticipates.get(0).getStatus() == 3){
+                        elegantService.setCustomButtonLabel("不采纳");
+                        elegantService.setStatus("None_Accepted");
+                    }else {
+                        elegantService.setCustomButtonLabel("待审核");
+                        elegantService.setStatus("Auditing");
+                    }
+
+                }else {
+                    elegantService.setCustomButtonLabel("立即参与");
+                    elegantService.setStatus("Now_Participate");
+                }
+            }
+
 
         ElegantServiceDescription queryElegantServiceDescription = new ElegantServiceDescription();
         queryElegantServiceDescription.setElegantServiceId(elegantServiceId);
@@ -683,6 +852,10 @@ public class ElegantServiceImpl implements ElegantServiceService{
         ElegantServiceDescriptionDetail queryElegantServiceDescriptionDetail = new ElegantServiceDescriptionDetail();
         queryElegantServiceDescriptionDetail.setElegantServiceId(elegantServiceId);
         elegantService.setElegantServiceDescriptionDetail(elegantServiceDescriptionDetailMapper.selectOne(queryElegantServiceDescriptionDetail));
+
+        ElegantServiceDescriptionUrl queryElegantServiceDescriptionUrl = new ElegantServiceDescriptionUrl();
+        queryElegantServiceDescriptionUrl.setElegantServiceId(elegantServiceId);
+        elegantService.setElegantServiceDescriptionUrls(elegantServiceDescriptionUrlMapper.select(queryElegantServiceDescriptionUrl));
 
         ElegantServiceApproveType queryElegantServiceApproveType = new ElegantServiceApproveType();
         queryElegantServiceApproveType.setElegantServiceId(elegantServiceId);
@@ -702,51 +875,207 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         ElegantServiceRelevantProject elegantServiceRelevantProject = new ElegantServiceRelevantProject();
         elegantServiceRelevantProject.setElegantServiceId(elegantServiceId);
-        elegantService.setElegantServiceRelevantProject(elegantServiceRelevantProjectMapper.selectOne(elegantServiceRelevantProject));
+        elegantServiceRelevantProject = elegantServiceRelevantProjectMapper.selectOne(elegantServiceRelevantProject);
+            elegantService.setElegantServiceRelevantProject(elegantServiceRelevantProject);
+
+        ElegantServiceLeadInvestor elegantServiceLeadInvestor = new ElegantServiceLeadInvestor();
+        elegantServiceLeadInvestor.setElegantServiceId(elegantServiceId);
+        List<ElegantServiceLeadInvestor> elegantServiceLeadInvestors = elegantServiceLeadInvestorMapper.select(elegantServiceLeadInvestor);
+        if (elegantServiceLeadInvestors!=null && elegantServiceLeadInvestors.size() == 1 && elegantServiceLeadInvestors.get(0).getLeadInvestorType() == 1){
+            elegantService.setIsLeadInvestor(1);
+        }else{
+            elegantService.setIsLeadInvestor(0);
+        }
 
         return new CommonDto<>(elegantService, "success", 200);
     }
 
+    /**
+     * 保存反馈信息的接口
+     * @param body
+     * @param appId
+     * @param token
+     * @return
+     */
+    @Transactional
     @Override
     public CommonDto<String> saveOrUpdateParticipate(ElegantServiceParticipate body, Integer appId, String token) {
 
-        ElegantServiceParticipate elegantServiceParticipateRecord = new ElegantServiceParticipate();
-        elegantServiceParticipateRecord.setElegantServiceId(body.getElegantServiceId());
-        elegantServiceParticipateRecord.setToken(token);
-        elegantServiceParticipateRecord.setAppid(appId);
-        ElegantServiceParticipate elegantServiceParticipate = elegantServiceParticipateMapper.selectOne(elegantServiceParticipateRecord);
-        if (null != elegantServiceParticipate){
-            elegantServiceParticipate.setStatus(2);
+        Integer elegantServiceParticipateId = null;
+
+        if (null != body.getId()){
+            ElegantServiceParticipate elegantServiceParticipate = elegantServiceParticipateMapper.selectByPrimaryKey(body.getId());
+            elegantServiceParticipate.setStatus(body.getStatus());
             elegantServiceParticipate.setCompletionTime(DateTime.now().toDate());
+            elegantServiceParticipate.setId(body.getId());
             elegantServiceParticipateMapper.updateByPrimaryKey(elegantServiceParticipate);
+            if(null != body.getStatus() && body.getStatus() == 2) {
+                ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceParticipate.getElegantServiceId());
+                UserToken userToken = new UserToken();
+                userToken.setToken(elegantServiceParticipate.getToken());
+                userToken = userTokenMapper.selectOne(userToken);
+                redEnvelopeService.addUserIntegralsLog(appId, "REWARD_COLLECTION", userToken.getUserId(), elegantService.getOriginalPrice(), 965, false, new BigDecimal(1), elegantService.getPriceUnit());
+            }
+            elegantServiceParticipateId = body.getId();
         }else {
             body.setAppid(appId);
-            elegantServiceParticipateMapper.insert(body);
+            body.setCreateTime(DateTime.now().toDate());
+            elegantServiceParticipateMapper.insertSelective(body);
+
+            elegantServiceParticipateId = body.getId();
+        }
+
+        // 更新图片和文字
+        if(body.getStatus() !=2 && body.getStatus() != 3 ){
+            saveOrUpdateElegantServiceParticipateFeedback(elegantServiceParticipateId,body);
+            if (null == body.getFormid()){
+                return new CommonDto<>(null,"formid不能为空",502);
+            }
+        }
+        //保存formid
+        Integer userId = userLoginService.getUserIdByToken(body.getToken(),appId);
+        if (userId == -1){
+            return new CommonDto<>(null,"token失效",502);
+        }
+
+        CommonDto<String> resultS =  formIdService.saveFormid(userId,body.getFormid(),null);
+        if (resultS.getStatus() != 200){
+            return resultS;
         }
 
         return new CommonDto<>("ok","success",200);
     }
 
+    /**
+     * 查询反馈列表的接口
+     * @param appId
+     * @param elegantServiceId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @Transactional
     @Override
     public CommonDto<List<ElegantServiceParticipate>> queryParticipate(Integer appId, Integer elegantServiceId, Integer pageNo, Integer pageSize) {
 
-        ElegantServiceParticipate elegantServiceParticipateRecord = new ElegantServiceParticipate();
-        elegantServiceParticipateRecord.setAppid(appId);
-        elegantServiceParticipateRecord.setElegantServiceId(elegantServiceId);
+        if (null == elegantServiceId){
+            return new CommonDto<>(null,"服务id不能为空",502);
+        }
 
-        PageHelper.startPage(pageNo,pageSize);
-        List<ElegantServiceParticipate> elegantServiceParticipates = elegantServiceParticipateMapper.select(elegantServiceParticipateRecord);
+        if (null == pageNo){
+            pageNo = pageNumDefault;
+        }
+
+        if (null == pageSize){
+            pageSize = pageSizeDefault;
+        }
+
+        Integer startPage = (pageNo-1)*pageSize;
+        List<ElegantServiceParticipate> elegantServiceParticipates = elegantServiceParticipateMapper.getElegantServiceParticipateList(appId, elegantServiceId, startPage, pageSize);
 
         return new CommonDto<>(elegantServiceParticipates,"success", 200);
     }
 
+    /**
+     * 根据用户token获取反馈记录信息
+     * @param appId
+     * @param token
+     * @return
+     */
     @Override
-    public CommonDto<ElegantServiceParticipate> queryParticipate(Integer appId, Integer elegantServiceId, String token) {
-        ElegantServiceParticipate elegantServiceParticipateRecord = new ElegantServiceParticipate();
-        elegantServiceParticipateRecord.setAppid(appId);
-        elegantServiceParticipateRecord.setElegantServiceId(elegantServiceId);
-        elegantServiceParticipateRecord.setToken(token);
-        ElegantServiceParticipate elegantServiceParticipate = elegantServiceParticipateMapper.selectOne(elegantServiceParticipateRecord);
+    public CommonDto<ElegantServiceParticipate> getParticipateByToken(Integer appId, String token,Integer elegantServiceId) {
+        if (null == token){
+            return new CommonDto<>(null,"用户token不能为空",502);
+        }
+
+        if (null == elegantServiceId){
+            return new CommonDto<>(null,"悬赏id不能为空",502);
+        }
+
+        ElegantServiceParticipate elegantServiceParticipateForSearch = new ElegantServiceParticipate();
+        elegantServiceParticipateForSearch.setToken(token);
+        elegantServiceParticipateForSearch.setElegantServiceId(elegantServiceId);
+        elegantServiceParticipateForSearch.setAppid(appId);
+
+        List<ElegantServiceParticipate> elegantServiceParticipates = elegantServiceParticipateMapper.select(elegantServiceParticipateForSearch);
+        if (elegantServiceParticipates.size() > 0){
+          return  queryParticipate(appId,elegantServiceParticipates.get(0).getId(),token);
+        }
+
+        ElegantServiceParticipate elegantServiceParticipate = new ElegantServiceParticipate();
+
+
+        return new CommonDto<>(elegantServiceParticipate,"用户还未有任何反馈",200) ;
+    }
+
+    /**
+     * 查询单条反馈的接口
+     * @param appId
+     * @param elegantServiceParticipateId
+     * @param token
+     * @return
+     */
+    @Override
+    public CommonDto<ElegantServiceParticipate> queryParticipate(Integer appId, Integer elegantServiceParticipateId, String token) {
+
+        if (null == elegantServiceParticipateId){
+            return new CommonDto<>(null,"精选服务反馈id不能为空",502);
+        }
+
+        ElegantServiceParticipate elegantServiceParticipate = elegantServiceParticipateMapper.getElegantServiceParticipateById(appId, elegantServiceParticipateId);
+
+        if (null == elegantServiceParticipate){
+            return new CommonDto<>(null,"没有找到当前反馈id对应的反馈内容",502);
+        }
+
+        //获取图文信息
+        ElegantServiceParticipateFeedbackImages elegantServiceParticipateFeedbackImagesForSearch = new ElegantServiceParticipateFeedbackImages();
+        elegantServiceParticipateFeedbackImagesForSearch.setElegantServiceParticipateId(elegantServiceParticipateId);
+
+        List<ElegantServiceParticipateFeedbackImages> elegantServiceParticipateFeedbackImages = elegantServiceParticipateFeedbackImagesMapper.select(elegantServiceParticipateFeedbackImagesForSearch);
+
+        ElegantServiceParticipateFeedbackText elegantServiceParticipateFeedbackTextForSearch = new ElegantServiceParticipateFeedbackText();
+        elegantServiceParticipateFeedbackTextForSearch.setElegantServiceParticipateId(elegantServiceParticipateId);
+
+        List<ElegantServiceParticipateFeedbackText> elegantServiceParticipateFeedbackText = elegantServiceParticipateFeedbackTextMapper.select(elegantServiceParticipateFeedbackTextForSearch);
+
+        elegantServiceParticipate.setFeedbackImages(elegantServiceParticipateFeedbackImages);
+        elegantServiceParticipate.setFeedbackTexts(elegantServiceParticipateFeedbackText);
+
+        //获取项目信息
+        ElegantServiceRelevantProject elegantServiceRelevantProjectForSearch = new ElegantServiceRelevantProject();
+        elegantServiceRelevantProjectForSearch.setElegantServiceId(elegantServiceParticipate.getElegantServiceId());
+
+        List<ElegantServiceRelevantProject> elegantServiceRelevantProject = elegantServiceRelevantProjectMapper.select(elegantServiceRelevantProjectForSearch);
+        if (elegantServiceRelevantProject.size()>0){
+            elegantServiceParticipate.setProjectName(elegantServiceRelevantProject.get(0).getProjectShortName());
+            elegantServiceParticipate.setProjectId(elegantServiceRelevantProject.get(0).getProjectId());
+        }else {
+            elegantServiceParticipate.setProjectName("");
+        }
+
+        //获取悬赏信息
+        ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceParticipate.getElegantServiceId());
+        if (null != elegantService){
+            elegantServiceParticipate.setElegantServiceName(elegantService.getServiceName());
+        }else {
+            elegantServiceParticipate.setElegantServiceName("");
+        }
+
+        Integer userId = userLoginService.getUserIdByToken(elegantServiceParticipate.getToken(),appId);
+        if (userId == -1){
+            return new CommonDto<>(null,"当前记录的用户tokne无效",502);
+        }
+
+        CommonDto<UserFormid> resultS = formIdService.findUserFormid(userId,null);
+        if (resultS.getStatus() != 200){
+            CommonDto<ElegantServiceParticipate> result = new CommonDto<>();
+            result.setStatus(resultS.getStatus());
+            result.setMessage(resultS.getMessage());
+            return result;
+        }
+
+        elegantServiceParticipate.setFormid(resultS.getData().getFormid());
 
         return new CommonDto<>(elegantServiceParticipate,"success", 200);
     }
@@ -770,6 +1099,33 @@ public class ElegantServiceImpl implements ElegantServiceService{
         elegantServiceParticipateFeedbackTextMapper.insert(body.getElegantServiceParticipateFeedbackText());
 
         return null;
+    }
+
+    @Transactional
+    @Override
+    public CommonDto<String> updateParticipateStatus(ElegantServiceParticipate body, Integer appId) {
+
+        if (null == body.getId() || null == body.getStatus()){
+            return new CommonDto<>(null,"记录id和状态都不能为空",502);
+        }
+
+        body.setCompletionTime(DateTime.now().toDate());
+
+        elegantServiceParticipateMapper.updateByPrimaryKeySelective(body);
+
+        // 发模板消息
+        CommonDto<String> result = elegantServiceParticipateSendTamplate(body, appId);
+        if (result.getStatus() != 200){
+
+            log.error(result.getMessage());
+            log.info(result.getMessage());
+
+           result.setStatus(200);
+
+           return result;
+        }
+
+        return new CommonDto<>(null,"success",200);
     }
 
 
@@ -800,187 +1156,214 @@ public class ElegantServiceImpl implements ElegantServiceService{
         CommonDto<String> result = new CommonDto<>();
         Date now = new Date();
 
-        //价格转化
-        BigDecimal originalPrice = new BigDecimal(body.getOriginalPrice());
-        originalPrice = originalPrice.setScale(2,BigDecimal.ROUND_HALF_UP);
-
-        BigDecimal vipPrice = new BigDecimal(body.getVipPrice());
-        vipPrice = vipPrice.setScale(2,BigDecimal.ROUND_HALF_UP);
-        //上下架时间转化
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date beginTime = null;
-        Date endTime =null;
         try {
-            beginTime = sdf.parse(body.getBeginTime());
-            endTime = sdf.parse(body.getEndTime());
+            //价格转化
+            BigDecimal originalPrice = new BigDecimal(body.getOriginalPrice());
+            originalPrice = originalPrice.setScale(2,BigDecimal.ROUND_HALF_UP);
 
-        }catch (java.lang.Exception e){
-            log.error("时间解析出错");
-            log.error(e.getMessage(),e.fillInStackTrace());
-            result.setData(null);
-            result.setMessage("时间解析出错，请检查输入时间");
-            result.setStatus(502);
+            BigDecimal vipPrice = new BigDecimal(body.getVipPrice());
+            vipPrice = vipPrice.setScale(2,BigDecimal.ROUND_HALF_UP);
+            //上下架时间转化
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date beginTime = null;
+            Date endTime =null;
+            try {
+                beginTime = sdf.parse(body.getBeginTime()+" 00:00:00");
+                endTime = sdf.parse(body.getEndTime()+" 23:59:59");
 
-            return result;
-        }
-        //生成场景码
-        String sceneKey = getRandomString(8);
-        //保险起见先看看有没重复的scenceKey
-        Example sceneExample = new Example(MetaScene.class);
-        sceneExample.and().andEqualTo("key",sceneKey);
+            }catch (Exception e){
+                log.error("时间解析出错");
+                log.error(e.getMessage(),e.fillInStackTrace());
+                result.setData(null);
+                result.setMessage("时间解析出错，请检查输入时间");
+                result.setStatus(502);
 
-        List<MetaScene> metaSceneList = metaSceneMapper.selectByExample(sceneExample);
-        if (metaSceneList.size() > 0){
-            sceneKey = getRandomString(8);
-        }
-        //先创建场景信息
-        MetaScene metaScene = new MetaScene();
-        metaScene.setCreateTime(now);
-        metaScene.setDesc(body.getServiceName());
-        metaScene.setKey(sceneKey);
-        metaScene.setYn(0);
-
-        metaSceneMapper.insertSelective(metaScene);
-
-         float one = 1;
-        //创建场景获取积分场景表信息
-          //获取元数据表会员id
-          List<MetaUserLevel> metaUserLevelList = metaUserLevelMapper.selectAll();
-        if (metaUserLevelList.size() > 0){
-            for (MetaUserLevel mul: metaUserLevelList){
-                MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
-                metaObtainIntegral.setCreateTime(now);
-                metaObtainIntegral.setSceneKey(sceneKey);
-                metaObtainIntegral.setUserLevel(mul.getId());
-                metaObtainIntegral.setIntegral(originalPrice);
-                metaObtainIntegral.setPeriod(365);
-                metaObtainIntegral.setYn(0);
-                metaObtainIntegral.setRatio(one);
-
-                metaObtainIntegralMapper.insertSelective(metaObtainIntegral);
+                return result;
             }
+            //生成场景码
+            String sceneKey = getRandomString(8);
+            //保险起见先看看有没重复的scenceKey
+            Example sceneExample = new Example(MetaScene.class);
+            sceneExample.and().andEqualTo("key",sceneKey);
 
-        }else {
-            result.setMessage("用户等级元数据表被谁删了？现在没数据了");
-            result.setStatus(502);
-            result.setData(null);
-
-            return result;
-        }
-        //创建精选活动表
-        ElegantService elegantService = new ElegantService();
-        elegantService.setServiceName(body.getServiceName());
-        elegantService.setOriginalPrice(originalPrice);
-        elegantService.setVipPrice(vipPrice);
-        elegantService.setPreVipPriceDescript("VIP会员");//默认前缀
-        elegantService.setPriceUnit(0);//默认人民币
-        elegantService.setUnit(body.getUnit());
-        elegantService.setBackgroundPicture(body.getBackgroundPicture());
-        elegantService.setBeginTime(beginTime);
-        elegantService.setEndTime(endTime);
-        elegantService.setOnOff(body.getOnOff());
-        elegantService.setRecommendYn(body.getRecommendYn());
-        elegantService.setSort(body.getSort());
-        elegantService.setCreateTime(now);
-        elegantService.setScenceKey(sceneKey);
-        elegantService.setYn(1);//默认是未删除的，有效的
-        elegantService.setAppid(appid);
-        elegantService.setWebSwitch(body.getWebSwitch());
-        elegantService.setIsReward(body.getIsReward());
-        elegantService.setIsLeadInvestor(body.getIsLeadInvestor());
-        elegantService.setCommissionPublish(body.getCommissionPublish());
-        elegantService.setCommissionPublishFixed(body.getCommissionPublishFixed());
-        elegantService.setCommissionReceiver(body.getCommissionReceiver());
-        elegantService.setCommissionReceiverFixed(body.getCommissionReceiverFixed());
-        elegantService.setCustomButtonLabel(body.getCustomButtonLabel());
-        elegantService.setEntrepreneurLandingPage(body.getEntrepreneurLandingPage());
-        elegantService.setInvestorLandingPage(body.getInvestorLandingPage());
-        elegantService.setOrthorLandingPage(body.getOrthorLandingPage());
-        elegantService.setQuantity(body.getQuantity());
-        elegantServiceMapper.insertSelective(elegantService);
-
-        //拿到服务表的id
-        int elegantServiceId = elegantService.getId();
-
-        //创建合作方表
-        ElegantServiceCooperation elegantServiceCooperation = new ElegantServiceCooperation();
-        elegantServiceCooperation.setElegantServiceId(elegantServiceId);
-        elegantServiceCooperation.setCooperationName(body.getCooperationName());
-        elegantServiceCooperation.setCreateTime(now);
-        elegantServiceCooperation.setYn(1);//默认没被删除
-
-        elegantServiceCooperationMapper.insertSelective(elegantServiceCooperation);
-        //创建描述表
-        ElegantServiceDescription elegantServiceDescription = new ElegantServiceDescription();
-        elegantServiceDescription.setElegantServiceId(elegantServiceId);
-        elegantServiceDescription.setCreateTime(now);
-        elegantServiceDescription.setDescription(body.getDescription());
-        elegantServiceDescription.setYn(1);//默认有效
-
-        elegantServiceDescriptionMapper.insertSelective(elegantServiceDescription);
-        //创建详细描述表
-        if (null != body.getDetailDescription()) {
-            ElegantServiceDescriptionDetail elegantServiceDescriptionDetail = new ElegantServiceDescriptionDetail();
-            elegantServiceDescriptionDetail.setCreateTime(now);
-            elegantServiceDescriptionDetail.setElegantServiceId(elegantServiceId);
-            if (body.getWebSwitch() == 1) {
-                elegantServiceDescriptionDetail.setDescriptionType(0);
-            } else {
-                elegantServiceDescriptionDetail.setDescriptionType(1);//默认展示卡片详情
+            List<MetaScene> metaSceneList = metaSceneMapper.selectByExample(sceneExample);
+            if (metaSceneList.size() > 0){
+                sceneKey = getRandomString(8);
             }
-            elegantServiceDescriptionDetail.setDetailDescription(body.getDetailDescription());
-            elegantServiceDescriptionDetail.setYn(1);//默认有效
+            //先创建场景信息
+            MetaScene metaScene = new MetaScene();
+            metaScene.setCreateTime(now);
+            metaScene.setDesc(body.getServiceName());
+            metaScene.setKey(sceneKey);
+            metaScene.setYn(0);
 
-            elegantServiceDescriptionDetailMapper.insertSelective(elegantServiceDescriptionDetail);
-        }
-        //创建服务-身份类型关系表
-          //解析输入参数
-        String[] identityType = body.getIdentityType().split(",");
-          //找到元数据表的id
-        for (String s:identityType){
-            Integer identityTypeId = Integer.parseInt(s);
+            metaSceneMapper.insertSelective(metaScene);
 
-            ElegantServiceIdentityType elegantServiceIdentityType = new ElegantServiceIdentityType();
-            elegantServiceIdentityType.setElegantServiceId(elegantServiceId);
-            elegantServiceIdentityType.setMetaIdentityTypeId(identityTypeId);
-            elegantServiceIdentityType.setCreateTime(now);
+            float one = 1;
+            //创建场景获取积分场景表信息
+            //获取元数据表会员id
+            List<MetaUserLevel> metaUserLevelList = metaUserLevelMapper.selectAll();
+            if (metaUserLevelList.size() > 0){
+                for (MetaUserLevel mul: metaUserLevelList){
+                    MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
+                    metaObtainIntegral.setCreateTime(now);
+                    metaObtainIntegral.setSceneKey(sceneKey);
+                    metaObtainIntegral.setUserLevel(mul.getId());
+                    metaObtainIntegral.setIntegral(originalPrice);
+                    metaObtainIntegral.setPeriod(365);
+                    metaObtainIntegral.setYn(0);
+                    metaObtainIntegral.setRatio(one);
 
-            elegantServiceIdentityTypeMapper.insertSelective(elegantServiceIdentityType);
-        }
+                    metaObtainIntegralMapper.insertSelective(metaObtainIntegral);
+                }
 
-        //创建服务-服务类型关系表
-          //解析服务类型
-        String[] serviceType = body.getServiceType().split(",");
-        for (String s:serviceType){
-            Integer serviceTypeId = Integer.parseInt(s);
-            ElegantServiceServiceType elegantServiceServiceType = new ElegantServiceServiceType();
-            elegantServiceServiceType.setElegantServiceId(elegantServiceId);
-            elegantServiceServiceType.setMetaServiceTypeId(serviceTypeId);
+            }else {
+                result.setMessage("用户等级元数据表被谁删了？现在没数据了");
+                result.setStatus(502);
+                result.setData(null);
 
-            elegantServiceServiceTypeMapper.insertSelective(elegantServiceServiceType);
-        }
-        elegantServiceApproveMemberHandler(body, elegantServiceId);
-
-        if (null != body.getDetailUrls() && body.getDetailUrls().size() > 0) {
-            ElegantServiceDescriptionUrl elegantServiceDescriptionUrl = null;
-            StringBuffer stringBuffer = new StringBuffer("");
-            for (String url : body.getDetailUrls()) {
-                elegantServiceDescriptionUrl = new ElegantServiceDescriptionUrl();
-                elegantServiceDescriptionUrl.setUrl(url);
-                elegantServiceDescriptionUrl.setElegantServiceId(elegantServiceId);
-                stringBuffer.append("<p ><br></p > <p >< img src=\"").append(url).append("\"/></p >");
-                elegantServiceDescriptionUrlMapper.insert(elegantServiceDescriptionUrl);
+                return result;
             }
-            if (null == body.getDetailDescription() ) {
+            //创建精选活动表
+            ElegantService elegantService = new ElegantService();
+            elegantService.setServiceName(body.getServiceName());
+            elegantService.setOriginalPrice(originalPrice);
+            elegantService.setVipPrice(vipPrice);
+            elegantService.setPreVipPriceDescript("VIP会员"); //默认前缀
+            elegantService.setPriceUnit(body.getPriceUnit()); //默认人民币
+            elegantService.setUnit(body.getUnit());
+            elegantService.setBackgroundPicture(body.getBackgroundPicture());
+            elegantService.setBeginTime(beginTime);
+            elegantService.setEndTime(endTime);
+            elegantService.setOnOff(body.getOnOff());
+            elegantService.setRecommendYn(body.getRecommendYn());
+            elegantService.setSort(body.getSort());
+            elegantService.setCreateTime(now);
+            elegantService.setScenceKey(sceneKey);
+            elegantService.setYn(1);//默认是未删除的，有效的
+            elegantService.setAppid(appid);
+            elegantService.setWebSwitch(body.getWebSwitch());
+            elegantService.setIsReward(body.getIsReward());
+            elegantService.setIsLeadInvestor(body.getIsLeadInvestor());
+            elegantService.setCommissionPublish(body.getCommissionPublish());
+            elegantService.setCommissionPublishFixed(body.getCommissionPublishFixed());
+            elegantService.setCommissionReceiver(body.getCommissionReceiver());
+            elegantService.setCommissionReceiverFixed(body.getCommissionReceiverFixed());
+            elegantService.setCustomButtonLabel(body.getCustomButtonLabel());
+            elegantService.setEntrepreneurLandingPage(body.getEntrepreneurLandingPage());
+            elegantService.setInvestorLandingPage(body.getInvestorLandingPage());
+            elegantService.setOrthorLandingPage(body.getOrthorLandingPage());
+            elegantService.setQuantity(body.getQuantity());
+            elegantService.setCreator(body.getCreator());
+            elegantServiceMapper.insertSelective(elegantService);
+
+            result.setData(String.valueOf(elegantService.getId()));
+            result.setMessage("success");
+            result.setStatus(200);
+            //拿到服务表的id
+            int elegantServiceId = elegantService.getId();
+
+            //创建合作方表
+            ElegantServiceCooperation elegantServiceCooperation = new ElegantServiceCooperation();
+            elegantServiceCooperation.setElegantServiceId(elegantServiceId);
+            elegantServiceCooperation.setCooperationName(body.getCooperationName());
+            elegantServiceCooperation.setCreateTime(now);
+            elegantServiceCooperation.setYn(1);//默认没被删除
+
+            elegantServiceCooperationMapper.insertSelective(elegantServiceCooperation);
+            //创建描述表
+            ElegantServiceDescription elegantServiceDescription = new ElegantServiceDescription();
+            elegantServiceDescription.setElegantServiceId(elegantServiceId);
+            elegantServiceDescription.setCreateTime(now);
+            elegantServiceDescription.setDescription(body.getDescription());
+            elegantServiceDescription.setYn(1);//默认有效
+
+            elegantServiceDescriptionMapper.insertSelective(elegantServiceDescription);
+            //创建详细描述表
+            if (null != body.getDetailDescription()) {
                 ElegantServiceDescriptionDetail elegantServiceDescriptionDetail = new ElegantServiceDescriptionDetail();
                 elegantServiceDescriptionDetail.setCreateTime(now);
                 elegantServiceDescriptionDetail.setElegantServiceId(elegantServiceId);
-                elegantServiceDescriptionDetail.setDescriptionType(1);//默认展示卡片详情
-                elegantServiceDescriptionDetail.setDetailDescription(stringBuffer.toString());
+                if (body.getWebSwitch() == 1) {
+                    elegantServiceDescriptionDetail.setDescriptionType(0);
+                } else {
+                    elegantServiceDescriptionDetail.setDescriptionType(1);//默认展示卡片详情
+                }
+                elegantServiceDescriptionDetail.setDetailDescription(body.getDetailDescription());
                 elegantServiceDescriptionDetail.setYn(1);//默认有效
 
                 elegantServiceDescriptionDetailMapper.insertSelective(elegantServiceDescriptionDetail);
             }
+            //创建服务-身份类型关系表
+            //解析输入参数
+            String[] identityType = new String[0];
+            if (StringUtils.isNotEmpty(body.getIdentityType())) {
+                identityType = body.getIdentityType().split(",");
+            }
+            //找到元数据表的id
+            for (String s:identityType){
+                Integer identityTypeId = Integer.parseInt(s);
+
+                ElegantServiceIdentityType elegantServiceIdentityType = new ElegantServiceIdentityType();
+                elegantServiceIdentityType.setElegantServiceId(elegantServiceId);
+                elegantServiceIdentityType.setMetaIdentityTypeId(identityTypeId);
+                elegantServiceIdentityType.setCreateTime(now);
+
+                elegantServiceIdentityTypeMapper.insertSelective(elegantServiceIdentityType);
+            }
+
+
+            //创建服务-服务类型关系表
+            //解析服务类型
+            String[] serviceType = body.getServiceType().split(",");
+            for (String s:serviceType){
+                Integer serviceTypeId = Integer.parseInt(s);
+                ElegantServiceServiceType elegantServiceServiceType = new ElegantServiceServiceType();
+                elegantServiceServiceType.setElegantServiceId(elegantServiceId);
+                elegantServiceServiceType.setMetaServiceTypeId(serviceTypeId);
+
+                elegantServiceServiceTypeMapper.insertSelective(elegantServiceServiceType);
+            }
+            elegantServiceApproveMemberHandler(body, elegantServiceId);
+
+            if (null != body.getDetailUrls() && body.getDetailUrls().size() > 0) {
+                ElegantServiceDescriptionUrl elegantServiceDescriptionUrl = null;
+                StringBuffer stringBuffer = new StringBuffer("");
+                for (String url : body.getDetailUrls()) {
+                    elegantServiceDescriptionUrl = new ElegantServiceDescriptionUrl();
+                    elegantServiceDescriptionUrl.setUrl(url);
+                    elegantServiceDescriptionUrl.setElegantServiceId(elegantServiceId);
+                    stringBuffer.append("<p ><br></p > <p >< img src=\"").append(url).append("\"/></p >");
+                    elegantServiceDescriptionUrlMapper.insert(elegantServiceDescriptionUrl);
+                }
+                if (null == body.getDetailDescription() ) {
+                    ElegantServiceDescriptionDetail elegantServiceDescriptionDetail = new ElegantServiceDescriptionDetail();
+                    elegantServiceDescriptionDetail.setCreateTime(now);
+                    elegantServiceDescriptionDetail.setElegantServiceId(elegantServiceId);
+                    elegantServiceDescriptionDetail.setDescriptionType(1);//默认展示卡片详情
+                    elegantServiceDescriptionDetail.setDetailDescription(stringBuffer.toString());
+                    elegantServiceDescriptionDetail.setYn(1);//默认有效
+
+                    elegantServiceDescriptionDetailMapper.insertSelective(elegantServiceDescriptionDetail);
+                }
+            }
+            ElegantServiceLeadInvestor elegantServiceLeadInvestor = null;
+            if (body.getIsLeadInvestor() == null || body.getIsLeadInvestor() == 0){
+                elegantServiceLeadInvestor = new ElegantServiceLeadInvestor();
+                elegantServiceLeadInvestor.setElegantServiceId(elegantServiceId);
+                elegantServiceLeadInvestor.setLeadInvestorType(0);
+                elegantServiceLeadInvestorMapper.insert(elegantServiceLeadInvestor);
+                elegantServiceLeadInvestor.setLeadInvestorType(1);
+                elegantServiceLeadInvestorMapper.insert(elegantServiceLeadInvestor);
+            }else {
+                elegantServiceLeadInvestor = new ElegantServiceLeadInvestor();
+                elegantServiceLeadInvestor.setElegantServiceId(elegantServiceId);
+                elegantServiceLeadInvestor.setLeadInvestorType(1);
+                elegantServiceLeadInvestorMapper.insert(elegantServiceLeadInvestor);
+            }
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
 
         return result;
@@ -1230,10 +1613,27 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 }
             }
         }
+        ElegantServiceLeadInvestor elegantServiceLeadInvestor = new ElegantServiceLeadInvestor();
+        elegantServiceLeadInvestor.setElegantServiceId(elegantServiceId);
+        elegantServiceLeadInvestorMapper.delete(elegantServiceLeadInvestor);
 
+
+        if (body.getIsLeadInvestor() == null || body.getIsLeadInvestor() == 0){
+            elegantServiceLeadInvestor = new ElegantServiceLeadInvestor();
+            elegantServiceLeadInvestor.setElegantServiceId(elegantServiceId);
+            elegantServiceLeadInvestor.setLeadInvestorType(0);
+            elegantServiceLeadInvestorMapper.insert(elegantServiceLeadInvestor);
+            elegantServiceLeadInvestor.setLeadInvestorType(1);
+            elegantServiceLeadInvestorMapper.insert(elegantServiceLeadInvestor);
+        }else {
+            elegantServiceLeadInvestor = new ElegantServiceLeadInvestor();
+            elegantServiceLeadInvestor.setElegantServiceId(elegantServiceId);
+            elegantServiceLeadInvestor.setLeadInvestorType(1);
+            elegantServiceLeadInvestorMapper.insert(elegantServiceLeadInvestor);
+        }
 
         result.setStatus(200);
-        result.setData(null);
+        result.setData(String.valueOf(elegantService.getId()));
         result.setMessage("success");
 
         return result;
@@ -1271,8 +1671,117 @@ public class ElegantServiceImpl implements ElegantServiceService{
             elegantServiceRelevantProjectMapper.delete(elegantServiceRelevantProjectRecord);
             elegantServiceRelevantProjectRecord.setProjectId(body.getProjectId());
             elegantServiceRelevantProjectRecord.setProjectShortName(body.getProjectShortName());
+            elegantServiceRelevantProjectRecord.setDataType(body.getDataType());
             elegantServiceRelevantProjectMapper.insert(elegantServiceRelevantProjectRecord);
         }
 
+    }
+
+    /**
+     * 保存图片和描述的接口
+     * @param elegantServiceParticipateId
+     * @param body
+     */
+    @Transactional
+    public void saveOrUpdateElegantServiceParticipateFeedback(Integer elegantServiceParticipateId, ElegantServiceParticipate body){
+
+        //先删除原来的
+        ElegantServiceParticipateFeedbackImages elegantServiceParticipateFeedbackImages = new ElegantServiceParticipateFeedbackImages();
+        elegantServiceParticipateFeedbackImages.setElegantServiceParticipateId(elegantServiceParticipateId);
+
+        elegantServiceParticipateFeedbackImagesMapper.delete(elegantServiceParticipateFeedbackImages);
+
+        ElegantServiceParticipateFeedbackText elegantServiceParticipateFeedbackText = new ElegantServiceParticipateFeedbackText();
+        elegantServiceParticipateFeedbackText.setElegantServiceParticipateId(elegantServiceParticipateId);
+
+        elegantServiceParticipateFeedbackTextMapper.delete(elegantServiceParticipateFeedbackText);
+
+        //新增新的
+        if (null != body.getFeedbackImages() && body.getFeedbackImages().size()>0){
+            body.getFeedbackImages().forEach(e->{
+                e.setElegantServiceParticipateId(elegantServiceParticipateId);
+
+                elegantServiceParticipateFeedbackImagesMapper.insertSelective(e);
+            });
+        }
+
+        if (null != body.getFeedbackTexts() && body.getFeedbackTexts().size() > 0){
+            body.getFeedbackTexts().forEach(e->{
+                e.setElegantServiceParticipateId(elegantServiceParticipateId);
+
+                elegantServiceParticipateFeedbackTextMapper.insertSelective(e);
+            });
+        }
+    }
+
+    /**
+     * 精选服务反馈发消息接口
+     * @param body
+     * @param appId
+     * @return
+     */
+    @Transactional
+    public CommonDto<String> elegantServiceParticipateSendTamplate(ElegantServiceParticipate body, Integer appId){
+        CommonDto<String> result = new CommonDto<>();
+
+        String userName = "";
+        String formId = "";
+        String token = elegantServiceParticipateMapper.selectByPrimaryKey(body.getId()).getToken();
+
+        Integer userId = userLoginService.getUserIdByToken(token,appId);
+
+        CommonDto<UserFormid> resulta = formIdService.findUserFormid(userId,null);
+        if (resulta.getStatus() != 200){
+            result.setMessage(resulta.getMessage());
+            result.setStatus(resulta.getStatus());
+
+            return result;
+        }
+        formId = resulta.getData().getFormid();
+
+        ElegantServiceParticipate elegantServiceParticipate = elegantServiceParticipateMapper.selectByPrimaryKey(body.getId());
+        if (null == elegantServiceParticipate){
+            return new CommonDto<>(null,"当前id没有找到对应的反馈信息",502);
+        }
+
+        ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceParticipate.getElegantServiceId());
+
+        Users usersForSearch = new Users();
+        usersForSearch.setUuid(elegantService.getCreator());
+        if (null == elegantService.getCreator() || "".equals(elegantService.getCreator())){
+            return new CommonDto<>(null,"没有找到发布悬赏人的token信息",502);
+        }
+
+        Users users = usersMapper.selectOne(usersForSearch);
+        userName = users.getActualName();
+        if (null==userName){
+            UsersWeixin usersWeixinForSearch = new UsersWeixin();
+            usersWeixinForSearch.setUserId(users.getId());
+            UsersWeixin usersWeixin = usersWeixinMapper.selectOne(usersWeixinForSearch);
+            if (null != usersWeixin){
+                userName = usersWeixin.getNickName();
+            }else {
+                userName = "";
+            }
+        }
+
+        if (null == userName){
+            userName = "";
+        }
+
+        if (body.getStatus() == 2){
+            String title = "天使投资指数悬赏任务";
+            String messege = "你完成了"+userName+"的悬赏任务,奖励已入钱包,快去查看吧";
+
+            result = sendTemplateService.sendTemplateByFormId(userId,2,formId,messege,title);
+
+        }else {
+            result.setData(null);
+            result.setStatus(200);
+            result.setMessage("success");
+        }
+
+
+        return result;
     }
 }

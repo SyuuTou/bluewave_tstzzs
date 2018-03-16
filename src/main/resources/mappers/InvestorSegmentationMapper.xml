@@ -8,4 +8,11 @@
     <result column="id" property="id" jdbcType="INTEGER" />
     <result column="segmentation_id" property="segmentationId" jdbcType="INTEGER" />
   </resultMap>
+  <select id="getInvestorSegmentations" resultMap="BaseResultMap">
+  	select * from investor_segmentation where 1=1
+  	<if test="segmentation != null and segmentation.length > 0">
+  		and segmentation_id in
+  		<foreach collection="segmentation" index="index" item="item" close=")" open="(" separator=",">#{item}</foreach>
+  	</if>
+  </select>
 </mapper>

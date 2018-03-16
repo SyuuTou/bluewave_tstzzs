@@ -93,21 +93,21 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		Integer userId= usersMapper.findByUuid(uuids);
 		if(userId !=0 && userId !=null){
 			//获取用户id
-			Integer leId =usersMapper.findByUserid(userId);
+			Integer leId =usersMapper.findByUserid(userId, appId);
 			if(leId != null){
-				Float bei =usersMapper.findByBei(leId);
+				Float bei =usersMapper.findByBei(appId,leId);
 				String skey =body.getsKey();
 				//下个等级
 				leId=leId+1;
-				Float xbei =usersMapper.findByBei(leId);
-				double dnum = usersMapper.findByJinE(skey);
+				Float xbei =usersMapper.findByBei(appId, leId);
+				double dnum = usersMapper.findByJinE(appId,skey);
 				if(skey !=null){
 					if("okuF3LQg".equals(skey)){
 						map.put("dnum",dnum);
 						map.put("snum",(int) (bei*dnum));
 						map.put("hnum",(int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -131,7 +131,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -155,7 +155,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -179,7 +179,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -203,7 +203,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -227,7 +227,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -251,7 +251,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -273,7 +273,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						if(leId<5){
-							String userName = usersMapper.findByUserLevel(leId);
+							String userName = usersMapper.findByUserLevel(appId,leId);
 							map.put("xnum",(int) (xbei*dnum));
 							map.put("userName",userName);
 						}else{
@@ -293,18 +293,18 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				}
 			}else{
 				leId=0;
-				Float bei =usersMapper.findByBei(leId+1);
+				Float bei =usersMapper.findByBei(appId, leId+1);
 				String skey =body.getsKey();
-				Integer dnum = usersMapper.findByJinE(skey);
+				Integer dnum = usersMapper.findByJinE(appId,skey);
 				if(skey !=null){
 					if("okuF3LQg".equals(skey)){
 						map.put("dnum",dnum);
 						map.put("snum",(int) (bei*dnum));
 						map.put("hnum",(int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -322,9 +322,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -343,9 +343,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -364,9 +364,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -385,9 +385,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -406,9 +406,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -426,9 +426,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -446,9 +446,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 						map.put("snum", (int) (bei*dnum));
 						map.put("hnum", (int) ((bei+1)*dnum));
 						map.put("xnum",(int) (bei*dnum));
-						String userName = usersMapper.findByUserLevel(leId+1);
+						String userName = usersMapper.findByUserLevel(appId,leId+1);
 						leId=leId+1;
-						Float xbei =usersMapper.findByBei(leId);
+						Float xbei =usersMapper.findByBei(appId, leId);
 						map.put("xnum",(int) (xbei*dnum));
 						map.put("userName",userName);
 						UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -472,6 +472,174 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		result.setData(map);
 		return result;
 	}
+
+	/**
+	 * 重构版页面显示选择值的接口
+	 * @param appId
+	 * @param body
+	 * @return
+	 */
+	@Override
+	public CommonDto<Map<String, Object>> recordUserPayAmountMember(Integer appId, ZengDto body) {
+
+		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
+		Map<String,Object> map =new HashMap<String,Object>();
+
+
+		//验证其他充值金额
+		if (null != body.getQj()){
+			CommonDto<Map<String,Object>> resulta =verifyLimitCount(body.getQj());
+			if (resulta.getStatus() != 200){
+				return resulta;
+			}
+		}
+
+		String uuids = body.getUuids();
+		Integer userId= usersMapper.findByUuid(uuids);
+
+		if (null == userId || 0==userId){
+			return new CommonDto<>(null,"用户不存在",502);
+		}
+
+		if (null == body.getsKey()){
+			return new CommonDto<>(null,"请传入场景key",502);
+		}
+
+		//获取当前用户等级
+		Integer userLevelId =usersMapper.findByUserid(userId, appId);
+
+		if (null == userLevelId){
+			userLevelId = 1;
+		}
+
+		float discount = usersMapper.findByBei(appId,userLevelId);//折扣
+		String sceneKey = body.getsKey();//场景key
+
+
+		//查对应场景key是否存在
+		MetaScene metaScene = new MetaScene();
+		metaScene.setKey(sceneKey);
+
+		List<MetaScene> metaSceneList = metaSceneMapper.select(metaScene);
+
+		if (metaSceneList.size() < 1){
+			return new CommonDto<>(null,"场景key无效",502);
+		}
+
+		//不同充值方式取金额方式也不同
+		Integer integral = 0;
+		if (null != body.getQj()){
+			integral = body.getQj().intValue();
+		}else{
+			integral = usersMapper.findByJinE(appId,sceneKey);//当前场景对应积分数量
+		}
+
+		if (null == integral){
+			return  new CommonDto<>(null,"场景错误",502);
+		}
+
+
+		map.put("dnum",integral);
+		map.put("snum",(int) (discount*integral));
+		map.put("hnum",(int) ((discount+1)*integral));
+		map.put("xnum",(int) (discount*integral));
+		if (userLevelId < 4){
+			String userName = usersMapper.findByUserLevel(appId,userLevelId+1);
+			Float nextDiscount =usersMapper.findByBei(appId, userLevelId+1);
+			map.put("xnum",(int) (nextDiscount*integral));
+			map.put("userName",userName);//会员名称
+		}else {
+			result.setStatus(5000);
+			result.setMessage("您已经是VIP投资人");
+		}
+
+		result.setMessage("success");
+		result.setData(map);
+		result.setStatus(200);
+
+		return result;
+	}
+
+	/**
+	 * 用户充值接口
+	 * @param appId
+	 * @param body
+	 * @return
+	 */
+	@Override
+	public CommonDto<Integer> recordUserPayAmount(Integer appId, ZengDto body) {
+
+		CommonDto<Integer> result = new CommonDto<Integer>();
+
+		//验证其他充值金额
+		if ("YCQ42NgS".equals(body.getsKey())){
+			//免验证最低金额的场景
+			if (null == body.getQj() || body.getQj().compareTo(BigDecimal.ZERO) < 0){
+				result.setMessage("支付金额非法");
+				result.setStatus(502);
+				result.setData(null);
+
+				return result;
+			}
+		}else {
+			if (null != body.getQj()){
+				CommonDto<Map<String,Object>> resulta =verifyLimitCount(body.getQj());
+				if (resulta.getStatus() != 200){
+					result.setMessage(resulta.getMessage());
+					result.setStatus(resulta.getStatus());
+					result.setData(null);
+					return result;
+				}
+			}
+		}
+
+
+		String uuids = body.getUuids();
+		Integer userId= usersMapper.findByUuid(uuids);
+
+		if (null == userId || 0==userId){
+			return new CommonDto<>(null,"你没有此权限，请完善资料",5013);
+		}
+
+		if (null == body.getsKey()){
+			return new CommonDto<>(null,"请传入场景key",5013);
+		}
+		String sceneKey = body.getsKey();//场景key
+		//查对应场景key是否存在
+		MetaScene metaScene = new MetaScene();
+		metaScene.setKey(sceneKey);
+
+		List<MetaScene> metaSceneList = metaSceneMapper.select(metaScene);
+
+		if (metaSceneList.size() < 1){
+			return new CommonDto<>(null,"场景key无效",5013);
+		}
+
+		//不同充值方式取金额方式也不同
+		Integer integral = 0;
+		if (null != body.getQj()){
+			integral = body.getQj().intValue();
+		}else{
+			integral = usersMapper.findByJinE(appId,sceneKey);//当前场景对应积分数量
+		}
+
+		UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
+		userMoneyRecord.setCreateTime(new Date());
+		BigDecimal jnum =new BigDecimal(integral);
+		userMoneyRecord.setMoney(jnum );
+		userMoneyRecord.setSceneKey(sceneKey);
+		userMoneyRecord.setUserId(userId);
+		userMoneyRecord.setAppId(appId);
+		userMoneyRecordMapper.insert(userMoneyRecord);
+
+		result.setMessage("success");
+		result.setData(userMoneyRecord.getId());
+		result.setStatus(200);
+
+		return result;
+	}
+
+
 	/**
 	 * 其他金额充值页面显示
 	 */
@@ -481,9 +649,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		String uuids = body.getUuids();
 		Integer userId= usersMapper.findByUuid(uuids);
 		if(userId !=0 && userId !=null){
-			Integer leId =usersMapper.findByUserid(userId);
+			Integer leId =usersMapper.findByUserid(userId, appId);
 			if(leId !=null) {
-                Float bei = usersMapper.findByBei(leId);
+                Float bei = usersMapper.findByBei(appId, leId);
                 BigDecimal dnum = body.getQj();
                 Integer dnum1 = dnum.intValue();
                 if (dnum1 >= 188) {
@@ -495,8 +663,8 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
                     System.out.println(dnum);
                     if (leId < 4) {
                         leId = leId + 1;
-                        Float xbei = usersMapper.findByBei(leId);
-                        String userName = usersMapper.findByUserLevel(leId);
+                        Float xbei = usersMapper.findByBei(appId, leId);
+                        String userName = usersMapper.findByUserLevel(appId,leId);
                         map.put("xnum", (int) (xbei * dnum1));
                         map.put("userName", userName);
                     } else {
@@ -517,7 +685,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
                 }
 			}else{
 				leId=0;
-				Float bei =usersMapper.findByBei(leId+1);
+				Float bei =usersMapper.findByBei(appId, leId+1);
 				BigDecimal dnum = body.getQj();
                 Integer dnum1=dnum.intValue();
 				if(dnum1>=188){
@@ -525,9 +693,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 
 					map.put("snum",(int)(bei*dnum1));
 					map.put("hnum",(int)(((bei+1)*dnum1)));
-					String userName = usersMapper.findByUserLevel(leId+1);
+					String userName = usersMapper.findByUserLevel(appId,leId+1);
 					leId=leId+1;
-					Float xbei =usersMapper.findByBei(leId);
+					Float xbei =usersMapper.findByBei(appId, leId);
 					map.put("xnum",(int) (xbei*dnum1));
 					map.put("userName",userName);
 					UserMoneyRecord userMoneyRecord =new UserMoneyRecord();
@@ -570,9 +738,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
         }*/
 		if(userId !=0 && userId !=null){
 			list=userLevelRelationMapper.findByMing(appId,userId, beginNum, pageSize);
-			Integer leId =usersMapper.findByUserid(userId);
+			Integer leId =usersMapper.findByUserid(userId, appId);
 			if(leId !=null){
-				Float bei =usersMapper.findByBei(leId);
+				Float bei =usersMapper.findByBei(appId, leId);
 				for (Map<String, Object> obj : list){
 					//UserIntegralConsume u =new  UserIntegralConsume();
 					if(new BigDecimal(obj.get("cost_num").toString()).compareTo(new BigDecimal(0))>=0){
@@ -634,7 +802,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 	
 			}else{
 				leId=1;
-				Float bei =usersMapper.findByBei(leId);
+				Float bei =usersMapper.findByBei(appId, leId);
 				for (Map<String, Object> obj : list) {
 					UserIntegrals u = new UserIntegrals();
 					if (new BigDecimal(obj.get("cost_num").toString()).compareTo(new BigDecimal(0))>=0) {
@@ -720,14 +888,15 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 		Map<String,Integer> map =new HashMap<String,Integer>();
 //		Integer userId= usersMapper.findByUuid(uuids);
 		if(userId !=0 && userId !=null){
-			Integer leId =usersMapper.findByUserid(userId);
+			Integer leId =usersMapper.findByUserid(userId,appId);
 			if(leId !=null){
-				Float bei =usersMapper.findByBei(leId);
+				Float bei =usersMapper.findByBei(appId, leId);
 				UserIntegrals userIntegrals =new UserIntegrals();
 				userIntegrals.setUserId(userId);
+				userIntegrals.setAppId(appId);
 				userIntegrals.setSceneKey("xHwofbNs");
 				Integer jb=qj.intValue();
-				if(jb>=188){
+				if(jb>=0.01){
 				userIntegrals.setConsumeNum(new BigDecimal(0));
 				userIntegrals.setIntegralNum(qj);
 				userIntegrals.setCreateTime(new Date());
@@ -737,6 +906,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				//获取该场景配置信息
 				MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
 				metaObtainIntegral.setSceneKey("xHwofbNs");
+				metaObtainIntegral.setAppId(appId);
 				metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
 				calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral.getPeriod());
 				Date end = calendar.getTime();
@@ -746,8 +916,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				//购买金币赠送的记录
 				UserIntegrals userIntegrals2 =new UserIntegrals();
 				userIntegrals2.setUserId(userId);
+				userIntegrals2.setAppId(appId);
 				userIntegrals2.setConsumeNum(new BigDecimal(0));
-				String sKey = userIntegralsMapper.findBySkey(leId);
+				String sKey = userIntegralsMapper.findBySkey(appId, leId);
 				userIntegrals2.setSceneKey(sKey);
 				jb=qj.intValue();
 				Integer snum =(int)(jb*bei);
@@ -755,6 +926,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals2.setCreateTime(new Date());
 				MetaObtainIntegral metaObtainIntegral1 = new MetaObtainIntegral();
 				metaObtainIntegral1.setSceneKey(sKey);
+                    metaObtainIntegral1.setAppId(appId);
 				Calendar calendar1 = new GregorianCalendar();
 				metaObtainIntegral1 = metaObtainIntegralMapper.selectOne(metaObtainIntegral1);
 				calendar1.add(Calendar.DAY_OF_YEAR, metaObtainIntegral1.getPeriod());
@@ -765,6 +937,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				//插入总表数据
 				UserIntegralConsume userIntegrals3=new UserIntegralConsume();
 				userIntegrals3.setUserId(userId);
+				userIntegrals3.setAppId(appId);
 				userIntegrals3.setSceneKey("xHwofbNs");
 //				Integer jb1=qj.intValue();
 				//if(jb>=100){
@@ -776,6 +949,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				//获取该场景配置信息
 				MetaObtainIntegral metaObtainIntegral3 = new MetaObtainIntegral();
 				metaObtainIntegral3.setSceneKey("xHwofbNs");
+                    metaObtainIntegral3.setAppId(appId);
 				metaObtainIntegral3 = metaObtainIntegralMapper.selectOne(metaObtainIntegral3);
 				calendar3.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
 				Date end3 = calendar3.getTime();
@@ -785,7 +959,8 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				//购买金币赠送的记录
 				UserIntegralConsume userIntegrals4 =new UserIntegralConsume();
 				userIntegrals4.setUserId(userId);
-				String sKey4 = userIntegralsMapper.findBySkey(leId);
+				userIntegrals4.setAppId(appId);
+				String sKey4 = userIntegralsMapper.findBySkey(appId, leId);
 				userIntegrals4.setSceneKey(sKey4);
 //				jb=qj.intValue();
 //				Integer snum4 =(int)(jb*bei);
@@ -793,6 +968,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				userIntegrals4.setCreateTime(new Date());
 				MetaObtainIntegral metaObtainIntegral4 = new MetaObtainIntegral();
 				metaObtainIntegral4.setSceneKey(sKey);
+                    metaObtainIntegral4.setAppId(appId);
 				Calendar calendar4 = new GregorianCalendar();
 				metaObtainIntegral4 = metaObtainIntegralMapper.selectOne(metaObtainIntegral4);
 				calendar4.add(Calendar.DAY_OF_YEAR, metaObtainIntegral4.getPeriod());
@@ -806,12 +982,13 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 				}
 			}else {
 					leId = 0;
-					Float bei = usersMapper.findByBei(leId + 1);
+					Float bei = usersMapper.findByBei(appId, leId + 1);
 					UserIntegrals userIntegrals = new UserIntegrals();
 					userIntegrals.setUserId(userId);
+					userIntegrals.setAppId(appId);
 					userIntegrals.setSceneKey("xHwofbNs");
 					Integer jb = qj.intValue();
-					if(jb>=188){
+					if(jb>=0.01){
 					userIntegrals.setConsumeNum(new BigDecimal("0"));
 					userIntegrals.setIntegralNum(qj);
 					userIntegrals.setCreateTime(new Date());
@@ -819,6 +996,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					Calendar calendar = new GregorianCalendar();
 					MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
 					metaObtainIntegral.setSceneKey("xHwofbNs");
+                        metaObtainIntegral.setAppId(appId);
 					metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
 					calendar.add(Calendar.DAY_OF_YEAR, metaObtainIntegral.getPeriod());
 					Date end = calendar.getTime();
@@ -828,8 +1006,9 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					//购买金币赠送的记录
 					UserIntegrals userIntegrals2 = new UserIntegrals();
 					userIntegrals2.setUserId(userId);
+					userIntegrals2.setAppId(appId);
 					userIntegrals2.setConsumeNum(new BigDecimal("0"));
-					String sKey = userIntegralsMapper.findBySkey(leId + 1);
+					String sKey = userIntegralsMapper.findBySkey(appId, leId + 1);
 					userIntegrals2.setSceneKey(sKey);
 //					jb = qj.intValue();
 //					Integer snum = (int) (jb * bei);
@@ -838,6 +1017,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					//时间场景
 					MetaObtainIntegral metaObtainIntegral1 = new MetaObtainIntegral();
 					metaObtainIntegral1.setSceneKey(sKey);
+                        metaObtainIntegral1.setAppId(appId);
 					Calendar calendar1 = new GregorianCalendar();
 					metaObtainIntegral1 = metaObtainIntegralMapper.selectOne(metaObtainIntegral1);
 					calendar1.add(Calendar.DAY_OF_YEAR, metaObtainIntegral1.getPeriod());
@@ -847,6 +1027,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					userIntegralsMapper.insert(userIntegrals2);
 					UserIntegralConsume userIntegrals3=new UserIntegralConsume();
 					userIntegrals3.setUserId(userId);
+					userIntegrals3.setAppId(appId);
 					userIntegrals3.setSceneKey("xHwofbNs");
 //					Integer jb1=qj.intValue();
 					//if(jb>=100){
@@ -858,6 +1039,7 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					//获取该场景配置信息
 					MetaObtainIntegral metaObtainIntegral3 = new MetaObtainIntegral();
 					metaObtainIntegral3.setSceneKey("xHwofbNs");
+                        metaObtainIntegral3.setAppId(appId);
 					metaObtainIntegral3 = metaObtainIntegralMapper.selectOne(metaObtainIntegral3);
 					calendar3.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
 					Date end3 = calendar3.getTime();
@@ -867,14 +1049,16 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 					//购买金币赠送的记录
 					UserIntegralConsume userIntegrals4 =new UserIntegralConsume();
 					userIntegrals4.setUserId(userId);
-					String sKey4 = userIntegralsMapper.findBySkey(leId+1);
+					String sKey4 = userIntegralsMapper.findBySkey(appId,leId+1);
 					userIntegrals4.setSceneKey(sKey4);
+					userIntegrals4.setAppId(appId);
 					jb=qj.intValue();
 					Integer snum4 =(int)(jb*bei);
 					userIntegrals4.setCostNum(qj.multiply(new BigDecimal(bei)));
 					userIntegrals4.setCreateTime(new Date());
 					MetaObtainIntegral metaObtainIntegral4 = new MetaObtainIntegral();
 					metaObtainIntegral4.setSceneKey(sKey4);
+                        metaObtainIntegral4.setAppId(appId);
 					Calendar calendar4 = new GregorianCalendar();
 					metaObtainIntegral4 = metaObtainIntegralMapper.selectOne(metaObtainIntegral4);
 					calendar4.add(Calendar.DAY_OF_YEAR, metaObtainIntegral4.getPeriod());
@@ -959,5 +1143,31 @@ public class UserIntegralsServiceImpl implements UserIntegralsService {
 			result = this.insertGold(userId, payMoney, appId);
 		}
 		return result;
+	}
+
+	/**
+	 * 验证其他金额是否满足最低限度
+	 * @param count
+	 * @return
+	 */
+	private CommonDto<Map<String,Object>> verifyLimitCount(BigDecimal count){
+
+		//获取最低限度
+		MetaScene metaScene = new MetaScene();
+		metaScene.setKey("RtlrV3oS");
+
+		MetaScene metaSceneResult =  metaSceneMapper.selectOne(metaScene);
+
+		if (null == metaSceneResult){
+			return new CommonDto<>(null,"最低限度场景丢失",502);
+		}
+
+		BigDecimal limitCount =new BigDecimal(metaSceneResult.getDesc());
+		String message = "充值金额必须大于" + limitCount;
+		if (limitCount.compareTo(count) > 0){
+			return new CommonDto<>(null,message,502);
+		}
+
+		return new CommonDto<>(null,"success",200);
 	}
 }

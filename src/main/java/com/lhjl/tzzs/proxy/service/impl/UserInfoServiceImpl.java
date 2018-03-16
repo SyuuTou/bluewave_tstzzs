@@ -65,7 +65,8 @@ public class UserInfoServiceImpl implements UserInfoService{
     @Autowired
     private UserLevelRelationMapper userLevelRelationMapper;
 
-   	
+    @Autowired
+   	private UsersWeixinMapper usersWeixinMapper;
     /**
      * 获取个人资料
      * @param userId 用户ID
@@ -83,7 +84,15 @@ public class UserInfoServiceImpl implements UserInfoService{
         users.setId(userId);
         users = usersMapper.selectByPrimaryKey(users);
         if(users != null){
-            params.put("user7realname_cn", users.getActualName());
+            if (StringUtils.isEmpty(users.getActualName())){
+                UsersWeixin usersWeixin = new UsersWeixin();
+                usersWeixin.setUserId(users.getId());
+                usersWeixin = usersWeixinMapper.selectOne(usersWeixin);
+                params.put("user7realname_cn", usersWeixin.getNickName());
+            }else{
+                params.put("user7realname_cn", users.getActualName());
+            }
+
             params.put("city", users.getCity());
             params.put("desc", users.getDesc());
             params.put("email", users.getEmail());

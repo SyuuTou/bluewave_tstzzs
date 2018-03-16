@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class DatasOperationManage {
     /**
      * 数据ID
+     * 投资人id或者是项目id等等其他领域模型的id
      */
     @Id
     @Column(name = "data_id")
@@ -16,12 +17,12 @@ public class DatasOperationManage {
      * 数据类型表：关联基础数据类型元数据的key
      */
     @Id
-    @Column(name = "data_type")
-    private String dataType;
+    @Column(name = "data_type") 
+    private String dataType;  
 
     /**
      * 基础推荐值
-     */
+     */ 
     @Column(name = "basics_recommend")
     private Integer basicsRecommend;
 
@@ -57,6 +58,7 @@ public class DatasOperationManage {
 
     /**
      * IR负责人
+     * 此处的负责人存储的是负责人的姓名
      */
     @Column(name = "ir_principal")
     private String irPrincipal;

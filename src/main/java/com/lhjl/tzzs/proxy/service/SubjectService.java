@@ -11,7 +11,8 @@ public interface SubjectService {
      * @param inputsWords 输入内容
      * @param pageSize  一页返回数量
      * @param inputsType 搜全程还是搜简称
+     * @param projectType 项目类型,1是项目,2是机构
      * @return
      */
-    CommonDto<List<CompanyIntelligentOutputDto>> getCompanyIntelligent(String inputsWords, Integer pageSize,Integer inputsType);
+    CommonDto<List<CompanyIntelligentOutputDto>> getCompanyIntelligent(String inputsWords, Integer pageSize,Integer inputsType,Integer projectType);
 }

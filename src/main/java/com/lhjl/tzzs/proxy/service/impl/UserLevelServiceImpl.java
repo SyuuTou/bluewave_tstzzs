@@ -149,6 +149,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
                 metaObtainIntegral.setSceneKey("EWJkiU7Q");
                 metaObtainIntegral.setUserLevel(userLevel.getLevelId());
+                metaObtainIntegral.setAppId(appId);
                 metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
                 BigDecimal originalCost = metaObtainIntegral.getIntegral();
                 userLevelDto.setOriginalCost(originalCost);
@@ -181,12 +182,14 @@ public class UserLevelServiceImpl implements UserLevelService {
                 MetaObtainIntegral send = new MetaObtainIntegral();
                 send.setSceneKey("PnLUE0m4");
                 send.setUserLevel(userLevel.getLevelId());
+                send.setAppId(appId);
                 send = metaObtainIntegralMapper.selectOne(send);
                 userLevelDto.setSendsNum(send.getDeliverNum());
 
                 MetaObtainIntegral condition = new MetaObtainIntegral();
                 condition.setSceneKey("cIQwmmX7");
                 condition.setUserLevel(userLevel.getLevelId());
+                condition.setAppId(appId);
                 condition = metaObtainIntegralMapper.selectOne(condition);
                 userLevelDto.setConditionNum(condition.getDeliverNum());
 
@@ -322,6 +325,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
         metaObtainIntegral.setSceneKey("EWJkiU7Q");
         metaObtainIntegral.setUserLevel(userLevel.getLevelId());
+        metaObtainIntegral.setAppId(appId);
         metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
         BigDecimal originalCost = metaObtainIntegral.getIntegral();
         userLevelDto.setOriginalCost(originalCost);
@@ -354,12 +358,14 @@ public class UserLevelServiceImpl implements UserLevelService {
         MetaObtainIntegral send = new MetaObtainIntegral();
         send.setSceneKey("PnLUE0m4");
         send.setUserLevel(userLevel.getLevelId());
+        send.setAppId(appId);
         send = metaObtainIntegralMapper.selectOne(send);
         userLevelDto.setSendsNum(send.getDeliverNum());
 
         MetaObtainIntegral condition = new MetaObtainIntegral();
         condition.setSceneKey("cIQwmmX7");
         condition.setUserLevel(userLevel.getLevelId());
+        condition.setAppId(appId);
         condition = metaObtainIntegralMapper.selectOne(condition);
         userLevelDto.setConditionNum(condition.getDeliverNum());
 
@@ -381,6 +387,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             //获取失效周期
             MetaUserLevel metaUserLevel = new MetaUserLevel();
             metaUserLevel.setId(levelId);
+            metaUserLevel.setAppId(appId);
             metaUserLevel = metaUserLevelMapper.selectOne(metaUserLevel);
             int period = metaUserLevel.getPeriod();
 
@@ -390,6 +397,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             calendar.add(Calendar.DAY_OF_YEAR, period);
             Date end = calendar.getTime();
             newOne.setEndTime(end);
+            newOne.setAppId(appId);
             newOne.setStatus(0);//未支付状态
             userLevelRelationMapper.insertSelective(newOne);
 
@@ -567,6 +575,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             newOne.setYn(1);
             newOne.setUserId(localUserId);
             newOne.setLevelId(levelId);
+            newOne.setAppId(appId);
             Date now = new Date();
             newOne.setBeginTime(beginTime);
             newOne.setCreateTime(now);
@@ -861,6 +870,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
             metaObtainIntegral.setSceneKey(sceneKey);
             metaObtainIntegral.setUserLevel(userLevel);
+            metaObtainIntegral.setAppId(appId);
             metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
 
             //普通会员
@@ -902,7 +912,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                     //金币足够
                     if(totalCoins.add(consumeNum).compareTo(new BigDecimal(0))  > 0){
                         result.setStatus(204);
-                        result.setMessage("使用项目评估，每个选项扣除"+(consumeNum.multiply(new BigDecimal(-1)))+"金币，共消费"+(consumeNum.multiply(new BigDecimal(-1)))+"金币，24小时内可重复查看该选项");
+                        result.setMessage("使用项目评估，每个选项扣除"+(consumeNum.multiply(new BigDecimal(-1)).setScale(2))+"金币，共消费"+(consumeNum.multiply(new BigDecimal(-1)).setScale(2))+"金币，24小时内可重复查看该选项");
                         data.put("consumeNum", consumeNum.multiply(new BigDecimal(-1)));
                         //判断是否提示
                         UserScene userScene = new UserScene();
@@ -1027,6 +1037,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
             metaObtainIntegral.setSceneKey(sceneKey);
             metaObtainIntegral.setUserLevel(userLevel);
+            metaObtainIntegral.setAppId(appId);
             metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
 
             //过滤已购买机构
@@ -1457,6 +1468,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             userIntegralConsume.setCreateTime(now);
             userIntegralConsume.setEndTime(end);
             userIntegralConsume.setAppId(appId);
+            userIntegralConsume.setCurrency(1);// 1是积分或令牌
             userIntegralConsumeMapper.insert(userIntegralConsume);
 
             //更新金币记录表
@@ -1557,6 +1569,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegralConsume.setCreateTime(now);
                 userIntegralConsume.setEndTime(end);
                 userIntegralConsume.setAppId(appId);
+                userIntegralConsume.setCurrency(1);// 1是积分或令牌
                 userIntegralConsumeMapper.insert(userIntegralConsume);
                 int consumeId = userIntegralConsume.getId();
 
@@ -1629,6 +1642,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegralConsume.setCreateTime(now);
                 userIntegralConsume.setEndTime(end);
                 userIntegralConsume.setAppId(appId);
+                userIntegralConsume.setCurrency(1);// 1是积分或令牌
                 userIntegralConsumeMapper.insert(userIntegralConsume);
                 int consumeId = userIntegralConsume.getId();
 
@@ -1663,6 +1677,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
             metaObtainIntegral.setSceneKey(sceneKey);
             metaObtainIntegral.setUserLevel(userLevel);
+            metaObtainIntegral.setAppId(appId);
             metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
 
             //过滤已购买机构
@@ -1692,6 +1707,7 @@ public class UserLevelServiceImpl implements UserLevelService {
             userIntegralConsume.setCreateTime(now);
             userIntegralConsume.setEndTime(end);
             userIntegralConsume.setAppId(appId);
+            userIntegralConsume.setCurrency(1);// 1是积分或令牌
             userIntegralConsumeMapper.insert(userIntegralConsume);
             int consumeId = userIntegralConsume.getId();
 
@@ -1883,7 +1899,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         Map<String,Integer> map =new HashMap<String,Integer>();
         if(userId !=null){
             //当前会员状态总的金币
-            Integer leId1 =usersMapper.findByUserid(userId);
+            Integer leId1 =usersMapper.findByUserid(userId, appId);
             if(leId1 != null){
 
                 //Integer dnum1 = userIntegralsMapper.findByQnum(leId1);
@@ -1893,10 +1909,10 @@ public class UserLevelServiceImpl implements UserLevelService {
             	MetaUserLevel m2 = metaUserLevelMapper.selectByPrimaryKey(userLevel11);
                 BigDecimal qj2=m2.getAmount();
                 Integer dnum1=qj2.intValue();
-                Float bei1 =usersMapper.findByBei(leId1);
+                Float bei1 =usersMapper.findByBei(appId, leId1);
                 Integer hnum1 =(int)(dnum1*(1+bei1));
                 //购买或升级买的金币
-                Float bei2 =usersMapper.findByBei(leId);
+                Float bei2 =usersMapper.findByBei(appId, leId);
                 //Integer qj = userIntegralsMapper.findByQnum(leId);
                 MetaUserLevel userLevel1 =new MetaUserLevel();
                 userLevel1.setId(leId);
@@ -1911,6 +1927,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setUserId(userId);
                 userIntegrals.setSceneKey(sKey);
                 userIntegrals.setAppId(appId);
+                userIntegrals.setCurrency(1); // 1是积分或令牌
                 userIntegrals.setIntegralNum(qj1.multiply(new BigDecimal(1+bei2)));
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
@@ -1929,6 +1946,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals3.setUserId(userId);
                 userIntegrals3.setSceneKey(sKey);
                 userIntegrals3.setAppId(appId);
+                userIntegrals3.setCurrency(1);// 1是积分或令牌
                 userIntegrals3.setCostNum(new BigDecimal(hnum));
                 //if(jb>=100){
                 userIntegrals3.setCreateTime(new Date());
@@ -1948,7 +1966,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 leId1=1;
                 Integer hnum1 = 0;
                 //购买或升级买的金币
-                Float bei2 =usersMapper.findByBei(leId);
+                Float bei2 =usersMapper.findByBei(appId, leId);
                 //Integer qj = userIntegralsMapper.findByQnum(leId);
                 MetaUserLevel userLevel1 =new MetaUserLevel();
                 userLevel1.setId(leId);
@@ -1963,12 +1981,14 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setUserId(userId);
                 userIntegrals.setSceneKey(sKey);
                 userIntegrals.setAppId(appId);
+                userIntegrals.setCurrency(1); // 1是积分或令牌
                 userIntegrals.setIntegralNum(qj1.multiply(new BigDecimal(1+bei2)));
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(new Date());
                 MetaObtainIntegral metaObtainIntegral = new MetaObtainIntegral();
                 metaObtainIntegral.setSceneKey(sKey);
+                metaObtainIntegral.setAppId(appId);
                 metaObtainIntegral = metaObtainIntegralMapper.selectOne(metaObtainIntegral);
                 calendar.add(Calendar.DAY_OF_YEAR,metaObtainIntegral.getPeriod());
                 Date end= calendar.getTime();
@@ -1980,6 +2000,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals3.setUserId(userId);
                 userIntegrals3.setSceneKey(sKey);
                 userIntegrals3.setAppId(appId);
+                userIntegrals3.setCurrency(1);// 1是积分或令牌
                 userIntegrals3.setCostNum(qj1.multiply(new BigDecimal(1+bei2)));
                 //if(jb>=100){
                 userIntegrals3.setCreateTime(new Date());
@@ -1989,6 +2010,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 //获取该场景配置信息
                 MetaObtainIntegral metaObtainIntegral3 = new MetaObtainIntegral();
                 metaObtainIntegral3.setSceneKey(sKey);
+                metaObtainIntegral3.setAppId(appId);
                 metaObtainIntegral3 = metaObtainIntegralMapper.selectOne(metaObtainIntegral3);
                 calendar3.add(Calendar.DAY_OF_YEAR,metaObtainIntegral3.getPeriod());
                 Date end3 = calendar3.getTime();
@@ -2009,7 +2031,7 @@ public class UserLevelServiceImpl implements UserLevelService {
         Map<String,Integer> map =new HashMap<String,Integer>();
         if(userId !=null){
             //当前会员状态总的金币
-            Integer leId1 =usersMapper.findByUserid(userId);
+            Integer leId1 =usersMapper.findByUserid(userId, appId);
 //            if(leId1 != null){
 //                //购买或购买升级的
 //                //Integer dnum1 = userIntegralsMapper.findByQnum(leId1);
@@ -2078,10 +2100,10 @@ public class UserLevelServiceImpl implements UserLevelService {
 //                userIntegralConsumeMapper.insert(userIntegrals3);
 //                //购买金币赠送的记录
 //            }else{
-                leId1=usersMapper.findByUserid(userId);
+                leId1=usersMapper.findByUserid(userId, appId);
                 Integer hnum1 = 0;
                 //购买或升级买的金币
-                Float bei2 =usersMapper.findByBei(leId1);
+                Float bei2 =usersMapper.findByBei(appId, leId1);
                 //Integer qj = userIntegralsMapper.findByQnum(leId1);
                 MetaUserLevel userLevel =new MetaUserLevel();
                 userLevel.setId(leId1);
@@ -2097,6 +2119,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals.setUserId(userId);
                 userIntegrals.setSceneKey(sKey);
                 userIntegrals.setAppId(appId);
+                userIntegrals.setCurrency(1);// 1是积分或令牌
                 userIntegrals.setIntegralNum(qj2.multiply(new BigDecimal(1+bei2)));
                 userIntegrals.setCreateTime(new Date());
                 Calendar calendar = new GregorianCalendar();
@@ -2115,6 +2138,7 @@ public class UserLevelServiceImpl implements UserLevelService {
                 userIntegrals3.setUserId(userId);
                 userIntegrals3.setSceneKey(sKey);
                 userIntegrals3.setAppId(appId);
+                userIntegrals3.setCurrency(1);// 1是积分或令牌
                 userIntegrals3.setCostNum(qj2.multiply(new BigDecimal(1+bei2)));
                 //if(jb>=100){
                 userIntegrals3.setCreateTime(new Date());

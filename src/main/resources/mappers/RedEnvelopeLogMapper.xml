@@ -12,5 +12,9 @@
     <result column="app_id" property="appId" jdbcType="INTEGER" />
     <result column="from_token" property="fromToken" jdbcType="VARCHAR" />
     <result column="union_key" property="unionKey" jdbcType="VARCHAR" />
+    <result column="currency" property="currency" jdbcType="INTEGER" />
+    <result column="pay_status" property="payStatus" jdbcType="INTEGER" />
+    <result column="pay_trade_no" property="payTradeNo" jdbcType="VARCHAR" />
+    <result column="pay_time" property="payTime" jdbcType="VARCHAR" />
   </resultMap>
 </mapper>

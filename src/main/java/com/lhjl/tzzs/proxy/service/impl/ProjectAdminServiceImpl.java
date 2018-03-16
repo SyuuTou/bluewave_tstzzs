@@ -13,6 +13,7 @@ import com.lhjl.tzzs.proxy.service.ProjectAdminService;
 import com.lhjl.tzzs.proxy.service.ProjectAuditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -69,6 +70,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
      * @param body
      * @return
      */
+    @Transactional
     @Override
     public CommonDto<String> updateProjectLogoAndMainInfo(ProjectAdminLogoInputDto body) {
         CommonDto<String> result = new CommonDto<>();
@@ -430,7 +432,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
             }
             projectAdminLogoOutputDto.setProjectAdmin(adminName);
             projectAdminLogoOutputDto.setClaimStatus("未认领");
-            projectAdminLogoOutputDto.setType("产业公司");
+            projectAdminLogoOutputDto.setType("创业公司");
 
             result.setMessage("success");
             result.setData(projectAdminLogoOutputDto);

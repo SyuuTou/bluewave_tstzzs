@@ -12,7 +12,12 @@ import java.util.Map;
  * Created by lanhaijulang on 2018/1/18.
  */
 public interface ProjectAdminTeamService {
-
+	
+	/**
+	 * 获取平台项目团队成员
+	 * @param projectId 项目id
+	 * @return
+	 */
     CommonDto<List<ProjectTeamMemberOutputDto>> getProjectTeamMemberList(Integer projectId);
 
     CommonDto<String> addOrUpdatePojectTeamMember(ProjectTeamMemberInputDto body);

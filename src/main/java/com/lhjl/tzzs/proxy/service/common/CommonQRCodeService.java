@@ -47,6 +47,8 @@ public class CommonQRCodeService extends GenericService {
 //            result.setData( Base64.getEncoder().encodeToString(imageData));
 //            result.setMessage("success");
 //            result.setStatus(200);
+
+
         } catch (WxErrorException e) {
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
         } catch (IOException e) {

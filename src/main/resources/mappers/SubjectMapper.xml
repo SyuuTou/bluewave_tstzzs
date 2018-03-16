@@ -12,16 +12,26 @@
     <result column="summary" jdbcType="VARCHAR" property="summary" />
   </resultMap>
   <select id="getIntelligentSearchInfo" resultMap="BaseResultMap">
-    SELECT * FROM subject where short_name like CONCAT(CONCAT("%",#{inputsWords}),"%")
-    and short_name != ""
-    group by short_name
+    SELECT s.* FROM subject s
+    left join subject_type_relational str on s.id = str.subject_id
+    where s.short_name like CONCAT(CONCAT("%",#{inputsWords}),"%")
+    and s.short_name != ""
+    <if test="projectType != null and projectType != ''">
+      and str.subject_type_id = #{projectType}
+    </if>
+    group by s.short_name
     LIMIT #{startPage},#{pageSize}
   </select>
 
   <select id="getIntelligentSearchInfoFullName" resultMap="BaseResultMap">
-    SELECT * FROM subject where full_name like CONCAT(CONCAT("%",#{inputsWords}),"%")
-    and full_name != ""
-    group by full_name
+    SELECT s.* FROM subject s
+    left join subject_type_relational str on s.id = str.subject_id
+    where s.full_name like CONCAT(CONCAT("%",#{inputsWords}),"%")
+    and s.full_name != ""
+    <if test="projectType != null and projectType != ''">
+      and str.subject_type_id = #{projectType}
+    </if>
+    group by s.full_name
     LIMIT #{startPage},#{pageSize}
   </select>
   <select id="getSubejectType" resultType="java.util.HashMap">

@@ -8,5 +8,6 @@
     <id column="elegant_service_id" property="elegantServiceId" jdbcType="INTEGER" />
     <id column="project_id" property="projectId" jdbcType="INTEGER" />
     <result column="project_short_name" property="projectShortName" jdbcType="VARCHAR" />
+    <result column="data_type" property="dataType" javaType="INTEGER" />
   </resultMap>
 </mapper>
