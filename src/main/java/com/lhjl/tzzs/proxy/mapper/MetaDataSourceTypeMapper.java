@@ -8,7 +8,7 @@ import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 
 public interface MetaDataSourceTypeMapper extends OwnerMapper<MetaDataSourceType> {
 	/**
-	 * 测试返回投资人领域的无效方法
+	 * 
 	 * @return
 	 */
 	List<MetaDataSourceType> getEntityTest();
