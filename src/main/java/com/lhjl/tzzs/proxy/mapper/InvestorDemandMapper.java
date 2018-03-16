@@ -22,6 +22,18 @@ public interface InvestorDemandMapper extends OwnerMapper<InvestorDemand> {
                                                    @Param("appid") Integer appid, @Param("dataType") Integer dataType,@Param("userId") Integer userId);
 
     /**
+     * 获取融资需求/投资风向标方法
+     * @param startPage
+     * @param pageSize
+     * @param dataType
+     * @param userId
+     * @return
+     */
+    List<Map<String,Object>> getInvestorDemandListBackStage(@Param("startPage") Integer startPage, @Param("pageSize") Integer pageSize,
+                                                   @Param("status") Integer[] status, @Param("isUser") Integer isUser,
+                                                   @Param("appid") Integer appid, @Param("dataType") Integer dataType,@Param("userId") Integer userId);
+
+    /**
      * 获取总数量
      * @param startPage
      * @param pageSize

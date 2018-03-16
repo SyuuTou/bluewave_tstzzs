@@ -55,4 +55,12 @@ public interface InvestorsDemandService {
      * @return
      */
     CommonDto<InvestorDemandListOutputDto> getInvestorsDemand(String token,Integer appid);
+
+    /**
+     * 后台投资风向标列表
+     * @param  body
+     * @param appid
+     * @return
+     */
+    CommonDto<Map<String,Object>> getInvestorDemandList(InvestorDemandListInputDto body, Integer appid);
 }
