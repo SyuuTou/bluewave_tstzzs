@@ -112,6 +112,8 @@
 					SELECT * FROM project_financing_log
 				    order by ISNULL(financing_time) desc ,financing_time desc
     				) statemp on p.ID = statemp.project_id
+    	<!-- 筛选出审核状态为1（通过）的记录 -->
+    	where p.approval_status = 1
 		GROUP BY p.short_name 
     	
     	union all
