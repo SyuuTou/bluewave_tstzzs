@@ -67,9 +67,9 @@ public class TestDemo {
 		return ids;
 	}
 	//获取实体映射
-	@GetMapping("getEntityMap")
+	/*@GetMapping("getEntityMap")
 	public Object getMap() {
 		List<MetaDataSourceType> result = metaDataSourceTypeMapper.getEntityTest();
 		return result;
-	}
+	}*/
 }
