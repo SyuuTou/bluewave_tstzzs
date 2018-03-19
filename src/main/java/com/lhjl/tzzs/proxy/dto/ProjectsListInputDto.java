@@ -51,6 +51,7 @@ public class ProjectsListInputDto {
 	 */
 	private String foreignInvestmentYn;
 	
+	
 	public String getForeignInvestmentYn() {
 		return foreignInvestmentYn;
 	}
