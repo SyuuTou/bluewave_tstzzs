@@ -33,20 +33,31 @@ public class ProjectsListInputDto {
 	/**
 	 * 项目等级的查询条件
 	 * 0表示D级，1表示C级，2表示B级，3表示A级，4表示S级'
-	 * @return
 	 */
 	private Integer ratingStage;
 	/**
 	 * 融资状态的查询条件
 	 * stage 传给的值为on的时候表示正在融
-	 * @return
 	 */
 	private String stage;
 	/**
 	 * 跟进状态的查询条件
-	 * @return
 	 */
 	private String followStatus;
+	/**
+	 * 是否对外投资
+	 * 用于将机构拆离出来
+	 * 机构列表请求的时候传递 "1" 即可
+	 */
+	private String foreignInvestmentYn;
+	
+	public String getForeignInvestmentYn() {
+		return foreignInvestmentYn;
+	}
+	public void setForeignInvestmentYn(String foreignInvestmentYn) {
+		this.foreignInvestmentYn = foreignInvestmentYn;
+	}
+	
 	public String getColumn() {
 		return column;
 	}

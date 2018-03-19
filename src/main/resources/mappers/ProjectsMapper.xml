@@ -96,8 +96,7 @@
   </select>
     <!-- 用户关注的项目 -->
 	<select id="findSplit" parameterType="com.lhjl.tzzs.proxy.dto.ProjectsListInputDto" resultMap="ProjectsListOutputDtoMap">
-     SELECT * from (	
-		select p.ID,p.serial_number,p.short_name,p.full_name,p.kernel_desc,segs.segmentations,p.city,p.project_source,aprl.rating_stage,
+     select * from (select p.ID,p.serial_number,p.short_name,p.full_name,p.kernel_desc,segs.segmentations,p.city,p.project_source,aprl.rating_stage,
 		case when statemp.financing_time is null then concat('正在融',statemp.stage) else statemp.stage end stage,
 		followtemp.focuscount,interviewtemp.interviewcount,proviewtemp.viewcount, pfs.meta_follow_status_id followstatus,
 		p.create_time,p.update_time,p.foreign_investment_yn,p.project_type,p.claim_status
@@ -112,35 +111,38 @@
 					SELECT * FROM project_financing_log
 				    order by ISNULL(financing_time) desc ,financing_time desc
     				) statemp on p.ID = statemp.project_id
-    	<!-- 筛选出审核状态为1（通过）的记录 -->
-    	where p.approval_status = 1
 		GROUP BY p.short_name 
     	
     	union all
 
 		select ii.ID, '' as serial_number, ii.short_name,ii.full_name,ii.kenel_case as kernel_desc,segs.segmentations, ii.city,ii.data_source_type as project_source, 
 		'' as rating_stage, '' as stage, '' as focuscount, '' as interviewcount, '' as viewcount, '' as followstatus,ii.create_time, '' as update_time,
-	    '' as foreign_investment_yn, '' as project_type, '' as claim_status
+	    1 as foreign_investment_yn, '' as project_type, '' as claim_status
 		from investment_institutions ii 
 		left join (
 		select investment_institutions_id , GROUP_CONCAT(`name`) segmentations from investment_institutions_segmentation  iis
 		LEFT JOIN meta_segmentation ms on iis.meta_segmentation_id= ms.id
 		GROUP BY iis.investment_institutions_id
-		) segs on ii.ID=segs.investment_institutions_id ) pro
+		) segs on ii.ID=segs.investment_institutions_id ) tmp
 		
-		where 1=1 
+		where 1=1
+		<!-- 用于筛选机构 -->
+		<if test="foreignInvestmentYn !=null and foreignInvestmentYn != '' ">
+			 and foreign_investment_yn =1
+		</if>
 		<if test="keyword !=null and keyword != ''">
 			 and (short_name like "%"#{keyword}"%" or kernel_desc like "%"#{keyword}"%" or
 			 city like "%"#{keyword}"%" or project_source like "%"#{keyword}"%")
 		</if>
+		<!-- <if test="city !=null and city != ''">
+			and p.city = #{city}
+		</if> -->
 		<if test="projectSource !=null and projectSource != ''">
 			and project_source = #{projectSource}
 		</if>
-		<!-- 项目等级 -->
 		<if test="ratingStage !=null and ratingStage != ''">
 			and rating_stage = #{ratingStage}
 		</if>
-		<!-- 融资状态 -->
 		<if test="stage !=null and stage != ''">
 			and stage = #{stage}
 		</if>
@@ -176,7 +178,7 @@
 
 		select ii.ID, '' as serial_number, ii.short_name,ii.full_name,ii.kenel_case as kernel_desc,segs.segmentations, ii.city,ii.data_source_type as project_source, 
 		'' as rating_stage, '' as stage, '' as focuscount, '' as interviewcount, '' as viewcount, '' as followstatus,ii.create_time, '' as update_time,
-	    '' as foreign_investment_yn, '' as project_type, '' as claim_status
+	    1 as foreign_investment_yn, '' as project_type, '' as claim_status
 		from investment_institutions ii 
 		left join (
 		select investment_institutions_id , GROUP_CONCAT(`name`) segmentations from investment_institutions_segmentation  iis
@@ -185,6 +187,10 @@
 		) segs on ii.ID=segs.investment_institutions_id ) tmp
 		
 		where 1=1
+		<!-- 用于筛选机构 -->
+		<if test="foreignInvestmentYn !=null and foreignInvestmentYn != '' ">
+			 and foreign_investment_yn =1
+		</if>
 		<if test="keyword !=null and keyword != ''">
 			 and (short_name like "%"#{keyword}"%" or kernel_desc like "%"#{keyword}"%" or
 			 city like "%"#{keyword}"%" or project_source like "%"#{keyword}"%")

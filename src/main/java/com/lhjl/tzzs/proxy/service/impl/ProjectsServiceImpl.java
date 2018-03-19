@@ -1125,12 +1125,11 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			body.setPageSize(pageSizeDefault);
 		}
 		body.setStart((long)(body.getCurrentPage()-1) * body.getPageSize());
-		
 		List<ProjectsListOutputDto> list = projectsMapper.findSplit(body);
 		//设置创建时间，更新时间输出字符串格式
-		list.forEach((e)->{
+		list.forEach((e)->{ 
 			//设置提交时间
-			if(e.getCreateTime()!=null) {
+			if(e.getCreateTime()!=null) {  
 				e.setCreateTimeOutputStr(sdf.format(e.getCreateTime()));
 			}
 			//设置更新时间,更新时间为null的时候更新时间为提交时间
@@ -1143,7 +1142,6 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			
 		});
 		Long total = projectsMapper.findSplitCount(body);
-		
 		map.put("data", list);
 		map.put("total", total);
 		map.put("currentPage",body.getCurrentPage());

@@ -93,12 +93,9 @@ public class ProjectsListOutputDto {
 	private Integer projectType;
 	/**
 	 * 认领状态
-	 * @return
 	 */
 	private Integer claimStatus;
 	
-	
-
 	public Integer getClaimStatus() {
 		return claimStatus;
 	}
