@@ -116,7 +116,7 @@
     	union all
 
 		select ii.ID, '' as serial_number, ii.short_name,ii.full_name,ii.kenel_case as kernel_desc,segs.segmentations, ii.city,ii.data_source_type as project_source, 
-		'' as rating_stage, '' as stage, '' as focuscount, '' as interviewcount, '' as viewcount, '' as followstatus,ii.create_time, '' as update_time,
+		'' as rating_stage, '' as stage, '' as focuscount, '' as interviewcount, '' as viewcount, '' as followstatus,ii.create_time, NULL as update_time,
 	    1 as foreign_investment_yn, '' as project_type, '' as claim_status
 		from investment_institutions ii 
 		left join (
@@ -177,7 +177,7 @@
     	union all
 
 		select ii.ID, '' as serial_number, ii.short_name,ii.full_name,ii.kenel_case as kernel_desc,segs.segmentations, ii.city,ii.data_source_type as project_source, 
-		'' as rating_stage, '' as stage, '' as focuscount, '' as interviewcount, '' as viewcount, '' as followstatus,ii.create_time, '' as update_time,
+		'' as rating_stage, '' as stage, '' as focuscount, '' as interviewcount, '' as viewcount, '' as followstatus,ii.create_time, NULL as update_time,
 	    1 as foreign_investment_yn, '' as project_type, '' as claim_status
 		from investment_institutions ii 
 		left join (
