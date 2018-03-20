@@ -282,9 +282,11 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
             investorsApproval.setInvestorsApprovalcolCase(params.getInvestorsApprovalcolCase());
 
             investorsApprovalMapper.insert(investorsApproval);
-            Users users = new Users();
-            users.setUuid(params.getToken());
-            Users u = usersMapper.selectOne(users);
+
+            userToken = new UserToken();
+            userToken.setToken(params.getToken());
+            userToken = userTokenMapper.selectOne(userToken);
+            Users u = usersMapper.selectByPrimaryKey(userToken.getUserId());
             u.setCompanyName(params.getOrganization());
             u.setCompanyDuties(params.getFillOffice());
             u.setActualName(params.getCompellation());
@@ -307,9 +309,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
             UserToken userToken = new UserToken();
             userToken.setToken(token);
             userToken = userTokenMapper.selectOne(userToken);
-            Users users1 = new Users();
-            users1.setUuid(token);
-            users1 = usersMapper.selectOne(users1);
+            Users users1  = usersMapper.selectByPrimaryKey(userToken.getUserId());
 
             Integer userId = userToken.getUserId();
             map = investorsApprovalMapper.findInvestorsApproval(userId);
@@ -362,9 +362,10 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 map.put("renzhenleixin", renzhenleixin);
             } else {
                 map = new HashMap<>();
-                Users users = new Users();
-                users.setUuid(token);
-                users = usersMapper.selectOne(users);
+                UserToken query = new UserToken();
+                query.setToken(token);
+                query = userTokenMapper.selectOne(query);
+                Users users = usersMapper.selectByPrimaryKey(query.getUserId());
                 String username = users.getActualName();
 
                 map.put("id", token);

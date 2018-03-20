@@ -175,9 +175,12 @@ public class InvestorsApprovalNewServiceImpl implements InvestorsApprovalNewServ
 					investorsApproval.setInstitutionId(ivesId);
 				}
 				investorsApprovalMapper.insertSelective(investorsApproval);
-				Users users =new Users();
-				users.setUuid(params.getToken());
-				Users u =usersMapper.selectOne(users);
+				userToken = new UserToken();
+				userToken.setToken(params.getToken());
+
+				userToken = userTokenMapper.selectOne(userToken);
+
+				Users u =usersMapper.selectByPrimaryKey(userToken.getUserId());
 				u.setCompanyName(params.getOrganization());
 				u.setCompanyDuties(params.getFillOffice());
 				u.setActualName(params.getCompellation());

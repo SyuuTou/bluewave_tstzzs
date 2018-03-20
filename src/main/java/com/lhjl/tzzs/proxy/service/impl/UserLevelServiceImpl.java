@@ -68,6 +68,8 @@ public class UserLevelServiceImpl implements UserLevelService {
 
     @Autowired
     private InvestorsMapper investorsMapper;
+    @Autowired
+    private UserTokenMapper userTokenMapper;
 
     //消费场景
     private static final String INDEX = "Ys54fPbz";
@@ -1857,14 +1859,12 @@ public class UserLevelServiceImpl implements UserLevelService {
      */
     private Integer getLocalUserId(String userId){
         //获取本系统用户ID
-        Example userExample = new Example(Users.class);
-        userExample.and().andEqualTo("uuid", userId);
-        List<Users> users = usersMapper.selectByExample(userExample);
-        Integer localUserId = null;
-        if(users.size() > 0){
-            localUserId = users.get(0).getId();
-        }
-        return localUserId;
+        UserToken userToken = new UserToken();
+        userToken.setToken(userId);
+
+        userToken = userTokenMapper.selectOne(userToken);
+
+        return userToken.getUserId();
     }
 
     /**

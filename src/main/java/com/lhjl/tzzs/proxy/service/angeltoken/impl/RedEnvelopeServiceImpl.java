@@ -648,9 +648,11 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
     @Override
     public CommonDto<String> resolveWechatGroupId(Integer appId, String redEnvelopeId, String token, RedEnvelopeGroupDto groupDto) {
 
-        Users record = new Users();
-        record.setUuid(token);
-        Users users = usersMapper.selectOne(record);
+        UserToken userToken = new UserToken();
+        userToken.setToken(token);
+
+        userToken = userTokenMapper.selectOne(userToken);
+        Users users = usersMapper.selectByPrimaryKey(userToken.getUserId());
 
 
         //sessionkey加前缀
@@ -890,7 +892,6 @@ public class RedEnvelopeServiceImpl extends GenericService implements RedEnvelop
     public Users getUserInfo(Integer appId,String token){
         UserToken queryUserToken = new UserToken();
         queryUserToken.setToken(token);
-        queryUserToken.setMetaAppId(String.valueOf(appId));
         UserToken userToken = userTokenMapper.selectOne(queryUserToken);
 
         Users users = null;

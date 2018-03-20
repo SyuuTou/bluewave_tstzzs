@@ -7,6 +7,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.lhjl.tzzs.proxy.mapper.*;
+import com.lhjl.tzzs.proxy.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,17 +20,6 @@ import com.lhjl.tzzs.proxy.dto.InterviewDetailsOutputDto;
 import com.lhjl.tzzs.proxy.dto.InterviewListInputDto;
 import com.lhjl.tzzs.proxy.dto.InterviewListOutputDto;
 import com.lhjl.tzzs.proxy.dto.UpdateModifyInputDto;
-import com.lhjl.tzzs.proxy.mapper.FollowMapper;
-import com.lhjl.tzzs.proxy.mapper.FoundersEducationMapper;
-import com.lhjl.tzzs.proxy.mapper.FoundersMapper;
-import com.lhjl.tzzs.proxy.mapper.FoundersWorkMapper;
-import com.lhjl.tzzs.proxy.mapper.InterviewMapper;
-import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
-import com.lhjl.tzzs.proxy.mapper.UsersMapper;
-import com.lhjl.tzzs.proxy.model.Follow;
-import com.lhjl.tzzs.proxy.model.Interview;
-import com.lhjl.tzzs.proxy.model.Projects;
-import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.InterviewService;
 
@@ -61,6 +53,8 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
     
     @Resource
     private FoundersWorkMapper foundersWorkMapper;
+    @Autowired
+    private UserTokenMapper userTokenMapper;
     /**
      * 插入约谈记录
      */
@@ -167,11 +161,11 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 		
 		if(interview != null) {
 			//实例化一个Users对象 用于作为查找条件
-			Users user = new Users(); 
-			user.setUuid(interview.getUserId());
+			UserToken userToken = new UserToken();
+			userToken.setToken(interview.getUserId());
 			//根据UUID查询数据库中的唯一一条user对象
-			user=usersMapper.selectOne(user);
-			
+			userToken=userTokenMapper.selectOne(userToken);
+			Users user = usersMapper.selectByPrimaryKey(userToken.getUserId());
 			System.err.println(user);
 			
 			if (user != null) {

@@ -80,6 +80,8 @@ public class InvestorsDemandServiceImpl extends GenericService implements Invest
 
     @Autowired
     private MetaProjectStageMapper metaProjectStageMapper;
+    @Autowired
+    private UserTokenMapper userTokenMapper;
 
     @Autowired
     private UsersMapper usersMapper;
@@ -804,10 +806,11 @@ public class InvestorsDemandServiceImpl extends GenericService implements Invest
                 case "Latest":
                     break;
                 case "Mine":
-                    Users record = new Users();
-                    record.setUuid(body.getToken());
-                    Users users = usersMapper.selectOne(record);
-                    userId = users.getId();
+                    UserToken userToken = new UserToken();
+                    userToken.setToken(body.getToken());
+                    userToken = userTokenMapper.selectOne(userToken);
+                    userId = userToken.getUserId();
+                    isUser = null;
                     break;
             }
         }
@@ -1205,10 +1208,10 @@ public class InvestorsDemandServiceImpl extends GenericService implements Invest
                 case "Latest":
                     break;
                 case "Mine":
-                    Users record = new Users();
-                    record.setUuid(body.getToken());
-                    Users users = usersMapper.selectOne(record);
-                    userId = users.getId();
+                    UserToken userToken = new UserToken();
+                    userToken.setToken(body.getToken());
+
+                    userId = userToken.getUserId();
                     break;
             }
         }
