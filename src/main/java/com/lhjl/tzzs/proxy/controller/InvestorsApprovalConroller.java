@@ -143,7 +143,7 @@ public class InvestorsApprovalConroller {
 	}
 
 	/**
-	 * 获取投资审核信息(后台调用)(新)
+	 * 获取投资审核信息列表(后台调用)(新)
 	 * @param body
 	 * @return
 	 */
