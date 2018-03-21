@@ -253,9 +253,11 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
 
             InvestorsApproval investorsApproval = new InvestorsApproval();
+            
             UserToken userToken = new UserToken();
             userToken.setToken(params.getToken());
             userToken = userTokenMapper.selectOne(userToken);
+            
             investorsApproval.setUserid(userToken.getUserId());
             investorsApproval.setApprovalUsername(params.getCompellation());
 //		 if("个人投资人".equals(params.getDateName())){
@@ -275,15 +277,21 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
             investorsApproval.setCompany(params.getOrganization());
             investorsApproval.setCompanyDuties(params.getFillOffice());
             investorsApproval.setWorkCard(params.getTempFilePaths());
+            //设置为待审核状态
             investorsApproval.setApprovalResult(0);
             investorsApproval.setReviewTime(new Date());
+            
             investorsApproval.setCreateTime(new Date());
+            
             investorsApproval.setFormId(formId);
             investorsApproval.setInvestorsApprovalcolCase(params.getInvestorsApprovalcolCase());
 
             investorsApprovalMapper.insert(investorsApproval);
+            //修改关联用户的重叠信息
             Users users = new Users();
+            //params.getToken()指的是认证id
             users.setUuid(params.getToken());
+            
             Users u = usersMapper.selectOne(users);
             u.setCompanyName(params.getOrganization());
             u.setCompanyDuties(params.getFillOffice());
@@ -297,16 +305,18 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
     }
 
     /**
-     * 数据的回显
+     * 认证信息回显
      */
     @Override
     public CommonDto<Map<String, Object>> findInvestorsApproval(String token) {
         CommonDto<Map<String, Object>> result = new CommonDto<Map<String, Object>>();
         try {
             Map<String, Object> map = new HashMap<>();
+            
             UserToken userToken = new UserToken();
             userToken.setToken(token);
             userToken = userTokenMapper.selectOne(userToken);
+            
             Users users1 = new Users();
             users1.setUuid(token);
             users1 = usersMapper.selectOne(users1);
@@ -469,6 +479,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 map.put("yiquxiao", false);
                 map.put("success", true);
             }
+            //投资人认证的时候取消了VIP投资人的认证
             if (Integer.valueOf(String.valueOf(map.get("approval_result"))) == 5) {
                 map.put("gongsizhiwei", String.valueOf(map.get("company_duties")));
                 map.put("gongsimingcheng", String.valueOf(map.get("company")));
@@ -712,10 +723,10 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
         approval.setId(approvalId);
         approval = investorsApprovalMapper.selectOne(approval);
         approval.setApprovalResult(Integer.parseInt(approveResult));
-        if (explanation != null && !"".equals(explanation)) {
+        if (explanation != null && !"".equals(explanation) ) {
             approval.setSupplementaryExplanation(explanation);
         }
-        investorsApprovalMapper.updateByPrimaryKey(approval);
+        investorsApprovalMapper.updateByPrimaryKeySelective(approval);
 
         //获得机构id
         Integer jgid = getInvestmentInstitutionId(approvalId);
@@ -726,8 +737,10 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
             return result;
         }
+        
         //更新投资人信息
         int userId = approval.getUserid();
+        
         Investors investors = new Investors();
         investors.setUserId(userId);
         investors = investorsMapper.selectOne(investors);
@@ -743,11 +756,13 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                     investors.setApprovalTime(now);
                     break;
                 case 4:
+                	//认证为机构投资人
                     investors.setInvestorsType(1);
                     investors.setApprovalStatus(1);
                     investors.setApprovalTime(now);
                     break;
                 case 5:
+                	//认证为VIP投资人
                     investors.setInvestorsType(2);
                     investors.setApprovalStatus(1);
                     investors.setApprovalTime(now);
@@ -888,16 +903,19 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
         InvestorsApproval investorsApproval = new InvestorsApproval();
         investorsApproval.setId(body.getId());
         investorsApproval.setSupplementaryExplanation(body.getSupplementaryExplanation());
+      
+        if (null != body.getLeader()) {
+            investorsApproval.setLeadership(body.getLeader());
+        }
+        
         Integer investorAuditType = 0;
         if (body.getInvestorType() == 1) {
             investorAuditType = 4;
         } else if (body.getInvestorType() == 0) {
             investorAuditType = 3;
         }
-        if (null != body.getLeader()) {
-            investorsApproval.setLeadership(body.getLeader());
-        }
         investorsApproval.setApprovalResult(investorAuditType);
+        
         investorsApproval.setReviewTime(now);
 
         investorsApprovalMapper.updateByPrimaryKeySelective(investorsApproval);
@@ -1042,6 +1060,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 //创建主体关系表
                 SubjectTypeRelational subjectTypeRelational = new SubjectTypeRelational();
                 subjectTypeRelational.setSubjectId(ztbid);
+                //设置主体的类型为机构
                 subjectTypeRelational.setSubjectTypeId(2);
 
                 subjectTypeRelationalMapper.insertSelective(subjectTypeRelational);
@@ -1049,14 +1068,14 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 return jgid;
 
             } else {
-
+            	//TODO 假设简称都是唯一的？？
                 Subject subject = subjectList.get(0);
                 //如果主体表的信息存在，判断主体类型
                 Example subjectExample = new Example(SubjectTypeRelational.class);
                 subjectExample.and().andEqualTo("subjectId", subject.getId()).andEqualTo("subjectTypeId", 2);
                 List<SubjectTypeRelational> subjectTypeRelationalList = subjectTypeRelationalMapper.selectByExample(subjectExample);
+                //如果主体的类型是机构，则拿到机构id返回
                 if (subjectTypeRelationalList.size() > 0) {
-                    //如果主体的类型是机构，则拿到机构id返回
                     return subject.getSourceid();
                 } else {
                     //如果主体类型不是机构，或者没有那么创建机构信息表，并创建一个关系表；
@@ -1069,12 +1088,15 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
                     //创建机构表信息
                     InvestmentInstitutions investmentInstitutions = new InvestmentInstitutions();
+                    
                     investmentInstitutions.setShortName(subject.getShortName());
                     investmentInstitutions.setCreateTime(now);
+                    
                     investmentInstitutions.setType(0);
                     investmentInstitutions.setApprovalStatus(1);
                     investmentInstitutions.setApprovalTime(now);
                     investmentInstitutions.setYn(1);
+                    
                     investmentInstitutions.setKenelCase(subject.getSummary());
                     investmentInstitutions.setLogo(subject.getPicture());
 

@@ -11,6 +11,11 @@ import com.lhjl.tzzs.proxy.model.InvestorsApproval;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 
 public interface InvestorsApprovalMapper extends OwnerMapper<InvestorsApproval> {
+	/**
+	 * 获取用户的当前的审核记录
+	 * @param userId 用户id
+	 * @return
+	 */
 	Map<String,Object> findInvestorsApproval(@Param("userId") Integer userId);
 	List<InvestorsApproval> findApproval(@Param("checkName") String checkName,
 										 @Param("time")String time, @Param("beginNum")Integer beginNum, @Param("pageSize")Integer pageSize);

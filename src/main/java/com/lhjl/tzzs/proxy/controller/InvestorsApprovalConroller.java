@@ -65,7 +65,7 @@ public class InvestorsApprovalConroller {
 	     }
 
 	/**
-	 * 审核状态
+	 * 通过token获取投资人审核状态
 	 * @param token
 	 * @return
 	 */
@@ -89,7 +89,7 @@ public class InvestorsApprovalConroller {
 	}
 
 	/**
-	 * 认证页面
+	 * 认证信息回显接口
 	 * @param token
 	 * @return
 	 */
@@ -98,7 +98,6 @@ public class InvestorsApprovalConroller {
 		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
 
 		try {
-			//初始化分页信息
 			result = investorsApprovalService.findInvestorsApproval(token);
 			if(result.getStatus() == null){
 				result.setStatus(200);
