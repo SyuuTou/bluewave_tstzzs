@@ -42,7 +42,7 @@ public class InvestorsApprovalConroller {
 
 
 	/**
-	 * 投资人记录信息
+	 * 申请成为投资人接口
 	 * @param params
 	 * @return
 	 */
@@ -51,16 +51,15 @@ public class InvestorsApprovalConroller {
 	 public CommonDto<String> insertGold( @RequestBody  TouZiDto params){
 	     CommonDto<String>result = new CommonDto<String>();
 	     try {
-	     
-	     result=investorsApprovalService.saveTouZi(params);
-	     if(result.getStatus() == null){
-	     result.setStatus(200);
-	     result.setMessage("success");
-	     }
+		     result=investorsApprovalService.saveTouZi(params);
+		     if(result.getStatus() == null){
+		     result.setStatus(200);
+		     result.setMessage("success");
+		     }
 	     } catch (Exception e) {
-	     result.setStatus(5101);
-	     result.setMessage("显示页面异常，请稍后再试");
-	     log.error(e.getMessage(), e);
+		     result.setStatus(5101);
+		     result.setMessage("显示页面异常，请稍后再试");
+		     log.error(e.getMessage(), e);
 	     }
 	     return result;
 	     }

@@ -282,6 +282,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
             investorsApproval.setInvestorsApprovalcolCase(params.getInvestorsApprovalcolCase());
 
             investorsApprovalMapper.insert(investorsApproval);
+            //更新用户信息
             Users users = new Users();
             users.setUuid(params.getToken());
             Users u = usersMapper.selectOne(users);
@@ -290,6 +291,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
             u.setActualName(params.getCompellation());
             u.setWorkCard(params.getTempFilePaths());
             usersMapper.updateByPrimaryKey(u);
+            
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
