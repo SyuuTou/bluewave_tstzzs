@@ -536,6 +536,7 @@ public class UserEditImpl implements UserEditService {
         //获取foundersId
         int foundersId = -1;
         if (foundersList.size() > 0){
+        	//创始人表中只可能存在一个平台用户
             Founders foundersForId = foundersList.get(0);
 
             foundersId = foundersForId.getId();
