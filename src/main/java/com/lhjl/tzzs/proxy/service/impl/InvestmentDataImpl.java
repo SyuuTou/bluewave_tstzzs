@@ -5,6 +5,7 @@ import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.InvestmentDataService;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +56,8 @@ public class InvestmentDataImpl implements InvestmentDataService{
     //用户表
     @Resource
     private UsersMapper usersMapper;
+    @Autowired
+    private UserTokenMapper userTokenMapper;
 
     @Transactional
     @Override
@@ -178,15 +181,17 @@ public class InvestmentDataImpl implements InvestmentDataService{
         Date now = new Date();
 
         //判断原平台的id在新平台是否存在，不存在的话创建用户，存在拿用户id
-        Users users = new Users();
-        users.setUuid(userId);
 
-        List<Users> usersList = usersMapper.select(users);
+        UserToken userToken = new UserToken();
+        userToken.setToken(userId);
+
+        userToken = userTokenMapper.selectOne(userToken);
+
 
         int uid = -1;
-        if (usersList.size() > 0){
-            Users usersForId = usersList.get(0);
-            uid = usersForId.getId();
+        if (null != userToken){
+
+            uid = userToken.getUserId();
         }else{
             Users usersAdd = new Users();
             usersAdd.setUuid(userId);

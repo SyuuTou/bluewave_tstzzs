@@ -80,13 +80,13 @@ public class PayServiceImpl implements PayService {
 
         userMoneyRecord = userMoneyRecordMapper.selectOne(userMoneyRecord);
 
-        Users query = new Users();
-        query.setUuid(payRequestBody.getUuid());
+        UserToken query = new UserToken();
+        query.setToken(payRequestBody.getUuid());
 
-        Users users = usersMapper.selectOne(query);
+        UserToken userToken = userTokenMapper.selectOne(query);
 
         UsersWeixin queryWX = new UsersWeixin();
-        queryWX.setUserId(users.getId());
+        queryWX.setUserId(userToken.getUserId());
         queryWX.setMetaAppId(appId);
 
         UsersWeixin usersWeixin = usersWeixinMapper.selectOne(queryWX);

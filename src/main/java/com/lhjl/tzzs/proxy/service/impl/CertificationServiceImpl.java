@@ -58,7 +58,6 @@ public class CertificationServiceImpl implements CertificationService {
                         if (users.getHeadpicReal() == null) {
                             if (users.getHeadpic() != null) {
                                 obj.setHeadpic( users.getHeadpic());
-
                             } else {
                                 obj.setHeadpic("");
                             }

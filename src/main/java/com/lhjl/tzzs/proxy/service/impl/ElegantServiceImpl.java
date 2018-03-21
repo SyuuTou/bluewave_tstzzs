@@ -1789,13 +1789,16 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
         ElegantService elegantService = elegantServiceMapper.selectByPrimaryKey(elegantServiceParticipate.getElegantServiceId());
 
-        Users usersForSearch = new Users();
-        usersForSearch.setUuid(elegantService.getCreator());
+        UserToken userToken = new UserToken();
+        userToken.setToken(elegantService.getCreator());
+
+        userToken = userTokenMapper.selectOne(userToken);
+
         if (null == elegantService.getCreator() || "".equals(elegantService.getCreator())){
             return new CommonDto<>(null,"没有找到发布悬赏人的token信息",502);
         }
 
-        Users users = usersMapper.selectOne(usersForSearch);
+        Users users = usersMapper.selectByPrimaryKey(userToken.getUserId());
         userName = users.getActualName();
         if (null==userName){
             UsersWeixin usersWeixinForSearch = new UsersWeixin();
