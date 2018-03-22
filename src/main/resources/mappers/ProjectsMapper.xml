@@ -1078,7 +1078,7 @@ SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.calculation_amou
         order by a.evaluation_recommend desc
         limit #{startPage},#{pageSize}
 
-    </select>
+    </select>  
 
     <select id="selectByProjectShortName" parameterType="java.lang.String" resultMap="BaseResultMap">
       select * from projects from `short_name`=#{searchWord};
