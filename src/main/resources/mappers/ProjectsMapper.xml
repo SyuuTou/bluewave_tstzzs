@@ -940,11 +940,37 @@ SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.calculation_amou
         <result column="x" jdbcType="VARCHAR" property="x" />
         <result column="y" jdbcType="VARCHAR" property="y" />
     </resultMap>
+    <!-- 头部信息回显输出DTO -->
+    <resultMap id="subjectHeadInfoOutputDto" type="com.lhjl.tzzs.proxy.dto.ProjectAdminLogoOutputDto">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="project_logo" jdbcType="VARCHAR" property="logo" />
+        <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="claimStatus" jdbcType="VARCHAR" property="claimStatus" />
+        <result column="rating_stage" jdbcType="VARCHAR" property="stage" />
+        <result column="status_name" jdbcType="VARCHAR" property="followStatus" />
+        <result column="admin_name" jdbcType="VARCHAR" property="projectAdmin" />
+    </resultMap>
+    <select id="getLogoAndOtherInfoById" parameterType="java.lang.Integer" resultMap="subjectHeadInfoOutputDto">
+        FROM projects p
+        left join admin_project_rating_log aprl on p.ID = aprl.project_id
+        left join project_follow_status pfs on p.ID = pfs.project_id
+        left join meta_follow_status mfs on pfs.meta_follow_status_id = mfs.id
+        left join (
+			select pa.projects_id,group_concat(au.admin_name) admin_name
+                        from project_administrator pa
+                        left join (
+                                select u.id,case when u.actual_name is null then uw.nick_name else u.actual_name end admin_name from users u
+                                left join users_weixin uw on u.id = uw.user_id 
+                        ) au on pa.user_id = au.id
+                        group by projects_id
+
+                ) pau on p.id = pau.projects_id
+        where p.id = #{projectId}
+    </select>
+    
     <select id="projectSearchStatistics" parameterType="com.lhjl.tzzs.proxy.dto.ProjectReqDto" resultMap="histogramResultMap">
-
-
-            select  count(DISTINCT p.short_name) x , ${statisticsType} y
-
+        select  count(DISTINCT p.short_name) x , ${statisticsType} y
         from project_financing_log pfl left join projects p on pfl.project_id = p.id
         right join project_segmentation ps on ps.project_id = p.id
         <if test="segmentation != '' and segmentation != null">
@@ -993,24 +1019,7 @@ SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.calculation_amou
         limit #{offset},#{pageSize}
     </select>
     
-    <select id="getLogoAndOtherInfoById" resultType="java.util.HashMap">
-        SELECT  p.id,p.short_name,p.project_logo,aprl.rating_stage,mfs.status_name,pau.admin_name
-        FROM projects p
-        left join admin_project_rating_log aprl on p.ID = aprl.project_id
-        left join project_follow_status pfs on p.ID = pfs.project_id
-        left join meta_follow_status mfs on pfs.meta_follow_status_id = mfs.id
-        left join (
-			select pa.projects_id,group_concat(au.admin_name) admin_name
-                        from project_administrator pa
-                        left join (
-                                select u.id,case when u.actual_name is null then uw.nick_name else u.actual_name end admin_name from users u
-                                left join users_weixin uw on u.id = uw.user_id 
-                        ) au on pa.user_id = au.id
-                        group by projects_id
-
-                ) pau on p.id = pau.projects_id
-        where p.id = #{projectId}
-    </select>
+    
     <select id="getBaseInfoById" resultType="java.util.HashMap">
         SELECT
         p.id,p.full_name,p.kernel_desc,p.url,p.item_label,cpn.competitive_products_name,ps.segmentation_name,

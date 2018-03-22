@@ -79,11 +79,39 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
      */
     private CommonDto<ProjectAdminLogoOutputDto> readInstitutionLogo(Integer projectId) {
     	CommonDto<ProjectAdminLogoOutputDto> result =new CommonDto<ProjectAdminLogoOutputDto>();
-    	ProjectAdminLogoOutputDto headInfo = investmentInstitutionsMapper.getLogoAndOtherInfoById(projectId);
-//    	System.err.println(headInfo+"*********");
-    	result.setData(headInfo);
-    	result.setMessage("success");
-    	result.setStatus(200);
+    	ProjectAdminLogoOutputDto baseInfo = investmentInstitutionsMapper.getLogoAndOtherInfoById(projectId);
+    	
+        if (baseInfo != null){
+        	if(baseInfo.getStage()!=null) {
+        		switch(Integer.valueOf(baseInfo.getStage())) {
+        		case 0:baseInfo.setStage("D级"); 
+                break;
+                case 1:baseInfo.setStage("C级") ;
+                    break;
+                case 2:baseInfo.setStage("B级") ;
+                    break;
+                case 3:baseInfo.setStage("A级");
+                    break;
+                case 4:baseInfo.setStage("S级") ;
+                    break;
+                default:baseInfo.setStage(null) ;
+        		}
+        	}
+        	//TODO 认领状态需要根据后台的设计来提供而不是程序中控制，需要完善
+        	baseInfo.setClaimStatus("未认领");
+        	//TODO 机构暂时默认为投资机构，需要完善
+        	baseInfo.setType("投资机构");
+        	
+            result.setMessage("success");
+            result.setData(baseInfo);
+            result.setStatus(200);
+
+        }else {
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("没有找到机构信息，请检查机构id");
+
+        }
     	
 		return result;
 	}
@@ -95,54 +123,30 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
     private CommonDto<ProjectAdminLogoOutputDto> readProjectLogo(Integer projectId){
         CommonDto<ProjectAdminLogoOutputDto> result = new CommonDto<>();
 
-        Map<String,Object> baseInfo  = projectsMapper.getLogoAndOtherInfoById(projectId);
+        ProjectAdminLogoOutputDto baseInfo = projectsMapper.getLogoAndOtherInfoById(projectId);
         if (baseInfo != null){
-            ProjectAdminLogoOutputDto projectAdminLogoOutputDto= new ProjectAdminLogoOutputDto();
-            projectAdminLogoOutputDto.setId((Integer)baseInfo.get("id"));
-            String logo = "";
-            if (baseInfo.get("project_logo") != null){
-                logo = (String)baseInfo.get("project_logo");
-            }
-            projectAdminLogoOutputDto.setLogo(logo);
-            String shortName = "";
-            if (baseInfo.get("short_name") != null){
-                shortName = (String)baseInfo.get("short_name");
-            }
-            projectAdminLogoOutputDto.setShortName(shortName);
-            Integer ratingStage = -1;
-            String ratingStageString = "";
-            if (baseInfo.get("rating_stage") != null){
-                ratingStage = (Integer)baseInfo.get("rating_stage");
-            }
-            switch (ratingStage){
-                case 0:ratingStageString = "D级";
+        	if(baseInfo.getStage()!=null) {
+        		switch(Integer.valueOf(baseInfo.getStage())) {
+        		case 0:baseInfo.setStage("D级"); 
                 break;
-                case 1:ratingStageString = "C级";
+                case 1:baseInfo.setStage("C级") ;
                     break;
-                case 2:ratingStageString = "B级";
+                case 2:baseInfo.setStage("B级") ;
                     break;
-                case 3:ratingStageString = "A级";
+                case 3:baseInfo.setStage("A级");
                     break;
-                case 4:ratingStageString = "S级";
+                case 4:baseInfo.setStage("S级") ;
                     break;
-                default:ratingStageString = "";
-            }
-            projectAdminLogoOutputDto.setStage(ratingStageString);
-            String statusName= "";
-            if (baseInfo.get("status_name") != null){
-                statusName = (String)baseInfo.get("status_name");
-            }
-            projectAdminLogoOutputDto.setFollowStatus(statusName);
-            String adminName = "";
-            if (baseInfo.get("admin_name") != null){
-                adminName = (String)baseInfo.get("admin_name");
-            }
-            projectAdminLogoOutputDto.setProjectAdmin(adminName);
-            projectAdminLogoOutputDto.setClaimStatus("未认领");
-            projectAdminLogoOutputDto.setType("创业公司");
-
+                default:baseInfo.setStage(null) ;
+        		}
+        	}
+        	//TODO 此处需要根据后台的设计来提供而不是程序中控制，需要完善
+        	baseInfo.setClaimStatus("未认领");
+        	//TODO 机构暂时默认为创业公司，需要完善
+        	baseInfo.setType("创业公司");
+        	
             result.setMessage("success");
-            result.setData(projectAdminLogoOutputDto);
+            result.setData(baseInfo);
             result.setStatus(200);
 
         }else {
