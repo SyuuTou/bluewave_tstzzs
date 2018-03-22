@@ -952,6 +952,7 @@ SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.calculation_amou
         <result column="admin_name" jdbcType="VARCHAR" property="projectAdmin" />
     </resultMap>
     <select id="getLogoAndOtherInfoById" parameterType="java.lang.Integer" resultMap="subjectHeadInfoOutputDto">
+        SELECT p.id,p.short_name,p.project_logo,aprl.rating_stage,mfs.status_name,pau.admin_name
         FROM projects p
         left join admin_project_rating_log aprl on p.ID = aprl.project_id
         left join project_follow_status pfs on p.ID = pfs.project_id
