@@ -7,7 +7,7 @@ public class InvestorSpecialApprovalDto {
     /**用户id*/
     private Integer userId;
 
-    /**领头人资格*/
+    /**领投人资格*/
     private Integer leader;
 
     /**审核状态*/
