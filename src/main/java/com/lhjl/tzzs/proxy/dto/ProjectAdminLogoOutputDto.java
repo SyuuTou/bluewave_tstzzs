@@ -88,4 +88,12 @@ public class ProjectAdminLogoOutputDto {
     public void setProjectAdmin(String projectAdmin) {
         this.projectAdmin = projectAdmin;
     }
+
+	@Override
+	public String toString() {
+		return "ProjectAdminLogoOutputDto [id=" + id + ", logo=" + logo + ", shortName=" + shortName + ", type=" + type
+				+ ", claimStatus=" + claimStatus + ", stage=" + stage + ", followStatus=" + followStatus
+				+ ", projectAdmin=" + projectAdmin + "]";
+	}
+    
 }

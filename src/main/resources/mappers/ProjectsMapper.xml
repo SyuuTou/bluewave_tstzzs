@@ -999,15 +999,16 @@ SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.calculation_amou
         left join admin_project_rating_log aprl on p.ID = aprl.project_id
         left join project_follow_status pfs on p.ID = pfs.project_id
         left join meta_follow_status mfs on pfs.meta_follow_status_id = mfs.id
-        left join (select pa.projects_id,group_concat(au.admin_name) admin_name from(
-        select *
-        from project_administrator
-        group by projects_id,user_id
-        order by id ) pa
-        left join (select u.id,case when u.actual_name is null then uw.nick_name else u.actual_name end admin_name
-        from users u
-        left join users_weixin uw on u.id = uw.user_id) au on pa.user_id = au.id
-        group by projects_id)pau on p.id = pau.projects_id
+        left join (
+			select pa.projects_id,group_concat(au.admin_name) admin_name
+                        from project_administrator pa
+                        left join (
+                                select u.id,case when u.actual_name is null then uw.nick_name else u.actual_name end admin_name from users u
+                                left join users_weixin uw on u.id = uw.user_id 
+                        ) au on pa.user_id = au.id
+                        group by projects_id
+
+                ) pau on p.id = pau.projects_id
         where p.id = #{projectId}
     </select>
     <select id="getBaseInfoById" resultType="java.util.HashMap">

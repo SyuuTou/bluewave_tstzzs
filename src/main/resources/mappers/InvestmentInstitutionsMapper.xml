@@ -91,6 +91,23 @@
         <result column="p_name" jdbcType="VARCHAR" property="pName" />
 
     </resultMap>
+    <!-- 机构头部信息输出DTO -->
+    <resultMap id="subjectHeadInfoOutputDto" type="com.lhjl.tzzs.proxy.dto.ProjectAdminLogoOutputDto">
+        <id column="ID" jdbcType="INTEGER" property="id" />
+        <result column="logo" jdbcType="VARCHAR" property="logo" />
+        <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="claimStatus" jdbcType="VARCHAR" property="claimStatus" />
+        <result column="stage" jdbcType="VARCHAR" property="stage" />
+        <result column="followStatus" jdbcType="VARCHAR" property="followStatus" />
+        <result column="projectAdmin" jdbcType="VARCHAR" property="projectAdmin" />
+    </resultMap>
+    
+    <!-- 该SQL有待进一步完善 -->
+   	<select id="getLogoAndOtherInfoById" parameterType="java.lang.Integer" resultMap="subjectHeadInfoOutputDto">
+       select ii.ID,ii.logo,ii.short_name,"投资机构" as type from investment_institutions ii where ii.ID =#{projectId}
+    </select>
+    
      <select id="blurScan" parameterType="String" resultMap="BaseResultMap">
         select * from investment_institutions where short_name like "%"#{keyword}"%" group by short_name
     </select>

@@ -3,8 +3,8 @@ package com.lhjl.tzzs.proxy.service;
 import com.lhjl.tzzs.proxy.dto.*;
 
 public interface ProjectAdminService {
-    /**
-     * 读取项目logo和其他基本信息
+	/**
+     * 读取主体(项目或者机构)logo和其他基本信息
      * @param projectId
      * @param projectType
      * @return
