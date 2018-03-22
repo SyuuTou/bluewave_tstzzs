@@ -33,7 +33,7 @@ public class InvestorVIPController extends GenericController {
 	/**
 	 * 投资人会员信息输出
 	 * @param appid
-	 * @param id 投资人用户id
+	 * @param id 投资人用户id 
 	 * @return
 	 */
     @GetMapping("/v{appid}/echo/vipinfo")
