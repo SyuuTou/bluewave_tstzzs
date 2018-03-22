@@ -652,7 +652,8 @@ SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.calculation_amou
             and pfl.financing_time_year in
             <foreach close=")" collection="financingTime" index="index" item="item" open="(" separator=",">#{item}</foreach>
         </if>
-        group by p.full_name,ps.segmentation_name
+
+        group by p.full_name
         order by pfl.financing_time desc,p.id asc
         limit #{startNum},#{pageSize}
     </select>
