@@ -67,7 +67,7 @@
   	<result column="foreign_investment_yn" jdbcType="INTEGER" property="foreignInvestmentYn" />
   	<result column="project_type" jdbcType="INTEGER" property="projectType" />
   	<result column="claim_status" jdbcType="INTEGER" property="claimStatus" />
-  	<result column="subjectTypeId" jdbcType="INTEGER" property="subjectTypeId" />
+  	<result column="subjectType" jdbcType="INTEGER" property="subjectType" />
   </resultMap>
   
   <resultMap id="ProjectsSimpleInfosMap" type="com.lhjl.tzzs.proxy.dto.ProInfoDto">
@@ -102,7 +102,7 @@
      select p.ID,p.serial_number,p.short_name,p.full_name,p.kernel_desc,segs.segmentations,p.city,p.project_source,aprl.rating_stage,
 		case when statemp.financing_time is null then concat('正在融',statemp.stage) else statemp.stage end stage,
 		followtemp.focuscount,interviewtemp.interviewcount,proviewtemp.viewcount, pfs.meta_follow_status_id followstatus,
-		p.create_time,p.update_time,p.foreign_investment_yn,p.project_type,p.claim_status,1 as subjectTypeId
+		p.create_time,p.update_time,p.foreign_investment_yn,p.project_type,p.claim_status,1 as subjectType
 		from projects p
 		left join admin_project_rating_log aprl on p.ID = aprl.project_id 
 		left join (select project_id,GROUP_CONCAT(segmentation_name) segmentations from project_segmentation GROUP BY project_id) segs on p.ID=segs.project_id
@@ -121,7 +121,7 @@
 		<!-- 机构视图 -->
 		select ii.ID, '' as serial_number, ii.short_name,ii.full_name,ii.kenel_case as kernel_desc,segs.segmentations, ii.city,ii.data_source_type as project_source, 
 		'' as rating_stage, '' as stage, '' as focuscount, '' as interviewcount, '' as viewcount, '' as followstatus,ii.create_time, NULL as update_time,
-	    1 as foreign_investment_yn, '' as project_type, '' as claim_status,2 as subjectTypeId
+	    1 as foreign_investment_yn, '' as project_type, '' as claim_status,2 as subjectType
 		from investment_institutions ii 
 		left join (
 		select investment_institutions_id , GROUP_CONCAT(`name`) segmentations from investment_institutions_segmentation  iis
@@ -133,8 +133,8 @@
 		
 		where 1=1
 		<!-- 根据主体类型判断是否属于投资机构还是属于项目 -->
-		<if test="subjectTypeId !=null and subjectTypeId ==2 ">
-			 and subjectTypeId =2
+		<if test="subjectType !=null and subjectType ==2 ">
+			 and subjectType =2
 		</if>
 		<if test="keyword !=null and keyword != ''">
 			 and (short_name like "%"#{keyword}"%" or kernel_desc like "%"#{keyword}"%" or
@@ -168,7 +168,7 @@
      	( select * from (select p.ID,p.serial_number,p.short_name,p.full_name,p.kernel_desc,segs.segmentations,p.city,p.project_source,aprl.rating_stage,
 		case when statemp.financing_time is null then concat('正在融',statemp.stage) else statemp.stage end stage,
 		followtemp.focuscount,interviewtemp.interviewcount,proviewtemp.viewcount, pfs.meta_follow_status_id followstatus,
-		p.create_time,p.update_time,p.foreign_investment_yn,p.project_type,p.claim_status,1 as subjectTypeId
+		p.create_time,p.update_time,p.foreign_investment_yn,p.project_type,p.claim_status,1 as subjectType
 		from projects p
 		left join admin_project_rating_log aprl on p.ID = aprl.project_id 
 		left join (select project_id,GROUP_CONCAT(segmentation_name) segmentations from project_segmentation GROUP BY project_id) segs on p.ID=segs.project_id
@@ -187,7 +187,7 @@
 
 		select ii.ID, '' as serial_number, ii.short_name,ii.full_name,ii.kenel_case as kernel_desc,segs.segmentations, ii.city,ii.data_source_type as project_source, 
 		'' as rating_stage, '' as stage, '' as focuscount, '' as interviewcount, '' as viewcount, '' as followstatus,ii.create_time, NULL as update_time,
-	    1 as foreign_investment_yn, '' as project_type, '' as claim_status, 2 as subjectTypeId
+	    1 as foreign_investment_yn, '' as project_type, '' as claim_status, 2 as subjectType
 		from investment_institutions ii 
 		left join (
 		select investment_institutions_id , GROUP_CONCAT(`name`) segmentations from investment_institutions_segmentation  iis
@@ -199,8 +199,8 @@
 		
 		where 1=1
 		<!-- 根据主体类型判断是否属于投资机构还是属于项目 -->
-		<if test="subjectTypeId !=null and subjectTypeId == 2 ">
-			 and subjectTypeId = 2
+		<if test="subjectType !=null and subjectType == 2 ">
+			 and subjectType = 2
 		</if>
 		<if test="keyword !=null and keyword != ''">
 			 and (short_name like "%"#{keyword}"%" or kernel_desc like "%"#{keyword}"%" or

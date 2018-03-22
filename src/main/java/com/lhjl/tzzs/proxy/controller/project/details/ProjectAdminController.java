@@ -41,8 +41,8 @@ public class ProjectAdminController extends GenericController{
     }
 
     /**
-     * 更改项目logo和其他基本信息的接口
-     * @param body
+     * 更新项目详情主体(项目/机构...)头部基本信息
+     * @param body 项目详情部分头部信息请求体
      * @return
      */
     @PostMapping("update/project/logo")

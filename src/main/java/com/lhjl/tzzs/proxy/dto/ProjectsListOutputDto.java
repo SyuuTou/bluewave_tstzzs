@@ -103,15 +103,16 @@ public class ProjectsListOutputDto {
 	 * 2 (属于机构)
 	 * 用于区分是来自于项目表还是机构表
 	 */
-	private Integer subjectTypeId;
+	private Integer subjectType;
 	
 	
-	public Integer getSubjectTypeId() {
-		return subjectTypeId;
+
+	public Integer getSubjectType() {
+		return subjectType;
 	}
 
-	public void setSubjectTypeId(Integer subjectTypeId) {
-		this.subjectTypeId = subjectTypeId;
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
 	}
 
 	public Integer getClaimStatus() {
@@ -282,14 +283,5 @@ public class ProjectsListOutputDto {
 		this.updateTime = updateTime;
 	}
 
-	@Override
-	public String toString() {
-		return "ProjectsListOutputDto [id=" + id + ", serialNumber=" + serialNumber + ", shortName=" + shortName
-				+ ", kernelDesc=" + kernelDesc + ", city=" + city + ", projectSource=" + projectSource
-				+ ", ratingStage=" + ratingStage + ", stage=" + stage + ", focusCount=" + focusCount
-				+ ", interviewCount=" + interviewCount + ", viewCount=" + viewCount + ", followStatus=" + followStatus
-				+ ", createTime=" + createTime + ", updateTime=" + updateTime + "]";
-	}
-	
 	
 }

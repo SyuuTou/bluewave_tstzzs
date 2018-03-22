@@ -49,13 +49,13 @@ public class ProjectsListInputDto {
 	 * 1 项目
 	 * 2 机构
 	 */
-	private Integer subjectTypeId;
+	private Integer subjectType;
 	
-	public Integer getSubjectTypeId() {
-		return subjectTypeId;
+	public Integer getSubjectType() {
+		return subjectType;
 	}
-	public void setSubjectTypeId(Integer subjectTypeId) {
-		this.subjectTypeId = subjectTypeId;
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
 	}
 	public String getColumn() {
 		return column;
@@ -129,7 +129,7 @@ public class ProjectsListInputDto {
 		return "ProjectsListInputDto [column=" + column + ", order=" + order + ", keyword=" + keyword + ", currentPage="
 				+ currentPage + ", pageSize=" + pageSize + ", start=" + start + ", projectSource=" + projectSource
 				+ ", ratingStage=" + ratingStage + ", stage=" + stage + ", followStatus=" + followStatus
-				+ ", subjectTypeId=" + subjectTypeId + "]";
+				+ ", subjectType=" + subjectType + "]";
 	}
 }
 
