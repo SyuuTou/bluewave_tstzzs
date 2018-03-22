@@ -59,7 +59,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
         if (projectType == 1){
             result = readProjectLogo(projectId);
         }else {
-            //todo 读机构信息
+            //TODO 读机构信息
         }
 
         return result;

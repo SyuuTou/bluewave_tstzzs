@@ -67,6 +67,7 @@
   	<result column="foreign_investment_yn" jdbcType="INTEGER" property="foreignInvestmentYn" />
   	<result column="project_type" jdbcType="INTEGER" property="projectType" />
   	<result column="claim_status" jdbcType="INTEGER" property="claimStatus" />
+  	<result column="subjectTypeId" jdbcType="INTEGER" property="subjectTypeId" />
   </resultMap>
   
   <resultMap id="ProjectsSimpleInfosMap" type="com.lhjl.tzzs.proxy.dto.ProInfoDto">
@@ -94,12 +95,14 @@
     where p.ID =#{projectId}
 	GROUP BY p.short_name
   </select>
-    <!-- 用户关注的项目 -->
+  
 	<select id="findSplit" parameterType="com.lhjl.tzzs.proxy.dto.ProjectsListInputDto" resultMap="ProjectsListOutputDtoMap">
-     select * from (select p.ID,p.serial_number,p.short_name,p.full_name,p.kernel_desc,segs.segmentations,p.city,p.project_source,aprl.rating_stage,
+     select * from (
+     <!-- 项目视图 -->
+     select p.ID,p.serial_number,p.short_name,p.full_name,p.kernel_desc,segs.segmentations,p.city,p.project_source,aprl.rating_stage,
 		case when statemp.financing_time is null then concat('正在融',statemp.stage) else statemp.stage end stage,
 		followtemp.focuscount,interviewtemp.interviewcount,proviewtemp.viewcount, pfs.meta_follow_status_id followstatus,
-		p.create_time,p.update_time,p.foreign_investment_yn,p.project_type,p.claim_status
+		p.create_time,p.update_time,p.foreign_investment_yn,p.project_type,p.claim_status,1 as subjectTypeId
 		from projects p
 		left join admin_project_rating_log aprl on p.ID = aprl.project_id 
 		left join (select project_id,GROUP_CONCAT(segmentation_name) segmentations from project_segmentation GROUP BY project_id) segs on p.ID=segs.project_id
@@ -111,24 +114,27 @@
 					SELECT * FROM project_financing_log
 				    order by ISNULL(financing_time) desc ,financing_time desc
     				) statemp on p.ID = statemp.project_id
+    	<!-- 对项目数据按照简称进行去重 -->
 		GROUP BY p.short_name 
     	
     	union all
-
+		<!-- 机构视图 -->
 		select ii.ID, '' as serial_number, ii.short_name,ii.full_name,ii.kenel_case as kernel_desc,segs.segmentations, ii.city,ii.data_source_type as project_source, 
 		'' as rating_stage, '' as stage, '' as focuscount, '' as interviewcount, '' as viewcount, '' as followstatus,ii.create_time, NULL as update_time,
-	    1 as foreign_investment_yn, '' as project_type, '' as claim_status
+	    1 as foreign_investment_yn, '' as project_type, '' as claim_status,2 as subjectTypeId
 		from investment_institutions ii 
 		left join (
 		select investment_institutions_id , GROUP_CONCAT(`name`) segmentations from investment_institutions_segmentation  iis
 		LEFT JOIN meta_segmentation ms on iis.meta_segmentation_id= ms.id
 		GROUP BY iis.investment_institutions_id
-		) segs on ii.ID=segs.investment_institutions_id ) tmp
+		) segs on ii.ID=segs.investment_institutions_id 
+		<!-- 对机构数据按照简称进行去重 -->
+		group by ii.short_name ) tmp
 		
 		where 1=1
-		<!-- 用于筛选机构 -->
-		<if test="foreignInvestmentYn !=null and foreignInvestmentYn != '' ">
-			 and foreign_investment_yn =1
+		<!-- 根据主体类型判断是否属于投资机构还是属于项目 -->
+		<if test="subjectTypeId !=null and subjectTypeId ==2 ">
+			 and subjectTypeId =2
 		</if>
 		<if test="keyword !=null and keyword != ''">
 			 and (short_name like "%"#{keyword}"%" or kernel_desc like "%"#{keyword}"%" or
@@ -149,6 +155,8 @@
 		<if test="followStatus !=null and followStatus != ''">
 			and meta_follow_status_id = #{followStatus}
 		</if>
+		<!-- 对最终的结果集进行去重 -->
+			group by short_name
 		<if test="column !=null and column != '' and order != null and order != ''">
 			order by ${column} ${order}
 		</if>
@@ -160,7 +168,7 @@
      	( select * from (select p.ID,p.serial_number,p.short_name,p.full_name,p.kernel_desc,segs.segmentations,p.city,p.project_source,aprl.rating_stage,
 		case when statemp.financing_time is null then concat('正在融',statemp.stage) else statemp.stage end stage,
 		followtemp.focuscount,interviewtemp.interviewcount,proviewtemp.viewcount, pfs.meta_follow_status_id followstatus,
-		p.create_time,p.update_time,p.foreign_investment_yn,p.project_type,p.claim_status
+		p.create_time,p.update_time,p.foreign_investment_yn,p.project_type,p.claim_status,1 as subjectTypeId
 		from projects p
 		left join admin_project_rating_log aprl on p.ID = aprl.project_id 
 		left join (select project_id,GROUP_CONCAT(segmentation_name) segmentations from project_segmentation GROUP BY project_id) segs on p.ID=segs.project_id
@@ -172,24 +180,27 @@
 					SELECT * FROM project_financing_log
 				    order by ISNULL(financing_time) desc ,financing_time desc
     				) statemp on p.ID = statemp.project_id
+    	<!-- 对项目数据按照简称进行去重 -->
 		GROUP BY p.short_name 
     	
     	union all
 
 		select ii.ID, '' as serial_number, ii.short_name,ii.full_name,ii.kenel_case as kernel_desc,segs.segmentations, ii.city,ii.data_source_type as project_source, 
 		'' as rating_stage, '' as stage, '' as focuscount, '' as interviewcount, '' as viewcount, '' as followstatus,ii.create_time, NULL as update_time,
-	    1 as foreign_investment_yn, '' as project_type, '' as claim_status
+	    1 as foreign_investment_yn, '' as project_type, '' as claim_status, 2 as subjectTypeId
 		from investment_institutions ii 
 		left join (
 		select investment_institutions_id , GROUP_CONCAT(`name`) segmentations from investment_institutions_segmentation  iis
 		LEFT JOIN meta_segmentation ms on iis.meta_segmentation_id= ms.id
 		GROUP BY iis.investment_institutions_id
-		) segs on ii.ID=segs.investment_institutions_id ) tmp
+		) segs on ii.ID=segs.investment_institutions_id
+		<!-- 对机构数据按照简称进行去重 -->
+		group by ii.short_name ) tmp
 		
 		where 1=1
-		<!-- 用于筛选机构 -->
-		<if test="foreignInvestmentYn !=null and foreignInvestmentYn != '' ">
-			 and foreign_investment_yn =1
+		<!-- 根据主体类型判断是否属于投资机构还是属于项目 -->
+		<if test="subjectTypeId !=null and subjectTypeId == 2 ">
+			 and subjectTypeId = 2
 		</if>
 		<if test="keyword !=null and keyword != ''">
 			 and (short_name like "%"#{keyword}"%" or kernel_desc like "%"#{keyword}"%" or
@@ -210,6 +221,8 @@
 		<if test="followStatus !=null and followStatus != ''">
 			and meta_follow_status_id = #{followStatus}
 		</if>
+		<!-- 对最终的结果集进行去重 -->
+		group by short_name
 		) pro
     </select>
     
