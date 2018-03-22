@@ -24,8 +24,8 @@ import com.lhjl.tzzs.proxy.service.InvestorService;
  * @author IdataVC
  *
  */
-@RestController
-public class InvestorVIPController extends GenericController {
+@RestController  
+public class InvestorVIPController extends GenericController {  
 	@Resource 
 	private InvestorService investorService;
 	@Resource 
