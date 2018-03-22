@@ -1125,9 +1125,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			body.setPageSize(pageSizeDefault);
 		}
 		body.setStart((long)(body.getCurrentPage()-1) * body.getPageSize());
-		System.err.println("1111111");
 		List<ProjectsListOutputDto> list = projectsMapper.findSplit(body);
-		System.err.println("2222222");
 		//设置创建时间，更新时间输出字符串格式
 		list.forEach((e)->{  
 			//设置提交时间
@@ -1144,7 +1142,6 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			
 		});
 		Long total = projectsMapper.findSplitCount(body);
-		System.err.println("333333");
 		map.put("data", list);
 		map.put("total", total);
 		map.put("currentPage",body.getCurrentPage());

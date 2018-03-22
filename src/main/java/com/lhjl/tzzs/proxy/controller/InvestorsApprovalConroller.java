@@ -204,7 +204,7 @@ public class InvestorsApprovalConroller {
 	 * @param body
 	 * @return
 	 */
-	@PostMapping("admin/approval")
+	@PostMapping("admin/approval")  
 	public CommonDto<String> adminApproval(@RequestBody InvestorSpecialApprovalDto body){
 		CommonDto<String> result = new CommonDto<>();
 		try {
@@ -218,7 +218,7 @@ public class InvestorsApprovalConroller {
 		}
 
 		return result;
-
+ 
 	}
 
 	/**

@@ -18,8 +18,10 @@ public class ProjectAdminController extends GenericController{
 
     /**
      * 获取后台项目编辑页的
-     * @param projectId
-     * @param projectType
+     * @param projectId 主体id
+     * @param projectType 主体的类型，
+     * 	1 代表项目
+     * 	2 代表机构
      * @return
      */
     @GetMapping("get/project/logo")
@@ -39,8 +41,8 @@ public class ProjectAdminController extends GenericController{
     }
 
     /**
-     * 更改项目logo和其他基本信息的接口
-     * @param body
+     * 更新项目详情主体(项目/机构...)头部基本信息
+     * @param body 项目详情部分头部信息请求体
      * @return
      */
     @PostMapping("update/project/logo")

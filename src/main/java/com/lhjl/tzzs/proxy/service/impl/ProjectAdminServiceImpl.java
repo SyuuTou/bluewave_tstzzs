@@ -2,9 +2,11 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.google.common.base.Joiner;
 import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectCompetitiveProductsMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectSegmentationMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
+import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.ProjectCompetitiveProducts;
 import com.lhjl.tzzs.proxy.model.ProjectSegmentation;
 import com.lhjl.tzzs.proxy.model.Projects;
@@ -33,13 +35,11 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 
     @Autowired
     private ProjectCompetitiveProductsMapper projectCompetitiveProductsMapper;
+    
+    @Autowired
+    private InvestmentInstitutionsMapper investmentInstitutionsMapper;
 
-    /**
-     * 读取项目logo和其他基本信息
-     * @param projectId
-     * @param projectType
-     * @return
-     */
+    
     @Override
     public CommonDto<ProjectAdminLogoOutputDto> getProjectLogoAndMainInfo(Integer projectId, Integer projectType) {
         CommonDto<ProjectAdminLogoOutputDto> result = new CommonDto<>();
@@ -53,19 +53,112 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
         }
 
         if (projectType == null){
-            projectType = 1;
+//            projectType = 1;
+            result.setData(null);
+            result.setMessage("请指定相关的主体信息，1：项目；2：机构...");
+            result.setStatus(500);
+            return result;
         }
 
-        if (projectType == 1){
+        if (projectType == 1){ // 读项目信息
             result = readProjectLogo(projectId);
+        }else if(projectType == 2){// 读机构信息
+        	result = readInstitutionLogo(projectId);
         }else {
-            //todo 读机构信息
+        	result.setData(null);
+            result.setMessage("属于其他主体类型，业务有待进一步完善");
+            result.setStatus(500);
+            return result;
         }
 
         return result;
     }
-
     /**
+     * 读取机构logo和一些基本信息的方法
+     * @param projectId
+     * @return
+     */
+    private CommonDto<ProjectAdminLogoOutputDto> readInstitutionLogo(Integer projectId) {
+    	CommonDto<ProjectAdminLogoOutputDto> result =new CommonDto<ProjectAdminLogoOutputDto>();
+    	ProjectAdminLogoOutputDto baseInfo = investmentInstitutionsMapper.getLogoAndOtherInfoById(projectId);
+    	
+        if (baseInfo != null){
+        	if(baseInfo.getStage()!=null) {
+        		switch(Integer.valueOf(baseInfo.getStage())) {
+        		case 0:baseInfo.setStage("D级"); 
+                break;
+                case 1:baseInfo.setStage("C级") ;
+                    break;
+                case 2:baseInfo.setStage("B级") ;
+                    break;
+                case 3:baseInfo.setStage("A级");
+                    break;
+                case 4:baseInfo.setStage("S级") ;
+                    break;
+                default:baseInfo.setStage(null) ;
+        		}
+        	}
+        	//TODO 认领状态需要根据后台的设计来提供而不是程序中控制，需要完善
+        	baseInfo.setClaimStatus("未认领");
+        	//TODO 机构暂时默认为投资机构，需要完善
+        	baseInfo.setType("投资机构");
+        	
+            result.setMessage("success");
+            result.setData(baseInfo);
+            result.setStatus(200);
+
+        }else {
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("没有找到机构信息，请检查机构id");
+
+        }
+    	
+		return result;
+	}
+    /**
+     * 读取项目logo和一些基本信息的方法
+     * @param projectId
+     * @return
+     */
+    private CommonDto<ProjectAdminLogoOutputDto> readProjectLogo(Integer projectId){
+        CommonDto<ProjectAdminLogoOutputDto> result = new CommonDto<>();
+
+        ProjectAdminLogoOutputDto baseInfo = projectsMapper.getLogoAndOtherInfoById(projectId);
+        if (baseInfo != null){
+        	if(baseInfo.getStage()!=null) {
+        		switch(Integer.valueOf(baseInfo.getStage())) {
+        		case 0:baseInfo.setStage("D级"); 
+                break;
+                case 1:baseInfo.setStage("C级") ;
+                    break;
+                case 2:baseInfo.setStage("B级") ;
+                    break;
+                case 3:baseInfo.setStage("A级");
+                    break;
+                case 4:baseInfo.setStage("S级") ;
+                    break;
+                default:baseInfo.setStage(null) ;
+        		}
+        	}
+        	//TODO 此处需要根据后台的设计来提供而不是程序中控制，需要完善
+        	baseInfo.setClaimStatus("未认领");
+        	//TODO 机构暂时默认为创业公司，需要完善
+        	baseInfo.setType("创业公司");
+        	
+            result.setMessage("success");
+            result.setData(baseInfo);
+            result.setStatus(200);
+
+        }else {
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("没有找到项目信息，请检查项目id");
+
+        }
+        return result;
+    }
+	/**
      * 更改项目logo和其他基本信息的接口
      * @param body
      * @return
@@ -75,16 +168,16 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
     public CommonDto<String> updateProjectLogoAndMainInfo(ProjectAdminLogoInputDto body) {
         CommonDto<String> result = new CommonDto<>();
 
-        if (body.getProjectId() == null){
+        /*if (body.getProjectId() == null){
             result.setStatus(502);
             result.setData(null);
             result.setMessage("项目id不能为空");
 
             return result;
-        }
+        }*/
 
-        if (body.getProjectType() == null){
-            result.setMessage("项目类型不能为空");
+        if (body.getSubjectType() == null){
+            result.setMessage("主体类型不能为空");
             result.setData(null);
             result.setStatus(502);
 
@@ -98,51 +191,100 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 
             return result;
         }
+        
+        //对项目简称的有效性进行判断
+        if(body.getSubjectType()==1) {
+        	Projects projects = new Projects();
+            projects.setShortName(body.getShortName());
+            List<Projects> projectsList = projectsMapper.select(projects);
+            if (projectsList.size() > 0){//该项目简称在项目表中存在
+            	//原项目id所对应的项目
+                Projects projectsForCompare = new Projects();
+                projectsForCompare = projectsMapper.selectByPrimaryKey(body.getProjectId());
+                //如果该简称不等同于所更改项目的简称
+                if ( ! projectsList.get(0).getShortName().equals(projectsForCompare.getShortName()) ){
 
+                    result.setMessage("该项目已经存在");
+                    result.setData(null);
+                    result.setStatus(502);
 
-        Projects projects = new Projects();
-        projects.setShortName(body.getShortName());
-
-        List<Projects> projectsList = projectsMapper.select(projects);
-        if (projectsList.size() > 0){
-
-            Projects projectsForCompare = new Projects();
-            projectsForCompare = projectsMapper.selectByPrimaryKey(body.getProjectId());
-
-            if (String.valueOf(projectsList.get(0).getShortName()).equals(String.valueOf(projectsForCompare.getShortName()))){
-
-            }else {
-
-                result.setMessage("项目名称已存在");
-                result.setData(null);
-                result.setStatus(502);
-
-                return result;
+                    return result;
+                }
             }
+        }else if(body.getSubjectType()==2){
+        	InvestmentInstitutions ii = new InvestmentInstitutions();
+            ii.setShortName(body.getShortName());
+            List<InvestmentInstitutions> iiList = investmentInstitutionsMapper.select(ii);
+            if (iiList.size() > 0){//该机构简称在机构表中存在
+            	//原机构id所对应的项目
+            	InvestmentInstitutions iiForCompare = new InvestmentInstitutions();
+            	iiForCompare = investmentInstitutionsMapper.selectByPrimaryKey(body.getProjectId());
+                //如果该简称不等同于所更改机构的简称
+                if ( ! iiList.get(0).getShortName().equals(iiForCompare.getShortName()) ){
+
+                    result.setMessage("该机构已经存在");
+                    result.setData(null);
+                    result.setStatus(502);
+
+                    return result;
+                }
+            }
+            
         }
-
-        if (body.getProjectType() != null && body.getProjectType() == 1){
+        //接收自增长id用于
+        Integer updatedId = body.getProjectId();
+        if (body.getSubjectType() == 1){
             //更新项目信息
-            Projects projectsForInsert = new Projects();
-            projectsForInsert.setShortName(body.getShortName());
-            projectsForInsert.setId(body.getProjectId());
-            if (body.getProjectLogo() != null && body.getProjectLogo() != ""){
-                projectsForInsert.setProjectLogo(body.getProjectLogo());
+            Projects projects = new Projects();
+            projects.setId(body.getProjectId());
+            projects.setShortName(body.getShortName());
+            //设置项目类型
+            projects.setProjectType(body.getProjectType());
+            projects.setProjectLogo(body.getProjectLogo());
+            
+            if(body.getProjectId()==null) {//执行新增操作
+            	projectsMapper.insertSelective(projects);
+            	//设置自增长id
+            	updatedId=projects.getId();
+            }else {//执行更新操作
+            	projectsMapper.updateByPrimaryKeySelective(projects);
             }
-            projectsMapper.updateByPrimaryKeySelective(projectsForInsert);
-
+            
             //添加项目管理员
             if(body.getUserId() != null){
-                projectAuditService.adminAddAdministractor(body.getProjectId(),body.getUserId());
+                projectAuditService.adminAddAdministractor(body.getProjectId(),updatedId);
             }
-        }else {
-            //todo 机构逻辑的处理
+            //TODO 项目评级信息的更新(单独接口)
+            
+            //TODO 项目跟进状态的更新(单独接口)
+        }else if(body.getSubjectType() == 2){
+        	InvestmentInstitutions ii=new InvestmentInstitutions();
+        	ii.setId(body.getProjectId());
+        	ii.setShortName(body.getShortName());
+        	ii.setLogo(body.getProjectLogo());
+        	//TODO 设置机构的类型
+        	
+        	if(body.getProjectId()==null) {//执行新增操作
+        		investmentInstitutionsMapper.insertSelective(ii);
+        		updatedId=ii.getId();
+            }else {//执行更新操作
+            	investmentInstitutionsMapper.updateByPrimaryKeySelective(ii);
+//            	ii.
+            }
+        	
+        	//TODO 添加机构管理员
+        	if(body.getUserId()!=null) {
+        		
+        	}
+        	
+            //TODO 机构评级信息的更新(单独接口)
+            
+            //TODO 机构跟进状态的更新(单独接口)
         }
 
         result.setStatus(200);
         result.setData(null);
         result.setMessage("success");
-
 
         return result;
     }
@@ -380,70 +522,5 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
         return result;
     }
 
-    /**
-     * 读取项目logo和一些基本信息的方法
-     * @param projectId
-     * @return
-     */
-    private CommonDto<ProjectAdminLogoOutputDto> readProjectLogo(Integer projectId){
-        CommonDto<ProjectAdminLogoOutputDto> result = new CommonDto<>();
-
-        Map<String,Object> baseInfo  = projectsMapper.getLogoAndOtherInfoById(projectId);
-        if (baseInfo != null){
-            ProjectAdminLogoOutputDto projectAdminLogoOutputDto= new ProjectAdminLogoOutputDto();
-            projectAdminLogoOutputDto.setId((Integer)baseInfo.get("id"));
-            String logo = "";
-            if (baseInfo.get("project_logo") != null){
-                logo = (String)baseInfo.get("project_logo");
-            }
-            projectAdminLogoOutputDto.setLogo(logo);
-            String shortName = "";
-            if (baseInfo.get("short_name") != null){
-                shortName = (String)baseInfo.get("short_name");
-            }
-            projectAdminLogoOutputDto.setShortName(shortName);
-            Integer ratingStage = -1;
-            String ratingStageString = "";
-            if (baseInfo.get("rating_stage") != null){
-                ratingStage = (Integer)baseInfo.get("rating_stage");
-            }
-            switch (ratingStage){
-                case 0:ratingStageString = "D级";
-                break;
-                case 1:ratingStageString = "C级";
-                    break;
-                case 2:ratingStageString = "B级";
-                    break;
-                case 3:ratingStageString = "A级";
-                    break;
-                case 4:ratingStageString = "S级";
-                    break;
-                default:ratingStageString = "";
-            }
-            projectAdminLogoOutputDto.setStage(ratingStageString);
-            String statusName= "";
-            if (baseInfo.get("status_name") != null){
-                statusName = (String)baseInfo.get("status_name");
-            }
-            projectAdminLogoOutputDto.setFollowStatus(statusName);
-            String adminName = "";
-            if (baseInfo.get("admin_name") != null){
-                adminName = (String)baseInfo.get("admin_name");
-            }
-            projectAdminLogoOutputDto.setProjectAdmin(adminName);
-            projectAdminLogoOutputDto.setClaimStatus("未认领");
-            projectAdminLogoOutputDto.setType("创业公司");
-
-            result.setMessage("success");
-            result.setData(projectAdminLogoOutputDto);
-            result.setStatus(200);
-
-        }else {
-            result.setStatus(502);
-            result.setData(null);
-            result.setMessage("没有找到项目信息，请检查项目id");
-
-        }
-        return result;
-    }
+   
 }
