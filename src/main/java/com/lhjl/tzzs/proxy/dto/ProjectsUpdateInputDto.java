@@ -2,13 +2,26 @@ package com.lhjl.tzzs.proxy.dto;
 
 public class ProjectsUpdateInputDto {
 	/**
-	 * 项目id
+	 * 主体id
 	 */
 	private Integer id;
 	/**
 	 * 项目的跟进状态
 	 */
 	private Integer status;
+	/**
+	 * 主体类型
+	 * 1 项目
+	 * 2 机构
+	 */
+	private Integer subjectType;
+	
+	public Integer getSubjectType() {
+		return subjectType;
+	}
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
 
 	/**跟进状态描述*/
 	private String description;

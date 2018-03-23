@@ -2,9 +2,9 @@ package com.lhjl.tzzs.proxy.dto;
 
 public class ProjectRatingDto {
     /**
-     * 项目id
+     * 主体id
      */
-    private Integer projectId;
+    private Integer subjectId;
     /**
      * 评级等级
      */
@@ -17,16 +17,32 @@ public class ProjectRatingDto {
      * 评级管理员姓名
      */
     private String ratingAdminName;
+    
+    /**
+     * 主体类型
+     * 1 项目
+     * 2 机构
+     */
+    private Integer subjectType;
+    
 
-    public Integer getProjectId() {
-        return projectId;
-    }
+    public Integer getSubjectType() {
+		return subjectType;
+	}
 
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
-    }
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
 
-    public Integer getRatingStage() {
+    public Integer getSubjectId() {
+		return subjectId;
+	}
+
+	public void setSubjectId(Integer subjectId) {
+		this.subjectId = subjectId;
+	}
+
+	public Integer getRatingStage() {
         return ratingStage;
     }
 

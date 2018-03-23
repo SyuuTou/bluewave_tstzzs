@@ -18,7 +18,7 @@ public class ProjectAdminController extends GenericController{
     private ProjectAdminService projectAdminService;
 
     /**
-     * 获取后台项目编辑页的
+     * 获取后台主体详情头部信息
      * @param subjectId 主体id
      * @param subjectType 主体的类型，
      * 	1 代表项目
@@ -42,8 +42,8 @@ public class ProjectAdminController extends GenericController{
     }
 
     /**
-     * 保存或者更新项目详情主体(项目/机构...)头部基本信息
-     * @param body 项目详情部分头部信息请求体
+     * 保存或者更新主体详情详情主体(项目/机构...)头部基本信息
+     * @param body 主体详情部分头部信息请求体
      * @return
      */
     @PostMapping("update/project/logo")

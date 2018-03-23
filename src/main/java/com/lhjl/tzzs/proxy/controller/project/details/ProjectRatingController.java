@@ -5,6 +5,7 @@ import com.lhjl.tzzs.proxy.dto.AdminCreatProjectDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectRatingDto;
 import com.lhjl.tzzs.proxy.model.AdminProjectRatingLog;
+import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
 import com.lhjl.tzzs.proxy.service.ProjectRatingService;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +20,12 @@ public class ProjectRatingController extends GenericController {
 
     @Resource
     private ProjectRatingService projectRatingService;
+    
+    @Resource
+    private InvestmentInstitutionsService investmentInstitutionsService;
 
     /**
-     *
+     * 编辑项目评级信息
      * @param projectId
      * @param ratingStage(0表示D级,1表示C级,2表示B级,3表示A级,4表示S级)
      * @param ratingDiscription
@@ -29,19 +33,27 @@ public class ProjectRatingController extends GenericController {
      * @return
      */
     @GetMapping("admin/project/rating")
-    public CommonDto<String> projectRatingLevel(Integer projectId,Integer ratingStage,String ratingDiscription,String ratingAdminName){
+    public CommonDto<String> projectRatingLevel(Integer subjectId,Integer ratingStage,String ratingDiscription,String ratingAdminName,Integer subjectType){
         CommonDto<String> result = new CommonDto<>();
 
-        //POST请求改GET请求时将参数转化一下
+        //参数转换
         ProjectRatingDto body = new ProjectRatingDto();
-        body.setProjectId(projectId);
+        body.setSubjectId(subjectId);
         body.setRatingAdminName(ratingAdminName);
         body.setRatingDiscription(ratingDiscription);
         body.setRatingStage(ratingStage);
+        body.setSubjectType(subjectType);
 
 
         try {
-        result = projectRatingService.projectRating(body);
+        	if(body.getSubjectType().equals(1)) {//项目评级
+        		result = projectRatingService.projectRating(body);
+        	}else if(body.getSubjectType().equals(2)) {//机构评级
+        		//TODO 机构评级（待完善）
+        		result= investmentInstitutionsService.institutionRating(body);
+        	}else {
+        		//TODO 其他项目类别的评级
+        	}
         }catch (Exception e){
             result.setMessage("服务器端发生错误");
             result.setData(null);

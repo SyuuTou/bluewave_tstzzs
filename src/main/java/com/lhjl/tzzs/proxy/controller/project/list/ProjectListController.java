@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
 import com.lhjl.tzzs.proxy.model.MetaFollowStatus;
 import com.lhjl.tzzs.proxy.model.ProjectBusinessPlanImage;
 import com.lhjl.tzzs.proxy.model.ProjectFollowStatus;
+import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
 import com.lhjl.tzzs.proxy.service.ProjectBusinessPlanService;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
 
@@ -28,6 +29,8 @@ public class ProjectListController extends GenericController {
 
 	@Resource
     private ProjectsService projectsService;
+	@Resource
+	private InvestmentInstitutionsService investmentInstitutionsService;
 	/**
      * 天使投资指数的项目列表
      * @param appid
@@ -58,7 +61,13 @@ public class ProjectListController extends GenericController {
     public CommonDto<Boolean> updateFollowStatus(@PathVariable("appid") Integer appid,@RequestBody ProjectsUpdateInputDto body){
     	CommonDto<Boolean> result = new CommonDto<>();
     	try {
-    		result=projectsService.updateFollowStatus(appid,body);
+    		if(body.getSubjectType().equals(1)) {//项目跟进状态变更
+        		result=projectsService.updateFollowStatus(appid,body);
+    		}else if(body.getSubjectType().equals(2)){//机构跟进状态变更
+    			result=investmentInstitutionsService.updateFollowStatus(appid,body);
+    		}else {
+    			
+    		}
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
     		
