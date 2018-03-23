@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto;
+import com.lhjl.tzzs.proxy.dto.ProjectAdminLogoOutputDto;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -70,4 +72,10 @@ public interface InvestmentInstitutionsMapper extends OwnerMapper<InvestmentInst
     String selectById(@Param("investmentInstitutionsId") Integer investmentInstitutionsId);
 
     InvestmentInstitutions selectByShortName(@Param("shortName") String shortName);
+    /**
+     * 获取机构的logo以及其他基本信息
+     * @param projectId 机构id
+     * @return
+     */
+    ProjectAdminLogoOutputDto getLogoAndOtherInfoById(@Param("institutionId") Integer institutionId);
 }
