@@ -107,6 +107,13 @@ public class DatasOperationManage {
      */
     @Transient
     private Integer recommand;
+    /**
+     * 主体类型
+     * 1 项目
+     * 2 机构
+     */
+    @Transient
+    private Integer subjectType;
 
     /**
      * 获取数据ID
@@ -404,6 +411,14 @@ public class DatasOperationManage {
 		this.recommand = recommand;
 	}
 
+	public Integer getSubjectType() {
+		return subjectType;
+	}
+
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
+
 	@Override
 	public String toString() {
 		return "DatasOperationManage [dataId=" + dataId + ", dataType=" + dataType + ", basicsRecommend="
@@ -412,7 +427,8 @@ public class DatasOperationManage {
 				+ customerGrade + ", sourceType=" + sourceType + ", irPrincipal=" + irPrincipal + ", wechatGroupId="
 				+ wechatGroupId + ", note=" + note + ", isHide=" + isHide + ", creator=" + creator + ", createTime="
 				+ createTime + ", updateTime=" + updateTime + ", indexType=" + indexType + ", recommand=" + recommand
-				+ "]";
+				+ ", subjectType=" + subjectType + "]";
 	}
+
     
 }

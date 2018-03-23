@@ -58,7 +58,7 @@ public class ProjectManageController extends GenericController {
     public CommonDto<Boolean> saveOrUpdateInvestorsManagement(@PathVariable Integer appid,@RequestBody DatasOperationManage body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result = projectsService.saveOrUpdateProjectManagement(appid,body);
+    		result = projectsService.saveOrUpdateManagement(appid,body);
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		

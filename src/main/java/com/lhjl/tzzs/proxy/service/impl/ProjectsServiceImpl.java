@@ -1776,15 +1776,22 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<Boolean> saveOrUpdateProjectManagement(Integer appid, DatasOperationManage body) {
+	public CommonDto<Boolean> saveOrUpdateManagement(Integer appid, DatasOperationManage body) {
 		CommonDto<Boolean> result =new CommonDto<>();
 		
 		DatasOperationManage dom =new DatasOperationManage();
 		dom.setDataId(body.getDataId());
-		dom.setDataType("PROJECT");
 		
-		body.setDataType("PROJECT");
 		try {
+			
+			if(body.getSubjectType().equals(1)) {
+				dom.setDataType("PROJECT");
+				body.setDataType("PROJECT");
+			}else if(body.getSubjectType().equals(2)) {
+				dom.setDataType("INVESTMENT_INSTITUTIONS");
+				body.setDataType("INVESTMENT_INSTITUTIONS");
+			}
+			
 			if( datasOperationManageMapper.selectOne(dom) != null) {//执行更新操作
 				body.setUpdateTime(new Date());
 				datasOperationManageMapper.updateByPrimaryKeySelective(body);
@@ -1795,7 +1802,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		}catch(Exception e ) {
 			result.setData(true);
 	        result.setStatus(200); 
-	        result.setMessage("运营管理表中存在项目冗余数据，数据存在问题");
+	        result.setMessage("运营管理表中存在主题类型不唯一的冗余数据，DB数据存在问题");
 			return result;
 		}
 		result.setData(true);

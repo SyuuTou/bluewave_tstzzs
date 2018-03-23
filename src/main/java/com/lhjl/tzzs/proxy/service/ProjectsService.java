@@ -298,6 +298,6 @@ public interface ProjectsService {
      * @param body
      * @return
      */
-	CommonDto<Boolean> saveOrUpdateProjectManagement(Integer appid, DatasOperationManage body);
+	CommonDto<Boolean> saveOrUpdateManagement(Integer appid, DatasOperationManage body);
 	
 }
