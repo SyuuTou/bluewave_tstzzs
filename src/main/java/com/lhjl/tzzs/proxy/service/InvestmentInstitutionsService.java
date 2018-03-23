@@ -5,6 +5,9 @@ import com.lhjl.tzzs.proxy.dto.ImageHandlerDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto2;
+import com.lhjl.tzzs.proxy.dto.ProjectRatingDto;
+import com.lhjl.tzzs.proxy.dto.ProjectsUpdateInputDto;
+import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
 import com.lhjl.tzzs.proxy.model.MetaProjectStage;
 import com.lhjl.tzzs.proxy.model.MetaSegmentation;
@@ -79,6 +82,19 @@ public interface InvestmentInstitutionsService {
 	 * @return
 	 */
 	CommonDto<Boolean> saveOrUpdate(Integer appid,InvestmentInstitutionsDto2 body);
+	/**
+	 * 机构信息的评级
+	 * @param body
+	 * @return
+	 */
+	CommonDto<String> institutionRating(ProjectRatingDto body);
+	/**
+	 * 机构跟进状态更新
+	 * @param appid
+	 * @param body
+	 * @return
+	 */
+	CommonDto<Boolean> updateFollowStatus(Integer appid, ProjectsUpdateInputDto body);
 	
 	
 	

@@ -81,6 +81,8 @@ public class ProjectsListOutputDto {
 	//原有项目列表的新增字段
 	/**
 	 * 是否对外投资
+	 * 0 否 (属于项目表的默认设置)
+	 * 1 是 (属于机构表的默认设置)
 	 */
 	private Integer foreignInvestmentYn;
 	/**
@@ -95,7 +97,24 @@ public class ProjectsListOutputDto {
 	 * 认领状态
 	 */
 	private Integer claimStatus;
+	/**
+	 * 主体类型id
+	 * 1 (属于项目)
+	 * 2 (属于机构)
+	 * 用于区分是来自于项目表还是机构表
+	 */
+	private Integer subjectType;
 	
+	
+
+	public Integer getSubjectType() {
+		return subjectType;
+	}
+
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
+
 	public Integer getClaimStatus() {
 		return claimStatus;
 	}
@@ -264,14 +283,5 @@ public class ProjectsListOutputDto {
 		this.updateTime = updateTime;
 	}
 
-	@Override
-	public String toString() {
-		return "ProjectsListOutputDto [id=" + id + ", serialNumber=" + serialNumber + ", shortName=" + shortName
-				+ ", kernelDesc=" + kernelDesc + ", city=" + city + ", projectSource=" + projectSource
-				+ ", ratingStage=" + ratingStage + ", stage=" + stage + ", focusCount=" + focusCount
-				+ ", interviewCount=" + interviewCount + ", viewCount=" + viewCount + ", followStatus=" + followStatus
-				+ ", createTime=" + createTime + ", updateTime=" + updateTime + "]";
-	}
-	
 	
 }

@@ -45,20 +45,18 @@ public class ProjectsListInputDto {
 	 */
 	private String followStatus;
 	/**
-	 * 是否对外投资
-	 * 用于将机构拆离出来
-	 * 机构列表请求的时候传递 "1" 即可
+	 * 主体类型
+	 * 1 项目
+	 * 2 机构
 	 */
-	private String foreignInvestmentYn;
+	private Integer subjectType;
 	
-	
-	public String getForeignInvestmentYn() {
-		return foreignInvestmentYn;
+	public Integer getSubjectType() {
+		return subjectType;
 	}
-	public void setForeignInvestmentYn(String foreignInvestmentYn) {
-		this.foreignInvestmentYn = foreignInvestmentYn;
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
 	}
-	
 	public String getColumn() {
 		return column;
 	}
@@ -130,7 +128,8 @@ public class ProjectsListInputDto {
 	public String toString() {
 		return "ProjectsListInputDto [column=" + column + ", order=" + order + ", keyword=" + keyword + ", currentPage="
 				+ currentPage + ", pageSize=" + pageSize + ", start=" + start + ", projectSource=" + projectSource
-				+ ", ratingStage=" + ratingStage + ", stage=" + stage + ", followStatus=" + followStatus + "]";
+				+ ", ratingStage=" + ratingStage + ", stage=" + stage + ", followStatus=" + followStatus
+				+ ", subjectType=" + subjectType + "]";
 	}
 }
 

@@ -1,8 +1,11 @@
 package com.lhjl.tzzs.proxy.dto;
 
 public class ProjectAdminLogoInputDto {
-    /**项目id*/
-    private Integer projectId;
+    /**
+     * 主体id
+     * 联合主体类型判断是属于项目还是机构
+     */
+    private Integer subjectId;
 
     /**项目logo*/
     private String projectLogo;
@@ -10,21 +13,47 @@ public class ProjectAdminLogoInputDto {
     /**项目简称*/
     private String shortName;
 
-    /**用户id*/
+    /**
+     * 用户id
+     * 机构或者项目管理员的id
+     */
     private Integer userId;
 
-    /**项目类型*/
+    /**
+     * 项目的五个类别
+     *  1		创业公司
+	 *	2		基金公司
+	 *	3		产业公司
+	 *	4		上市公司
+	 *	5		投资机构
+     */
     private Integer projectType;
+    /**
+     * 主体类别
+     * 用于确定属于对项目还是对机构的操作
+     * 1 项目
+     * 2 机构
+     */
+    private Integer subjectType;
+    
+    public Integer getSubjectType() {
+		return subjectType;
+	}
 
-    public Integer getProjectId() {
-        return projectId;
-    }
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
 
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
-    }
 
-    public String getProjectLogo() {
+    public Integer getSubjectId() {
+		return subjectId;
+	}
+
+	public void setSubjectId(Integer subjectId) {
+		this.subjectId = subjectId;
+	}
+
+	public String getProjectLogo() {
         return projectLogo;
     }
 

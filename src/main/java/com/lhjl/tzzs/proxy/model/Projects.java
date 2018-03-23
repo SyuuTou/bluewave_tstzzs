@@ -860,4 +860,22 @@ CHANGE COLUMN `project_type` `project_type` INT(11) NULL DEFAULT NULL COMMENT 'ç
     public void setClaimStatus(Integer claimStatus) {
         this.claimStatus = claimStatus;
     }
+
+	@Override
+	public String toString() {
+		return "Projects [id=" + id + ", serialNumber=" + serialNumber + ", shortName=" + shortName + ", fullName="
+				+ fullName + ", kernelDesc=" + kernelDesc + ", commet=" + commet + ", url=" + url + ", establishedTime="
+				+ establishedTime + ", segmentation=" + segmentation + ", itemLabel=" + itemLabel + ", address="
+				+ address + ", territory=" + territory + ", createTime=" + createTime + ", continent=" + continent
+				+ ", country=" + country + ", province=" + province + ", city=" + city + ", region=" + region
+				+ ", investmentInstitutionsId=" + investmentInstitutionsId + ", approvalStatus=" + approvalStatus
+				+ ", approvalTime=" + approvalTime + ", yn=" + yn + ", userid=" + userid + ", kernelDescStatus="
+				+ kernelDescStatus + ", cityCount=" + cityCount + ", evaluationRecommend=" + evaluationRecommend
+				+ ", projectType=" + projectType + ", projectSource=" + projectSource + ", projectLogo=" + projectLogo
+				+ ", projectInvestmentHighlights=" + projectInvestmentHighlights + ", cityCountMax=" + cityCountMax
+				+ ", cityCountMin=" + cityCountMin + ", totalAmount=" + totalAmount + ", updateTime=" + updateTime
+				+ ", companyEmail=" + companyEmail + ", companyHrEmail=" + companyHrEmail + ", foreignInvestmentYn="
+				+ foreignInvestmentYn + ", claimStatus=" + claimStatus + "]";
+	}
+    
 }

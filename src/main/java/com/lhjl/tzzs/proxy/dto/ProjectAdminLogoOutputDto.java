@@ -16,7 +16,7 @@ public class ProjectAdminLogoOutputDto {
     /**认领状态*/
     private String claimStatus;
 
-    /**项目等级*/
+    /**项目评级*/
     private String stage;
 
     /**跟进状态*/
@@ -65,15 +65,16 @@ public class ProjectAdminLogoOutputDto {
         this.claimStatus = claimStatus;
     }
 
-    public String getStage() {
-        return stage;
-    }
 
-    public void setStage(String stage) {
-        this.stage = stage;
-    }
+	public String getStage() {
+		return stage;
+	}
 
-    public String getFollowStatus() {
+	public void setStage(String stage) {
+		this.stage = stage;
+	}
+
+	public String getFollowStatus() {
         return followStatus;
     }
 
@@ -88,4 +89,12 @@ public class ProjectAdminLogoOutputDto {
     public void setProjectAdmin(String projectAdmin) {
         this.projectAdmin = projectAdmin;
     }
+
+	@Override
+	public String toString() {
+		return "ProjectAdminLogoOutputDto [id=" + id + ", logo=" + logo + ", shortName=" + shortName + ", type=" + type
+				+ ", claimStatus=" + claimStatus + ", stage=" + stage + ", followStatus=" + followStatus
+				+ ", projectAdmin=" + projectAdmin + "]";
+	}
+    
 }

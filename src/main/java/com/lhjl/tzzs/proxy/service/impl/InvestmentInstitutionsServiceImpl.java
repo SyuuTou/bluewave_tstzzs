@@ -9,6 +9,9 @@ import com.lhjl.tzzs.proxy.dto.ImageHandlerDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto2;
+import com.lhjl.tzzs.proxy.dto.ProjectRatingDto;
+import com.lhjl.tzzs.proxy.dto.ProjectsUpdateInputDto;
+import com.lhjl.tzzs.proxy.mapper.DatasOperationManageMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionAdminMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressPartMapper;
@@ -18,6 +21,7 @@ import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsSegmentationMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsStageMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaProjectStageMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
+import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddress;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
@@ -87,6 +91,9 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
     
     @Autowired
     private InvestmentInstitutionsLabelMapper investmentInstitutionsLabelMapper;
+    
+    @Autowired
+    private DatasOperationManageMapper datasOperationManageMapper;
     
     
     
@@ -843,5 +850,27 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
         return count + num;
     }
 
+	@Override
+	public CommonDto<String> institutionRating(ProjectRatingDto body) {
+		CommonDto<String> result =new CommonDto<String>();
+		//TODO 机构评级逻辑
+		this.LOGGER.info("机构评级待完善，，后台数据结构不足，，，");
+		result.setData("机构评级待完善，，后台数据结构不足，，，");
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+	
+	@Transactional
+	@Override
+	public CommonDto<Boolean> updateFollowStatus(Integer appid, ProjectsUpdateInputDto body) {
+		CommonDto<Boolean> result =new CommonDto<Boolean>();
+		
+		//TODO 有待进一步完善后台数据结构
+		result.setData(true);
+		result.setMessage("success_机构跟进状态后台数据结构待完善");
+		result.setStatus(200);
+		return result;
+	}
 
 }
