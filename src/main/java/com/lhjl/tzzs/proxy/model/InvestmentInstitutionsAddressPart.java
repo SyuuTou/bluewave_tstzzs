@@ -74,8 +74,22 @@ public class InvestmentInstitutionsAddressPart {
     @Transient
     private Integer sort;
     
+    /**
+     * 主体类型
+     */
+    @Transient 
+    private Integer subjectType;
+    
 
-    public Integer getSort() {
+    public Integer getSubjectType() {
+		return subjectType;
+	}
+
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
+
+	public Integer getSort() {
 		return sort;
 	}
 

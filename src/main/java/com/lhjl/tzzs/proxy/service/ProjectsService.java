@@ -196,18 +196,18 @@ public interface ProjectsService {
 	/**
      * 项目公司的列表信息
      * @param appid 扩展字段
-     * @param proType 项目的类别(根据不同的项目类别来列举不同项目的分部信息)
-     * @param proId 项目或者投资机构的id
+     * @param companyType 项目的类别(根据不同的项目类别来列举不同项目的分部信息)
+     * @param companyId 项目或者投资机构的id
      * @return
      */
-	CommonDto<List<InvestmentInstitutionsAddressPart>> listProPartsByCompanyIdAndProtype(Integer appid, Integer companyType,Integer companyId);
+	CommonDto<Object> listProPartsByCompanyIdAndProtype(Integer appid, Integer subjectType,Integer companyId);
 	/**
      * 根据id删除分部信息
      * @param appid
      * @param partId 分部id
      * @return
      */
-	CommonDto<Boolean> removePartInfoById(Integer appid, Integer partId);
+	CommonDto<Boolean> removePartInfoById(Integer appid, Integer partId,Integer subjectType);
 	/**
 	 * 保存或者更新地址分部的信息
 	 * @param appid

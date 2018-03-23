@@ -35,7 +35,7 @@ import io.swagger.annotations.ApiOperation;
 /**
  * 
  * @author IdataVC
- * 项目分布信息
+ * 项目分部信息
  */
 @RestController
 public class ProjectsPartsController extends GenericController{
@@ -63,16 +63,18 @@ public class ProjectsPartsController extends GenericController{
     	return result;
     }
     /**
-     * 根据id删除分部信息
      * @param appid
-     * @param partId 分部id
+     * @param id 主体id
+     * @param subjectType 主体类型
+     * 			1 项目
+     * 			2 机构
      * @return
      */
     @DeleteMapping("/v{appid}/delete/part")
-    public CommonDto<Boolean> deletePartInfoById(@PathVariable Integer appid,Integer id){
+    public CommonDto<Boolean> deletePartInfoById(@PathVariable Integer appid,Integer id,Integer subjectType){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result=projectsService.removePartInfoById(appid,id);
+    		result=projectsService.removePartInfoById(appid,id,subjectType);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
@@ -85,15 +87,15 @@ public class ProjectsPartsController extends GenericController{
     /**
      * 项目(投资机构/公司)分部的列表信息
      * @param appid 扩展字段
-     * @param companyType 项目的类别(根据不同的项目类别来列举不同项目的分部信息：1代表项目【产业公司】;2代表机构)
+     * @param companyType 项目的类别(根据不同的项目类别来列举不同项目的分部信息：1代表项目;2代表机构)
      * @param companyId 项目或者投资机构等的id
      * @return
      */
     @GetMapping("/v{appid}/list/proparts")
-    public CommonDto<List<InvestmentInstitutionsAddressPart>> listProPart(@PathVariable("appid") Integer appid,Integer companyType,Integer companyId){
-    	CommonDto<List<InvestmentInstitutionsAddressPart>> result =new CommonDto<>();
+    public CommonDto<Object> listProPart(@PathVariable("appid") Integer appid,Integer subjectType,Integer companyId){
+    	CommonDto<Object> result =new CommonDto<>();
     	try {
-    		result=projectsService.listProPartsByCompanyIdAndProtype(appid,companyType,companyId);
+    		result=projectsService.listProPartsByCompanyIdAndProtype(appid,subjectType,companyId);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    

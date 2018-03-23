@@ -1522,17 +1522,31 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 	@Transactional(readOnly=true)
 	@Override
-	public CommonDto<List<InvestmentInstitutionsAddressPart>> listProPartsByCompanyIdAndProtype(Integer appid, Integer companyType,Integer companyId) {
-		CommonDto<List<InvestmentInstitutionsAddressPart>> result=new CommonDto<>();
-//		Object partList = null;
-//		InvestmentInstitutionsAddressPart iiap=new InvestmentInstitutionsAddressPart();
-//		iiap.setInvestmentInstitutionId(companyId);
-		//获取该机构的所有分部信息
-		List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.selectAllByWeight(companyId);
-		Integer i=0;
-		for(InvestmentInstitutionsAddressPart e:list) {
-			e.setSort(++i);
+	public CommonDto<Object> listProPartsByCompanyIdAndProtype(Integer appid, Integer subjectType,Integer companyId) {
+		CommonDto<Object> result=new CommonDto<>();
+		
+		Object list=new ArrayList<>();
+		
+		if(subjectType.equals(1)) {//项目分部
+			//TODO 项目分部的后台数据结构待完善
+			
+			result.setData(list);
+			result.setStatus(200);
+			result.setMessage("项目的分部信息后台数据结构不完善，有待进一步调整");  
+			
+			return result;
+			
+		}else if(subjectType.equals(2)) {//机构分部
+			//获取该机构的所有分部信息
+			List<InvestmentInstitutionsAddressPart> iiapLists = investmentInstitutionsAddressPartMapper.selectAllOrderByWeight(companyId);
+			Integer i=0;
+			for(InvestmentInstitutionsAddressPart e:iiapLists) {
+				e.setSort(++i);
+			}
+			
+			list=iiapLists; 
 		}
+		
 //		if(list != null) {
 //			for(InvestmentInstitutionsAddressPart tmp:list) {
 //				InvestmentInstitutionsAddress iia =new InvestmentInstitutionsAddress();
@@ -1549,28 +1563,50 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		
 		return result;
 	}
+	
 	@Transactional
 	@Override
-	public CommonDto<Boolean> removePartInfoById(Integer appid, Integer partId) {
+	public CommonDto<Boolean> removePartInfoById(Integer appid, Integer partId,Integer subjectType) {
+		
 		CommonDto<Boolean> result =new CommonDto<Boolean>();
-		InvestmentInstitutionsAddressPart iiap =new InvestmentInstitutionsAddressPart();
-		iiap.setId(partId);
-		iiap.setYn(1);
-		investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(iiap);
+		if(subjectType.equals(1)) {
+			//TODO 删除项目的分部信息
+			result.setData(true);
+			result.setMessage("项目分部信息后台数据结构不完善，有待进一步调整");
+			result.setStatus(200);
+			
+			return result;
+		}else if (subjectType.equals(2)) {
+			InvestmentInstitutionsAddressPart iiap =new InvestmentInstitutionsAddressPart();
+			iiap.setId(partId);
+			iiap.setYn(1);
+			investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(iiap);
+		}
+		
 		result.setData(true);
 		result.setMessage("success");
 		result.setStatus(200);
 		return result;
 	}
+	
 	@Transactional
 	@Override
 	public CommonDto<Boolean> saveOrUpdayePart(Integer appid, InvestmentInstitutionsAddressPart body) {
 		CommonDto<Boolean> result =new CommonDto<Boolean>();
-		if(body.getId()!=null) {//更新操作
-			investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(body);
-		}else {//插入操作
-			investmentInstitutionsAddressPartMapper.insertSelective(body);
+		if(body.getSubjectType().equals(1)) {
+			//TODO 项目分部信息，后台数据结构有待完善
+			result.setData(true);
+			result.setMessage("项目分部信息，后台数据结构有待完善");
+			result.setStatus(200);
+			return result;
+		}else if(body.getSubjectType().equals(2)) {
+			if(body.getId()!=null) {//更新操作
+				investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(body);
+			}else {//插入操作
+				investmentInstitutionsAddressPartMapper.insertSelective(body);
+			}
 		}
+		
 		result.setData(true);
 		result.setMessage("success");
 		result.setStatus(200);
