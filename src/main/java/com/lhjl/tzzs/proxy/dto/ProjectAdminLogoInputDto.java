@@ -5,7 +5,7 @@ public class ProjectAdminLogoInputDto {
      * 主体id
      * 联合主体类型判断是属于项目还是机构
      */
-    private Integer projectId;
+    private Integer subjectId;
 
     /**项目logo*/
     private String projectLogo;
@@ -21,6 +21,11 @@ public class ProjectAdminLogoInputDto {
 
     /**
      * 项目的五个类别
+     *  1		创业公司
+	 *	2		基金公司
+	 *	3		产业公司
+	 *	4		上市公司
+	 *	5		投资机构
      */
     private Integer projectType;
     /**
@@ -42,15 +47,16 @@ public class ProjectAdminLogoInputDto {
 		this.subjectType = subjectType;
 	}
 
-	public Integer getProjectId() {
-        return projectId;
-    }
 
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
-    }
+    public Integer getSubjectId() {
+		return subjectId;
+	}
 
-    public String getProjectLogo() {
+	public void setSubjectId(Integer subjectId) {
+		this.subjectId = subjectId;
+	}
+
+	public String getProjectLogo() {
         return projectLogo;
     }
 

@@ -965,12 +965,11 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 	        return result;
         }
 
-	    Date now = new Date();
 	    ProjectAdministrator projectAdministratorForInsert = new ProjectAdministrator();
 	    projectAdministratorForInsert.setUserId(userId);
 	    //设置为1表示是普通管理员吗？？？？？
 	    projectAdministratorForInsert.setTypes(1);
-	    projectAdministratorForInsert.setCreateTime(now);
+	    projectAdministratorForInsert.setCreateTime(new Date());
 	    projectAdministratorForInsert.setProjectsId(projectId);
 	    projectAdministratorForInsert.setYn(0);
 

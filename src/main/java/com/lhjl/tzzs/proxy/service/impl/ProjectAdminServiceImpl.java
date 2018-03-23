@@ -41,10 +41,10 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 
     
     @Override
-    public CommonDto<ProjectAdminLogoOutputDto> getProjectLogoAndMainInfo(Integer projectId, Integer projectType) {
+    public CommonDto<ProjectAdminLogoOutputDto> getProjectLogoAndMainInfo(Integer subjectId, Integer subjectType) {
         CommonDto<ProjectAdminLogoOutputDto> result = new CommonDto<>();
 
-        if (projectId == null){
+        if (subjectId == null){
             result.setStatus(502);
             result.setMessage("项目id不能为空");
             result.setData(null);
@@ -52,18 +52,17 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
             return result;
         }
 
-        if (projectType == null){
-//            projectType = 1;
+        if (subjectType == null){
             result.setData(null);
             result.setMessage("请指定相关的主体信息，1：项目；2：机构...");
             result.setStatus(500);
             return result;
         }
 
-        if (projectType == 1){ // 读项目信息
-            result = readProjectLogo(projectId);
-        }else if(projectType == 2){// 读机构信息
-        	result = readInstitutionLogo(projectId);
+        if (subjectType == 1){ // 读项目信息
+            result = readProjectLogo(subjectId);
+        }else if(subjectType == 2){// 读机构信息
+        	result = readInstitutionLogo(subjectId);
         }else {
         	result.setData(null);
             result.setMessage("属于其他主体类型，业务有待进一步完善");
@@ -75,12 +74,12 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
     }
     /**
      * 读取机构logo和一些基本信息的方法
-     * @param projectId
+     * @param InstitutionId 机构id
      * @return
      */
-    private CommonDto<ProjectAdminLogoOutputDto> readInstitutionLogo(Integer projectId) {
+    private CommonDto<ProjectAdminLogoOutputDto> readInstitutionLogo(Integer institutionId) {
     	CommonDto<ProjectAdminLogoOutputDto> result =new CommonDto<ProjectAdminLogoOutputDto>();
-    	ProjectAdminLogoOutputDto baseInfo = investmentInstitutionsMapper.getLogoAndOtherInfoById(projectId);
+    	ProjectAdminLogoOutputDto baseInfo = investmentInstitutionsMapper.getLogoAndOtherInfoById(institutionId);
     	
         if (baseInfo != null){
         	if(baseInfo.getStage()!=null) {
@@ -118,7 +117,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 	}
     /**
      * 读取项目logo和一些基本信息的方法
-     * @param projectId
+     * @param projectId 项目id
      * @return
      */
     private CommonDto<ProjectAdminLogoOutputDto> readProjectLogo(Integer projectId){
@@ -168,14 +167,6 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
     public CommonDto<String> updateProjectLogoAndMainInfo(ProjectAdminLogoInputDto body) {
         CommonDto<String> result = new CommonDto<>();
 
-        /*if (body.getProjectId() == null){
-            result.setStatus(502);
-            result.setData(null);
-            result.setMessage("项目id不能为空");
-
-            return result;
-        }*/
-
         if (body.getSubjectType() == null){
             result.setMessage("主体类型不能为空");
             result.setData(null);
@@ -200,7 +191,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
             if (projectsList.size() > 0){//该项目简称在项目表中存在
             	//原项目id所对应的项目
                 Projects projectsForCompare = new Projects();
-                projectsForCompare = projectsMapper.selectByPrimaryKey(body.getProjectId());
+                projectsForCompare = projectsMapper.selectByPrimaryKey(body.getSubjectId());
                 //如果该简称不等同于所更改项目的简称
                 if ( ! projectsList.get(0).getShortName().equals(projectsForCompare.getShortName()) ){
 
@@ -218,7 +209,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
             if (iiList.size() > 0){//该机构简称在机构表中存在
             	//原机构id所对应的项目
             	InvestmentInstitutions iiForCompare = new InvestmentInstitutions();
-            	iiForCompare = investmentInstitutionsMapper.selectByPrimaryKey(body.getProjectId());
+            	iiForCompare = investmentInstitutionsMapper.selectByPrimaryKey(body.getSubjectId());
                 //如果该简称不等同于所更改机构的简称
                 if ( ! iiList.get(0).getShortName().equals(iiForCompare.getShortName()) ){
 
@@ -231,18 +222,24 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
             }
             
         }
-        //接收自增长id用于
-        Integer updatedId = body.getProjectId();
+        //用于接收自增长id
+        Integer updatedId = body.getSubjectId();
         if (body.getSubjectType() == 1){
             //更新项目信息
             Projects projects = new Projects();
-            projects.setId(body.getProjectId());
+            projects.setId(body.getSubjectId());
             projects.setShortName(body.getShortName());
             //设置项目类型
             projects.setProjectType(body.getProjectType());
             projects.setProjectLogo(body.getProjectLogo());
             
-            if(body.getProjectId()==null) {//执行新增操作
+            //设置固有属性
+            projects.setYn(1);
+            projects.setApprovalStatus(1);
+            projects.setApprovalTime(new Date());
+            projects.setCreateTime(new Date());
+            
+            if(body.getSubjectId()==null) {//执行新增操作
             	projectsMapper.insertSelective(projects);
             	//设置自增长id
             	updatedId=projects.getId();
@@ -252,19 +249,28 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
             
             //添加项目管理员
             if(body.getUserId() != null){
-                projectAuditService.adminAddAdministractor(body.getProjectId(),updatedId);
+                projectAuditService.adminAddAdministractor(body.getSubjectId(),updatedId);
             }
             //TODO 项目评级信息的更新(单独接口)
             
             //TODO 项目跟进状态的更新(单独接口)
         }else if(body.getSubjectType() == 2){
         	InvestmentInstitutions ii=new InvestmentInstitutions();
-        	ii.setId(body.getProjectId());
+        	ii.setId(body.getSubjectId());
         	ii.setShortName(body.getShortName());
         	ii.setLogo(body.getProjectLogo());
-        	//TODO 设置机构的类型
         	
-        	if(body.getProjectId()==null) {//执行新增操作
+        	//设置机构的固有属性
+        	ii.setApprovalStatus(1);
+        	ii.setApprovalTime(new Date());
+        	ii.setYn(1);
+        	ii.setCreateTime(new Date());
+        	//运营人员后台添加
+        	ii.setDataSourceType(3);
+        	
+        	//TODO 设置机构的类型（对比项目的五种类型）
+        	
+        	if(body.getSubjectId()==null) {//执行新增操作
         		investmentInstitutionsMapper.insertSelective(ii);
         		updatedId=ii.getId();
             }else {//执行更新操作

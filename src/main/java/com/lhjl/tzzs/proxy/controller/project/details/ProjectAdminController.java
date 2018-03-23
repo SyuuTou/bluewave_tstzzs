@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.service.ProjectAdminService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,18 +19,18 @@ public class ProjectAdminController extends GenericController{
 
     /**
      * 获取后台项目编辑页的
-     * @param projectId 主体id
-     * @param projectType 主体的类型，
+     * @param subjectId 主体id
+     * @param subjectType 主体的类型，
      * 	1 代表项目
      * 	2 代表机构
      * @return
      */
     @GetMapping("get/project/logo")
-    public CommonDto<ProjectAdminLogoOutputDto> getProjectLogo(Integer projectId, Integer projectType){
+    public CommonDto<ProjectAdminLogoOutputDto> getProjectLogo(Integer subjectId, Integer subjectType){
     CommonDto<ProjectAdminLogoOutputDto> result = new CommonDto<>();
 
     try {
-    result = projectAdminService.getProjectLogoAndMainInfo(projectId,projectType);
+    	result = projectAdminService.getProjectLogoAndMainInfo(subjectId,subjectType);
     }catch (Exception e){
         this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
         result.setData(null);
@@ -41,7 +42,7 @@ public class ProjectAdminController extends GenericController{
     }
 
     /**
-     * 更新项目详情主体(项目/机构...)头部基本信息
+     * 保存或者更新项目详情主体(项目/机构...)头部基本信息
      * @param body 项目详情部分头部信息请求体
      * @return
      */
@@ -60,7 +61,7 @@ public class ProjectAdminController extends GenericController{
 
         return result;
     }
-
+    
     /**
      * 获取项目基本信息的接口
      * @param projectId

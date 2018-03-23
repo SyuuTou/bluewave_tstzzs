@@ -77,5 +77,5 @@ public interface InvestmentInstitutionsMapper extends OwnerMapper<InvestmentInst
      * @param projectId 机构id
      * @return
      */
-    ProjectAdminLogoOutputDto getLogoAndOtherInfoById(@Param("projectId") Integer projectId);
+    ProjectAdminLogoOutputDto getLogoAndOtherInfoById(@Param("institutionId") Integer institutionId);
 }

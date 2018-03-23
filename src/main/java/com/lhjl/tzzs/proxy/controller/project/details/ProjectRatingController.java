@@ -1,5 +1,6 @@
-package com.lhjl.tzzs.proxy.controller;
+package com.lhjl.tzzs.proxy.controller.project.details;
 
+import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.AdminCreatProjectDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectRatingDto;
@@ -14,9 +15,8 @@ import java.util.Map;
 
 
 @RestController
-public class ProjectRatingController {
+public class ProjectRatingController extends GenericController {
 
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(ProjectRatingController.class);
     @Resource
     private ProjectRatingService projectRatingService;
 
@@ -63,7 +63,7 @@ public class ProjectRatingController {
         try {
             result = projectRatingService.adminCreateEvent(sourceId,idType);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setData(null);
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
@@ -79,7 +79,7 @@ public class ProjectRatingController {
         try {
             result = projectRatingService.getProjectRatingInfo(projectId);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);
             result.setMessage("服务器端发生错误");
             result.setData(null);
@@ -100,7 +100,7 @@ public class ProjectRatingController {
         try {
             result = projectRatingService.getUserAndInvestmentInstitutionIds(projectId);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setData(null);
             result.setMessage("服务器端发生错误");
             result.setStatus(502);

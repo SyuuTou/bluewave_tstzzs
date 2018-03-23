@@ -105,7 +105,7 @@
     
     <!-- 该SQL有待进一步完善 -->
    	<select id="getLogoAndOtherInfoById" parameterType="java.lang.Integer" resultMap="subjectHeadInfoOutputDto">
-       select ii.ID,ii.logo,ii.short_name<!-- ,"投资机构" as type --> from investment_institutions ii where ii.ID =#{projectId}
+       select ii.ID,ii.logo,ii.short_name<!-- ,"投资机构" as type --> from investment_institutions ii where ii.ID =#{institutionId}
     </select>
     
      <select id="blurScan" parameterType="String" resultMap="BaseResultMap">
