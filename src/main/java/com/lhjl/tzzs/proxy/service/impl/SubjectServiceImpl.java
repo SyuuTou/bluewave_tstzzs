@@ -62,9 +62,9 @@ public class SubjectServiceImpl implements SubjectService {
                     companyIntelligentOutputDto.setCompanyId(s.getId());
                     companyIntelligentOutputDto.setSourceId(s.getSourceid());
 
-                    SubjectTypeRelational subjectTypeRelationalForSearch = new SubjectTypeRelational();
-                    subjectTypeRelationalForSearch.setSubjectId(s.getId());
-                    SubjectTypeRelational subjectTypeRelational = subjectTypeRelationalMapper.selectOne(subjectTypeRelationalForSearch);
+//                    SubjectTypeRelational subjectTypeRelationalForSearch = new SubjectTypeRelational();
+//                    subjectTypeRelationalForSearch.setSubjectId(s.getId());
+                    SubjectTypeRelational subjectTypeRelational = subjectTypeRelationalMapper.selectBySubjectIdAndProjectType(s.getId(), projectType);
                     if (null != subjectTypeRelational){
                         companyIntelligentOutputDto.setSourceType(subjectTypeRelational.getSubjectTypeId());
                     }else {
@@ -85,9 +85,7 @@ public class SubjectServiceImpl implements SubjectService {
                     companyIntelligentOutputDto.setCompanyId(s.getId());
                     companyIntelligentOutputDto.setSourceId(s.getSourceid());
 
-                    SubjectTypeRelational subjectTypeRelationalForSearch = new SubjectTypeRelational();
-                    subjectTypeRelationalForSearch.setSubjectId(s.getId());
-                    SubjectTypeRelational subjectTypeRelational = subjectTypeRelationalMapper.selectOne(subjectTypeRelationalForSearch);
+                    SubjectTypeRelational subjectTypeRelational = subjectTypeRelationalMapper.selectBySubjectIdAndProjectType(s.getId(), projectType);
                     if (null != subjectTypeRelational){
                         companyIntelligentOutputDto.setSourceType(subjectTypeRelational.getSubjectTypeId());
                     }else {

@@ -8,4 +8,13 @@
     <id column="subject_id" property="subjectId" jdbcType="INTEGER" />
     <id column="subject_type_id" property="subjectTypeId" jdbcType="INTEGER" />
   </resultMap>
+
+  <select id="selectBySubjectIdAndProjectType" resultMap="BaseResultMap">
+    select * from subject_type_relational where 1 = 1
+    subject_id =#{subjectId} and
+    <if test="projectType != null and projectType !=''">
+      and subject_type_id =#{projectType}
+    </if>
+  </select>
+
 </mapper>
