@@ -36,9 +36,6 @@ public class ProjectAdminLogoInputDto {
      */
     private Integer subjectType;
     
-//    private 
-    
-
     public Integer getSubjectType() {
 		return subjectType;
 	}

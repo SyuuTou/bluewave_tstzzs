@@ -60,7 +60,7 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
         CommonDto<String> result = new CommonDto<>();
         Date now =new Date();
 
-        if (body.getProjectId() == null){
+        if (body.getSubjectId() == null){
             result.setStatus(50001);
             result.setMessage("项目id不能为空");
             result.setData(null);
@@ -76,7 +76,7 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
         }
         //先判断项目是否已经评过等级了
         AdminProjectRatingLog adminProjectRatingLogForSearch = new AdminProjectRatingLog();
-        adminProjectRatingLogForSearch.setProjectId(body.getProjectId());
+        adminProjectRatingLogForSearch.setProjectId(body.getSubjectId());
 
         List<AdminProjectRatingLog> adminProjectRatingLogList = adminProjectRatingLogMapper.select(adminProjectRatingLogForSearch);
 
@@ -86,26 +86,20 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
             AdminProjectRatingLog adminProjectRatingLogForUpdate = new AdminProjectRatingLog();
             adminProjectRatingLogForUpdate.setId(aprlid);
             adminProjectRatingLogForUpdate.setRatingStage(body.getRatingStage());
-            if (body.getRatingAdminName() != null){
-                adminProjectRatingLogForUpdate.setRatingAdminName(body.getRatingAdminName());
-            }
-            if (body.getRatingDiscription() != null){
-                adminProjectRatingLogForUpdate.setRatingDescription(body.getRatingDiscription());
-            }
+            
+            adminProjectRatingLogForUpdate.setRatingAdminName(body.getRatingAdminName());
+            adminProjectRatingLogForUpdate.setRatingDescription(body.getRatingDiscription());
             adminProjectRatingLogForUpdate.setRatingTime(now);
 
             //更新数据
             adminProjectRatingLogMapper.updateByPrimaryKeySelective(adminProjectRatingLogForUpdate);
         }else{
             AdminProjectRatingLog adminProjectRatingLog = new AdminProjectRatingLog();
-            adminProjectRatingLog.setProjectId(body.getProjectId());
+            adminProjectRatingLog.setProjectId(body.getSubjectId());
             adminProjectRatingLog.setRatingStage(body.getRatingStage());
-            if (body.getRatingAdminName() != null){
-                adminProjectRatingLog.setRatingAdminName(body.getRatingAdminName());
-            }
-            if (body.getRatingDiscription() != null){
-                adminProjectRatingLog.setRatingDescription(body.getRatingDiscription());
-            }
+            
+            adminProjectRatingLog.setRatingAdminName(body.getRatingAdminName());
+            adminProjectRatingLog.setRatingDescription(body.getRatingDiscription());
             adminProjectRatingLog.setRatingTime(now);
 
             //插入数据
@@ -113,7 +107,7 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
         }
 
         //发信息流
-        CommonDto<AdminCreatProjectDto>  result1 =  getUserAndInvestmentInstitutionIds(body.getProjectId());
+        CommonDto<AdminCreatProjectDto>  result1 =  getUserAndInvestmentInstitutionIds(body.getSubjectId());
         if (result1.getStatus() != 200){
             result.setMessage(result1.getMessage());
             result.setStatus(502);
@@ -139,8 +133,10 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
         if (null != result1.getData().getProjectCreaterId() && null != result1.getData().getInvestmentInstitutionIds() ){
             EventDto eventDto = new EventDto();
             eventDto.setFromUser(result1.getData().getProjectCreaterId());
+            
             List<Integer> projectIds = new ArrayList<>();
-            projectIds.add(body.getProjectId());
+            projectIds.add(body.getSubjectId());
+            
             eventDto.setProjectIds(projectIds);
             eventDto.setEventType("RECOMMEND");
             eventDto.setProjectLevel(projectLevel);
@@ -269,7 +265,9 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
 
            return result;
        }
-        Integer projectSendId = adminProjectApprovalLogList.get(0).getProjectSourceId();
+       //获取审核时间最近的该项目对应的项目源记录id
+       Integer projectSendId = adminProjectApprovalLogList.get(0).getProjectSourceId();
+       
        if (null == projectSendId){
            result.setMessage("项目来源未知,无法找到对应提交的机构");
            result.setStatus(502);
@@ -281,7 +279,7 @@ public class ProjectRatingServiceImpl implements ProjectRatingService{
        //获取prepareId
         ProjectSendAuditB projectSendAuditB = projectSendAuditBMapper.selectByPrimaryKey(projectSendId);
        if (projectSendAuditB != null){
-           Integer prepareId = projectSendAuditB.getPrepareId();
+        Integer prepareId = projectSendAuditB.getPrepareId();
 
         List<Integer> institutionIds = projectSendInstitutionBMapper.getInstitutionIdsByPrepareId(prepareId);
         adminCreatProjectDto.setInvestmentInstitutionIds(institutionIds);

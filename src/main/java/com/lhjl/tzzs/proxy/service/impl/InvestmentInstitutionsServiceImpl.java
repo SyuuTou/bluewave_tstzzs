@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.dto.ImageHandlerDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto2;
+import com.lhjl.tzzs.proxy.dto.ProjectRatingDto;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionAdminMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressPartMapper;
@@ -843,5 +844,15 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
         return count + num;
     }
 
+	@Override
+	public CommonDto<String> institutionRating(ProjectRatingDto body) {
+		CommonDto<String> result =new CommonDto<String>();
+		//TODO 机构评级逻辑
+		this.LOGGER.info("机构评级待完善，，后台数据结构不足，，，");
+		result.setData("机构评级待完善，，后台数据结构不足，，，");
+		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
 
 }
