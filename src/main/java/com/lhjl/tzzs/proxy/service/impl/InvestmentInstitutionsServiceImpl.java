@@ -10,6 +10,7 @@ import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto2;
 import com.lhjl.tzzs.proxy.dto.ProjectRatingDto;
+import com.lhjl.tzzs.proxy.dto.ProjectsUpdateInputDto;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionAdminMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressPartMapper;
@@ -851,6 +852,18 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 		this.LOGGER.info("机构评级待完善，，后台数据结构不足，，，");
 		result.setData("机构评级待完善，，后台数据结构不足，，，");
 		result.setMessage("success");
+		result.setStatus(200);
+		return result;
+	}
+	
+	@Transactional
+	@Override
+	public CommonDto<Boolean> updateFollowStatus(Integer appid, ProjectsUpdateInputDto body) {
+		CommonDto<Boolean> result =new CommonDto<Boolean>();
+		
+		//TODO 有待进一步完善后台数据结构
+		result.setData(true);
+		result.setMessage("success_机构跟进状态后台数据结构待完善");
 		result.setStatus(200);
 		return result;
 	}
