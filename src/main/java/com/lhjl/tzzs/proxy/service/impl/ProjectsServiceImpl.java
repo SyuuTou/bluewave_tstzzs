@@ -1728,11 +1728,22 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<DatasOperationManage> echoProjectManagementInfo(Integer appid, Integer projectId) {
+	public CommonDto<DatasOperationManage> echoManagementInfo(Integer appid, Integer subjectId ,Integer subjectType) {
 		CommonDto<DatasOperationManage> result =new CommonDto<>();
+		if(subjectType==null) {
+			result.setData(null);
+			result.setMessage("请输入主体类型");
+			result.setStatus(500);
+			return result;
+		}
 		DatasOperationManage dom =new DatasOperationManage();
-		dom.setDataId(projectId);
-		dom.setDataType("PROJECT");
+		dom.setDataId(subjectId);
+		if(subjectType.equals(1)) {
+			dom.setDataType("PROJECT");
+		}else if(subjectType.equals(2)) {
+			dom.setDataType("INVESTMENT_INSTITUTIONS");
+		}
+		
 		//一个项目只有一条的运营管理记录
 		try {
 			dom = datasOperationManageMapper.selectOne(dom);

@@ -287,10 +287,11 @@ public interface ProjectsService {
 	/**
 	 * 回显项目的运营管理信息
 	 * @param appid
-	 * @param projectId 项目id
+	 * @param subjectId 主体id
+	 * @param subjectType 主体类型
 	 * @return
 	 */
-	CommonDto<DatasOperationManage> echoProjectManagementInfo(Integer appid, Integer projectId);
+	CommonDto<DatasOperationManage> echoManagementInfo(Integer appid, Integer subjectId,Integer subjectType);
 	/**
      * 更新或者保存项目的运营管理
      * @param appid

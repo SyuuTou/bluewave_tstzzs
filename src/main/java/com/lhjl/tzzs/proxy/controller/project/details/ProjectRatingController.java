@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.Map;
 
-
+/**
+ * 项目评级相关
+ * @author IdataVC
+ *
+ */
 @RestController
 public class ProjectRatingController extends GenericController {
 
@@ -25,7 +29,8 @@ public class ProjectRatingController extends GenericController {
     private InvestmentInstitutionsService investmentInstitutionsService;
 
     /**
-     * 编辑项目评级信息
+     * 更新项目评级信息
+     * 需要发信息流
      * @param projectId
      * @param ratingStage(0表示D级,1表示C级,2表示B级,3表示A级,4表示S级)
      * @param ratingDiscription

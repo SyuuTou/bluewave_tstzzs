@@ -4,6 +4,7 @@ import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.model.ProjectBusinessPlanImage;
+import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
 import com.lhjl.tzzs.proxy.service.ProjectBusinessPlanService;
 import com.lhjl.tzzs.proxy.service.ProjectsService;
 
@@ -22,6 +23,9 @@ public class ProjectManageController extends GenericController {
 
 	@Resource
     private ProjectsService projectsService;
+	
+	@Resource
+	private InvestmentInstitutionsService investmentInstitutionsService;
 
 	/**
 	 * 回显项目的运营管理信息
@@ -30,10 +34,11 @@ public class ProjectManageController extends GenericController {
 	 * @return
 	 */
     @GetMapping("/v{appid}/echo/project/management")
-    public CommonDto<DatasOperationManage> echoInvestorsManagementInfo(@PathVariable Integer appid,Integer projectId){
+    public CommonDto<DatasOperationManage> echoInvestorsManagementInfo(@PathVariable Integer appid,Integer subjectId,Integer subjectType){
     	CommonDto<DatasOperationManage> result =new CommonDto<>();
     	try {
-    		result = projectsService.echoProjectManagementInfo(appid,projectId);
+			result = projectsService.echoManagementInfo(appid,subjectId,subjectType);
+    		
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
     		

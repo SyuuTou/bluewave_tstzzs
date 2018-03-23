@@ -11,6 +11,7 @@ import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
 import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto2;
 import com.lhjl.tzzs.proxy.dto.ProjectRatingDto;
 import com.lhjl.tzzs.proxy.dto.ProjectsUpdateInputDto;
+import com.lhjl.tzzs.proxy.mapper.DatasOperationManageMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionAdminMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressPartMapper;
@@ -20,6 +21,7 @@ import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsSegmentationMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsStageMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaProjectStageMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
+import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddress;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
@@ -89,6 +91,9 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
     
     @Autowired
     private InvestmentInstitutionsLabelMapper investmentInstitutionsLabelMapper;
+    
+    @Autowired
+    private DatasOperationManageMapper datasOperationManageMapper;
     
     
     
