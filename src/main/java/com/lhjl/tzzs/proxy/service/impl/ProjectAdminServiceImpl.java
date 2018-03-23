@@ -182,43 +182,52 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 
             return result;
         }
-        
         //对项目简称的有效性进行判断
         if(body.getSubjectType()==1) {
         	Projects projects = new Projects();
             projects.setShortName(body.getShortName());
             List<Projects> projectsList = projectsMapper.select(projects);
             if (projectsList.size() > 0){//该项目简称在项目表中存在
-            	//原项目id所对应的项目
-                Projects projectsForCompare = new Projects();
-                projectsForCompare = projectsMapper.selectByPrimaryKey(body.getSubjectId());
-                //如果该简称不等同于所更改项目的简称
-                if ( ! projectsList.get(0).getShortName().equals(projectsForCompare.getShortName()) ){
-
-                    result.setMessage("该项目已经存在");
+            	
+            	if(body.getSubjectId()==null) {//执行增加操作时
+            		result.setMessage("该项目已经存在");
                     result.setData(null);
                     result.setStatus(502);
 
                     return result;
-                }
+            	}else {//执行更新操作时
+                    if ( ! projectsList.get(0).getId().equals(body.getSubjectId()) ){
+
+                        result.setMessage("该项目已经存在");
+                        result.setData(null);
+                        result.setStatus(502);
+
+                        return result;
+                    }
+            	}
             }
         }else if(body.getSubjectType()==2){
         	InvestmentInstitutions ii = new InvestmentInstitutions();
             ii.setShortName(body.getShortName());
             List<InvestmentInstitutions> iiList = investmentInstitutionsMapper.select(ii);
             if (iiList.size() > 0){//该机构简称在机构表中存在
-            	//原机构id所对应的项目
-            	InvestmentInstitutions iiForCompare = new InvestmentInstitutions();
-            	iiForCompare = investmentInstitutionsMapper.selectByPrimaryKey(body.getSubjectId());
-                //如果该简称不等同于所更改机构的简称
-                if ( ! iiList.get(0).getShortName().equals(iiForCompare.getShortName()) ){
-
-                    result.setMessage("该机构已经存在");
+            	if(body.getSubjectId()==null) {//执行增加操作时
+            		result.setMessage("该机构已经存在");
                     result.setData(null);
                     result.setStatus(502);
 
                     return result;
-                }
+            	}else {//执行更新操作时
+            		System.err.println(iiList.get(0).getId()+"get(0).getId()"+body.getSubjectId()+"body.getSubjectId()");
+                    if (  ! iiList.get(0).getId().equals(body.getSubjectId()) ){
+
+                        result.setMessage("该机构已经存在");
+                        result.setData(null);
+                        result.setStatus(502);
+
+                        return result;
+                    }
+            	}
             }
             
         }
@@ -265,10 +274,10 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
         	ii.setApprovalTime(new Date());
         	ii.setYn(1);
         	ii.setCreateTime(new Date());
-        	//运营人员后台添加
+        	//来源类型为运营人员后台添加
         	ii.setDataSourceType(3);
         	
-        	//TODO 设置机构的类型（对比项目的五种类型）
+        	//TODO 设置机构的类型（类比项目的五种类型）
         	
         	if(body.getSubjectId()==null) {//执行新增操作
         		investmentInstitutionsMapper.insertSelective(ii);
@@ -287,7 +296,6 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
             
             //TODO 机构跟进状态的更新(单独接口)
         }
-
         result.setStatus(200);
         result.setData(null);
         result.setMessage("success");

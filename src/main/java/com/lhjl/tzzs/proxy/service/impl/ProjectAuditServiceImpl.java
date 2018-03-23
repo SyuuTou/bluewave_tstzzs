@@ -973,7 +973,7 @@ public class ProjectAuditServiceImpl implements ProjectAuditService {
 	    projectAdministratorForInsert.setProjectsId(projectId);
 	    projectAdministratorForInsert.setYn(0);
 
-	    projectAdministratorMapper.insert(projectAdministratorForInsert);
+	    projectAdministratorMapper.insertSelective(projectAdministratorForInsert);
 
 	    result.setData(null);
 	    result.setStatus(200);
