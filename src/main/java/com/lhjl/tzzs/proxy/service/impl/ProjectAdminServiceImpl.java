@@ -258,7 +258,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
         	InvestmentInstitutions ii=new InvestmentInstitutions();
         	ii.setId(body.getSubjectId());
         	ii.setShortName(body.getShortName());
-        	ii.setLogo(body.getProjectLogo());
+        	ii.setLogo(body.getProjectLogo());  
         	
         	//设置机构的固有属性
         	ii.setApprovalStatus(1);
