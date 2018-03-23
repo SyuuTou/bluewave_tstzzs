@@ -8,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AliOssUtils  {
 
@@ -39,5 +41,21 @@ public class AliOssUtils  {
             throw e;
         }
         return path;
+    }
+
+    public static void main(String[] args) {
+        String testTxt = "8个文件aslkajs行";
+//  注意[\u4E00-\u9FA5]里面的斜杠字符，千万不可省略，不区分大小写
+//        Pattern pat = Pattern.compile("^(\\d+)[\u4E00-\u9FA5]");
+        Pattern pat = Pattern.compile("([\u4e00-\u9fa5]+)");
+        Matcher mat = pat.matcher(testTxt);
+//        if(mat.matches()) {
+//            System.out.println(mat.group(0));
+//        }
+        String value = null;
+        while (mat.find()) {
+            value = mat.group(0);
+            System.out.println(value);
+        }
     }
 }

@@ -32,12 +32,15 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
@@ -484,7 +487,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         try {
             BufferedImage img = Thumbnails.of(new URL("http://img.idatavc.com/template/share_pic.png").openStream()).size(750,1334).asBufferedImage();
             img = createBufferedImage(img,42,60,750,1334, 666,180,"PingFang SC",Font.BOLD,42,Color.BLACK, 1.0f,report.getTitle(), 3);
-            img = createBufferedImage(img,42,218,750,1334, 200,32,"PingFang SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,report.getAuthor(), 1);
+//            img = createBufferedImage(img,42,218,750,1334, 200,32,"PingFang SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f,report.getAuthor(), 1);
             img = createBufferedImage(img,538,218,750,1334, 200,32,"PingFang SC",Font.BOLD,26,new Color(Integer.parseInt("808080",16)), 1.0f, new  DateTime(report.getCreateTime()).toString("MM-dd HH:mm"), 1);
             img = createBufferedImage(img,42,300,750,1334, 666,262,"PingFang SC",Font.PLAIN,36,new Color(Integer.parseInt("333333",16)), 1.0f,report.getSubTitle(), 5);
             img = Thumbnails.of(img).scale(1.0).watermark(new Position() {
@@ -498,13 +501,40 @@ public class ReportServiceImpl extends GenericService implements ReportService {
                 public Point calculate(int enclosingWidth, int enclosingHeight, int width, int height, int insetLeft, int insetRight, int insetTop, int insetBottom) {
                     return new Point(42,844);
                 }
-            },Thumbnails.of(new URL(report.getCoverUrl()).openStream()).size(666,400).keepAspectRatio(false).asBufferedImage(),1.0f).asBufferedImage();
+            },Thumbnails.of(new URL(chineseEncode(report.getCoverUrl())).openStream()).size(666,400).keepAspectRatio(false).asBufferedImage(),1.0f).asBufferedImage();
             ImageIO.write(img, "jpg", os);
         } catch (Exception e) {
            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
         }
         return new ByteArrayInputStream(os.toByteArray());
 
+    }
+
+
+    private String chineseEncode(String url){
+        System.out.println("当前JVM的默认字符集：" + Charset.defaultCharset());
+        Pattern pat = Pattern.compile("([\u4e00-\u9fa5]+)");
+        Matcher mat = pat.matcher(url);
+//        if(mat.matches()) {
+//            System.out.println(mat.group(0));
+//        }
+
+//        if (!Charset.defaultCharset().equals("UTF-8")){
+//
+//            try {
+//                byte[] b = url.getBytes(Charset.defaultCharset());
+//                url = new String(b, "UTF-8");
+//            } catch (UnsupportedEncodingException e) {
+//                this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+//            }
+//        }
+
+        String value = null;
+        while (mat.find()) {
+            value = mat.group(0);
+            url.replace(value,java.net.URLEncoder.encode(value));
+        }
+        return url;
     }
 
 //    public static void main(String[] args) {
