@@ -141,7 +141,7 @@ public class ProjectAdminMangeServiceImpl implements ProjectAdminManageService {
             System.err.println(body.getBpEmail()+"**");
             investmentInstitutionFundManage.setBpEmail(body.getBpEmail());
             investmentInstitutionFundManage.setTotalAmount(body.getTotalAmount());
-            investmentInstitutionFundManage.setCreator(body.getToken());
+            investmentInstitutionFundManage.setCreator(body.getToken());  
             investmentInstitutionFundManage.setDollarAmount(body.getDollarAmount());
             investmentInstitutionFundManage.setRmbAmount(body.getRmbAmount());
             investmentInstitutionFundManage.setInteriorOrganization(body.getInteriorOrganization());
