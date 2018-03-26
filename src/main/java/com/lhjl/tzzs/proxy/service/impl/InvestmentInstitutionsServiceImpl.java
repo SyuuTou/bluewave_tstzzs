@@ -4,36 +4,13 @@ import cn.binarywang.wx.miniapp.api.WxMaService;
 import com.github.stuxuhai.jpinyin.PinyinException;
 import com.github.stuxuhai.jpinyin.PinyinFormat;
 import com.github.stuxuhai.jpinyin.PinyinHelper;
-import com.lhjl.tzzs.proxy.dto.CommonDto;
-import com.lhjl.tzzs.proxy.dto.ImageHandlerDto;
-import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionComplexOutputDto;
-import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionSearchOutputDto;
-import com.lhjl.tzzs.proxy.dto.InvestmentInstitutionsDto2;
-import com.lhjl.tzzs.proxy.dto.ProjectRatingDto;
-import com.lhjl.tzzs.proxy.dto.ProjectsUpdateInputDto;
-import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionAdminMapper;
-import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressMapper;
-import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsAddressPartMapper;
-import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsLabelMapper;
-import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
-import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsSegmentationMapper;
-import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsStageMapper;
-import com.lhjl.tzzs.proxy.mapper.MetaProjectStageMapper;
-import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
-import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
-import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddress;
-import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsAddressPart;
-import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsLabel;
-import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsSegmentation;
-import com.lhjl.tzzs.proxy.model.InvestmentInstitutionsStage;
-import com.lhjl.tzzs.proxy.model.MetaProjectStage;
-import com.lhjl.tzzs.proxy.model.MetaSegmentation;
+import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.mapper.*;
+import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.InvestmentInstitutionsService;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
-import com.lhjl.tzzs.proxy.utils.TypeConvertUtil;
-
 import me.chanjar.weixin.common.exception.WxErrorException;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Position;
@@ -44,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
-import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -90,9 +66,8 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
     @Autowired
     private InvestmentInstitutionsLabelMapper investmentInstitutionsLabelMapper;
     
-    
-    
-    
+
+
     @Override
     public CommonDto<InvestmentInstitutionComplexOutputDto> getInvestmentInstitutionsComlexInfo(Map<String,Integer> body){
         CommonDto<InvestmentInstitutionComplexOutputDto> result =  new CommonDto<>();
