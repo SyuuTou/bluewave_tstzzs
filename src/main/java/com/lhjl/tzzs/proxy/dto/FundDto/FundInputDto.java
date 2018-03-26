@@ -1,19 +1,22 @@
 package com.lhjl.tzzs.proxy.dto.FundDto;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 /**
  * Created by lanhaijulang on 2018/1/19.
  */
 public class FundInputDto {
-
-    private Integer projectId;
+	/**
+	 * 机构基金表的主键id
+	 */
+	private Integer fundId;
+	
+	private Integer projectId;
 
     private Integer institutionId;
 
     private String creator;
-
-    private Integer fundId;
 
     private String shortName;
 
@@ -34,8 +37,20 @@ public class FundInputDto {
     private Integer[] investStages;
 
     private Integer[] focusDomains;
+    /**
+     * 主体类型
+     */
+    private Integer subjectType;
+    
+    public Integer getSubjectType() {
+		return subjectType;
+	}
 
-    public Integer getProjectId() {
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
+
+	public Integer getProjectId() {
         return projectId;
     }
 
@@ -146,4 +161,15 @@ public class FundInputDto {
     public void setFocusDomains(Integer[] focusDomains) {
         this.focusDomains = focusDomains;
     }
+
+	@Override
+	public String toString() {
+		return "FundInputDto [projectId=" + projectId + ", institutionId=" + institutionId + ", creator=" + creator
+				+ ", fundId=" + fundId + ", shortName=" + shortName + ", fullName=" + fullName + ", establishedTime="
+				+ establishedTime + ", survivalPeriod=" + survivalPeriod + ", currencyType=" + currencyType
+				+ ", fundManageScale=" + fundManageScale + ", investmentAmountLow=" + investmentAmountLow
+				+ ", investmentAmountHigh=" + investmentAmountHigh + ", investStages=" + Arrays.toString(investStages)
+				+ ", focusDomains=" + Arrays.toString(focusDomains) + ", subjectType=" + subjectType + "]";
+	}
+    
 }

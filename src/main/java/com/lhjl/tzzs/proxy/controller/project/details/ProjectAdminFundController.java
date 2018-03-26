@@ -21,16 +21,16 @@ public class ProjectAdminFundController extends GenericController{
     private ProjectAdminFundService projectAdminFundService;
 
     /**
-     * 获取项目基金列表
+     * 获取项目旗下基金列表
      * @param projectId
      * @return
      */
     @GetMapping("/getfundList")
-    public CommonDto<List<FundOutputDto>> getFundList(Integer projectId){
+    public CommonDto<List<FundOutputDto>> getFundList(Integer subjectId,Integer subjectType){
 
         CommonDto<List<FundOutputDto>> result = new CommonDto<>();
         try {
-            result = projectAdminFundService.getFundList(projectId);
+            result = projectAdminFundService.getFundList(subjectId,subjectType);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
@@ -62,14 +62,15 @@ public class ProjectAdminFundController extends GenericController{
     /**
      * 删除基金
      * @param fundId
+     * @param subjectType 主体类型
      * @return
      */
     @GetMapping("/deletefund")
-    public CommonDto<String> deleteFund(Integer fundId){
+    public CommonDto<String> deleteFund(Integer fundId,Integer subjectType){
 
         CommonDto<String> result = new CommonDto<>();
         try {
-            result = projectAdminFundService.deleteFund(fundId);
+            result = projectAdminFundService.deleteFund(fundId,subjectType);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");

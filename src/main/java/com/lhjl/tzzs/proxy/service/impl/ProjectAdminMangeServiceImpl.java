@@ -138,7 +138,6 @@ public class ProjectAdminMangeServiceImpl implements ProjectAdminManageService {
         }else if(Integer.valueOf(2).equals(body.getSubjectType())) {//机构
         	InvestmentInstitutionFundManage investmentInstitutionFundManage = new InvestmentInstitutionFundManage();
             investmentInstitutionFundManage.setCompanyId(body.getCompanyId());
-            System.err.println(body.getBpEmail()+"**");
             investmentInstitutionFundManage.setBpEmail(body.getBpEmail());
             investmentInstitutionFundManage.setTotalAmount(body.getTotalAmount());
             investmentInstitutionFundManage.setCreator(body.getToken());  
