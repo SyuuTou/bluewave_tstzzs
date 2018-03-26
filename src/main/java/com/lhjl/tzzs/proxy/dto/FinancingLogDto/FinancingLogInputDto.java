@@ -18,10 +18,24 @@ public class FinancingLogInputDto {
     private Integer currencyType;
 
     private String shareDivest;
-
+    /**
+     * 融资需求
+     */
     private String financingApplication;
+    /**
+     * 主体类型 
+     */
+    private Integer subjectType;
+    
+    public Integer getSubjectType() {
+		return subjectType;
+	}
 
-    public Integer getId() {
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
+
+	public Integer getId() {
         return id;
     }
 
