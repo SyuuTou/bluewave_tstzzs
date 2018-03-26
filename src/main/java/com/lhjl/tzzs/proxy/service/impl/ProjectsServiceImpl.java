@@ -113,6 +113,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
     private UserInfoService userInfoService;
     @Resource
     private DatasOperationManageMapper datasOperationManageMapper;
+    
     /**
      * 查询我关注的项目
      *
@@ -1499,21 +1500,61 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<Projects> getProInfoById(Integer appid, Integer proId) {
-		CommonDto<Projects> result=new CommonDto<Projects>();
-		result.setData(projectsMapper.selectByPrimaryKey(proId));
-		result.setStatus(200);;
-		result.setMessage("success");
-		
+	public CommonDto<CommentAndHighlightsOutputDto> getProInfoById(Integer appid, Integer subjectId,Integer subjectType) {
+		CommonDto<CommentAndHighlightsOutputDto> result=new CommonDto<>();
+		CommentAndHighlightsOutputDto cah=new CommentAndHighlightsOutputDto();
+		if(subjectType.equals(1)) {//项目
+			Projects pro = projectsMapper.selectByPrimaryKey(subjectId);
+			cah.setComment(pro.getCommet());
+			cah.setInvestmentHighlights(pro.getProjectInvestmentHighlights());
+			
+			result.setData(cah);
+			result.setStatus(200);;
+			result.setMessage("success");
+		}else if(subjectType.equals(2)) {//机构
+			InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(subjectId);
+			cah.setComment(ii.getComment());
+			cah.setInvestmentHighlights("");
+			result.setData(cah);
+			result.setStatus(200);;
+			result.setMessage("success");
+		}
 		return result;
 	}
 	
 	@Transactional
 	@Override
-	public CommonDto<Boolean> updateProInfos(Integer appid, Projects body) {
+	public CommonDto<Boolean> updateProInfos(Integer appid, CommentAndHighlightsInputDto body) {
 		CommonDto<Boolean> result=new CommonDto<>();
 		
-		projectsMapper.updateByPrimaryKeySelective(body);
+		if(body.getSubjectId()==null) {
+			result.setData(false);
+			result.setStatus(500);;
+			result.setMessage("请输入主体id"); 
+		}
+		if(body.getSubjectType() == null) {
+			result.setData(false);
+			result.setStatus(500);;
+			result.setMessage("请输入主体类型，1项目，2机构"); 
+		}
+		
+		if (body.getSubjectType().equals(1)) {//项目相关信息更新
+			Projects pro=new Projects();
+			pro.setId(body.getSubjectId());
+			pro.setCommet(body.getComment());
+			pro.setProjectInvestmentHighlights(body.getInvestmentHighlights());
+			
+			projectsMapper.updateByPrimaryKeySelective(pro);
+			
+		}else if(body.getSubjectType().equals(2)) {//机构相关信息更新
+			InvestmentInstitutions ii=new InvestmentInstitutions();
+			ii.setId(body.getSubjectId());
+			ii.setComment(body.getComment());
+			//TODO 机构表中不存在投资亮点的数据结构
+				
+			investmentInstitutionsMapper.updateByPrimaryKeySelective(ii);
+		}
+		
 		result.setData(true);
 		result.setStatus(200);;
 		result.setMessage("success");  

@@ -183,16 +183,17 @@ public interface ProjectsService {
      * 回显 公司简介 以及 投资亮点
      * @param appid
      * @param proId
+     * @param subjectType 主体类型 1项目 2机构
      * @return
      */
-	CommonDto<Projects> getProInfoById(Integer appid, Integer proId);
+	CommonDto<CommentAndHighlightsOutputDto> getProInfoById(Integer appid, Integer subjectId,Integer subjectType);
 	/**
-     * 更新公司相关信息(主要用于更新项目简介 以及 投资亮点)
-     * @param appid
-     * @param proId
-     * @return
-     */
-	CommonDto<Boolean> updateProInfos(Integer appid, Projects body);
+	 * 更新公司相关信息(主要用于更新项目简介 以及 投资亮点)
+	 * @param appid
+	 * @param body 简介 以及 投资亮点输入Dto
+	 * @return
+	 */
+	CommonDto<Boolean> updateProInfos(Integer appid, CommentAndHighlightsInputDto body);
 	/**
      * 项目公司的列表信息
      * @param appid 扩展字段
