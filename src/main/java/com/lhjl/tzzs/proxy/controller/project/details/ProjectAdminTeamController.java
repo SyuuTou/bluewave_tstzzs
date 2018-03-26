@@ -23,23 +23,7 @@ public class ProjectAdminTeamController extends  GenericController{
     @Resource
     private ProjectAdminTeamService projectAdminTeamService;
 
-    /**
-     * 团队成员热点城市
-     * @return
-     */
-    @GetMapping("gethotCity")
-    public CommonDto<Map<String,List<LabelList>>> hotCity(){
-        CommonDto<Map<String,List<LabelList>>> result = new CommonDto<>();
-        try {
-            result = projectAdminTeamService.queryHotCity();
-        }catch (Exception e){
-            result .setData(null);
-            result.setStatus(510);
-            result.setMessage("数据检索异常，请稍后再试");
-            LOGGER.error(e.getMessage(),e.fillInStackTrace());
-        }
-        return result;
-    }
+
 
     /**
      * 获取平台项目团队成员列表
@@ -96,6 +80,24 @@ public class ProjectAdminTeamController extends  GenericController{
             result.setMessage("服务器端发生错误");
             result.setData(null);
             result.setStatus(502);
+        }
+        return result;
+    }
+    
+    /**
+     * 团队成员热点城市
+     * @return
+     */
+    @GetMapping("gethotCity")
+    public CommonDto<Map<String,List<LabelList>>> hotCity(){
+        CommonDto<Map<String,List<LabelList>>> result = new CommonDto<>();
+        try {
+            result = projectAdminTeamService.queryHotCity();
+        }catch (Exception e){
+            result .setData(null);
+            result.setStatus(510);
+            result.setMessage("数据检索异常，请稍后再试");
+            LOGGER.error(e.getMessage(),e.fillInStackTrace());
         }
         return result;
     }

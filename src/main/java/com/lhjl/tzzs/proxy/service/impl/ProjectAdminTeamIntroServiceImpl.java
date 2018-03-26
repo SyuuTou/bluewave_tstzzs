@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.TeamIntroductionDto;
 import com.lhjl.tzzs.proxy.dto.ProjectTeamMemberDto.ProjectTeamIntroInputDto;
 import com.lhjl.tzzs.proxy.mapper.ProjectTeamInfoMapper;
 import com.lhjl.tzzs.proxy.model.ProjectTeamInfo;
@@ -26,60 +27,71 @@ public class ProjectAdminTeamIntroServiceImpl implements ProjectAdminTeamIntroSe
     public CommonDto<String> addOrUpdatePojectTeamIntro(ProjectTeamIntroInputDto body) {
 
         CommonDto<String> result = new CommonDto<>();
-
-        ProjectTeamInfo projectTeamInfo = new ProjectTeamInfo();
-        projectTeamInfo.setProjectId(body.getProjectId());
-        ProjectTeamInfo projectTeamInfo1 = projectTeamInfoMapper.selectByPrimaryKey(projectTeamInfo);
-        Integer projectTeamInfoInsertResult  = -1;
-        if(null == projectTeamInfo1){
-            projectTeamInfo.setTeamIntroduction(body.getTeamIntroduction());
-            projectTeamInfoInsertResult = projectTeamInfoMapper.insert(projectTeamInfo);
-        }else{
-            projectTeamInfo.setTeamIntroduction(body.getTeamIntroduction());
-            projectTeamInfoInsertResult = projectTeamInfoMapper.updateByPrimaryKeySelective(projectTeamInfo);
-        }
-        if(projectTeamInfoInsertResult > 0){
-            result.setData("保存成功");
-            result.setStatus(200);
-            result.setMessage("success");
+        
+        if(body.getProjectId()==null) {
+        	result.setData("请输入主体id");
+            result.setStatus(500);
+            result.setMessage("failed");
             return result;
         }
-
-        result.setData("保存失败");
-        result.setStatus(300);
-        result.setMessage("failed");
+        if(body.getSubjectType()==null) {
+        	result.setData("请输入主体类型");
+            result.setStatus(500);
+            result.setMessage("failed");
+            return result;
+        }
+        
+        if(Integer.valueOf(1).equals(body.getSubjectType())) {//项目
+        	ProjectTeamInfo projectTeamInfo = new ProjectTeamInfo();
+            projectTeamInfo.setProjectId(body.getProjectId());
+            projectTeamInfo.setTeamIntroduction(body.getTeamIntroduction());
+            
+            projectTeamInfoMapper.deleteByPrimaryKey(body.getProjectId());
+            projectTeamInfoMapper.insertSelective(projectTeamInfo);
+            
+        }else if(Integer.valueOf(2).equals(body.getSubjectType())) {//机构
+        	//TODO 机构的团队信息保存,后台数据待完善
+        }
+        
+        
+        result.setData("保存成功");
+        result.setStatus(200);
+        result.setMessage("success");
         return result;
 
     }
 
     @Override
-    public CommonDto<Map<String, Object>> getPojectTeamIntro(Integer projectId) {
+    public CommonDto<TeamIntroductionDto> getPojectTeamIntro(Integer projectId,Integer subjectType) {
 
-        CommonDto<Map<String, Object>> result = new CommonDto<>();
-        Map map = new HashMap();
+        CommonDto<TeamIntroductionDto> result = new CommonDto<>();
+        TeamIntroductionDto intro = new TeamIntroductionDto();
 
         if( null == projectId ){
-            map.put("projectId", projectId);
-            map.put("data", "没有该项目");
-            result.setStatus(300);
-            result.setMessage("failed");
-            result.setData(map);
+            result.setStatus(500);
+            result.setMessage("请输入项目id");
+            result.setData(null);
             return result;
         }
-        ProjectTeamInfo projectTeamInfo = new ProjectTeamInfo();
-        projectTeamInfo.setProjectId(projectId);
-        ProjectTeamInfo projectTeamInfo1 = projectTeamInfoMapper.selectByPrimaryKey(projectTeamInfo);
-
-
-
-        map.put("projectId", projectId);
-        if(null == projectTeamInfo1){
-            map.put("data",null);
-        }else {
-            map.put("data", projectTeamInfo1.getTeamIntroduction());
+        if( null == subjectType ){
+            result.setStatus(500);
+            result.setMessage("请输入主体类型");
+            result.setData(null);
+            return result;
+        }
+        
+        //设置主体id
+        intro.setProjectId(projectId);
+        if(Integer.valueOf(1).equals(subjectType)) {//项目
+        	ProjectTeamInfo info = projectTeamInfoMapper.selectByPrimaryKey(projectId);
+            if(null != info){
+            	intro.setData(info.getTeamIntroduction());
+            }
+        }else if(Integer.valueOf(2).equals(subjectType) ){//机构
+        	//TODO 机构的团队介绍
         }
 
-        result.setData(map);
+        result.setData(intro);
         result.setStatus(200);
         result.setMessage("success");
         return result;
