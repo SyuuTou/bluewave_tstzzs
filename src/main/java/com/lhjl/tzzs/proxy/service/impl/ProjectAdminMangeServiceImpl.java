@@ -2,12 +2,16 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectManageDto;
+import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionFundManageMapper;
 import com.lhjl.tzzs.proxy.mapper.ProjectsMapper;
 import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.*;
 import com.lhjl.tzzs.proxy.utils.DateUtils;
 import io.swagger.models.auth.In;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -36,152 +40,155 @@ public class ProjectAdminMangeServiceImpl implements ProjectAdminManageService {
 
     @Resource
     private ProjectsMapper projectsMapper;
+    
+    @Autowired
+    private InvestmentInstitutionFundManageMapper investmentInstitutionFundManageMapper;
 
     @Override
-    public CommonDto<ProjectManageDto> getProjectMange(Integer companyId) {
+    public CommonDto<ProjectManageDto> getProjectMange(Integer subjectId,Integer subjectType) {
         CommonDto<ProjectManageDto> result = new CommonDto<>();
         ProjectManageDto projectManageDto = new ProjectManageDto();
 
-        if(companyId == null){
-            result.setStatus(300);
-            result.setMessage("项目ID");
+        if(subjectId == null){
+            result.setStatus(500);
+            result.setMessage("请输入主体ID");
             result.setData(null);
             return result;
         }
-        InvestmentInstitutionFundManage investmentInstitutionFundManage = investmentInstitutionFundManageService.selectByPrimaryKey(companyId);
-        if(null == investmentInstitutionFundManage){
-            result.setStatus(200);
-            result.setMessage("success");
+        if(subjectType == null){
+            result.setStatus(500);
+            result.setMessage("请输入主体类型");
             result.setData(null);
             return result;
         }
-        projectManageDto.setBpEmail(investmentInstitutionFundManage.getBpEmail());
-        projectManageDto.setCompanyId(investmentInstitutionFundManage.getCompanyId());
-        projectManageDto.setDollarAmount(investmentInstitutionFundManage.getDollarAmount());
-        projectManageDto.setRmbAmount(investmentInstitutionFundManage.getRmbAmount());
-        projectManageDto.setTotalAmount(investmentInstitutionFundManage.getTotalAmount());
-        projectManageDto.setInteriorOrganization(investmentInstitutionFundManage.getInteriorOrganization());
-        projectManageDto.setInvestmentDecisionProcess(investmentInstitutionFundManage.getInvestmentDecisionProcess());
-
-        InvestmentInstitutionsType investmentInstitutionsType = new InvestmentInstitutionsType();
-        investmentInstitutionsType.setInvestmentInstitutionsId(companyId);
-        List<InvestmentInstitutionsType> investmentInstitutionsTypeList = investmentInstitutionsTypeService.select(investmentInstitutionsType);
-        String[] investmentInstitutionsTypeArr = null;
-        if (null != investmentInstitutionsTypeList && investmentInstitutionsTypeList.size()!=0) {
-            investmentInstitutionsTypeArr = new String[investmentInstitutionsTypeList.size()];
-            List<String> investmentInstitutionsTypes = new ArrayList<>();
-            investmentInstitutionsTypeList.forEach( investmentInstitutionInvestType_i ->{
-                investmentInstitutionsTypes.add(investmentInstitutionInvestType_i.getType());
-            });
-            investmentInstitutionsTypes.toArray(investmentInstitutionsTypeArr);
+        
+        if(Integer.valueOf(1).equals(subjectType) ) {//项目
+        	//TODO 对外投资属性为否的项目的基金管理信息待完善
+        	
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
+        	InvestmentInstitutionFundManage investmentInstitutionFundManage = investmentInstitutionFundManageService.selectByPrimaryKey(subjectId);
+            
+            if(investmentInstitutionFundManage !=null) {
+    	        projectManageDto.setBpEmail(investmentInstitutionFundManage.getBpEmail());
+    	        projectManageDto.setCompanyId(investmentInstitutionFundManage.getCompanyId());
+    	        projectManageDto.setDollarAmount(investmentInstitutionFundManage.getDollarAmount());
+    	        projectManageDto.setRmbAmount(investmentInstitutionFundManage.getRmbAmount());
+    	        projectManageDto.setTotalAmount(investmentInstitutionFundManage.getTotalAmount());
+    	        projectManageDto.setInteriorOrganization(investmentInstitutionFundManage.getInteriorOrganization());
+    	        projectManageDto.setInvestmentDecisionProcess(investmentInstitutionFundManage.getInvestmentDecisionProcess());
+            }
+            
+            /**
+             * 设置投资类型
+             */
+            InvestmentInstitutionsType investmentInstitutionsType = new InvestmentInstitutionsType();
+            investmentInstitutionsType.setInvestmentInstitutionsId(subjectId);
+            List<InvestmentInstitutionsType> investmentInstitutionsTypeList = investmentInstitutionsTypeService.select(investmentInstitutionsType);
+            
+            if (null != investmentInstitutionsTypeList && investmentInstitutionsTypeList.size()!=0) {
+                List<String> typeList = new ArrayList<>();
+                investmentInstitutionsTypeList.forEach( e ->{
+                	typeList.add(e.getType());
+                });
+                projectManageDto.setInvestTypes(typeList);
+            }
+            /**
+             * 经典案例
+             */
+            InvestmentInstitutionClassicCase investmentInstitutionClassicCase = new InvestmentInstitutionClassicCase();
+            investmentInstitutionClassicCase.setCompanyId(subjectId);
+            List<InvestmentInstitutionClassicCase> investmentInstitutionClassicCaseList = investmentInstitutionClassicCaseService.select(investmentInstitutionClassicCase);
+            
+            if (null != investmentInstitutionClassicCaseList && investmentInstitutionClassicCaseList.size() != 0) {
+                List<String> classicCasesList = new ArrayList<>();
+                investmentInstitutionClassicCaseList.forEach(e ->{
+                    classicCasesList.add(e.getClassicCase());
+                });
+                projectManageDto.setClassicCases(classicCasesList);
+            }
         }
-        projectManageDto.setInvestTypes(investmentInstitutionsTypeArr);
-
-        InvestmentInstitutionClassicCase investmentInstitutionClassicCase = new InvestmentInstitutionClassicCase();
-        investmentInstitutionClassicCase.setCompanyId(companyId);
-        List<InvestmentInstitutionClassicCase> investmentInstitutionClassicCaseList = investmentInstitutionClassicCaseService.select(investmentInstitutionClassicCase);
-        String[] investmentInstitutionClassicCaseArr = null;
-        if (null != investmentInstitutionClassicCaseList && investmentInstitutionClassicCaseList.size() != 0) {
-            investmentInstitutionClassicCaseArr = new String[investmentInstitutionClassicCaseList.size()];
-            List<String> investmentInstitutionClassicCases = new ArrayList<>();
-            investmentInstitutionClassicCaseList.forEach(investmentInstitutionClassicCase_i ->{
-                investmentInstitutionClassicCases.add(investmentInstitutionClassicCase_i.getClassicCase());
-            });
-            investmentInstitutionClassicCases.toArray(investmentInstitutionClassicCaseArr);
-        }
-        projectManageDto.setClassicCases(investmentInstitutionClassicCaseArr);
-
+        
+        
         result.setStatus(200);
         result.setMessage("success");
         result.setData(projectManageDto);
         return result;
     }
-
+    
+    @Transactional
     @Override
     public CommonDto<String> addOrUpdateManage(ProjectManageDto body) {
         CommonDto<String> result = new CommonDto<>();
+        
         if(null == body){
-            result.setStatus(300);
+            result.setStatus(500);
             result.setMessage("failed");
             result.setData("请输入相关信息");
             return result;
         }
-
-        InvestmentInstitutionFundManage investmentInstitutionFundManage = new InvestmentInstitutionFundManage();
-        investmentInstitutionFundManage.setCompanyId(body.getCompanyId());
-        investmentInstitutionFundManage.setBpEmail(body.getBpEmail());
-        investmentInstitutionFundManage.setTotalAmount(body.getTotalAmount());
-        investmentInstitutionFundManage.setCreator(body.getToken());
-        investmentInstitutionFundManage.setDollarAmount(body.getDollarAmount());
-        investmentInstitutionFundManage.setRmbAmount(body.getRmbAmount());
-        investmentInstitutionFundManage.setInteriorOrganization(body.getInteriorOrganization());
-        investmentInstitutionFundManage.setInvestmentDecisionProcess(body.getInvestmentDecisionProcess());
-
-        Integer investmentInstitutionFundManageInsertResult = -1;
-        long now = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String createTime = null;
-        try {
-            createTime = sdf.format(new Date(now));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        InvestmentInstitutionFundManage investmentInstitutionFundManage1 = investmentInstitutionFundManageService.selectByPrimaryKey(body.getCompanyId());
-        if(null == investmentInstitutionFundManage1){
-            investmentInstitutionFundManage.setCreateTime(DateUtils.parse(createTime));
-            investmentInstitutionFundManageInsertResult = investmentInstitutionFundManageService.save(investmentInstitutionFundManage);
-        }else{
-            investmentInstitutionFundManage.setUpdateTime(DateUtils.parse(createTime));
-            investmentInstitutionFundManageInsertResult = investmentInstitutionFundManageService.updateByPrimaryKey(investmentInstitutionFundManage);
-        }
-
-        List<InvestmentInstitutionsType> investmentInstitutionsTypeList = new ArrayList<>();
-        investmentInstitutionsTypeService.deleteAll(body.getCompanyId());
-        if(null == body.getInvestTypes() || body.getInvestTypes().length == 0){
-            InvestmentInstitutionsType investmentInstitutionsType = new InvestmentInstitutionsType();
-            investmentInstitutionsType.setInvestmentInstitutionsId(body.getCompanyId());
-            investmentInstitutionsType.setType(null);
-            investmentInstitutionsTypeList.add(investmentInstitutionsType);
-        }else{
-            for(String investType : body.getInvestTypes()){
-                InvestmentInstitutionsType investmentInstitutionsType1  = new InvestmentInstitutionsType();
-                investmentInstitutionsType1.setInvestmentInstitutionsId(body.getCompanyId());
-                investmentInstitutionsType1.setType(investType);
-                investmentInstitutionsTypeList.add(investmentInstitutionsType1);
-            }
-        }
-
-        Integer investmentInstitutionInvestTypeInsertResult = investmentInstitutionsTypeService.insertList(investmentInstitutionsTypeList);
-
-
-        List<InvestmentInstitutionClassicCase> investmentInstitutionClassicCaseList = new ArrayList<>();
-        investmentInstitutionClassicCaseService.deleteAll(body.getCompanyId());
-        if(null == body.getClassicCases() || body.getClassicCases().length == 0){
-            InvestmentInstitutionClassicCase investmentInstitutionClassicCase = new InvestmentInstitutionClassicCase();
-            investmentInstitutionClassicCase.setCompanyId(body.getCompanyId());
-            investmentInstitutionClassicCase.setClassicCase("");
-            investmentInstitutionClassicCaseList.add(investmentInstitutionClassicCase);
-        }else{
-            for(String classicCase : body.getClassicCases()){
-                InvestmentInstitutionClassicCase investmentInstitutionClassicCase1  = new InvestmentInstitutionClassicCase();
-                investmentInstitutionClassicCase1.setClassicCase(classicCase);
-                investmentInstitutionClassicCase1.setCompanyId(body.getCompanyId());
-                investmentInstitutionClassicCaseList.add(investmentInstitutionClassicCase1);
-            }
-        }
-
-        Integer investmentInstitutionClassicCaseInsertResult = investmentInstitutionClassicCaseService.insertList(investmentInstitutionClassicCaseList);
-
-        if(investmentInstitutionFundManageInsertResult > 0 && investmentInstitutionInvestTypeInsertResult > 0 &&
-                investmentInstitutionClassicCaseInsertResult > 0){
-            result.setStatus(200);
-            result.setMessage("success");
-            result.setData("保存成功");
+        if(body.getSubjectType() == null){
+            result.setStatus(500);
+            result.setMessage("failed");
+            result.setData("请输入主体类型");
             return result;
         }
-        result.setStatus(300);
-        result.setMessage("failed");
-        result.setData("保存失败");
+        if(Integer.valueOf(1).equals(body.getSubjectType())) {//项目
+        	//TODO 项目基金管理信息的更新
+        	
+        }else if(Integer.valueOf(2).equals(body.getSubjectType())) {//机构
+        	InvestmentInstitutionFundManage investmentInstitutionFundManage = new InvestmentInstitutionFundManage();
+            investmentInstitutionFundManage.setCompanyId(body.getCompanyId());
+            System.err.println(body.getBpEmail()+"**");
+            investmentInstitutionFundManage.setBpEmail(body.getBpEmail());
+            investmentInstitutionFundManage.setTotalAmount(body.getTotalAmount());
+            investmentInstitutionFundManage.setCreator(body.getToken());
+            investmentInstitutionFundManage.setDollarAmount(body.getDollarAmount());
+            investmentInstitutionFundManage.setRmbAmount(body.getRmbAmount());
+            investmentInstitutionFundManage.setInteriorOrganization(body.getInteriorOrganization());
+            investmentInstitutionFundManage.setInvestmentDecisionProcess(body.getInvestmentDecisionProcess());
+
+            //接收自增长id
+            Integer autoIncreasedId = body.getCompanyId();
+            if(null == body.getCompanyId() ){
+                investmentInstitutionFundManage.setCreateTime(new Date());
+                investmentInstitutionFundManageMapper.insertSelective(investmentInstitutionFundManage);
+                autoIncreasedId=investmentInstitutionFundManage.getCompanyId();
+            }else{
+                investmentInstitutionFundManage.setUpdateTime(new Date());
+                investmentInstitutionFundManageMapper.updateByPrimaryKeySelective(investmentInstitutionFundManage);
+            }
+            
+            //机构投资类型
+            List<InvestmentInstitutionsType> investmentInstitutionsTypeList = new ArrayList<>();
+            investmentInstitutionsTypeService.deleteAll(autoIncreasedId);
+            if(null != body.getInvestTypes() && body.getInvestTypes().size() != 0){
+                for(String investType : body.getInvestTypes()){
+                    InvestmentInstitutionsType e  = new InvestmentInstitutionsType();
+                    e.setInvestmentInstitutionsId(autoIncreasedId);
+                    e.setType(investType);
+                    investmentInstitutionsTypeList.add(e);
+                }
+            }
+            investmentInstitutionsTypeService.insertList(investmentInstitutionsTypeList);
+            
+            //经典案例更新
+            List<InvestmentInstitutionClassicCase> investmentInstitutionClassicCaseList = new ArrayList<>();
+            investmentInstitutionClassicCaseService.deleteAll(autoIncreasedId);
+            if(null != body.getClassicCases() && body.getClassicCases().size() != 0){
+                for(String classicCase : body.getClassicCases()){
+                    InvestmentInstitutionClassicCase e  = new InvestmentInstitutionClassicCase();
+                    e.setClassicCase(classicCase);
+                    e.setCompanyId(autoIncreasedId);
+                    investmentInstitutionClassicCaseList.add(e);
+                }
+            }
+            investmentInstitutionClassicCaseService.insertList(investmentInstitutionClassicCaseList);
+        }
+        
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData("更新成功");
         return result;
     }
 
