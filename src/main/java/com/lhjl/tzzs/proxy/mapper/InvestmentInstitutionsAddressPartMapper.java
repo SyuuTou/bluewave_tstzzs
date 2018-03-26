@@ -18,5 +18,5 @@ public interface InvestmentInstitutionsAddressPartMapper extends OwnerMapper<Inv
 	 * @param companyId
 	 * @return
 	 */
-	List<InvestmentInstitutionsAddressPart> selectAllByWeight(@Param("companyId")Integer companyId);
+	List<InvestmentInstitutionsAddressPart> selectAllOrderByWeight(@Param("companyId")Integer companyId);
 }

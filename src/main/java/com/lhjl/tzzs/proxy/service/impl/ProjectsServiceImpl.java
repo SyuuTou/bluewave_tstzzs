@@ -1522,17 +1522,31 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 	@Transactional(readOnly=true)
 	@Override
-	public CommonDto<List<InvestmentInstitutionsAddressPart>> listProPartsByCompanyIdAndProtype(Integer appid, Integer companyType,Integer companyId) {
-		CommonDto<List<InvestmentInstitutionsAddressPart>> result=new CommonDto<>();
-//		Object partList = null;
-//		InvestmentInstitutionsAddressPart iiap=new InvestmentInstitutionsAddressPart();
-//		iiap.setInvestmentInstitutionId(companyId);
-		//获取该机构的所有分部信息
-		List<InvestmentInstitutionsAddressPart> list = investmentInstitutionsAddressPartMapper.selectAllByWeight(companyId);
-		Integer i=0;
-		for(InvestmentInstitutionsAddressPart e:list) {
-			e.setSort(++i);
+	public CommonDto<Object> listProPartsByCompanyIdAndProtype(Integer appid, Integer subjectType,Integer companyId) {
+		CommonDto<Object> result=new CommonDto<>();
+		
+		Object list=new ArrayList<>();
+		
+		if(subjectType.equals(1)) {//项目分部
+			//TODO 项目分部的后台数据结构待完善
+			
+			result.setData(list);
+			result.setStatus(200);
+			result.setMessage("项目的分部信息后台数据结构不完善，有待进一步调整");  
+			
+			return result;
+			
+		}else if(subjectType.equals(2)) {//机构分部
+			//获取该机构的所有分部信息
+			List<InvestmentInstitutionsAddressPart> iiapLists = investmentInstitutionsAddressPartMapper.selectAllOrderByWeight(companyId);
+			Integer i=0;
+			for(InvestmentInstitutionsAddressPart e:iiapLists) {
+				e.setSort(++i);
+			}
+			
+			list=iiapLists; 
 		}
+		
 //		if(list != null) {
 //			for(InvestmentInstitutionsAddressPart tmp:list) {
 //				InvestmentInstitutionsAddress iia =new InvestmentInstitutionsAddress();
@@ -1549,28 +1563,50 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		
 		return result;
 	}
+	
 	@Transactional
 	@Override
-	public CommonDto<Boolean> removePartInfoById(Integer appid, Integer partId) {
+	public CommonDto<Boolean> removePartInfoById(Integer appid, Integer partId,Integer subjectType) {
+		
 		CommonDto<Boolean> result =new CommonDto<Boolean>();
-		InvestmentInstitutionsAddressPart iiap =new InvestmentInstitutionsAddressPart();
-		iiap.setId(partId);
-		iiap.setYn(1);
-		investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(iiap);
+		if(subjectType.equals(1)) {
+			//TODO 删除项目的分部信息
+			result.setData(true);
+			result.setMessage("项目分部信息后台数据结构不完善，有待进一步调整");
+			result.setStatus(200);
+			
+			return result;
+		}else if (subjectType.equals(2)) {
+			InvestmentInstitutionsAddressPart iiap =new InvestmentInstitutionsAddressPart();
+			iiap.setId(partId);
+			iiap.setYn(1);
+			investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(iiap);
+		}
+		
 		result.setData(true);
 		result.setMessage("success");
 		result.setStatus(200);
 		return result;
 	}
+	
 	@Transactional
 	@Override
 	public CommonDto<Boolean> saveOrUpdayePart(Integer appid, InvestmentInstitutionsAddressPart body) {
 		CommonDto<Boolean> result =new CommonDto<Boolean>();
-		if(body.getId()!=null) {//更新操作
-			investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(body);
-		}else {//插入操作
-			investmentInstitutionsAddressPartMapper.insertSelective(body);
+		if(body.getSubjectType().equals(1)) {
+			//TODO 项目分部信息，后台数据结构有待完善
+			result.setData(true);
+			result.setMessage("项目分部信息，后台数据结构有待完善");
+			result.setStatus(200);
+			return result;
+		}else if(body.getSubjectType().equals(2)) {
+			if(body.getId()!=null) {//更新操作
+				investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(body);
+			}else {//插入操作
+				investmentInstitutionsAddressPartMapper.insertSelective(body);
+			}
 		}
+		
 		result.setData(true);
 		result.setMessage("success");
 		result.setStatus(200);
@@ -1728,16 +1764,27 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<DatasOperationManage> echoProjectManagementInfo(Integer appid, Integer projectId) {
+	public CommonDto<DatasOperationManage> echoManagementInfo(Integer appid, Integer subjectId ,Integer subjectType) {
 		CommonDto<DatasOperationManage> result =new CommonDto<>();
+		if(subjectType==null) {
+			result.setData(null);
+			result.setMessage("请输入主体类型");
+			result.setStatus(500);
+			return result;
+		}
 		DatasOperationManage dom =new DatasOperationManage();
-		dom.setDataId(projectId);
-		dom.setDataType("PROJECT");
+		dom.setDataId(subjectId);
+		if(subjectType.equals(1)) {
+			dom.setDataType("PROJECT");
+		}else if(subjectType.equals(2)) {
+			dom.setDataType("INVESTMENT_INSTITUTIONS");
+		}
+		
 		//一个项目只有一条的运营管理记录
 		try {
 			dom = datasOperationManageMapper.selectOne(dom);
 		}catch(Exception e) {
-			result.setData(null);
+			result.setData(null);  
 	        result.setStatus(500); 
 	        result.setMessage("由于请求参数不正确导致数据库查询出多条相关的运营纪录");
 			return result;
@@ -1765,15 +1812,22 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<Boolean> saveOrUpdateProjectManagement(Integer appid, DatasOperationManage body) {
+	public CommonDto<Boolean> saveOrUpdateManagement(Integer appid, DatasOperationManage body) {
 		CommonDto<Boolean> result =new CommonDto<>();
 		
 		DatasOperationManage dom =new DatasOperationManage();
 		dom.setDataId(body.getDataId());
-		dom.setDataType("PROJECT");
 		
-		body.setDataType("PROJECT");
 		try {
+			
+			if(body.getSubjectType().equals(1)) {
+				dom.setDataType("PROJECT");
+				body.setDataType("PROJECT");
+			}else if(body.getSubjectType().equals(2)) {
+				dom.setDataType("INVESTMENT_INSTITUTIONS");
+				body.setDataType("INVESTMENT_INSTITUTIONS");
+			}
+			
 			if( datasOperationManageMapper.selectOne(dom) != null) {//执行更新操作
 				body.setUpdateTime(new Date());
 				datasOperationManageMapper.updateByPrimaryKeySelective(body);
@@ -1784,7 +1838,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		}catch(Exception e ) {
 			result.setData(true);
 	        result.setStatus(200); 
-	        result.setMessage("运营管理表中存在项目冗余数据，数据存在问题");
+	        result.setMessage("运营管理表中存在主题类型不唯一的冗余数据，DB数据存在问题");
 			return result;
 		}
 		result.setData(true);

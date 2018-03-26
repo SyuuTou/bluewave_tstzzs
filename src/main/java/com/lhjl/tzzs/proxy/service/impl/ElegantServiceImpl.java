@@ -374,6 +374,15 @@ public class ElegantServiceImpl implements ElegantServiceService{
             return result;
         }
 
+
+        if (body.getIsReward() == 1&& StringUtils.isEmpty(body.getBackgroundPicture())){
+            body.setBackgroundPicture("https://img.idatavc.com/static/banner/elegant.png");
+        }
+
+        if (StringUtils.isEmpty(body.getUnit())){
+            body.setUnit("人");
+        }
+
         //开始判断值的合理性
         BigDecimal originalPrice = new BigDecimal(body.getOriginalPrice());
         originalPrice = originalPrice.setScale(2,BigDecimal.ROUND_HALF_UP);
@@ -495,18 +504,20 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 userToken.setToken(body.getCreator());
                 userToken = userTokenMapper.selectOne(userToken);
                 BigDecimal amount = new BigDecimal(body.getOriginalPrice()).multiply(new BigDecimal(body.getQuantity())).setScale(2);
-                if (body.getPriceUnit() == 1){
-                    // 扣除令牌
-                    redEnvelopeService.addUserIntegralsLog(appid,"LOCK",userToken.getUserId(),amount,965,false,new BigDecimal(-1),1);
-                    String title = "发布悬赏";
-                    String msg = "锁定"+amount+"令牌";
-                    investorsApprovalService.sendCommonTemplate(userToken.getUserId(),title,msg);
-                }else if (body.getPriceUnit() == 0){
-                    // 锁定人民币
-                    redEnvelopeService.addUserIntegralsLog(appid,"LOCK",userToken.getUserId(),amount,965,false,new BigDecimal(-1),0);
-                    String title = "发布悬赏";
-                    String msg = "锁定"+amount+"人民币";
-                    investorsApprovalService.sendCommonTemplate(userToken.getUserId(),title,msg);
+                if (body.getIsReward() == 1) {
+                    if (body.getPriceUnit() == 1) {
+                        // 扣除令牌
+                        redEnvelopeService.addUserIntegralsLog(appid, "LOCK", userToken.getUserId(), amount, 965, false, new BigDecimal(-1), 1);
+                        String title = "发布悬赏";
+                        String msg = "锁定" + amount + "令牌";
+                        investorsApprovalService.sendCommonTemplate(userToken.getUserId(), title, msg);
+                    } else if (body.getPriceUnit() == 0) {
+                        // 锁定人民币
+                        redEnvelopeService.addUserIntegralsLog(appid, "LOCK", userToken.getUserId(), amount, 965, false, new BigDecimal(-1), 0);
+                        String title = "发布悬赏";
+                        String msg = "锁定" + amount + "人民币";
+                        investorsApprovalService.sendCommonTemplate(userToken.getUserId(), title, msg);
+                    }
                 }
 
             }else {
@@ -829,27 +840,41 @@ public class ElegantServiceImpl implements ElegantServiceService{
                     elegantService.setCustomButtonLabel("查看结果");
                     elegantService.setStatus("Check_Result");
             }else{
+
+
+
                 ElegantServiceParticipate queryElegantServiceParticipate = new ElegantServiceParticipate();
-                queryElegantServiceParticipate.setToken(token);
                 queryElegantServiceParticipate.setElegantServiceId(elegantServiceId);
+                queryElegantServiceParticipate.setStatus(2);
 
-                List<ElegantServiceParticipate> elegantServiceParticipates = elegantServiceParticipateMapper.select(queryElegantServiceParticipate);
-                if (null != elegantServiceParticipates && elegantServiceParticipates.size()==1){
+                Integer count = elegantServiceParticipateMapper.selectCount(queryElegantServiceParticipate);
 
-                    if (elegantServiceParticipates.get(0).getStatus() == 2){
-                        elegantService.setCustomButtonLabel("已采纳");
-                        elegantService.setStatus("Accepted");
-                    }else if (elegantServiceParticipates.get(0).getStatus() == 3){
-                        elegantService.setCustomButtonLabel("不采纳");
-                        elegantService.setStatus("None_Accepted");
-                    }else {
-                        elegantService.setCustomButtonLabel("待审核");
-                        elegantService.setStatus("Auditing");
-                    }
-
+                if (elegantService.getQuantity() <= count){
+                    elegantService.setCustomButtonLabel("已结束");
+                    elegantService.setStatus("Completed");
                 }else {
-                    elegantService.setCustomButtonLabel("立即参与");
-                    elegantService.setStatus("Now_Participate");
+                    queryElegantServiceParticipate = new ElegantServiceParticipate();
+                    queryElegantServiceParticipate.setToken(token);
+                    queryElegantServiceParticipate.setElegantServiceId(elegantServiceId);
+
+                    List<ElegantServiceParticipate> elegantServiceParticipates = elegantServiceParticipateMapper.select(queryElegantServiceParticipate);
+                    if (null != elegantServiceParticipates && elegantServiceParticipates.size() == 1) {
+
+                        if (elegantServiceParticipates.get(0).getStatus() == 2) {
+                            elegantService.setCustomButtonLabel("已采纳");
+                            elegantService.setStatus("Accepted");
+                        } else if (elegantServiceParticipates.get(0).getStatus() == 3) {
+                            elegantService.setCustomButtonLabel("不采纳");
+                            elegantService.setStatus("None_Accepted");
+                        } else {
+                            elegantService.setCustomButtonLabel("待审核");
+                            elegantService.setStatus("Auditing");
+                        }
+
+                    } else {
+                        elegantService.setCustomButtonLabel("立即参与");
+                        elegantService.setStatus("Now_Participate");
+                    }
                 }
             }
 

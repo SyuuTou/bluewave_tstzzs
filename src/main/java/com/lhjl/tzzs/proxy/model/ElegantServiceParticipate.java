@@ -45,12 +45,16 @@ public class ElegantServiceParticipate {
     private Integer appid;
     @Column(name = "collection_status")
     private Integer collectionStatus;
+    @Transient
+    private String companyName;
 
     @Transient
     private List<ElegantServiceParticipateFeedbackImages> feedbackImages;
 
     @Transient
     private List<ElegantServiceParticipateFeedbackText> feedbackTexts;
+
+
 
     /**
      * 用户头像
@@ -98,6 +102,14 @@ public class ElegantServiceParticipate {
 
     public void setCollectionStatus(Integer collectionStatus) {
         this.collectionStatus = collectionStatus;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     /**

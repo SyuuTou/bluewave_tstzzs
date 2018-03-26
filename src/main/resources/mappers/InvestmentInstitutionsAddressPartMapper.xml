@@ -24,7 +24,7 @@
   	select id,investment_institution_id,name,town,detail_address,phone_country_code,phone_district_code,phone_number,longitude,latitude from investment_institutions_address_part
   	where id = #{investmentInstitutionId}
   </select>
-   <select id="selectAllByWeight" parameterType="Integer" resultMap="BaseResultMap">
+   <select id="selectAllOrderByWeight" parameterType="Integer" resultMap="BaseResultMap">
   	select * from investment_institutions_address_part
   	where investment_institution_id = #{companyId} and yn=0
   	order by weight desc
