@@ -26,8 +26,21 @@ public class ProjectPreferDto {
     private BigDecimal investmentAmountSingleLowDollar;
 
     private BigDecimal investmentAmountSingleHighDollar;
+    /**
+     * 主体类型
+     */
+    private Integer subjectType;
+    
 
-    public Integer getProjectId() {
+    public Integer getSubjectType() {
+		return subjectType;
+	}
+
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
+
+	public Integer getProjectId() {
         return projectId;
     }
 
