@@ -186,7 +186,11 @@ public class ElegantServiceImpl implements ElegantServiceService{
             for (Map<String,Object> m:elegantServiceList){
 
                 m.putIfAbsent("original_price","");
-                m.putIfAbsent("background_picture","http://img.idatavc.com/static/img/serverwu.png");
+                if (body.getIsReward()!=null && body.getIsReward() == 0) {
+                    m.putIfAbsent("background_picture", "http://img.idatavc.com/static/img/serverwu.png");
+                }else if (body.getIsReward()!=null && body.getIsReward() == 1) {
+                    m.putIfAbsent("background_picture", "http://img.idatavc.com/static/banner/elegant.png");
+                }
 
                 //判断是否在时间范围
 //                if (m.get("begin_time") != null && m.get("end_time") != null){

@@ -16,7 +16,7 @@ public interface RedEnvelopeMapper extends OwnerMapper<RedEnvelope> {
     @ResultType(Integer.class)
     Integer getRecivedRedEnvelopePeopleNums();
 
-    @Select("select count(1) from red_envelope")
+    @Select("select count(1) from red_envelope_log")
     @ResultType(Integer.class)
     Integer getRedEnvelopeNums();
 
