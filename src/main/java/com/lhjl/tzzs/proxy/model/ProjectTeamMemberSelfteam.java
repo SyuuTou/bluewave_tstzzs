@@ -69,4 +69,10 @@ public class ProjectTeamMemberSelfteam {
     public void setTeamName(String teamName) {
         this.teamName = teamName;
     }
+
+	@Override
+	public String toString() {
+		return "ProjectTeamMemberSelfteam [id=" + id + ", memberId=" + memberId + ", teamName=" + teamName + "]";
+	}
+    
 }

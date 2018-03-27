@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public class ProjectTeamMemberInputDto {
 
     /**
-     * 项目Id
+     * 主体Id
      */
     private Integer projectId;
 
@@ -161,8 +161,21 @@ public class ProjectTeamMemberInputDto {
      * 是否隐藏，默认不隐藏，不隐藏为1
      */
     private Integer isHide;
+    /**
+     * 主体类型
+     */
+    private Integer subjectType;
+    
 
-    public String getBirthDay() {
+    public Integer getSubjectType() {
+		return subjectType;
+	}
+
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
+
+	public String getBirthDay() {
         return birthDay;
     }
 

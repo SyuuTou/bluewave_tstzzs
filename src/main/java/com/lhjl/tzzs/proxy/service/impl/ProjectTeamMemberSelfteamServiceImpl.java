@@ -42,8 +42,7 @@ public class ProjectTeamMemberSelfteamServiceImpl implements ProjectTeamMemberSe
 
     @Override
     public List<ProjectTeamMemberSelfteam> select(ProjectTeamMemberSelfteam projectTeamMemberSelfteam) {
-        List<ProjectTeamMemberSelfteam> projectTeamMemberSelfteamList = new ArrayList<>();
-        projectTeamMemberSelfteamList = projectTeamMemberSelfteamMapper.select(projectTeamMemberSelfteam);
-        return projectTeamMemberSelfteamList;
+        List<ProjectTeamMemberSelfteam> teams = projectTeamMemberSelfteamMapper.select(projectTeamMemberSelfteam);
+        return teams;
     }
 }

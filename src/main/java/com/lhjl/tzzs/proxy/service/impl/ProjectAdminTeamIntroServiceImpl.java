@@ -29,15 +29,15 @@ public class ProjectAdminTeamIntroServiceImpl implements ProjectAdminTeamIntroSe
         CommonDto<String> result = new CommonDto<>();
         
         if(body.getProjectId()==null) {
-        	result.setData("请输入主体id");
+        	result.setData(null);
             result.setStatus(500);
-            result.setMessage("failed");
+            result.setMessage("请输入主体id");
             return result;
         }
         if(body.getSubjectType()==null) {
-        	result.setData("请输入主体类型");
+        	result.setData(null);
             result.setStatus(500);
-            result.setMessage("failed");
+            result.setMessage("请输入主体类型");
             return result;
         }
         

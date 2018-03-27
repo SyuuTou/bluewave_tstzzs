@@ -32,6 +32,6 @@
     <result column="nationality" jdbcType="INTEGER" property="nationality" />
   </resultMap>
   <select id="getProjectMemberList" resultMap="BaseResultMap">
-    select * from project_team_member where project_id=#{projectId} and yn=0 order by weight;
+    select * from project_team_member where project_id=#{projectId} and yn=0 order by weight desc;
   </select>
 </mapper>

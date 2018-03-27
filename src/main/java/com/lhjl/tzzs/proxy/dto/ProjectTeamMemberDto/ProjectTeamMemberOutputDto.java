@@ -9,7 +9,7 @@ import java.util.List;
 public class ProjectTeamMemberOutputDto implements Comparable<ProjectTeamMemberOutputDto>{
 
     /**
-     * 项目Id
+     * 主体Id
      */
     private Integer projectId;
 
@@ -41,12 +41,12 @@ public class ProjectTeamMemberOutputDto implements Comparable<ProjectTeamMemberO
     /**
      * 工作经历
      */
-    private String[] workExperiences;
+    private List<String> workExperiences;
 
     /**
      * 教育经历
      */
-    private String[] educationExperience;
+    private List<String> educationExperience;
 
     /**
      * 是否在职
@@ -54,7 +54,7 @@ public class ProjectTeamMemberOutputDto implements Comparable<ProjectTeamMemberO
     private Integer isOnJob;
 
     /**
-     * 是否删除
+     * 是否隐藏
      */
     private Integer isDelete;
 
@@ -121,12 +121,12 @@ public class ProjectTeamMemberOutputDto implements Comparable<ProjectTeamMemberO
     /**
      * 关注领域
      */
-    private Integer[] focusDomain;
+    private List<Integer> focusDomain;
 
     /**
      * 投资阶段
      */
-    private Integer[] investStages;
+    private List<Integer> investStages;
 
     /**
      * 股票
@@ -136,17 +136,17 @@ public class ProjectTeamMemberOutputDto implements Comparable<ProjectTeamMemberO
     /**
      * 所在城市
      */
-    private String[] citys;
+    private List<String> citys;
 
     /**
      * 自定义城市
      */
-    private String[] selfcitys;
+    private List<String> selfcitys;
 
     /**
      * 创业经历
      */
-    private String[] businesses;
+    private List<String> businesses;
 
     /**
      * 创业经历描述
@@ -162,8 +162,17 @@ public class ProjectTeamMemberOutputDto implements Comparable<ProjectTeamMemberO
      * 教育经历描述
      */
     private String educationDesc;
+    
 
-    /**
+    public List<String> getEducationExperience() {
+		return educationExperience;
+	}
+
+	public void setEducationExperience(List<String> educationExperience) {
+		this.educationExperience = educationExperience;
+	}
+
+	/**
      * 是否隐藏，默认不隐藏，不隐藏为1
      */
     private Integer isHide;
@@ -248,21 +257,15 @@ public class ProjectTeamMemberOutputDto implements Comparable<ProjectTeamMemberO
         this.memberDesc = memberDesc;
     }
 
-    public String[] getWorkExperiences() {
-        return workExperiences;
-    }
 
-    public void setWorkExperiences(String[] workExperiences) {
-        this.workExperiences = workExperiences;
-    }
+    public List<String> getWorkExperiences() {
+		return workExperiences;
+	}
 
-    public String[] getEducationExperience() {
-        return educationExperience;
-    }
+	public void setWorkExperiences(List<String> workExperiences) {
+		this.workExperiences = workExperiences;
+	}
 
-    public void setEducationExperience(String[] educationExperience) {
-        this.educationExperience = educationExperience;
-    }
 
     public Integer getIsOnJob() {
         return isOnJob;
@@ -336,23 +339,25 @@ public class ProjectTeamMemberOutputDto implements Comparable<ProjectTeamMemberO
         this.selfDefTeam = selfDefTeam;
     }
 
-    public Integer[] getFocusDomain() {
-        return focusDomain;
-    }
 
-    public void setFocusDomain(Integer[] focusDomain) {
-        this.focusDomain = focusDomain;
-    }
+    public List<Integer> getFocusDomain() {
+		return focusDomain;
+	}
 
-    public Integer[] getInvestStages() {
-        return investStages;
-    }
+	public void setFocusDomain(List<Integer> focusDomain) {
+		this.focusDomain = focusDomain;
+	}
 
-    public void setInvestStages(Integer[] investStages) {
-        this.investStages = investStages;
-    }
 
-    public BigDecimal getStockPer() {
+    public List<Integer> getInvestStages() {
+		return investStages;
+	}
+
+	public void setInvestStages(List<Integer> investStages) {
+		this.investStages = investStages;
+	}
+
+	public BigDecimal getStockPer() {
         return stockPer;
     }
 
@@ -360,31 +365,32 @@ public class ProjectTeamMemberOutputDto implements Comparable<ProjectTeamMemberO
         this.stockPer = stockPer;
     }
 
-    public String[] getCitys() {
-        return citys;
-    }
 
-    public void setCitys(String[] citys) {
-        this.citys = citys;
-    }
+    public List<String> getCitys() {
+		return citys;
+	}
 
-    public String[] getSelfcitys() {
-        return selfcitys;
-    }
+	public void setCitys(List<String> citys) {
+		this.citys = citys;
+	}
 
-    public void setSelfcitys(String[] selfcitys) {
-        this.selfcitys = selfcitys;
-    }
+    public List<String> getSelfcitys() {
+		return selfcitys;
+	}
 
-    public String[] getBusinesses() {
-        return businesses;
-    }
+	public void setSelfcitys(List<String> selfcitys) {
+		this.selfcitys = selfcitys;
+	}
 
-    public void setBusinesses(String[] businesses) {
-        this.businesses = businesses;
-    }
+	public List<String> getBusinesses() {
+		return businesses;
+	}
 
-    public String getBusinessDesc() {
+	public void setBusinesses(List<String> businesses) {
+		this.businesses = businesses;
+	}
+
+	public String getBusinessDesc() {
         return businessDesc;
     }
 

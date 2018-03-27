@@ -23,19 +23,18 @@ public class ProjectAdminTeamController extends  GenericController{
     @Resource
     private ProjectAdminTeamService projectAdminTeamService;
 
-
-
     /**
-     * 获取平台项目团队成员列表
-     * @param projectId
+     * 获取平台团队成员列表
+     * @param subjectId 主体id
+     * @param subjectType 主体类型
      * @return
      */
     @GetMapping("/getprojectteammemberList")
-    public CommonDto<List<ProjectTeamMemberOutputDto>> getprojectteammemberList(Integer projectId){
+    public CommonDto<List<ProjectTeamMemberOutputDto>> getprojectteammemberList(Integer subjectId,Integer subjectType){
 
         CommonDto<List<ProjectTeamMemberOutputDto>> result = new CommonDto<>();
         try {
-            result = projectAdminTeamService.getProjectTeamMemberList(projectId);
+            result = projectAdminTeamService.getProjectTeamMemberList(subjectId,subjectType);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
@@ -70,11 +69,11 @@ public class ProjectAdminTeamController extends  GenericController{
      * @return
      */
     @DeleteMapping("deleteprojectteammember")
-    public CommonDto<String> deleteProjectTeamMember(Integer memberId){
+    public CommonDto<String> deleteProjectTeamMember(Integer memberId,Integer subjectType){
 
         CommonDto<String> result = new CommonDto<>();
         try {
-            result = projectAdminTeamService.deleteProjectTeamMember(memberId);
+            result = projectAdminTeamService.deleteProjectTeamMember(memberId,subjectType);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
