@@ -1568,16 +1568,15 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		
 		Object list=new ArrayList<>();
 		
-		if(subjectType.equals(1)) {//项目分部
+		if(Integer.valueOf(1).equals(subjectType)) {//项目
 			//TODO 项目分部的后台数据结构待完善
 			
 			result.setData(list);
 			result.setStatus(200);
-			result.setMessage("项目的分部信息后台数据结构不完善，有待进一步调整");  
+			result.setMessage("success");  
 			
 			return result;
-			
-		}else if(subjectType.equals(2)) {//机构分部
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
 			//获取该机构的所有分部信息
 			List<InvestmentInstitutionsAddressPart> iiapLists = investmentInstitutionsAddressPartMapper.selectAllOrderByWeight(companyId);
 			Integer i=0;
@@ -1588,16 +1587,6 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			list=iiapLists; 
 		}
 		
-//		if(list != null) {
-//			for(InvestmentInstitutionsAddressPart tmp:list) {
-//				InvestmentInstitutionsAddress iia =new InvestmentInstitutionsAddress();
-//				iia.setInvestmentInstitutionId(proId);
-//				iia = investmentInstitutionsAddressMapper.selectOne(iia);
-//				//设置总部邮箱
-//				tmp.setHeadQuartersEmail(iia.getEmail());
-//			}
-//		}
-//		partList=list;
 		result.setData(list);
 		result.setStatus(200);
 		result.setMessage("success");  
@@ -1610,14 +1599,10 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	public CommonDto<Boolean> removePartInfoById(Integer appid, Integer partId,Integer subjectType) {
 		
 		CommonDto<Boolean> result =new CommonDto<Boolean>();
-		if(subjectType.equals(1)) {
+		
+		if(Integer.valueOf(1).equals(subjectType)) {//项目
 			//TODO 删除项目的分部信息
-			result.setData(true);
-			result.setMessage("项目分部信息后台数据结构不完善，有待进一步调整");
-			result.setStatus(200);
-			
-			return result;
-		}else if (subjectType.equals(2)) {
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
 			InvestmentInstitutionsAddressPart iiap =new InvestmentInstitutionsAddressPart();
 			iiap.setId(partId);
 			iiap.setYn(1);
@@ -1634,13 +1619,9 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	@Override
 	public CommonDto<Boolean> saveOrUpdayePart(Integer appid, InvestmentInstitutionsAddressPart body) {
 		CommonDto<Boolean> result =new CommonDto<Boolean>();
-		if(body.getSubjectType().equals(1)) {
+		if(Integer.valueOf(1).equals(body.getSubjectType())) {//项目
 			//TODO 项目分部信息，后台数据结构有待完善
-			result.setData(true);
-			result.setMessage("项目分部信息，后台数据结构有待完善");
-			result.setStatus(200);
-			return result;
-		}else if(body.getSubjectType().equals(2)) {
+        }else if(Integer.valueOf(2).equals(body.getSubjectType())) {//机构
 			if(body.getId()!=null) {//更新操作
 				investmentInstitutionsAddressPartMapper.updateByPrimaryKeySelective(body);
 			}else {//插入操作

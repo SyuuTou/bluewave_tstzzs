@@ -87,7 +87,7 @@ public class ProjectsPartsController extends GenericController{
     /**
      * 项目(投资机构/公司)分部的列表信息
      * @param appid 扩展字段
-     * @param companyType 项目的类别(根据不同的项目类别来列举不同项目的分部信息：1代表项目;2代表机构)
+     * @param subjectType 项目的类别(根据不同的项目类别来列举不同项目的分部信息：1代表项目;2代表机构)
      * @param companyId 项目或者投资机构等的id
      * @return
      */
