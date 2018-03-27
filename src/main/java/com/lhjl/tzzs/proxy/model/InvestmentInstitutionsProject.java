@@ -71,6 +71,19 @@ public class InvestmentInstitutionsProject {
      */
     @Transient
     private String accountingDateOutputStr;  
+    /**
+     * 主体类型
+     */
+    @Transient
+    private Integer subjectType;
+    
+	public Integer getSubjectType() {
+		return subjectType;
+	}
+
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
 
 	public String getAccountingDateStr() {
 		return accountingDateStr;

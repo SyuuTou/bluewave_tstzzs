@@ -1249,54 +1249,51 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<List<ProjectFinancingLog>> getFinancingLogs(Integer appid, Integer projectId) {
+	public CommonDto<List<ProjectFinancingLog>> getFinancingLogs(Integer appid, Integer projectId,Integer subjectType) {
 		CommonDto<List<ProjectFinancingLog>> result =new CommonDto<>();
 		
-		
-		Example example=new Example(ProjectFinancingLog.class);
-		example.and()
-		.andIsNotNull("financingTime")
-		.andEqualTo("projectId",projectId)
-		.andEqualTo("yn",0)
-		.andEqualTo("approvalStatus",1);
-		
-		/*ProjectFinancingLog pfl=new ProjectFinancingLog();
-		pfl.setProjectId(projectId);
-		pfl.setYn(0);
-		//获取所有的融资历史记录
-		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.select(pfl);*/
-		
-//		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.selectAllHistoryFinancing(projectId);
-		
-		List<ProjectFinancingLog> pfls = projectFinancingLogMapper.selectByExample(example);
-		
-		if(pfls != null && pfls.size() != 0) {
-			pfls.forEach((e)->{
-				//获取融资阶段的id
-				Integer financingLogId = e.getId();
-				InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
-				iip.setProjectId(financingLogId);
-				iip.setYn(0);
-				//查询关系表中相关的投资方的相关信息
-				List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
-				
-				//用于获取所有的机构信息
-//				List<InvestmentInstitutions> investmentInstitutions=new ArrayList<>();
-				List<String> institutionShortNames=new ArrayList<>();
-				if(iips != null) {
-					for(InvestmentInstitutionsProject obj:iips) {
-						//根据机构id获取机构的相关信息
-						InvestmentInstitutions instiOne = investmentInstitutionsMapper.selectByPrimaryKey(obj.getInvestmentInstitutionsId());
-						if(instiOne != null) {
-//							investmentInstitutions.add(instiOne);
-							institutionShortNames.add(instiOne.getShortName());
+		List<ProjectFinancingLog> pfls=null;
+		if(Integer.valueOf(1).equals(subjectType)) {//项目
+			Example example=new Example(ProjectFinancingLog.class);
+			example.and()
+			.andIsNotNull("financingTime")
+			.andEqualTo("projectId",projectId)
+			.andEqualTo("yn",0)
+			.andEqualTo("approvalStatus",1);
+			
+			pfls = projectFinancingLogMapper.selectByExample(example);
+			
+			if(pfls != null && pfls.size() != 0) {
+				pfls.forEach((e)->{
+					//获取融资阶段的id
+					Integer financingLogId = e.getId();
+					InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
+					iip.setProjectId(financingLogId);
+					iip.setYn(0);
+					//查询关系表中相关的投资方的相关信息
+					List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
+					
+					//用于获取所有的机构信息
+//					List<InvestmentInstitutions> investmentInstitutions=new ArrayList<>();
+					List<String> institutionShortNames=new ArrayList<>();
+					if(iips != null) {
+						for(InvestmentInstitutionsProject obj:iips) {
+							//根据机构id获取机构的相关信息
+							InvestmentInstitutions instiOne = investmentInstitutionsMapper.selectByPrimaryKey(obj.getInvestmentInstitutionsId());
+							if(instiOne != null) {
+//								investmentInstitutions.add(instiOne);
+								institutionShortNames.add(instiOne.getShortName());
+							}
 						}
 					}
-				}
-//				e.setInstitutions(investmentInstitutions);
-				e.setInstitutionsShortNames(institutionShortNames);
-			});
-		}
+//					e.setInstitutions(investmentInstitutions);
+					e.setInstitutionsShortNames(institutionShortNames);
+				});
+			}
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
+        	//TODO 机构的融资历史列表设置
+        }
+		
 		
 		result.setData(pfls);
 		result.setMessage("success");
@@ -1306,12 +1303,17 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	
 	@Transactional
 	@Override
-	public CommonDto<Boolean> removeFinancingLogById(Integer appid, Integer id) {
+	public CommonDto<Boolean> removeFinancingLogById(Integer appid, Integer id,Integer subjectType) {
 		CommonDto<Boolean> result=new CommonDto<Boolean>();
-		ProjectFinancingLog pfl=new ProjectFinancingLog();
-		pfl.setId(id);
-		pfl.setYn(1);
-		projectFinancingLogMapper.updateByPrimaryKeySelective(pfl);
+		
+		if(Integer.valueOf(1).equals(subjectType)) {//项目
+			ProjectFinancingLog pfl=new ProjectFinancingLog();
+			pfl.setId(id);
+			pfl.setYn(1);
+			projectFinancingLogMapper.updateByPrimaryKeySelective(pfl);
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
+        	//TODO 机构的融资历史删除
+        }
 		
 		result.setData(true);
 		result.setMessage("success");
@@ -1353,6 +1355,13 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	@Override
 	public CommonDto<Boolean> updateFinancingLog(Integer appid, ProjectFinancingLog body) {
 		CommonDto<Boolean> result =new CommonDto<>();
+		if(body.getSubjectType()==null) {
+			result.setData(false);
+			result.setMessage("请输入主体类型");
+			result.setStatus(500);
+			return result;
+		}
+		
 		//对body进行数据格式化处理
 		try {
 			Date financingTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(body.getFinancingStr());
@@ -1363,80 +1372,85 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	        result.setMessage("日期格式解析错误");
 	        return result;
 		}
-		//保存在融资历史保存或者更新后的主键id
-		Integer afterUpdateLogId=null;
-		if(body.getId() !=null) { //执行相关的更新操作
-			body.setUpdateTime(new Date());
-			
-			projectFinancingLogMapper.updateByPrimaryKeySelective(body);
-			afterUpdateLogId=body.getId();
-		}else {//执行相关的插入操作,增加的话肯定会传递一个projectId作为body的属性
-			Date now=new Date();
-			
-			body.setYn(0);
-			body.setCreateTime(now);
-			//设置审核状态,创建即默认审核通过
-			body.setApprovalStatus(1);
-			body.setApprovalTime(now);;
-			
-			//数据来源为运营人员后台添加
-			body.setDataSoruceTypeId(3);
-			
-			projectFinancingLogMapper.insertSelective(body);
-			afterUpdateLogId=body.getId();
-		}
 		
-		//获取该融资历史信息的相关的投资方的相关信息
-		List<String> shortNames = body.getInstitutionsShortNames();
-		if((shortNames != null) && (shortNames.size()!=0)) {
-			//收集该融资历史同机构的相关信息
-			List<Integer> logRelativeInstitutions=new ArrayList<>();
-			
-			for(String tmp:shortNames) {
-				InvestmentInstitutions ii=new InvestmentInstitutions();
-				ii.setShortName(tmp);
-				//作为查询结果的实体判断
-				try { 
-					ii = investmentInstitutionsMapper.selectOne(ii);
-					if(ii != null) {//取得该机构的id
-						logRelativeInstitutions.add(ii.getId());
-					}else {//创建该机构
-						InvestmentInstitutions createIi=new InvestmentInstitutions();
-						createIi.setShortName(tmp);
-						investmentInstitutionsMapper.insertSelective(createIi);
-						//获取自增长id
-						logRelativeInstitutions.add(createIi.getId());
-					}
-				}catch(Exception e) {
-					this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
-					
-					result.setData(false);
-			        result.setStatus(500);
-			        result.setMessage("机构的简称不唯一，数据存在错误");
-			        return result;
-				}
+		if(Integer.valueOf(1).equals(body.getSubjectType())) {//项目
+			//保存在融资历史保存或者更新后的主键id
+			Integer afterUpdateLogId=null;
+			if(body.getId() !=null) { //执行相关的更新操作
+				body.setUpdateTime(new Date());
+				
+				projectFinancingLogMapper.updateByPrimaryKeySelective(body);
+				afterUpdateLogId=body.getId();
+			}else {//执行相关的插入操作,增加的话肯定会传递一个projectId作为body的属性
+				Date now=new Date();
+				
+				body.setYn(0);
+				body.setCreateTime(now);
+				//设置审核状态,创建即默认审核通过
+				body.setApprovalStatus(1);
+				body.setApprovalTime(now);;
+				
+				//数据来源为运营人员后台添加
+				body.setDataSoruceTypeId(3);
+				
+				projectFinancingLogMapper.insertSelective(body);
+				afterUpdateLogId=body.getId();
 			}
-			//统一设置该融资历史信息同机构的关联关系
-			if((logRelativeInstitutions != null) && (logRelativeInstitutions.size()!=0)) {
+			
+			//获取该融资历史信息的相关的投资方的相关信息
+			List<String> shortNames = body.getInstitutionsShortNames();
+			if((shortNames != null) && (shortNames.size()!=0)) {
+				//收集该融资历史同机构的相关信息
+				List<Integer> logRelativeInstitutions=new ArrayList<>();
+				
+				for(String tmp:shortNames) {
+					InvestmentInstitutions ii=new InvestmentInstitutions();
+					ii.setShortName(tmp);
+					//作为查询结果的实体判断
+					try { 
+						ii = investmentInstitutionsMapper.selectOne(ii);
+						if(ii != null) {//取得该机构的id
+							logRelativeInstitutions.add(ii.getId());
+						}else {//创建该机构
+							InvestmentInstitutions createIi=new InvestmentInstitutions();
+							createIi.setShortName(tmp);
+							investmentInstitutionsMapper.insertSelective(createIi);
+							//获取自增长id
+							logRelativeInstitutions.add(createIi.getId());
+						}
+					}catch(Exception e) {
+						this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+						
+						result.setData(false);
+				        result.setStatus(500);
+				        result.setMessage("机构的简称不唯一，数据存在错误");
+				        return result;
+					}
+				}
+				//统一设置该融资历史信息同机构的关联关系
+				if((logRelativeInstitutions != null) && (logRelativeInstitutions.size()!=0)) {
+					InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
+					//设置融资历史的id
+					iip.setProjectId(afterUpdateLogId);
+					//删除所有同之前投资机构的关系
+					investmentInstitutionsProjectMapper.delete(iip);
+					logRelativeInstitutions.forEach((e)->{
+						//设置融资历史记录同投资机构的关系
+						iip.setInvestmentInstitutionsId(e);
+						iip.setYn(0);
+						investmentInstitutionsProjectMapper.insertSelective(iip);
+					});
+				}
+			}else {//执行原关联的投资机构的删除操作
 				InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
-				//设置融资历史的id
+				//设置融资历史的id  
 				iip.setProjectId(afterUpdateLogId);
 				//删除所有同之前投资机构的关系
-				investmentInstitutionsProjectMapper.delete(iip);
-				logRelativeInstitutions.forEach((e)->{
-					//设置融资历史记录同投资机构的关系
-					iip.setInvestmentInstitutionsId(e);
-					iip.setYn(0);
-					investmentInstitutionsProjectMapper.insertSelective(iip);
-				});
+				investmentInstitutionsProjectMapper.delete(iip);  
 			}
-		}else {//执行原关联的投资机构的删除操作
-			InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
-			//设置融资历史的id  
-			iip.setProjectId(afterUpdateLogId);
-			//删除所有同之前投资机构的关系
-			investmentInstitutionsProjectMapper.delete(iip);  
-		}
+        }else if(Integer.valueOf(2).equals(body.getSubjectType())) {//机构
+        	//TODO 机构的融资历史信息更新
+        }
 		
 		result.setData(true);
         result.setStatus(200);
@@ -1445,23 +1459,29 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLogId) {
+	public CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLogId,Integer subjectType) {
 		CommonDto<List<InvestmentInstitutionsProject>> result =new CommonDto<>();
-		InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
-		iip.setProjectId(financingLogId);
-		//设置有效标志为有效
-//		iip.setYn(0);
-		List<InvestmentInstitutionsProject> iips = investmentInstitutionsProjectMapper.select(iip);
-		//融资历史记录的详细信息进行进一步的输出格式化
-		if(iips !=null) {  
-			for(InvestmentInstitutionsProject temp:iips) {
-				InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(temp.getInvestmentInstitutionsId()); 
-				temp.setInvestmentShortName(ii.getShortName());
-				if(temp.getAccountingDate() != null) {
-					temp.setAccountingDateOutputStr(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(temp.getAccountingDate()));
+		List<InvestmentInstitutionsProject> iips=null;
+		if(Integer.valueOf(1).equals(subjectType)) {//项目
+			InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
+			iip.setProjectId(financingLogId);
+			//设置有效标志为有效
+//			iip.setYn(0);
+			iips = investmentInstitutionsProjectMapper.select(iip);
+			//融资历史记录的详细信息进行进一步的输出格式化
+			if(iips !=null) {  
+				for(InvestmentInstitutionsProject temp:iips) {
+					InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(temp.getInvestmentInstitutionsId()); 
+					temp.setInvestmentShortName(ii.getShortName());
+					if(temp.getAccountingDate() != null) {
+						temp.setAccountingDateOutputStr(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(temp.getAccountingDate()));
+					}
 				}
 			}
-		}
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
+        	//TODO 机构的融资历史
+        }
+		
 		result.setData(iips);
         result.setStatus(200);
         result.setMessage("success");
@@ -1470,9 +1490,14 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	
 	@Transactional
 	@Override
-	public CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer projectId,Integer investmentInstitutionsId) {
+	public CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer projectId,Integer investmentInstitutionsId,Integer subjectType) {
 		CommonDto<Boolean> result=new CommonDto<>();
-		investmentInstitutionsProjectMapper.updateDelStatus(projectId,investmentInstitutionsId);
+		if(Integer.valueOf(1).equals(subjectType)) {//项目
+			investmentInstitutionsProjectMapper.updateDelStatus(projectId,investmentInstitutionsId);
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
+        	//TODO 机构的融资历史对应的投资方信息
+        }
+		
 		result.setData(true);
         result.setStatus(200);
         result.setMessage("success");
@@ -1483,6 +1508,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	@Override
 	public CommonDto<Boolean> updateRelativeInvestmentInfo(Integer appid, InvestmentInstitutionsProject body) {
 		CommonDto<Boolean> result=new CommonDto<>();
+		
 		try {
 			body.setAccountingDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(body.getAccountingDateStr()));
 		}catch(Exception e) {
@@ -1490,7 +1516,11 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	        result.setStatus(500);
 	        result.setMessage("日期字符串不正确");
 		}
-		investmentInstitutionsProjectMapper.updateLogRelativeInvestmentInfo(body);
+		if(Integer.valueOf(1).equals(body.getSubjectType())) {//项目
+			investmentInstitutionsProjectMapper.updateLogRelativeInvestmentInfo(body);
+        }else if(Integer.valueOf(2).equals(body.getSubjectType())) {//机构
+        	//TODO 机构的融资历史对应的投资方的信息编辑
+        }
 		
 		result.setData(true);
         result.setStatus(200);
