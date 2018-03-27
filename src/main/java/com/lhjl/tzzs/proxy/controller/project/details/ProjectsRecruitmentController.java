@@ -78,10 +78,10 @@ public class ProjectsRecruitmentController extends GenericController{
      * @return
      */
     @GetMapping("/v{appid}/list/recruitmentinfo")
-    public CommonDto<List<Recruitment>> listRecruInfo(@PathVariable Integer appid,Integer companyId){
+    public CommonDto<List<Recruitment>> listRecruInfo(@PathVariable Integer appid,Integer companyId,Integer subjectType){
     	CommonDto<List<Recruitment>> result =new CommonDto<>();
     	try {
-    		result=projectsService.listRecruInfos(appid,companyId);
+    		result=projectsService.listRecruInfos(appid,companyId,subjectType);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
@@ -99,10 +99,10 @@ public class ProjectsRecruitmentController extends GenericController{
      * @return
      */
     @DeleteMapping("/v{appid}/del/recruitmentbyid")
-    public CommonDto<Boolean> deleteRecruInfoById(@PathVariable Integer appid,Integer id){
+    public CommonDto<Boolean> deleteRecruInfoById(@PathVariable Integer appid,Integer id,Integer subjectType){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result=projectsService.removeRecruInfoById(appid,id);
+    		result=projectsService.removeRecruInfoById(appid,id,subjectType);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    

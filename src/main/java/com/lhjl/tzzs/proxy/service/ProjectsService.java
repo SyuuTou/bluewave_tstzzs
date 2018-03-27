@@ -235,14 +235,14 @@ public interface ProjectsService {
      * @param partId 招聘信息id
      * @return
      */
-	CommonDto<Boolean> removeRecruInfoById(Integer appid, Integer id);
+	CommonDto<Boolean> removeRecruInfoById(Integer appid, Integer id,Integer subjectType);
 	/**
      * 招聘职位信息列表
      * @param appid
      * @param proId 项目id
      * @return
      */
-	CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer companyId);
+	CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer companyId,Integer subjectType);
 	/**
      * 招聘需求信息回显
      * @param appid

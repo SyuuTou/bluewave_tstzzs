@@ -1667,14 +1667,20 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	@Override
 	public CommonDto<Boolean> saveOrUpdateRecruitment(Integer appid, Recruitment body) {
 		CommonDto<Boolean> result =new CommonDto<Boolean>();
-		if(body.getId()!=null) {//更新操作,此时用户id要设置到createdUserId中
-			body.setLastUpdateTime(new Date());
-			recruitmentMapper.updateByPrimaryKeySelective(body);
-		}else {//插入操作，此时用户id要设置到updatedUserId中
-			body.setCreateTime(new Date());
-			body.setYn(0);//默认设置为有效
-			recruitmentMapper.insertSelective(body);
-		}
+		
+		if(Integer.valueOf(1).equals(body.getSubjectType())) {//项目
+			if(body.getId()!=null) {//更新操作,此时用户id要设置到createdUserId中
+				body.setLastUpdateTime(new Date());
+				recruitmentMapper.updateByPrimaryKeySelective(body);
+			}else {//插入操作，此时用户id要设置到updatedUserId中
+				body.setCreateTime(new Date());
+				body.setYn(0);//默认设置为有效
+				recruitmentMapper.insertSelective(body);
+			}
+        }else if(Integer.valueOf(2).equals(body.getSubjectType())) {//机构
+        	//TODO 机构招聘信息的更新
+        }
+		
 		result.setData(true);
 		result.setMessage("success");
 		result.setStatus(200);
@@ -1682,12 +1688,18 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 	@Transactional
 	@Override
-	public CommonDto<Boolean> removeRecruInfoById(Integer appid, Integer id) {
+	public CommonDto<Boolean> removeRecruInfoById(Integer appid, Integer id,Integer subjectType) {
 		CommonDto<Boolean> result =new CommonDto<Boolean>();
-		Recruitment rec =new Recruitment();
-		rec.setId(id);
-		rec.setYn(1);
-		recruitmentMapper.updateByPrimaryKeySelective(rec);
+		
+		if(Integer.valueOf(1).equals(subjectType)) {//项目
+			Recruitment rec =new Recruitment();
+			rec.setId(id);
+			rec.setYn(1);
+			recruitmentMapper.updateByPrimaryKeySelective(rec);
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
+        	//TODO 机构招聘信息删除
+        }
+		
 		result.setData(true);
 		result.setMessage("success");
 		result.setStatus(200);
@@ -1695,13 +1707,19 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer companyId) {
+	public CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer companyId,Integer subjectType) {
 		CommonDto<List<Recruitment>> result=new CommonDto<>();
-		Recruitment rec=new Recruitment();
-		rec.setYn(0);
-		rec.setCompanyId(companyId);
+		List<Recruitment> recruitments=null;
+		if(Integer.valueOf(1).equals(subjectType)) {//项目
+			Recruitment rec=new Recruitment();
+			rec.setYn(0);
+			rec.setCompanyId(companyId);
+			recruitments = recruitmentMapper.select(rec);
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
+        	//TODO 机构的招聘列表回显
+        }
 		
-		result.setData(recruitmentMapper.select(rec));
+		result.setData(recruitments);
 		result.setStatus(200);
 		result.setMessage("success");  
 		
