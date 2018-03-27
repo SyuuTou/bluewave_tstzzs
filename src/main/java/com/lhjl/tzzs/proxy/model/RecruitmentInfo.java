@@ -17,9 +17,24 @@ public class RecruitmentInfo {
     /**
      * 招聘需求描述
      */
+    @Column(name = "description")
     private String description;
-
+    
     /**
+     * 主体类型
+     */
+    @Transient
+    private Integer subjectType;
+
+    public Integer getSubjectType() {
+		return subjectType;
+	}
+
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
+
+	/**
      * @return id
      */
     public Integer getId() {

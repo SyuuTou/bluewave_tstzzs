@@ -553,7 +553,6 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
             }
         }
         
-
         result.setMessage("success");
         result.setStatus(200);
         result.setData("更新成功");
@@ -576,7 +575,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         	if(investmentInstitutionTeamMapper.existsWithPrimaryKey(memberId)){
         		InvestmentInstitutionTeam mem=new InvestmentInstitutionTeam();
         		mem.setId(memberId);
-        		//TODO 删除机构的团队成员
+        		//TODO 删除机构的团队成员,机构团队成员表需要添加标志位
         		
 //            	investmentInstitutionTeamMapper.updateByPrimaryKey(mem);
             }

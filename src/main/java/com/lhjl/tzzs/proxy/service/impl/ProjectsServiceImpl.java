@@ -1709,32 +1709,47 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<RecruitmentInfo> echoRequirementInfo(Integer appid, Integer proId) {
+	public CommonDto<RecruitmentInfo> echoRequirementInfo(Integer appid, Integer proId,Integer subjectType) {
 		CommonDto<RecruitmentInfo> result=new CommonDto<>();
-		RecruitmentInfo reci=new RecruitmentInfo();
-		reci.setCompanyId(proId);
-		try {
-			reci = recruitmentInfoMapper.selectOne(reci);
-			result.setData(reci);
-			result.setStatus(200);
-			result.setMessage("success"); 
-		}catch(Exception e) {
-			result.setData(null);
-			result.setStatus(200);
-			result.setMessage("项目id不唯一，数据产生错误"); 
-			return result;
-		}
+		
+		if(Integer.valueOf(1).equals(subjectType)) {//项目
+			RecruitmentInfo reci=new RecruitmentInfo();
+			reci.setCompanyId(proId);
+			List<RecruitmentInfo> query = recruitmentInfoMapper.select(reci);
+			if(query !=null && query.size() !=0) {
+				result.setData(query.get(0));
+				 	
+			}
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
+        	//TODO 机构的招聘需求设置
+        }
+		
+		result.setStatus(200);
+		result.setMessage("success");
 		return result;
 	}
+	
 	@Transactional
 	@Override
 	public CommonDto<Boolean> saveOrUpdateRecruInfo(Integer appid, RecruitmentInfo body) {
 		CommonDto<Boolean> result=new CommonDto<Boolean>();
-		if(body.getId()!=null) {
-			recruitmentInfoMapper.updateByPrimaryKeySelective(body);
-		}else {
-			recruitmentInfoMapper.insertSelective(body);
+		if(body.getCompanyId()==null) {
+			result.setData(false);
+			result.setStatus(500);
+			result.setMessage("请关联主体id");
+			return result;
 		}
+		
+		if(Integer.valueOf(1).equals(body.getSubjectType())) {//项目
+			if(body.getId()!=null) {
+				recruitmentInfoMapper.updateByPrimaryKeySelective(body);
+			}else {
+				recruitmentInfoMapper.insertSelective(body);
+			}
+        }else if(Integer.valueOf(2).equals(body.getSubjectType())) {//机构
+        	//TODO 机构的招聘信息更新
+        }
+		
 		
 		result.setData(true);
 		result.setStatus(200);

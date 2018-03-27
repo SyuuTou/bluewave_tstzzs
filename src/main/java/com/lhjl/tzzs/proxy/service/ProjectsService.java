@@ -249,7 +249,7 @@ public interface ProjectsService {
      * @param proId 项目id
      * @return
      */
-	CommonDto<RecruitmentInfo> echoRequirementInfo(Integer appid, Integer proId);
+	CommonDto<RecruitmentInfo> echoRequirementInfo(Integer appid, Integer proId,Integer subjectType);
 	/**
      * 招聘需求信息编辑
      * @param appid

@@ -51,6 +51,27 @@ public class ProjectsRecruitmentController extends GenericController{
     	return result;
     }
     /**
+     * 招聘需求信息回显
+     * @param appid
+     * @param proId
+     * @param subjectType 主体类型
+     * @return
+     */
+    @GetMapping("/v{appid}/echo/recruitmentrequirement")
+    public CommonDto<RecruitmentInfo> echoRequirementInfo(@PathVariable Integer appid,Integer proId,Integer subjectType){
+    	CommonDto<RecruitmentInfo> result =new CommonDto<>();
+    	try {
+    		result=projectsService.echoRequirementInfo(appid,proId,subjectType);
+	    }catch(Exception e) {
+	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
+    		    
+    		result.setData(null);
+    		result.setMessage("fail");
+    		result.setStatus(500);
+	    }
+    	return result;
+    }
+    /**
      * 招聘信息列表
      * @param appid
      * @param companyId 项目(公司)id  
@@ -70,26 +91,7 @@ public class ProjectsRecruitmentController extends GenericController{
 	    }
     	return result;
     }
-    /**
-     * 招聘需求信息回显
-     * @param appid
-     * @param proId 项目id
-     * @return
-     */
-    @GetMapping("/v{appid}/echo/recruitmentrequirement")
-    public CommonDto<RecruitmentInfo> echoRecruInfo(@PathVariable Integer appid,Integer proId){
-    	CommonDto<RecruitmentInfo> result =new CommonDto<>();
-    	try {
-    		result=projectsService.echoRequirementInfo(appid,proId);
-	    }catch(Exception e) {
-	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
-    		    
-    		result.setData(null);
-    		result.setMessage("fail");
-    		result.setStatus(500);
-	    }
-    	return result;
-    }
+    
     /**
      * 根据id删除招聘职位信息
      * @param appid
