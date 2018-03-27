@@ -68,6 +68,7 @@
   	<result column="project_type" jdbcType="INTEGER" property="projectType" />
   	<result column="claim_status" jdbcType="INTEGER" property="claimStatus" />
   	<result column="subjectType" jdbcType="INTEGER" property="subjectType" />
+  	<result column="stages" jdbcType="VARCHAR" property="stages" />
   </resultMap>
   
   <resultMap id="ProjectsSimpleInfosMap" type="com.lhjl.tzzs.proxy.dto.ProInfoDto">
@@ -99,7 +100,7 @@
 	<select id="findSplit" parameterType="com.lhjl.tzzs.proxy.dto.ProjectsListInputDto" resultMap="ProjectsListOutputDtoMap">
      select * from (
      <!-- 项目视图 -->
-     select p.ID,p.serial_number,p.short_name,p.full_name,p.kernel_desc,segs.segmentations,p.city,p.project_source,aprl.rating_stage,
+     select p.ID,p.serial_number,p.short_name,p.full_name,p.kernel_desc,segs.segmentations, '' as stages,p.city,p.project_source,aprl.rating_stage,
 		case when statemp.financing_time is null then concat('正在融',statemp.stage) else statemp.stage end stage,
 		followtemp.focuscount,interviewtemp.interviewcount,proviewtemp.viewcount, pfs.meta_follow_status_id followstatus,
 		p.create_time,p.update_time,p.foreign_investment_yn,p.project_type,p.claim_status,1 as subjectType
@@ -119,15 +120,22 @@
     	
     	union all
 		<!-- 机构视图 -->
-		select ii.ID, '' as serial_number, ii.short_name,ii.full_name,ii.kenel_case as kernel_desc,segs.segmentations, ii.city,ii.data_source_type as project_source, 
+		select ii.ID, '' as serial_number, ii.short_name,ii.full_name,ii.kenel_case as kernel_desc,segs.segmentations,stages.stages, ii.city,ii.data_source_type as project_source, 
 		'' as rating_stage, '' as stage, '' as focuscount, '' as interviewcount, '' as viewcount, '' as followstatus,ii.create_time, NULL as update_time,
 	    1 as foreign_investment_yn, '' as project_type, '' as claim_status,2 as subjectType
 		from investment_institutions ii 
-		left join (
-		select investment_institutions_id , GROUP_CONCAT(`name`) segmentations from investment_institutions_segmentation  iis
-		LEFT JOIN meta_segmentation ms on iis.meta_segmentation_id= ms.id
-		GROUP BY iis.investment_institutions_id
+		left join (select investment_institutions_id , GROUP_CONCAT(`name`) segmentations from investment_institutions_segmentation  iis
+					LEFT JOIN meta_segmentation ms on iis.meta_segmentation_id= ms.id
+					GROUP BY iis.investment_institutions_id
 		) segs on ii.ID=segs.investment_institutions_id 
+		LEFT JOIN(SELECT iis.investment_institution_id,GROUP_CONCAT(`name`) stages from investment_institutions_stage iis
+					LEFT JOIN meta_project_stage mps on iis.meta_project_stage_id=mps.id
+					<if test="stages !=null and stages.size() !=0 ">
+						where iis.meta_project_stage_id in
+						<foreach collection="stages" item="item" open="(" close=")" separator=",">#{item}</foreach>
+					</if>
+					GROUP BY iis.investment_institution_id 
+		)stages on ii.ID=stages.investment_institution_id
 		<!-- 对机构数据按照简称进行去重 -->
 		group by ii.short_name ) tmp
 		
@@ -165,7 +173,7 @@
     
     <select id="findSplitCount" parameterType="com.lhjl.tzzs.proxy.dto.ProjectsListInputDto" resultType="Long">
      	select count(*) from 
-     	( select * from (select p.ID,p.serial_number,p.short_name,p.full_name,p.kernel_desc,segs.segmentations,p.city,p.project_source,aprl.rating_stage,
+     	( select * from (select p.ID,p.serial_number,p.short_name,p.full_name,p.kernel_desc,segs.segmentations, '' as stages,p.city,p.project_source,aprl.rating_stage,
 		case when statemp.financing_time is null then concat('正在融',statemp.stage) else statemp.stage end stage,
 		followtemp.focuscount,interviewtemp.interviewcount,proviewtemp.viewcount, pfs.meta_follow_status_id followstatus,
 		p.create_time,p.update_time,p.foreign_investment_yn,p.project_type,p.claim_status,1 as subjectType
@@ -185,15 +193,22 @@
     	
     	union all
 
-		select ii.ID, '' as serial_number, ii.short_name,ii.full_name,ii.kenel_case as kernel_desc,segs.segmentations, ii.city,ii.data_source_type as project_source, 
+		select ii.ID, '' as serial_number, ii.short_name,ii.full_name,ii.kenel_case as kernel_desc,segs.segmentations,stages.stages, ii.city,ii.data_source_type as project_source, 
 		'' as rating_stage, '' as stage, '' as focuscount, '' as interviewcount, '' as viewcount, '' as followstatus,ii.create_time, NULL as update_time,
 	    1 as foreign_investment_yn, '' as project_type, '' as claim_status, 2 as subjectType
 		from investment_institutions ii 
-		left join (
-		select investment_institutions_id , GROUP_CONCAT(`name`) segmentations from investment_institutions_segmentation  iis
-		LEFT JOIN meta_segmentation ms on iis.meta_segmentation_id= ms.id
-		GROUP BY iis.investment_institutions_id
+		left join (select investment_institutions_id , GROUP_CONCAT(`name`) segmentations from investment_institutions_segmentation  iis
+					LEFT JOIN meta_segmentation ms on iis.meta_segmentation_id= ms.id
+					GROUP BY iis.investment_institutions_id
 		) segs on ii.ID=segs.investment_institutions_id
+		LEFT JOIN(SELECT iis.investment_institution_id,GROUP_CONCAT(`name`) stages from investment_institutions_stage iis
+					LEFT JOIN meta_project_stage mps on iis.meta_project_stage_id=mps.id
+					<if test="stages !=null and stages.size() !=0 ">
+						where iis.meta_project_stage_id in
+						<foreach collection="stages" item="item" open="(" close=")" separator=",">#{item}</foreach>
+					</if>
+					GROUP BY iis.investment_institution_id 
+		)stages on ii.ID=stages.investment_institution_id
 		<!-- 对机构数据按照简称进行去重 -->
 		group by ii.short_name ) tmp
 		

@@ -1,5 +1,7 @@
 package com.lhjl.tzzs.proxy.dto;
 
+import java.util.List;
+
 public class ProjectsListInputDto {
 	/**
 	 * 需要进行排序的列的字段
@@ -50,7 +52,18 @@ public class ProjectsListInputDto {
 	 * 2 机构
 	 */
 	private Integer subjectType;
+	/**
+	 * 机构的投资阶段筛选
+	 * 传递的是元数据的id数组
+	 */
+	private List<Integer> stages;
 	
+	public List<Integer> getStages() {
+		return stages;
+	}
+	public void setStages(List<Integer> stages) {
+		this.stages = stages;
+	}
 	public Integer getSubjectType() {
 		return subjectType;
 	}
