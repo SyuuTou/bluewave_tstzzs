@@ -84,7 +84,6 @@ public class InvestmentInstitutionsController extends GenericController {
     @PostMapping("/v{appid}/institution/saveOrUpdate")
     public CommonDto<Boolean> institutionSaveOrUpdate(@PathVariable("appid") Integer appid,@RequestBody InvestmentInstitutionsDto2 body){
     	CommonDto<Boolean> result =new CommonDto<>();
-    	System.err.println(appid);
     	try {
     		result = investmentInstitutionsService.saveOrUpdate(appid,body);
     	}catch(Exception e){
