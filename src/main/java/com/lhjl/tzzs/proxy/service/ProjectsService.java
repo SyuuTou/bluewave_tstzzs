@@ -263,7 +263,7 @@ public interface ProjectsService {
      * @param companyId 公司id
      * @return
      */
-	CommonDto<List<ProjectProgress>> listProProgress(Integer appid, Integer companyId);
+	CommonDto<List<ProjectProgress>> listProProgress(Integer appid, Integer companyId,Integer subjectType);
 	/**
      * 增加公司进展的消息
      * @param appid
@@ -277,7 +277,7 @@ public interface ProjectsService {
      * @param id 进展的id
      * @return
      */
-	CommonDto<Boolean> removeProgressInfoById(Integer appid, Integer id);
+	CommonDto<Boolean> removeProgressInfoById(Integer appid, Integer id,Integer subjectType);
 	/**
      * 投资方的智能搜索
      * @param appid

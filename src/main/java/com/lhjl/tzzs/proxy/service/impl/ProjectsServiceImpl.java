@@ -1757,18 +1757,26 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<List<ProjectProgress>> listProProgress(Integer appid, Integer companyId) {
+	public CommonDto<List<ProjectProgress>> listProProgress(Integer appid, Integer companyId,Integer subjectType) {
 		CommonDto<List<ProjectProgress>> result=new CommonDto<>();
-		ProjectProgress pp=new ProjectProgress();
-		pp.setCompanyId(companyId);
-		pp.setYn(0);
-		List<ProjectProgress> pps = projectProgressMapper.select(pp);
-		if(pps!=null) {
-			pps.forEach((e)->{
-				Users user = usersMapper.selectByPrimaryKey(e.getOperationUser());
-				e.setUserName(user.getActualName());
-			});
-		}
+		
+		List<ProjectProgress> pps=null;
+		if(Integer.valueOf(1).equals(subjectType)) {//项目
+			ProjectProgress pp=new ProjectProgress();
+			pp.setCompanyId(companyId);
+			pp.setYn(0);
+			pps = projectProgressMapper.select(pp);
+			
+			if(pps!=null) {
+				pps.forEach((e)->{
+					Users user = usersMapper.selectByPrimaryKey(e.getOperationUser());
+					e.setUserName(user.getActualName());
+				});
+			}
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
+        	//TODO 机构的进展跟踪
+        }
+		
 		result.setData(pps);
 		result.setStatus(200);
 		result.setMessage("success");  
@@ -1779,14 +1787,20 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	@Override
 	public CommonDto<Boolean> saveOrUpdateProgressInfo(Integer appid, ProjectProgress body) {
 		CommonDto<Boolean> result=new CommonDto<>();
-		if(body.getId()!=null) {//更新
-			body.setOperationTime(new Date());
-			projectProgressMapper.updateByPrimaryKeySelective(body);
-		}else {//插入
-			body.setOperationTime(new Date());
-			body.setYn(0);
-			projectProgressMapper.insertSelective(body);
-		}
+		
+		if(Integer.valueOf(1).equals(body.getSubjectType())) {//项目
+			if(body.getId()!=null) {//更新
+				body.setOperationTime(new Date());
+				projectProgressMapper.updateByPrimaryKeySelective(body);
+			}else {//插入
+				body.setOperationTime(new Date());
+				body.setYn(0);
+				projectProgressMapper.insertSelective(body);
+			}
+        }else if(Integer.valueOf(2).equals(body.getSubjectType())) {//机构
+        	//TODO 机构的进展信息更新
+        }
+		
 		
 		result.setData(true);
 		result.setStatus(200);
@@ -1796,12 +1810,18 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	}
 
 	@Override
-	public CommonDto<Boolean> removeProgressInfoById(Integer appid, Integer id) {
+	public CommonDto<Boolean> removeProgressInfoById(Integer appid, Integer id,Integer subjectType) {
 		CommonDto<Boolean> result=new CommonDto<>();
-		ProjectProgress pp=new ProjectProgress();
-		pp.setId(id);
-		pp.setYn(1);
-		projectProgressMapper.updateByPrimaryKeySelective(pp);
+		
+		if(Integer.valueOf(1).equals(subjectType)) {//项目
+			ProjectProgress pp=new ProjectProgress();
+			pp.setId(id);
+			pp.setYn(1);
+			projectProgressMapper.updateByPrimaryKeySelective(pp);
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
+        	//TODO 机构的进展信息删除
+        }
+		
 		result.setData(true);
 		result.setStatus(200);
 		result.setMessage("success"); 
