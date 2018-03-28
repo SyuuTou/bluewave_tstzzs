@@ -95,9 +95,9 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
     @Autowired
     private DatasOperationManageMapper datasOperationManageMapper;
     
-    
-    
-    
+
+
+
     @Override
     public CommonDto<InvestmentInstitutionComplexOutputDto> getInvestmentInstitutionsComlexInfo(Map<String,Integer> body){
         CommonDto<InvestmentInstitutionComplexOutputDto> result =  new CommonDto<>();
@@ -496,12 +496,10 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 
 		//下面进行机构信息的增加
 		if(ii.getId() == null) {
-			System.err.println("<<<<<<");
 			//自增长Id
 			int updateLines = investmentInstitutionsMapper.insertSelective(ii);
 			// investmentInstitutionsMapper.getLastInsertId();
 			Integer autoGrowId = ii.getId();
-			System.err.println("**********autoGrowId*********" + autoGrowId);
 			
 			//实现机构自定义领域数据的增加
 			int diySegInserts;

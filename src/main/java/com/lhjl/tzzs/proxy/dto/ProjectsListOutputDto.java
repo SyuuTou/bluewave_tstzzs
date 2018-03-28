@@ -39,7 +39,7 @@ public class ProjectsListOutputDto {
 	 */
 	private Integer ratingStage;
 	/**
-	 * 融资状态
+	 * 项目的融资状态
 	 * 该值返回为null字段的时候表示正在融A轮
 	 */
 	private String stage;
@@ -104,8 +104,18 @@ public class ProjectsListOutputDto {
 	 * 用于区分是来自于项目表还是机构表
 	 */
 	private Integer subjectType;
+	/**
+	 * 投资阶段 
+	 */
+	private String stages;
 	
-	
+	public String getStages() {
+		return stages;
+	}
+
+	public void setStages(String stages) {
+		this.stages = stages;
+	}
 
 	public Integer getSubjectType() {
 		return subjectType;

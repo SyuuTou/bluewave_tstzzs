@@ -117,7 +117,6 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         report.setAuthor(reqBody.getAuthor());
         report.setYn(reqBody.getYn());
         report.setStatus(reqBody.getStatus());
-//        System.err.println(report+"*****report");
         
         int offset = (reqBody.getPageNo() - 1) * reqBody.getPageSize();
         int limit = reqBody.getPageSize();
@@ -352,7 +351,6 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         		pro.setShortName(e);
         		try { //根据简称搜索唯一的一条项目信息
         			pro = projectsMapper.selectOne(pro);
-        			System.err.println(pro+"****pro");
         		}catch(Exception ex) {
         			this.LOGGER.info(ex.getMessage(), ex.fillInStackTrace());
         			result.setData(null);

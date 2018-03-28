@@ -11,8 +11,13 @@ import java.util.List;
  * @date 2018-1-24 16:19:19
  */
 public interface ProjectAdminManageService {
-
-    CommonDto<ProjectManageDto> getProjectMange(Integer companyId);
+	/**
+	 * 获取基金管理信息
+	 * @param subjectId
+	 * @param subjectType 主体类型（1项目；2机构）
+	 * @return
+	 */
+    CommonDto<ProjectManageDto> getProjectMange(Integer subjectId,Integer subjectType);
 
     CommonDto<String> addOrUpdateManage(ProjectManageDto body);
 

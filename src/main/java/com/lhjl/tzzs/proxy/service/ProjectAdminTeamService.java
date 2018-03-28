@@ -18,11 +18,11 @@ public interface ProjectAdminTeamService {
 	 * @param projectId 项目id
 	 * @return
 	 */
-    CommonDto<List<ProjectTeamMemberOutputDto>> getProjectTeamMemberList(Integer projectId);
+    CommonDto<List<ProjectTeamMemberOutputDto>> getProjectTeamMemberList(Integer subjectId,Integer subjectType);
 
     CommonDto<String> addOrUpdatePojectTeamMember(ProjectTeamMemberInputDto body);
 
-    CommonDto<String> deleteProjectTeamMember(Integer memberId);
+    CommonDto<String> deleteProjectTeamMember(Integer memberId,Integer subjectType);
 
     CommonDto<Map<String,List<LabelList>>> queryHotCity();
 

@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.ChangePrincipalInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.PagingOutputDto;
 import com.lhjl.tzzs.proxy.dto.VIPOutputDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorsOutputDto;
@@ -67,21 +68,21 @@ public class InvestorServiceImpl implements InvestorService {
     
     @Transactional(readOnly = true)
 	@Override
-	public CommonDto<Map<String,Object>> listInvestorsInfos(Integer appid, InvestorListInputDto body) {
+	public CommonDto<PagingOutputDto<InvestorsOutputDto>> listInvestorsInfos(Integer appid, InvestorListInputDto body) {
 
     	if (StringUtil.isEmpty(body.getToken())){
-    		return new CommonDto<>(null, "Token 不能为空。", 500);
+    		
 		}
     	//根据token获取当前用户
 		UserToken query = new UserToken();
     	query.setToken(body.getToken());
     	UserToken userToken = userTokenMapper.selectOne(query);
-    	
+    	if(userToken == null) {
+    		return new CommonDto<>(null, "Token非法。", 500);
+    	}
 		Users users = usersMapper.selectByPrimaryKey(userToken.getUserId());
-
-
-		CommonDto<Map<String,Object>> result =new CommonDto<>();
-		Map<String,Object> map=new HashMap<>();
+		CommonDto<PagingOutputDto<InvestorsOutputDto>> result =new CommonDto<>();
+		PagingOutputDto<InvestorsOutputDto> pod=new PagingOutputDto<>();
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//验证、格式化参数信息
         //默认设置为10条记录
@@ -94,7 +95,6 @@ public class InvestorServiceImpl implements InvestorService {
         }
         //设置开始索引  
         body.setStart((long) ((body.getCurrentPage()-1) * body.getPageSize())) ;
-        
         AdminUser au=new AdminUser();
         au.setMetaAppId(appid);
         au.setUserId(userToken.getUserId());
@@ -109,7 +109,6 @@ public class InvestorServiceImpl implements InvestorService {
 					body.setAdminName(users.getActualName());
 				}
         	} 
-        	
         }catch(Exception e) {
         	result.setData(null);
             result.setStatus(500);
@@ -131,10 +130,8 @@ public class InvestorServiceImpl implements InvestorService {
     		return result;  
         }
         List<InvestorsOutputDto> list = investorsMapper.listInvestorsInfos(body);
-        
         //日期转换为输出时间字符串
         list.forEach((e)->{  
-        	
         		//设置提交时间
             	if(e.getCreateTime() !=null) {
             		e.setCreateTimeStr(sdf.format(e.getCreateTime()));  
@@ -161,14 +158,13 @@ public class InvestorServiceImpl implements InvestorService {
             	}*/
         });
         Long total = investorsMapper.getInvestorsListCount(body);
-        
         //规范数据封装格式，便于前台接受数据
-        map.put("list", list);
-        map.put("total", total);
-        map.put("currentPage", body.getCurrentPage());
-        map.put("pageSize", body.getPageSize());
+        pod.setList(list);
+        pod.setTotal(total);
+        pod.setCurrentPage(body.getCurrentPage());
+        pod.setPageSize(body.getPageSize());
         
-        result.setData(map);
+        result.setData(pod);
         result.setStatus(200);
         result.setMessage("success");
 		return result;

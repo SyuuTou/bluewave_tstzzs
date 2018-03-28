@@ -26,10 +26,10 @@ public class ProjectAdminPreferController extends GenericController{
      * @return
      */
     @GetMapping("/getprojectprefer")
-    public CommonDto<ProjectPreferDto> getProjectPrefer(Integer projectId){
+    public CommonDto<ProjectPreferDto> getProjectPrefer(Integer projectId,Integer subjectType){
         CommonDto<ProjectPreferDto> result = new CommonDto<>();
         try {
-            result = projectPreferService.getProjectprefer(projectId);
+            result = projectPreferService.getProjectprefer(projectId,subjectType);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);

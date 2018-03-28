@@ -16,18 +16,14 @@ public class InvestmentInstitutionFundManageServiceImpl implements InvestmentIns
     @Autowired
     private InvestmentInstitutionFundManageMapper investmentInstitutionFundManageMapper;
 
-    @Override
-    public Integer save(InvestmentInstitutionFundManage investmentInstitutionFundManage) {
-        return investmentInstitutionFundManageMapper.insert(investmentInstitutionFundManage);
-    }
 
     @Override
     public InvestmentInstitutionFundManage selectByPrimaryKey(Integer companyId) {
         return investmentInstitutionFundManageMapper.selectByPrimaryKey(companyId);
     }
 
-    @Override
+    /*@Override
     public Integer updateByPrimaryKey(InvestmentInstitutionFundManage investmentInstitutionFundManage) {
-        return investmentInstitutionFundManageMapper.updateByPrimaryKey(investmentInstitutionFundManage);
-    }
+        return investmentInstitutionFundManageMapper.updateByPrimaryKeySelective(investmentInstitutionFundManage);
+    }*/
 }

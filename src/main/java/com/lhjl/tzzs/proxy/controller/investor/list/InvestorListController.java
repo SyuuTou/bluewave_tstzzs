@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.ChangePrincipalInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.PagingOutputDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
+import com.lhjl.tzzs.proxy.dto.investorDto.InvestorsOutputDto;
 import com.lhjl.tzzs.proxy.model.Users;
 import com.lhjl.tzzs.proxy.service.InvestorService;
 
@@ -32,8 +34,8 @@ public class InvestorListController extends GenericController {
 	 * @return
 	 */
     @PostMapping("/v{appid}/list/investors")
-    public CommonDto<Map<String,Object>> listInvestorsInfo(@PathVariable Integer appid,@RequestBody InvestorListInputDto body){
-    	CommonDto<Map<String,Object>> result =new CommonDto<>();
+    public CommonDto<PagingOutputDto<InvestorsOutputDto>> listInvestorsInfo(@PathVariable Integer appid,@RequestBody InvestorListInputDto body){
+    	CommonDto<PagingOutputDto<InvestorsOutputDto>> result =new CommonDto<>();
     	try {
     		result = investorService.listInvestorsInfos(appid,body);
     	}catch(Exception e) {

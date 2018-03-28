@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.controller.project.details;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.TeamIntroductionDto;
 import com.lhjl.tzzs.proxy.dto.ProjectTeamMemberDto.ProjectTeamIntroInputDto;
 import com.lhjl.tzzs.proxy.service.ProjectAdminTeamIntroService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,8 @@ public class ProjectAdminTeamIntroController extends GenericController{
     private ProjectAdminTeamIntroService projectAdminTeamIntroService;
 
     /**
-     * 增加或更新团队成员信息
+     * 增加或更新团队成员团队介绍
+     * @param body
      * @return
      */
     @PostMapping("/addOrUpdatePojectTeamIntro")
@@ -35,13 +37,19 @@ public class ProjectAdminTeamIntroController extends GenericController{
         }
         return result;
     }
-
+    
+    /**
+     * 获取团队成员的介绍信息
+     * @param projectId 主体id
+     * @param subjectType 主体类型：1项目；2机构
+     * @return
+     */
     @GetMapping("/getpojectteamintro")
-    public CommonDto<Map<String, Object>> getPojectTeamIntro(Integer projectId){
+    public CommonDto<TeamIntroductionDto> getPojectTeamIntro(Integer projectId,Integer subjectType){
 
-        CommonDto<Map<String, Object>> result = new CommonDto<>();
+        CommonDto<TeamIntroductionDto> result = new CommonDto<>();
         try {
-            result = projectAdminTeamIntroService.getPojectTeamIntro(projectId);
+            result = projectAdminTeamIntroService.getPojectTeamIntro(projectId,subjectType);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");

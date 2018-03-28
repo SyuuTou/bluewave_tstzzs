@@ -46,74 +46,79 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
     @Resource
     private InvestmentInstitutionsFundsStagesService investmentInstitutionsFundsStagesService;
 
-    @Transactional
     @Override
-    public CommonDto<List<FundOutputDto>> getFundList(Integer projectId) {
+    public CommonDto<List<FundOutputDto>> getFundList(Integer subjectId,Integer subjectType) {
         CommonDto<List<FundOutputDto>> result = new CommonDto<>();
         List<FundOutputDto> fundOutputDtoList = new ArrayList<>();
-        List<InvestmentInstitutionsFunds> investmentInstitutionsFundsList = investmentInstitutionsFundsMapper.getFundList(projectId);
-
-        if(null != investmentInstitutionsFundsList && investmentInstitutionsFundsList.size() != 0){
-            for(InvestmentInstitutionsFunds investmentInstitutionsFunds_i: investmentInstitutionsFundsList){
-                FundOutputDto fundOutputDto = new FundOutputDto();
-                fundOutputDto.setFundId(investmentInstitutionsFunds_i.getId());
-                fundOutputDto.setShortName(investmentInstitutionsFunds_i.getName());
-                fundOutputDto.setFullName(investmentInstitutionsFunds_i.getFullName());
-                fundOutputDto.setEstablishedTime(String.valueOf(investmentInstitutionsFunds_i.getCreateTime()));
-                fundOutputDto.setSurvivalPeriod(investmentInstitutionsFunds_i.getDuration());
-                fundOutputDto.setCurrencyType(investmentInstitutionsFunds_i.getCurrency());
-                fundOutputDto.setFundManageScale(investmentInstitutionsFunds_i.getScale());
-                fundOutputDto.setInvestmentAmountLow(investmentInstitutionsFunds_i.getInvestmentAmountBegin());
-                fundOutputDto.setInvestmentAmountHigh(investmentInstitutionsFunds_i.getInvestmentAmountEnd());
-
-                InvestmentInstitutionsFundsStages investmentInstitutionsFundsStages = new InvestmentInstitutionsFundsStages();
-                investmentInstitutionsFundsStages.setInvestmentInstitutionsFundsId(investmentInstitutionsFunds_i.getId());
-                List<InvestmentInstitutionsFundsStages> investmentInstitutionsFundsStagesList = investmentInstitutionsFundsStagesService.select(investmentInstitutionsFundsStages);
-                List<Integer> investmentInstitutionsFundsStagess = new ArrayList<>();
-                List<String> investmentInstitutionsFundsStageNames = new ArrayList<>();
-                String[] investmentInstitutionsFundsStagesArr = null;
-                if(investmentInstitutionsFundsStagesList == null || investmentInstitutionsFundsStagesList.size() == 0){
-                    fundOutputDto.setInvestStages(investmentInstitutionsFundsStagesArr);
-                }else{
-                    investmentInstitutionsFundsStagesList.forEach(investmentInstitutionsFundsStages_i -> {
-                        investmentInstitutionsFundsStagess.add(investmentInstitutionsFundsStages_i.getStageId());
-                    });
-                    Integer[] StageIds = new Integer[investmentInstitutionsFundsStagess.size()];
-                    investmentInstitutionsFundsStagess.toArray(StageIds);
-                    List<MetaProjectStage> metaProjectStageList = metaProjectStageMapper.selectByStageIds(StageIds);
-                    metaProjectStageList.forEach( metaProjectStage -> {
-                        investmentInstitutionsFundsStageNames.add(metaProjectStage.getName());
-                    });
-                    investmentInstitutionsFundsStagesArr = new String[investmentInstitutionsFundsStagesList.size()];
-                    investmentInstitutionsFundsStageNames.toArray(investmentInstitutionsFundsStagesArr);
-                    fundOutputDto.setInvestStages(investmentInstitutionsFundsStagesArr);
+        if(Integer.valueOf(1).equals(subjectType)){ //项目
+        	
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
+        	List<InvestmentInstitutionsFunds> investmentInstitutionsFundsList = investmentInstitutionsFundsMapper.getFundList(subjectId);
+            if(null != investmentInstitutionsFundsList && investmentInstitutionsFundsList.size() != 0){
+                for(InvestmentInstitutionsFunds e: investmentInstitutionsFundsList){
+                    FundOutputDto fundOutputDto = new FundOutputDto();
+                    
+                    fundOutputDto.setFundId(e.getId());
+                    fundOutputDto.setShortName(e.getName());
+                    fundOutputDto.setFullName(e.getFullName());
+                    fundOutputDto.setEstablishedTime(DateUtils.format(e.getCreateTime()));
+                    fundOutputDto.setSurvivalPeriod(e.getDuration());
+                    fundOutputDto.setCurrencyType(e.getCurrency());
+                    fundOutputDto.setFundManageScale(e.getScale());
+                    fundOutputDto.setInvestmentAmountLow(e.getInvestmentAmountBegin());
+                    fundOutputDto.setInvestmentAmountHigh(e.getInvestmentAmountEnd());
+                    
+                    //投资阶段设置
+                    InvestmentInstitutionsFundsStages investmentInstitutionsFundsStages = new InvestmentInstitutionsFundsStages();
+                    investmentInstitutionsFundsStages.setInvestmentInstitutionsFundsId(e.getId());
+                    List<InvestmentInstitutionsFundsStages> investmentInstitutionsFundsStagesList = investmentInstitutionsFundsStagesService.select(investmentInstitutionsFundsStages);
+                    	
+                    List<Integer> investmentInstitutionsFundsStagess = new ArrayList<>();
+                    List<String> investmentInstitutionsFundsStageNames = new ArrayList<>();
+                    String[] investmentInstitutionsFundsStagesArr = null;
+                    
+                    if(investmentInstitutionsFundsStagesList != null && investmentInstitutionsFundsStagesList.size() != 0){
+                        investmentInstitutionsFundsStagesList.forEach(obj -> {
+                            investmentInstitutionsFundsStagess.add(obj.getStageId());
+                        });
+                        Integer[] StageIds = new Integer[investmentInstitutionsFundsStagess.size()];
+                        investmentInstitutionsFundsStagess.toArray(StageIds);
+                        List<MetaProjectStage> metaProjectStageList = metaProjectStageMapper.selectByStageIds(StageIds);
+                        metaProjectStageList.forEach( obj -> {
+                            investmentInstitutionsFundsStageNames.add(obj.getName());
+                        });
+                        investmentInstitutionsFundsStagesArr = new String[investmentInstitutionsFundsStagesList.size()];
+                        investmentInstitutionsFundsStageNames.toArray(investmentInstitutionsFundsStagesArr);
+                        fundOutputDto.setInvestStages(investmentInstitutionsFundsStagesArr);
+                    }
+                    //投资领域设置
+                    InvestmentInstitutionsFundsSegmentation investmentInstitutionsFundsSegmentation = new InvestmentInstitutionsFundsSegmentation();
+                    investmentInstitutionsFundsSegmentation.setInvestmentInstitutionsFundsId(e.getId());
+                    List<InvestmentInstitutionsFundsSegmentation> investmentInstitutionsFundsSegmentationList = investmentInstitutionsFundsSegmentationService.select(investmentInstitutionsFundsSegmentation);
+                    List<Integer> investmentInstitutionsFundsSegmentations = new ArrayList<>();
+                    List<String> investmentInstitutionsFundsSegmentationNames = new ArrayList<>();
+                    String[] investmentInstitutionsFundsSegmentationArr = null;
+                    if(investmentInstitutionsFundsSegmentationList != null && investmentInstitutionsFundsSegmentationList.size() != 0){
+                        investmentInstitutionsFundsSegmentationList.forEach(investmentInstitutionsFundsSegmentation_i -> {
+                            investmentInstitutionsFundsSegmentations.add(investmentInstitutionsFundsSegmentation_i.getSegmentationId());
+                        });
+                        Integer[] SegmentationIds = new Integer[investmentInstitutionsFundsSegmentations.size()];
+                        investmentInstitutionsFundsSegmentations.toArray(SegmentationIds);
+                        List<MetaSegmentation> metaSegmentationList = metaSegmentationMapper.selectBySegmentationIds(SegmentationIds);
+                        metaSegmentationList.forEach(metaSegmentation -> {
+                            investmentInstitutionsFundsSegmentationNames.add(metaSegmentation.getName());
+                        });
+                        investmentInstitutionsFundsSegmentationArr = new String[metaSegmentationList.size()];
+                        investmentInstitutionsFundsSegmentationNames.toArray(investmentInstitutionsFundsSegmentationArr);
+                        fundOutputDto.setFocusDomains(investmentInstitutionsFundsSegmentationArr);
+                    }
+                    
+                    fundOutputDtoList.add(fundOutputDto);
                 }
-
-                InvestmentInstitutionsFundsSegmentation investmentInstitutionsFundsSegmentation = new InvestmentInstitutionsFundsSegmentation();
-                investmentInstitutionsFundsSegmentation.setInvestmentInstitutionsFundsId(investmentInstitutionsFunds_i.getId());
-                List<InvestmentInstitutionsFundsSegmentation> investmentInstitutionsFundsSegmentationList = investmentInstitutionsFundsSegmentationService.select(investmentInstitutionsFundsSegmentation);
-                List<Integer> investmentInstitutionsFundsSegmentations = new ArrayList<>();
-                List<String> investmentInstitutionsFundsSegmentationNames = new ArrayList<>();
-                String[] investmentInstitutionsFundsSegmentationArr = null;
-                if(investmentInstitutionsFundsSegmentationList == null || investmentInstitutionsFundsSegmentationList.size() == 0){
-                    fundOutputDto.setInvestStages(investmentInstitutionsFundsSegmentationArr);
-                }else{
-                    investmentInstitutionsFundsSegmentationList.forEach(investmentInstitutionsFundsSegmentation_i -> {
-                        investmentInstitutionsFundsSegmentations.add(investmentInstitutionsFundsSegmentation_i.getSegmentationId());
-                    });
-                    Integer[] SegmentationIds = new Integer[investmentInstitutionsFundsSegmentations.size()];
-                    investmentInstitutionsFundsSegmentations.toArray(SegmentationIds);
-                    List<MetaSegmentation> metaSegmentationList = metaSegmentationMapper.selectBySegmentationIds(SegmentationIds);
-                    metaSegmentationList.forEach(metaSegmentation -> {
-                        investmentInstitutionsFundsSegmentationNames.add(metaSegmentation.getName());
-                    });
-                    investmentInstitutionsFundsSegmentationArr = new String[metaSegmentationList.size()];
-                    investmentInstitutionsFundsSegmentationNames.toArray(investmentInstitutionsFundsSegmentationArr);
-                    fundOutputDto.setFocusDomains(investmentInstitutionsFundsSegmentationArr);
-                }
-                fundOutputDtoList.add(fundOutputDto);
             }
         }
+        
+        
         result.setData(fundOutputDtoList);
         result.setStatus(200);
         result.setMessage("success");
@@ -124,102 +129,96 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
     @Override
     public CommonDto<String> addOrUpdateFund(FundInputDto body) {
         CommonDto<String> result = new CommonDto<>();
-        if(null == body || body.toString() == ""){
-            result.setMessage("success");
-            result.setStatus(200);
+        if(null == body ){
+            result.setMessage("failed");
+            result.setStatus(500);
             result.setData("请输入基金相关信息");
             return result;
         }
-
-        InvestmentInstitutionsFunds investmentInstitutionsFunds = new InvestmentInstitutionsFunds();
-        investmentInstitutionsFunds.setInvestmentInstitutionsId(body.getProjectId());
-        investmentInstitutionsFunds.setYn(0);
-        investmentInstitutionsFunds.setCreateTime(DateUtils.parse(body.getEstablishedTime()));
-        investmentInstitutionsFunds.setCreator(body.getCreator());
-        investmentInstitutionsFunds.setCurrency(body.getCurrencyType());
-        investmentInstitutionsFunds.setInvestmentAmountBegin(body.getInvestmentAmountLow());
-        investmentInstitutionsFunds.setInvestmentAmountEnd(body.getInvestmentAmountHigh());
-        investmentInstitutionsFunds.setDuration(body.getSurvivalPeriod());
-        investmentInstitutionsFunds.setName(body.getShortName());
-        investmentInstitutionsFunds.setFullName(body.getFullName());
-
-        Integer fundInsertResult = -1;
-
-        if(null == body.getFundId()){
-            fundInsertResult = investmentInstitutionsFundsMapper.insert(investmentInstitutionsFunds);
-        }else{
-            fundInsertResult = investmentInstitutionsFundsMapper.updateByPrimaryKey(investmentInstitutionsFunds);
+        if(null == body.getSubjectType() ){
+            result.setMessage("failed");
+            result.setStatus(500);
+            result.setData("请输入主体类型");
+            return result;
         }
+        
+        if(Integer.valueOf(1).equals(body.getSubjectType())){//项目
+        	//TODO 基金和项目之间的关系有待完善，目前以机构为主
+        }else if (Integer.valueOf(2).equals(body.getSubjectType())) {//机构
+        	InvestmentInstitutionsFunds investmentInstitutionsFunds = new InvestmentInstitutionsFunds();
+            investmentInstitutionsFunds.setInvestmentInstitutionsId(body.getProjectId());
+            investmentInstitutionsFunds.setId(body.getFundId());
+            
+            investmentInstitutionsFunds.setCreateTime(DateUtils.parse(body.getEstablishedTime()));
+            investmentInstitutionsFunds.setCreator(body.getCreator());
+            investmentInstitutionsFunds.setCurrency(body.getCurrencyType());
+            investmentInstitutionsFunds.setInvestmentAmountBegin(body.getInvestmentAmountLow());
+            investmentInstitutionsFunds.setInvestmentAmountEnd(body.getInvestmentAmountHigh());
+            investmentInstitutionsFunds.setDuration(body.getSurvivalPeriod());
+            investmentInstitutionsFunds.setName(body.getShortName());
+            investmentInstitutionsFunds.setFullName(body.getFullName());
+            
+            investmentInstitutionsFunds.setYn(0);
 
-        Integer fundStageInsertResult = -1;
-        List<InvestmentInstitutionsFundsStages> investmentInstitutionsFundsStagesList = new ArrayList<>();
-        investmentInstitutionsFundsStagesService.deleteAll(investmentInstitutionsFunds.getId());
-        if(body.getInvestStages().length == 0 || body.getInvestStages() == null){
-            InvestmentInstitutionsFundsStages investmentInstitutionsFundsStages = new InvestmentInstitutionsFundsStages();
-            investmentInstitutionsFundsStages.setInvestmentInstitutionsFundsId(investmentInstitutionsFunds.getId());
-            investmentInstitutionsFundsStages.setStageId(null);
-            investmentInstitutionsFundsStagesList.add(investmentInstitutionsFundsStages);
-        }else{
-            for(int i = 0; i<body.getInvestStages().length; i++){
-                InvestmentInstitutionsFundsStages investmentInstitutionsFundsStages = new InvestmentInstitutionsFundsStages();
-                investmentInstitutionsFundsStages.setInvestmentInstitutionsFundsId(investmentInstitutionsFunds.getId());
-                investmentInstitutionsFundsStages.setStageId(body.getInvestStages()[i]);
-                investmentInstitutionsFundsStagesList.add(investmentInstitutionsFundsStages);
+            //更新主体信息
+            //获取增长后的id
+            Integer autoIncreId= body.getFundId();
+            if(null == body.getFundId()){
+                investmentInstitutionsFundsMapper.insertSelective(investmentInstitutionsFunds);
+                autoIncreId=investmentInstitutionsFunds.getId();
+            }else{
+                investmentInstitutionsFundsMapper.updateByPrimaryKeySelective(investmentInstitutionsFunds);
             }
-        }
-
-        fundStageInsertResult = investmentInstitutionsFundsStagesService.insertList(investmentInstitutionsFundsStagesList);
-
-        Integer fundDomainInsertResult = -1;
-
-        List<InvestmentInstitutionsFundsSegmentation> investmentInstitutionsFundsSegmentationList = new ArrayList<>();
-        investmentInstitutionsFundsSegmentationService.deleteAll(investmentInstitutionsFunds.getId());
-        if(body.getFocusDomains().length == 0 || body.getFocusDomains() == null){
-            InvestmentInstitutionsFundsSegmentation investmentInstitutionsFundsSegmentation = new InvestmentInstitutionsFundsSegmentation();
-            investmentInstitutionsFundsSegmentation.setInvestmentInstitutionsFundsId(investmentInstitutionsFunds.getId());
-            investmentInstitutionsFundsSegmentation.setSegmentationId(null);
-            investmentInstitutionsFundsSegmentationList.add(investmentInstitutionsFundsSegmentation);
-        }else{
-            for(int i = 0; i<body.getFocusDomains().length; i++){
-                InvestmentInstitutionsFundsSegmentation investmentInstitutionsFundsSegmentation = new InvestmentInstitutionsFundsSegmentation();
-                investmentInstitutionsFundsSegmentation.setInvestmentInstitutionsFundsId(investmentInstitutionsFunds.getId());
-                investmentInstitutionsFundsSegmentation.setSegmentationId(body.getFocusDomains()[i]);
-                investmentInstitutionsFundsSegmentationList.add(investmentInstitutionsFundsSegmentation);
+            
+            //更新基金下的投资阶段
+            List<InvestmentInstitutionsFundsStages> investmentInstitutionsFundsStagesList = new ArrayList<>();
+            investmentInstitutionsFundsStagesService.deleteAll(autoIncreId);
+            if(body.getInvestStages().length != 0 && body.getInvestStages() != null){
+                for(int i = 0; i<body.getInvestStages().length; i++){
+                    InvestmentInstitutionsFundsStages investmentInstitutionsFundsStages = new InvestmentInstitutionsFundsStages();
+                    investmentInstitutionsFundsStages.setInvestmentInstitutionsFundsId(autoIncreId);
+                    investmentInstitutionsFundsStages.setStageId(body.getInvestStages()[i]);
+                    investmentInstitutionsFundsStagesList.add(investmentInstitutionsFundsStages);
+                }
             }
-        }
-        fundStageInsertResult = investmentInstitutionsFundsSegmentationService.insertList(investmentInstitutionsFundsSegmentationList);
+            investmentInstitutionsFundsStagesService.insertList(investmentInstitutionsFundsStagesList);
 
-        //TODO 基金和项目之间的关系，插入基金是否要插入项目
+            //更新基金下的投资领域
+            List<InvestmentInstitutionsFundsSegmentation> investmentInstitutionsFundsSegmentationList = new ArrayList<>();
+            investmentInstitutionsFundsSegmentationService.deleteAll(autoIncreId);
+            if(body.getFocusDomains().length != 0 && body.getFocusDomains() != null){
+                for(int i = 0; i<body.getFocusDomains().length; i++){
+                    InvestmentInstitutionsFundsSegmentation investmentInstitutionsFundsSegmentation = new InvestmentInstitutionsFundsSegmentation();
+                    investmentInstitutionsFundsSegmentation.setInvestmentInstitutionsFundsId(autoIncreId);
+                    investmentInstitutionsFundsSegmentation.setSegmentationId(body.getFocusDomains()[i]);
+                    investmentInstitutionsFundsSegmentationList.add(investmentInstitutionsFundsSegmentation);
+                }
+            }
+            investmentInstitutionsFundsSegmentationService.insertList(investmentInstitutionsFundsSegmentationList);
+        }
 
         result.setData("保存成功");
         result.setMessage("success");
         result.setStatus(200);
         return result;
     }
-
+    
+    @Transactional
     @Override
-    public CommonDto<String> deleteFund(Integer fundId) {
-
+    public CommonDto<String> deleteFund(Integer fundId,Integer subjectType) {
         CommonDto<String> result = new CommonDto<>();
-
-        InvestmentInstitutionsFunds investmentInstitutionsFund = investmentInstitutionsFundsMapper.selectByPrimaryKey(fundId);
-        if(null == investmentInstitutionsFund){
-            result.setMessage("failed");
-            result.setStatus(200);
-            result.setData("删除失败");
-            return result;
+        if(Integer.valueOf(1).equals(subjectType)) {//项目
+        	//TODO 删除项目的某一个基金
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
+        	InvestmentInstitutionsFunds e =new InvestmentInstitutionsFunds(); 
+        	e.setId(fundId);
+        	e.setYn(1);
+            investmentInstitutionsFundsMapper.updateByPrimaryKeySelective(e);
         }
-        investmentInstitutionsFund.setYn(1);
-        Integer investmentInstitutionsFundInsertResult = investmentInstitutionsFundsMapper.updateByPrimaryKey(investmentInstitutionsFund);
-        if(investmentInstitutionsFundInsertResult > 0) {
-            result.setMessage("success");
-            result.setStatus(200);
-            result.setData("删除成功");
-            return result;
-        }
-        result.setMessage("failed");
+        
+        result.setMessage("success");
         result.setStatus(200);
-        result.setData("删除失败");
+        result.setData("删除成功");
         return result;
     }
 }

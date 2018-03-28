@@ -1,9 +1,14 @@
 package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.PagingOutputDto;
+import com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectKernelInfoOutputDto;
+import com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectListInputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectLogoInfoOutputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBOutDto;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 public interface ProjectSendBService {
 
@@ -50,4 +55,11 @@ public interface ProjectSendBService {
      */
     CommonDto<ProjectLogoInfoOutputDto> readProjectSendBLogoInfo(Integer projectSendId,Integer appid);
 
+    /**
+     * 小程序提交项目列表
+     * @param appid
+     * @param body
+     * @return
+     */
+    CommonDto<PagingOutputDto<ProjectKernelInfoOutputDto>> listProjectInfos(Integer appid,  ProjectListInputDto body);
 }

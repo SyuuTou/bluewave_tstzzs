@@ -8,7 +8,7 @@ import com.lhjl.tzzs.proxy.dto.ProjectPreferDto;
  * @date 2018-1-24 16:19:33
  */
 public interface ProjectAdminPreferService {
-    CommonDto<ProjectPreferDto> getProjectprefer(Integer projectId);
+    CommonDto<ProjectPreferDto> getProjectprefer(Integer projectId,Integer subjectType);
 
     CommonDto<String> addOrUpdatePrefer(ProjectPreferDto body);
 }

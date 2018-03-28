@@ -218,7 +218,6 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 
                     return result;
             	}else {//执行更新操作时
-            		System.err.println(iiList.get(0).getId()+"get(0).getId()"+body.getSubjectId()+"body.getSubjectId()");
                     if (  ! iiList.get(0).getId().equals(body.getSubjectId()) ){
 
                         result.setMessage("该机构已经存在");

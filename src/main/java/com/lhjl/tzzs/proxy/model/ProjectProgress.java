@@ -40,8 +40,22 @@ public class ProjectProgress {
     @Transient
     private String userName;
     
+    /**
+     * 主体类型
+     */
+    @Transient
+    private Integer subjectType;
+    
 
-    public String getUserName() {
+    public Integer getSubjectType() {
+		return subjectType;
+	}
+
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
+
+	public String getUserName() {
 		return userName;
 	}
 
