@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.project.collect;
+package com.lhjl.tzzs.proxy.controller.project.collect.details;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CollectProjectAuditHistoryFinancingDto;
@@ -19,7 +19,7 @@ public class CollectProjectAuditHistoryFinancingController extends GenericContro
     @Autowired
     private CollectProjectAuditHistoryFinancingService collectProjectAuditHistoryFinancingService;
     /**
-     * 采集项目审核历史融资信息
+     * 回显采集项目审核历史融资信息
      * @param projectId
      * @return
      */

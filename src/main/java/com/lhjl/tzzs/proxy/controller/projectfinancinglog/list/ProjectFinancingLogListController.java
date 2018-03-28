@@ -2,7 +2,9 @@ package com.lhjl.tzzs.proxy.controller.projectfinancinglog.list;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.PagingOutputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogInputDto;
+import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogOutputDto;
 import com.lhjl.tzzs.proxy.service.ProjectFinancingLogService;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,8 +27,8 @@ public class ProjectFinancingLogListController extends GenericController{
      * @return 
      */
     @PostMapping("get/projectfinancinglog/list")
-    public CommonDto<Map<String,Object>> getProjectFinancingLog(@RequestBody ProjectFinancingLogInputDto body){
-        CommonDto<Map<String,Object>> result = new CommonDto<>();
+    public CommonDto<PagingOutputDto<ProjectFinancingLogOutputDto>> getProjectFinancingLog(@RequestBody ProjectFinancingLogInputDto body){
+        CommonDto<PagingOutputDto<ProjectFinancingLogOutputDto>> result = new CommonDto<>();
         try {
             result = projectFinancingLogService.getProjectFinancingLogList(body);
         }catch (Exception e){

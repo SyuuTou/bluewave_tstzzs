@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller;
+package com.lhjl.tzzs.proxy.controller.project.collect.list;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendAuditBInputDto;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class ProjectAuditBController extends GenericService{
+public class CollectProjectAuditBSubmitAndListController extends GenericService{
 
     @Resource
     private ProjectAuditBService projectAuditBService;

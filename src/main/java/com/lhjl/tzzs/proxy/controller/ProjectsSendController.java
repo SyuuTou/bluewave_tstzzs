@@ -195,8 +195,8 @@ public class ProjectsSendController {
     public CommonDto<List<ProjectSendTeamMember>> searchTeam(@RequestBody TeamDto2 body){
     	CommonDto<List<ProjectSendTeamMember>>  result = new CommonDto<>();
         //获取userId
-       String token =body.getToken();
-       String tsid = body.getTsid();
+        String token =body.getToken();
+        String tsid = body.getTsid();
         int userId = commonUserService.getLocalUserId(token);
         try{
             result = projectsSendService.serachTeam(tsid, userId);

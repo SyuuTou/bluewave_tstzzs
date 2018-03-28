@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.project.collect;
+package com.lhjl.tzzs.proxy.controller.project.collect.details;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CollectProjectAuditTeamDto;
