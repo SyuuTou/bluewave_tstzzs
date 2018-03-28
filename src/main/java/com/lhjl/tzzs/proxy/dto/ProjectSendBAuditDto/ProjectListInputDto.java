@@ -11,9 +11,9 @@ public class ProjectListInputDto {
     private Integer appId;
 
     /**
-     * 用户id
+     * 用户token
      */
-    private Integer userId;
+    private String token;
 
     /**
      * 当前页码
@@ -38,12 +38,12 @@ public class ProjectListInputDto {
         this.appId = appId;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public String getToken() {
+        return token;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Integer getCurrentPage() {
