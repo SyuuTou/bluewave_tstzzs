@@ -138,24 +138,28 @@ public class ElegantServiceImpl implements ElegantServiceService{
         if (body.getPageSize() == null){
             body.setPageSize(pageSizeDefault);
         }
+
+        Integer startPage = (body.getPageNum()-1)*body.getPageSize();
         //转数组
         Integer[] identityType = {};
         Integer[] serviceType = {};
-        if (body.getIsReward()!=null && body.getIsReward() == 0) {
+        List<Map<String,Object>> elegantServiceList = null;
+//        if (body.getIsReward()!=null && body.getIsReward() == 0) {
+          if (StringUtils.isEmpty(token)) {
+              CommonDto<Map<String, Object>> userInfo = userInfoService.getUserInfo(body.getToken());
+              if (null != userInfo.getData().get("approveId")) {
+                  Integer[] approveIds = (Integer[]) userInfo.getData().get("approveId");
+                  body.setApproveType(Arrays.asList(approveIds));
+              }
+              if (null != userInfo.getData().get("levelId")) {
+                  body.setMemberType((Integer) userInfo.getData().get("levelId"));
+              }
+              if (null != userInfo.getData().get("isLeadInvestor")) {
+                  body.setIsLeadInvestor((Integer) userInfo.getData().get("isLeadInvestor"));
+              }
 
-            CommonDto<Map<String, Object>> userInfo = userInfoService.getUserInfo(body.getToken());
-            if (null != userInfo.getData().get("approveId")) {
-                Integer[] approveIds = (Integer[]) userInfo.getData().get("approveId");
-                body.setApproveType(Arrays.asList(approveIds));
-            }
-            if (null != userInfo.getData().get("levelId")) {
-                body.setMemberType((Integer) userInfo.getData().get("levelId"));
-            }
-            if (null != userInfo.getData().get("isLeadInvestor")) {
-                body.setIsLeadInvestor((Integer) userInfo.getData().get("isLeadInvestor"));
-            }
 
-        }
+//        }
 
         if (null == body.getIsLeadInvestor()){
             body.setIsLeadInvestor(0);
@@ -178,10 +182,14 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 }
                 serviceType = serviceTypeA;
             }
+              elegantServiceList = elegantServiceMapper.findElegantServiceList(token,body.getRecommendYn(),
+                      body.getCreateTimeOrder(),sortOrder,appid,identityType,serviceType,body.getSearchWord(),body.getApproveType(),body.getIsLeadInvestor(),body.getIsReward(),body.getMemberType(),startPage,body.getPageSize(), DateTime.now().toDate());
+          }else{
 
-        Integer startPage = (body.getPageNum()-1)*body.getPageSize();
-        List<Map<String,Object>> elegantServiceList = elegantServiceMapper.findElegantServiceList(token,body.getRecommendYn(),
-                body.getCreateTimeOrder(),sortOrder,appid,identityType,serviceType,body.getSearchWord(),body.getApproveType(),body.getIsLeadInvestor(),body.getIsReward(),body.getMemberType(),startPage,body.getPageSize(), DateTime.now().toDate());
+              elegantServiceList = elegantServiceMapper.findElegantServiceListCustomer(token,startPage,body.getPageSize(), DateTime.now().toDate());
+          }
+
+
         if (elegantServiceList.size() > 0){
             for (Map<String,Object> m:elegantServiceList){
 
@@ -383,6 +391,11 @@ public class ElegantServiceImpl implements ElegantServiceService{
             body.setBackgroundPicture("https://img.idatavc.com/static/banner/elegant.png");
         }
 
+        if (body.getIsReward() == 1 && body.getPriceUnit()== 0 && Integer.valueOf(body.getOriginalPrice())>=100){
+            body.setRecommendYn(1);
+        }
+
+
         if (StringUtils.isEmpty(body.getUnit())){
             body.setUnit("人");
         }
@@ -431,15 +444,23 @@ public class ElegantServiceImpl implements ElegantServiceService{
             switch (serviceType) {
                 case 17:
                 case 12:
+                case 21:
+                    if (body.getIsLeadInvestor() == null || body.getIsLeadInvestor() == 0 ){
+                        body.setIsLeadInvestor(1);
+                        body.setIsLeadInvestor(0);
+                    }
                     if (StringUtils.isEmpty(body.getIdentityType())){
                         body.setIdentityType("1,2,3,4,5,6");
                     }
                     if (body.getApproveTypes()== null || body.getApproveTypes().size() == 0 ){
                         List<Integer> approveType = new ArrayList<>();
+                        approveType.add(-1);
                         approveType.add(0);
                         approveType.add(1);
                         approveType.add(2);
                         body.setApproveTypes(approveType);
+                    }else{
+                        body.getApproveTypes().add(-1);
                     }
                     if (body.getMemberTypes()==null || body.getMemberTypes().size() == 0){
                         List<Integer> memberType = new ArrayList<>();
@@ -453,6 +474,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
                 case 13:
                     case 16:
                         case 18:
+                case 15:
                     if (StringUtils.isEmpty(body.getIdentityType())){
                         body.setIdentityType("1,3,4,5,6");
                     }
@@ -471,9 +493,9 @@ public class ElegantServiceImpl implements ElegantServiceService{
                                 body.setMemberTypes(memberType);
                             }
                     break;
-                case 15:
+
                 case 19:
-                case 21:
+
                     if (StringUtils.isEmpty(body.getIdentityType())){
                         body.setIdentityType("1,3,4,5,6");
                     }

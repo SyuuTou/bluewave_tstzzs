@@ -83,7 +83,7 @@ public class ProjectsFinancingLogController extends GenericController{
     		result=projectsService.removeSingleInvestment(appid,projectId,investmentInstitutionsId,subjectType);
 	    }catch(Exception e) {
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
-    		  
+
     		result.setData(false);
     		result.setMessage("fail");
     		result.setStatus(500);
@@ -103,7 +103,7 @@ public class ProjectsFinancingLogController extends GenericController{
     		result=projectsService.getFinancingLogDetails(appid,financingLogId,subjectType);
 	    }catch(Exception e) {
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
-    		  
+
     		result.setData(null);
     		result.setMessage("fail");
     		result.setStatus(500);

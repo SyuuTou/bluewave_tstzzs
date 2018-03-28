@@ -1,6 +1,8 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectKernelInfoOutputDto;
+import com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectListInputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectLogoInfoOutputDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
@@ -8,6 +10,7 @@ import com.lhjl.tzzs.proxy.service.*;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,6 +76,12 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
 
     @Autowired
     private ProjectSendAuditBMapper projectSendAuditBMapper;
+
+    @Value("${pageNum}")
+    private Integer pageNumDefault ;
+
+    @Value("${pageSize}")
+    private Integer pageSizeDefault;
 
 
     /**
@@ -1191,6 +1200,38 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         result.setData(jieguo);
         result.setMessage("success");
         result.setStatus(502);
+        return result;
+    }
+
+
+    @Override
+    public CommonDto<PagingOutputDto<ProjectKernelInfoOutputDto>> listProjectInfos(Integer appid, ProjectListInputDto body) {
+
+        CommonDto<PagingOutputDto<ProjectKernelInfoOutputDto>> result = new CommonDto<>();
+
+        PagingOutputDto<ProjectKernelInfoOutputDto> pagingOutputDto = new PagingOutputDto<>();
+
+        if (body.getPageSize() == null){
+            body.setPageSize(pageSizeDefault);
+        }
+        //默认设置为第一页
+        if (body.getCurrentPage() == null){
+            body.setCurrentPage(pageNumDefault);
+        }
+        //设置开始索引
+        body.setStart((Integer) ((body.getCurrentPage()-1) * body.getPageSize())) ;
+
+        List<ProjectKernelInfoOutputDto> projectKernelInfoOutputDtoList = new ArrayList<>();
+
+        projectKernelInfoOutputDtoList = projectSendBMapper.getSendProjects(body);
+
+        pagingOutputDto.setTotal(null);
+        pagingOutputDto.setPageSize(body.getPageSize());
+        pagingOutputDto.setCurrentPage(body.getCurrentPage());
+        pagingOutputDto.setList(projectKernelInfoOutputDtoList);
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(pagingOutputDto);
         return result;
     }
 }

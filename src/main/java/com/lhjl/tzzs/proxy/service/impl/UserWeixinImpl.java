@@ -50,6 +50,7 @@ public class UserWeixinImpl implements UserWeixinService {
         Date now = new Date();
         //userId转数字
         int userID = Integer.parseInt(userid);
+        boolean hasUnionId = false;
         UsersWeixin usersWeixin = null;
         if (StringUtils.isNotEmpty(userInfo.getUnionId())) {
                 usersWeixin = new UsersWeixin();
@@ -59,7 +60,7 @@ public class UserWeixinImpl implements UserWeixinService {
                     userID = usersWeixins.get(0).getUserId();
                     UserToken userToken = new UserToken();
                     userToken.setUserId(Integer.parseInt(userid));
-
+                    hasUnionId = true;
                     userToken = userTokenMapper.selectOne(userToken);
                     userToken.setUserId(userID);
                     userTokenMapper.updateByPrimaryKey(userToken);
@@ -68,10 +69,14 @@ public class UserWeixinImpl implements UserWeixinService {
 
         usersWeixin = new UsersWeixin();
         usersWeixin.setOpenid(userInfo.getOpenId());
+        if (hasUnionId){
+            usersWeixin.setUserId(userID);
+        }
 
-        usersWeixin = usersWeixinMapper.selectOne(usersWeixin);
+        List<UsersWeixin> usersWeixins = usersWeixinMapper.select(usersWeixin);
 
-        if (null != usersWeixin){
+        if (null != usersWeixins&&usersWeixins.size()>0){
+            usersWeixin = usersWeixins.get(0);
             usersWeixin.setOpenid(userInfo.getOpenId());
             usersWeixin.setUserId(userID);
             usersWeixin.setNickName(userInfo.getNickName());

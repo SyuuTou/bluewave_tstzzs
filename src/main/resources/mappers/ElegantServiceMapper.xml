@@ -52,7 +52,7 @@
 
     RIGHT JOIN elegant_service_approve_type esat on esat.elegant_service_id = es.id
     RIGHT JOIN elegant_service_member_type esmt on esmt.elegant_service_id = es.id
-    <if test="isLeadInvestor != null and isLeadInvestor != ''">
+    <if test="isLeadInvestor != null ">
     RIGHT JOIN elegant_service_lead_investor esli on esli.elegant_service_id =  es.id
     </if>
     where es.on_off = 1
@@ -69,10 +69,13 @@
       and esit.meta_identity_type_id in
       <foreach close=")" collection="identityType" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
+
     <if test="serviceType != null and serviceType.length &gt; 0 ">
       and esst.meta_service_type_id in
       <foreach close=")" collection="serviceType" index="index" item="item" open="(" separator=",">#{item}</foreach>
+
     </if>
+
     <if test="searchWord != null and searchWord !=''">
       and (
          es.service_name like CONCAT(CONCAT('%', #{searchWord}), '%')
@@ -91,7 +94,11 @@
       <foreach close=")" collection="approveType" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
 
-    <if test="isLeadInvestor != null and isLeadInvestor != ''">
+    <if test="approveType == null or approveType.size() &lt;= 0 ">
+      and esat.approve_type NOT in (0,1)
+    </if>
+
+    <if test="isLeadInvestor != null">
       and esli.lead_investor_type = #{isLeadInvestor}
     </if>
 
@@ -110,6 +117,25 @@
     <if test="sortOrder != null and sortOrder != ''">
       order by es.sort
     </if>
+    limit #{startPage},#{pageSize}
+  </select>
+
+  <select id="findElegantServiceListCustomer" resultType="java.util.HashMap">
+    select es.service_name,es.pre_vip_price_descript,es.original_price,es.vip_price,esd.description,es.unit,es.price_unit,
+    es.background_picture,es.id,es.scence_key,es.begin_time,es.end_time,es.recommend_yn,es.create_time,es.web_switch
+    from elegant_service es
+    left join elegant_service_description esd on es.id = esd.elegant_service_id
+
+
+    where es.on_off = 1
+    and es.yn = 1
+    AND es.begin_time &lt;= #{now}
+    and es.end_time &gt;= #{now}
+
+      and creator = #{token}
+
+    group by es.id
+      order by es.create_time desc
     limit #{startPage},#{pageSize}
   </select>
 
