@@ -3,9 +3,15 @@ package com.lhjl.tzzs.proxy.controller.project.collect.details;
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CollectProjectAuditBasicInfoDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ProjectSendBOutDto;
 import com.lhjl.tzzs.proxy.service.CollectProjectAuditBasicInfoService;
+import com.lhjl.tzzs.proxy.service.ProjectSendBService;
+
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CollectProjectAuditBasicInfoController extends GenericController{
 
-    @Autowired
+	@Resource
     private CollectProjectAuditBasicInfoService collectProjectAuditBasicInfoService;
+    @Resource
+    private ProjectSendBService projectSendBService;
     
     /**
      * 回显采集项目审核基本信息 
@@ -34,6 +42,28 @@ public class CollectProjectAuditBasicInfoController extends GenericController{
             result.setMessage("服务器端发生错误");
             result.setData(null);
             result.setStatus(502);
+        }
+        return result;
+    }
+    
+    /**
+     * ZYY
+     * 读取项目信息接口
+     * @param token
+     * @param appid
+     * @return
+     */
+    @GetMapping("v{appid}/read/project/sendinfo")
+    public CommonDto<ProjectSendBOutDto> readProjectSendInfo(String token,@PathVariable Integer appid){
+        CommonDto<ProjectSendBOutDto> result  = new CommonDto<>();
+
+        try {
+            result = projectSendBService.readProjectInfomation(token, appid);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
         }
         return result;
     }
