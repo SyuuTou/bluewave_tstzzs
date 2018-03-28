@@ -134,14 +134,14 @@ public interface ProjectsService {
 	 * @param projectId 项目id
 	 * @return
 	 */
-	CommonDto<List<ProjectFinancingLog>> getFinancingLogs(Integer appid, Integer projectId);  
+	CommonDto<List<ProjectFinancingLog>> getFinancingLogs(Integer appid, Integer projectId,Integer subjectType);  
 	/**
 	 * 删除单条的融资历史记录信息
 	 * @param appid
 	 * @param financiingLogId 融资历史记录的标识id
 	 * @return
 	 */
-	CommonDto<Boolean> removeFinancingLogById(Integer appid, Integer id);
+	CommonDto<Boolean> removeFinancingLogById(Integer appid, Integer id,Integer subjectType);
 
 	/**
 	 * 根据项目id获取项目跟进状态的接口
@@ -163,7 +163,7 @@ public interface ProjectsService {
 	 * @param financingLodId 融资历史记录的id
 	 * @return
 	 */
-	CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLogId);
+	CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLogId,Integer subjectType);
 	/**
      * 移除项目的融资历史单阶段对应的投资机构信息
      * @param appid
@@ -171,7 +171,7 @@ public interface ProjectsService {
      * @param investmentInstitutionsId 投资机构id
      * @return
      */
-	CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer projectId,Integer investmentInstitutionsId);
+	CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer projectId,Integer investmentInstitutionsId,Integer subjectType);
 	/**
 	 * 更新融资历史相关的投资机构信息
 	 * @param appid
@@ -183,16 +183,17 @@ public interface ProjectsService {
      * 回显 公司简介 以及 投资亮点
      * @param appid
      * @param proId
+     * @param subjectType 主体类型 1项目 2机构
      * @return
      */
-	CommonDto<Projects> getProInfoById(Integer appid, Integer proId);
+	CommonDto<CommentAndHighlightsOutputDto> getProInfoById(Integer appid, Integer subjectId,Integer subjectType);
 	/**
-     * 更新公司相关信息(主要用于更新项目简介 以及 投资亮点)
-     * @param appid
-     * @param proId
-     * @return
-     */
-	CommonDto<Boolean> updateProInfos(Integer appid, Projects body);
+	 * 更新公司相关信息(主要用于更新项目简介 以及 投资亮点)
+	 * @param appid
+	 * @param body 简介 以及 投资亮点输入Dto
+	 * @return
+	 */
+	CommonDto<Boolean> updateProInfos(Integer appid, CommentAndHighlightsInputDto body);
 	/**
      * 项目公司的列表信息
      * @param appid 扩展字段
@@ -234,21 +235,21 @@ public interface ProjectsService {
      * @param partId 招聘信息id
      * @return
      */
-	CommonDto<Boolean> removeRecruInfoById(Integer appid, Integer id);
+	CommonDto<Boolean> removeRecruInfoById(Integer appid, Integer id,Integer subjectType);
 	/**
      * 招聘职位信息列表
      * @param appid
      * @param proId 项目id
      * @return
      */
-	CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer companyId);
+	CommonDto<List<Recruitment>> listRecruInfos(Integer appid, Integer companyId,Integer subjectType);
 	/**
      * 招聘需求信息回显
      * @param appid
      * @param proId 项目id
      * @return
      */
-	CommonDto<RecruitmentInfo> echoRequirementInfo(Integer appid, Integer proId);
+	CommonDto<RecruitmentInfo> echoRequirementInfo(Integer appid, Integer proId,Integer subjectType);
 	/**
      * 招聘需求信息编辑
      * @param appid
@@ -262,7 +263,7 @@ public interface ProjectsService {
      * @param companyId 公司id
      * @return
      */
-	CommonDto<List<ProjectProgress>> listProProgress(Integer appid, Integer companyId);
+	CommonDto<List<ProjectProgress>> listProProgress(Integer appid, Integer companyId,Integer subjectType);
 	/**
      * 增加公司进展的消息
      * @param appid
@@ -276,7 +277,7 @@ public interface ProjectsService {
      * @param id 进展的id
      * @return
      */
-	CommonDto<Boolean> removeProgressInfoById(Integer appid, Integer id);
+	CommonDto<Boolean> removeProgressInfoById(Integer appid, Integer id,Integer subjectType);
 	/**
      * 投资方的智能搜索
      * @param appid

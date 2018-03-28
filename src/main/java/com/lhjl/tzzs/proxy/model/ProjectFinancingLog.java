@@ -170,9 +170,21 @@ public class ProjectFinancingLog {
 	 */
 	@Transient
 	private String financingStr;
+	/**
+	 * 主体类型
+	 */
+	@Transient
+	private Integer subjectType;
 	
+    public Integer getSubjectType() {
+		return subjectType;
+	}
 
-    public List<InvestmentInstitutions> getInstitutions() {
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
+
+	public List<InvestmentInstitutions> getInstitutions() {
 		return institutions;
 	}
 

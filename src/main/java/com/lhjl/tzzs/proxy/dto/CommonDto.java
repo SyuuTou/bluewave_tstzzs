@@ -40,4 +40,10 @@ public class CommonDto<T> {
     public void setData(T data) {
         this.data = data;
     }
+
+	@Override
+	public String toString() {
+		return "CommonDto [message=" + message + ", status=" + status + ", data=" + data + "]";
+	}
+    
 }

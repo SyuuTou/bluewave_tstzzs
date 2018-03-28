@@ -23,25 +23,34 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
     private ProjectFinancingLogMapper projectFinancingLogMapper;
 
     @Override
-    public CommonDto<FinancingLogOutputDto> getFinancingLog(Integer projectId) {
+    public CommonDto<FinancingLogOutputDto> getFinancingLog(Integer subjectId,Integer subjectType) {
         CommonDto<FinancingLogOutputDto> result = new CommonDto<>();
-        FinancingLogOutputDto financingLogOutputDto = new FinancingLogOutputDto();
-        if(projectId == null){
+        if(subjectId == null){
             result.setStatus(300);
             result.setMessage("failed");
             result.setData(null);
             return result;
         }
-        ProjectFinancingLog projectFinancingLog = projectFinancingLogMapper.selectByProjectId(projectId);
-        if(null != projectFinancingLog){
-            financingLogOutputDto.setId(projectFinancingLog.getId());
-            financingLogOutputDto.setStage(projectFinancingLog.getStage());
-            financingLogOutputDto.setAmount(projectFinancingLog.getAmount());
-            financingLogOutputDto.setCurrencyType(projectFinancingLog.getCurrency());
-            financingLogOutputDto.setProjectId(projectId);
-            financingLogOutputDto.setShareDivest(projectFinancingLog.getShareDivest());
-            financingLogOutputDto.setFinancingApplication(projectFinancingLog.getProjectFinancingUseful());
+        
+        FinancingLogOutputDto financingLogOutputDto = new FinancingLogOutputDto();
+        
+        ProjectFinancingLog projectFinancingLog = new ProjectFinancingLog();
+        
+        if(Integer.valueOf(1).equals(subjectType)) {//项目
+            projectFinancingLog = projectFinancingLogMapper.selectByProjectId(subjectId);
+            if(null != projectFinancingLog){
+                financingLogOutputDto.setId(projectFinancingLog.getId());
+                financingLogOutputDto.setStage(projectFinancingLog.getStage());
+                financingLogOutputDto.setAmount(projectFinancingLog.getAmount());
+                financingLogOutputDto.setCurrencyType(projectFinancingLog.getCurrency());
+                financingLogOutputDto.setProjectId(subjectId);
+                financingLogOutputDto.setShareDivest(projectFinancingLog.getShareDivest());
+                financingLogOutputDto.setFinancingApplication(projectFinancingLog.getProjectFinancingUseful());
+            }
+        }else if(Integer.valueOf(2).equals(subjectType)) {//机构
+        	
         }
+        
         result.setStatus(200);
         result.setMessage("success");
         result.setData(financingLogOutputDto);
@@ -51,46 +60,60 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
     @Override
     public CommonDto<String> addOrUpdateFinancingLog(FinancingLogInputDto body) {
         CommonDto<String> result = new CommonDto<>();
+        
         if(null == body){
-            result.setStatus(300);
+            result.setStatus(500);
             result.setMessage("failed");
             result.setData("请输入相关信息");
             return result;
         }
+        if(null == body.getSubjectType()){
+            result.setStatus(500);
+            result.setMessage("failed");
+            result.setData("请输入主体类型");
+            return result;
+        }
+        if(null == body.getProjectId()){
+            result.setStatus(500);
+            result.setMessage("failed");
+            result.setData("请输入主体id");
+            return result;
+        }
+        
         ProjectFinancingLog projectFinancingLog = new ProjectFinancingLog();
+        projectFinancingLog.setId(body.getId());
         projectFinancingLog.setProjectId(body.getProjectId());
-        
-        Date now = new Date();
-        
         projectFinancingLog.setAmount(body.getAmount());
         projectFinancingLog.setCurrency(body.getCurrencyType());
         projectFinancingLog.setStage(body.getStage());
         projectFinancingLog.setProjectFinancingUseful(body.getFinancingApplication());
         projectFinancingLog.setShareDivest(body.getShareDivest());
-        projectFinancingLog.setId(body.getId());
-        //曹传桂添加
+        
+        
+        //固有信息设置
         projectFinancingLog.setApprovalStatus(1);
         projectFinancingLog.setYn(0);
         
-        Integer projectFinancingLogInsertResult = null;
-        
-        if(null == body.getId()){
-            projectFinancingLog.setCreateTime(now);
-            projectFinancingLogInsertResult = projectFinancingLogMapper.insertSelective(projectFinancingLog);
-        }else{
-            projectFinancingLog.setUpdateTime(now);
-            projectFinancingLogInsertResult = projectFinancingLogMapper.updateByPrimaryKeySelective(projectFinancingLog);
+        if(Integer.valueOf(1).equals(body.getSubjectType())) {//项目
+            Date now = new Date();
+            if(null == body.getId()){
+                projectFinancingLog.setCreateTime(now);
+                projectFinancingLogMapper.insertSelective(projectFinancingLog);
+                result.setData("保存成功");
+            }else{
+                projectFinancingLog.setUpdateTime(now);
+                projectFinancingLogMapper.updateByPrimaryKeySelective(projectFinancingLog);
+                result.setData("更新成功");
+            }
+        }else if(Integer.valueOf(2).equals(body.getSubjectType())) {//机构
+        	//TODO 机构融资需求信息后台数据有待完善
+        	
+        	result.setData("成功");
         }
         
-        if(projectFinancingLogInsertResult > 0){
-            result.setStatus(200);
-            result.setMessage("success");
-            result.setData("保存成功");
-            return result;
-        }
-        result.setStatus(300);
-        result.setMessage("failed");
-        result.setData("保存失败");
+        
+        result.setStatus(200);
+        result.setMessage("success");
         return result;
     }
 }

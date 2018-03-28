@@ -61,18 +61,15 @@ public class CollectProjectAuditBasicInfoServiceImpl implements CollectProjectAu
             result.setData(null);
             return result;
         }
-        System.err.println("111111111111111");
         collectProjectAuditBasicInfoDto.setCompanyFullName(projectSendB.getFullName());
         collectProjectAuditBasicInfoDto.setKernelDesc(projectSendB.getKernelDesc());
         collectProjectAuditBasicInfoDto.setUrl(projectSendB.getUrl());
         collectProjectAuditBasicInfoDto.setCompanyCity(projectSendB.getCity());
-        System.err.println("22222");
         //设置成立时间
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if(projectSendB.getEstablishTime() != null) {
         	collectProjectAuditBasicInfoDto.setEstablishedTime(sdf.format(projectSendB.getEstablishTime()));
         }
-        System.err.println("333333");
         List<ProjectSendTagsB> projectSendTagsBList = projectSendTagsBMapper.selectByProjectId(projectSendAuditB1.getProjectSendBId());
         List<String> projectSendTagsBLists = new ArrayList<>();
         String[] projectSendTagsBArr = null;
@@ -84,7 +81,6 @@ public class CollectProjectAuditBasicInfoServiceImpl implements CollectProjectAu
             projectSendTagsBLists.toArray(projectSendTagsBArr);
         }
         collectProjectAuditBasicInfoDto.setCompanyTag(projectSendTagsBArr);
-        System.err.println("4444444");
         List<ProjectSendCompetingB> projectSendCompetingBList = projectSendCompetingBMapper.selectByProjectId(projectSendAuditB1.getProjectSendBId());
         List<String> projectSendCompetingBLists = new ArrayList<>();
         String[] projectSendCompetingBArr = null;
@@ -96,7 +92,6 @@ public class CollectProjectAuditBasicInfoServiceImpl implements CollectProjectAu
             projectSendCompetingBLists.toArray(projectSendCompetingBArr);
         }
         collectProjectAuditBasicInfoDto.setCompetitiveProduct(projectSendCompetingBArr);
-        System.err.println("5555555");
         List<ProjectSendSegmentationB> projectSendSegmentationBList = projectSendSegmentationBMapper.selectByProjectId(projectSendAuditB1.getProjectSendBId());
         List<String> projectSendSegmentationBLists = new ArrayList<>();
         String[] projectSendSegmentationBArr = null;
@@ -108,7 +103,6 @@ public class CollectProjectAuditBasicInfoServiceImpl implements CollectProjectAu
             projectSendSegmentationBLists.toArray(projectSendSegmentationBArr);  
         }
         collectProjectAuditBasicInfoDto.setSegmentation(projectSendSegmentationBArr);
-        System.err.println("66666");
         result.setStatus(200);
         result.setMessage("success");
         result.setData(collectProjectAuditBasicInfoDto);

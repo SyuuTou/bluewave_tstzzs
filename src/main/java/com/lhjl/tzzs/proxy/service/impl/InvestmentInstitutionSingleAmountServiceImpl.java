@@ -21,7 +21,7 @@ public class InvestmentInstitutionSingleAmountServiceImpl implements InvestmentI
 
     @Override
     public int save(InvestmentInstitutionSingleAmount investmentInstitutionSingleAmount) {
-        return investmentInstitutionSingleAmountMapper.insert(investmentInstitutionSingleAmount);
+        return investmentInstitutionSingleAmountMapper.insertSelective(investmentInstitutionSingleAmount);
     }
 
     @Override

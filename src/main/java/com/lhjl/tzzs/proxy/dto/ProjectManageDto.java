@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by lanhaijulang on 2018/1/24.
@@ -10,8 +11,6 @@ public class ProjectManageDto {
     private String token;
 
     private Integer companyId;
-
-    private String[] investTypes;
 
     private String interiorOrganization;
 
@@ -23,11 +22,30 @@ public class ProjectManageDto {
 
     private BigDecimal dollarAmount;
 
-    private String BpEmail;
+    private String bpEmail;
+    /**
+     * 投资类型
+     */
+    private List<String> investTypes;
+    /**
+     * 经典案例
+     */
+    private List<String> classicCases;
+    /**
+     * 主体类型
+     */
+    private Integer subjectType;
+    
 
-    private String[] classicCases;
+    public Integer getSubjectType() {
+		return subjectType;
+	}
 
-    public String getToken() {
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}
+
+	public String getToken() {
         return token;
     }
 
@@ -43,13 +61,6 @@ public class ProjectManageDto {
         this.companyId = companyId;
     }
 
-    public String[] getInvestTypes() {
-        return investTypes;
-    }
-
-    public void setInvestTypes(String[] investTypes) {
-        this.investTypes = investTypes;
-    }
 
     public String getInteriorOrganization() {
         return interiorOrganization;
@@ -91,19 +102,31 @@ public class ProjectManageDto {
         this.dollarAmount = dollarAmount;
     }
 
-    public String getBpEmail() {
-        return BpEmail;
-    }
 
-    public void setBpEmail(String bpEmail) {
-        BpEmail = bpEmail;
-    }
+	public String getBpEmail() {
+		return bpEmail;
+	}
 
-    public String[] getClassicCases() {
-        return classicCases;
-    }
+	public void setBpEmail(String bpEmail) {
+		this.bpEmail = bpEmail;
+	}
 
-    public void setClassicCases(String[] classicCases) {
-        this.classicCases = classicCases;
-    }
+	public List<String> getInvestTypes() {
+		return investTypes;
+	}
+
+	public void setInvestTypes(List<String> investTypes) {
+		this.investTypes = investTypes;
+	}
+
+	public List<String> getClassicCases() {
+		return classicCases;
+	}
+
+	public void setClassicCases(List<String> classicCases) {
+		this.classicCases = classicCases;
+	}
+
+
+
 }

@@ -41,7 +41,12 @@
 
 
     <select id="queryHotCity" resultMap="labelResultMap">
- SELECT g.city name,g.city `value`  FROM (select count(distinct p.serial_number) counts ,city FROM  project_financing_log pfl left join  projects p on pfl.project_id = p.id  WHERE p.continent != '国外' and pfl.financing_time >= '2017-01-01' and city is not NULL and  city != ""  GROUP BY city ) g ORDER BY counts DESC limit 0,11  </select>
+ SELECT g.city name,g.city `value`  FROM (
+ select count(distinct p.serial_number) counts ,city FROM  project_financing_log pfl 
+ left join  projects p on pfl.project_id = p.id 
+ WHERE p.continent != '国外' and pfl.financing_time >= '2017-01-01' and city is not NULL and  city != "" 
+ GROUP BY city ) g ORDER BY counts DESC limit 0,11 
+    </select>
 
     <select id="queryHotEducation" resultMap="labelResultMap">
 select fe.education_experience name, fe.education_experience `value`, count(distinct mf.serial_number) count from project_financing_log pfl LEFT JOIN projects mf on pfl.project_id = mf.id

@@ -166,7 +166,6 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 			//根据UUID查询数据库中的唯一一条user对象
 			userToken=userTokenMapper.selectOne(userToken);
 			Users user = usersMapper.selectByPrimaryKey(userToken.getUserId());
-			System.err.println(user);
 			
 			if (user != null) {
 				outputDto.setActualName(user.getActualName());
@@ -189,18 +188,15 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 			if(user !=null) {
 				userPrimaryKey = user.getId();
 			}
-			System.err.println(userPrimaryKey+"*****userPrimaryKey******");
 			//获取用户的教育经历以及工作经历
 			List<String> userEducations = foundersEducationMapper.findFoundersEducationsByUserId(userPrimaryKey);
 			if (userEducations != null) {
 				outputDto.setEducationExperience(userEducations);
 			}
-			System.err.println(userEducations+"****userEducations******");
 			List<String> userWorks = foundersWorkMapper.findFoundersWorksByUserId(userPrimaryKey);
 			if(userWorks != null) {
 				outputDto.setWorkExperience(userWorks);
 			}
-			System.err.println(userWorks+"****userWorks******");
 			//获取项目的相关信息
 			Projects pro = new Projects();
 			pro.setShortName(projectShortName);
@@ -262,9 +258,6 @@ public class InterviewServiceImpl extends GenericService implements InterviewSer
 		        List<InterviewListOutputDto> interviewList = interviewMapper.getInterviewList(body);
 		        //查询出的所有的行数
 		        Long total = interviewMapper.getInterviewListCount(body);
-		        
-//		        System.err.println("total****"+total);
-//		        System.err.println("interviewList****"+interviewList);
 		        
 		        map.put("list", interviewList);
 		        map.put("total", total);

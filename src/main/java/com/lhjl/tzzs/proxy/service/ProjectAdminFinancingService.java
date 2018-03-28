@@ -9,7 +9,7 @@ import com.lhjl.tzzs.proxy.dto.FinancingLogDto.FinancingLogOutputDto;
  */
 public interface ProjectAdminFinancingService {
 
-    CommonDto<FinancingLogOutputDto> getFinancingLog(Integer projectId);
+    CommonDto<FinancingLogOutputDto> getFinancingLog(Integer subjectId,Integer subjectType);
 
     CommonDto<String> addOrUpdateFinancingLog(FinancingLogInputDto body);
 }

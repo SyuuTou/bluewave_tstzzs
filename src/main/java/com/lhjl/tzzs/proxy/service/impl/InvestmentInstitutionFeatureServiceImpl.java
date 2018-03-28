@@ -18,7 +18,7 @@ public class InvestmentInstitutionFeatureServiceImpl implements InvestmentInstit
 
     @Override
     public Integer save(InvestmentInstitutionFeature investmentInstitutionFeature) {
-        return investmentInstitutionFeatureMapper.insert(investmentInstitutionFeature);
+        return investmentInstitutionFeatureMapper.insertSelective(investmentInstitutionFeature);
     }
 
     @Override
@@ -28,6 +28,6 @@ public class InvestmentInstitutionFeatureServiceImpl implements InvestmentInstit
 
     @Override
     public Integer updateByPrimaryKey(InvestmentInstitutionFeature investmentInstitutionFeature) {
-        return investmentInstitutionFeatureMapper.updateByPrimaryKey(investmentInstitutionFeature);
+        return investmentInstitutionFeatureMapper.updateByPrimaryKeySelective(investmentInstitutionFeature);
     }
 }

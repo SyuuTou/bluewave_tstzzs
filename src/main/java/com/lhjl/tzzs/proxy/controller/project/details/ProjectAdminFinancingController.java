@@ -19,18 +19,18 @@ public class ProjectAdminFinancingController extends GenericController {
     private ProjectAdminFinancingService projectAdminFinancingService;
 
     /**
-     * 获取项目融资需求列表
+     * 获取项目融资需求
      * @param projectId
      * @return
      */
     @GetMapping("/getFinancingLog")
-    public CommonDto<FinancingLogOutputDto> getFinancingLog(Integer projectId){
-
+    public CommonDto<FinancingLogOutputDto> getFinancingLog(Integer subjectId,Integer subjectType){
         CommonDto<FinancingLogOutputDto> result = new CommonDto<>();
         try {
-            result = projectAdminFinancingService.getFinancingLog(projectId);
+            result = projectAdminFinancingService.getFinancingLog(subjectId,subjectType);
         }catch (Exception e){
             LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            
             result.setMessage("服务器端发生错误");
             result.setData(null);
             result.setStatus(502);

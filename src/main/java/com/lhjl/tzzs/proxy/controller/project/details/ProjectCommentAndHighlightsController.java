@@ -1,6 +1,8 @@
 package com.lhjl.tzzs.proxy.controller.project.details;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
+import com.lhjl.tzzs.proxy.dto.CommentAndHighlightsInputDto;
+import com.lhjl.tzzs.proxy.dto.CommentAndHighlightsOutputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectsListInputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectsUpdateInputDto;
@@ -32,14 +34,15 @@ public class ProjectCommentAndHighlightsController extends GenericController {
 	 /**
      * 根据id回显 公司全部信息(主要用于获取项目简介 以及 投资亮点)
      * @param appid
-     * @param proId 项目id
+     * @param proId 主体id
+     * @param subjectType 主体类型
      * @return
      */
     @GetMapping("/v{appid}/echo/proinfobyid")
-    public CommonDto<Projects> echoProInfoById(@PathVariable Integer appid,Integer proId){
-    	CommonDto<Projects> result =new CommonDto<>();
+    public CommonDto<CommentAndHighlightsOutputDto> echoProInfoById(@PathVariable Integer appid,Integer subjectId,Integer subjectType){
+    	CommonDto<CommentAndHighlightsOutputDto> result =new CommonDto<>();
     	try {
-    		result=projectsService.getProInfoById(appid,proId);
+    		result=projectsService.getProInfoById(appid,subjectId,subjectType);
 	    }catch(Exception e) {
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		  
@@ -53,11 +56,11 @@ public class ProjectCommentAndHighlightsController extends GenericController {
     /**
      * 根据id更新公司相关信息(主要用于更新项目简介 以及 投资亮点)
      * @param appid
-     * @param proId  
+     * @param body 简介 以及 投资亮点请求体
      * @return
      */
     @PutMapping("/v{appid}/edit/proinfobyid")
-    public CommonDto<Boolean> editProInfoById(@PathVariable Integer appid,@RequestBody Projects body){
+    public CommonDto<Boolean> editProInfoById(@PathVariable Integer appid,@RequestBody CommentAndHighlightsInputDto body){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
     		result=projectsService.updateProInfos(appid,body);

@@ -25,13 +25,15 @@ public class ProjectAdminFundMangeController extends GenericController{
 
     /**
      * 获取基金管理信息
+     * @param subjectId 项目id
+     * @param subjectType 主体类型
      * @return
      */
     @GetMapping("get/projectmanage")
-    public CommonDto<ProjectManageDto> getProjectManage(Integer projectId){
+    public CommonDto<ProjectManageDto> getProjectManage(Integer subjectId,Integer subjectType){
         CommonDto<ProjectManageDto> result = new CommonDto<>();
         try {
-            result = projectAdminManageService.getProjectMange(projectId);
+            result = projectAdminManageService.getProjectMange(subjectId,subjectType);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);

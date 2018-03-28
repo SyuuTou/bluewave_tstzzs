@@ -54,14 +54,15 @@ public class ProjectProgressController extends GenericController {
     /**
      * 根据id删除进展的信息
      * @param appid
-     * @param id 进展的id
+     * @param id
+     * @param subjectType
      * @return
      */
     @DeleteMapping("/v{appid}/del/progressinfobyid")
-    public CommonDto<Boolean> deleteProgressInfoById(@PathVariable Integer appid,Integer id){
+    public CommonDto<Boolean> deleteProgressInfoById(@PathVariable Integer appid,Integer id,Integer subjectType){
     	CommonDto<Boolean> result =new CommonDto<>();
     	try {
-    		result=projectsService.removeProgressInfoById(appid,id);
+    		result=projectsService.removeProgressInfoById(appid,id,subjectType);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
@@ -98,10 +99,10 @@ public class ProjectProgressController extends GenericController {
      * @return
      */
     @GetMapping("/v{appid}/list/project/progress")
-    public CommonDto<List<ProjectProgress>> listProProgress(@PathVariable("appid") Integer appid,Integer companyId){
+    public CommonDto<List<ProjectProgress>> listProProgress(@PathVariable("appid") Integer appid,Integer companyId,Integer subjectType){
     	CommonDto<List<ProjectProgress>> result =new CommonDto<>();
     	try {
-    		result=projectsService.listProProgress(appid,companyId);
+    		result=projectsService.listProProgress(appid,companyId,subjectType);
 	    }catch(Exception e) {  
 	    	this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
     		    
