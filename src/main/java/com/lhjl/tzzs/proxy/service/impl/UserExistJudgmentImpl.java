@@ -55,7 +55,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
 
         if (usersWeixins.size()>0){
             usersWeixin = usersWeixins.get(0);
-            if (StringUtils.isNotEmpty(usersWeixin.getUnionId())){
+            if (StringUtils.isNotEmpty(unionid)){
                 usersWeixin.setUnionId(unionid);
                 usersWeixinMapper.updateByPrimaryKey(usersWeixin);
             }
@@ -88,11 +88,12 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
 
 
         }else{
+            if (null != unionid ) {
             usersWeixin = new UsersWeixin();
             usersWeixin.setUnionId(unionid);
 
             usersWeixins = usersWeixinMapper.select(usersWeixin);
-            if (usersWeixins.size()>0){
+            if (usersWeixins.size()>0) {
                 usersWeixin = usersWeixins.get(0);
                 usersWeixin.setOpenid(oppenId);
                 usersWeixin.setId(null);
@@ -104,7 +105,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
                 int userId = usersWeixinForId.getUserId();
 
                 log.info("用户微信号已存在，对应的用户id为：");
-                log.info("userId={}",userId);
+                log.info("userId={}", userId);
 
                 //去获取token
                 UserToken userToken = new UserToken();
@@ -116,6 +117,7 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
                 //  log.info("你在这里呀！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
                 if (handlerUserInfo(oppenId, appid, unionid, result, userExsitJudgmentDto, usersWeixinForId, userId, userTokens))
                     return result;
+            }
 
             }else {
 
