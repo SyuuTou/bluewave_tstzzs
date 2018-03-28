@@ -5,8 +5,10 @@ import java.util.Map;
 
 import com.lhjl.tzzs.proxy.dto.ChangePrincipalInputDto;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.PagingOutputDto;
 import com.lhjl.tzzs.proxy.dto.VIPOutputDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorListInputDto;
+import com.lhjl.tzzs.proxy.dto.investorDto.InvestorsOutputDto;
 import com.lhjl.tzzs.proxy.model.AdminUser;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.model.MetaUserLevel;
@@ -20,7 +22,7 @@ public interface InvestorService {
 	 * @param body 投资人列表请求体
 	 * @return
 	 */
-	CommonDto<Map<String,Object>> listInvestorsInfos(Integer appid, InvestorListInputDto body);
+	CommonDto<PagingOutputDto<InvestorsOutputDto>> listInvestorsInfos(Integer appid, InvestorListInputDto body);
 	/**
      * 投资人的用户匹配
      * @param appid
