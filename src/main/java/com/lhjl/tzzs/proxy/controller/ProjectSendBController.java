@@ -1,6 +1,8 @@
 package com.lhjl.tzzs.proxy.controller;
 
 import com.lhjl.tzzs.proxy.dto.*;
+import com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectKernelInfoOutputDto;
+import com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectListInputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectLogoInfoOutputDto;
 import com.lhjl.tzzs.proxy.model.ProjectSendFinancingHistoryB;
 import com.lhjl.tzzs.proxy.service.GenericService;
@@ -218,4 +220,28 @@ public class ProjectSendBController extends GenericService{
         }
         return result;
     }
+
+
+    /**
+     * 天使投资指数的提交项目列表
+     * @param appid
+     * @param body
+     * @return
+     */
+    @PostMapping("/v{appid}/send/list/projects")
+    public CommonDto<PagingOutputDto<ProjectKernelInfoOutputDto>> listProjectInfos(@PathVariable("appid") Integer appid, @RequestBody ProjectListInputDto body){
+        CommonDto<PagingOutputDto<ProjectKernelInfoOutputDto>> result =new CommonDto<>();
+        try {
+            result = projectSendBService.listProjectInfos(appid,body);
+        }catch(Exception e) {
+            this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
+
+            result.setData(null);
+            result.setMessage("fail");
+            result.setStatus(500);
+        }
+        return result;
+    }
+
+
 }

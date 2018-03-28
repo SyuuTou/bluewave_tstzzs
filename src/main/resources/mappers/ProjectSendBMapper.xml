@@ -20,7 +20,23 @@
     <result column="edit_status" jdbcType="INTEGER" property="editStatus" />
     <result column="appid" jdbcType="INTEGER" property="appid" />
     <result column="establish_time" jdbcType="TIMESTAMP" property="establishTime" />
+    <result column="serial_number" jdbcType="INTEGER" property="serialNumber" />
   </resultMap>
+
+  <resultMap id="ProjectKernelInfoOutputMap" type="com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectKernelInfoOutputDto">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="projectSendId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="project_logo" jdbcType="VARCHAR" property="logo" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc" />
+    <result column="stage" jdbcType="VARCHAR" property="stage"/>
+    <result column="segmentation_name" jdbcType="VARCHAR" property="segmentation"/>
+  </resultMap>
+
   <select id="getLastCreateProject" resultMap="BaseResultMap">
     SELECT * FROM project_send_b where user_id = #{userId} and appid = #{appid}
     order by create_time desc
@@ -43,4 +59,29 @@
     (SELECT id FROM project_send_b where user_id = #{userId})
     group by investment_institution_id
   </select>
+
+  <select id="maxSerialNumber" resultMap="BaseResultMap">
+      select * from projects where serial_number between 100000 and 200000 order by serial_number desc
+      limit 0,1;
+  </select>
+
+
+  <select id="getSendProjects" resultMap="ProjectKernelInfoOutputMap">
+    select psb.id, psb.user_id, psb.project_logo, psb.short_name, psb.city, psb.kernel_desc, psb.create_time, psfab.stage, pssb.segmentation_name
+    from project_send_b psb
+    left join project_send_financing_approval_b psfab on psb.id = psfab.project_send_b_id
+    left join project_send_segmentation_b pssb on psb.id = pssb.project_send_b_id
+    where psb.user_id =#{userId} and psb.appid =#{appId}
+    order by psb.create_time desc
+    limit #{start},#{pageSize}
+  </select>
+
+  <!--<select id="getSendProjectsCount" resultType="java.lang.Integer">-->
+    <!--select count(1)-->
+    <!--from project_send_b psb-->
+    <!--left join project_send_financing_approval_b psfab on psb.id = psfab.project_send_b_id-->
+    <!--left join project_send_segmentation_b pssb on psb.id = pssb.project_send_b_id-->
+    <!--where psb.user_id =#{userId}-->
+  <!--</select>-->
+
 </mapper>
