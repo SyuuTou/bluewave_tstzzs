@@ -48,7 +48,7 @@ public class CollectProjectAuditBasicInfoController extends GenericController{
     
     /**
      * ZYY
-     * 读取项目信息接口
+     * 根据token读取项目信息接口
      * @param token
      * @param appid
      * @return
