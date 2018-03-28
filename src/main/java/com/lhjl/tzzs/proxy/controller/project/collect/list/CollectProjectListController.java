@@ -1,10 +1,13 @@
 package com.lhjl.tzzs.proxy.controller.project.collect.list;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.ProjectAuditInputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendAuditBInputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBAdminListInputDto;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.ProjectAuditBService;
+import com.lhjl.tzzs.proxy.service.ProjectAuditService;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -12,13 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class CollectProjectAuditBSubmitAndListController extends GenericService{
+public class CollectProjectListController extends GenericService{
 
     @Resource
     private ProjectAuditBService projectAuditBService;
 
+
     /**
-     * 读取审核项目列表的接口
+     * 采集项目审核列表
      * @return
      */
     @PostMapping("/v{appid}/get/project/send/list")
@@ -36,24 +40,6 @@ public class CollectProjectAuditBSubmitAndListController extends GenericService{
 
         return result;
     }
-    /**
-     * 提交项目审核接口
-     * @param body
-     * @param appid
-     * @return
-     */
-    @PostMapping("/v{appid}/send/project/audit")
-    public CommonDto<String> auditProjectSend(@RequestBody ProjectSendAuditBInputDto body, @PathVariable Integer appid){
-        CommonDto<String> result  = new CommonDto<>();
-        try {
-            result = projectAuditBService.auditProjectSend(body, appid);
-        }catch (Exception e){
-            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
-            result.setMessage("服务器端发生错误");
-            result.setData(null);
-            result.setStatus(502);
-        }
-
-        return result;
-    }
+    
+    
 }
