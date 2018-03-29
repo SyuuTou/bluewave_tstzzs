@@ -60,28 +60,14 @@ public class FounderWorkServiceImpl implements FounderWorkService{
         FoundersWork foundersWork = new FoundersWork();
         foundersWork.setFounderId(founderId);
 
-        List<FoundersWork> foundersWorkList = foundersWorkMapper.select(foundersWork);
-        if (foundersWorkList.size() > 0){
-            foundersWorkMapper.delete(foundersWork);
-            if (workExperience != null){
-                for (String s:workExperience){
-                    FoundersWork foundersWorkForInsert = new FoundersWork();
-                    foundersWorkForInsert.setFounderId(founderId);
-                    foundersWorkForInsert.setWorkExperience(s);
+        foundersWorkMapper.delete(foundersWork);  
+        if (workExperience != null){
+            for (String s:workExperience){
+                FoundersWork foundersWorkForInsert = new FoundersWork();
+                foundersWorkForInsert.setFounderId(founderId);
+                foundersWorkForInsert.setWorkExperience(s);
 
-                    foundersWorkMapper.insertSelective(foundersWorkForInsert);
-                }
-            }
-
-        }else {
-            if (workExperience != null){
-                for (String s:workExperience){
-                    FoundersWork foundersWorkForInsert = new FoundersWork();
-                    foundersWorkForInsert.setFounderId(founderId);
-                    foundersWorkForInsert.setWorkExperience(s);
-
-                    foundersWorkMapper.insertSelective(foundersWorkForInsert);
-                }
+                foundersWorkMapper.insertSelective(foundersWorkForInsert);
             }
         }
     }

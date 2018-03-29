@@ -72,7 +72,7 @@
     left join project_send_financing_approval_b psfab on psb.id = psfab.project_send_b_id
     left join project_send_segmentation_b pssb on psb.id = pssb.project_send_b_id
     left join user_token ut on psb.user_id = ut.user_id
-    where ut.token =#{token} and psb.appid =#{appId}
+    where ut.token =#{token}
     order by psb.create_time desc
     limit #{start},#{pageSize}
   </select>

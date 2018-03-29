@@ -133,7 +133,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
                     projectSoruceInt = (Integer)m.get("project_source");
                 }
                 switch (projectSoruceInt){
-                    case 1:projectSoruce = "创业者提交";
+                    case 1:projectSoruce = "创业者提交";  
                     break;
                 }
                 projectSendBAdminListOutputDto.setProjectSource(projectSoruce);

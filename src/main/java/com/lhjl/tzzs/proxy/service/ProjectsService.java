@@ -96,7 +96,7 @@ public interface ProjectsService {
      * @param body
      * @return
      */
-	CommonDto<Map<String, Object>> listProInfos(Integer appid, ProjectsListInputDto body);
+	CommonDto<PagingOutputDto<ProjectsListOutputDto>> listProInfos(Integer appid, ProjectsListInputDto body);
 	/**
 	 * 更新项目的跟进状态
 	 * @param appid

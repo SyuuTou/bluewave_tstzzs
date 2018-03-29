@@ -152,7 +152,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             return result;
         }
 
-
+        //获取用户id
         Integer userid = userLoginService.getUserIdByToken(body.getToken(),appid);
         if (userid == -1){
             result.setMessage("用户token非法，请检查");
@@ -168,29 +168,25 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             result = resulta;
             return result;
         }
-
+        //更新项目
         ProjectSendB projectSendB = new ProjectSendB();
+        //设置提交项目表的主键id？
         projectSendB.setId(body.getProjectSendId());
-        if (body.getProjectLogo() != null){
-            projectSendB.setProjectLogo(body.getProjectLogo());
-        }
+        projectSendB.setProjectLogo(body.getProjectLogo());
         projectSendB.setShortName(body.getShortName());
-        if (body.getFullName() != null){
-            projectSendB.setFullName(body.getFullName());
-        }
+        projectSendB.setFullName(body.getFullName());
         projectSendB.setKernelDesc(body.getKernelDesc());
         projectSendB.setProjectInvestmentHighlights(body.getProjectInvestmentHighlights());
         projectSendB.setCommet(body.getCommet());
-        if (body.getUrl() != null){
-            projectSendB.setUrl(body.getUrl());
-        }
+        projectSendB.setUrl(body.getUrl());
         projectSendB.setCity(body.getCity());
         projectSendB.setCreateTime(now);
+        //编辑状态：编辑完成了
         projectSendB.setEditStatus(1);
 
         projectSendBMapper.updateByPrimaryKeySelective(projectSendB);
 
-        //项目领域
+        //项目领域更新
         CommonDto<String> result1 =  createProjectSegmentation(body, appid);
         if (result1.getStatus() != 200){
             result = result1;
@@ -222,13 +218,14 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             return result;
         }
 
-        //创始人信息
+        //用户以及创始人信息
         CommonDto<String> result5 =updateUserInfo(body,appid);
         if (result5.getStatus() != 200){
             result = result5;
 
             return result;
         }
+        
 
         //机构项目关系
         CommonDto<String> result6 = createProjectSendAndInstitution(body.getInstitutionId(),body.getProjectSendId(),body.getPrepareId(),appid);
@@ -555,29 +552,24 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         }
 
         //先删除原有的数据
-        ProjectSendFinancingApprovalB projectSendFinancingApprovalB1 = new ProjectSendFinancingApprovalB();
-        projectSendFinancingApprovalB1.setProjectSendBId(body.getProjectSendId());
-        projectSendFinancingApprovalB1.setAppid(appid);
+        ProjectSendFinancingApprovalB e = new ProjectSendFinancingApprovalB();
+        e.setProjectSendBId(body.getProjectSendId());
+        e.setAppid(appid);
 
-        projectSendFinancingApprovalBMapper.delete(projectSendFinancingApprovalB1);
+        projectSendFinancingApprovalBMapper.delete(e);
 
-        ProjectSendFinancingApprovalB projectSendFinancingApprovalB = new ProjectSendFinancingApprovalB();
-        projectSendFinancingApprovalB.setStage(body.getStage());
-        projectSendFinancingApprovalB.setAmount(body.getAmount());
-        projectSendFinancingApprovalB.setProjectSendBId(body.getProjectSendId());
-        projectSendFinancingApprovalB.setAppid(appid);
-        projectSendFinancingApprovalB.setUserId(userid);
-        projectSendFinancingApprovalB.setCreateTime(now);
-        if (body.getCurrency() == null){
-            body.setCurrency(0);
-        }
-        projectSendFinancingApprovalB.setCurrency(body.getCurrency());
-        projectSendFinancingApprovalB.setShareDivest(body.getShareDivest());
-        if (body.getProjectFinancingUseful() != null){
-            projectSendFinancingApprovalB.setProjectFinancingUseful(body.getProjectFinancingUseful());
-        }
+        ProjectSendFinancingApprovalB obj = new ProjectSendFinancingApprovalB();
+        obj.setProjectSendBId(body.getProjectSendId());
+        obj.setStage(body.getStage());
+        obj.setAmount(body.getAmount());
+        obj.setAppid(appid);
+        obj.setUserId(userid);
+        obj.setCreateTime(now);
+        obj.setCurrency(body.getCurrency()==null ?0:body.getCurrency());
+        obj.setShareDivest(body.getShareDivest());
+        obj.setProjectFinancingUseful(body.getProjectFinancingUseful());
 
-        projectSendFinancingApprovalBMapper.insertSelective(projectSendFinancingApprovalB);
+        projectSendFinancingApprovalBMapper.insertSelective(obj);
 
         result.setStatus(200);
         result.setMessage("success");
@@ -621,7 +613,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
 
             return result;
         }
-
+        //更新用户信息
         Users users = new Users();
         users.setId(userId);
         users.setActualName(body.getActualName());
@@ -642,6 +634,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         if (foundersList.size() > 0){
             founderId = foundersList.get(0).getId();
         }else {
+        	//认证为创始人
             Founders founders = new Founders();
             founders.setName(body.getActualName());
             founders.setUserId(userId);
@@ -755,17 +748,17 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         projectLogoInfoOutputDto.setId((Integer)projectLogoInfo.get("id"));
         projectLogoInfoOutputDto.setShortName((String)projectLogoInfo.get("short_name"));
         projectLogoInfoOutputDto.setProjectSourceId((Integer)projectLogoInfo.get("project_source"));
-        String actualName = "";
+        /*String actualName = "";
         if (projectLogoInfo.get("actual_name") != null){
             actualName = (String) projectLogoInfo.get("actual_name");
-        }
-        projectLogoInfoOutputDto.setUserName(actualName);
+        }*/
+        projectLogoInfoOutputDto.setUserName((String) projectLogoInfo.get("actual_name"));
         projectLogoInfoOutputDto.setUserId((Integer)projectLogoInfo.get("userid"));
-        String projectLogo = "";
+        /*String projectLogo = "";
         if (projectLogoInfo.get("project_logo") != null){
             projectLogo = (String) projectLogoInfo.get("project_logo");
-        }
-        projectLogoInfoOutputDto.setProjectLogo(projectLogo);
+        }*/
+        projectLogoInfoOutputDto.setProjectLogo((String) projectLogoInfo.get("project_logo"));
 
         result.setData(projectLogoInfoOutputDto);
         result.setStatus(200);
@@ -1136,7 +1129,6 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
     @Transactional
     public CommonDto<String> createProjectSendAudit(ProjectSendBDto body, Integer appid,Integer prepareId,Integer userid){
         CommonDto<String> result = new CommonDto<>();
-        Date now = new Date();
         //获取用户最近未审核的提交记录
         Boolean aduitYn =false;
         List<ProjectSendAuditB> projectSendAuditBList = projectSendAuditBMapper.searchProjectSendAuditB(userid,appid);
@@ -1145,6 +1137,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         }
 
         CommonDto<Boolean> createOrUpdate = projectSendAuditJudgement(body,appid,aduitYn);
+        
         if (createOrUpdate.getData()){
             Integer projectSendAuditId = projectSendAuditBList.get(0).getId();
             ProjectSendAuditB projectSendAuditBForUpdate = new ProjectSendAuditB();
@@ -1158,9 +1151,10 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             projectSendAuditBForInsert.setProjectSendBId(body.getProjectSendId());
             projectSendAuditBForInsert.setPrepareId(prepareId);
             projectSendAuditBForInsert.setAppid(appid);
+            //表示待审核
             projectSendAuditBForInsert.setAuditStatus(0);
             projectSendAuditBForInsert.setUserId(userid);
-            projectSendAuditBForInsert.setCreateTime(now);
+            projectSendAuditBForInsert.setCreateTime(new Date());
             projectSendAuditBForInsert.setProjectSource(1);
 
             projectSendAuditBMapper.insertSelective(projectSendAuditBForInsert);

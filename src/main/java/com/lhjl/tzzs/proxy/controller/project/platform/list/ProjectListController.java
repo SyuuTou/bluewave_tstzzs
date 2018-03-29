@@ -1,8 +1,10 @@
-package com.lhjl.tzzs.proxy.controller.project.list;
+package com.lhjl.tzzs.proxy.controller.project.platform.list;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.PagingOutputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectsListInputDto;
+import com.lhjl.tzzs.proxy.dto.ProjectsListOutputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectsUpdateInputDto;
 import com.lhjl.tzzs.proxy.model.DatasOperationManage;
 import com.lhjl.tzzs.proxy.model.MetaDataSourceType;
@@ -38,8 +40,8 @@ public class ProjectListController extends GenericController {
      * @return
      */
     @PostMapping("/v{appid}/list/projects")  
-    public CommonDto<Map<String, Object>> listProject(@PathVariable("appid") Integer appid,@RequestBody ProjectsListInputDto body){
-    	CommonDto<Map<String, Object>> result=new CommonDto<>();
+    public CommonDto<PagingOutputDto<ProjectsListOutputDto>> listProject(@PathVariable("appid") Integer appid,@RequestBody ProjectsListInputDto body){
+    	CommonDto<PagingOutputDto<ProjectsListOutputDto>> result=new CommonDto<>();
     	try {
     		result=projectsService.listProInfos(appid,body);
     	}catch(Exception e) {

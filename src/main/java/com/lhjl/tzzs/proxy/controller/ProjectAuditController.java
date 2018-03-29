@@ -18,77 +18,11 @@ import com.lhjl.tzzs.proxy.service.ProjectAuditService;
 
 
 @RestController
-public class ProjectAuditController {
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(ProjectAuditController.class);
+public class ProjectAuditController extends GenericController {
 
     @Resource
     private ProjectAuditService projectAuditService;
 
-    /**
-     * 后台审核项目接口
-     * @param projectSourceId 项目源id
-     * @param auditStatus  审核状态
-     * @param projctSourceType 项目源类型
-     * @param auditDescription 审核描述
-     * @param auditAdminName 审核人名称
-     * @return
-     */
-    @GetMapping("admin/project/audit")
-    public CommonDto<String> adminProjectAudit(Integer projectSourceId,Integer auditStatus,Integer projctSourceType,String auditDescription,String auditAdminName){
-        CommonDto<String> result  = new CommonDto<>();
-
-        if (projectSourceId == null){
-            result.setStatus(502);
-            result.setMessage("项目源id不能为空");
-            result.setData(null);
-
-            return result;
-        }
-
-        if (auditStatus == null){
-            result.setStatus(502);
-            result.setMessage("项目审核状态不能为空");
-            result.setData(null);
-
-            return result;
-        }
-
-        if (projctSourceType == null){
-            result.setStatus(502);
-            result.setMessage("项目源类型不能为空");
-            result.setData(null);
-
-            return result;
-        }
-
-        if (auditDescription == null){
-            auditDescription = "";
-        }
-
-        if (auditAdminName == null){
-            auditAdminName = "";
-        }
-
-        //为了避免多改，先在这里把入参整合一下
-        ProjectAuditInputDto body =new ProjectAuditInputDto();
-        body.setAuditAdminName(auditAdminName);
-        body.setAuditDescription(auditDescription);
-        body.setAuditStatus(auditStatus);
-        body.setProjctSourceType(projctSourceType);
-        body.setProjectSourceId(projectSourceId);
-
-
-        try {
-            result = projectAuditService.adminAuditProject(body);
-        }catch (Exception e){
-            log.info(e.getMessage(),e.fillInStackTrace());
-            result.setMessage("服务器发生错误");
-            result.setData(null);
-            result.setStatus(502);
-        }
-
-        return result;
-    }
     @GetMapping("search/likes")
     public CommonDto<List<Map<String, Object>>> findProject(Integer id){
 
@@ -105,7 +39,7 @@ public class ProjectAuditController {
         } catch (Exception e) {
             result.setStatus(5101);
             result.setMessage("项目id不存在");
-            log.error(e.getMessage());
+            this.LOGGER.error(e.getMessage());
         }
         return result;
     }
@@ -123,7 +57,7 @@ public class ProjectAuditController {
         } catch (Exception e) {
             result.setStatus(5101);
             result.setMessage("服务器端发生错误");
-            log.error(e.getMessage());
+            this.LOGGER.error(e.getMessage());
         }
         return result;
     }
@@ -147,7 +81,7 @@ public class ProjectAuditController {
         } catch (Exception e) {
             result.setStatus(5101);
             result.setMessage("项目id不存在");
-            log.error(e.getMessage());
+            this.LOGGER.error(e.getMessage());
         }
         return result;
     }
@@ -158,7 +92,7 @@ public class ProjectAuditController {
         try {
             result = projectAuditService.adminAddAdministractor(projetcId,userId);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
             result.setData(null);

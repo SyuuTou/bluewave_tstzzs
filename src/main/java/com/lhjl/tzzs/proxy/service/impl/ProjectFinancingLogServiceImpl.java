@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.service.impl;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.PagingOutputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogInputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogOutputDto;
 import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadInputDto;
@@ -49,15 +50,15 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
     
     @Transactional(readOnly=true)
     @Override
-    public CommonDto<Map<String, Object>> getProjectFinancingLogList(ProjectFinancingLogInputDto body) {
-        CommonDto<Map<String,Object>> result = new CommonDto<>();
+    public CommonDto<PagingOutputDto<ProjectFinancingLogOutputDto>> getProjectFinancingLogList(ProjectFinancingLogInputDto body) {
+        CommonDto<PagingOutputDto<ProjectFinancingLogOutputDto>> result = new CommonDto<>();
         
         SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd");
         //输入实际字符串格式化对象
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //输出时间字符串格式化对象
         SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-        Map<String,Object> map = new HashMap<>();
+        PagingOutputDto<ProjectFinancingLogOutputDto> pod = new PagingOutputDto<ProjectFinancingLogOutputDto>();
         //格式化输入时间字符串
         if (body.getBeginTimeInputStr() != null){
             try {
@@ -85,7 +86,7 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
         this.LOGGER.info("**"+body);
         //数据输出
         List<ProjectFinancingLogOutputDto> projectFinancingLogList = projectFinancingLogMapper.getProjectFinancingLogLists(body);
-        Integer totalcount = projectFinancingLogMapper.getProjectFinancingLogListCount(body);
+        Long totalcount = projectFinancingLogMapper.getProjectFinancingLogListCount(body);
         /**
          * 格式化输出时间转换为字符串
          */
@@ -105,14 +106,14 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
 			}
         });
         
-        map.put("total",totalcount);
-        map.put("list",projectFinancingLogList);
+        pod.setTotal((long)totalcount);
+        pod.setList(projectFinancingLogList);
         
-        map.put("currentPage",body.getCurrentPage()); 
-        map.put("pageSize",body.getPageSize());
+        pod.setCurrentPage(body.getCurrentPage()); 
+        pod.setPageSize(body.getPageSize());
         
 
-        result.setData(map);
+        result.setData(pod);
         result.setStatus(200);
         result.setMessage("success");
 

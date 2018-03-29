@@ -1,7 +1,9 @@
 package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.PagingOutputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogInputDto;
+import com.lhjl.tzzs.proxy.dto.ProjectFinancingLogOutputDto;
 import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadInputDto;
 import com.lhjl.tzzs.proxy.dto.projectfinancinglog.ProjectFinancingLogHeadOutputDto;
 import com.lhjl.tzzs.proxy.model.ProjectFinancingLog;
@@ -17,7 +19,7 @@ public interface ProjectFinancingLogService {
      * @param body
      * @return
      */
-    CommonDto<Map<String,Object>> getProjectFinancingLogList(ProjectFinancingLogInputDto body);
+    CommonDto<PagingOutputDto<ProjectFinancingLogOutputDto>> getProjectFinancingLogList(ProjectFinancingLogInputDto body);
     /**
 	 * 输出投资事件详情中的头部信息
 	 * @param appid

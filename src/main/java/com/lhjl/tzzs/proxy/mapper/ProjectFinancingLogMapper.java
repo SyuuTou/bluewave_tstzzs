@@ -26,7 +26,7 @@ public interface ProjectFinancingLogMapper extends OwnerMapper<ProjectFinancingL
      * @param body
      * @return
      */
-    Integer getProjectFinancingLogListCount(ProjectFinancingLogInputDto body);
+    Long getProjectFinancingLogListCount(ProjectFinancingLogInputDto body);
     /**
      * 获取所有的融资状态
      * @return

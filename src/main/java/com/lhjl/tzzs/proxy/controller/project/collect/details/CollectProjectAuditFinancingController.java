@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.project.collect;
+package com.lhjl.tzzs.proxy.controller.project.collect.details;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CollectProjectAuditFinancingDto;
@@ -16,7 +16,11 @@ public class CollectProjectAuditFinancingController extends GenericController{
 
     @Autowired
     private CollectProjectAuditFinancingService collectProjectAuditFinancingService;
-
+    /**
+     * 回显采集项目融资需求信息
+     * @param projectId
+     * @return
+     */
     @GetMapping("/getcollectprojectauditfinancing")
     public CommonDto<CollectProjectAuditFinancingDto> getCollectProjectAuditFinancing(Integer projectId){
         CommonDto<CollectProjectAuditFinancingDto> result = new CommonDto<>();

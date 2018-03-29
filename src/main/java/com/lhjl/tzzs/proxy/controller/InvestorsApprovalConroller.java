@@ -25,8 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.lhjl.tzzs.proxy.service.InvestorsApprovalService;
 @RestController
-public class InvestorsApprovalConroller {
-	private static final Logger log = LoggerFactory.getLogger(InvestorsApprovalConroller.class);
+public class InvestorsApprovalConroller extends GenericController {
 	@Resource
 	private InvestorsApprovalService investorsApprovalService;
 
@@ -59,9 +58,9 @@ public class InvestorsApprovalConroller {
 	     } catch (Exception e) {
 		     result.setStatus(5101);
 		     result.setMessage("显示页面异常，请稍后再试");
-		     log.error(e.getMessage(), e);
+		     this.LOGGER.error(e.getMessage(), e);
 	     }
-	     return result;
+	     	return result;
 	     }
 
 	/**
@@ -83,7 +82,7 @@ public class InvestorsApprovalConroller {
 		} catch (Exception e) {
 			result.setStatus(5101);
 			result.setMessage("显示页面异常，请稍后再试");
-			log.error(e.getMessage());
+			this.LOGGER.error(e.getMessage());
 		}
 		return result;
 	}
@@ -107,7 +106,7 @@ public class InvestorsApprovalConroller {
 
 			result.setStatus(5101);
 			result.setMessage("显示页面异常，请稍后再试");
-			log.error(e.getMessage(), e);
+			this.LOGGER.error(e.getMessage(), e);
 		}
 		return result;
 	}
@@ -135,7 +134,7 @@ public class InvestorsApprovalConroller {
 		} catch (Exception e) {
 			result.setStatus(5101);
 			result.setMessage("获取投资审核信息异常");
-			log.error(e.getMessage());
+			this.LOGGER.error(e.getMessage());
 		}
 		return result;
 	}
@@ -152,7 +151,7 @@ public class InvestorsApprovalConroller {
 		try {
 			result = investorsApprovalService.adminFindApprovals(body);
 		}catch (Exception e){
-			log.error(e.getMessage(),e.fillInStackTrace());
+			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
 			result.setStatus(502);
 			result.setData(null);
 			result.setMessage("服务器端发生错误");
@@ -175,7 +174,7 @@ public class InvestorsApprovalConroller {
 		} catch (Exception e) {
 			result.setStatus(5101);
 			result.setMessage("投资审核操作异常");
-			log.error(e.getMessage(),e.fillInStackTrace());
+			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
 		}
 		return result;
 	}
@@ -193,7 +192,7 @@ public class InvestorsApprovalConroller {
 		} catch (Exception e) {
 			result.setStatus(5101);
 			result.setMessage("投资审核操作异常");
-			log.error(e.getMessage(),e.fillInStackTrace());
+			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
 		}
 		return result;
 	}
@@ -210,7 +209,7 @@ public class InvestorsApprovalConroller {
 		try {
 			result= investorsApprovalService.adminApproval(body);
 		}catch (Exception e){
-			log.error(e.getMessage(),e.fillInStackTrace());
+			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
 
 			result.setMessage("服务器端发生错误");
 			result.setData(null);
@@ -234,7 +233,7 @@ public class InvestorsApprovalConroller {
 		}catch(Exception e){
 			result.setStatus(5010);
 			result.setMessage("获取工作名片异常");
-			log.error(e.getMessage(), e.fillInStackTrace());
+			this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
 		}
 		return result;
 	}
@@ -270,7 +269,7 @@ public class InvestorsApprovalConroller {
 		try {
 			result = investorsApprovalService.specialApproval(userId,status,userName,companyName,comanyDuties,1);
 		}catch (Exception e){
-			log.error(e.getMessage(),e.fillInStackTrace());
+			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
 			result.setMessage("服务器端发生错误");
 			result.setStatus(502);
 			result.setData(null);
@@ -295,7 +294,7 @@ public class InvestorsApprovalConroller {
 		try {
 			result = investorsApprovalService.specialApproval(userId,status,userName,companyName,comanyDuties,appId);
 		}catch (Exception e){
-			log.error(e.getMessage(),e.fillInStackTrace());
+			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
 			result.setMessage("服务器端发生错误");
 			result.setStatus(502);
 			result.setData(null);
@@ -316,7 +315,7 @@ public class InvestorsApprovalConroller {
 		try {
 			result = investorsApprovalService.adminSpecialApproval(body,appid);
 		}catch (Exception e){
-			log.error(e.getMessage(),e.fillInStackTrace());
+			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
 			result.setData(null);
 			result.setStatus(502);
 			result.setMessage("服务器端发生错误");
