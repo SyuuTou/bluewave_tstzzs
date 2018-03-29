@@ -186,7 +186,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
 
         projectSendBMapper.updateByPrimaryKeySelective(projectSendB);
 
-        //项目领域
+        //项目领域更新
         CommonDto<String> result1 =  createProjectSegmentation(body, appid);
         if (result1.getStatus() != 200){
             result = result1;
@@ -218,7 +218,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             return result;
         }
 
-        //创始人信息
+        //用户以及创始人信息
         CommonDto<String> result5 =updateUserInfo(body,appid);
         if (result5.getStatus() != 200){
             result = result5;
