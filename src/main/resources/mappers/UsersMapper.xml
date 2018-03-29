@@ -119,7 +119,7 @@
       group by cc.user_id
     ) cc on aa.id = cc.user_id
     left join meta_user_level mul on cc.level_id = mul.id
-    left join meta_identity_type mit on (aa.identity_type+1) = mit.id
+    left join meta_identity_type mit on aa.identity_type = mit.id
     where aa.id is not null
     <if test="investorType != null and investorType !=''">
       and i.investors_type =#{investorType}
@@ -186,7 +186,7 @@
     group by cc.user_id
     ) cc on aa.id = cc.user_id
     left join meta_user_level mul on cc.level_id = mul.id
-    left join meta_identity_type mit on (aa.identity_type+1) = mit.id
+    left join meta_identity_type mit on aa.identity_type = mit.id
     where aa.id is not null
     <if test="investorType != null and investorType !=''">
       and i.investors_type =#{investorType}

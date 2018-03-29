@@ -10,8 +10,10 @@ import com.lhjl.tzzs.proxy.model.Report;
 import com.lhjl.tzzs.proxy.service.bluewave.ColumnService;
 import com.lhjl.tzzs.proxy.service.bluewave.ReportService;
 import com.lhjl.tzzs.proxy.service.bluewave.SegmentationService;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -178,6 +180,7 @@ public class ReportController extends GenericController {
     }
 
     @GetMapping("report/image/generate/{reportId}")
+    @Cacheable(value = "generateReportShareImage",keyGenerator = "wiselyKeyGenerator")
     public HttpEntity<byte[]> generateReportShareImage( @PathVariable Integer reportId) throws IOException {
 
         CommonDto<String> result = null;
@@ -198,7 +201,7 @@ public class ReportController extends GenericController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
         headers.setContentLength(outputStream.toByteArray().length);
-        headers.set("Content-Disposition", "attachment; filename=image.jpg");
+        headers.set("Content-Disposition", "attachment; filename="+ DateTime.now().millisOfDay()+".jpg");
         return new HttpEntity<byte[]>(outputStream.toByteArray(), headers);
     }
 

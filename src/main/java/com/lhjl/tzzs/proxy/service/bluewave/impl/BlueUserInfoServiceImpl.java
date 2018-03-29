@@ -229,9 +229,9 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
             identityType = usersForSearch.getIdentityType();
         }
 
-        if (appid == 1){
-            identityType = identityType +1;
-        }
+//        if (appid == 1){
+//            identityType = identityType +1;
+//        }
         userInformationOutputDto.setIdentityType(identityType);
         userInformationOutputDto.setIndustry(industry);
         String desc = "";
@@ -351,16 +351,7 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
             users.setCity(body.getCity());
         }
         if (body.getIdentityType() != null){
-            Integer identityType = 0;
-            if (appid ==1){
-                if (body.getIdentityType() > 0){
-                    identityType = body.getIdentityType() -1;
-                }
-            }else {
-                identityType = body.getIdentityType();
-            }
-
-            users.setIdentityType(identityType);
+            users.setIdentityType(body.getIdentityType());
         }
         if (body.getIndustry() != null){
             users.setIndustry(body.getIndustry());
@@ -394,6 +385,8 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
             result = resulta;
             return result;
         }
+
+
 
         result.setMessage("success");
         result.setStatus(200);
@@ -455,7 +448,7 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
 
         Users users = usersMapper.selectByPrimaryKey(userId);
 
-        if (null == users.getHeadpic() && null == users.getHeadpicReal()){
+        if (null == users.getHeadpic()){
             return new CommonDto<>(0,"用户没有头像",200);
         }
 
@@ -545,22 +538,22 @@ public class BlueUserInfoServiceImpl implements BlueUserInfoService{
         if (users != null){
             if (users.getIdentityType() != null) {
                 switch (users.getIdentityType()) {
-                    case 0:
+                    case 1:
                         map.put("identityType", "投资人");
                         break;
-                    case 1:
+                    case 2:
                         map.put("identityType", "创业者");
                         break;
-                    case 2:
+                    case 3:
                         map.put("identityType", "产业公司");
                         break;
-                    case 3:
+                    case 4:
                         map.put("identityType", "媒体");
                         break;
-                    case 4:
+                    case 5:
                         map.put("identityType", "政府机构");
                         break;
-                    case 5:
+                    case 6:
                         map.put("identityType", "服务机构");
                         break;
                 }

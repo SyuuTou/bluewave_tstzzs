@@ -131,22 +131,22 @@ public class UserInfoServiceImpl implements UserInfoService{
             if(identity != null){
                 String identiStr = "";
                 switch(identity){
-                    case 0:
+                    case 1:
                         identiStr = "投资人";
                         break;
-                    case 1:
+                    case 2:
                         identiStr = "创业者";
                         break;
-                    case 2:
+                    case 3:
                         identiStr = "产业公司";
                         break;
-                    case 3:
+                    case 4:
                         identiStr = "媒体";
                         break;
-                    case 4:
+                    case 5:
                         identiStr = "政府机构";
                         break;
-                    case 5:
+                    case 6:
                         identiStr = "服务机构";
                         break;
                 }
@@ -667,17 +667,17 @@ public class UserInfoServiceImpl implements UserInfoService{
         if (users.getIdentityType() != null ){
             Integer it = users.getIdentityType();
             switch (it){
-                case 0:identityType= "投资人";
+                case 1:identityType= "投资人";
                     break;
-                case 1:identityType= "创业者";
+                case 2:identityType= "创业者";
                     break;
-                case 2:identityType= "产业公司";
+                case 3:identityType= "产业公司";
                     break;
-                case 3:identityType= "媒体";
+                case 4:identityType= "媒体";
                     break;
-                case 4:identityType= "政府机构";
+                case 5:identityType= "政府机构";
                     break;
-                case 5:identityType= "服务机构";
+                case 6:identityType= "服务机构";
                     break;
                     default:identityType="";
             }
@@ -1035,6 +1035,10 @@ public class UserInfoServiceImpl implements UserInfoService{
         }
 
         map.put("approveId", certificationTypeArr);
+
+        Users users = usersMapper.selectByPrimaryKey(userToken.getUserId());
+
+        map.put("identityType", users.getIdentityType());
 
         return new CommonDto<>(map, "success", 200);
     }

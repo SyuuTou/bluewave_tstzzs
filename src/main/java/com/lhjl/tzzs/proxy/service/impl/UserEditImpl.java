@@ -78,17 +78,17 @@ public class UserEditImpl implements UserEditService {
 
         //个人投资人，机构投资人，现在都是投资人
         switch (identityType){
-            case "投资人":shenfenleixing =0;
+            case "投资人":shenfenleixing =1;
                 break;
-            case "创业者":shenfenleixing = 1;
+            case "创业者":shenfenleixing = 2;
                 break;
-            case "产业公司":shenfenleixing =2;
+            case "产业公司":shenfenleixing =3;
                 break;
-            case "媒体":shenfenleixing=3;
+            case "媒体":shenfenleixing=4;
                 break;
-            case "政府机构":shenfenleixing =4;
+            case "政府机构":shenfenleixing =5;
                 break;
-            case "服务机构":shenfenleixing =5;
+            case "服务机构":shenfenleixing =6;
                 break;
             default:
                 break;
@@ -184,22 +184,22 @@ public class UserEditImpl implements UserEditService {
                 identityType = "";
             }else {
                 switch (identityTypeInt) {
-                    case 0:
+                    case 1:
                         identityType = "投资人";
                         break;
-                    case 1:
+                    case 2:
                         identityType = "创业者";
                         break;
-                    case 2:
+                    case 3:
                         identityType = "产业公司";
                         break;
-                    case 3:
+                    case 4:
                         identityType = "媒体";
                         break;
-                    case 4:
+                    case 5:
                         identityType = "政府机构";
                         break;
-                    case 5:
+                    case 6:
                         identityType = "服务机构";
                         break;
                     default:
@@ -492,17 +492,17 @@ public class UserEditImpl implements UserEditService {
         //转义一下身份类型
         int shenfenleixing = -1;
         switch (user7excessfield){
-            case "投资人":shenfenleixing =0;
+            case "投资人":shenfenleixing =1;
             break;
-            case "创业者":shenfenleixing = 1;
+            case "创业者":shenfenleixing = 2;
             break;
-            case "产业公司":shenfenleixing =2;
+            case "产业公司":shenfenleixing =3;
             break;
-            case "媒体":shenfenleixing=3;
+            case "媒体":shenfenleixing=4;
             break;
-            case "政府机构":shenfenleixing =4;
+            case "政府机构":shenfenleixing =5;
             break;
-            case "服务机构":shenfenleixing =5;
+            case "服务机构":shenfenleixing =6;
             break;
             default:
                 break;
@@ -726,7 +726,7 @@ public class UserEditImpl implements UserEditService {
          }
 
          switch (shenfenleixingInt){
-             case 0:
+             case 1:
                  xianshi="active";
                  xianshi1="";
                  xianshi2="";
@@ -734,7 +734,7 @@ public class UserEditImpl implements UserEditService {
                  xianshi4="";
                  xianshi5="";
                  break;
-             case 1:
+             case 2:
                  xianshi="";
                  xianshi1="active";
                  xianshi2="";
@@ -742,7 +742,7 @@ public class UserEditImpl implements UserEditService {
                  xianshi4="";
                  xianshi5="";
                  break;
-             case 2:
+             case 3:
                  xianshi="";
                  xianshi1="";
                  xianshi2="active";
@@ -750,7 +750,7 @@ public class UserEditImpl implements UserEditService {
                  xianshi4="";
                  xianshi5="";
                  break;
-             case 3:
+             case 4:
                  xianshi="";
                  xianshi1="";
                  xianshi2="";
@@ -758,7 +758,7 @@ public class UserEditImpl implements UserEditService {
                  xianshi4="";
                  xianshi5="";
                  break;
-             case 4:
+             case 5:
                  xianshi="";
                  xianshi1="";
                  xianshi2="";
@@ -766,7 +766,7 @@ public class UserEditImpl implements UserEditService {
                  xianshi4="active";
                  xianshi5="";
                  break;
-             case 5:
+             case 6:
                  xianshi="";
                  xianshi1="";
                  xianshi2="";
@@ -1247,17 +1247,17 @@ public class UserEditImpl implements UserEditService {
 
         Integer it = null;
         switch (body.getIdentityType()){
-            case "投资人":it = 0;
+            case "投资人":it = 1;
             break;
-            case "创业者":it = 1;
+            case "创业者":it = 2;
                 break;
-            case "产业公司":it = 2;
+            case "产业公司":it = 3;
                 break;
-            case "媒体":it = 3;
+            case "媒体":it = 4;
                 break;
-            case "政府机构":it = 4;
+            case "政府机构":it = 5;
                 break;
-            case "服务机构":it = 5;
+            case "服务机构":it = 6;
                 break;
            default:
                it = null;
