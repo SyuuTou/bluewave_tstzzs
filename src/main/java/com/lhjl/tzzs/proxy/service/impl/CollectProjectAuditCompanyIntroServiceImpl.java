@@ -28,10 +28,7 @@ public class CollectProjectAuditCompanyIntroServiceImpl implements CollectProjec
 
         CollectProjectAuditCompanyIntroDto collectProjectAuditCompanyIntroDto = new CollectProjectAuditCompanyIntroDto();
 
-        ProjectSendAuditB projectSendAuditB = new ProjectSendAuditB();
-        projectSendAuditB.setId(projectId);
-
-        ProjectSendAuditB projectSendAuditB1 = projectSendAuditBMapper.selectByPrimaryKey(projectSendAuditB);
+        ProjectSendAuditB projectSendAuditB1 = projectSendAuditBMapper.selectByPrimaryKey(projectId);
 
         if(null == projectSendAuditB1){
             result.setStatus(300);

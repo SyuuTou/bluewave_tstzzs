@@ -41,4 +41,6 @@ public interface ElegantServiceMapper extends OwnerMapper<ElegantService> {
                                 @Param("appid") Integer appid,
                                 @Param("approveType") Integer approveType, @Param("isLeadInvestor") Integer isLeadInvestor, @Param("isReward") Integer isReward, @Param("memberType") Integer memberType,
                                 @Param("beginTime") String beginTime,@Param("endTime") String endTime);
+
+    List<Map<String,Object>> findElegantServiceListCustomer(@Param("token") String token, @Param("startPage") Integer startPage, @Param("pageSize") Integer pageSize, @Param("now") Date date);
 }

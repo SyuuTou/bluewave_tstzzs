@@ -1114,9 +1114,9 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
     
     @Transactional(readOnly = true) 
 	@Override
-	public CommonDto<Map<String, Object>> listProInfos(Integer appid, ProjectsListInputDto body) {
-		CommonDto<Map<String, Object>> result=new CommonDto<Map<String, Object>>();
-		Map<String,Object> map =new HashMap<>();
+	public CommonDto<PagingOutputDto<ProjectsListOutputDto>> listProInfos(Integer appid, ProjectsListInputDto body) {
+		CommonDto<PagingOutputDto<ProjectsListOutputDto>> result=new CommonDto<>();
+		PagingOutputDto<ProjectsListOutputDto> pod =new PagingOutputDto<>();
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//格式化参数
 		if(body.getCurrentPage()==null) {
@@ -1143,12 +1143,12 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			
 		});
 		Long total = projectsMapper.findSplitCount(body);
-		map.put("data", list);
-		map.put("total", total);
-		map.put("currentPage",body.getCurrentPage());
-		map.put("pageSize", body.getPageSize());
+		pod.setList(list);
+		pod.setTotal(total);
+		pod.setCurrentPage(body.getCurrentPage());
+		pod.setPageSize(body.getPageSize());
 		
-		result.setData(map);
+		result.setData(pod);
 		result.setMessage("success");
 		result.setStatus(200);
 		

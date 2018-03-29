@@ -11,10 +11,11 @@
 
   <select id="selectBySubjectIdAndProjectType" resultMap="BaseResultMap">
     select * from subject_type_relational where 1 = 1
-    subject_id =#{subjectId}
+    and subject_id =#{subjectId}
     <if test="projectType != null and projectType !=''">
       and subject_type_id =#{projectType}
     </if>
+    limit 1
   </select>
 
 </mapper>

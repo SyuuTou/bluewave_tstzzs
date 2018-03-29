@@ -168,24 +168,20 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             result = resulta;
             return result;
         }
-
+        //更新项目
         ProjectSendB projectSendB = new ProjectSendB();
+        //设置提交项目表的主键id？
         projectSendB.setId(body.getProjectSendId());
-        if (body.getProjectLogo() != null){
-            projectSendB.setProjectLogo(body.getProjectLogo());
-        }
+        projectSendB.setProjectLogo(body.getProjectLogo());
         projectSendB.setShortName(body.getShortName());
-        if (body.getFullName() != null){
-            projectSendB.setFullName(body.getFullName());
-        }
+        projectSendB.setFullName(body.getFullName());
         projectSendB.setKernelDesc(body.getKernelDesc());
         projectSendB.setProjectInvestmentHighlights(body.getProjectInvestmentHighlights());
         projectSendB.setCommet(body.getCommet());
-        if (body.getUrl() != null){
-            projectSendB.setUrl(body.getUrl());
-        }
+        projectSendB.setUrl(body.getUrl());
         projectSendB.setCity(body.getCity());
         projectSendB.setCreateTime(now);
+        //编辑状态：编辑完成了
         projectSendB.setEditStatus(1);
 
         projectSendBMapper.updateByPrimaryKeySelective(projectSendB);
@@ -1136,7 +1132,6 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
     @Transactional
     public CommonDto<String> createProjectSendAudit(ProjectSendBDto body, Integer appid,Integer prepareId,Integer userid){
         CommonDto<String> result = new CommonDto<>();
-        Date now = new Date();
         //获取用户最近未审核的提交记录
         Boolean aduitYn =false;
         List<ProjectSendAuditB> projectSendAuditBList = projectSendAuditBMapper.searchProjectSendAuditB(userid,appid);
@@ -1145,6 +1140,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         }
 
         CommonDto<Boolean> createOrUpdate = projectSendAuditJudgement(body,appid,aduitYn);
+        
         if (createOrUpdate.getData()){
             Integer projectSendAuditId = projectSendAuditBList.get(0).getId();
             ProjectSendAuditB projectSendAuditBForUpdate = new ProjectSendAuditB();
@@ -1158,9 +1154,10 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             projectSendAuditBForInsert.setProjectSendBId(body.getProjectSendId());
             projectSendAuditBForInsert.setPrepareId(prepareId);
             projectSendAuditBForInsert.setAppid(appid);
+            //表示待审核
             projectSendAuditBForInsert.setAuditStatus(0);
             projectSendAuditBForInsert.setUserId(userid);
-            projectSendAuditBForInsert.setCreateTime(now);
+            projectSendAuditBForInsert.setCreateTime(new Date());
             projectSendAuditBForInsert.setProjectSource(1);
 
             projectSendAuditBMapper.insertSelective(projectSendAuditBForInsert);
