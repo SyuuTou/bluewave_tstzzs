@@ -21,7 +21,7 @@ public class CollectProjectSubmitController extends GenericService{
     private ProjectSendBService projectSendBService;
 
     /**
-     * 创建项目提交信息的接口
+     * 创建项目提交信息
      * @param body
      * @param appid
      * @return
