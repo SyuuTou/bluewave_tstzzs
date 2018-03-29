@@ -21,7 +21,8 @@ public class CollectProjectAuditController extends GenericService{
     private ProjectAuditService projectAuditService;
 
     /**
-     * 审核提交项目
+     * ZYY
+     * 采集项目审核
      * @param body
      * @param appid
      * @return
