@@ -751,17 +751,17 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         projectLogoInfoOutputDto.setId((Integer)projectLogoInfo.get("id"));
         projectLogoInfoOutputDto.setShortName((String)projectLogoInfo.get("short_name"));
         projectLogoInfoOutputDto.setProjectSourceId((Integer)projectLogoInfo.get("project_source"));
-        String actualName = "";
+        /*String actualName = "";
         if (projectLogoInfo.get("actual_name") != null){
             actualName = (String) projectLogoInfo.get("actual_name");
-        }
-        projectLogoInfoOutputDto.setUserName(actualName);
+        }*/
+        projectLogoInfoOutputDto.setUserName((String) projectLogoInfo.get("actual_name"));
         projectLogoInfoOutputDto.setUserId((Integer)projectLogoInfo.get("userid"));
-        String projectLogo = "";
+        /*String projectLogo = "";
         if (projectLogoInfo.get("project_logo") != null){
             projectLogo = (String) projectLogoInfo.get("project_logo");
-        }
-        projectLogoInfoOutputDto.setProjectLogo(projectLogo);
+        }*/
+        projectLogoInfoOutputDto.setProjectLogo((String) projectLogoInfo.get("project_logo"));
 
         result.setData(projectLogoInfoOutputDto);
         result.setStatus(200);

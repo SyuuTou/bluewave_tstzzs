@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.project.collect.list;
+package com.lhjl.tzzs.proxy.controller.project.collect.submit;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendAuditBInputDto;
