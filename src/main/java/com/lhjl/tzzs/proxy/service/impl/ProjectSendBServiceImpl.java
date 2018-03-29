@@ -152,7 +152,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             return result;
         }
 
-
+        //获取用户id
         Integer userid = userLoginService.getUserIdByToken(body.getToken(),appid);
         if (userid == -1){
             result.setMessage("用户token非法，请检查");
@@ -551,29 +551,24 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         }
 
         //先删除原有的数据
-        ProjectSendFinancingApprovalB projectSendFinancingApprovalB1 = new ProjectSendFinancingApprovalB();
-        projectSendFinancingApprovalB1.setProjectSendBId(body.getProjectSendId());
-        projectSendFinancingApprovalB1.setAppid(appid);
+        ProjectSendFinancingApprovalB e = new ProjectSendFinancingApprovalB();
+        e.setProjectSendBId(body.getProjectSendId());
+        e.setAppid(appid);
 
-        projectSendFinancingApprovalBMapper.delete(projectSendFinancingApprovalB1);
+        projectSendFinancingApprovalBMapper.delete(e);
 
-        ProjectSendFinancingApprovalB projectSendFinancingApprovalB = new ProjectSendFinancingApprovalB();
-        projectSendFinancingApprovalB.setStage(body.getStage());
-        projectSendFinancingApprovalB.setAmount(body.getAmount());
-        projectSendFinancingApprovalB.setProjectSendBId(body.getProjectSendId());
-        projectSendFinancingApprovalB.setAppid(appid);
-        projectSendFinancingApprovalB.setUserId(userid);
-        projectSendFinancingApprovalB.setCreateTime(now);
-        if (body.getCurrency() == null){
-            body.setCurrency(0);
-        }
-        projectSendFinancingApprovalB.setCurrency(body.getCurrency());
-        projectSendFinancingApprovalB.setShareDivest(body.getShareDivest());
-        if (body.getProjectFinancingUseful() != null){
-            projectSendFinancingApprovalB.setProjectFinancingUseful(body.getProjectFinancingUseful());
-        }
+        ProjectSendFinancingApprovalB obj = new ProjectSendFinancingApprovalB();
+        obj.setProjectSendBId(body.getProjectSendId());
+        obj.setStage(body.getStage());
+        obj.setAmount(body.getAmount());
+        obj.setAppid(appid);
+        obj.setUserId(userid);
+        obj.setCreateTime(now);
+        obj.setCurrency(body.getCurrency()==null ?0:body.getCurrency());
+        obj.setShareDivest(body.getShareDivest());
+        obj.setProjectFinancingUseful(body.getProjectFinancingUseful());
 
-        projectSendFinancingApprovalBMapper.insertSelective(projectSendFinancingApprovalB);
+        projectSendFinancingApprovalBMapper.insertSelective(obj);
 
         result.setStatus(200);
         result.setMessage("success");
@@ -617,7 +612,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
 
             return result;
         }
-
+        //更新用户信息
         Users users = new Users();
         users.setId(userId);
         users.setActualName(body.getActualName());
@@ -638,6 +633,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         if (foundersList.size() > 0){
             founderId = foundersList.get(0).getId();
         }else {
+        	//认证为创始人
             Founders founders = new Founders();
             founders.setName(body.getActualName());
             founders.setUserId(userId);
