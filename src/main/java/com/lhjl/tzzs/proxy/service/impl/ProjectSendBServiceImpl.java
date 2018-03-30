@@ -1135,7 +1135,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         if (projectSendAuditBList.size() > 0){
             aduitYn = true;
         }
-
+        //判断是该新建还是更新,返回true表示更新
         CommonDto<Boolean> createOrUpdate = projectSendAuditJudgement(body,appid,aduitYn);
         
         if (createOrUpdate.getData()){

@@ -127,107 +127,71 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
             for (Map<String,Object> m:projectSendList){
                 ProjectSendBAdminListOutputDto projectSendBAdminListOutputDto = new ProjectSendBAdminListOutputDto();
                 projectSendBAdminListOutputDto.setId((Integer) m.get("id"));
-                String projectSoruce = "";
-                Integer projectSoruceInt = 1;
-                if (m.get("project_source") != null){
-                    projectSoruceInt = (Integer)m.get("project_source");
-                }
-                switch (projectSoruceInt){
-                    case 1:projectSoruce = "创业者提交";  
-                    break;
+                
+                String projectSoruce = null;
+                Integer projectSoruceInt = (Integer)m.get("project_source");
+                if(projectSoruceInt != null) {
+                	switch (projectSoruceInt){
+	                    case 1:projectSoruce = "创业者提交";  
+	                    break;
+	                    default:projectSoruce="";
+                	}
                 }
                 projectSendBAdminListOutputDto.setProjectSource(projectSoruce);
-                String projectShortName = "";
-                if (m.get("short_name") != null){
-                    projectShortName = (String) m.get("short_name");
+                
+                projectSendBAdminListOutputDto.setProjectShortName((String) m.get("short_name"));
+                projectSendBAdminListOutputDto.setProjectFullName((String)m.get("full_name"));
+                projectSendBAdminListOutputDto.setKernelDesc((String)m.get("kernel_desc"));
+                projectSendBAdminListOutputDto.setSegmentationName((String)m.get("segmentation_name"));
+                projectSendBAdminListOutputDto.setCity((String) m.get("city"));
+                projectSendBAdminListOutputDto.setUserName((String)m.get("actual_name"));
+                projectSendBAdminListOutputDto.setCompanyName((String)m.get("company_name"));
+                projectSendBAdminListOutputDto.setCompanyDuties((String)m.get("company_duties"));
+                projectSendBAdminListOutputDto.setPhonenumber((String)m.get("phonenumber"));
+                
+                String projectLevel = null;
+                Integer projectLevelInt = (Integer)m.get("rating_stage");
+                if(projectLevelInt != null) {
+                	switch (projectLevelInt){
+	                    case 0:projectLevel = "D级";
+	                    break;
+	                    case 1:projectLevel = "C级";
+	                        break;
+	                    case 2:projectLevel = "B级";
+	                        break;
+	                    case 3:projectLevel = "A级";
+	                        break;
+	                    case 4:projectLevel = "S级";
+	                        break;
+	                    default:projectLevel = "";
+                	}
                 }
-                projectSendBAdminListOutputDto.setProjectShortName(projectShortName);
-                String projectFullName = "";
-                if (m.get("full_name") != null){
-                    projectFullName = (String)m.get("full_name");
-                }
-                projectSendBAdminListOutputDto.setProjectFullName(projectFullName);
-                String kernelDesc = "";
-                if (m.get("kernel_desc") != null){
-                    kernelDesc = (String)m.get("kernel_desc");
-                }
-                projectSendBAdminListOutputDto.setKernelDesc(kernelDesc);
-                String segmentation = "";
-                if (m.get("segmentation_name") != null){
-                    segmentation = (String)m.get("segmentation_name");
-                }
-                projectSendBAdminListOutputDto.setSegmentationName(segmentation);
-                String city = "";
-                if (m.get("city") != null){
-                    city = (String) m.get("city");
-                }
-                projectSendBAdminListOutputDto.setCity(city);
-                String userName = "";
-                if (m.get("actual_name") != null){
-                    userName = (String)m.get("actual_name");
-                }
-                projectSendBAdminListOutputDto.setUserName(userName);
-                String companyName ="";
-                if (m.get("company_name") != null){
-                    companyName = (String)m.get("company_name");
-                }
-                projectSendBAdminListOutputDto.setCompanyName(companyName);
-                String companyDuties = "";
-                if (m.get("company_duties") != null){
-                    companyDuties = (String)m.get("company_duties");
-                }
-                projectSendBAdminListOutputDto.setCompanyDuties(companyDuties);
-                String phoneNum = "";
-                if (m.get("phonenumber") != null){
-                    phoneNum = (String)m.get("phonenumber");
-                }
-                projectSendBAdminListOutputDto.setPhonenumber(phoneNum);
-                String projectLevel = "";
-                Integer projectLevelInt = 111;
-                if (m.get("rating_stage") != null){
-                    projectLevelInt = (Integer)m.get("rating_stage");
-                }
-                switch (projectLevelInt){
-                    case 0:projectLevel = "D级";
-                    break;
-                    case 1:projectLevel = "C级";
-                        break;
-                    case 2:projectLevel = "B级";
-                        break;
-                    case 3:projectLevel = "A级";
-                        break;
-                    case 4:projectLevel = "S级";
-                        break;
-                    default:projectLevel = "";
-                }
+                
                 projectSendBAdminListOutputDto.setProjectLevel(projectLevel);
-                String createTime = "";
+                
                 if (m.get("create_time") != null){
-                    Date createTimeD = (Date)m.get("create_time");
-                    createTime = sdf.format(createTimeD);
+                	projectSendBAdminListOutputDto.setCreatTime(sdf.format((Date)m.get("create_time")));
                 }
-                projectSendBAdminListOutputDto.setCreatTime(createTime);
-                String auditStatus = "";
-                Integer auditStatusInt = 0;
-                if (m.get("audit_status") != null){
-                    auditStatusInt = (Integer)m.get("audit_status");
+                
+                String auditStatus = null;
+                Integer auditStatusInt = (Integer)m.get("audit_status");
+                if(auditStatusInt!=null) {
+                	switch (auditStatusInt){
+	                    case 0:auditStatus = "待审核";
+	                    break;
+	                    case 1:auditStatus = "审核通过";
+	                    break;
+	                    case 2:auditStatus = "审核未通过";
+	                    break;
+	                    default : auditStatus = "";
+                	}
                 }
-                switch (auditStatusInt){
-                    case 0:auditStatus = "待审核";
-                    break;
-                    case 1:auditStatus = "审核通过";
-                    break;
-                    case 2:auditStatus = "审核未通过";
-                    break;
-                }
+                
                 projectSendBAdminListOutputDto.setAuditStatus(auditStatus);
-                String auditTime = "";
                 if (m.get("audit_time") != null){
-                    Date auditTimeD = (Date)m.get("audit_time");
-                    auditTime = sdf.format(auditTimeD);
+                	projectSendBAdminListOutputDto.setAuditTime(sdf.format((Date)m.get("audit_time")));
                 }
-                projectSendBAdminListOutputDto.setAuditTime(auditTime);
-
+                
                 list.add(projectSendBAdminListOutputDto);
             }
         }
