@@ -1132,7 +1132,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         //获取用户最近未审核的提交记录
         Boolean aduitYn =false;
         List<ProjectSendAuditB> projectSendAuditBList = projectSendAuditBMapper.searchProjectSendAuditB(userid,appid);
-        if (projectSendAuditBList.size() > 0){
+        if (projectSendAuditBList.size() > 0){//存在最近未审核的提交记录
             aduitYn = true;
         }
         //判断是该新建还是更新,返回true表示更新
@@ -1140,24 +1140,24 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         
         if (createOrUpdate.getData()){
             Integer projectSendAuditId = projectSendAuditBList.get(0).getId();
-            ProjectSendAuditB projectSendAuditBForUpdate = new ProjectSendAuditB();
-            projectSendAuditBForUpdate.setId(projectSendAuditId);
-            projectSendAuditBForUpdate.setPrepareId(prepareId);
-            projectSendAuditBForUpdate.setProjectSendBId(body.getProjectSendId());
+            ProjectSendAuditB e = new ProjectSendAuditB();
+            e.setId(projectSendAuditId);
+            e.setPrepareId(prepareId);
+            e.setProjectSendBId(body.getProjectSendId());
 
-            projectSendAuditBMapper.updateByPrimaryKeySelective(projectSendAuditBForUpdate);
+            projectSendAuditBMapper.updateByPrimaryKeySelective(e);
         }else {
-            ProjectSendAuditB projectSendAuditBForInsert = new ProjectSendAuditB();
-            projectSendAuditBForInsert.setProjectSendBId(body.getProjectSendId());
-            projectSendAuditBForInsert.setPrepareId(prepareId);
-            projectSendAuditBForInsert.setAppid(appid);
+            ProjectSendAuditB e = new ProjectSendAuditB();
+            e.setProjectSendBId(body.getProjectSendId());
+            e.setPrepareId(prepareId);
+            e.setAppid(appid);
             //表示待审核
-            projectSendAuditBForInsert.setAuditStatus(0);
-            projectSendAuditBForInsert.setUserId(userid);
-            projectSendAuditBForInsert.setCreateTime(new Date());
-            projectSendAuditBForInsert.setProjectSource(1);
+            e.setAuditStatus(0);
+            e.setUserId(userid);
+            e.setCreateTime(new Date());
+            e.setProjectSource(1);
 
-            projectSendAuditBMapper.insertSelective(projectSendAuditBForInsert);
+            projectSendAuditBMapper.insertSelective(e);
         }
 
         result.setStatus(200);
@@ -1179,21 +1179,22 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         Boolean jieguo = false;
         Integer projectSendId = body.getProjectSendId();
         ProjectSendB projectSendB = projectSendBMapper.selectByPrimaryKey(projectSendId);
-        if (body.getShortName().equals(projectSendB.getShortName())){
-            ProjectSendFinancingApprovalB projectSendFinancingApprovalB = new ProjectSendFinancingApprovalB();
-            projectSendFinancingApprovalB.setProjectSendBId(projectSendId);
-            projectSendFinancingApprovalB.setAppid(appid);
+        if(projectSendB !=null) {
+        	if (body.getShortName().equals(projectSendB.getShortName())){
+                ProjectSendFinancingApprovalB e = new ProjectSendFinancingApprovalB();
+                e.setProjectSendBId(projectSendId);
+                e.setAppid(appid);
 
-            List<ProjectSendFinancingApprovalB> projectSendFinancingApprovalBList = projectSendFinancingApprovalBMapper.select(projectSendFinancingApprovalB);
-            if (projectSendFinancingApprovalBList.size() > 0){
-                if (projectSendFinancingApprovalBList.get(0).getStage().equals(body.getStage())){
-                    if (aduitYn){
-                        jieguo=true;
+                List<ProjectSendFinancingApprovalB> list = projectSendFinancingApprovalBMapper.select(e);
+                if (list.size() > 0){
+                    if (list.get(0).getStage().equals(body.getStage())){
+                        if (aduitYn){
+                            jieguo=true;
+                        }
                     }
                 }
             }
         }
-
         result.setData(jieguo);
         result.setMessage("success");
         result.setStatus(502);

@@ -85,7 +85,7 @@ public class CollectProjectAuditHistoryFinancingController extends GenericContro
             result = projectSendFinancingHistoryBService.creatProjectSendFinancingHistoryB(body, appid);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
-            result.setMessage("服务器端发生错误"); 
+            result.setMessage("服务器端发生错误");
             result.setStatus(502);
             result.setData(null);
         }
