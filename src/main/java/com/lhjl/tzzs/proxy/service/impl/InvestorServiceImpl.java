@@ -402,14 +402,27 @@ public class InvestorServiceImpl implements InvestorService {
 			return result;
 		}
 		
-		//不存在相关的用户会员记录
-		if(user == null) {//进行相应的插入操作
+		if(user != null){
+			//将user的有效位变更为无效
+			user.setYn(0);
+			userLevelRelationMapper.updateByPrimaryKeySelective(user);
+		}
+		//设置插入的实体
+		body.setCreateTime(new Date());
+		body.setYn(1);
+		//后台管理员添加时需要设置状态为："赠送"
+		body.setStatus(4);
+		body.setAppId(appid);
+		userLevelRelationMapper.insertSelective(body);
+		
+		/*if(user == null) {//不存在相关的用户会员记录,进行相应的插入操作
 //			body.setBeginTime(new Date());
 			//设置会员记录的创建时间
 			body.setCreateTime(new Date());
 			body.setYn(1);
 			//后台管理员添加时需要设置状态为："赠送"
 			body.setStatus(4);
+			body.setAppId(appid);
 			userLevelRelationMapper.insertSelective(body);
 		}else {
 			//将user的有效位变更为无效
@@ -421,15 +434,17 @@ public class InvestorServiceImpl implements InvestorService {
 			body.setYn(1);
 			//后台管理员添加时需要设置状态为："赠送"
 			body.setStatus(4);
-			/*if(user.getLevelId() !=body.getLevelId()) {//用户的会员等级进行了变更
+			body.setAppId(appid);
+			userLevelRelationMapper.insertSelective(body);
+			if(user.getLevelId() !=body.getLevelId()) {//用户的会员等级进行了变更
 				
 				body.setBeginTime(new Date());
 				userLevelRelationMapper.insertSelective(body);
 			}else {//用户的会员等级没有进行变更，会员的开始时间没有发生变化，要取得之前会员的开始时间
 				body.setBeginTime(user.getBeginTime());
 				userLevelRelationMapper.insertSelective(body);
-			}*/
-		}
+			}
+		}*/
 		
 		result.setData(true);
         result.setStatus(200); 
