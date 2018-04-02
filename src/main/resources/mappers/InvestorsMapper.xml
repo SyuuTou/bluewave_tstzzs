@@ -230,7 +230,7 @@
       AND ide.investment_amount_high_dollars &lt;= #{amountEndDollar}
   </if>
   <!-- 根据项目来源进行精确搜索 -->
-  <if test="typeName !=null and typeName.size() &gt; 0">
+  <if test="typeName !=null and typeName.size() &gt; 0">  
       AND mdst.type_name in
 	      <foreach collection="typeName" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
