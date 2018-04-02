@@ -171,11 +171,13 @@ public class InvestorServiceImpl implements InvestorService {
 		return result;
 	}
 
-	@Override
+    @Transactional
+    @Override
 	public CommonDto<Boolean> matchUsers(Integer appid, Integer userId,Integer investorId) {
 		CommonDto<Boolean> result =new CommonDto<>();
 		Investors investor=new Investors();
 		investor.setId(investorId);
+		//绑定用户id
 		investor.setUserId(userId);
 		
 		investorsMapper.updateByPrimaryKeySelective(investor);
