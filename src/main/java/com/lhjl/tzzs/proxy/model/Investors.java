@@ -874,4 +874,36 @@ public class Investors {
     public void setLeaderYn(Integer leaderYn) {
         this.leaderYn = leaderYn;
     }
+
+    public Integer getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(Integer serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public String getSubmitter() {
+        return submitter;
+    }
+
+    public void setSubmitter(String submitter) {
+        this.submitter = submitter;
+    }
+
+    public String getInvestCaseDescription() {
+        return investCaseDescription;
+    }
+
+    public void setInvestCaseDescription(String investCaseDescription) {
+        this.investCaseDescription = investCaseDescription;
+    }
+
+    public String getSingleInvestAmount() {
+        return singleInvestAmount;
+    }
+
+    public void setSingleInvestAmount(String singleInvestAmount) {
+        this.singleInvestAmount = singleInvestAmount;
+    }
 }

@@ -77,6 +77,13 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+    <resultMap id="InvestorSmartSearchOutputMap" type="com.lhjl.tzzs.proxy.dto.investorauditdto.investorauditdetaildto.InvestorSmartSearchOutputDto">
+        <result column="ID" jdbcType="INTEGER" property="investorId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+        <result column="position" jdbcType="VARCHAR" property="position" />
+    </resultMap>
   
    <select id="listInvestorsInfos" resultMap="InvestorsOutputMap">
     	SELECT i.ID,i.user_id,i.name,
@@ -258,7 +265,20 @@
   </select>
 
   <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-      select * from investors where user_id =#{userId} and approval_status = 1 and yn =1;
+      select * from investors where user_id =#{userId} and approval_status != 1 and yn =1;
   </select>
+
+    <select id="maxSerialNumber" resultMap="BaseResultMap">
+    select * from investors where serial_number between 100000 and 200000 order by serial_number desc
+    limit 0,1;
+   </select>
+
+    <select id="smartSearchInvestor" resultMap="InvestorSmartSearchOutputMap">
+    SELECT i.ID, i.name, iis.short_name, i.position FROM idatavc.investors i left join investment_institutions iis on i.investment_institutions_id = iis.ID
+    where 1=1
+        <if test="keyword !=null and keyword !=''">
+            AND i.name like CONCAT(CONCAT('%', #{keyword}), '%')
+        </if>;
+    </select>
 
 </mapper>
