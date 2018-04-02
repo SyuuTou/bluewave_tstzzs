@@ -4,7 +4,10 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorInvestInfoDto;
 import com.lhjl.tzzs.proxy.dto.investorauditdto.investorauditdetaildto.*;
 import com.lhjl.tzzs.proxy.dto.investorauditdto.investorauditlistdto.InvestorAuditListInputDto;
+import com.lhjl.tzzs.proxy.model.Investors;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,4 +34,10 @@ public interface InvestorAuditService {
     CommonDto<Map<String, Object>> getMatchInvestor(String investorName);
 
 //    CommonDto<Map<String, Object>> listAuditInvestorsInfos(Integer appid, InvestorAuditListInputDto body);
+
+    CommonDto<String> auditInvestor(InvestorAuditInputDto body);
+
+    CommonDto<InvestorAuditOutputDto> getInvestorAuditResult(Integer investorId);
+
+    CommonDto<List<InvestorSmartSearchOutputDto>> intelligentSearchInvestor(String keyword);
 }

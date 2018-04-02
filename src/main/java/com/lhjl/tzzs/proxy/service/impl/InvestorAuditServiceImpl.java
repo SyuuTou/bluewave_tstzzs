@@ -916,4 +916,59 @@ public class InvestorAuditServiceImpl implements InvestorAuditService {
 //        result.setData(map);
 //        return result;
 //    }
+
+
+    @Override
+    public CommonDto<String> auditInvestor(InvestorAuditInputDto body) {
+        CommonDto<String> result = new CommonDto<>();
+        Investors investors = investorsMapper.selectByPrimaryKey(body.getInvestorId());
+        if (null == investors) {
+            result.setStatus(300);
+            result.setMessage("failed");
+            result.setData("没有该投资人");
+        }
+        investors.setApprovalStatus(body.getApprovalStatus());
+        investorsMapper.updateByPrimaryKeySelective(investors);
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData("审核成功");
+        return result;
+    }
+
+    @Override
+    public CommonDto<InvestorAuditOutputDto> getInvestorAuditResult(Integer investorId) {
+
+        CommonDto<InvestorAuditOutputDto> result = new CommonDto<>();
+
+        InvestorAuditOutputDto investorAuditOutputDto = new InvestorAuditOutputDto();
+
+        Investors investors = investorsMapper.selectByPrimaryKey(investorId);
+        if (null == investors) {
+            result.setStatus(300);
+            result.setMessage("failed");
+            result.setData(null);
+        }
+
+        investorAuditOutputDto.setInvestorId(investorId);
+        investorAuditOutputDto.setApprovalStatus(investors.getApprovalStatus());
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(investorAuditOutputDto);
+        return result;
+    }
+
+    @Override
+    public CommonDto<List<InvestorSmartSearchOutputDto>> intelligentSearchInvestor(String keyword) {
+
+        CommonDto<List<InvestorSmartSearchOutputDto>> result = new CommonDto<>();
+
+        List<InvestorSmartSearchOutputDto> investorSmartSearchOutputDtoList =investorsMapper.smartSearchInvestor(keyword);
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(investorSmartSearchOutputDtoList);
+        return result;
+    }
 }
