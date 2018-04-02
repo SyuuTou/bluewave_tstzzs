@@ -317,9 +317,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         investorSegmentation.setId(investorId);
         List<InvestorSegmentation> investorSegmentationList = investorSegmentationService.select(investorSegmentation);
         String[] investorSegmentationArr = null;
-        if(null == investorSegmentationList || investorSegmentationList.size() == 0){
-            investorBasicInfoOutputDto.setSegmentations(investorSegmentationArr);
-        }else{
+        if(null != investorSegmentationList && investorSegmentationList.size() != 0){
             List<Integer> investorSegmentationIds = new ArrayList<>();
             investorSegmentationList.forEach(investorSegmentation_i -> {
                 investorSegmentationIds.add(investorSegmentation_i.getSegmentationId());
@@ -339,7 +337,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         
         //城市为选定城市以及自定义城市的总和
         List<String> citysResult=new ArrayList<>();
-        
+        //选定城市
         InvestorCity investorCity = new InvestorCity();
         investorCity.setId(investorId);
         List<InvestorCity> investorCityLists = investorCityService.select(investorCity);
@@ -348,6 +346,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         		citysResult.add(e.getCity());
         	});
         }
+        //自定义城市
         InvestorSelfdefCity investorSelfdefCity =new InvestorSelfdefCity();
         investorSelfdefCity.setId(investorId);
         List<InvestorSelfdefCity> investorSelfdefCitys = investorSelfdefCityMapper.select(investorSelfdefCity);
@@ -356,6 +355,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         		citysResult.add(e.getSelfDefCity());
         	});
         }
+        
         if(citysResult !=null && citysResult.size()!=0) {
         	investorBasicInfoOutputDto.setCitys(citysResult);
         }
@@ -393,9 +393,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         investorBusiness.setId(investorId);
         List<InvestorBusiness> investorBusinessesList = investorBusinessService.select(investorBusiness);
         String[] investorBusinessArr = null;
-        if(null == investorBusinessesList || investorBusinessesList.size() == 0){
-            investorBasicInfoOutputDto.setBusinesses(investorBusinessArr);
-        }else{
+        if(null != investorBusinessesList && investorBusinessesList.size() != 0){
             List<String> investorBusinessess = new ArrayList<>();
             investorBusinessesList.forEach(investorSelfdefCity_i -> {
                 investorBusinessess.add(investorSelfdefCity_i.getBusiness());
@@ -409,9 +407,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         investorWorkExperience.setId(investorId);
         List<InvestorWorkExperience> investorWorkExperienceList = investorWorkExperienceService.select(investorWorkExperience);
         String[] investorWorkExperienceArr = null;
-        if(null == investorWorkExperienceList || investorWorkExperienceList.size() == 0){
-            investorBasicInfoOutputDto.setWorkExperiences(investorWorkExperienceArr);
-        }else{
+        if(null != investorWorkExperienceList && investorWorkExperienceList.size() != 0){
             List<String> investorWorkExperiences = new ArrayList<>();
             investorWorkExperienceList.forEach(investorWorkExperience_i -> {
                 investorWorkExperiences.add(investorWorkExperience_i.getWorkExperience());
@@ -425,9 +421,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         investorEducationExperience.setId(investorId);
         List<InvestorEducationExperience> investorEducationExperienceList = investorEducationExperienceService.select(investorEducationExperience);
         String[] investorEducationExperienceArr = null;
-        if(null == investorEducationExperienceList || investorEducationExperienceList.size() == 0){
-            investorBasicInfoOutputDto.setEducationExperiences(investorEducationExperienceArr);
-        }else{
+        if(null != investorEducationExperienceList && investorEducationExperienceList.size() != 0){
             List<String> investorEducationExperiences = new ArrayList<>();
             investorEducationExperienceList.forEach(investorEducationExperience_i -> {
                 investorEducationExperiences.add(investorEducationExperience_i.getEducationExperience());

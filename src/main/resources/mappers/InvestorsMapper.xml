@@ -134,6 +134,7 @@
   <if test="endTime !=null ">
       AND i.create_time &lt;= #{endTime}
   </if>
+  <!-- 单笔投资金额的范围 -->
   <if test="amountBeginRmb !=null and amountBeginRmb !=''">
       AND ide.investment_amount_low &gt;= #{amountBeginRmb}
   </if>
@@ -148,20 +149,25 @@
   </if>
   <!-- 精确搜索 -->
   <!-- 根据项目来源进行精确搜索 -->
-  <if test="typeName !=null and typeName !=''">
-      AND mdst.type_name = #{typeName}
+  <if test="typeName !=null and typeName.size() &gt; 0">
+      AND mdst.type_name in
+	      <foreach collection="typeName" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="type !=null and type !=''">
-      AND iit.type = #{type}
+  <if test="type !=null and type.size() &gt; 0">
+      AND iit.type in  
+      <foreach collection="type" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="currency !=null and currency !=''">
-      AND funds.currency = #{currency}
+  <if test="currency !=null and currency.size() &gt; 0">
+      AND funds.currency in
+      <foreach collection="currency" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="irPrincipal !=null and irPrincipal !=''">
-      AND mgt.irPrincipal = #{irPrincipal}
+  <if test="irPrincipal !=null and irPrincipal.size() &gt; 0">
+      AND mgt.irPrincipal in
+      <foreach collection="irPrincipal" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="cooperativeRelationship !=null and cooperativeRelationship !=''">
-      AND mgt.cooperativeRelationship = #{cooperativeRelationship}
+  <if test="cooperativeRelationship !=null and cooperativeRelationship.size() &gt; 0">
+      AND mgt.cooperativeRelationship in
+      <foreach collection="cooperativeRelationship" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
   
   <!-- 默认排序 -->
@@ -230,20 +236,26 @@
   <if test="amountEndDollar !=null and amountEndDollar !=''">
       AND ide.investment_amount_high_dollars &lt;= #{amountEndDollar}
   </if>
-  <if test="typeName !=null and typeName !=''">
-      AND mdst.type_name = #{typeName}
+  <!-- 根据项目来源进行精确搜索 -->
+  <if test="typeName !=null and typeName.size() &gt; 0">  
+      AND mdst.type_name in
+	      <foreach collection="typeName" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="type !=null and type !=''">
-      AND iit.type = #{type}
+  <if test="type !=null and type.size() &gt; 0">
+      AND iit.type in  
+      <foreach collection="type" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="currency !=null and currency !=''">
-      AND funds.currency = #{currency}
+  <if test="currency !=null and currency.size() &gt; 0">
+      AND funds.currency in
+      <foreach collection="currency" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="irPrincipal !=null and irPrincipal !=''">
-      AND mgt.irPrincipal = #{irPrincipal}
+  <if test="irPrincipal !=null and irPrincipal.size() &gt; 0">
+      AND mgt.irPrincipal in
+      <foreach collection="irPrincipal" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="cooperativeRelationship !=null and cooperativeRelationship !=''">
-      AND mgt.cooperativeRelationship = #{cooperativeRelationship}
+  <if test="cooperativeRelationship !=null and cooperativeRelationship.size() &gt; 0">
+      AND mgt.cooperativeRelationship in
+      <foreach collection="cooperativeRelationship" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
   </select>
   

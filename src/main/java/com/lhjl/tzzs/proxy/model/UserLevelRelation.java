@@ -68,15 +68,71 @@ public class UserLevelRelation {
     @Column(name = "app_id")
     private Integer appId;
 
-    public Integer getAppId() {
-        return appId;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setAppId(Integer appId) {
-        this.appId = appId;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getBeginTimeStr() {
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public Integer getLevelId() {
+		return levelId;
+	}
+
+	public void setLevelId(Integer levelId) {
+		this.levelId = levelId;
+	}
+
+	public Date getBeginTime() {
+		return beginTime;
+	}
+
+	public void setBeginTime(Date beginTime) {
+		this.beginTime = beginTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Integer getYn() {
+		return yn;
+	}
+
+	public void setYn(Integer yn) {
+		this.yn = yn;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public String getBeginTimeStr() {
 		return beginTimeStr;
 	}
 
@@ -92,171 +148,20 @@ public class UserLevelRelation {
 		EndTimeStr = endTimeStr;
 	}
 
-	/**
-     * @return id
-     */
-    public Integer getId() {
-        return id;
-    }
+	public Integer getAppId() {
+		return appId;
+	}
 
-    /**
-     * @param id
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    /**
-     * 获取用户ID
-     *
-     * @return user_id - 用户ID
-     */
-    public Integer getUserId() {
-        return userId;
-    }
-
-    /**
-     * 设置用户ID
-     *
-     * @param userId 用户ID
-     */
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    /**
-     * 获取会员ID
-     *
-     * @return level_id - 会员ID
-     */
-    public Integer getLevelId() {
-        return levelId;
-    }
-
-    /**
-     * 设置会员ID
-     *
-     * @param levelId 会员ID
-     */
-    public void setLevelId(Integer levelId) {
-        this.levelId = levelId;
-    }
-
-    /**
-     * 获取开通会员时间
-     *
-     * @return begin_time - 开通会员时间
-     */
-    public Date getBeginTime() {
-        return beginTime;
-    }
-
-    /**
-     * 设置开通会员时间
-     *
-     * @param beginTime 开通会员时间
-     */
-    public void setBeginTime(Date beginTime) {
-        this.beginTime = beginTime;
-    }
-
-    /**
-     * 获取会员到期时间
-     *
-     * @return end_time - 会员到期时间
-     */
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    /**
-     * 设置会员到期时间
-     *
-     * @param endTime 会员到期时间
-     */
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
-    /**
-     * 获取创建时间
-     *
-     * @return create_time - 创建时间
-     */
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    /**
-     * 设置创建时间
-     *
-     * @param createTime 创建时间
-     */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    /**
-     * 获取是否有效
-0: 无效
-1：有效
-     *
-     * @return yn - 是否有效
-0: 无效
-1：有效
-     */
-    public Integer getYn() {
-        return yn;
-    }
-
-    /**
-     * 设置是否有效
-0: 无效
-1：有效
-     *
-     * @param yn 是否有效
-0: 无效
-1：有效
-     */
-    public void setYn(Integer yn) {
-        this.yn = yn;
-    }
-
-    /**
-     * 获取0: 未支付
-1: 支付完成
-2: 取消支付
-3: 支付失败
-     *
-     * @return status - 0: 未支付
-1: 支付完成
-2: 取消支付
-3: 支付失败
-     */
-    public Integer getStatus() {
-        return status;
-    }
-
-    /**
-     * 设置0: 未支付
-1: 支付完成
-2: 取消支付
-3: 支付失败
-     *
-     * @param status 0: 未支付
-1: 支付完成
-2: 取消支付
-3: 支付失败
-     */
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+	public void setAppId(Integer appId) {
+		this.appId = appId;
+	}
 
 	@Override
 	public String toString() {
 		return "UserLevelRelation [id=" + id + ", userId=" + userId + ", levelId=" + levelId + ", beginTime="
 				+ beginTime + ", endTime=" + endTime + ", createTime=" + createTime + ", yn=" + yn + ", status="
-				+ status + ", beginTimeStr=" + beginTimeStr + ", EndTimeStr=" + EndTimeStr + "]";
+				+ status + ", beginTimeStr=" + beginTimeStr + ", EndTimeStr=" + EndTimeStr + ", appId=" + appId + "]";
 	}
+
 
 }
