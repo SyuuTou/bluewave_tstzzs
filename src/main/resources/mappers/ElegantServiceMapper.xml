@@ -131,8 +131,8 @@
     and es.yn = 1
     AND es.begin_time &lt;= #{now}
     and es.end_time &gt;= #{now}
-
-      and creator = #{token}
+    and es.is_reward = #{isReward}
+    and es.creator = #{token}
 
     group by es.id
       order by es.create_time desc

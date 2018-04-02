@@ -60,29 +60,18 @@ public class FounderEducationServiceImpl implements FounderEducationService {
         //先找到该创始人的原来的教育经历
         FoundersEducation foundersEducation = new FoundersEducation();
         foundersEducation.setFounderId(founderId);
+        
+        foundersEducationMapper.delete(foundersEducation);
+        
+        if (educationExperience != null){
+            for (String s:educationExperience){
+                FoundersEducation foundersEducationForInsert = new FoundersEducation();
+                foundersEducationForInsert.setFounderId(founderId);
+                foundersEducationForInsert.setEducationExperience(s);
 
-        List<FoundersEducation> foundersEducationList = foundersEducationMapper.select(foundersEducation);
-        if (foundersEducationList.size() > 0){
-            foundersEducationMapper.delete(foundersEducation);
-            if (educationExperience != null){
-                for (String s:educationExperience){
-                    FoundersEducation foundersEducationForInsert = new FoundersEducation();
-                    foundersEducationForInsert.setFounderId(founderId);
-                    foundersEducationForInsert.setEducationExperience(s);
-
-                    foundersEducationMapper.insertSelective(foundersEducationForInsert);
-                }
-            }
-        }else {
-            if (educationExperience != null){
-                for (String s:educationExperience){
-                    FoundersEducation foundersEducationForInsert = new FoundersEducation();
-                    foundersEducationForInsert.setFounderId(founderId);
-                    foundersEducationForInsert.setEducationExperience(s);
-
-                    foundersEducationMapper.insertSelective(foundersEducationForInsert);
-                }
+                foundersEducationMapper.insertSelective(foundersEducationForInsert);
             }
         }
+
     }
 }

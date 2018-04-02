@@ -158,6 +158,11 @@ public class ElegantServiceImpl implements ElegantServiceService{
                   body.setIsLeadInvestor((Integer) userInfo.getData().get("isLeadInvestor"));
               }
 
+              if (null != userInfo.getData().get("identityType")) {
+                  identityType = new Integer[1];
+                  identityType[0] = Integer.valueOf(String.valueOf(userInfo.getData().get("identityType")));
+              }
+
 
 //        }
 
@@ -186,7 +191,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
                       body.getCreateTimeOrder(),sortOrder,appid,identityType,serviceType,body.getSearchWord(),body.getApproveType(),body.getIsLeadInvestor(),body.getIsReward(),body.getMemberType(),startPage,body.getPageSize(), DateTime.now().toDate());
           }else{
 
-              elegantServiceList = elegantServiceMapper.findElegantServiceListCustomer(token,startPage,body.getPageSize(), DateTime.now().toDate());
+              elegantServiceList = elegantServiceMapper.findElegantServiceListCustomer(token,body.getIsReward(),startPage,body.getPageSize(), DateTime.now().toDate());
           }
 
 
@@ -195,7 +200,7 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
                 m.putIfAbsent("original_price","");
                 if (body.getIsReward()!=null && body.getIsReward() == 0) {
-                    m.putIfAbsent("background_picture", "http://img.idatavc.com/static/img/serverwu.png");
+                    m.putIfAbsent("background_picture", "http://img.idatavc.com/static/img/serverwunew.png");
                 }else if (body.getIsReward()!=null && body.getIsReward() == 1) {
                     m.putIfAbsent("background_picture", "http://img.idatavc.com/static/banner/elegant.png");
                 }
@@ -460,7 +465,9 @@ public class ElegantServiceImpl implements ElegantServiceService{
                         approveType.add(2);
                         body.setApproveTypes(approveType);
                     }else{
-                        body.getApproveTypes().add(-1);
+                        if(!body.getApproveTypes().contains(-1)){
+                            body.getApproveTypes().add(-1);
+                        }
                     }
                     if (body.getMemberTypes()==null || body.getMemberTypes().size() == 0){
                         List<Integer> memberType = new ArrayList<>();
@@ -513,9 +520,9 @@ public class ElegantServiceImpl implements ElegantServiceService{
                         memberType.add(4);
                         body.setMemberTypes(memberType);
                     }
-                    if (body.getIsLeadInvestor() == null){
-                        body.setIsLeadInvestor(1);
-                    }
+//                    if (body.getIsLeadInvestor() == null){
+//                        body.setIsLeadInvestor(1);
+//                    }
                     break;
             }
         }
@@ -875,7 +882,11 @@ public class ElegantServiceImpl implements ElegantServiceService{
 
                 Integer count = elegantServiceParticipateMapper.selectCount(queryElegantServiceParticipate);
 
-                if (elegantService.getQuantity() <= count){
+                queryElegantServiceParticipate = new ElegantServiceParticipate();
+                queryElegantServiceParticipate.setElegantServiceId(elegantServiceId);
+                queryElegantServiceParticipate.setToken(token);
+
+                if (elegantService.getQuantity() == count&&elegantServiceParticipateMapper.selectCount(queryElegantServiceParticipate) == 0){
                     elegantService.setCustomButtonLabel("已结束");
                     elegantService.setStatus("Completed");
                 }else {

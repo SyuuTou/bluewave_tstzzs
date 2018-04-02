@@ -43,11 +43,12 @@
     esp.completion_time,esrp.project_id,esrp.project_short_name
     FROM elegant_service_participate esp
     left join users u on esp.token = u.uuid
-    left join users_weixin uw on u.ID = uw.user_id
+    RIGHT join users_weixin uw on u.ID = uw.user_id
     left join elegant_service es on esp.elegant_service_id = es.id
     left join elegant_service_relevant_project esrp on esp.elegant_service_id = esrp.elegant_service_id
     where
     esp.id = #{elegantServiceParticipateId}
     and esp.appId = #{appId}
+    limit 1
   </select>
 </mapper>

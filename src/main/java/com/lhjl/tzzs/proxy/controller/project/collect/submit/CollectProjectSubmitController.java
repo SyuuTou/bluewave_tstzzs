@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.project.collect.list;
+package com.lhjl.tzzs.proxy.controller.project.collect.submit;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendAuditBInputDto;
@@ -21,7 +21,7 @@ public class CollectProjectSubmitController extends GenericService{
     private ProjectSendBService projectSendBService;
 
     /**
-     * 创建项目提交信息的接口
+     * 创建项目提交信息
      * @param body
      * @param appid
      * @return

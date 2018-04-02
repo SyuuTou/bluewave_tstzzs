@@ -234,6 +234,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
         Map<String,Object> map=new HashMap<>();
         
         Report report = reportMapper.selectByPrimaryKey(id);
+        report.setContent(report.getContent().replace("<p >&nbsp;</p>","<p ><br></p>"));
         Integer reportId = report.getId();
         map.put("report", report);
 //        获取report的相关附属信息
@@ -383,7 +384,7 @@ public class ReportServiceImpl extends GenericService implements ReportService {
 
         Report report = new Report();
         report.setComments(reqBody.getComments());
-        report.setContent(reqBody.getContent());
+        report.setContent(reqBody.getContent().replace("<p >&nbsp;</p>","<p ><br></p>"));
         report.setCoverUrl(reqBody.getCoverUrl());
         report.setCreater(reqBody.getCreater());
         report.setFromRul(reqBody.getFromRul());
