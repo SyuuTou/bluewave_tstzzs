@@ -456,7 +456,7 @@ public class InvestorBasicinfoServiceImpl extends GenericService implements Inve
         investorIntroductionDto.setInvestorIntroduction(investors.getPersonalIntroduction());
         result.setStatus(200);
         result.setMessage("success");
-        result.setData(investorIntroductionDto);
+        result.setData(investorIntroductionDto);  
 
         return result;
     }
