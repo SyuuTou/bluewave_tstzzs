@@ -1209,6 +1209,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
 
         PagingOutputDto<ProjectKernelInfoOutputDto> pagingOutputDto = new PagingOutputDto<>();
 
+
         if (body.getPageSize() == null){
             body.setPageSize(pageSizeDefault);
         }
