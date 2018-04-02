@@ -71,7 +71,7 @@ public class InvestorServiceImpl implements InvestorService {
 	public CommonDto<PagingOutputDto<InvestorsOutputDto>> listInvestorsInfos(Integer appid, InvestorListInputDto body) {
 
     	if (StringUtil.isEmpty(body.getToken())){
-    		
+    		return new CommonDto<>(null, "Token 不能为空。", 500);
 		}
     	//根据token获取当前用户
 		UserToken query = new UserToken();
@@ -95,6 +95,7 @@ public class InvestorServiceImpl implements InvestorService {
         }
         //设置开始索引  
         body.setStart((long) ((body.getCurrentPage()-1) * body.getPageSize())) ;
+        
         AdminUser au=new AdminUser();
         au.setMetaAppId(appid);
         au.setUserId(userToken.getUserId());
