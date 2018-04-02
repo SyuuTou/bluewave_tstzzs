@@ -347,9 +347,47 @@ public class InvestorServiceImpl implements InvestorService {
 		if(body.getUserId() == null) {
 			result.setData(false);
 	        result.setStatus(500); 
-	        result.setMessage("请输入相关的userId");    
+	        result.setMessage("请输入相关的用户id");    
 			return result;
 		}
+		//数据格式校验
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			if(body.getEndTimeStr() != null) {
+				body.setEndTime(sdf.parse(body.getEndTimeStr()));
+			}
+			if(body.getBeginTimeStr() != null) {
+				body.setBeginTime(sdf.parse(body.getBeginTimeStr()));
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+			result.setData(false);
+	        result.setStatus(200); 
+	        result.setMessage("日期字符串格式化错误");    
+			return result;
+		}
+		//数据有效性校验
+		if(body.getEndTime().getTime() <= body.getBeginTime().getTime()) {
+			result.setData(false);
+	        result.setStatus(500); 
+	        result.setMessage("会员到期时间不能小于会员开通时间");    
+			return result;
+		}
+		//如果用户输入的截止日期小于当前日期，则用户输入非法
+		if(body.getEndTime().getTime() < new Date().getTime()) {
+			result.setData(false);
+	        result.setStatus(500); 
+	        result.setMessage("用户输入截止日期小于当前时间");
+			return result;
+		}
+		
+		/*if(body.getEndTime().getTime() <= body.getBeginTime().getTime()) {
+			result.setData(false);
+	        result.setStatus(500); 
+	        result.setMessage("会员到期时间不能小于等于会员开通时间");    
+			return result;
+		}*/
+		
 		UserLevelRelation ulr=new UserLevelRelation();
 		ulr.setUserId(body.getUserId());
 		ulr.setYn(1);  
@@ -364,31 +402,10 @@ public class InvestorServiceImpl implements InvestorService {
 			return result;
 		}
 		
-		
-		//进行数据格式的规范化
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		try {
-			if(body.getEndTimeStr() != null) {
-				body.setEndTime(sdf.parse(body.getEndTimeStr()));
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
-			result.setData(false);
-	        result.setStatus(200); 
-	        result.setMessage("日期字符串格式化错误");    
-			return result;
-		}
-		//如果用户输入的截止日期小于当前日期，则用户输入非法
-		if(body.getEndTime().getTime() < new Date().getTime()) {
-			result.setData(false);
-	        result.setStatus(500); 
-	        result.setMessage("用户输入截止日期非法");
-			return result;
-		}
 		//不存在相关的用户会员记录
 		if(user == null) {//进行相应的插入操作
-			//设置会员的创建时间以及变更的时间
-			body.setBeginTime(new Date());
+//			body.setBeginTime(new Date());
+			//设置会员记录的创建时间
 			body.setCreateTime(new Date());
 			body.setYn(1);
 			//后台管理员添加时需要设置状态为："赠送"
@@ -399,17 +416,19 @@ public class InvestorServiceImpl implements InvestorService {
 			user.setYn(0);
 			userLevelRelationMapper.updateByPrimaryKeySelective(user);
 			
+			//设置插入的实体
 			body.setCreateTime(new Date());
 			body.setYn(1);
+			//后台管理员添加时需要设置状态为："赠送"
 			body.setStatus(4);
-			if(user.getLevelId() !=body.getLevelId()) {//用户的会员等级进行了变更
+			/*if(user.getLevelId() !=body.getLevelId()) {//用户的会员等级进行了变更
 				
 				body.setBeginTime(new Date());
 				userLevelRelationMapper.insertSelective(body);
 			}else {//用户的会员等级没有进行变更，会员的开始时间没有发生变化，要取得之前会员的开始时间
 				body.setBeginTime(user.getBeginTime());
 				userLevelRelationMapper.insertSelective(body);
-			}
+			}*/
 		}
 		
 		result.setData(true);
