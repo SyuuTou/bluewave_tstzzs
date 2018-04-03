@@ -52,4 +52,21 @@ public class InvestorAuditListController extends GenericController{
 		return result;
 	}
 
+	/**
+	 * 获取工作名片
+	 * @param approvalId 投资审核记录ID
+	 * @return
+	 */
+	@GetMapping("/workcard")
+	public CommonDto<String> getWorkcard(String approvalId){
+		CommonDto<String> result = new CommonDto<>();
+		try{
+			result = investorsApprovalService.getWorkcard(approvalId);
+		}catch(Exception e){
+			result.setStatus(5010);
+			result.setMessage("获取工作名片异常");
+			this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
+		}
+		return result;
+	}
 }

@@ -60,30 +60,6 @@ public class InvestorsApprovalConroller extends GenericController {
 	}
 
 	/**
-	 * 认证信息回显接口
-	 * @param token
-	 * @return
-	 */
-	@GetMapping("rest/renzhengtouzirenshenhebiao/newrshenhexinxi")
-	public CommonDto<Map<String,Object>> findInvestorsApproval(String token){
-		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
-
-		try {
-			result = investorsApprovalService.findInvestorsApproval(token);
-			if(result.getStatus() == null){
-				result.setStatus(200);
-				result.setMessage("success");
-			}
-		} catch (Exception e) {
-
-			result.setStatus(5101);
-			result.setMessage("显示页面异常，请稍后再试");
-			this.LOGGER.error(e.getMessage(), e);
-		}
-		return result;
-	}
-
-	/**
 	 * 获取投资审核信息(后台调用)
 	 * @return
 	 */
@@ -111,70 +87,11 @@ public class InvestorsApprovalConroller extends GenericController {
 		return result;
 	}
 
-	/**
-	 * 后台审核操作接口
-	 * @param body 请求对象
-	 * @return
-	 */
-	@GetMapping("/approval")
-	public CommonDto<String> approval(InvestorsApprovalActionDto body){
-		CommonDto<String> result = new CommonDto<>();
-		try {
-			result = investorsApprovalService.approval(body,1);
-		} catch (Exception e) {
-			result.setStatus(5101);
-			result.setMessage("投资审核操作异常");
-			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
-		}
-		return result;
-	}
-
-	/**
-	 * 后台审核操作接口
-	 * @param body 请求对象
-	 * @return
-	 */
-	@GetMapping("/v{appId}/approval")
-	public CommonDto<String> approval(InvestorsApprovalActionDto body, @PathVariable Integer appId){
-		CommonDto<String> result = new CommonDto<>();
-		try {
-			result = investorsApprovalService.approval(body,appId);
-		} catch (Exception e) {
-			result.setStatus(5101);
-			result.setMessage("投资审核操作异常");
-			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
-		}
-		return result;
-	}
-
-	/**
-	 * 获取工作名片
-	 * @param approvalId 投资审核记录ID
-	 * @return
-	 */
-	@GetMapping("/workcard")
-	public CommonDto<String> getWorkcard(String approvalId){
-		CommonDto<String> result = new CommonDto<>();
-		try{
-			result = investorsApprovalService.getWorkcard(approvalId);
-		}catch(Exception e){
-			result.setStatus(5010);
-			result.setMessage("获取工作名片异常");
-			this.LOGGER.error(e.getMessage(), e.fillInStackTrace());
-		}
-		return result;
-	}
-
-
 	@GetMapping("/send/approvallog")  
 	public CommonDto<String> sendApprovalLog(Integer userId,Integer status,String formId){
 		CommonDto<String> result = new CommonDto<>();
 
-
 		result = investorsApprovalService.sendTemplate(userId,status,formId);
-
-
-
 
 		return result;
 	}
@@ -230,24 +147,5 @@ public class InvestorsApprovalConroller extends GenericController {
 		return result;
 	}
 
-	/**
-	 * 新后台用户审核接口
-	 * @param body
-	 * @return
-	 */
-	@PostMapping("/v{appid}/admin/special/approval")
-	public CommonDto<String> adminSpecialApproval(@RequestBody InvestorSpecialApprovalDto body,Integer appid){
-		CommonDto<String> result = new CommonDto<>();
-
-		try {
-			result = investorsApprovalService.adminSpecialApproval(body,appid);
-		}catch (Exception e){
-			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
-			result.setData(null);
-			result.setStatus(502);
-			result.setMessage("服务器端发生错误");
-		}
-
-		return result;
-	}
+	
 }

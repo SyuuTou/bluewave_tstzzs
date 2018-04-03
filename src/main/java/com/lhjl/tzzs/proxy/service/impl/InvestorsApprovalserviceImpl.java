@@ -23,13 +23,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.InvestorsApprovalService;
 import tk.mybatis.mapper.entity.Example;
 
 @Service
-public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
-
-    private static final Logger log = LoggerFactory.getLogger(InvestorsApprovalService.class);
+public class InvestorsApprovalserviceImpl extends GenericService implements InvestorsApprovalService {
 
     @Value("${pageNum}")
     private Integer defaultPageNum;
@@ -189,8 +188,8 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setMessage("用户token不能为空");
                 result.setStatus(50001);
 
-                log.info("投资人认证场景");
-                log.info("用户token不能为空");
+                this.LOGGER.info("投资人认证场景");
+                this.LOGGER.info("用户token不能为空");
 
                 return result;
             }
@@ -200,8 +199,8 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setMessage("请填写姓名");
                 result.setStatus(50001);
 
-                log.info("投资人认证场景");
-                log.info("请填写姓名");
+                this.LOGGER.info("投资人认证场景");
+                this.LOGGER.info("请填写姓名");
 
                 return result;
             }
@@ -211,8 +210,8 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setMessage("请选择投资人类型");
                 result.setStatus(50001);
 
-				log.info("投资人认证场景");
-				log.info("请选择投资人类型");
+				this.LOGGER.info("投资人认证场景");
+				this.LOGGER.info("请选择投资人类型");
 
                 return result;
             }*/
@@ -223,8 +222,8 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setMessage("请填写所在公司");
                 result.setStatus(50001);
 
-                log.info("投资人认证场景");
-                log.info("请填写所在公司");
+                this.LOGGER.info("投资人认证场景");
+                this.LOGGER.info("请填写所在公司");
 
                 return result;
             }
@@ -234,8 +233,8 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setMessage("请填写所在公司职务");
                 result.setStatus(50001);
 
-                log.info("投资人认证场景");
-                log.info("请填写所在公司职务");
+                this.LOGGER.info("投资人认证场景");
+                this.LOGGER.info("请填写所在公司职务");
 
                 return result;
             }
@@ -245,8 +244,8 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
                 result.setMessage("formId不存在");
                 result.setStatus(50001);
 
-                log.info("投资人认证场景");
-                log.info("formId不存在");
+                this.LOGGER.info("投资人认证场景");
+                this.LOGGER.info("formId不存在");
 
                 return result;
             }
@@ -504,7 +503,6 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
 
     /**
      * 获取投资审核信息
-     *
      * @param body 查询条件
      * @return
      */
@@ -1242,7 +1240,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
             result.setData(null);
 
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            this.LOGGER.error(e.getMessage(), e);
             result.setData(null);
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
@@ -1480,7 +1478,7 @@ public class InvestorsApprovalserviceImpl implements InvestorsApprovalService {
             result.setData(null);
 
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            this.LOGGER.error(e.getMessage(), e);
             result.setData(null);
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
