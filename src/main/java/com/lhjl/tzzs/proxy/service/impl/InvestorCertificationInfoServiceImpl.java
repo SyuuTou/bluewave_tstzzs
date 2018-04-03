@@ -127,6 +127,7 @@ public class InvestorCertificationInfoServiceImpl extends GenericService impleme
         return result;
     }
 
+    @Transactional
     @Override
     public CommonDto<InvestorCertificationDto> getInvestorCertification(Integer investorId) {
 
