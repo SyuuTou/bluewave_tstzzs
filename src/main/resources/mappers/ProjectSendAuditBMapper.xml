@@ -15,6 +15,7 @@
     <result column="prepare_id" jdbcType="INTEGER" property="prepareId" />
     <result column="appid" jdbcType="INTEGER" property="appid" />
     <result column="project_source" jdbcType="INTEGER" property="projectSource" />
+    <result column="audit_introductions" jdbcType="VARCHAR" property="auditIntroductions"/>
   </resultMap>
   <select id="searchProjectSendAuditB" resultMap="BaseResultMap">
     SELECT * FROM project_send_audit_b

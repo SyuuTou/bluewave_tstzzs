@@ -8,7 +8,12 @@ import javax.annotation.Resource;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.EventDto;
+import com.lhjl.tzzs.proxy.mapper.UserProjectsMapper;
+import com.lhjl.tzzs.proxy.mapper.UserTokenMapper;
+import com.lhjl.tzzs.proxy.model.UserProjects;
+import com.lhjl.tzzs.proxy.model.UserToken;
 import com.lhjl.tzzs.proxy.service.UserInfoService;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -40,6 +45,10 @@ public class FollowServiceImpl implements FollowService {
 
     @Resource
     private UserInfoService userInfoService;
+    @Autowired
+    private UserTokenMapper userTokenMapper;
+    @Autowired
+    private UserProjectsMapper userProjectsMapper;
 
     @Value("${event.trigger.url}")
     private String eventUrl;
@@ -61,6 +70,18 @@ public class FollowServiceImpl implements FollowService {
                 follow.setUserId(userId);
                 follow.setCreateTime(new Date());
                 followMapper.updateFollowStatus(follow);
+                UserToken userToken = new UserToken();
+                userToken.setToken(userId);
+                userToken = userTokenMapper.selectOne(userToken);
+
+                UserProjects userProjects = new UserProjects();
+                userProjects.setUserId(userToken.getUserId());
+                userProjects.setSendProjectId(projectId);
+                userProjects = userProjectsMapper.selectOne(userProjects);
+                if (null == userProjects) {
+                    userProjects.setIsdel(1);
+                    userProjectsMapper.updateByPrimaryKey(userProjects);
+                }
 
             }
 
@@ -75,7 +96,30 @@ public class FollowServiceImpl implements FollowService {
         follow.setStatus(status);
         follow.setUserId(userId);
         followMapper.insert(follow);
+        UserToken userToken = new UserToken();
+        userToken.setToken(userId);
+        userToken = userTokenMapper.selectOne(userToken);
+        UserProjects userProjects = new UserProjects();
+        userProjects.setUserId(userToken.getUserId());
+        userProjects.setSendProjectId(projectId);
+        userProjects = userProjectsMapper.selectOne(userProjects);
+        if (null == userProjects) {
+            userProjects.setIsdel(0);
+            userProjectsMapper.updateByPrimaryKey(userProjects);
+        }else {
 
+            userProjects = new UserProjects();
+            userProjects.setSourcePlatformId(1);//项目来源平台
+            userProjects.setActionId(2);//项目关注
+            userProjects.setSendProjectId(projectId);
+            userProjects.setUpdateTime(DateTime.now().toDate());
+            userProjects.setCreateTime(DateTime.now().toDate());
+            userProjects.setUserId(userToken.getUserId());
+            userProjects.setYn(1);
+            userProjects.setIsdel(0);
+            userProjectsMapper.insert(userProjects);
+
+        }
         sendConcernEvent(projectId, userId);
     }
 

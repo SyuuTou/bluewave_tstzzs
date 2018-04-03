@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.bluewave;
+package com.lhjl.tzzs.proxy.controller.reference;
 
 import com.lhjl.tzzs.proxy.controller.weixin.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;

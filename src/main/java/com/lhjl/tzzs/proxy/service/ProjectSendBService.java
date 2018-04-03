@@ -7,8 +7,8 @@ import com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectListInputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBAuditDto.ProjectLogoInfoOutputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBOutDto;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 public interface ProjectSendBService {
 
@@ -62,4 +62,12 @@ public interface ProjectSendBService {
      * @return
      */
     CommonDto<PagingOutputDto<ProjectKernelInfoOutputDto>> listProjectInfos(Integer appid,  ProjectListInputDto body);
+
+    CommonDto<List<ProjectSendBOutDto>> readProjectInfomationList(String token, Integer appId, Integer pageNo, Integer pageSize);
+
+    CommonDto<ProjectSendBOutDto> readProjectInfomation(String token, Integer projectId, Integer appid);
+
+    CommonDto<String> updateProjectById(ProjectSendBDto body, Integer appId);
+
+    CommonDto<String> commitProjectAudit(ProjectSendBDto body, Integer appid);
 }

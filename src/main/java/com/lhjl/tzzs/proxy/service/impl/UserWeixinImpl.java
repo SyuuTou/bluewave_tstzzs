@@ -81,7 +81,7 @@ public class UserWeixinImpl implements UserWeixinService {
             usersWeixin.setUserId(userID);
             usersWeixin.setNickName(userInfo.getNickName());
             usersWeixin.setUnionId(userInfo.getUnionId());
-            usersWeixinMapper.updateByPrimaryKey(usersWeixin);
+            usersWeixinMapper.updateByPrimaryKeySelective(usersWeixin);
         }else{
             //创建用户微信表的实体类
             usersWeixin = new UsersWeixin();

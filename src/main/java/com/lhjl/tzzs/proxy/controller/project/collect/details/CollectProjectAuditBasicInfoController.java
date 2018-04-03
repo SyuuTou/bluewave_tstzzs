@@ -10,11 +10,9 @@ import com.lhjl.tzzs.proxy.service.ProjectSendBService;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created by lanhaijulang on 2018/2/1.
@@ -47,6 +45,27 @@ public class CollectProjectAuditBasicInfoController extends GenericController{
     }
     
     /**
+     * 根据token和项目ID读取项目信息接口
+     * @param token
+     * @param appid
+     * @return
+     */
+    @GetMapping("v{appid}/read/project/sendinfo/{projectId}")
+    public CommonDto<ProjectSendBOutDto> readProjectSendInfoById(String token, @PathVariable Integer projectId ,@PathVariable Integer appid){
+        CommonDto<ProjectSendBOutDto> result  = new CommonDto<>();
+
+        try {
+            result = projectSendBService.readProjectInfomation(token, projectId, appid);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setStatus(502);
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+        }
+        return result;
+    }
+
+    /**
      * ZYY
      * 根据token读取项目信息接口
      * @param token
@@ -65,6 +84,29 @@ public class CollectProjectAuditBasicInfoController extends GenericController{
             result.setMessage("服务器端发生错误");
             result.setData(null);
         }
+        return result;
+    }
+
+    /**
+     * 根据token读取项目信息接口
+     * @param token
+     * @param appId
+     * @return
+     */
+    @GetMapping("v{appId}/read/project/sendinfo/list")
+    public CommonDto<List<ProjectSendBOutDto>> readProjectSendInfoList(String token, @PathVariable Integer appId, @RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = "10") Integer pageSize){
+        CommonDto<List<ProjectSendBOutDto>> result = null;
+
+        try {
+            result = projectSendBService.readProjectInfomationList(token, appId, pageNo, pageSize);
+        } catch (Exception e) {
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result = new CommonDto<>();
+            result.setStatus(502);
+            result.setMessage(e.getMessage());
+            result.setData(null);
+        }
+
         return result;
     }
 

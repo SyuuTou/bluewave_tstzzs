@@ -9,9 +9,10 @@ import com.lhjl.tzzs.proxy.model.*;
 import com.lhjl.tzzs.proxy.service.*;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ProjectSendBServiceImpl implements ProjectSendBService{
+public class ProjectSendBServiceImpl extends GenericService implements ProjectSendBService{
 
     @Resource
     private UserLoginService userLoginService;
@@ -82,6 +83,9 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
 
     @Value("${pageSize}")
     private Integer pageSizeDefault;
+
+    @Autowired
+    private UserProjectsMapper userProjectsMapper;
 
 
     /**
@@ -227,13 +231,13 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         }
         
 
-        //机构项目关系
-        CommonDto<String> result6 = createProjectSendAndInstitution(body.getInstitutionId(),body.getProjectSendId(),body.getPrepareId(),appid);
-        if (result6.getStatus() != 200){
-            result = result6;
-
-            return result;
-        }
+//        //机构项目关系
+//        CommonDto<String> result6 = createProjectSendAndInstitution(body.getInstitutionId(),body.getProjectSendId(),body.getPrepareId(),appid);
+//        if (result6.getStatus() != 200){
+//            result = result6;
+//
+//            return result;
+//        }
 
         result.setData(null);
         result.setMessage("success");
@@ -678,6 +682,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         Integer id =0;
         //复制项目主体信息
         ProjectSendSearchDto projectSendSearchDto = new ProjectSendSearchDto();
+        projectSendSearchDto.setId(projectSendBId);
         projectSendSearchDto.setNewprepareid(newprepareid);
         projectSendSearchDto.setPrepareid(prepareid);
 
@@ -940,6 +945,179 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
 
         return result;
     }
+/**
+     * 提交项目信息回显
+     * @param projectSendBId
+     * @param appid
+     * @param userid
+     * @param newprepareid
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public CommonDto<ProjectSendBOutDto> readProjectSendByIdForList(Integer projectSendBId,Integer appid,Integer userid,Integer newprepareid){
+        CommonDto<ProjectSendBOutDto> result = new CommonDto<>();
+        ProjectSendBOutDto projectSendBOutDto = new ProjectSendBOutDto();
+
+        ProjectSendB projectSendB =  projectSendBMapper.selectByPrimaryKey(projectSendBId);
+        if (projectSendB == null){
+            result.setMessage("服务器端发生逻辑错误，请联系后端");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+        //如果项目的名称简介不存在,取用户信息里的
+        Users userss = usersMapper.selectByPrimaryKey(userid);
+
+        String projectLogo = "";
+        if (projectSendB.getProjectLogo() != null){
+            projectLogo = projectSendB.getProjectLogo();
+        }
+        projectSendBOutDto.setProjectLogo(projectLogo);
+        if (  null == projectSendB.getShortName() || "".equals(projectSendB.getShortName())){
+            projectSendB.setShortName(userss.getCompanyName());
+        }
+        projectSendBOutDto.setShortName(projectSendB.getShortName());
+        projectSendBOutDto.setFullName(projectSendB.getFullName());
+        projectSendBOutDto.setKernelDesc(projectSendB.getKernelDesc());
+        projectSendBOutDto.setProjectInvestmentHighlights(projectSendB.getProjectInvestmentHighlights());
+        if (null ==projectSendB.getCommet() || "".equals(projectSendB.getCommet())){
+            projectSendB.setCommet(userss.getCompanyDesc());
+        }
+        projectSendBOutDto.setCommet(projectSendB.getCommet());
+        String url = "";
+        if (projectSendB.getUrl() != ""){
+            url = projectSendB.getUrl();
+        }
+        projectSendBOutDto.setUrl(url);
+        if (null == projectSendB.getCity() || "".equals(projectSendB.getCity())){
+            projectSendB.setCity(userss.getCity());
+        }
+        projectSendBOutDto.setCity(projectSendB.getCity());
+
+        //项目领域
+        List<String> segmentation = new ArrayList<>();
+        ProjectSendSegmentationB projectSendSegmentationB = new ProjectSendSegmentationB();
+        projectSendSegmentationB.setProjectSendBId(projectSendBId);
+        projectSendSegmentationB.setAppid(appid);
+
+        List<ProjectSendSegmentationB> projectSendSegmentationBList = projectSendSegmentationBMapper.select(projectSendSegmentationB);
+        if (projectSendSegmentationBList.size() > 0){
+            for (ProjectSendSegmentationB pssb:projectSendSegmentationBList){
+                segmentation.add(pssb.getSegmentationName());
+            }
+        }
+        projectSendBOutDto.setProjectSegmentation(segmentation);
+
+        //项目标签
+        List<String> projectTags = new ArrayList<>();
+        ProjectSendTagsB projectSendTagsB = new ProjectSendTagsB();
+        projectSendTagsB.setProjectSendBId(projectSendBId);
+        projectSendTagsB.setAppid(appid);
+
+        List<ProjectSendTagsB> projectSendTagsBList = projectSendTagsBMapper.select(projectSendTagsB);
+        if (projectSendTagsBList.size() > 0){
+            for (ProjectSendTagsB pstb:projectSendTagsBList){
+                projectTags.add(pstb.getTagName());
+            }
+        }
+        projectSendBOutDto.setProjectTags(projectTags);
+
+        //当前融资信息
+        ProjectSendFinancingApprovalB projectSendFinancingApprovalB = new ProjectSendFinancingApprovalB();
+        projectSendFinancingApprovalB.setProjectSendBId(projectSendBId);
+        projectSendFinancingApprovalB.setAppid(appid);
+
+        List<ProjectSendFinancingApprovalB> projectSendFinancingApprovalBList = projectSendFinancingApprovalBMapper.select(projectSendFinancingApprovalB);
+        if (projectSendFinancingApprovalBList.size() > 0){
+            projectSendBOutDto.setStage(projectSendFinancingApprovalBList.get(0).getStage());
+            projectSendBOutDto.setAmount(projectSendFinancingApprovalBList.get(0).getAmount());
+            projectSendBOutDto.setCurrency(projectSendFinancingApprovalBList.get(0).getCurrency());
+            projectSendBOutDto.setShareDivest(projectSendFinancingApprovalBList.get(0).getShareDivest());
+            projectSendBOutDto.setProjectFinancingUseful(projectSendFinancingApprovalBList.get(0).getProjectFinancingUseful());
+
+        }else {
+            projectSendBOutDto.setStage("");
+            BigDecimal a = BigDecimal.ZERO;
+            projectSendBOutDto.setAmount(a);
+            projectSendBOutDto.setCurrency(0);
+            projectSendBOutDto.setShareDivest("");
+            projectSendBOutDto.setProjectFinancingUseful("");
+        }
+
+        //项目竞品
+        List<String> projectCompetion= new ArrayList<>();
+        ProjectSendCompetingB projectSendCompetingB = new ProjectSendCompetingB();
+        projectSendCompetingB.setProjectSendBId(projectSendBId);
+        projectSendCompetingB.setAppid(appid);
+
+        List<ProjectSendCompetingB> projectSendCompetingBList = projectSendCompetingBMapper.select(projectSendCompetingB);
+        if (projectSendCompetingBList.size() > 0){
+            for (ProjectSendCompetingB pscb:projectSendCompetingBList){
+                projectCompetion.add(pscb.getCompetingName());
+            }
+        }
+        projectSendBOutDto.setProjectCompeting(projectCompetion);
+
+
+        //获取创始人信息
+        Users users = usersMapper.selectByPrimaryKey(userid);
+
+        projectSendBOutDto.setActualName(users.getActualName());
+        projectSendBOutDto.setCompanyDuties(users.getCompanyDuties());
+        projectSendBOutDto.setDesc(users.getDesc());
+        String email = "";
+        if (users.getEmail() != null){
+            email = users.getEmail();
+        }
+        projectSendBOutDto.setEmail(email);
+        String wechat = "";
+        if (users.getWechat() != null){
+            wechat = users.getWechat();
+        }
+        projectSendBOutDto.setWechat(wechat);
+
+        List<String> founderEducation = new ArrayList<>();
+        List<String> founderWork = new ArrayList<>();
+        Founders founders = new Founders();
+        founders.setUserId(userid);
+
+        List<Founders> foundersList = foundersMapper.select(founders);
+        if (foundersList.size() > 0){
+            Integer founderId = foundersList.get(0).getId();
+            FoundersEducation foundersEducation = new FoundersEducation();
+            foundersEducation.setFounderId(founderId);
+
+            List<FoundersEducation> foundersEducationList = foundersEducationMapper.select(foundersEducation);
+            if (foundersEducationList.size() > 0){
+                for (FoundersEducation fe:foundersEducationList){
+                    founderEducation.add(fe.getEducationExperience());
+                }
+            }
+
+            FoundersWork foundersWork = new FoundersWork();
+            foundersWork.setFounderId(founderId);
+
+            List<FoundersWork> foundersWorkList = foundersWorkMapper.select(foundersWork);
+            if (foundersWorkList.size() > 0){
+                for (FoundersWork fw:foundersWorkList){
+                    founderWork.add(fw.getWorkExperience());
+                }
+            }
+
+        }
+
+        projectSendBOutDto.setEducationExperience(founderEducation);
+        projectSendBOutDto.setWorkExperience(founderWork);
+        projectSendBOutDto.setProjectSendId(projectSendBId);
+        projectSendBOutDto.setPrepareId(projectSendB.getPrepareId());
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(projectSendBOutDto);
+
+        return result;
+    }
 
     /**
      * 用户第一次访问项目读的接口
@@ -1144,7 +1322,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             projectSendAuditBForUpdate.setId(projectSendAuditId);
             projectSendAuditBForUpdate.setPrepareId(prepareId);
             projectSendAuditBForUpdate.setProjectSendBId(body.getProjectSendId());
-
+            projectSendAuditBForUpdate.setAuditIntroductions(body.getAudiIintroductions());
             projectSendAuditBMapper.updateByPrimaryKeySelective(projectSendAuditBForUpdate);
         }else {
             ProjectSendAuditB projectSendAuditBForInsert = new ProjectSendAuditB();
@@ -1156,6 +1334,7 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
             projectSendAuditBForInsert.setUserId(userid);
             projectSendAuditBForInsert.setCreateTime(new Date());
             projectSendAuditBForInsert.setProjectSource(1);
+            projectSendAuditBForInsert.setAuditIntroductions(body.getAudiIintroductions());
 
             projectSendAuditBMapper.insertSelective(projectSendAuditBForInsert);
         }
@@ -1179,20 +1358,20 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         Boolean jieguo = false;
         Integer projectSendId = body.getProjectSendId();
         ProjectSendB projectSendB = projectSendBMapper.selectByPrimaryKey(projectSendId);
-        if (body.getShortName().equals(projectSendB.getShortName())){
+//        if (body.getShortName().equals(projectSendB.getShortName())){
             ProjectSendFinancingApprovalB projectSendFinancingApprovalB = new ProjectSendFinancingApprovalB();
             projectSendFinancingApprovalB.setProjectSendBId(projectSendId);
             projectSendFinancingApprovalB.setAppid(appid);
 
             List<ProjectSendFinancingApprovalB> projectSendFinancingApprovalBList = projectSendFinancingApprovalBMapper.select(projectSendFinancingApprovalB);
             if (projectSendFinancingApprovalBList.size() > 0){
-                if (projectSendFinancingApprovalBList.get(0).getStage().equals(body.getStage())){
+//                if (projectSendFinancingApprovalBList.get(0).getStage().equals(projectSendB..getStage())){
                     if (aduitYn){
                         jieguo=true;
                     }
-                }
+//                }
             }
-        }
+//        }
 
         result.setData(jieguo);
         result.setMessage("success");
@@ -1229,6 +1408,320 @@ public class ProjectSendBServiceImpl implements ProjectSendBService{
         result.setStatus(200);
         result.setMessage("success");
         result.setData(pagingOutputDto);
+        return result;
+    }
+
+    @Override
+    public CommonDto<List<ProjectSendBOutDto>> readProjectInfomationList(String token, Integer appId, Integer pageNo, Integer pageSize) {
+
+        List<ProjectSendBOutDto> projectSendBOutDtos = new ArrayList<>();
+        try {
+            Integer userId = userLoginService.getUserIdByToken(token,appId);
+
+            UserProjects userProjects = new UserProjects();
+            userProjects.setUserId(userId);
+            userProjects.setIsdel(0);//未删除的
+            userProjects.setYn(1);
+            List<UserProjects> userProjectsList = userProjectsMapper.selectByRowBounds(userProjects, new RowBounds(pageSize*(pageNo-1),pageSize));
+            userProjectsList.forEach((item) ->{
+                if (item.getSourcePlatformId() == 2) {
+                    projectSendBOutDtos.add(readProjectSendByIdForList(item.getSendProjectId(), appId, userId, null).getData());
+                }else if (item.getSourcePlatformId() == 1){
+//                    projectSendBOutDtos.add();
+                }
+            });
+        } catch (Exception e) {
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            return new CommonDto<>(null,"failed", 500);
+        }
+
+
+        return new CommonDto<>(projectSendBOutDtos,"success",200);
+    }
+
+    @Override
+    public CommonDto<ProjectSendBOutDto> readProjectInfomation(String token, Integer projectId, Integer appid) {
+        CommonDto<ProjectSendBOutDto> result  = new CommonDto<>();
+
+        if (StringUtils.isAnyBlank(token)){
+            result.setStatus(502);
+            result.setMessage("用户token不能为空");
+            result.setData(null);
+
+            return result;
+        }
+
+        Integer userId = userLoginService.getUserIdByToken(token,appid);
+        if (userId == -1){
+            result.setMessage("用户token非法");
+            result.setData(null);
+            result.setStatus(502);
+            return result;
+        }
+
+        Integer prepareId = getPrepareId(token,appid);
+        if (prepareId == null){
+            result.setStatus(502);
+            result.setData(null);
+            result.setMessage("生产prepareId出错");
+
+            return result;
+        }
+
+//        List<ProjectSendB> projectSendBList = projectSendBMapper.getLastCreateProject(userId,appid,projectId);
+        if (projectId > 0){
+            //原prepareid
+//            Integer prepareid = projectSendBList.get(0).getPrepareId();
+            //新prepareid
+            Integer newprepareid = getPrepareId(token,appid);
+//            //老提交项目id
+//            Integer projectSendBId = projectSendBList.get(0).getId();
+            //复制项目信息获取新项目id
+            CommonDto<Integer> newProjectSendBC = copyProjectById(newprepareid,appid,userId,projectId);
+            Integer newProjectSendBId = newProjectSendBC.getData();
+
+            result =readProjectSendById(newProjectSendBId,appid,userId,newprepareid);
+
+            UserProjects userProjects = new UserProjects();
+            userProjects.setUserId(userId);
+            userProjects.setSendProjectId(projectId);
+
+            userProjects = userProjectsMapper.selectOne(userProjects);
+
+            userProjects.setCreateTime(DateTime.now().toDate());
+            userProjects.setSendProjectId(newProjectSendBId);
+            userProjects.setUpdateTime(DateTime.now().toDate());
+            userProjects.setActionId(1);
+            userProjects.setSourcePlatformId(2);
+            userProjectsMapper.updateByPrimaryKey(userProjects);
+
+        }else {
+            result = readProjectFirstTime(token,appid,userId);
+
+            UserProjects userProjects = new UserProjects();
+            userProjects.setSendProjectId(result.getData().getProjectSendId());
+            userProjects.setUserId(userId);
+
+            userProjects = userProjectsMapper.selectOne(userProjects);
+            if (null != userProjects){
+
+                userProjects.setIsdel(0);
+                userProjects.setCreateTime(DateTime.now().toDate());
+                userProjects.setUpdateTime(DateTime.now().toDate());
+                userProjects.setYn(0);
+                userProjects.setActionId(1);
+                userProjects.setSourcePlatformId(2);
+                userProjectsMapper.updateByPrimaryKey(userProjects);
+            }else {
+                userProjects = new UserProjects();
+                userProjects.setSendProjectId(result.getData().getProjectSendId());
+                userProjects.setUserId(userId);
+                userProjects.setIsdel(0);
+                userProjects.setCreateTime(DateTime.now().toDate());
+                userProjects.setUpdateTime(DateTime.now().toDate());
+                userProjects.setYn(0);
+                userProjects.setActionId(1);
+                userProjects.setSourcePlatformId(2);
+                userProjectsMapper.insert(userProjects);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public CommonDto<String> updateProjectById(ProjectSendBDto body, Integer appId) {
+        CommonDto<String> result  = new CommonDto<>();
+
+
+        Date now = new Date();
+        if (body.getToken() == null || "".equals(body.getToken()) || "undefined".equals(body.getToken())){
+            result.setData(null);
+            result.setStatus(502);
+            result.setMessage("用户token不能为空");
+
+            return result;
+        }
+
+        if (body.getProjectSendId() == null){
+            result.setMessage("提交项目id不能为空");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+        if (StringUtils.isAnyBlank(body.getShortName(),body.getKernelDesc(),body.getProjectInvestmentHighlights(),body.getCommet(),body.getCity())){
+            result.setMessage("必填项有为空的情况，请检查");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+        //获取用户id
+        Integer userid = userLoginService.getUserIdByToken(body.getToken(),appId);
+        if (userid == -1){
+            result.setMessage("用户token非法，请检查");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+
+        //注意：先创建提交记录，再更新项目！！！！！！
+//        CommonDto<String> resulta =  createProjectSendAudit(body,appId,body.getPrepareId(),userid);
+//        if (resulta.getStatus() != 200){
+//            result = resulta;
+//            return result;
+//        }
+
+        UserProjects userProjects = new UserProjects();
+        userProjects.setUserId(userid);
+        userProjects.setSendProjectId(body.getProjectSendId());
+
+        userProjects = userProjectsMapper.selectOne(userProjects);
+        userProjects.setYn(1);
+        userProjectsMapper.updateByPrimaryKey(userProjects);
+
+        //更新项目
+        ProjectSendB projectSendB = new ProjectSendB();
+        //设置提交项目表的主键id？
+        projectSendB.setId(body.getProjectSendId());
+        projectSendB.setProjectLogo(body.getProjectLogo());
+        projectSendB.setShortName(body.getShortName());
+        projectSendB.setFullName(body.getFullName());
+        projectSendB.setKernelDesc(body.getKernelDesc());
+        projectSendB.setProjectInvestmentHighlights(body.getProjectInvestmentHighlights());
+        projectSendB.setCommet(body.getCommet());
+        projectSendB.setUrl(body.getUrl());
+        projectSendB.setCity(body.getCity());
+        projectSendB.setCreateTime(now);
+        //编辑状态：编辑完成了
+        projectSendB.setEditStatus(1);
+
+        projectSendBMapper.updateByPrimaryKeySelective(projectSendB);
+
+        //项目领域更新
+        CommonDto<String> result1 =  createProjectSegmentation(body, appId);
+        if (result1.getStatus() != 200){
+            result = result1;
+
+            return result;
+        }
+
+        //项目标签
+        CommonDto<String> result2 =createProjectTags(body, appId);
+        if (result2.getStatus() != 200){
+            result = result2;
+
+            return result;
+        }
+
+        //项目竞品
+        CommonDto<String> result3 =createProjectCompeting(body, appId);
+        if (result3.getStatus() != 200){
+            result = result3;
+
+            return result;
+        }
+
+        //融资申请
+        CommonDto<String> result4 =createProjectFinancingApproval(body, appId,userid);
+        if (result4.getStatus() != 200){
+            result = result4;
+
+            return result;
+        }
+
+        //用户以及创始人信息
+        CommonDto<String> result5 =updateUserInfo(body,appId);
+        if (result5.getStatus() != 200){
+            result = result5;
+
+            return result;
+        }
+
+
+
+
+        result.setData(null);
+        result.setMessage("success");
+        result.setStatus(200);
+
+        return result;
+    }
+
+    @Override
+    public CommonDto<String> commitProjectAudit(ProjectSendBDto body, Integer appId) {
+        CommonDto<String> result  = new CommonDto<>();
+        //获取用户id
+        Integer userid = userLoginService.getUserIdByToken(body.getToken(),appId);
+        if (userid == -1){
+            result.setMessage("用户token非法，请检查");
+            result.setStatus(502);
+            result.setData(null);
+
+            return result;
+        }
+        CommonDto<String> resulta =  createProjectSendAudit(body,appId,body.getPrepareId(),userid);
+        if (resulta.getStatus() != 200){
+            result = resulta;
+            return result;
+        }
+
+        //机构项目关系
+        CommonDto<String> result6 = createProjectSendAndInstitution(body.getInstitutionId(),body.getProjectSendId(),body.getPrepareId(),appId);
+        if (result6.getStatus() != 200){
+            result = result6;
+
+            return result;
+        }
+        result.setData(null);
+        result.setMessage("success");
+        result.setStatus(200);
+
+        return result;
+    }
+
+    private CommonDto<Integer> copyProjectById(Integer newprepareid, Integer appid, Integer userId, Integer projectSendBId) {
+        CommonDto<Integer> result  = new CommonDto<>();
+        if (appid == null || userId == null || projectSendBId == null){
+            result.setMessage("缺少参数无法完成复制");
+            result.setData(null);
+            result.setStatus(502);
+
+            return result;
+        }
+        Integer id =0;
+        //复制项目主体信息
+
+        ProjectSendB projectSendB = projectSendBMapper.selectByPrimaryKey(projectSendBId);
+        projectSendB.setPrepareId(newprepareid);
+        projectSendB.setId(null);
+
+        projectSendBMapper.insert(projectSendB);
+        Integer newprojectSendId = projectSendB.getId();
+
+        ProjectSendSearchCommenDto projectSendSearchCommenDto = new ProjectSendSearchCommenDto();
+        projectSendSearchCommenDto.setNewid(newprojectSendId);
+        projectSendSearchCommenDto.setOldid(projectSendBId);
+
+        //复制项目相关信息
+        projectSendCompetingBMapper.copyProjectSendCompetingB(projectSendSearchCommenDto);
+        projectSendSegmentationBMapper.copyProjectSendSegmentationB(projectSendSearchCommenDto);
+        projectSendTagsBMapper.copyProjectSendTagsB(projectSendSearchCommenDto);
+        projectSendFinancingApprovalBMapper.copyProjectSendFinancingApprovalB(projectSendSearchCommenDto);
+
+        //复制团队成员
+        projectSendTeamBService.copyProjectSendBTeam(appid, projectSendBId,newprojectSendId);
+
+        //复制融资历史
+        projectSendFinancingHistoryBService.copyProjectSendFinancingHistoryB(newprojectSendId,projectSendBId,appid);
+
+        result.setData(newprojectSendId);
+        result.setStatus(200);
+        result.setMessage("success");
+
         return result;
     }
 }

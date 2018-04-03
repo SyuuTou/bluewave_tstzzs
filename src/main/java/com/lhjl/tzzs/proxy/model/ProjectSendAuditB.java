@@ -62,6 +62,17 @@ public class ProjectSendAuditB {
     @Column(name = "project_source")
     private Integer projectSource;
 
+    @Column(name = "audit_introductions")
+    private String auditIntroductions;
+
+    public String getAuditIntroductions() {
+        return auditIntroductions;
+    }
+
+    public void setAuditIntroductions(String auditIntroductions) {
+        this.auditIntroductions = auditIntroductions;
+    }
+
     /**
      * @return id
      */

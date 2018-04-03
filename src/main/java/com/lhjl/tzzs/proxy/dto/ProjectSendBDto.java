@@ -85,6 +85,17 @@ public class ProjectSendBDto {
     /**预生成id*/
     private Integer prepareId;
 
+    /** 提交审核说明 */
+    private String audiIintroductions;
+
+    public String getAudiIintroductions() {
+        return audiIintroductions;
+    }
+
+    public void setAudiIintroductions(String audiIintroductions) {
+        this.audiIintroductions = audiIintroductions;
+    }
+
     public String getProjectLogo() {
         return projectLogo;
     }
