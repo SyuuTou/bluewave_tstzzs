@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.dto.FundDto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by lanhaijulang on 2018/1/19.
@@ -25,27 +26,28 @@ public class FundOutputDto {
 
     private BigDecimal investmentAmountHigh;
 
-    private String[] investStages;
+    private List<String> investStages;
 
-    private String[] focusDomains;
+    private List<String> focusDomains;
 
-    public String[] getInvestStages() {
-        return investStages;
-    }
 
-    public void setInvestStages(String[] investStages) {
-        this.investStages = investStages;
-    }
+    public List<String> getInvestStages() {
+		return investStages;
+	}
 
-    public String[] getFocusDomains() {
-        return focusDomains;
-    }
+	public void setInvestStages(List<String> investStages) {
+		this.investStages = investStages;
+	}
 
-    public void setFocusDomains(String[] focusDomains) {
-        this.focusDomains = focusDomains;
-    }
+	public List<String> getFocusDomains() {
+		return focusDomains;
+	}
 
-    public Integer getFundId() {
+	public void setFocusDomains(List<String> focusDomains) {
+		this.focusDomains = focusDomains;
+	}
+
+	public Integer getFundId() {
         return fundId;
     }
 

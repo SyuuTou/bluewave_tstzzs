@@ -1,5 +1,7 @@
 package com.lhjl.tzzs.proxy.dto.investorauditdto.investorauditdetaildto;
 
+import java.util.List;
+
 /**
  * Created by lanhaijulang on 2018/2/7.
  */
@@ -18,7 +20,7 @@ public class InvestorAuditBasicInfoOutputDto {
     /**
      * 领域id
      */
-    private String[] segmentations;
+    private List<String> segmentations;
 
     /**
      * 微信
@@ -33,12 +35,12 @@ public class InvestorAuditBasicInfoOutputDto {
     /**
      * 所在城市
      */
-    private String[] citys;
+    private List<String> citys;
 
     /**
      * 自定义城市
      */
-    private String[] selfDefCity;
+    private List<String> selfDefCity;
 
     /**
      * 出生年月
@@ -73,12 +75,12 @@ public class InvestorAuditBasicInfoOutputDto {
     /**
      * 工作经历
      */
-    private String[] workExperiences;
+    private List<String> workExperiences;
 
     /**
      * 教育经历
      */
-    private String[] educationExperiences;
+    private List<String> educationExperiences;
 
     /**
      * 工作名片
@@ -95,7 +97,7 @@ public class InvestorAuditBasicInfoOutputDto {
     /**
      * 创业经历
      */
-    private String[] businesses;
+    private List<String> businesses;
 
     /**
      * 创业描述
@@ -117,188 +119,188 @@ public class InvestorAuditBasicInfoOutputDto {
      */
     private String honor;
 
-    public Integer getInvestorId() {
-        return investorId;
-    }
+	public Integer getInvestorId() {
+		return investorId;
+	}
 
-    public void setInvestorId(Integer investorId) {
-        this.investorId = investorId;
-    }
+	public void setInvestorId(Integer investorId) {
+		this.investorId = investorId;
+	}
 
-    public String getIdentityType() {
-        return identityType;
-    }
+	public String getIdentityType() {
+		return identityType;
+	}
 
-    public void setIdentityType(String identityType) {
-        this.identityType = identityType;
-    }
+	public void setIdentityType(String identityType) {
+		this.identityType = identityType;
+	}
 
-    public String[] getSegmentations() {
-        return segmentations;
-    }
+	public List<String> getSegmentations() {
+		return segmentations;
+	}
 
-    public void setSegmentations(String[] segmentations) {
-        this.segmentations = segmentations;
-    }
+	public void setSegmentations(List<String> segmentations) {
+		this.segmentations = segmentations;
+	}
 
-    public String getWeiChat() {
-        return weiChat;
-    }
+	public String getWeiChat() {
+		return weiChat;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public void setWeiChat(String weiChat) {
+		this.weiChat = weiChat;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setWeiChat(String weiChat) {
-        this.weiChat = weiChat;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String[] getCitys() {
-        return citys;
-    }
+	public List<String> getCitys() {
+		return citys;
+	}
 
-    public void setCitys(String[] citys) {
-        this.citys = citys;
-    }
+	public void setCitys(List<String> citys) {
+		this.citys = citys;
+	}
 
-    public String[] getSelfDefCity() {
-        return selfDefCity;
-    }
+	public List<String> getSelfDefCity() {
+		return selfDefCity;
+	}
 
-    public void setSelfDefCity(String[] selfDefCity) {
-        this.selfDefCity = selfDefCity;
-    }
+	public void setSelfDefCity(List<String> selfDefCity) {
+		this.selfDefCity = selfDefCity;
+	}
 
-    public String getBirthDay() {
-        return birthDay;
-    }
+	public String getBirthDay() {
+		return birthDay;
+	}
 
-    public void setBirthDay(String birthDay) {
-        this.birthDay = birthDay;
-    }
+	public void setBirthDay(String birthDay) {
+		this.birthDay = birthDay;
+	}
 
-    public Integer getSex() {
-        return sex;
-    }
+	public Integer getSex() {
+		return sex;
+	}
 
-    public void setSex(Integer sex) {
-        this.sex = sex;
-    }
+	public void setSex(Integer sex) {
+		this.sex = sex;
+	}
 
-    public String getDiploma() {
-        return diploma;
-    }
+	public String getDiploma() {
+		return diploma;
+	}
 
-    public void setDiploma(String diploma) {
-        this.diploma = diploma;
-    }
+	public void setDiploma(String diploma) {
+		this.diploma = diploma;
+	}
 
-    public String getNationality() {
-        return nationality;
-    }
+	public String getNationality() {
+		return nationality;
+	}
 
-    public void setNationality(String nationality) {
-        this.nationality = nationality;
-    }
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
+	}
 
-    public String getTenureTime() {
-        return tenureTime;
-    }
+	public String getTenureTime() {
+		return tenureTime;
+	}
 
-    public void setTenureTime(String tenureTime) {
-        this.tenureTime = tenureTime;
-    }
+	public void setTenureTime(String tenureTime) {
+		this.tenureTime = tenureTime;
+	}
 
-    public String getCompanyIntro() {
-        return companyIntro;
-    }
+	public String getCompanyIntro() {
+		return companyIntro;
+	}
 
-    public void setCompanyIntro(String companyIntro) {
-        this.companyIntro = companyIntro;
-    }
+	public void setCompanyIntro(String companyIntro) {
+		this.companyIntro = companyIntro;
+	}
 
-    public String[] getWorkExperiences() {
-        return workExperiences;
-    }
+	public List<String> getWorkExperiences() {
+		return workExperiences;
+	}
 
-    public void setWorkExperiences(String[] workExperiences) {
-        this.workExperiences = workExperiences;
-    }
+	public void setWorkExperiences(List<String> workExperiences) {
+		this.workExperiences = workExperiences;
+	}
 
-    public String[] getEducationExperiences() {
-        return educationExperiences;
-    }
+	public List<String> getEducationExperiences() {
+		return educationExperiences;
+	}
 
-    public void setEducationExperiences(String[] educationExperiences) {
-        this.educationExperiences = educationExperiences;
-    }
+	public void setEducationExperiences(List<String> educationExperiences) {
+		this.educationExperiences = educationExperiences;
+	}
 
-    public String getBusinessCard() {
-        return businessCard;
-    }
+	public String getBusinessCard() {
+		return businessCard;
+	}
 
-    public void setBusinessCard(String businessCard) {
-        businessCard = businessCard;
-    }
+	public void setBusinessCard(String businessCard) {
+		this.businessCard = businessCard;
+	}
 
+	public String getBusinessCardOposite() {
+		return businessCardOposite;
+	}
 
-    public String getBusinessCardOposite() {
-        return businessCardOposite;
-    }
+	public void setBusinessCardOposite(String businessCardOposite) {
+		this.businessCardOposite = businessCardOposite;
+	}
 
-    public void setBusinessCardOposite(String businessCardOposite) {
-        this.businessCardOposite = businessCardOposite;
-    }
+	public String getPicture() {
+		return picture;
+	}
 
-    public String getPicture() {
-        return picture;
-    }
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
 
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
+	public List<String> getBusinesses() {
+		return businesses;
+	}
 
-    public String[] getBusinesses() {
-        return businesses;
-    }
+	public void setBusinesses(List<String> businesses) {
+		this.businesses = businesses;
+	}
 
-    public void setBusinesses(String[] businesses) {
-        this.businesses = businesses;
-    }
+	public String getBussiness() {
+		return bussiness;
+	}
 
-    public String getBussiness() {
-        return bussiness;
-    }
+	public void setBussiness(String bussiness) {
+		this.bussiness = bussiness;
+	}
 
-    public void setBussiness(String bussiness) {
-        this.bussiness = bussiness;
-    }
+	public String getEducationExperience() {
+		return educationExperience;
+	}
 
-    public String getEducationExperience() {
-        return educationExperience;
-    }
+	public void setEducationExperience(String educationExperience) {
+		this.educationExperience = educationExperience;
+	}
 
-    public void setEducationExperience(String educationExperience) {
-        this.educationExperience = educationExperience;
-    }
+	public String getWorkExperience() {
+		return workExperience;
+	}
 
-    public String getWorkExperience() {
-        return workExperience;
-    }
+	public void setWorkExperience(String workExperience) {
+		this.workExperience = workExperience;
+	}
 
-    public void setWorkExperience(String workExperience) {
-        this.workExperience = workExperience;
-    }
+	public String getHonor() {
+		return honor;
+	}
 
-    public String getHonor() {
-        return honor;
-    }
+	public void setHonor(String honor) {
+		this.honor = honor;
+	}
 
-    public void setHonor(String honor) {
-        this.honor = honor;
-    }
 }
