@@ -16,7 +16,7 @@ import javax.annotation.Resource;
  * @date 2018-1-30 17:26:54
  */
 @RestController
-public class InvestorInvestInfoController extends GenericController{
+public class InvestorDemandInfoController extends GenericController{
 
     @Resource
     private InvestorInvestInfoService investorInvestInfoService;

@@ -57,7 +57,7 @@
 
   <select id="selectBySegmentationIds" resultMap="BaseResultMap">
     select * from meta_segmentation where 1=1
-    <if test="segmentationIds != null and segmentationIds!=''">
+    <if test="segmentationIds != null and segmentationIds.size() > 0">
       and id in
       <foreach close=")" collection="segmentationIds" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
