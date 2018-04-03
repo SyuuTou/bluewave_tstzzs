@@ -155,10 +155,12 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
         investorKernelInfoDto.setName(investors.getName());
         String companyName = investmentInstitutionsMapper.selectById(investors.getInvestmentInstitutionsId());
         investorKernelInfoDto.setCompanyName(companyName);
+        
         investorKernelInfoDto.setCompanyDuties(investors.getPosition());
         investorKernelInfoDto.setHeadPicture(investors.getHeadPicture());
         String teamName = metaInvestmentInstitutionTeamTypeMapper.findTeamNameById(investors.getTeamId());
         investorKernelInfoDto.setTeamName(teamName);
+        
         investorKernelInfoDto.setSelfDefTeam(investors.getSelfDefTeam());
         investorKernelInfoDto.setPhone(investors.getPhone());
         investorKernelInfoDto.setKernelDesc(investors.getKernelDescription());

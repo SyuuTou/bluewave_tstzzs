@@ -1,5 +1,7 @@
 package com.lhjl.tzzs.proxy.dto.investorDto;
 
+import java.util.List;
+
 /**
  * Created by lanhaijulang on 2018/1/31.
  */
@@ -28,7 +30,7 @@ public class InvestorCertificationDto {
     /**
      * 投资案例
      */
-    private String[] investCase;
+    private List<String> investCase;
 
     /**
      *工作名片
@@ -85,15 +87,16 @@ public class InvestorCertificationDto {
         this.investorType = investorType;
     }
 
-    public String[] getInvestCase() {
-        return investCase;
-    }
 
-    public void setInvestCase(String[] investCase) {
-        this.investCase = investCase;
-    }
+    public List<String> getInvestCase() {
+		return investCase;
+	}
 
-    public String getBusinessCard() {
+	public void setInvestCase(List<String> investCase) {
+		this.investCase = investCase;
+	}
+
+	public String getBusinessCard() {
         return businessCard;
     }
 
