@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.utils.DateUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -40,6 +41,7 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
     @Resource
     private InvestorDemandAreaService investorDemandAreaService;
 
+    @Transactional
     @Override
     public CommonDto<String> addOrUpdateInvestorInvestInfo(InvestorInvestInfoDto body) {
         CommonDto<String> result = new CommonDto<>();
@@ -58,127 +60,86 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
         investorDemand.setInvestmentAmountLowDollars(body.getInvestAmountLowDollar());
         investorDemand.setInvestmentAmountHighDollars(body.getInvestAmountHighDollar());
         investorDemand.setDemand(body.getPreferDesc());
-        long now = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String createTime = null;
-        try {
-            createTime = sdf.format(new Date(now));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Integer investorDemandInsertResult = -1;
+        
         if(null == body.getInvestorDemandId()){
-            investorDemand.setCreatTime(DateUtils.parse(createTime));
-            investorDemandInsertResult = investorDemandMapper.insert(investorDemand);
+            investorDemand.setCreatTime(new Date());
+            investorDemandMapper.insertSelective(investorDemand);
         }else{
-            investorDemand.setUpdateTime(DateUtils.parse(createTime));
-            investorDemandInsertResult = investorDemandMapper.updateByPrimaryKeySelective(investorDemand);
+            investorDemand.setUpdateTime(new Date());
+            investorDemandMapper.updateByPrimaryKeySelective(investorDemand);
         }
-
-        Integer investorDemandSegmentationInsertResult = -1;
-        List<InvestorDemandSegmentation> investorDemandSegmentationList = new ArrayList<>();
+        
+        //关注领域
+        List<InvestorDemandSegmentation> demandSegmentations = new ArrayList<>();
         investorDemandSegmentationService.deleteAll(investorDemand.getId());
-        if(null == body.getFocusSegmentations()||body.getFocusSegmentations().length ==0){
-            InvestorDemandSegmentation investorDemandSegmentation = new InvestorDemandSegmentation();
-            investorDemandSegmentation.setInvestorDemandId(investorDemand.getId());
-            investorDemandSegmentation.setSegmentation(null);
-            investorDemandSegmentationList.add(investorDemandSegmentation);
-        }else{
-            for (String investorDemandSegmentation : body.getFocusSegmentations()){
-                InvestorDemandSegmentation investorDemandSegmentation1 = new InvestorDemandSegmentation();
-                investorDemandSegmentation1.setInvestorDemandId(investorDemand.getId());
-                investorDemandSegmentation1.setSegmentation(investorDemandSegmentation);
-                investorDemandSegmentationList.add(investorDemandSegmentation1);
+        
+        if(null != body.getFocusSegmentations() && body.getFocusSegmentations().size()!=0){
+            for (String e : body.getFocusSegmentations()){
+                InvestorDemandSegmentation investorDemandSegmentation = new InvestorDemandSegmentation();
+                investorDemandSegmentation.setInvestorDemandId(investorDemand.getId());
+                investorDemandSegmentation.setSegmentation(e);
+                demandSegmentations.add(investorDemandSegmentation);
             }
         }
-        investorDemandSegmentationInsertResult = investorDemandSegmentationService.insertList(investorDemandSegmentationList);
-
-        Integer investorDemandStageInsertResult = -1;
+        investorDemandSegmentationService.insertList(demandSegmentations);
+        
+        //投资阶段
         List<InvestorDemandStage> investorDemandStageList = new ArrayList<>();
         investorDemandStageService.deleteAll(investorDemand.getId());
-        if(null == body.getFocusStages()||body.getFocusStages().length ==0){
-            InvestorDemandStage investorDemandStage = new InvestorDemandStage();
-            investorDemandStage.setInvestorDemandId(investorDemand.getId());
-            investorDemandStage.setMetaProjectStageId(null);
-            investorDemandStageList.add(investorDemandStage);
-        }else{
-            for (Integer investorDemandStageId : body.getFocusStages()){
+        
+        if(null != body.getFocusStages()&&body.getFocusStages().size()!=0){
+            for (Integer e : body.getFocusStages()){
                 InvestorDemandStage investorDemandStage = new InvestorDemandStage();
                 investorDemandStage.setInvestorDemandId(investorDemand.getId());
-                investorDemandStage.setMetaProjectStageId(investorDemandStageId);
+                investorDemandStage.setMetaProjectStageId(e);
                 investorDemandStageList.add(investorDemandStage);
             }
         }
-        investorDemandStageInsertResult = investorDemandStageService.insertList(investorDemandStageList);
-
-        Integer investorDemandAreaInsertResult = -1;
+        investorDemandStageService.insertList(investorDemandStageList);
+        //地域偏好
         List<InvestorDemandArea> investorDemandAreaList = new ArrayList<>();
         investorDemandAreaService.deleteAll(investorDemand.getId());
-        if(null == body.getPreferCitys()||body.getPreferCitys().length == 0){
-            InvestorDemandArea investorDemandArea = new InvestorDemandArea();
-            investorDemandArea.setInvestorDemandId(investorDemand.getId());
-            investorDemandArea.setCity(null);
-            investorDemandAreaList.add(investorDemandArea);
-        }else{
-            for (String investorDemandArea : body.getPreferCitys()){
-                InvestorDemandArea investorDemandArea1 = new InvestorDemandArea();
-                investorDemandArea1.setInvestorDemandId(investorDemand.getId());
-                investorDemandArea1.setCity(investorDemandArea);
-                investorDemandAreaList.add(investorDemandArea1);
+        
+        if(null != body.getPreferCitys()&&body.getPreferCitys().size() != 0){
+            for (String e : body.getPreferCitys()){
+                InvestorDemandArea investorDemandArea = new InvestorDemandArea();
+                investorDemandArea.setInvestorDemandId(investorDemand.getId());
+                investorDemandArea.setCity(e);
+                investorDemandAreaList.add(investorDemandArea);
             }
         }
-        investorDemandAreaInsertResult = investorDemandAreaService.insertList(investorDemandAreaList);
-
-
-        Integer investorDemandSpeedwayInsertResult = -1;
+        investorDemandAreaService.insertList(investorDemandAreaList);
+        //最近关注细分赛道
         List<InvestorDemandSpeedway> investorDemandSpeedwayList = new ArrayList<>();
         investorDemandSpeedwayService.deleteAll(investorDemand.getId());
-        if(null == body.getFocusSpeedway()||body.getFocusSpeedway().length ==0){
-            InvestorDemandSpeedway investorDemandSpeedway = new InvestorDemandSpeedway();
-            investorDemandSpeedway.setInvestorDemandId(investorDemand.getId());
-            investorDemandSpeedway.setSpeedway(null);
-            investorDemandSpeedwayList.add(investorDemandSpeedway);
-        }else{
-            for (String investorDemandSpeedway : body.getFocusSpeedway()){
+        
+        if(null != body.getFocusSpeedway() && body.getFocusSpeedway().size()!=0){
+            for (String e : body.getFocusSpeedway()){
                 InvestorDemandSpeedway investorDemandSpeedway1 = new InvestorDemandSpeedway();
                 investorDemandSpeedway1.setInvestorDemandId(investorDemand.getId());
-                investorDemandSpeedway1.setSpeedway(investorDemandSpeedway);
+                investorDemandSpeedway1.setSpeedway(e);
                 investorDemandSpeedwayList.add(investorDemandSpeedway1);
 
             }
         }
-        investorDemandSpeedwayInsertResult = investorDemandSpeedwayService.insertList(investorDemandSpeedwayList);
-
-        Integer investorDemandCharacterInsertResult = -1;
+        investorDemandSpeedwayService.insertList(investorDemandSpeedwayList);
+        //关注的创始人特质
         List<InvestorDemandCharacter> investorDemandCharacterList = new ArrayList<>();
         investorDemandCharacterService.deleteAll(investorDemand.getId());
-        if(null == body.getFocusCharacters()||body.getFocusCharacters().length ==0){
-            InvestorDemandCharacter investorDemandCharacter = new InvestorDemandCharacter();
-            investorDemandCharacter.setInvestorDemandId(investorDemand.getId());
-            investorDemandCharacter.setCharacter(null);
-            investorDemandCharacterList.add(investorDemandCharacter);
-        }else{
-            for (String investorDemandCharacter : body.getFocusCharacters()){
+        
+        if(null != body.getFocusCharacters() && body.getFocusCharacters().size() !=0){
+            for (String e : body.getFocusCharacters()){
                 InvestorDemandCharacter investorDemandCharacter1 = new InvestorDemandCharacter();
                 investorDemandCharacter1.setInvestorDemandId(investorDemand.getId());
-                investorDemandCharacter1.setCharacter(investorDemandCharacter);
+                investorDemandCharacter1.setCharacter(e);
                 investorDemandCharacterList.add(investorDemandCharacter1);
             }
         }
-        investorDemandCharacterInsertResult = investorDemandCharacterService.insertList(investorDemandCharacterList);
+        investorDemandCharacterService.insertList(investorDemandCharacterList);
 
-        if(investorDemandInsertResult > 0 && investorDemandCharacterInsertResult > 0 &&
-                investorDemandSpeedwayInsertResult > 0 && investorDemandAreaInsertResult > 0 &&
-                investorDemandStageInsertResult > 0 && investorDemandSegmentationInsertResult > 0){
-            result.setMessage("success");
-            result.setStatus(200);
-            result.setData("保存成功");
-            return result;
-        }
-
-        result.setMessage("failed");
-        result.setStatus(300);
-        result.setData("保存失败");
+        result.setMessage("success");
+        result.setStatus(200);
+        result.setData("保存成功");
         return result;
     }
 
@@ -187,6 +148,7 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
         CommonDto<InvestorInvestInfoDto> result = new CommonDto<>();
         InvestorInvestInfoDto investorInvestInfoDto = new InvestorInvestInfoDto();
         InvestorDemand investorDemand = investorDemandMapper.selectByInvestorId(investorId);
+        
         if(null != investorDemand) {
             investorInvestInfoDto.setInvestorId(investorId);
             investorInvestInfoDto.setInvestorDemandId(investorDemand.getId());
@@ -195,85 +157,65 @@ public class InvestorInvestInfoServiceImpl implements InvestorInvestInfoService 
             investorInvestInfoDto.setInvestAmountLowDollar(investorDemand.getInvestmentAmountLowDollars());
             investorInvestInfoDto.setInvestAmountLowRmb(investorDemand.getInvestmentAmountLow());
             investorInvestInfoDto.setInvestAmountHighRmb(investorDemand.getInvestmentAmountHigh());
-
+            //关注领域
             InvestorDemandSegmentation investorDemandSegmentation = new InvestorDemandSegmentation();
             investorDemandSegmentation.setInvestorDemandId(investorDemand.getId());
-            List<InvestorDemandSegmentation> investorDemandSegmentationList = investorDemandSegmentationService.select(investorDemandSegmentation);
-            String[] investorDemandSegmentationArr = null;
-            if (null == investorDemandSegmentationList) {
-                investorInvestInfoDto.setFocusSegmentations(investorDemandSegmentationArr);
-            } else {
-                List<String> investorDemandSegmentations = new ArrayList<>();
-                investorDemandSegmentationList.forEach(investorDemandSegmentation_i -> {
-                    investorDemandSegmentations.add(investorDemandSegmentation_i.getSegmentation());
+            List<InvestorDemandSegmentation> demandSegmentations = investorDemandSegmentationService.select(investorDemandSegmentation);
+            
+            if (null != demandSegmentations &&demandSegmentations.size()!=0){
+                List<String> demandSegmentationNames = new ArrayList<>();
+                demandSegmentations.forEach(e -> {
+                	demandSegmentationNames.add(e.getSegmentation());
                 });
-                investorDemandSegmentationArr = new String[investorDemandSegmentations.size()];
-                investorDemandSegmentations.toArray(investorDemandSegmentationArr);
-                investorInvestInfoDto.setFocusSegmentations(investorDemandSegmentationArr);
+                investorInvestInfoDto.setFocusSegmentations(demandSegmentationNames);
             }
-
+            //投资阶段
             InvestorDemandStage investorDemandStage = new InvestorDemandStage();
             investorDemandStage.setInvestorDemandId(investorDemand.getId());
             List<InvestorDemandStage> investorDemandStagesList = investorDemandStageService.select(investorDemandStage);
-            Integer[] investorDemandStageArr = null;
-            if (null == investorDemandStagesList) {
-                investorInvestInfoDto.setFocusStages(investorDemandStageArr);
-            } else {
+            
+            if (null != investorDemandStagesList && investorDemandStagesList.size()!=0 ){
                 List<Integer> investorDemandStages = new ArrayList<>();
-                investorDemandStagesList.forEach(investorDemandStage_i -> {
-                    investorDemandStages.add(investorDemandStage_i.getMetaProjectStageId());
+                investorDemandStagesList.forEach(e -> {
+                    investorDemandStages.add(e.getMetaProjectStageId());
                 });
-                investorDemandStageArr = new Integer[investorDemandStages.size()];
-                investorDemandStages.toArray(investorDemandStageArr);
-                investorInvestInfoDto.setFocusStages(investorDemandStageArr);
+                investorInvestInfoDto.setFocusStages(investorDemandStages);
             }
-
+            //地域偏好
             InvestorDemandArea investorDemandArea = new InvestorDemandArea();
             investorDemandArea.setInvestorDemandId(investorDemand.getId());
             List<InvestorDemandArea> InvestorDemandAreaList = investorDemandAreaService.select(investorDemandArea);
-            String[] investorDemandCityArr = null;
-            if (null == InvestorDemandAreaList) {
-                investorInvestInfoDto.setPreferCitys(investorDemandCityArr);
-            } else {
+            
+            if (null != InvestorDemandAreaList && investorDemandStagesList.size()!=0 ){
                 List<String> investorDemandCitys = new ArrayList<>();
-                InvestorDemandAreaList.forEach(investorDemandCity_i -> {
-                    investorDemandCitys.add(investorDemandCity_i.getCity());
+                InvestorDemandAreaList.forEach(e -> {
+                    investorDemandCitys.add(e.getCity());
                 });
-                investorDemandCityArr = new String[investorDemandCitys.size()];
-                investorDemandCitys.toArray(investorDemandCityArr);
-                investorInvestInfoDto.setPreferCitys(investorDemandCityArr);
+                investorInvestInfoDto.setPreferCitys(investorDemandCitys);
             }
-
+            
             InvestorDemandSpeedway investorDemandSpeedway = new InvestorDemandSpeedway();
             investorDemandSpeedway.setInvestorDemandId(investorDemand.getId());
             List<InvestorDemandSpeedway> investorDemandSpeedwayList = investorDemandSpeedwayService.select(investorDemandSpeedway);
-            String[] investorDemandSpeedwayArr = null;
-            if (null == investorDemandSpeedwayList) {
-                investorInvestInfoDto.setFocusSpeedway(investorDemandSpeedwayArr);
-            } else {
+            
+            if (null != investorDemandSpeedwayList && investorDemandStagesList.size()!=0 ){
                 List<String> investorDemandSpeedways = new ArrayList<>();
-                investorDemandSpeedwayList.forEach(investorDemandSpeedway_i -> {
-                    investorDemandSpeedways.add(investorDemandSpeedway_i.getSpeedway());
+                investorDemandSpeedwayList.forEach(e -> {
+                    investorDemandSpeedways.add(e.getSpeedway());
                 });
-                investorDemandSpeedwayArr = new String[investorDemandSpeedways.size()];
-                investorDemandSpeedways.toArray(investorDemandSpeedwayArr);
-                investorInvestInfoDto.setFocusSpeedway(investorDemandSpeedwayArr);
+                investorInvestInfoDto.setFocusSpeedway(investorDemandSpeedways);
             }
 
             InvestorDemandCharacter investorDemandCharacter = new InvestorDemandCharacter();
             investorDemandCharacter.setInvestorDemandId(investorDemand.getId());
             List<InvestorDemandCharacter> investorDemandCharacterList = investorDemandCharacterService.select(investorDemandCharacter);
-            String[] investorDemandCharacterArr = null;
-            if (null == investorDemandCharacterList) {
-                investorInvestInfoDto.setFocusCharacters(investorDemandCharacterArr);
-            } else {
+            
+            if (null != investorDemandCharacterList && investorDemandStagesList.size()!=0){
                 List<String> investorDemandCharacters = new ArrayList<>();
-                investorDemandCharacterList.forEach(investorDemandCharacter_i -> {
-                    investorDemandCharacters.add(investorDemandCharacter_i.getCharacter());
+                investorDemandCharacterList.forEach(e -> {
+                    investorDemandCharacters.add(e.getCharacter());
                 });
-                investorDemandCharacterArr = new String[investorDemandCharacters.size()];
-                investorDemandCharacters.toArray(investorDemandCharacterArr);
-                investorInvestInfoDto.setFocusCharacters(investorDemandCharacterArr);
+                investorInvestInfoDto.setFocusCharacters(investorDemandCharacters);
             }
         }
 

@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.investor.details;
+package com.lhjl.tzzs.proxy.controller.investor.palatform.details;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
@@ -41,7 +41,7 @@ public class InvestorProcessTrackingController extends GenericController{
     }
 
     /**
-     * 得到操作日志表
+     * 操作日志回显
      * @param investorId
      * @return
      */
@@ -65,7 +65,7 @@ public class InvestorProcessTrackingController extends GenericController{
      * @return
      */
     @DeleteMapping("/deleteinvestoroperateLog")
-    public CommonDto<String> getInvestorInfo(Integer logId){
+    public CommonDto<String> getInvestorInfo(Long logId){
         CommonDto<String> result = new CommonDto<>();
         try {
             result = investorProcessTrackingService.deleteInvestorOperateLog(logId);

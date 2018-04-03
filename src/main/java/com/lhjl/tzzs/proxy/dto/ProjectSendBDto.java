@@ -1,9 +1,20 @@
 package com.lhjl.tzzs.proxy.dto;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 public class ProjectSendBDto {
+	
+    /**提交项目id*/
+    private Integer projectSendId;
+    
+    /**预生成id*/
+    private Integer prepareId;
+    
+    /**用户token*/
+    private String token;
+    
     /**项目logo*/
     private String projectLogo;
 
@@ -34,7 +45,7 @@ public class ProjectSendBDto {
     /**项目标签*/
     private List<String> projectTags;
 
-    /**轮次*/
+    /**融资轮次*/
     private String stage;
 
     /**融资金额*/
@@ -73,17 +84,10 @@ public class ProjectSendBDto {
     /**微信号*/
     private String wechat;
 
-    /**用户token*/
-    private String token;
-
-    /**提交项目id*/
-    private Integer projectSendId;
-
     /**机构id*/
     private List<Integer> institutionId;
 
-    /**预生成id*/
-    private Integer prepareId;
+
 
     /** 提交审核说明 */
     private String audiIintroductions;
@@ -311,4 +315,7 @@ public class ProjectSendBDto {
     public void setPrepareId(Integer prepareId) {
         this.prepareId = prepareId;
     }
+
+
+    
 }

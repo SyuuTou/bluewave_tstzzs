@@ -22,7 +22,7 @@ import java.util.*;
  * Created by lanhaijulang on 2018/2/7.
  */
 @Service
-public class InvestorAuditServiceImpl implements InvestorAuditService {
+public class InvestorAuditServiceImpl extends GenericService implements InvestorAuditService {
 
     @Autowired
     private MetaInvestmentInstitutionTeamTypeMapper metaInvestmentInstitutionTeamTypeMapper;
@@ -532,10 +532,9 @@ public class InvestorAuditServiceImpl implements InvestorAuditService {
         investorAuditBasicInfoOutputDto.setIdentityType(identityName);
         investorAuditBasicInfoOutputDto.setWeiChat(investors.getWeichat());
         investorAuditBasicInfoOutputDto.setEmail(investors.getEmail());
+        
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
-        if(null == investors.getBirthDay() || "undefined".equals(investors.getBirthDay())){
-            investorAuditBasicInfoOutputDto.setBirthDay("");
-        }else{
+        if(null != investors.getBirthDay()){
             investorAuditBasicInfoOutputDto.setBirthDay(sdf.format(investors.getBirthDay()));
         }
         investorAuditBasicInfoOutputDto.setSex(investors.getSex());
@@ -544,13 +543,10 @@ public class InvestorAuditServiceImpl implements InvestorAuditService {
         String countryName = metaRegionMapper.selectByRegionId(investors.getNationality());
         investorAuditBasicInfoOutputDto.setNationality(countryName);
         investorAuditBasicInfoOutputDto.setBusinessCardOposite(investors.getBusinessCardOpposite());
-        if(null == investors.getTenureTime() || "undefined".equals(investors.getTenureTime())){
-            investorAuditBasicInfoOutputDto.setTenureTime("");
-        }else{
+        if(null != investors.getTenureTime()){
             investorAuditBasicInfoOutputDto.setTenureTime(sdf.format(investors.getTenureTime()));
         }
         investorAuditBasicInfoOutputDto.setCompanyIntro(investors.getCompanyIntroduction());
-        System.out.println(investors.getBusinessCard());
         investorAuditBasicInfoOutputDto.setBusinessCard(investors.getBusinessCard());
         investorAuditBasicInfoOutputDto.setPicture(investors.getPicture());
         investorAuditBasicInfoOutputDto.setBussiness(investors.getBusinessDescription());
@@ -558,107 +554,80 @@ public class InvestorAuditServiceImpl implements InvestorAuditService {
         investorAuditBasicInfoOutputDto.setEducationExperience(investors.getEducationDescription());
         investorAuditBasicInfoOutputDto.setHonor(investors.getHonor());
 
+        //所在领域
         InvestorSegmentation investorSegmentation = new InvestorSegmentation();
         investorSegmentation.setId(investorId);
         List<InvestorSegmentation> investorSegmentationList = investorSegmentationService.select(investorSegmentation);
-        String[] investorSegmentationArr = null;
-        if(null == investorSegmentationList || investorSegmentationList.size() == 0){
-            investorAuditBasicInfoOutputDto.setSegmentations(investorSegmentationArr);
-        }else{
+        if(null != investorSegmentationList && investorSegmentationList.size() != 0){
             List<Integer> investorSegmentationIds = new ArrayList<>();
-            investorSegmentationList.forEach(investorSegmentation_i -> {
-                investorSegmentationIds.add(investorSegmentation_i.getSegmentationId());
+            investorSegmentationList.forEach(e -> {
+                investorSegmentationIds.add(e.getSegmentationId());
             });
-            Integer[] investorSegmentationIdArr = new Integer[investorSegmentationIds.size()];
-            investorSegmentationIds.toArray(investorSegmentationIdArr);
-            List<MetaSegmentation> metaSegmentationList = metaSegmentationMapper.selectBySegmentationIds(investorSegmentationIdArr);
-            List<String> segmentations = new ArrayList<>();
-            metaSegmentationList.forEach( metaSegmentation -> {
-                segmentations.add(metaSegmentation.getName());
-            });
-            investorSegmentationArr = new String[segmentations.size()];
-            segmentations.toArray(investorSegmentationArr);
-            investorAuditBasicInfoOutputDto.setSegmentations(investorSegmentationArr);
+            List<MetaSegmentation> metaSegmentationList = metaSegmentationMapper.selectBySegmentationIds(investorSegmentationIds);
+            
+            if(metaSegmentationList!=null && metaSegmentationList.size()>0) {
+            	List<String> segmentations = new ArrayList<>();
+                metaSegmentationList.forEach( e -> {
+                    segmentations.add(e.getName());
+                });
+                investorAuditBasicInfoOutputDto.setSegmentations(segmentations);
+            }
         }
-
+        //所在城市
         InvestorCity investorCity = new InvestorCity();
         investorCity.setId(investorId);
         List<InvestorCity> investorCityList = investorCityService.select(investorCity);
-        String[] investorCityArr = null;
-        if(null == investorCityList || investorCityList.size()==0){
-            investorAuditBasicInfoOutputDto.setCitys(investorCityArr);
-        }else{
+        if(null != investorCityList && investorCityList.size()!=0){
             List<String> investorCitys = new ArrayList<>();
-            investorCityList.forEach(investorCity_i -> {
-                investorCitys.add(investorCity_i.getCity());
+            investorCityList.forEach(e -> {
+                investorCitys.add(e.getCity());
             });
-            investorCityArr = new String[investorCitys.size()];
-            investorCitys.toArray(investorCityArr);
-            investorAuditBasicInfoOutputDto.setCitys(investorCityArr);
+            investorAuditBasicInfoOutputDto.setCitys(investorCitys);
         }
-
+        //自定义城市
         InvestorSelfdefCity investorSelfdefCity = new InvestorSelfdefCity();
         investorSelfdefCity.setId(investorId);
         List<InvestorSelfdefCity> investorSelfdefCityList = investorSelfdefCityService.select(investorSelfdefCity);
-        String[] investorSelfdefCityArr = null;
-        if(null == investorSelfdefCityList || investorSelfdefCityList.size() == 0){
-            investorAuditBasicInfoOutputDto.setCitys(investorSelfdefCityArr);
-        }else{
+        if(null != investorSelfdefCityList && investorSelfdefCityList.size() != 0){
             List<String> investorSelfdefCitys = new ArrayList<>();
-            investorSelfdefCityList.forEach(investorSelfdefCity_i -> {
-                investorSelfdefCitys.add(investorSelfdefCity_i.getSelfDefCity());
+            investorSelfdefCityList.forEach(e -> {
+                investorSelfdefCitys.add(e.getSelfDefCity());
             });
-            investorSelfdefCityArr = new String[investorSelfdefCitys.size()];
-            investorSelfdefCitys.toArray(investorSelfdefCityArr);
-            investorAuditBasicInfoOutputDto.setSelfDefCity(investorSelfdefCityArr);
+            investorAuditBasicInfoOutputDto.setSelfDefCity(investorSelfdefCitys);
         }
-
+        //创业经历
         InvestorBusiness investorBusiness = new InvestorBusiness();
         investorBusiness.setId(investorId);
         List<InvestorBusiness> investorBusinessesList = investorBusinessService.select(investorBusiness);
-        String[] investorBusinessArr = null;
-        if(null == investorBusinessesList || investorBusinessesList.size() == 0){
-            investorAuditBasicInfoOutputDto.setCitys(investorBusinessArr);
-        }else{
+        
+        if(null != investorBusinessesList && investorBusinessesList.size() != 0){
             List<String> investorBusinessess = new ArrayList<>();
-            investorBusinessesList.forEach(investorSelfdefCity_i -> {
-                investorBusinessess.add(investorSelfdefCity_i.getBusiness());
+            investorBusinessesList.forEach(e -> {
+                investorBusinessess.add(e.getBusiness());
             });
-            investorBusinessArr = new String[investorBusinessess.size()];
-            investorBusinessess.toArray(investorBusinessArr);
-            investorAuditBasicInfoOutputDto.setBusinesses(investorBusinessArr);
+            investorAuditBasicInfoOutputDto.setBusinesses(investorBusinessess);
         }
-
+        //工作经历
         InvestorWorkExperience investorWorkExperience = new InvestorWorkExperience();
         investorWorkExperience.setId(investorId);
         List<InvestorWorkExperience> investorWorkExperienceList = investorWorkExperienceService.select(investorWorkExperience);
-        String[] investorWorkExperienceArr = null;
-        if(null == investorWorkExperienceList || investorWorkExperienceList.size() == 0){
-            investorAuditBasicInfoOutputDto.setWorkExperiences(investorWorkExperienceArr);
-        }else{
+        if(null != investorWorkExperienceList && investorWorkExperienceList.size() != 0){
             List<String> investorWorkExperiences = new ArrayList<>();
-            investorWorkExperienceList.forEach(investorWorkExperience_i -> {
-                investorWorkExperiences.add(investorWorkExperience_i.getWorkExperience());
+            investorWorkExperienceList.forEach(e -> {
+                investorWorkExperiences.add(e.getWorkExperience());
             });
-            investorWorkExperienceArr = new String[investorWorkExperiences.size()];
-            investorWorkExperiences.toArray(investorWorkExperienceArr);
-            investorAuditBasicInfoOutputDto.setWorkExperiences(investorWorkExperienceArr);
+            investorAuditBasicInfoOutputDto.setWorkExperiences(investorWorkExperiences);
         }
-
+        //教育经历
         InvestorEducationExperience investorEducationExperience = new InvestorEducationExperience();
         investorEducationExperience.setId(investorId);
         List<InvestorEducationExperience> investorEducationExperienceList = investorEducationExperienceService.select(investorEducationExperience);
-        String[] investorEducationExperienceArr = null;
-        if(null == investorEducationExperienceList || investorEducationExperienceList.size() == 0){
-            investorAuditBasicInfoOutputDto.setEducationExperiences(investorEducationExperienceArr);
-        }else{
+        if(null != investorEducationExperienceList && investorEducationExperienceList.size() != 0){
             List<String> investorEducationExperiences = new ArrayList<>();
-            investorEducationExperienceList.forEach(investorEducationExperience_i -> {
-                investorEducationExperiences.add(investorEducationExperience_i.getEducationExperience());
+            investorEducationExperienceList.forEach(e -> {
+                investorEducationExperiences.add(e.getEducationExperience());
             });
-            investorEducationExperienceArr = new String[investorEducationExperiences.size()];
-            investorEducationExperiences.toArray(investorEducationExperienceArr);
-            investorAuditBasicInfoOutputDto.setEducationExperiences(investorEducationExperienceArr);
+            investorAuditBasicInfoOutputDto.setEducationExperiences(investorEducationExperiences);
         }
 
         result.setData(investorAuditBasicInfoOutputDto);
@@ -916,4 +885,59 @@ public class InvestorAuditServiceImpl implements InvestorAuditService {
 //        result.setData(map);
 //        return result;
 //    }
+
+
+    @Override
+    public CommonDto<String> auditInvestor(InvestorAuditInputDto body) {
+        CommonDto<String> result = new CommonDto<>();
+        Investors investors = investorsMapper.selectByPrimaryKey(body.getInvestorId());
+        if (null == investors) {
+            result.setStatus(300);
+            result.setMessage("failed");
+            result.setData("没有该投资人");
+        }
+        investors.setApprovalStatus(body.getApprovalStatus());
+        investorsMapper.updateByPrimaryKeySelective(investors);
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData("审核成功");
+        return result;
+    }
+
+    @Override
+    public CommonDto<InvestorAuditOutputDto> getInvestorAuditResult(Integer investorId) {
+
+        CommonDto<InvestorAuditOutputDto> result = new CommonDto<>();
+
+        InvestorAuditOutputDto investorAuditOutputDto = new InvestorAuditOutputDto();
+
+        Investors investors = investorsMapper.selectByPrimaryKey(investorId);
+        if (null == investors) {
+            result.setStatus(300);
+            result.setMessage("failed");
+            result.setData(null);
+        }
+
+        investorAuditOutputDto.setInvestorId(investorId);
+        investorAuditOutputDto.setApprovalStatus(investors.getApprovalStatus());
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(investorAuditOutputDto);
+        return result;
+    }
+
+    @Override
+    public CommonDto<List<InvestorSmartSearchOutputDto>> intelligentSearchInvestor(String keyword) {
+
+        CommonDto<List<InvestorSmartSearchOutputDto>> result = new CommonDto<>();
+
+        List<InvestorSmartSearchOutputDto> investorSmartSearchOutputDtoList =investorsMapper.smartSearchInvestor(keyword);
+
+        result.setStatus(200);
+        result.setMessage("success");
+        result.setData(investorSmartSearchOutputDtoList);
+        return result;
+    }
 }

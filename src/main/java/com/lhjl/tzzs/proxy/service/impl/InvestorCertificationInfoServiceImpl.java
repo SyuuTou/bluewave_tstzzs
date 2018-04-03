@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.service.impl;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorCertificationDto;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsMapper;
+import com.lhjl.tzzs.proxy.mapper.InvestorInvestmentCaseMapper;
 import com.lhjl.tzzs.proxy.mapper.InvestorsMapper;
 import com.lhjl.tzzs.proxy.model.InvestmentInstitutions;
 import com.lhjl.tzzs.proxy.model.InvestorDemandCharacter;
@@ -33,6 +34,9 @@ public class InvestorCertificationInfoServiceImpl extends GenericService impleme
 
     @Autowired
     private InvestmentInstitutionsMapper investmentInstitutionsMapper;
+    
+    @Autowired
+    private InvestorInvestmentCaseMapper investorInvestmentCaseMapper;
 
     @Transactional
     @Override
@@ -107,15 +111,14 @@ public class InvestorCertificationInfoServiceImpl extends GenericService impleme
      	//删除所有的投资案例
         investorInvestmentCaseService.deleteAll(body.getInvestorId());
         //投资案例不为null的时候
-        if(null != body.getInvestCase() && body.getInvestCase().length != 0){
-        	List<InvestorInvestmentCase> investorInvestmentCaseList = new ArrayList<>();
-            for (String investorInvestmentCase : body.getInvestCase()){
-                InvestorInvestmentCase investorInvestmentCase1 = new InvestorInvestmentCase();
-                investorInvestmentCase1.setInvestorId(body.getInvestorId());
-                investorInvestmentCase1.setInvestmentCase(investorInvestmentCase);
-                investorInvestmentCaseList.add(investorInvestmentCase1);
+        if(null != body.getInvestCase() && body.getInvestCase().size() != 0){
+            for (String e : body.getInvestCase()){
+                InvestorInvestmentCase investmentCase = new InvestorInvestmentCase();
+                investmentCase.setInvestorId(body.getInvestorId());
+                investmentCase.setInvestmentCase(e);
+                
+                investorInvestmentCaseMapper.insertSelective(investmentCase);
             }
-            investorInvestmentCaseService.insertList(investorInvestmentCaseList);
         }
 
         result.setStatus(200);
@@ -124,6 +127,7 @@ public class InvestorCertificationInfoServiceImpl extends GenericService impleme
         return result;
     }
 
+    @Transactional
     @Override
     public CommonDto<InvestorCertificationDto> getInvestorCertification(Integer investorId) {
 
@@ -150,18 +154,13 @@ public class InvestorCertificationInfoServiceImpl extends GenericService impleme
 
         InvestorInvestmentCase investorInvestmentCase = new InvestorInvestmentCase();
         investorInvestmentCase.setInvestorId(investorId);
-        List<InvestorInvestmentCase> investorInvestmentCaseList = investorInvestmentCaseService.select(investorInvestmentCase);
-        String[] investorInvestmentCaseArr = null;
-        if(null == investorInvestmentCaseList){
-            investorCertificationDto.setInvestCase(investorInvestmentCaseArr);
-        }else{
-            List<String> investorInvestmentCases = new ArrayList<>();
-            investorInvestmentCaseList.forEach(investorInvestmentCase_i -> {
-                investorInvestmentCases.add(investorInvestmentCase_i.getInvestmentCase());
+        List<InvestorInvestmentCase> list = investorInvestmentCaseService.select(investorInvestmentCase);
+        if(null != list){
+            List<String> cases = new ArrayList<>();
+            list.forEach(e -> {
+            	cases.add(e.getInvestmentCase());
             });
-            investorInvestmentCaseArr = new String[investorInvestmentCases.size()];
-            investorInvestmentCases.toArray(investorInvestmentCaseArr);
-            investorCertificationDto.setInvestCase(investorInvestmentCaseArr);
+            investorCertificationDto.setInvestCase(cases);
         }
 
         result.setData(investorCertificationDto);

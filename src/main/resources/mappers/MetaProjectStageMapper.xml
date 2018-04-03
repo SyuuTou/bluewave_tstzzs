@@ -29,7 +29,7 @@
 
   <select id="selectByStageIds" resultMap="BaseResultMap">
     select * from meta_project_stage where 1=1
-    <if test="stageIds != null and stageIds!=''">
+    <if test="stageIds != null and stageIds.size() >0">
       and id in
       <foreach close=")" collection="stageIds" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>

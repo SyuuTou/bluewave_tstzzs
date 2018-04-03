@@ -77,6 +77,13 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+    <resultMap id="InvestorSmartSearchOutputMap" type="com.lhjl.tzzs.proxy.dto.investorauditdto.investorauditdetaildto.InvestorSmartSearchOutputDto">
+        <result column="ID" jdbcType="INTEGER" property="investorId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+        <result column="position" jdbcType="VARCHAR" property="position" />
+    </resultMap>
   
    <select id="listInvestorsInfos" resultMap="InvestorsOutputMap">
     	SELECT i.ID,i.user_id,i.name,
@@ -127,6 +134,7 @@
   <if test="endTime !=null ">
       AND i.create_time &lt;= #{endTime}
   </if>
+  <!-- 单笔投资金额的范围 -->
   <if test="amountBeginRmb !=null and amountBeginRmb !=''">
       AND ide.investment_amount_low &gt;= #{amountBeginRmb}
   </if>
@@ -141,20 +149,25 @@
   </if>
   <!-- 精确搜索 -->
   <!-- 根据项目来源进行精确搜索 -->
-  <if test="typeName !=null and typeName !=''">
-      AND mdst.type_name = #{typeName}
+  <if test="typeName !=null and typeName.size() &gt; 0">
+      AND mdst.type_name in
+	      <foreach collection="typeName" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="type !=null and type !=''">
-      AND iit.type = #{type}
+  <if test="type !=null and type.size() &gt; 0">
+      AND iit.type in  
+      <foreach collection="type" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="currency !=null and currency !=''">
-      AND funds.currency = #{currency}
+  <if test="currency !=null and currency.size() &gt; 0">
+      AND funds.currency in
+      <foreach collection="currency" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="irPrincipal !=null and irPrincipal !=''">
-      AND mgt.irPrincipal = #{irPrincipal}
+  <if test="irPrincipal !=null and irPrincipal.size() &gt; 0">
+      AND mgt.irPrincipal in
+      <foreach collection="irPrincipal" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="cooperativeRelationship !=null and cooperativeRelationship !=''">
-      AND mgt.cooperativeRelationship = #{cooperativeRelationship}
+  <if test="cooperativeRelationship !=null and cooperativeRelationship.size() &gt; 0">
+      AND mgt.cooperativeRelationship in
+      <foreach collection="cooperativeRelationship" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
   
   <!-- 默认排序 -->
@@ -223,20 +236,26 @@
   <if test="amountEndDollar !=null and amountEndDollar !=''">
       AND ide.investment_amount_high_dollars &lt;= #{amountEndDollar}
   </if>
-  <if test="typeName !=null and typeName !=''">
-      AND mdst.type_name = #{typeName}
+  <!-- 根据项目来源进行精确搜索 -->
+  <if test="typeName !=null and typeName.size() &gt; 0">  
+      AND mdst.type_name in
+	      <foreach collection="typeName" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="type !=null and type !=''">
-      AND iit.type = #{type}
+  <if test="type !=null and type.size() &gt; 0">
+      AND iit.type in  
+      <foreach collection="type" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="currency !=null and currency !=''">
-      AND funds.currency = #{currency}
+  <if test="currency !=null and currency.size() &gt; 0">
+      AND funds.currency in
+      <foreach collection="currency" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="irPrincipal !=null and irPrincipal !=''">
-      AND mgt.irPrincipal = #{irPrincipal}
+  <if test="irPrincipal !=null and irPrincipal.size() &gt; 0">
+      AND mgt.irPrincipal in
+      <foreach collection="irPrincipal" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
-  <if test="cooperativeRelationship !=null and cooperativeRelationship !=''">
-      AND mgt.cooperativeRelationship = #{cooperativeRelationship}
+  <if test="cooperativeRelationship !=null and cooperativeRelationship.size() &gt; 0">
+      AND mgt.cooperativeRelationship in
+      <foreach collection="cooperativeRelationship" index="index" item="item" open="(" close=")" separator=",">#{item}</foreach>
   </if>
   </select>
   
@@ -246,7 +265,20 @@
   </select>
 
   <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-      select * from investors where user_id =#{userId} and approval_status = 1 and yn =1;
+      select * from investors where user_id =#{userId} and approval_status != 1 and yn =1;
   </select>
+
+    <select id="maxSerialNumber" resultMap="BaseResultMap">
+    select * from investors where serial_number between 100000 and 200000 order by serial_number desc
+    limit 0,1;
+   </select>
+
+    <select id="smartSearchInvestor" resultMap="InvestorSmartSearchOutputMap">
+    SELECT i.ID, i.name, iis.short_name, i.position FROM idatavc.investors i left join investment_institutions iis on i.investment_institutions_id = iis.ID
+    where 1=1
+        <if test="keyword !=null and keyword !=''">
+            AND i.name like CONCAT(CONCAT('%', #{keyword}), '%')
+        </if>;
+    </select>
 
 </mapper>

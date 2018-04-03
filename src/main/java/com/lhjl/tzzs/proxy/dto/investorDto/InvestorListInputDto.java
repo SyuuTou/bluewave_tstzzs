@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.dto.investorDto;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class InvestorListInputDto {
 	/**
@@ -60,26 +61,29 @@ public class InvestorListInputDto {
      * 群号
      */
     private String weChatGroupId;
+    //以下字段支持多选筛选
     /**
      * 负责人
      */
-    private String irPrincipal;
+    private List<String> irPrincipal;
     /**
      * 来源类型
      */
-    private String typeName;
+    private List<String> typeName;
     /**
      * 合作等级
      */
-    private String cooperativeRelationship;
+    private List<String> cooperativeRelationship;
     /**
      * 机构分类
      */
-    private String type;
+    private List<String> type;
     /**
      * 基金币种
      */
-    private String currency;
+    private List<String> currency;
+    //以上字段支持多选筛选
+    
     /**
      * 默认按照更新时间进行排序
      * 此处根据实际情况可考虑将列值传递过来
@@ -121,24 +125,24 @@ public class InvestorListInputDto {
 	 * 审核标志位
 	 */
 	private String submitter;
-	
-
-	public String getSubmitter() {
-		return submitter;
+	public Integer getUserId() {
+		return userId;
 	}
-
-	public void setSubmitter(String submitter) {
-		this.submitter = submitter;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
-
-	public String getToken() {
-		return token;
+	public Integer getAdminType() {
+		return adminType;
 	}
-
-	public void setToken(String token) {
-		this.token = token;
+	public void setAdminType(Integer adminType) {
+		this.adminType = adminType;
 	}
-
+	public String getAdminName() {
+		return adminName;
+	}
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
 	public String getKeyWords() {
 		return keyWords;
 	}
@@ -199,34 +203,34 @@ public class InvestorListInputDto {
 	public void setWeChatGroupId(String weChatGroupId) {
 		this.weChatGroupId = weChatGroupId;
 	}
-	public String getIrPrincipal() {
+	public List<String> getIrPrincipal() {
 		return irPrincipal;
 	}
-	public void setIrPrincipal(String irPrincipal) {
+	public void setIrPrincipal(List<String> irPrincipal) {
 		this.irPrincipal = irPrincipal;
 	}
-	public String getTypeName() {
+	public List<String> getTypeName() {
 		return typeName;
 	}
-	public void setTypeName(String typeName) {
+	public void setTypeName(List<String> typeName) {
 		this.typeName = typeName;
 	}
-	public String getCooperativeRelationship() {
+	public List<String> getCooperativeRelationship() {
 		return cooperativeRelationship;
 	}
-	public void setCooperativeRelationship(String cooperativeRelationship) {
+	public void setCooperativeRelationship(List<String> cooperativeRelationship) {
 		this.cooperativeRelationship = cooperativeRelationship;
 	}
-	public String getType() {
+	public List<String> getType() {
 		return type;
 	}
-	public void setType(String type) {
+	public void setType(List<String> type) {
 		this.type = type;
 	}
-	public String getCurrency() {
+	public List<String> getCurrency() {
 		return currency;
 	}
-	public void setCurrency(String currency) {
+	public void setCurrency(List<String> currency) {
 		this.currency = currency;
 	}
 	public String getColumn() {
@@ -253,43 +257,30 @@ public class InvestorListInputDto {
 	public void setPageSize(Integer pageSize) {
 		this.pageSize = pageSize;
 	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
 	public Long getStart() {
 		return start;
 	}
 	public void setStart(Long start) {
 		this.start = start;
 	}
-	
-	public Integer getUserId() {
-		return userId;
-	}
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-	
-	public Integer getAdminType() {
-		return adminType;
-	}
-	public void setAdminType(Integer adminType) {
-		this.adminType = adminType;
-	}
-	
-	
-	public String getAdminName() {
-		return adminName;
-	}
-	public void setAdminName(String adminName) {
-		this.adminName = adminName;
-	}
-	
 	public Integer getApprovalStatus() {
 		return approvalStatus;
 	}
-
 	public void setApprovalStatus(Integer approvalStatus) {
 		this.approvalStatus = approvalStatus;
 	}
-
+	public String getSubmitter() {
+		return submitter;
+	}
+	public void setSubmitter(String submitter) {
+		this.submitter = submitter;
+	}
 	@Override
 	public String toString() {
 		return "InvestorListInputDto [userId=" + userId + ", adminType=" + adminType + ", adminName=" + adminName
@@ -299,10 +290,8 @@ public class InvestorListInputDto {
 				+ amountEndDollar + ", weChatGroupId=" + weChatGroupId + ", irPrincipal=" + irPrincipal + ", typeName="
 				+ typeName + ", cooperativeRelationship=" + cooperativeRelationship + ", type=" + type + ", currency="
 				+ currency + ", column=" + column + ", order=" + order + ", currentPage=" + currentPage + ", pageSize="
-				+ pageSize + ", start=" + start + "]";
+				+ pageSize + ", token=" + token + ", start=" + start + ", approvalStatus=" + approvalStatus
+				+ ", submitter=" + submitter + "]";
 	}
-	
-
-
 	
 }

@@ -1,9 +1,10 @@
-package com.lhjl.tzzs.proxy.controller.investoraudit.investorauditdetail;
+package com.lhjl.tzzs.proxy.controller.investor.collect.details;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorKernelInfoDto;
 import com.lhjl.tzzs.proxy.dto.investorauditdto.investorauditdetaildto.*;
+import com.lhjl.tzzs.proxy.model.Investors;
 import com.lhjl.tzzs.proxy.service.InvestorAuditService;
 import com.lhjl.tzzs.proxy.service.InvestorBasicinfoService;
 import com.lhjl.tzzs.proxy.service.InvestorInfoService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,6 +27,59 @@ public class InvestorAuditDetailController extends GenericController{
 
     @Resource
     private InvestorAuditService investorAuditService;
+
+    /**
+     * 智能检索投资人（姓名，机构名称，职务）
+     */
+    @GetMapping("/intelligent/search/investor")
+    public CommonDto<List<InvestorSmartSearchOutputDto>> intelligentSearchInvestor(String keyword){
+        CommonDto<List<InvestorSmartSearchOutputDto>> result = new CommonDto<>();
+        try {
+            result = investorAuditService.intelligentSearchInvestor(keyword);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+            result.setStatus(502);
+        }
+        return result;
+    }
+
+
+    /**
+     * 投资人审核
+     */
+    @PostMapping("/investor/audit")
+    public CommonDto<String> auditInvestor(@RequestBody InvestorAuditInputDto body){
+        CommonDto<String> result = new CommonDto<>();
+        try {
+            result = investorAuditService.auditInvestor(body);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+            result.setStatus(502);
+        }
+        return result;
+    }
+
+
+    /**
+     * 读取投资人审核
+     */
+    @GetMapping("/get/investor/audit/result")
+    public CommonDto<InvestorAuditOutputDto> getInvestorAuditResult(Integer investorId){
+        CommonDto<InvestorAuditOutputDto> result = new CommonDto<>();
+        try {
+            result = investorAuditService.getInvestorAuditResult(investorId);
+        }catch (Exception e){
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+            result.setMessage("服务器端发生错误");
+            result.setData(null);
+            result.setStatus(502);
+        }
+        return result;
+    }
 
     /**
      * 编辑投资人个人信息

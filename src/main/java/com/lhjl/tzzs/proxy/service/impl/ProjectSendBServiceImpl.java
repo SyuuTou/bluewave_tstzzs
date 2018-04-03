@@ -682,7 +682,6 @@ public class ProjectSendBServiceImpl extends GenericService implements ProjectSe
         Integer id =0;
         //复制项目主体信息
         ProjectSendSearchDto projectSendSearchDto = new ProjectSendSearchDto();
-        projectSendSearchDto.setId(projectSendBId);
         projectSendSearchDto.setNewprepareid(newprepareid);
         projectSendSearchDto.setPrepareid(prepareid);
 
@@ -1322,7 +1321,7 @@ public class ProjectSendBServiceImpl extends GenericService implements ProjectSe
             projectSendAuditBForUpdate.setId(projectSendAuditId);
             projectSendAuditBForUpdate.setPrepareId(prepareId);
             projectSendAuditBForUpdate.setProjectSendBId(body.getProjectSendId());
-            projectSendAuditBForUpdate.setAuditIntroductions(body.getAudiIintroductions());
+
             projectSendAuditBMapper.updateByPrimaryKeySelective(projectSendAuditBForUpdate);
         }else {
             ProjectSendAuditB projectSendAuditBForInsert = new ProjectSendAuditB();
@@ -1334,7 +1333,6 @@ public class ProjectSendBServiceImpl extends GenericService implements ProjectSe
             projectSendAuditBForInsert.setUserId(userid);
             projectSendAuditBForInsert.setCreateTime(new Date());
             projectSendAuditBForInsert.setProjectSource(1);
-            projectSendAuditBForInsert.setAuditIntroductions(body.getAudiIintroductions());
 
             projectSendAuditBMapper.insertSelective(projectSendAuditBForInsert);
         }

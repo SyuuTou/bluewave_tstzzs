@@ -4,7 +4,7 @@ import javax.management.loading.PrivateClassLoader;
 
 public class TouZiDto {
 
-	private String dateName;  //投资
+	private String dateName;  //投资人类型
 	private String compellation; // 姓名
 	private String organization;  // 所在公司
 	private String fillOffice;  //担任职务

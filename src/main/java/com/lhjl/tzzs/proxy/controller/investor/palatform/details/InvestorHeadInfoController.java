@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.investor.details;
+package com.lhjl.tzzs.proxy.controller.investor.palatform.details;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
@@ -13,7 +13,7 @@ import javax.annotation.Resource;
  * @date 2018-1-30 17:25:00
  */
 @RestController
-public class InvestorInfoController extends GenericController{
+public class InvestorHeadInfoController extends GenericController{
 
     @Resource
     private InvestorInfoService investorInfoService;

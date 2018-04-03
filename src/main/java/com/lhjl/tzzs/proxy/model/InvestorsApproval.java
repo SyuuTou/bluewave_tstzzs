@@ -61,7 +61,7 @@ public class InvestorsApproval {
     private String supplementaryExplanation;
 
     /**
-     * 审核时间
+     * 提交认证的时间
      */
     @Column(name = "review_time")
     private Date reviewTime;

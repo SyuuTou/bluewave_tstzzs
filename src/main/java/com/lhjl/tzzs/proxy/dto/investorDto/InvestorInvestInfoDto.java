@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.dto.investorDto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by lanhaijulang on 2018/1/30.
@@ -10,12 +11,16 @@ public class InvestorInvestInfoDto {
     private Integer investorId;
 
     private Integer investorDemandId;
-
-    private String[] focusSegmentations;
-
-    private Integer[]  focusStages;
-
-    private String[] preferCitys;
+    //关注领域
+    private List<String> focusSegmentations;
+    //投资阶段
+    private List<Integer>  focusStages;
+    //地域偏好
+    private List<String> preferCitys;
+    //最近关注细分赛道
+    private List<String> focusSpeedway;
+    //关注的创始人特质
+    private List<String> focusCharacters;
 
     private String preferDesc;
 
@@ -27,103 +32,103 @@ public class InvestorInvestInfoDto {
 
     private BigDecimal investAmountHighDollar;
 
-    private String[] focusSpeedway;
 
-    private String[] focusCharacters;
 
-    public Integer getInvestorId() {
-        return investorId;
-    }
+	public Integer getInvestorId() {
+		return investorId;
+	}
 
-    public void setInvestorId(Integer investorId) {
-        this.investorId = investorId;
-    }
+	public void setInvestorId(Integer investorId) {
+		this.investorId = investorId;
+	}
 
-    public Integer getInvestorDemandId() {
-        return investorDemandId;
-    }
+	public Integer getInvestorDemandId() {
+		return investorDemandId;
+	}
 
-    public void setInvestorDemandId(Integer investorDemandId) {
-        this.investorDemandId = investorDemandId;
-    }
+	public void setInvestorDemandId(Integer investorDemandId) {
+		this.investorDemandId = investorDemandId;
+	}
 
-    public String[] getFocusSegmentations() {
-        return focusSegmentations;
-    }
+	public List<String> getFocusSegmentations() {
+		return focusSegmentations;
+	}
 
-    public void setFocusSegmentations(String[] focusSegmentations) {
-        this.focusSegmentations = focusSegmentations;
-    }
+	public void setFocusSegmentations(List<String> focusSegmentations) {
+		this.focusSegmentations = focusSegmentations;
+	}
 
-    public Integer[] getFocusStages() {
-        return focusStages;
-    }
+	public List<Integer> getFocusStages() {
+		return focusStages;
+	}
 
-    public void setFocusStages(Integer[] focusStages) {
-        this.focusStages = focusStages;
-    }
+	public void setFocusStages(List<Integer> focusStages) {
+		this.focusStages = focusStages;
+	}
 
-    public String[] getPreferCitys() {
-        return preferCitys;
-    }
+	public List<String> getPreferCitys() {
+		return preferCitys;
+	}
 
-    public void setPreferCitys(String[] preferCitys) {
-        this.preferCitys = preferCitys;
-    }
+	public void setPreferCitys(List<String> preferCitys) {
+		this.preferCitys = preferCitys;
+	}
 
-    public String getPreferDesc() {
-        return preferDesc;
-    }
+	public String getPreferDesc() {
+		return preferDesc;
+	}
 
-    public void setPreferDesc(String preferDesc) {
-        this.preferDesc = preferDesc;
-    }
+	public void setPreferDesc(String preferDesc) {
+		this.preferDesc = preferDesc;
+	}
 
-    public BigDecimal getInvestAmountLowRmb() {
-        return investAmountLowRmb;
-    }
+	public BigDecimal getInvestAmountLowRmb() {
+		return investAmountLowRmb;
+	}
 
-    public void setInvestAmountLowRmb(BigDecimal investAmountLowRmb) {
-        this.investAmountLowRmb = investAmountLowRmb;
-    }
+	public void setInvestAmountLowRmb(BigDecimal investAmountLowRmb) {
+		this.investAmountLowRmb = investAmountLowRmb;
+	}
 
-    public BigDecimal getInvestAmountHighRmb() {
-        return investAmountHighRmb;
-    }
+	public BigDecimal getInvestAmountHighRmb() {
+		return investAmountHighRmb;
+	}
 
-    public void setInvestAmountHighRmb(BigDecimal investAmountHighRmb) {
-        this.investAmountHighRmb = investAmountHighRmb;
-    }
+	public void setInvestAmountHighRmb(BigDecimal investAmountHighRmb) {
+		this.investAmountHighRmb = investAmountHighRmb;
+	}
 
-    public BigDecimal getInvestAmountLowDollar() {
-        return investAmountLowDollar;
-    }
+	public BigDecimal getInvestAmountLowDollar() {
+		return investAmountLowDollar;
+	}
 
-    public void setInvestAmountLowDollar(BigDecimal investAmountLowDollar) {
-        this.investAmountLowDollar = investAmountLowDollar;
-    }
+	public void setInvestAmountLowDollar(BigDecimal investAmountLowDollar) {
+		this.investAmountLowDollar = investAmountLowDollar;
+	}
 
-    public BigDecimal getInvestAmountHighDollar() {
-        return investAmountHighDollar;
-    }
+	public BigDecimal getInvestAmountHighDollar() {
+		return investAmountHighDollar;
+	}
 
-    public void setInvestAmountHighDollar(BigDecimal investAmountHighDollar) {
-        this.investAmountHighDollar = investAmountHighDollar;
-    }
+	public void setInvestAmountHighDollar(BigDecimal investAmountHighDollar) {
+		this.investAmountHighDollar = investAmountHighDollar;
+	}
 
-    public String[] getFocusSpeedway() {
-        return focusSpeedway;
-    }
+	public List<String> getFocusSpeedway() {
+		return focusSpeedway;
+	}
 
-    public void setFocusSpeedway(String[] focusSpeedway) {
-        this.focusSpeedway = focusSpeedway;
-    }
+	public void setFocusSpeedway(List<String> focusSpeedway) {
+		this.focusSpeedway = focusSpeedway;
+	}
 
-    public String[] getFocusCharacters() {
-        return focusCharacters;
-    }
+	public List<String> getFocusCharacters() {
+		return focusCharacters;
+	}
 
-    public void setFocusCharacters(String[] focusCharacters) {
-        this.focusCharacters = focusCharacters;
-    }
+	public void setFocusCharacters(List<String> focusCharacters) {
+		this.focusCharacters = focusCharacters;
+	}
+
+    
 }
