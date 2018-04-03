@@ -35,34 +35,6 @@ public class InvestorsApprovalConroller extends GenericController {
 	@Value("${pageSize}")
 	private String defaultPageSize;
 
-	@Autowired
-	private WxMaService wxService;
-
-
-
-	/**
-	 * 申请成为投资人接口
-	 * @param params
-	 * @return
-	 */
-	
-	@PostMapping("rest/user/newuyhxinxi1")
-	 public CommonDto<String> insertGold( @RequestBody  TouZiDto params){
-	     CommonDto<String>result = new CommonDto<String>();
-	     try {
-		     result=investorsApprovalService.saveTouZi(params);
-		     if(result.getStatus() == null){
-		     result.setStatus(200);
-		     result.setMessage("success");
-		     }
-	     } catch (Exception e) {
-		     result.setStatus(5101);
-		     result.setMessage("显示页面异常，请稍后再试");
-		     this.LOGGER.error(e.getMessage(), e);
-	     }
-	     	return result;
-	     }
-
 	/**
 	 * 通过token获取投资人审核状态
 	 * @param token
@@ -140,28 +112,6 @@ public class InvestorsApprovalConroller extends GenericController {
 	}
 
 	/**
-	 * 获取投资审核信息列表(后台调用)(新)
-	 * @param body
-	 * @return
-	 */
-	@PostMapping("admin/findinvestorsapproval")
-	public CommonDto<Map<String,Object>> adminFindApprovals(@RequestBody InvestorsApprovalInputDto body){
-		CommonDto<Map<String,Object>> result = new CommonDto<>();
-
-		try {
-			result = investorsApprovalService.adminFindApprovals(body);
-		}catch (Exception e){
-			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
-			result.setStatus(502);
-			result.setData(null);
-			result.setMessage("服务器端发生错误");
-
-			return result;
-		}
-
-		return result;
-	}
-	/**
 	 * 后台审核操作接口
 	 * @param body 请求对象
 	 * @return
@@ -195,29 +145,6 @@ public class InvestorsApprovalConroller extends GenericController {
 			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
 		}
 		return result;
-	}
-
-
-	/**
-	 * 后台审核操作接口(新)
-	 * @param body
-	 * @return
-	 */
-	@PostMapping("admin/approval")  
-	public CommonDto<String> adminApproval(@RequestBody InvestorSpecialApprovalDto body){
-		CommonDto<String> result = new CommonDto<>();
-		try {
-			result= investorsApprovalService.adminApproval(body);
-		}catch (Exception e){
-			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
-
-			result.setMessage("服务器端发生错误");
-			result.setData(null);
-			result.setStatus(502);
-		}
-
-		return result;
- 
 	}
 
 	/**

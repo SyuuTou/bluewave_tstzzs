@@ -22,7 +22,7 @@ import java.util.*;
  * Created by lanhaijulang on 2018/2/7.
  */
 @Service
-public class InvestorAuditServiceImpl implements InvestorAuditService {
+public class InvestorAuditServiceImpl extends GenericService implements InvestorAuditService {
 
     @Autowired
     private MetaInvestmentInstitutionTeamTypeMapper metaInvestmentInstitutionTeamTypeMapper;

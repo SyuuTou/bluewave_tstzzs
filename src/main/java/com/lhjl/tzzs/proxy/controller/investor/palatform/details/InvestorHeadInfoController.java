@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.investor.details;
+package com.lhjl.tzzs.proxy.controller.investor.palatform.details;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;

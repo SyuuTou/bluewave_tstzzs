@@ -1,4 +1,4 @@
-package com.lhjl.tzzs.proxy.controller.investoraudit.investorauditdetail;
+package com.lhjl.tzzs.proxy.controller.investor.collect.details;
 
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
