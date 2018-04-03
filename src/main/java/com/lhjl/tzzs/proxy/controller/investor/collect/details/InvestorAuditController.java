@@ -130,6 +130,56 @@ public class InvestorAuditController extends GenericController{
 		}
 		return result;
 	}
+	
+	 /**
+		 * 用户列表页审核用户成为投资人的接口
+		 * @param userId 用户id
+	     * @param status 审核状态
+		 * @param userName 用户名
+		 * @param companyName 公司名称
+		 * @param comanyDuties 公司职位
+		 * @return
+		 */
+		@GetMapping("/special/approval")
+		public CommonDto<String> specialApproval(Integer userId,Integer status,String userName,String companyName,String comanyDuties){
+			CommonDto<String> result = new CommonDto<>();
+
+			try {
+				result = investorsApprovalService.specialApproval(userId,status,userName,companyName,comanyDuties,1);
+			}catch (Exception e){
+				this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+				result.setMessage("服务器端发生错误");
+				result.setStatus(502);
+				result.setData(null);
+			}
+
+			return result;
+		}
+
+		/**
+		 * 用户列表页审核用户成为投资人的接口
+		 * @param userId 用户id
+	     * @param status 审核状态
+		 * @param userName 用户名
+		 * @param companyName 公司名称
+		 * @param comanyDuties 公司职位
+		 * @return
+		 */
+		@GetMapping("/v{appId}/special/approval")
+		public CommonDto<String> specialApproval(Integer userId,Integer status,String userName,String companyName,String comanyDuties,@PathVariable Integer appId){
+			CommonDto<String> result = new CommonDto<>();
+
+			try {
+				result = investorsApprovalService.specialApproval(userId,status,userName,companyName,comanyDuties,appId);
+			}catch (Exception e){
+				this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
+				result.setMessage("服务器端发生错误");
+				result.setStatus(502);
+				result.setData(null);
+			}
+
+			return result;
+		}
 
 	
 }
