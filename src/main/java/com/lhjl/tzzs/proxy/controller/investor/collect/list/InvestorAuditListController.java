@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.controller.investor.collect.list;
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestorsApprovalInputDto;
+import com.lhjl.tzzs.proxy.dto.TouZiNewDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorKernelInfoDto;
 import com.lhjl.tzzs.proxy.dto.investorauditdto.investorauditdetaildto.*;
 import com.lhjl.tzzs.proxy.model.Investors;
@@ -10,6 +11,7 @@ import com.lhjl.tzzs.proxy.service.InvestorAuditService;
 import com.lhjl.tzzs.proxy.service.InvestorBasicinfoService;
 import com.lhjl.tzzs.proxy.service.InvestorInfoService;
 import com.lhjl.tzzs.proxy.service.InvestorInvestInfoService;
+import com.lhjl.tzzs.proxy.service.InvestorsApprovalNewService;
 import com.lhjl.tzzs.proxy.service.InvestorsApprovalService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,6 +53,8 @@ public class InvestorAuditListController extends GenericController{
 
 		return result;
 	}
+	
+	
 
 	/**
 	 * 获取工作名片

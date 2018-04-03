@@ -1,25 +1,13 @@
-package com.lhjl.tzzs.proxy.controller;
+package com.lhjl.tzzs.proxy.controller.investor.collect.details;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Resource;
 
-import cn.binarywang.wx.miniapp.api.WxMaService;
-import cn.binarywang.wx.miniapp.bean.WxMaKefuMessage;
-import cn.binarywang.wx.miniapp.bean.WxMaTemplateMessage;
+import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.*;
-
-import com.lhjl.tzzs.proxy.mapper.UsersWeixinMapper;
 import com.lhjl.tzzs.proxy.model.InvestorsApprovalNew;
 
-import com.lhjl.tzzs.proxy.model.UsersWeixin;
-
-import me.chanjar.weixin.common.exception.WxErrorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -95,57 +83,5 @@ public class InvestorsApprovalConroller extends GenericController {
 
 		return result;
 	}
-
-
-	/**
-	 * 用户列表页审核用户成为投资人的接口
-	 * @param userId 用户id
-     * @param status 审核状态
-	 * @param userName 用户名
-	 * @param companyName 公司名称
-	 * @param comanyDuties 公司职位
-	 * @return
-	 */
-	@GetMapping("/special/approval")
-	public CommonDto<String> specialApproval(Integer userId,Integer status,String userName,String companyName,String comanyDuties){
-		CommonDto<String> result = new CommonDto<>();
-
-		try {
-			result = investorsApprovalService.specialApproval(userId,status,userName,companyName,comanyDuties,1);
-		}catch (Exception e){
-			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
-			result.setMessage("服务器端发生错误");
-			result.setStatus(502);
-			result.setData(null);
-		}
-
-		return result;
-	}
-
-	/**
-	 * 用户列表页审核用户成为投资人的接口
-	 * @param userId 用户id
-     * @param status 审核状态
-	 * @param userName 用户名
-	 * @param companyName 公司名称
-	 * @param comanyDuties 公司职位
-	 * @return
-	 */
-	@GetMapping("/v{appId}/special/approval")
-	public CommonDto<String> specialApproval(Integer userId,Integer status,String userName,String companyName,String comanyDuties,@PathVariable Integer appId){
-		CommonDto<String> result = new CommonDto<>();
-
-		try {
-			result = investorsApprovalService.specialApproval(userId,status,userName,companyName,comanyDuties,appId);
-		}catch (Exception e){
-			this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
-			result.setMessage("服务器端发生错误");
-			result.setStatus(502);
-			result.setData(null);
-		}
-
-		return result;
-	}
-
 	
 }

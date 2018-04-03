@@ -205,17 +205,6 @@ public class InvestorsApprovalserviceImpl extends GenericService implements Inve
                 return result;
             }
 
-			/*if ("".equals(dataName) || dataName == null || "undefined".equals(dataName)){
-                result.setData(null);
-                result.setMessage("请选择投资人类型");
-                result.setStatus(50001);
-
-				this.LOGGER.info("投资人认证场景");
-				this.LOGGER.info("请选择投资人类型");
-
-                return result;
-            }*/
-
 
             if ("".equals(company) || company == null || "undefined".equals(company)) {
                 result.setData(null);
@@ -257,35 +246,29 @@ public class InvestorsApprovalserviceImpl extends GenericService implements Inve
             userToken.setToken(params.getToken());
             userToken = userTokenMapper.selectOne(userToken);
             
-            investorsApproval.setUserid(userToken.getUserId());
-            investorsApproval.setApprovalUsername(params.getCompellation());
-//		 if("个人投资人".equals(params.getDateName())){
-            if (dataName == null || "".equals(dataName)) {
-
-            } else {
+            if(userToken!=null) {
+            	investorsApproval.setUserid(userToken.getUserId());
+            }
+            //设置认证类型
+            if (dataName != null){
                 investorsApproval.setInvestorsType(Integer.valueOf(dataName));
             }
-//		 }
-//		 if("机构投资人".equals(params.getDateName())){
-//			 investorsApproval.setInvestorsType(1);
-//			 }
-//		 if("VIP投资人".equals(params.getDateName())){
-//			 investorsApproval.setInvestorsType(2);
-//			 }
+            investorsApproval.setApprovalUsername(params.getCompellation());
+            
             investorsApproval.setDescription(params.getEvaContent());
             investorsApproval.setCompany(params.getOrganization());
             investorsApproval.setCompanyDuties(params.getFillOffice());
             investorsApproval.setWorkCard(params.getTempFilePaths());
             //设置为待审核状态
             investorsApproval.setApprovalResult(0);
+            //设置提交认证的时间
             investorsApproval.setReviewTime(new Date());
-            
             investorsApproval.setCreateTime(new Date());
+            investorsApproval.setInvestorsApprovalcolCase(params.getInvestorsApprovalcolCase());
             
             investorsApproval.setFormId(formId);
-            investorsApproval.setInvestorsApprovalcolCase(params.getInvestorsApprovalcolCase());
-
-            investorsApprovalMapper.insert(investorsApproval);
+            investorsApprovalMapper.insertSelective(investorsApproval);
+            
             //修改关联用户的重叠信息
             Users users = new Users();
             //params.getToken()指的是认证id
@@ -296,6 +279,7 @@ public class InvestorsApprovalserviceImpl extends GenericService implements Inve
             u.setCompanyDuties(params.getFillOffice());
             u.setActualName(params.getCompellation());
             u.setWorkCard(params.getTempFilePaths());
+            
             usersMapper.updateByPrimaryKey(u);
         } catch (NumberFormatException e) {
             e.printStackTrace();
