@@ -14,5 +14,5 @@ public interface InvestorProcessTrackingService {
 
     CommonDto<List<InvestorOperateLogDto>> getInvestorOperateLogList(Integer investorId);
 
-    CommonDto<String> deleteInvestorOperateLog(Integer logId);
+    CommonDto<String> deleteInvestorOperateLog(Long logId);
 }
