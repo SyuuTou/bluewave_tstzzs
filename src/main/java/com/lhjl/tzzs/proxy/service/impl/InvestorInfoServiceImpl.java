@@ -13,6 +13,7 @@ import com.lhjl.tzzs.proxy.service.InvestorInfoService;
 import com.lhjl.tzzs.proxy.utils.CommonUtils;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -102,9 +103,21 @@ public class InvestorInfoServiceImpl extends GenericService implements InvestorI
             investors.setYn(1);
             //设置数据来源类型
             investors.setInvestorSourceType(3);
+            investors.setApprovalStatus(2);
             //设置创建时间,提交时间
             investors.setCreateTime(new Date());
+            Integer serialNumber = 1000000;
+            Investors investors1 = investorsMapper.maxSerialNumber();
+            if(null != investors1){
+                investors.setSerialNumber(investors1.getSerialNumber() + 1);
+            }else{
+                investors.setSerialNumber(serialNumber);
+            }
+
             investorsMapper.insert(investors);
+
+
+
             updateAfterId=investors.getId();
             
             result.setStatus(200);
