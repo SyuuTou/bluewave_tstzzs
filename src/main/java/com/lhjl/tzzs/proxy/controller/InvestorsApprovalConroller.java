@@ -166,7 +166,7 @@ public class InvestorsApprovalConroller extends GenericController {
 	}
 
 
-	@GetMapping("/send/approvallog")
+	@GetMapping("/send/approvallog")  
 	public CommonDto<String> sendApprovalLog(Integer userId,Integer status,String formId){
 		CommonDto<String> result = new CommonDto<>();
 
