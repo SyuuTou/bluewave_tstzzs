@@ -22,6 +22,23 @@
     <result column="form_id" jdbcType="VARCHAR" property="formId" />
     <result column="institution_id" jdbcType="INTEGER" property="institutionId" />
   </resultMap>
+  
+  <resultMap id="InvestorsApprovalListOutputMap" type="com.lhjl.tzzs.proxy.dto.InvestorsApprovalOutputDto">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="INTEGER" property="userId" />
+    <result column="approval_username" jdbcType="VARCHAR" property="userName" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="company_duties" jdbcType="VARCHAR" property="companyDuties" />
+    <result column="phonenumber" jdbcType="VARCHAR" property="phoneNum" />
+    <result column="investors_type" jdbcType="VARCHAR" property="investorType" />
+    <result column="description" jdbcType="VARCHAR" property="investorDescription" />
+    <result column="work_card" jdbcType="VARCHAR" property="workCard" />
+    <result column="investors_approvalcol_case" jdbcType="VARCHAR" property="investCase" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    
+    <result column="approval_result" jdbcType="INTEGER" property="approvalResult" />
+    <result column="shenfen" jdbcType="VARCHAR" property="investorTypeResult" />
+  </resultMap>
 
    <select id="findInvestorsApproval" parameterType="INTEGER" resultType="java.util.HashMap">
    SELECT i.* FROM investors_approval i  WHERE i.userid=#{userId} ORDER BY i.review_time DESC LIMIT 1
@@ -55,7 +72,8 @@
   GROUP BY userid
   ORDER BY create_time DESC
   </select>
-  <select id="findApprovalList" resultType="java.util.HashMap">
+  
+  <select id="findApprovalList" resultMap="InvestorsApprovalListOutputMap" parameterType="com.lhjl.tzzs.proxy.dto.InvestorsApprovalInputDto">
     SELECT ia.id,
     case when ivs.investors_type is null then "" else
     (case when ivs.investors_type = 0 then "个人投资人" else (case when ivs.investors_type = 1 then "机构投资人" else "VIP投资人" end) end)
@@ -69,19 +87,18 @@
     left join users u on ia.userid = u.ID
     left join users_weixin uw on ia.userid = uw.user_id
     left join (select * from investors  where approval_status = 1) ivs on ia.userid = ivs.user_id
-    where
-    1=1
+    where 1=1
     <if test="searchWord != null and searchWord !=''">
      and (ia.approval_username like CONCAT("%",CONCAT(#{searchWord},"%"))  or ia.company like CONCAT("%",CONCAT(#{searchWord},"%"))
       or ia.company_duties like CONCAT("%",CONCAT(#{searchWord},"%")) or u.phonenumber like CONCAT("%",CONCAT(#{searchWord},"%")))
     </if>
-    <if test="investorsType != null and investorsType.length > 0">
+    <if test="investorType != null and investorType.size > 0">
       and ia.investors_type in
-      <foreach close=")" collection="investorsType" index="index" item="item" open="(" separator=",">#{item}</foreach>
+      <foreach close=")" collection="investorType" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="approvalResult != null and approvalResult.length > 0">
+    <if test="aduitStatus != null and aduitStatus.size > 0">
       and ia.approval_result in
-      <foreach close=")" collection="approvalResult" index="index" item="item" open="(" separator=",">#{item}</foreach>
+      <foreach close=")" collection="aduitStatus" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
     <if test="approvalTimeOrder != null and approvalTimeOrder !=''">
       order by ia.create_time
@@ -89,43 +106,26 @@
         desc
       </if>
     </if>
-    limit #{startPage},#{pageSize};
+    limit #{start},#{pageSize}
   </select>
-  <select id="findApprovalListCount" resultType="java.lang.Integer">
-    select count(*) ct from (
-    SELECT ia.id,
-    case when ivs.investors_type is null then "" else
-    (case when ivs.investors_type = 0 then "个人投资人" else (case when ivs.investors_type = 1 then "机构投资人" else "VIP投资人" end) end)
-    end shenfen,
-    ia.userid,u.company_name company,ia.company_duties,u.phonenumber,ia.approval_username,
-    case when ia.investors_type is null then "" else
-    (case when ia.investors_type = 0 then "个人投资人" else (case when ia.investors_type = 1 then "机构投资人" else "VIP投资人" end) end)
-    end investors_type,
-    ia.description,ia.work_card,ia.investors_approvalcol_case,ia.create_time,ia.approval_result
+  <select id="findApprovalListCount" resultType="java.lang.Long" parameterType="com.lhjl.tzzs.proxy.dto.InvestorsApprovalInputDto">
+    select count(*)
     FROM investors_approval ia
     left join users u on ia.userid = u.ID
     left join users_weixin uw on ia.userid = uw.user_id
     left join (select * from investors  where approval_status = 1) ivs on ia.userid = ivs.user_id
-    where
-    1=1
+    where 1=1
     <if test="searchWord != null and searchWord !=''">
       and (ia.approval_username like CONCAT("%",CONCAT(#{searchWord},"%"))  or ia.company like CONCAT("%",CONCAT(#{searchWord},"%"))
       or ia.company_duties like CONCAT("%",CONCAT(#{searchWord},"%")) or u.phonenumber like CONCAT("%",CONCAT(#{searchWord},"%")))
     </if>
-    <if test="investorsType != null and investorsType.length > 0">
+    <if test="investorType != null and investorType.size > 0">
       and ia.investors_type in
-      <foreach close=")" collection="investorsType" index="index" item="item" open="(" separator=",">#{item}</foreach>
+      <foreach close=")" collection="investorType" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="approvalResult != null and approvalResult.length > 0">
+    <if test="aduitStatus != null and aduitStatus.size > 0">
       and ia.approval_result in
-      <foreach close=")" collection="approvalResult" index="index" item="item" open="(" separator=",">#{item}</foreach>
+      <foreach close=")" collection="aduitStatus" index="index" item="item" open="(" separator=",">#{item}</foreach>
     </if>
-    <if test="approvalTimeOrder != null and approvalTimeOrder !=''">
-      order by ia.create_time
-      <if test="approvalTimeOrderDesc != null and approvalTimeOrderDesc !=''">
-        desc
-      </if>
-    </if>
-    )cot
   </select>
 </mapper>

@@ -92,18 +92,16 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
      * @return
      */
     @Override
-    public CommonDto<Map<String, Object>> getProjectSendList(ProjectSendBAdminListInputDto body,Integer appid) {
-        CommonDto<Map<String,Object>> result =  new CommonDto<>();
+    public CommonDto<PagingOutputDto<ProjectSendBAdminListOutputDto>> getProjectSendList(ProjectSendBAdminListInputDto body,Integer appid) {
+        CommonDto<PagingOutputDto<ProjectSendBAdminListOutputDto>> result =  new CommonDto<>();
+        
+        PagingOutputDto<ProjectSendBAdminListOutputDto> pod=new PagingOutputDto<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm");
-        Map<String,Object> map = new HashMap<>();
+        
         List<ProjectSendBAdminListOutputDto> list = new ArrayList<>();
 
-        if (body.getSearchWord() == null){
-            body.setSearchWord("");
-        }
-
-        if (body.getPageNum() == null){
-            body.setPageNum(defalutPageNum);
+        if (body.getCurrentPage() == null){
+            body.setCurrentPage(defalutPageNum);
         }
         if (body.getPageSize() == null){
             body.setPageSize(defalutPageSize);
@@ -114,15 +112,17 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
             body.setCreatTimeOrderDesc(1);
         }
 
-        Integer startPage = (body.getPageNum() -1 )*body.getPageSize();
+        body.setStart( (long)(body.getCurrentPage() -1 ) * body.getPageSize() ); 
 
-        List<Map<String,Object>> projectSendList = projectSendAuditBMapper.adminGetProjectSendList(body.getSearchWord(),body.getBegainTime(),
+        /*List<Map<String,Object>> projectSendList = projectSendAuditBMapper.adminGetProjectSendList(body.getSearchWord(),body.getBegainTime(),
                 body.getEndTime(),body.getProjetcSource(),body.getCreatTimeOrder(),body.getCreatTimeOrderDesc(),body.getAuditTimeOrder(),
-                body.getAuditTimeOrderDesc(),startPage,body.getPageSize());
-        Integer totalCount = projectSendAuditBMapper.adminGetProjectSendListCount(body.getSearchWord(),body.getBegainTime(),
+                body.getAuditTimeOrderDesc(),startPage,body.getPageSize());*/
+        List<Map<String,Object>> projectSendList = projectSendAuditBMapper.adminGetProjectSendList(body);
+        /*Integer total = projectSendAuditBMapper.adminGetProjectSendListCount(body.getSearchWord(),body.getBegainTime(),
                 body.getEndTime(),body.getProjetcSource(),body.getCreatTimeOrder(),body.getCreatTimeOrderDesc(),body.getAuditTimeOrder(),
-                body.getAuditTimeOrderDesc(),startPage,body.getPageSize());
-
+                body.getAuditTimeOrderDesc(),startPage,body.getPageSize());*/
+        Long total = projectSendAuditBMapper.adminGetProjectSendListCount(body);
+        
         if (projectSendList.size() > 0){
             for (Map<String,Object> m:projectSendList){
                 ProjectSendBAdminListOutputDto projectSendBAdminListOutputDto = new ProjectSendBAdminListOutputDto();
@@ -198,12 +198,12 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
 
 
 
-        map.put("list",list);
-        map.put("currentPage",body.getPageNum());
-        map.put("total",totalCount);
-        map.put("pageSize",body.getPageSize());
+        pod.setList(list);
+        pod.setCurrentPage(body.getCurrentPage());
+        pod.setTotal(total);
+        pod.setPageSize(body.getPageSize());
 
-        result.setData(map);
+        result.setData(pod);
         result.setMessage("success");
         result.setStatus(200);
 

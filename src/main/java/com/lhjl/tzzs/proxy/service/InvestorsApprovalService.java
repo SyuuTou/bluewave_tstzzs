@@ -48,7 +48,7 @@ public interface InvestorsApprovalService {
 	 * @param body
 	 * @return
 	 */
-	CommonDto<Map<String,Object>> adminFindApprovals(InvestorsApprovalInputDto body);
+	CommonDto<PagingOutputDto<InvestorsApprovalOutputDto>> adminFindApprovals(InvestorsApprovalInputDto body);
 
 	/**
 	 * 后台审核操作接口

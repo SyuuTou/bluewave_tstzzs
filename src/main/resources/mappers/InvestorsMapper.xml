@@ -274,7 +274,8 @@
    </select>
 
     <select id="smartSearchInvestor" resultMap="InvestorSmartSearchOutputMap">
-    SELECT i.ID, i.name, iis.short_name, i.position FROM idatavc.investors i left join investment_institutions iis on i.investment_institutions_id = iis.ID
+    SELECT i.ID, i.name, iis.short_name, i.position FROM <!-- idatavc. -->investors i 
+    left join investment_institutions iis on i.investment_institutions_id = iis.ID
     where 1=1
         <if test="keyword !=null and keyword !=''">
             AND i.name like CONCAT(CONCAT('%', #{keyword}), '%')

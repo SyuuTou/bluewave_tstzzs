@@ -7,6 +7,8 @@ import com.lhjl.tzzs.proxy.dto.ProjectInvestmentDto;
 import org.apache.ibatis.annotations.Param;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.InvestorsApprovalInputDto;
+import com.lhjl.tzzs.proxy.dto.InvestorsApprovalOutputDto;
 import com.lhjl.tzzs.proxy.model.InvestorsApproval;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 
@@ -20,13 +22,17 @@ public interface InvestorsApprovalMapper extends OwnerMapper<InvestorsApproval> 
 	List<InvestorsApproval> findApproval(@Param("checkName") String checkName,
 										 @Param("time")String time, @Param("beginNum")Integer beginNum, @Param("pageSize")Integer pageSize);
 	List<ProjectInvestmentDto> findApprovalName(@Param("shortName") String shortName);
-
-	List<Map<String,Object>> findApprovalList(@Param("searchWord") String searchWord,@Param("investorsType") Integer[] investorsType,
-											  @Param("approvalResult") Integer[] approvalResult,@Param("approvalTimeOrder") Integer approvalTimeOrder,
-											  @Param("approvalTimeOrderDesc") Integer approvalTimeOrderDesc,@Param("startPage") Integer startPage,
-											  @Param("pageSize") Integer pageSize);
-	Integer findApprovalListCount(@Param("searchWord") String searchWord,@Param("investorsType") Integer[] investorsType,
-							 @Param("approvalResult") Integer[] approvalResult,@Param("approvalTimeOrder") Integer approvalTimeOrder,
-							 @Param("approvalTimeOrderDesc") Integer approvalTimeOrderDesc,@Param("startPage") Integer startPage,
-							 @Param("pageSize") Integer pageSize);
+	
+	/**
+	 * 投资人提交认证审核列表
+	 * @param body
+	 * @return
+	 */
+	List<InvestorsApprovalOutputDto> findApprovalList(InvestorsApprovalInputDto body);
+	/**
+	 * 投资人认证审核列表总数
+	 * @param body
+	 * @return
+	 */
+	Long findApprovalListCount(InvestorsApprovalInputDto body);
 }

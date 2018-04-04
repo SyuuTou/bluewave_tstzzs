@@ -1,8 +1,10 @@
 package com.lhjl.tzzs.proxy.service;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.PagingOutputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendAuditBInputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBAdminListInputDto;
+import com.lhjl.tzzs.proxy.dto.ProjectSendBAdminListOutputDto;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +14,7 @@ public interface ProjectAuditBService {
      * 读取审核项目列表
      * @return
      */
-    CommonDto<Map<String,Object>> getProjectSendList(ProjectSendBAdminListInputDto body, Integer appid);
+    CommonDto<PagingOutputDto<ProjectSendBAdminListOutputDto>> getProjectSendList(ProjectSendBAdminListInputDto body, Integer appid);
 
     /**
      * 审核项目信息的接口
