@@ -34,5 +34,5 @@ public interface InvestorsApprovalMapper extends OwnerMapper<InvestorsApproval> 
 	 * @param body
 	 * @return
 	 */
-	Integer findApprovalListCount(InvestorsApprovalInputDto body);
+	Long findApprovalListCount(InvestorsApprovalInputDto body);
 }

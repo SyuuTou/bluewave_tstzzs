@@ -533,10 +533,11 @@ public class InvestorsApprovalserviceImpl extends GenericService implements Inve
      * @return
      */
     @Override
-    public CommonDto<Map<String, Object>> adminFindApprovals(InvestorsApprovalInputDto body) {
-        CommonDto<Map<String, Object>> result = new CommonDto<>();
-        Map<String, Object> map = new HashMap<>();
-//        List<InvestorsApprovalOutputDto> list = new ArrayList<>();
+    public CommonDto<PagingOutputDto<InvestorsApprovalOutputDto>> adminFindApprovals(InvestorsApprovalInputDto body) {
+        CommonDto<PagingOutputDto<InvestorsApprovalOutputDto>> result = new CommonDto<>();
+        
+        PagingOutputDto<InvestorsApprovalOutputDto> pod=new PagingOutputDto<>();
+        
         SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm");
 
         /*if (body.getPageNum() == null) {
@@ -590,15 +591,15 @@ public class InvestorsApprovalserviceImpl extends GenericService implements Inve
             });
         }
 
-        Integer total = investorsApprovalMapper.findApprovalListCount(body);
+        Long total = investorsApprovalMapper.findApprovalListCount(body);
 
-        map.put("approvalList", list);
-        map.put("total", total);
-        map.put("currentPage", body.getCurrentPage());
-        map.put("pageSize", body.getPageSize());
+        pod.setList(list);
+        pod.setTotal(total);
+        pod.setCurrentPage(body.getCurrentPage());;
+        pod.setPageSize(body.getPageSize());;
 
         result.setMessage("success");
-        result.setData(map);
+        result.setData(pod);
         result.setStatus(200);
         
         return result;

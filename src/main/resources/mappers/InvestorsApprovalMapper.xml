@@ -108,7 +108,7 @@
     </if>
     limit #{start},#{pageSize}
   </select>
-  <select id="findApprovalListCount" resultType="java.lang.Integer" parameterType="com.lhjl.tzzs.proxy.dto.InvestorsApprovalInputDto">
+  <select id="findApprovalListCount" resultType="java.lang.Long" parameterType="com.lhjl.tzzs.proxy.dto.InvestorsApprovalInputDto">
     select count(*)
     FROM investors_approval ia
     left join users u on ia.userid = u.ID
