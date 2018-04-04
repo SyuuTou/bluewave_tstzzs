@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ReportModulesFilesLabelsMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ReportModulesFilesLabels" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="report_modules_files_id" property="reportModulesFilesId" jdbcType="INTEGER" />
+    <result column="segmentation" property="segmentation" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>

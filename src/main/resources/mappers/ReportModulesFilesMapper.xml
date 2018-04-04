@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lhjl.tzzs.proxy.mapper.ReportModulesFilesMapper" >
+  <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.ReportModulesFiles" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="file_url" property="fileUrl" jdbcType="VARCHAR" />
+    <result column="file_type" property="fileType" jdbcType="INTEGER" />
+    <result column="file_icon" property="fileIcon" jdbcType="VARCHAR" />
+    <result column="file_size" property="fileSize" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="author" property="author" jdbcType="VARCHAR" />
+    <result column="digest" property="digest" jdbcType="VARCHAR" />
+    <result column="release_time" property="releaseTime" jdbcType="TIMESTAMP" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="report_modules_id" property="reportModulesId" jdbcType="INTEGER" />
+  </resultMap>
+</mapper>
