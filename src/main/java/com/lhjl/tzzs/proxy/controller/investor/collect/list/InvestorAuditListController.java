@@ -39,7 +39,6 @@ public class InvestorAuditListController extends GenericController{
 	 * @return
 	 */
 	@PostMapping("admin/findinvestorsapproval")
-//	PagingOutputDto<>
 	public CommonDto<PagingOutputDto<InvestorsApprovalOutputDto>> adminFindApprovals(@RequestBody InvestorsApprovalInputDto body){
 		CommonDto<PagingOutputDto<InvestorsApprovalOutputDto>> result = new CommonDto<>();
 

@@ -1031,28 +1031,24 @@ public class InvestorsApprovalserviceImpl extends GenericService implements Inve
     @Override
     public CommonDto<String> getWorkcard(String approvalId) {
         CommonDto<String> result = new CommonDto<>();
+        
         if (approvalId == null || "".equals(approvalId)) {
             result.setStatus(301);
             result.setMessage("无效参数");
             return result;
         }
-
-        String workcard = "";
-        InvestorsApproval investorsApproval = new InvestorsApproval();
-        investorsApproval.setId(Integer.parseInt(approvalId));
-        investorsApproval = investorsApprovalMapper.selectByPrimaryKey(investorsApproval);
+        InvestorsApproval investorsApproval=investorsApprovalMapper.selectByPrimaryKey(Integer.parseInt(approvalId));
+        
         if (investorsApproval != null) {
-            workcard = investorsApproval.getWorkCard();
+        	result.setStatus(200);
+            result.setMessage("查询工作名片成功");
+            result.setData(investorsApproval.getWorkCard());
+            return result;
         } else {
             result.setStatus(302);
             result.setMessage("未找到该审核记录");
             return result;
         }
-
-        result.setStatus(200);
-        result.setMessage("查询工作名片成功");
-        result.setData(workcard);
-        return result;
     }
 
 
