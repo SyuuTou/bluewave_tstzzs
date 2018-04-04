@@ -31,29 +31,6 @@ public class InvestorAuditController extends GenericController{
 	@Resource
 	private InvestorsApprovalService investorsApprovalService;
 	
-	/**
-	 * 认证信息回显接口
-	 * @param token
-	 * @return
-	 */
-	@GetMapping("rest/renzhengtouzirenshenhebiao/newrshenhexinxi")
-	public CommonDto<Map<String,Object>> findInvestorsApproval(String token){
-		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
-
-		try {
-			result = investorsApprovalService.findInvestorsApproval(token);
-			if(result.getStatus() == null){
-				result.setStatus(200);
-				result.setMessage("success");
-			}
-		} catch (Exception e) {
-
-			result.setStatus(5101);
-			result.setMessage("显示页面异常，请稍后再试");
-			this.LOGGER.error(e.getMessage(), e);
-		}
-		return result;
-	}
 	
 	/**
 	 * 后台审核操作接口(新)

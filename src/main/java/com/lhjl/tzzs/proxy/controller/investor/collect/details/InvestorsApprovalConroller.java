@@ -24,6 +24,30 @@ public class InvestorsApprovalConroller extends GenericController {
 	private String defaultPageSize;
 
 	/**
+	 * 认证信息回显接口
+	 * @param token
+	 * @return
+	 */
+	@GetMapping("rest/renzhengtouzirenshenhebiao/newrshenhexinxi")
+	public CommonDto<Map<String,Object>> findInvestorsApproval(String token){
+		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
+
+		try {
+			result = investorsApprovalService.findInvestorsApproval(token);
+			if(result.getStatus() == null){
+				result.setStatus(200);
+				result.setMessage("success");
+			}
+		} catch (Exception e) {
+
+			result.setStatus(5101);
+			result.setMessage("显示页面异常，请稍后再试");
+			this.LOGGER.error(e.getMessage(), e);
+		}
+		return result;
+	}
+	
+	/**
 	 * 通过token获取投资人审核状态
 	 * @param token
 	 * @return
@@ -33,7 +57,6 @@ public class InvestorsApprovalConroller extends GenericController {
 		CommonDto<Map<String,Object>> result = new CommonDto<Map<String,Object>>();
 		
 		try {
-			//初始化分页信息
 			result = investorsApprovalService.findInvestorsExamine(token);
 			if(result.getStatus() == null){
 				result.setStatus(200);
