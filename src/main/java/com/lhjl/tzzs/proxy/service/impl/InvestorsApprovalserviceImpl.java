@@ -566,7 +566,7 @@ public class InvestorsApprovalserviceImpl extends GenericService implements Inve
                 
             	if( e.getApprovalResult() !=null) {
             		switch(e.getApprovalResult()) {
-            		case 0:
+            		case 0: 
                         e.setAduitStatus("待审核");
                         break;
                     case 1:
