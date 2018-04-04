@@ -30,7 +30,12 @@ public class ReportModulesServiceImpl extends GenericService implements ReportMo
         ReportModules reportModules = new ReportModules();
         reportModules.setReportId(reportId);
 
-        return new CommonDto<>(reportModulesMapper.select(reportModules),"success", 200);
+        List<ReportModules> reportModulesList = reportModulesMapper.select(reportModules);
+        reportModulesList.forEach(item -> {
+            item.setReportModulesFilesList(queryReportModulesFilesList(appId,item.getId()).getData());
+        });
+
+        return new CommonDto<>(reportModulesList,"success", 200);
     }
 
     @Override

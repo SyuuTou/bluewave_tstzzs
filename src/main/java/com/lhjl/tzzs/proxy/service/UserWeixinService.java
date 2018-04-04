@@ -7,7 +7,7 @@ import com.lhjl.tzzs.proxy.dto.UserGetInfoDto;
 import java.util.Map;
 
 public interface UserWeixinService {
-    CommonDto<UserGetInfoDto> setUsersWeixin(WxMaUserInfo userInfo,String userid);
+    CommonDto<UserGetInfoDto> setUsersWeixin(Integer appid, WxMaUserInfo userInfo, String userid);
 
     CommonDto<String> checkName(String token);
 

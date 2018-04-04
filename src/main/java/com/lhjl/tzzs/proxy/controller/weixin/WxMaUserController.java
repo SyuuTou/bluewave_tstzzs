@@ -130,7 +130,7 @@ public class WxMaUserController {
 //    @GetMapping("info")
 //    public CommonDto<UserGetInfoDto> info(String token, String signature, String rawData, String encryptedData, String iv) {
       @PostMapping("info")
-      public CommonDto<UserGetInfoDto> info(@RequestBody Map<String,String> body) {
+      public CommonDto<UserGetInfoDto> info(@RequestBody Map<String,String> body, @PathVariable Integer appid) {
         CommonDto<UserGetInfoDto> result = new CommonDto<>();
         UserGetInfoDto userGetInfoDto = new UserGetInfoDto();
 
@@ -215,7 +215,7 @@ public class WxMaUserController {
             WxMaUserInfo userInfo = this.wxService.getUserService().getUserInfo(sessionKey, encryptedData, iv);
 
 
-            result = userWeixinService.setUsersWeixin(userInfo,userid);
+            result = userWeixinService.setUsersWeixin(appid,userInfo,userid);
         }catch (Exception e){
             logger.error(e.getMessage(),e.fillInStackTrace());
             userGetInfoDto.setTips("服务器发生错误");

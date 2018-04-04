@@ -18,6 +18,12 @@ public class ReportModulesController extends GenericController {
     @Resource(name = "reportModulesService")
     private ReportModulesService reportModulesService;
 
+    /**
+     * 获取模块列表及相关文件列表
+     * @param appId
+     * @param reportId
+     * @return
+     */
     @GetMapping("v{appId}/reprot/modules/list/{reportId}")
     public CommonDto<List<ReportModules>> queryReportModules(@PathVariable Integer appId, @PathVariable Integer reportId){
         CommonDto<List<ReportModules>> result = null;
@@ -102,5 +108,7 @@ public class ReportModulesController extends GenericController {
 
         return result;
     }
+
+
 
 }

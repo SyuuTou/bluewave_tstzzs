@@ -28,7 +28,7 @@ public class ReportModulesFiles {
     private Integer fileType;
 
     /**
-     * 文件标签
+     * 文件Icon
      */
     @Column(name = "file_icon")
     private String fileIcon;
@@ -74,6 +74,9 @@ public class ReportModulesFiles {
     @Column(name = "report_modules_id")
     private Integer reportModulesId;
 
+    /**
+     * 文件标签列表
+     */
     @Transient
     private List<ReportModulesFilesLabels> reportModulesFilesLabels;
 

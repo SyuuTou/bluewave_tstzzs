@@ -96,30 +96,30 @@ public class FollowServiceImpl implements FollowService {
         follow.setStatus(status);
         follow.setUserId(userId);
         followMapper.insert(follow);
-        UserToken userToken = new UserToken();
-        userToken.setToken(userId);
-        userToken = userTokenMapper.selectOne(userToken);
-        UserProjects userProjects = new UserProjects();
-        userProjects.setUserId(userToken.getUserId());
-        userProjects.setSendProjectId(projectId);
-        userProjects = userProjectsMapper.selectOne(userProjects);
-        if (null == userProjects) {
-            userProjects.setIsdel(0);
-            userProjectsMapper.updateByPrimaryKey(userProjects);
-        }else {
-
-            userProjects = new UserProjects();
-            userProjects.setSourcePlatformId(1);//项目来源平台
-            userProjects.setActionId(2);//项目关注
-            userProjects.setSendProjectId(projectId);
-            userProjects.setUpdateTime(DateTime.now().toDate());
-            userProjects.setCreateTime(DateTime.now().toDate());
-            userProjects.setUserId(userToken.getUserId());
-            userProjects.setYn(1);
-            userProjects.setIsdel(0);
-            userProjectsMapper.insert(userProjects);
-
-        }
+//        UserToken userToken = new UserToken();
+//        userToken.setToken(userId);
+//        userToken = userTokenMapper.selectOne(userToken);
+//        UserProjects userProjects = new UserProjects();
+//        userProjects.setUserId(userToken.getUserId());
+//        userProjects.setSendProjectId(projectId);
+//        userProjects = userProjectsMapper.selectOne(userProjects);
+//        if (null != userProjects) {
+//            userProjects.setIsdel(0);
+//            userProjectsMapper.updateByPrimaryKey(userProjects);
+//        }else {
+//
+//            userProjects = new UserProjects();
+//            userProjects.setSourcePlatformId(1);//项目来源平台
+//            userProjects.setActionId(2);//项目关注
+//            userProjects.setSendProjectId(projectId);
+//            userProjects.setUpdateTime(DateTime.now().toDate());
+//            userProjects.setCreateTime(DateTime.now().toDate());
+//            userProjects.setUserId(userToken.getUserId());
+//            userProjects.setYn(1);
+//            userProjects.setIsdel(0);
+//            userProjectsMapper.insert(userProjects);
+//
+//        }
         sendConcernEvent(projectId, userId);
     }
 

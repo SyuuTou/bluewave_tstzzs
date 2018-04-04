@@ -107,16 +107,16 @@ public class ProjectSendBServiceImpl extends GenericService implements ProjectSe
             return prepareId;
         }
 
-        Example prepareExample = new Example(ProjectSendPrepareidB.class);
-        prepareExample.and().andEqualTo("userId",userId).andEqualTo("auditStatus",0).andEqualTo("appid",appid);
-
-        List<ProjectSendPrepareidB> projectSendPrepareidBList = projectSendPrepareidBMapper.selectByExample(prepareExample);
-        if (projectSendPrepareidBList.size() > 0){
-            prepareId = projectSendPrepareidBList.get(0).getId();
-        }else {
+//        Example prepareExample = new Example(ProjectSendPrepareidB.class);
+//        prepareExample.and().andEqualTo("userId",userId).andEqualTo("auditStatus",0).andEqualTo("appid",appid);
+//
+//        List<ProjectSendPrepareidB> projectSendPrepareidBList = projectSendPrepareidBMapper.selectByExample(prepareExample);
+//        if (projectSendPrepareidBList.size() > 0){
+//            prepareId = projectSendPrepareidBList.get(0).getId();
+//        }else {
             //创建prepareId
             prepareId = creatPrepareId(userId,appid);
-        }
+//        }
         return prepareId;
     }
 

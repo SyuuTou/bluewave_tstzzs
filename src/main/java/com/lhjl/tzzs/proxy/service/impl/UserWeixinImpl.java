@@ -42,7 +42,7 @@ public class UserWeixinImpl implements UserWeixinService {
 
     @Transactional
     @Override
-    public CommonDto<UserGetInfoDto> setUsersWeixin(WxMaUserInfo userInfo,String userid){
+    public CommonDto<UserGetInfoDto> setUsersWeixin(Integer appid, WxMaUserInfo userInfo, String userid){
         CommonDto<UserGetInfoDto> result  = new CommonDto<>();
         UserGetInfoDto userGetInfoDto = new UserGetInfoDto();
 
@@ -63,7 +63,8 @@ public class UserWeixinImpl implements UserWeixinService {
                     hasUnionId = true;
                     userToken = userTokenMapper.selectOne(userToken);
                     userToken.setUserId(userID);
-                    userTokenMapper.updateByPrimaryKey(userToken);
+
+                    userTokenMapper.updateByPrimaryKeySelective(userToken);
                 }
         }
 
@@ -81,6 +82,7 @@ public class UserWeixinImpl implements UserWeixinService {
             usersWeixin.setUserId(userID);
             usersWeixin.setNickName(userInfo.getNickName());
             usersWeixin.setUnionId(userInfo.getUnionId());
+            usersWeixin.setMetaAppId(appid);
             usersWeixinMapper.updateByPrimaryKeySelective(usersWeixin);
         }else{
             //创建用户微信表的实体类
@@ -90,7 +92,7 @@ public class UserWeixinImpl implements UserWeixinService {
             usersWeixin.setUserId(userID);
             usersWeixin.setNickName(userInfo.getNickName());
             usersWeixin.setUnionId(userInfo.getUnionId());
-
+            usersWeixin.setMetaAppId(appid);
             usersWeixinMapper.insertSelective(usersWeixin);
         }
 

@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.model;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Table(name = "report_modules")
@@ -42,6 +43,20 @@ public class ReportModules {
      * 创建人
      */
     private String creator;
+
+    /**
+     * 文件列表
+     */
+    @Transient
+    private List<ReportModulesFiles> reportModulesFilesList;
+
+    public List<ReportModulesFiles> getReportModulesFilesList() {
+        return reportModulesFilesList;
+    }
+
+    public void setReportModulesFilesList(List<ReportModulesFiles> reportModulesFilesList) {
+        this.reportModulesFilesList = reportModulesFilesList;
+    }
 
     /**
      * @return ID

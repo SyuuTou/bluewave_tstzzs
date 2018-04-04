@@ -212,7 +212,7 @@ public class WxMaUserOldController {
             WxMaUserInfo userInfo = this.wxService.getUserService().getUserInfo(sessionKey, encryptedData, iv);
 
 
-            result = userWeixinService.setUsersWeixin(userInfo,userid);
+            result = userWeixinService.setUsersWeixin(1, userInfo,userid);
         }catch (Exception e){
             logger.error(e.getMessage(),e.fillInStackTrace());
             userGetInfoDto.setTips("服务器发生错误");
