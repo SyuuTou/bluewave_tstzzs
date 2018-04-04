@@ -1,9 +1,11 @@
 package com.lhjl.tzzs.proxy.controller.project.collect.list;
 
 import com.lhjl.tzzs.proxy.dto.CommonDto;
+import com.lhjl.tzzs.proxy.dto.PagingOutputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAuditInputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendAuditBInputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBAdminListInputDto;
+import com.lhjl.tzzs.proxy.dto.ProjectSendBAdminListOutputDto;
 import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.ProjectAuditBService;
 import com.lhjl.tzzs.proxy.service.ProjectAuditService;
@@ -26,8 +28,8 @@ public class CollectProjectListController extends GenericService{
      * @return
      */
     @PostMapping("/v{appid}/get/project/send/list")
-    public CommonDto<Map<String,Object>> getProjectSendList(@RequestBody ProjectSendBAdminListInputDto body, @PathVariable Integer appid){
-        CommonDto<Map<String,Object>> result  = new CommonDto<>();
+    public CommonDto<PagingOutputDto<ProjectSendBAdminListOutputDto>> getProjectSendList(@RequestBody ProjectSendBAdminListInputDto body, @PathVariable Integer appid){
+        CommonDto<PagingOutputDto<ProjectSendBAdminListOutputDto>> result  = new CommonDto<>();
 
         try {
             result = projectAuditBService.getProjectSendList(body, appid);

@@ -595,8 +595,8 @@ public class InvestorsApprovalserviceImpl extends GenericService implements Inve
 
         pod.setList(list);
         pod.setTotal(total);
-        pod.setCurrentPage(body.getCurrentPage());;
-        pod.setPageSize(body.getPageSize());;
+        pod.setCurrentPage(body.getCurrentPage());
+        pod.setPageSize(body.getPageSize());
 
         result.setMessage("success");
         result.setData(pod);

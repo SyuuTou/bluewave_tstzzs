@@ -88,6 +88,14 @@ public class InvestorsApprovalInputDto {
 		this.currentPage = currentPage;
 	}
 
+	/*public Integer getPageNum() {
+		return pageNum;
+	}
+
+	public void setPageNum(Integer pageNum) {
+		this.pageNum = pageNum;
+	}*/
+
 	public Long getStart() {
 		return start;
 	}

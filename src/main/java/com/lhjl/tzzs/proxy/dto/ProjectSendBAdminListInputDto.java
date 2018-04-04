@@ -26,12 +26,39 @@ public class ProjectSendBAdminListInputDto {
     private Integer auditTimeOrderDesc;
 
     /**当前页码*/
-    private Integer pageNum;
+//    private Integer pageNum;
+    
+    /**
+     * 当前页码
+     */
+    private Integer currentPage;
 
-    /**每页显示数量*/
+    /**每页显示数量*/ 
     private Integer pageSize;
+    /**
+     * 开始索引
+     */
+    private Long start;
+    
+    
+    
+    public Integer getCurrentPage() {
+		return currentPage;
+	}
 
-    public String getSearchWord() {
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public Long getStart() {
+		return start;
+	}
+
+	public void setStart(Long start) {
+		this.start = start;
+	}
+
+	public String getSearchWord() {
         return searchWord;
     }
 
@@ -95,13 +122,13 @@ public class ProjectSendBAdminListInputDto {
         this.auditTimeOrderDesc = auditTimeOrderDesc;
     }
 
-    public Integer getPageNum() {
+/*    public Integer getPageNum() {
         return pageNum;
     }
 
     public void setPageNum(Integer pageNum) {
         this.pageNum = pageNum;
-    }
+    }*/
 
     public Integer getPageSize() {
         return pageSize;

@@ -90,9 +90,9 @@
         desc
       </if>
     </if>
-    limit #{startPage},#{pageSize}
+    limit #{start},#{pageSize}
   </select>
-  <select id="adminGetProjectSendListCount" resultType="java.lang.Integer">
+  <select id="adminGetProjectSendListCount" resultType="java.lang.Long">
     select count(*) ct from(
     SELECT psab.id,psab.project_source,psb.short_name,psb.full_name,psb.kernel_desc,
     psb.city,u.actual_name,u.company_name,u.company_duties,u.phonenumber,aprl.rating_stage,psb.create_time,psab.audit_status,psab.audit_time,
