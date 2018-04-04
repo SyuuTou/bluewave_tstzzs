@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.dto;
 
+import java.util.Date;
 import java.util.List;
 
 public class InvestorsApprovalOutputDto {
@@ -9,9 +10,6 @@ public class InvestorsApprovalOutputDto {
 
     /**用户id*/
     private Integer userId;
-
-    /**身份类型审核结果*/
-    private String investorTypeResult;
 
     /**用户名*/
     private String userName;
@@ -36,14 +34,52 @@ public class InvestorsApprovalOutputDto {
 
     /**投资案例*/
     private String investCase;
-
-    /**认证时间*/
+    
+    
+    /**
+     * 提交认证时间
+     * (也就是创建时间)
+     */
+    private Date createTime;
+    
+    /**
+     * 提交认证时间字符串
+     */
     private String approvalTime;
 
-    /**审核状态*/
+    /**
+     * 审核结果（数据库存储的整形）
+     */
+    private Integer approvalResult;
+    
+    /**
+     * 转换为字符串之后的审核状态
+     */
     private String aduitStatus;
+    
+    /**
+     * 身份类型审核结果
+     * 当前的投资人类型
+     */
+    private String investorTypeResult;
+    
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-    public Integer getId() {
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Integer getApprovalResult() {
+		return approvalResult;
+	}
+
+	public void setApprovalResult(Integer approvalResult) {
+		this.approvalResult = approvalResult;
+	}
+
+	public Integer getId() {
         return id;
     }
 

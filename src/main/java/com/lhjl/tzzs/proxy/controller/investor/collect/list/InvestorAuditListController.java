@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.controller.investor.collect.list;
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.InvestorsApprovalInputDto;
+import com.lhjl.tzzs.proxy.dto.PagingOutputDto;
 import com.lhjl.tzzs.proxy.dto.TouZiNewDto;
 import com.lhjl.tzzs.proxy.dto.investorDto.InvestorKernelInfoDto;
 import com.lhjl.tzzs.proxy.dto.investorauditdto.investorauditdetaildto.*;
@@ -37,6 +38,7 @@ public class InvestorAuditListController extends GenericController{
 	 * @return
 	 */
 	@PostMapping("admin/findinvestorsapproval")
+//	PagingOutputDto<>
 	public CommonDto<Map<String,Object>> adminFindApprovals(@RequestBody InvestorsApprovalInputDto body){
 		CommonDto<Map<String,Object>> result = new CommonDto<>();
 
@@ -54,8 +56,6 @@ public class InvestorAuditListController extends GenericController{
 		return result;
 	}
 	
-	
-
 	/**
 	 * 获取工作名片
 	 * @param approvalId 投资审核记录ID

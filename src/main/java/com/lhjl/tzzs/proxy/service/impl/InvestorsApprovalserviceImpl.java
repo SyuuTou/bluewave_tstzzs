@@ -536,35 +536,17 @@ public class InvestorsApprovalserviceImpl extends GenericService implements Inve
     public CommonDto<Map<String, Object>> adminFindApprovals(InvestorsApprovalInputDto body) {
         CommonDto<Map<String, Object>> result = new CommonDto<>();
         Map<String, Object> map = new HashMap<>();
-        List<InvestorsApprovalOutputDto> list = new ArrayList<>();
+//        List<InvestorsApprovalOutputDto> list = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm");
 
-        if (body.getSearchWord() == null) {
-            body.setSearchWord("");
-        }
-
-        //list转array
-        Integer[] investorsType = {};
-        if (body.getInvestorType() != null) {
-            Integer[] investorsTypes = new Integer[body.getInvestorType().size()];
-            for (int i = 0; i < body.getInvestorType().size(); i++) {
-                investorsTypes[i] = body.getInvestorType().get(i);
-            }
-            investorsType = investorsTypes;
-        }
-        //list转array
-        Integer[] approvalResult = {};
-        if (body.getAduitStatus() != null) {
-            Integer[] approvalResults = new Integer[body.getAduitStatus().size()];
-            for (int j = 0; j < body.getAduitStatus().size(); j++) {
-                approvalResults[j] = body.getAduitStatus().get(j);
-            }
-            approvalResult = approvalResults;
-        }
-
-        if (body.getPageNum() == null) {
+        /*if (body.getPageNum() == null) {
             body.setPageNum(defaultPageNum);
+        }*/
+        
+        if (body.getCurrentPage() == null) {
+            body.setCurrentPage(defaultPageNum);
         }
+            
         if (body.getPageSize() == null) {
             body.setPageSize(defaultPageSize);
         }
@@ -573,107 +555,52 @@ public class InvestorsApprovalserviceImpl extends GenericService implements Inve
             body.setApprovalTimeOrderDesc(1);
         }
 
-        Integer startPage = (body.getPageNum() - 1) * body.getPageSize();
-
-        List<Map<String, Object>> approvalList = investorsApprovalMapper.findApprovalList(body.getSearchWord(), investorsType, approvalResult,
-                body.getApprovalTimeOrder(), body.getApprovalTimeOrderDesc(), startPage, body.getPageSize());
-
-
-        if (approvalList.size() > 0) {
-            for (Map<String, Object> m : approvalList) {
-                InvestorsApprovalOutputDto investorsApprovalOutputDto = new InvestorsApprovalOutputDto();
-                investorsApprovalOutputDto.setId((Integer) m.get("id"));
-                investorsApprovalOutputDto.setUserId((Integer) m.get("userid"));
-                String company = "";
-                if (m.get("company") != null) {
-                    company = (String) m.get("company");
-                }
-                investorsApprovalOutputDto.setCompany(company);
-                String companyDuties = "";
-                if (m.get("company_duties") != null) {
-                    companyDuties = (String) m.get("company_duties");
-                }
-                investorsApprovalOutputDto.setCompanyDuties(companyDuties);
-                String phoneNum = "";
-                if (m.get("phonenumber") != null) {
-                    phoneNum = (String) m.get("phonenumber");
-                }
-                investorsApprovalOutputDto.setPhoneNum(phoneNum);
-                investorsApprovalOutputDto.setUserName((String) m.get("approval_username"));
-                String investorType = "";
-                if (m.get("investors_type") != null) {
-                    investorType = (String) m.get("investors_type");
-                }
-                investorsApprovalOutputDto.setInvestorType(investorType);
-                String description = "";
-                if (m.get("description") != null) {
-                    description = (String) m.get("description");
-                }
-                investorsApprovalOutputDto.setInvestorDescription(description);
-                String workCard = "";
-                if (m.get("work_card") != null) {
-                    workCard = (String) m.get("work_card");
-                }
-                investorsApprovalOutputDto.setWorkCard(workCard);
-                String investorCase = "";
-                if (m.get("investors_approvalcol_case") != null) {
-                    investorCase = (String) m.get("investors_approvalcol_case");
-                }
-                investorsApprovalOutputDto.setInvestCase(investorCase);
-                String createTime = "";
-                if (m.get("create_time") != null) {
-                    Date createTimed = (Date) m.get("create_time");
-                    createTime = sdf.format(createTimed);
-                }
-                investorsApprovalOutputDto.setApprovalTime(createTime);
-                Integer approvalStatus = null;
-                String approvalStatusString = "";
-                if (m.get("approval_result") != null) {
-                    approvalStatus = (Integer) m.get("approval_result");
-                } else {
-                    approvalStatus = 0;
-                }
-                switch (approvalStatus) {
-                    case 0:
-                        approvalStatusString = "待审核";
+        body.setStart((long)(body.getCurrentPage() - 1) * body.getPageSize());
+        
+        List<InvestorsApprovalOutputDto> list = investorsApprovalMapper.findApprovalList(body);
+        if(list !=null && list.size()>0) {
+        	list.forEach((e) ->{
+        		if(e.getCreateTime()!=null) {
+        			e.setApprovalTime( sdf.format(e.getCreateTime()) );
+        		}
+                
+            	if( e.getApprovalResult() !=null) {
+            		switch(e.getApprovalResult()) {
+            		case 0:
+                        e.setAduitStatus("待审核");
                         break;
                     case 1:
-                        approvalStatusString = "未通过认证";
+                    	e.setAduitStatus("未通过认证");
                         break;
                     case 2:
-                        approvalStatusString = "投资人认证";
+                    	e.setAduitStatus("投资人认证");
                         break;
                     case 3:
-                        approvalStatusString = "个人投资人";
+                    	e.setAduitStatus("个人投资人");
                         break;
                     case 4:
-                        approvalStatusString = "机构投资人";
+                    	e.setAduitStatus("机构投资人");
                         break;
                     case 5:
-                        approvalStatusString = "VIP投资人";
+                    	e.setAduitStatus("VIP投资人");
                     default:
-                        approvalStatusString = "待审核";
-                }
-                investorsApprovalOutputDto.setAduitStatus(approvalStatusString);
-                investorsApprovalOutputDto.setInvestorTypeResult((String) m.get("shenfen"));
-
-                list.add(investorsApprovalOutputDto);
-
-            }
+                    	e.setAduitStatus("待审核"); 
+            		}
+            	}
+            });
         }
 
-        Integer allCount = investorsApprovalMapper.findApprovalListCount(body.getSearchWord(), investorsType, approvalResult,
-                body.getApprovalTimeOrder(), body.getApprovalTimeOrderDesc(), startPage, body.getPageSize());
+        Integer allCount = investorsApprovalMapper.findApprovalListCount(body);
 
         map.put("approvalList", list);
-        map.put("currentPage", body.getPageNum());
         map.put("total", allCount);
+        map.put("currentPage", body.getCurrentPage());
         map.put("pageSize", body.getPageSize());
 
         result.setMessage("success");
         result.setData(map);
         result.setStatus(200);
-
+        
         return result;
     }
 

@@ -10,74 +10,92 @@ public class InvestorsApprovalInputDto {
     /**认证类型*/
     private List<Integer> investorType;
 
+    /**审核状态*/
+    private List<Integer> aduitStatus;
+    
     /**认证时间排序*/
     private Integer approvalTimeOrder;
 
     /**认证时间降序*/
     private Integer approvalTimeOrderDesc;
 
-    /**审核状态*/
-    private List<Integer> aduitStatus;
-
     /**每页显示数量*/
     private Integer pageSize;
 
     /**页码*/
-    private Integer pageNum;
+//    private Integer pageNum;
+    private Integer currentPage;
+    
+    /**
+     * 起始索引
+     */
+    private Long start;
 
-    public String getSearchWord() {
-        return searchWord;
-    }
+	public String getSearchWord() {
+		return searchWord;
+	}
 
-    public void setSearchWord(String searchWord) {
-        this.searchWord = searchWord;
-    }
+	public void setSearchWord(String searchWord) {
+		this.searchWord = searchWord;
+	}
 
-    public List<Integer> getInvestorType() {
-        return investorType;
-    }
+	public List<Integer> getInvestorType() {
+		return investorType;
+	}
 
-    public void setInvestorType(List<Integer> investorType) {
-        this.investorType = investorType;
-    }
+	public void setInvestorType(List<Integer> investorType) {
+		this.investorType = investorType;
+	}
 
-    public Integer getApprovalTimeOrder() {
-        return approvalTimeOrder;
-    }
+	public List<Integer> getAduitStatus() {
+		return aduitStatus;
+	}
 
-    public void setApprovalTimeOrder(Integer approvalTimeOrder) {
-        this.approvalTimeOrder = approvalTimeOrder;
-    }
+	public void setAduitStatus(List<Integer> aduitStatus) {
+		this.aduitStatus = aduitStatus;
+	}
 
-    public Integer getApprovalTimeOrderDesc() {
-        return approvalTimeOrderDesc;
-    }
+	public Integer getApprovalTimeOrder() {
+		return approvalTimeOrder;
+	}
 
-    public void setApprovalTimeOrderDesc(Integer approvalTimeOrderDesc) {
-        this.approvalTimeOrderDesc = approvalTimeOrderDesc;
-    }
+	public void setApprovalTimeOrder(Integer approvalTimeOrder) {
+		this.approvalTimeOrder = approvalTimeOrder;
+	}
 
-    public List<Integer> getAduitStatus() {
-        return aduitStatus;
-    }
+	public Integer getApprovalTimeOrderDesc() {
+		return approvalTimeOrderDesc;
+	}
 
-    public void setAduitStatus(List<Integer> aduitStatus) {
-        this.aduitStatus = aduitStatus;
-    }
+	public void setApprovalTimeOrderDesc(Integer approvalTimeOrderDesc) {
+		this.approvalTimeOrderDesc = approvalTimeOrderDesc;
+	}
 
-    public Integer getPageSize() {
-        return pageSize;
-    }
+	public Integer getPageSize() {
+		return pageSize;
+	}
 
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
 
-    public Integer getPageNum() {
-        return pageNum;
-    }
 
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-    }
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public Long getStart() {
+		return start;
+	}
+
+	public void setStart(Long start) {
+		this.start = start;
+	}
+
+    
+    
 }
