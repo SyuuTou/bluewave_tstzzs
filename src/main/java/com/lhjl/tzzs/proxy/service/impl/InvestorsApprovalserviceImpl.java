@@ -590,10 +590,10 @@ public class InvestorsApprovalserviceImpl extends GenericService implements Inve
             });
         }
 
-        Integer allCount = investorsApprovalMapper.findApprovalListCount(body);
+        Integer total = investorsApprovalMapper.findApprovalListCount(body);
 
         map.put("approvalList", list);
-        map.put("total", allCount);
+        map.put("total", total);
         map.put("currentPage", body.getCurrentPage());
         map.put("pageSize", body.getPageSize());
 
