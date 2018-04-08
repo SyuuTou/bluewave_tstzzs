@@ -93,10 +93,7 @@
     limit #{start},#{pageSize}
   </select>
   <select id="adminGetProjectSendListCount" resultType="java.lang.Long">
-    select count(*) ct from(
-    SELECT psab.id,psab.project_source,psb.short_name,psb.full_name,psb.kernel_desc,
-    psb.city,u.actual_name,u.company_name,u.company_duties,u.phonenumber,aprl.rating_stage,psb.create_time,psab.audit_status,psab.audit_time,
-    ps.segmentation_name
+    select count(*) 
     FROM project_send_audit_b psab
     left join project_send_b psb on psab.project_send_b_id = psb.id
     left join users u on psab.user_id = u.ID
@@ -119,7 +116,7 @@
     <if test="projetcSource != null and projetcSource != ''">
       and psab.project_source =#{projetcSource}
     </if>
-    <if test="creatTimeOrder != null and creatTimeOrder != ''">
+    <!-- <if test="creatTimeOrder != null and creatTimeOrder != ''">
       order by psab.create_time
       <if test="creatTimeOrderDesc != null and creatTimeOrderDesc !=''">
         desc
@@ -130,8 +127,7 @@
       <if test="auditTimeOrderDesc != null and auditTimeOrderDesc != ''">
         desc
       </if>
-    </if>
-    ) abcd
+    </if> -->
   </select>
 
   <select id="searchProjectSendLogoInfo" resultType="java.util.HashMap">
