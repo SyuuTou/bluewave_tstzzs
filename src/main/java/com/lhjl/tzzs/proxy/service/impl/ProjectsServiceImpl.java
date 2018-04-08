@@ -32,8 +32,6 @@ import tk.mybatis.mapper.entity.Example;
 @Service
 public class ProjectsServiceImpl extends GenericService implements ProjectsService {
 
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(ProjectsServiceImpl.class);
-
     @Value("${statistics.beginTime}")
     private String beginTime;
 
@@ -1015,8 +1013,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
             result.setMessage("项目id不能为空");
             result.setStatus(50001);
 
-            log.info("通过项目id获取项目信息接口场景");
-            log.info("项目id不能为空");
+            this.LOGGER.info("通过项目id获取项目信息接口场景");
+            this.LOGGER.info("项目id不能为空");
 
             return result;
         }
@@ -1027,8 +1025,8 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
             result.setMessage("当前项目id没有找到项目信息，请检查项目id");
             result.setData(null);
 
-            log.info("通过项目id获取项目信息接口场景");
-            log.info("当前项目id没有找到项目信息，请检查项目id");
+            this.LOGGER.info("通过项目id获取项目信息接口场景");
+            this.LOGGER.info("当前项目id没有找到项目信息，请检查项目id");
 
             return result;
         }

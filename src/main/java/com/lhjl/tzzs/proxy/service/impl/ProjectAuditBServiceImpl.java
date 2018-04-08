@@ -22,7 +22,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
     private Integer defalutPageNum;
 
     @Value("${pageSize}")
-    private Integer defalutPageSize;
+    private Integer defaultPageSize;
 
     @Autowired
     private ProjectSendAuditBMapper projectSendAuditBMapper;
@@ -104,7 +104,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
             body.setCurrentPage(defalutPageNum);
         }
         if (body.getPageSize() == null){
-            body.setPageSize(defalutPageSize);
+            body.setPageSize(defaultPageSize);
         }
 
         if (body.getCreatTimeOrder() == null && body.getAuditTimeOrder() == null){

@@ -43,10 +43,10 @@ public class ProjectsController extends GenericController{
     private ProjectsService projectsService;
     
     @Value("${pageNum}")  
-    private String defaultPageNum;
+    private Integer defaultPageNum;
 
     @Value("${pageSize}")  
-    private String defaultPageSize;
+    private Integer defaultPageSize;
     /**
      * 查询我关注项目
      * @return
@@ -55,20 +55,18 @@ public class ProjectsController extends GenericController{
     @PostMapping("search/myfollow")
     public CommonDto<List<Map<String, Object>>> findProjectByUserId(@RequestBody MyFollowDto body){
 
-
         CommonDto<List<Map<String, Object>>> result =new CommonDto<List<Map<String, Object>>>();
         //Users user = (Users) request.getSession().getAttribute("loging_user");
-        Integer pageNum = body.getPageNum();
-        Integer pageSize = body.getPageSize();
+        
         try {
             //初始化分页信息
-            if(pageNum == null){
-                pageNum = Integer.parseInt(defaultPageNum);
+        	if (body.getPageNum() == null){
+                body.setPageNum(defaultPageNum);
             }
-            if(pageSize == null){
-                pageSize = Integer.parseInt(defaultPageSize);
+            if (body.getPageSize() == null){
+                body.setPageSize(defaultPageSize);
             }
-            result = projectsService.findProjectByUserId(body.getUserId(), pageNum, pageSize);
+            result = projectsService.findProjectByUserId(body.getUserId(), body.getPageNum(), body.getPageSize());
         } catch (Exception e) {
             result.setStatus(5101);
             result.setMessage("项目显示页面异常，请稍后再试");
