@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.controller.feilu;
 
+import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.UserYnDto;
 import com.lhjl.tzzs.proxy.service.UserExistJudgmentService;
@@ -12,8 +13,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @RestController
-public class UserYnController {
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(UserYnController.class);
+public class UserYnController extends GenericController{
 
     @Resource
     private UserExistJudgmentService userExistJudgmentService;
@@ -28,7 +28,7 @@ public class UserYnController {
         try {
             result = userExistJudgmentService.userYn(token);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setData(null);
             result.setStatus(501);
             result.setMessage("服务器发生错误");
@@ -49,7 +49,7 @@ public class UserYnController {
         try {
             result = userInfoService.getUserActivity(token);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器发生错误");
             result.setData(null);
             result.setStatus(502);
@@ -69,7 +69,7 @@ public class UserYnController {
         try {
             result = userInfoService.getUserActivityInfo(token);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);
             result.setData(null);
             result.setMessage("服务器端发生错误");

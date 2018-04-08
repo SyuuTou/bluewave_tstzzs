@@ -3,6 +3,8 @@ package com.lhjl.tzzs.proxy.controller.bluewave;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
+
+import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.UserExsitJudgmentDto;
 import com.lhjl.tzzs.proxy.dto.UserGetInfoDto;
@@ -21,8 +23,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @RestController
-public class WxMaBlueWaveUserController {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+public class WxMaBlueWaveUserController extends GenericController {
 
     @Autowired
     private WxMaService wxService;
@@ -40,7 +41,7 @@ public class WxMaBlueWaveUserController {
     private UserLoginService userLoginService;
 
     /**
-     * 登陆接口
+     * 登录接口
      */
     @GetMapping("/v{appid}/login")
     public CommonDto<UserExsitJudgmentDto> login(String code,@PathVariable("appid") Integer appid) {
@@ -52,7 +53,7 @@ public class WxMaBlueWaveUserController {
         }catch (WxErrorException we){
 
         } catch (Exception e) {
-            this.logger.error(e.getMessage(), e);
+            this.LOGGER.error(e.getMessage(), e);
             userExsitJudgmentDto.setToken(null);
             userExsitJudgmentDto.setSuccess(false);
 
@@ -79,7 +80,7 @@ public class WxMaBlueWaveUserController {
         try {
             result = userLoginService.analysisUserInfo(appid,body);
         }catch (Exception e){
-            logger.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setStatus(502);
             result.setMessage("服务器端发生错误");
             result.setData(null);
@@ -100,7 +101,7 @@ public class WxMaBlueWaveUserController {
         try {
         result = userLoginService.checkUserToken(token,appid);
         }catch (Exception e){
-            logger.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
             result.setData(null);
@@ -122,7 +123,7 @@ public class WxMaBlueWaveUserController {
         try {
             result = userLoginService.checkUserSessionKey(appid, sessionkey, token);
         }catch (Exception e){
-            logger.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setData(null);
             result.setStatus(502);
             result.setMessage("服务器端发生错误");

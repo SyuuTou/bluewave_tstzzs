@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.controller.feilu;
 
+import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.model.UserToken;
 import com.lhjl.tzzs.proxy.service.UserEditService;
@@ -17,8 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class UserEditController {
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(UserYnController.class);
+public class UserEditController extends GenericController {
 
     @Resource
     private UserEditService userEditService;
@@ -28,7 +28,6 @@ public class UserEditController {
 
     @Resource
     private SmsCommonService smsCommonService;
-
 
     /*
      * 设置账号密码接口,包括保存注册信息
@@ -42,7 +41,7 @@ public class UserEditController {
         try {
            result=userEditService.editUserMessage(body);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             userSetPasswordOutputDto.setMessage("服务器端发生错误");
             userSetPasswordOutputDto.setSuccess(false);
 
@@ -65,7 +64,7 @@ public class UserEditController {
         try {
             result = userEditService.sendSecurityCode(token,phoneNum);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             Map<String,Object> jieguo = new HashMap<>();
             jieguo.put("message","获取验证码失败");
             jieguo.put("status",50001);
@@ -97,13 +96,13 @@ public class UserEditController {
                 result.setData(null);
                 result.setStatus(502);
                 result.setMessage("用户token无效，请检查");
-                log.info("用户token无效，请检查");
+                this.LOGGER.info("用户token无效，请检查");
 
                 return result;
             }
             result = userEditService.getUserHeadpic(userid);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
 
             obj.put("success",false);
             obj.put("message","token非法无法获取用户头像");
@@ -127,7 +126,7 @@ public class UserEditController {
         try {
             result = userEditService.updateUserHeadpic(headpic,token);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             obj.put("success",false);
             obj.put("message","服务器发生错误");
 
@@ -151,7 +150,7 @@ public class UserEditController {
             result = userEditService.updateUserInfo(body);
 
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             obj.put("success",false);
             obj.put("message","服务器端发生错误");
 
@@ -173,7 +172,7 @@ public class UserEditController {
         try {
             result = userEditService.getUserInfo(token);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             obj.put("message","服务器发生错误");
             obj.put("success",false);
             obj.put("data",null);
@@ -191,7 +190,7 @@ public class UserEditController {
         try {
             result = userEditService.userInfoYn(token);
         }catch (Exception e){
-            log.info(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
             result.setData(null);
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
@@ -206,7 +205,7 @@ public class UserEditController {
         try {
           result = userEditService.userInfoPerfectYn(token);
         }catch (Exception e){
-            log.info(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.info(e.getMessage(),e.fillInStackTrace());
             result.setData(null);
             result.setMessage("服务器端发生错误");
             result.setStatus(502);
@@ -226,7 +225,7 @@ public class UserEditController {
         try {
             result=userEditService.editSomeinfo(body);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
             result.setData(null);
             result.setStatus(502);

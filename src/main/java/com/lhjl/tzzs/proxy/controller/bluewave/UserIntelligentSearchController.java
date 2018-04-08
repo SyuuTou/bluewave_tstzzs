@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.controller.bluewave;
 
+import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.CompanyIntelligentOutputDto;
 import com.lhjl.tzzs.proxy.model.FoundersEducation;
@@ -16,7 +17,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
-public class UserIntelligentSearchController extends GenericService{
+public class UserIntelligentSearchController extends GenericController{
     @Resource
     private FounderWorkService founderWorkService;
 
