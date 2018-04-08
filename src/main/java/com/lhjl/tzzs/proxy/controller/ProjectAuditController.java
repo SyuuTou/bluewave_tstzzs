@@ -30,7 +30,6 @@ public class ProjectAuditController extends GenericController {
         CommonDto<List<Map<String, Object>>> result =new CommonDto<List<Map<String, Object>>>();
 
         try {
-            //初始化分页信息
             result = projectAuditService.findProject(id);
             if(result.getStatus() == null){
                 result.setStatus(200);
@@ -48,7 +47,6 @@ public class ProjectAuditController extends GenericController {
     	 CommonDto<List<XiangsiDto>> result =new  CommonDto<List<XiangsiDto>>();
 
         try {
-            //初始化分页信息
             result = projectAuditService.findProjectall(id,pageNumber,pageSize);
             if(result.getStatus() == null){
                 result.setStatus(200);
@@ -72,7 +70,6 @@ public class ProjectAuditController extends GenericController {
         CommonDto<Map<String,Object>>  result =new  CommonDto<Map<String,Object>>();
 
         try {
-            //初始化分页信息
             result = projectAuditService.findFollow(id,token);
             if(result.getStatus() == null){
                 result.setStatus(200);

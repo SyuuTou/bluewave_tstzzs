@@ -116,18 +116,6 @@
     <if test="projetcSource != null and projetcSource != ''">
       and psab.project_source =#{projetcSource}
     </if>
-    <!-- <if test="creatTimeOrder != null and creatTimeOrder != ''">
-      order by psab.create_time
-      <if test="creatTimeOrderDesc != null and creatTimeOrderDesc !=''">
-        desc
-      </if>
-    </if>
-    <if test="auditTimeOrder != null  and auditTimeOrder != ''">
-      order by psab.audit_time
-      <if test="auditTimeOrderDesc != null and auditTimeOrderDesc != ''">
-        desc
-      </if>
-    </if> -->
   </select>
 
   <select id="searchProjectSendLogoInfo" resultType="java.util.HashMap">
