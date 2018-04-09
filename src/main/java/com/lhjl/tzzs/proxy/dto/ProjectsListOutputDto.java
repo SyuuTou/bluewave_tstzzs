@@ -16,6 +16,10 @@ public class ProjectsListOutputDto {
 	 */
 	private String shortName;
 	/**
+	 * 全称
+	 */
+	private String fullName;
+	/**
 	 * 一句话介绍
 	 */
 	private String kernelDesc;
@@ -43,6 +47,10 @@ public class ProjectsListOutputDto {
 	 * 该值返回为null字段的时候表示正在融A轮
 	 */
 	private String stage;
+	/**
+	 * 认领状态
+	 */
+	private Integer claimStatus;
 	/**
 	 * 关注量
 	 */
@@ -85,18 +93,13 @@ public class ProjectsListOutputDto {
 	 * 1 是 (属于机构表的默认设置)
 	 */
 	private Integer foreignInvestmentYn;
-	/**
-	 * 全称
-	 */
-	private String fullName;
+	
 	/**
 	 * 项目类型
+	 * meta_company_type元数据表的类型（产业公司，创业公司等。。）
 	 */
 	private Integer projectType;
-	/**
-	 * 认领状态
-	 */
-	private Integer claimStatus;
+	
 	/**
 	 * 主体类型id
 	 * 1 (属于项目)
@@ -105,7 +108,7 @@ public class ProjectsListOutputDto {
 	 */
 	private Integer subjectType;
 	/**
-	 * 投资阶段 
+	 * 投资阶段 （用于机构列表使用）
 	 */
 	private String stages;
 	

@@ -34,7 +34,7 @@ public class ProjectListController extends GenericController {
 	@Resource
 	private InvestmentInstitutionsService investmentInstitutionsService;
 	/**
-     * 天使投资指数的项目列表
+     * 天使投资指数的项目列表（兼容机构列表）
      * @param appid
      * @param body
      * @return
@@ -81,7 +81,7 @@ public class ProjectListController extends GenericController {
     }
 
     /**
-     * 项目跟进状态回显
+     * 项目的跟进状态回显
      * @param projectId
      * @param appid
      * @return

@@ -1115,8 +1115,9 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	public CommonDto<PagingOutputDto<ProjectsListOutputDto>> listProInfos(Integer appid, ProjectsListInputDto body) {
 		CommonDto<PagingOutputDto<ProjectsListOutputDto>> result=new CommonDto<>();
 		PagingOutputDto<ProjectsListOutputDto> pod =new PagingOutputDto<>();
+		
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		//格式化参数
+		//输入参数格式化
 		if(body.getCurrentPage()==null) {
 			body.setCurrentPage(pageNumDefault);
 		}
@@ -1124,7 +1125,11 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			body.setPageSize(pageSizeDefault);
 		}
 		body.setStart((long)(body.getCurrentPage()-1) * body.getPageSize());
+		
 		List<ProjectsListOutputDto> list = projectsMapper.findSplit(body);
+		Long total = projectsMapper.findSplitCount(body);
+		
+		//格式化输出的数据结构
 		//设置创建时间，更新时间输出字符串格式
 		list.forEach((e)->{  
 			//设置提交时间
@@ -1140,7 +1145,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			}
 			
 		});
-		Long total = projectsMapper.findSplitCount(body);
+		
 		pod.setList(list);
 		pod.setTotal(total);
 		pod.setCurrentPage(body.getCurrentPage());
@@ -1152,11 +1157,11 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		
 		return result;
 	}
+    
     @Transactional
 	@Override
 	public CommonDto<Boolean> updateFollowStatus(Integer appid, ProjectsUpdateInputDto body) {
 		CommonDto<Boolean> result  =  new CommonDto<>();
-		Date now = new Date();
 
 		if (body.getId() == null){
 		    result.setMessage("项目的id不能为空");
@@ -1185,18 +1190,16 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 		}
 		if(pfs != null) { //执行更新
 			pfs.setMetaFollowStatusId(body.getStatus());
-			if (body.getDescription() != null){
-			    pfs.setDescription(body.getDescription());
-            }
+			pfs.setDescription(body.getDescription());
+			
             projectFollowStatusMapper.updateByPrimaryKeySelective(pfs);
 		}else {//执行插入
 			ProjectFollowStatus pfss=new ProjectFollowStatus();
 			pfss.setProjectId(body.getId());
 			pfss.setMetaFollowStatusId(body.getStatus());
-			if (body.getDescription() != null){
-			    pfss.setDescription(body.getDescription());
-            }
-            pfss.setCreatTime(now);
+		    pfss.setDescription(body.getDescription());
+            pfss.setCreatTime(new Date());
+            
 			projectFollowStatusMapper.insertSelective(pfss);
 		}
 
@@ -1330,19 +1333,12 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 
             return result;
         }
-        ProjectFollowStatus projectFollowStatus = new ProjectFollowStatus();
-        projectFollowStatus.setDescription("");
-        projectFollowStatus.setMetaFollowStatusId(null);
 
         ProjectFollowStatus projectFollowStatusForSearch = new ProjectFollowStatus();
         projectFollowStatusForSearch.setProjectId(projectId);
         List<ProjectFollowStatus> projectFollowStatusList = projectFollowStatusMapper.select(projectFollowStatusForSearch);
-        if (projectFollowStatusList.size() > 0){
-            projectFollowStatus.setDescription(projectFollowStatusList.get(0).getDescription());
-            projectFollowStatus.setMetaFollowStatusId(projectFollowStatusList.get(0).getMetaFollowStatusId());
-        }
 
-        result.setData(projectFollowStatus);
+        result.setData(projectFollowStatusList.size() > 0?projectFollowStatusList.get(0):new ProjectFollowStatus());
         result.setStatus(200);
         result.setMessage("success");
 

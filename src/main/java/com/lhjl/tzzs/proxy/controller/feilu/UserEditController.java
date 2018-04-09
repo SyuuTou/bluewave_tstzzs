@@ -29,10 +29,11 @@ public class UserEditController extends GenericController {
     @Resource
     private SmsCommonService smsCommonService;
 
-    /*
+    /**
      * 设置账号密码接口,包括保存注册信息
+     * @param body
+     * @return
      */
-
     @PostMapping("user/editmessage")
     public CommonDto<UserSetPasswordOutputDto> editUserMessage(@RequestBody UserSetPasswordInputDto body){
         CommonDto<UserSetPasswordOutputDto> result = new CommonDto<>();

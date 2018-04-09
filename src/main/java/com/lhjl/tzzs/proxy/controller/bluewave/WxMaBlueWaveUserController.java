@@ -42,6 +42,9 @@ public class WxMaBlueWaveUserController extends GenericController {
 
     /**
      * 登录接口
+     * @param code
+     * @param appid
+     * @return
      */
     @GetMapping("/v{appid}/login")
     public CommonDto<UserExsitJudgmentDto> login(String code,@PathVariable("appid") Integer appid) {

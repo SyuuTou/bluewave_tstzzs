@@ -7,6 +7,7 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.UserExsitJudgmentDto;
 import com.lhjl.tzzs.proxy.mapper.*;
 import com.lhjl.tzzs.proxy.model.*;
+import com.lhjl.tzzs.proxy.service.GenericService;
 import com.lhjl.tzzs.proxy.service.bluewave.UserLoginService;
 import com.lhjl.tzzs.proxy.service.common.SessionKeyService;
 import com.lhjl.tzzs.proxy.utils.MD5Util;
@@ -25,9 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class UserLoginServiceImpl implements UserLoginService{
-
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(UserLoginServiceImpl.class);
+public class UserLoginServiceImpl extends GenericService implements UserLoginService{
 
     @Autowired
     private WxMaService wxService;
@@ -88,7 +87,7 @@ public class UserLoginServiceImpl implements UserLoginService{
 
         List<UsersWeixinLts> usersWeixinLtss = usersWeixinLtsMapper.select(usersWeixinLts);
 
-        log.info("进入用户登录注册实现方法中");
+        this.LOGGER.info("进入用户登录注册实现方法中");
 
         if (usersWeixinLtss.size() > 0){
             //oppenid存在的情况，返回token
@@ -172,7 +171,7 @@ public class UserLoginServiceImpl implements UserLoginService{
         String token = encode();
 
         Date now = new Date();
-        log.info("当前应用的用户微信号不存在，开始创建用户，及相关表");
+        this.LOGGER.info("当前应用的用户微信号不存在，开始创建用户，及相关表");
 
         //创建用户之前先判断union是否存在，不存在创建，存在就直接拿就行
         Users usersForSearchUnionid = new Users();
@@ -273,7 +272,7 @@ public class UserLoginServiceImpl implements UserLoginService{
             userExsitJudgmentDto.setToken(null);
             userExsitJudgmentDto.setSuccess(false);
 
-            log.info("用户code为空");
+            this.LOGGER.info("用户code为空");
 
             result.setMessage("empty jscode");
             result.setStatus(401);
@@ -283,7 +282,7 @@ public class UserLoginServiceImpl implements UserLoginService{
 
         try {
             WxMaJscode2SessionResult session = this.wxService.getUserService().getSessionInfo(code);
-            log.info("登录注册场景,SessionKey：{},Openid：{},Expiresin：{},unionid:{}", session.getSessionKey(), session.getOpenid(), session.getExpiresin().toString(), session.getUnionid());
+            this.LOGGER.info("登录注册场景,SessionKey：{},Openid：{},Expiresin：{},unionid:{}", session.getSessionKey(), session.getOpenid(), session.getExpiresin().toString(), session.getUnionid());
 
             String openId = session.getOpenid();
             String sessionKey = session.getSessionKey();
@@ -306,7 +305,7 @@ public class UserLoginServiceImpl implements UserLoginService{
                 userExsitJudgmentDto.setSuccess(false);
                 userExsitJudgmentDto.setToken(null);
 
-                log.info("缓存sessionkey出错");
+                this.LOGGER.info("缓存sessionkey出错");
 
                 result.setData(userExsitJudgmentDto);
                 result.setStatus(501);
@@ -332,7 +331,7 @@ public class UserLoginServiceImpl implements UserLoginService{
     public CommonDto<String> analysisUserInfo(Integer appid, Map<String, Object> body) {
         CommonDto<String> result = new CommonDto<>();
 
-        log.info("解析用户信息场景secretKey:{},signature:{},rawData:{},encryptedData:{},iv:{}",body.get("secretKey"),body.get("signature"),body.get("rawData"),body.get("encryptedData"),body.get("iv"));
+        this.LOGGER.info("解析用户信息场景secretKey:{},signature:{},rawData:{},encryptedData:{},iv:{}",body.get("secretKey"),body.get("signature"),body.get("rawData"),body.get("encryptedData"),body.get("iv"));
 
         String secretKey = (String) body.get("secretKey");
         String signature = (String) body.get("signature");
@@ -342,15 +341,15 @@ public class UserLoginServiceImpl implements UserLoginService{
 
         //sessionkey加前缀
         String redisKeyId = "sessionkey:" + secretKey;
-        log.info(redisKeyId);
+        this.LOGGER.info(redisKeyId);
         //取到sessionKey
         String sessionKey = sessionKeyService.getSessionKey(redisKeyId);
 
-        log.info("解析用户信息场景获取的sessionKey为：{}",sessionKey);
+        this.LOGGER.info("解析用户信息场景获取的sessionKey为：{}",sessionKey);
 
         if ("".equals(sessionKey) || sessionKey == null){
 
-            log.info("没有找到当前用户的sessionKey信息,无法完成解码");
+            this.LOGGER.info("没有找到当前用户的sessionKey信息,无法完成解码");
 
             result.setData(null);
             result.setStatus(502);
@@ -363,7 +362,7 @@ public class UserLoginServiceImpl implements UserLoginService{
         //rawData,signature有前端传入
         if (!this.wxService.getUserService().checkUserInfo(sessionKey, rawData, signature)) {
 
-            log.info("user check failed");
+            this.LOGGER.info("user check failed");
 
             result.setMessage("user check failed");
             result.setStatus(502);
@@ -377,10 +376,10 @@ public class UserLoginServiceImpl implements UserLoginService{
         try {
             userInfo = this.wxService.getUserService().getUserInfo(sessionKey, encryptedData, iv);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             throw e;
         }
-        log.info("解析的用户信息为：{}",userInfo);
+        this.LOGGER.info("解析的用户信息为：{}",userInfo);
         //先注册用户
         CommonDto<UserExsitJudgmentDto> registerResult = userRegister(userInfo.getOpenId(),userInfo.getUnionId(),appid);
 
