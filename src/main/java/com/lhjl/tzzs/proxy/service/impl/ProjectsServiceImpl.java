@@ -1539,6 +1539,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(subjectId);
 			cah.setComment(ii.getComment());
 			cah.setInvestmentHighlights("");
+			
 			result.setData(cah);
 			result.setStatus(200);;
 			result.setMessage("success");
@@ -1574,7 +1575,7 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			InvestmentInstitutions ii=new InvestmentInstitutions();
 			ii.setId(body.getSubjectId());
 			ii.setComment(body.getComment());
-			//TODO 机构表中不存在投资亮点的数据结构
+			//TODO 机构主体中不存在投资亮点的相关数据结构
 				
 			investmentInstitutionsMapper.updateByPrimaryKeySelective(ii);
 		}
