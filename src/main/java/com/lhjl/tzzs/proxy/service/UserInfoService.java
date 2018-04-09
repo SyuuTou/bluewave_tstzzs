@@ -102,9 +102,10 @@ public interface UserInfoService {
     /**
      * 设置记录的联系状态
      * @param logId
+     * @param contactStatus
      * @return
      */
-    CommonDto<String> setElegantServiceLogStatus(Integer logId);
+    CommonDto<String> setElegantServiceLogStatus(Integer logId, Integer contactStatus);
 
     CommonDto<List<MetaUserLevel>> getMetaUserLevel();
 

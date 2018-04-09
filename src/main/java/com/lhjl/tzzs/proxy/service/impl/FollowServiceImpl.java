@@ -70,18 +70,18 @@ public class FollowServiceImpl implements FollowService {
                 follow.setUserId(userId);
                 follow.setCreateTime(new Date());
                 followMapper.updateFollowStatus(follow);
-                UserToken userToken = new UserToken();
-                userToken.setToken(userId);
-                userToken = userTokenMapper.selectOne(userToken);
-
-                UserProjects userProjects = new UserProjects();
-                userProjects.setUserId(userToken.getUserId());
-                userProjects.setSendProjectId(projectId);
-                userProjects = userProjectsMapper.selectOne(userProjects);
-                if (null == userProjects) {
-                    userProjects.setIsdel(1);
-                    userProjectsMapper.updateByPrimaryKey(userProjects);
-                }
+//                UserToken userToken = new UserToken();
+//                userToken.setToken(userId);
+//                userToken = userTokenMapper.selectOne(userToken);
+//
+//                UserProjects userProjects = new UserProjects();
+//                userProjects.setUserId(userToken.getUserId());
+//                userProjects.setSendProjectId(projectId);
+//                userProjects = userProjectsMapper.selectOne(userProjects);
+//                if (null == userProjects) {
+//                    userProjects.setIsdel(1);
+//                    userProjectsMapper.updateByPrimaryKey(userProjects);
+//                }
 
             }
 

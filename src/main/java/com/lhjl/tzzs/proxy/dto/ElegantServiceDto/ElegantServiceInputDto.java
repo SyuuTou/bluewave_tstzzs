@@ -71,11 +71,11 @@ public class ElegantServiceInputDto {
     /**
      * 上架时间
      */
-    private String beginTime;
+    private Date beginTime;
     /**
      * 下架时间
      */
-    private String endTime;
+    private Date endTime;
     /**
      * 针对的身份类型
      */
@@ -410,24 +410,41 @@ public class ElegantServiceInputDto {
         this.detailDescription = detailDescription;
     }
 
-    public String getBeginTime() {
+//    public String getBeginTime() {
+//
+//        if (StringUtils.isEmpty(this.beginTime)){
+//            return DateTime.now().toString("yyyy-MM-dd");
+//        }else {
+//            return beginTime;
+//        }
+//    }
+//
+//    public void setBeginTime(String beginTime) {
+//        this.beginTime = beginTime;
+//    }
+//
+//    public String getEndTime() {
+//        return endTime;
+//    }
+//
+//    public void setEndTime(String endTime) {
+//        this.endTime = endTime;
+//    }
 
-        if (StringUtils.isEmpty(this.beginTime)){
-            return DateTime.now().toString("yyyy-MM-dd");
-        }else {
-            return beginTime;
-        }
+
+    public Date getBeginTime() {
+        return beginTime;
     }
 
-    public void setBeginTime(String beginTime) {
+    public void setBeginTime(Date beginTime) {
         this.beginTime = beginTime;
     }
 
-    public String getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
