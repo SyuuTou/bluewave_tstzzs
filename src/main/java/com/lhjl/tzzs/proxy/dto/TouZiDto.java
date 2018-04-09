@@ -3,18 +3,45 @@ package com.lhjl.tzzs.proxy.dto;
 import javax.management.loading.PrivateClassLoader;
 
 public class TouZiDto {
-
-	private String dateName;  //投资人类型
-	private String compellation; // 姓名
-	private String organization;  // 所在公司
-	private String fillOffice;  //担任职务
-	private String evaContent;  //说明
-	private String tempFilePaths; //图片
-	private String token;  //认证id
-	private String investorsApprovalcolCase;//投资人投资案例
-	private String formId;
 	
-
+	/**
+	 * 认证类型
+	 */
+	private String dateName;  
+	/**
+	 * 真实姓名
+	 */
+	private String compellation; 
+	/**
+	 * 所在公司
+	 */
+	private String organization;  
+	/**
+	 * 担任职务
+	 */
+	private String fillOffice; 
+	
+	/**
+	 * 投资人投资案例
+	 */
+	private String investorsApprovalcolCase;
+	 
+	/**
+	 * 工作名片
+	 */
+	private String tempFilePaths;
+	
+	/**
+	 * 认证说明
+	 */
+	private String evaContent;  
+	 
+	/**
+	 * 认证id
+	 */
+	private String token;  
+	
+	private String formId;
 
 	public String getFormId() {
 		return formId;
