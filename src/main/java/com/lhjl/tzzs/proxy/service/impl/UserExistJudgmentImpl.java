@@ -334,32 +334,27 @@ public class UserExistJudgmentImpl implements UserExistJudgmentService {
         userToken.setToken(token);
 
         List<UserToken> userTokens = userTokenMapper.select(userToken);
-       // log.info("还是在这里呀～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～`");
 
         if (userTokens.size() > 0){
-            UserToken userTokenForId = userTokens.get(0);
-            int userId = userTokenForId.getUserId();
+            int userId = userTokens.get(0).getUserId();
 
-            Users users =new Users();
-            users.setId(userId);
+            Users usersForTelephone = usersMapper.selectByPrimaryKey(userId);
+            
+            if(usersForTelephone!=null) {
+            	if (usersForTelephone.getPhonenumber() == null){
+                    userYnDto.setPhonenumberyn(0);
+                }else{
+                    userYnDto.setPhonenumberyn(1);
+                }
 
-            Users usersForTelephone = usersMapper.selectByPrimaryKey(users.getId());
-            String phonenumber = usersForTelephone.getPhonenumber();
-            String password = usersForTelephone.getPassword();
+                if (usersForTelephone.getPassword() == null){
+                    userYnDto.setPasswordyn(0);
+                }else {
+                    userYnDto.setPasswordyn(1);
+                }
 
-            if (phonenumber == null){
-                userYnDto.setPhonenumberyn(0);
-            }else{
-                userYnDto.setPhonenumberyn(1);
+                userYnDto.setSuccess(true);
             }
-
-            if (password == null){
-                userYnDto.setPasswordyn(0);
-            }else {
-                userYnDto.setPasswordyn(1);
-            }
-
-            userYnDto.setSuccess(true);
 
             result.setMessage("success");
             result.setStatus(200);

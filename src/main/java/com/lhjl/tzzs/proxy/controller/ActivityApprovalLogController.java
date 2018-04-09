@@ -11,9 +11,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @RestController
-public class ActivityApprovalLogController {
-
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(ActivityApprovalLogController.class);
+public class ActivityApprovalLogController extends GenericController {
 
     @Resource
     private ActivityApprovalLogService activityApprovalLogService;
@@ -24,14 +22,14 @@ public class ActivityApprovalLogController {
      * @param body
      * @return
      */
-    @PostMapping("create/activityapproval/log")
+    @PostMapping("create/activityapproval/this.LOGGER")
     public CommonDto<String> createActicityApprovalLog(@RequestBody Map<String,Object> body){
         CommonDto<String> result  =new CommonDto<>();
 
         try {
             result = activityApprovalLogService.createActicityApprovalLog(body);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
             result.setData(null);
             result.setStatus(502);

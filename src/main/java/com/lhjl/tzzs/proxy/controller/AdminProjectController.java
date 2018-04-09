@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class AdminProjectController {
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(AdminProjectController.class);
+public class AdminProjectController extends GenericController {
 
     @Resource
     private AdminProjectService adminProjectService;
@@ -34,7 +33,7 @@ public class AdminProjectController {
             try {
                 result = adminProjectService.getProjectList(pageNum,pageSize,shortName,projectType);
             }catch (Exception e){
-                log.error(e.getMessage(),e.fillInStackTrace());
+                this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
                 result.setData(list);
                 result.setMessage("服务器端发生错误");
                 result.setStatus(502);
@@ -55,7 +54,7 @@ public class AdminProjectController {
         try {
             result = adminProjectService.setProjectAdminOnestep(administractorId);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setData(null);
             result.setStatus(502);
             result.setMessage("服务器端发生错误");
@@ -75,7 +74,7 @@ public class AdminProjectController {
         try {
             result=adminProjectService.creatProjectAdministractors(projectId,administractorsId);
         }catch (Exception e){
-            log.error(e.getMessage(),e.fillInStackTrace());
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setData(null);
             result.setStatus(502);
             result.setMessage("服务器端发生错误");

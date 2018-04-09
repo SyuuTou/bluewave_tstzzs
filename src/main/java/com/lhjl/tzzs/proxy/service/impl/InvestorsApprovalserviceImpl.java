@@ -244,37 +244,43 @@ public class InvestorsApprovalserviceImpl extends GenericService implements Inve
             
             UserToken userToken = new UserToken();
             userToken.setToken(params.getToken());
-            userToken = userTokenMapper.selectOne(userToken);
-            
-            if(userToken!=null) {
-            	investorsApproval.setUserid(userToken.getUserId());
+            List<UserToken> userTokens = userTokenMapper.select(userToken);
+            //设置用户id
+            if(userTokens!=null && userTokens.size()>0) {
+            	investorsApproval.setUserid(userTokens.get(0).getUserId());
             }
+            
             //设置认证类型
-            if (dataName != null){
-                investorsApproval.setInvestorsType(Integer.valueOf(dataName));
-            }
+            investorsApproval.setInvestorsType(Integer.valueOf(dataName));
+            //设置申请人姓名
             investorsApproval.setApprovalUsername(params.getCompellation());
-            
+            //设置认证说明
             investorsApproval.setDescription(params.getEvaContent());
+            //所在公司
             investorsApproval.setCompany(params.getOrganization());
+            //担任职务
             investorsApproval.setCompanyDuties(params.getFillOffice());
+            //工作名片
             investorsApproval.setWorkCard(params.getTempFilePaths());
+            
             //设置为待审核状态
             investorsApproval.setApprovalResult(0);
-            //设置提交认证的时间
+            //设置审核时间为，默认为创建的时间
             investorsApproval.setReviewTime(new Date());
-            investorsApproval.setCreateTime(new Date());
-            investorsApproval.setInvestorsApprovalcolCase(params.getInvestorsApprovalcolCase());
             
+            investorsApproval.setCreateTime(new Date());
+            //投资人投资案例
+            investorsApproval.setInvestorsApprovalcolCase(params.getInvestorsApprovalcolCase());
+            //formId
             investorsApproval.setFormId(formId);
             investorsApprovalMapper.insertSelective(investorsApproval);
             
-            //修改关联用户的重叠信息
+            //更新用户表中的信息
             Users users = new Users();
             //params.getToken()指的是认证id
             users.setUuid(params.getToken());
-            
             Users u = usersMapper.selectOne(users);
+            
             u.setCompanyName(params.getOrganization());
             u.setCompanyDuties(params.getFillOffice());
             u.setActualName(params.getCompellation());

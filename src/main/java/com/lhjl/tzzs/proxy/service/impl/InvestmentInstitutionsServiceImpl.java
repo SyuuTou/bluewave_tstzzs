@@ -864,9 +864,9 @@ public class InvestmentInstitutionsServiceImpl extends GenericService implements
 	public CommonDto<Boolean> updateFollowStatus(Integer appid, ProjectsUpdateInputDto body) {
 		CommonDto<Boolean> result =new CommonDto<Boolean>();
 		
-		//TODO 有待进一步完善后台数据结构
+		//TODO 机构的跟进状态目前后台数据结构设计缺失，有待进一步完善
 		result.setData(true);
-		result.setMessage("success_机构跟进状态后台数据结构待完善");
+		result.setMessage("success");
 		result.setStatus(200);
 		return result;
 	}

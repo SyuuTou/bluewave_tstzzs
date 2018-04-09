@@ -27,6 +27,7 @@ public class CommonUserService {
         UserToken token = new UserToken();
         token.setToken(tokenStr);
         List<UserToken> users = userTokenMapper.select(token);
+        
         Integer localUserId = null;
         if(users.size() > 0){
             localUserId = users.get(0).getUserId();

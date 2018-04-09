@@ -32,4 +32,10 @@ public class MyFollowDto {
     public void setPageSize(Integer pageSizel) {
         this.pageSize = pageSizel;
     }
+
+	@Override
+	public String toString() {
+		return "MyFollowDto [userId=" + userId + ", pageNum=" + pageNum + ", pageSize=" + pageSize + "]";
+	}
+    
 }

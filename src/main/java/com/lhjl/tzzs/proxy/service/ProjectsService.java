@@ -34,6 +34,7 @@ public interface ProjectsService {
      * @return
      */
     CommonDto<List<Map<String, Object>>> findProjectByUserId(String userId, Integer pageNum, Integer pageSize);
+    
     CommonDto<List<Map<String, Object>>> findProjectByShortName(String shortName,String userId);
     CommonDto<Map<String,List<Map<String, Object>>>> findProjectByShortNameAll(String shortName,String userId,String size,String from);
     CommonDto< List<Map<String, Object>>>findProjectBySview(SereachDto sereachDto);

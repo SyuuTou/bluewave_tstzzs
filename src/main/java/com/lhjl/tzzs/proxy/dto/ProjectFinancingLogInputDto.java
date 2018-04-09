@@ -8,16 +8,26 @@ public class ProjectFinancingLogInputDto {
     /**搜索词*/
     private String searchWord;
 
-    /**搜索开始时间输入字符串*/
+    /**
+     * 搜索开始时间输入字符串
+     * abandoned
+     */
     private String beginTimeInputStr;
     
-    /**搜索开始时间*/
+    /**
+     * 搜索开始时间
+     */
     private Date beginTime;
 
-    /**搜索结束时间输入字符串*/
+    /**
+     * 搜索结束时间输入字符串
+     * abandoned
+     */
     private String endTimeInputStr;
     
-    /**搜索结束时间*/
+    /**
+     * 搜索结束时间
+     */
     private Date endTime;
 
     /**数据来源*/

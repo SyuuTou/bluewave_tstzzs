@@ -1,5 +1,6 @@
-package com.lhjl.tzzs.proxy.controller;
+package com.lhjl.tzzs.proxy.controller.project.platform.details;
 
+import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.ProjectsSendDto;
 import com.lhjl.tzzs.proxy.service.ProjectInformationDetailsService;
@@ -17,8 +18,7 @@ import javax.annotation.Resource;
  * Created by zyy on 2017/11/27.
  */
 @RestController
-public class ProjectInformationDetailsController {
-    private static Logger logger = LoggerFactory.getLogger(ProjectInformationDetailsController.class);
+public class ProjectInformationDetailsController extends GenericController{
 
     @Resource
     private ProjectInformationDetailsService projectInformationDetailsService;
@@ -27,6 +27,7 @@ public class ProjectInformationDetailsController {
     private CommonUserService commonUserService;
 
     /**
+     * ZYY
      * 项目详情的项目修改
      */
     @PostMapping("project/information/details")
@@ -46,7 +47,8 @@ public class ProjectInformationDetailsController {
         }catch(Exception e){
             result.setStatus(501);
             result.setMessage("项目修改异常");
-            logger.error(e.getMessage(),e.fillInStackTrace());
+            
+            this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
         }
 
         return result;

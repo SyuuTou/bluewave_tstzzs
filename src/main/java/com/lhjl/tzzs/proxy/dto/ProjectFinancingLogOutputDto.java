@@ -53,13 +53,20 @@ public class ProjectFinancingLogOutputDto {
     /**融资时间*/
     private Date financingTime;
     
-    /**融资时间输出字符串*/
+    /**
+     * 融资时间输出字符串
+     * abandoned
+     */
     private String financingTimeOutputStr;
 
-    /**相关投资机构简称*/
+    /**
+     * 相关投资机构简称
+     */
     private String InvestmentInstitutionsList;
 
-    /**相关投资机构说明*/
+    /**
+     * 相关投资机构说明
+     */
     private String proportionList;
 
     /**提交时间*/

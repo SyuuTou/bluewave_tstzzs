@@ -2,10 +2,10 @@ package com.lhjl.tzzs.proxy.dto;
 
 public class UserSetPasswordOutputDto {
     private String token;
-    private boolean success;
     private String yhid;
     private Boolean haspassword;
     private String message;
+    private boolean success;
 
     public Boolean getHaspassword() {
         return haspassword;

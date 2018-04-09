@@ -52,9 +52,10 @@ public class InvestorAuditSubmitController extends GenericController{
 		     result.setMessage("success");
 		     }
 	     } catch (Exception e) {
+	    	 this.LOGGER.error(e.getMessage(), e);
+	    	 
 		     result.setStatus(5101);
 		     result.setMessage("显示页面异常，请稍后再试");
-		     this.LOGGER.error(e.getMessage(), e);
 	     }
 	     return result;
      }
