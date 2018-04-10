@@ -63,12 +63,12 @@ public class ProjectListController extends GenericController {
     public CommonDto<Boolean> updateFollowStatus(@PathVariable("appid") Integer appid,@RequestBody ProjectsUpdateInputDto body){
     	CommonDto<Boolean> result = new CommonDto<>();
     	try {
-    		if(body.getSubjectType().equals(1)) {//项目跟进状态变更
+    		if(body.getSubjectType().equals(Integer.valueOf(1))) {//项目跟进状态变更
         		result=projectsService.updateFollowStatus(appid,body);
-    		}else if(body.getSubjectType().equals(2)){//机构跟进状态变更
+    		}else if(body.getSubjectType().equals(Integer.valueOf(2))){//机构跟进状态变更
     			result=investmentInstitutionsService.updateFollowStatus(appid,body);
     		}else {
-    			
+    			//TODO 其他公司类型的信息更新
     		}
     	}catch(Exception e) {
     		this.LOGGER.error(e.getMessage(),e.fillInStackTrace());

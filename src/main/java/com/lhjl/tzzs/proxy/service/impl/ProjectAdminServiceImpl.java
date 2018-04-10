@@ -312,7 +312,7 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
     public CommonDto<ProjectAdminBaseInfoDto> getProjectBaseInfo(Integer projectId, Integer projectType) {
         CommonDto<ProjectAdminBaseInfoDto> result = new CommonDto<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        ProjectAdminBaseInfoDto projectAdminBaseInfoDto = new ProjectAdminBaseInfoDto();
+        ProjectAdminBaseInfoDto info = new ProjectAdminBaseInfoDto();
 
         if (projectId == null){
             result.setMessage("项目id不能为空");
@@ -332,102 +332,28 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 
 
         if (projectType == 1){
-            Map<String,Object> projectlist = projectsMapper.getBaseInfoById(projectId);
-            if (projectlist.size() > 0){
-                String fullName = "";
-                if (projectlist.get("full_name") != null){
-                    fullName = (String)projectlist.get("full_name");
-                }
-                projectAdminBaseInfoDto.setFullName(fullName);
-                String kernelDesc = "";
-                if (projectlist.get("kernel_desc") != null){
-                    kernelDesc = (String)projectlist.get("kernel_desc");
-                }
-                projectAdminBaseInfoDto.setKernelDesc(kernelDesc);
-                String url = "";
-                if (projectlist.get("url") != null){
-                    url = (String) projectlist.get("url");
-                }
-                projectAdminBaseInfoDto.setUrl(url);
-                String itemLabel = "";
-                List<String> itemLabelL = new ArrayList<>();
-                if (projectlist.get("item_label") != null){
-                    itemLabel = (String)projectlist.get("item_label");
-                    itemLabelL = Arrays.asList(itemLabel.split("、"));
-                }
-                projectAdminBaseInfoDto.setItemLabel(itemLabelL);
-                String competitiveProductsName = "";
-                List<String> competitiveProductsNameL = new ArrayList<>();
-                if (projectlist.get("competitive_products_name") != null){
-                    competitiveProductsName = (String) projectlist.get("competitive_products_name");
-                    competitiveProductsNameL = Arrays.asList(competitiveProductsName.split(","));
-                }
-                projectAdminBaseInfoDto.setProjectCompetitiveProducts(competitiveProductsNameL);
-                String segmentationName = "";
-                List<String> segmentationNameL = new ArrayList<>();
-                if (projectlist.get("segmentation_name") != null){
-                    segmentationName = (String)projectlist.get("segmentation_name");
-                    segmentationNameL = Arrays.asList(segmentationName.split(","));
-                }
-                projectAdminBaseInfoDto.setProjectSegmentation(segmentationNameL);
-                String establishedTime = "";
-                if (projectlist.get("established_time") != null){
-                    Date et = (Date)projectlist.get("established_time");
-                    establishedTime = sdf.format(et);
-                }
-                projectAdminBaseInfoDto.setEstablishedTime(establishedTime);
-                String companyEmail = "";
-                if (projectlist.get("company_email") != null){
-                    companyEmail  = (String) projectlist.get("company_email");
-                }
-                projectAdminBaseInfoDto.setCompanyEmail(companyEmail);
-                String city = "";
-                if (projectlist.get("city") != null){
-                    city = (String) projectlist.get("city");
-                }
-                projectAdminBaseInfoDto.setCity(city);
-                String companyHrEmail = "";
-                if (projectlist.get("company_hr_email") != null){
-                    companyHrEmail = (String) projectlist.get("company_hr_email");
-                }
-                projectAdminBaseInfoDto.setCompanyHrEmail(companyHrEmail);
-                String address = "";
-                if (projectlist.get("address") != null){
-                    address = (String) projectlist.get("address");
-                }
-                projectAdminBaseInfoDto.setAddress(address);
-                String foreignInvestmentYn = "";
-                if (projectlist.get("foreign_investment_yn") != null){
-                    foreignInvestmentYn = (String)projectlist.get("foreign_investment_yn");
-                }
-                projectAdminBaseInfoDto.setForeignInvestmentYn(foreignInvestmentYn);
-                String territory = "";
-                if (projectlist.get("territory") != null){
-                    territory= (String)projectlist.get("territory");
-                }
-                projectAdminBaseInfoDto.setTerritory(territory);
-            }else {
-               projectAdminBaseInfoDto.setFullName("");
-               projectAdminBaseInfoDto.setKernelDesc("");
-               projectAdminBaseInfoDto.setUrl("");
-               projectAdminBaseInfoDto.setItemLabel(new ArrayList<>());
-               projectAdminBaseInfoDto.setProjectCompetitiveProducts(new ArrayList<>());
-               projectAdminBaseInfoDto.setProjectSegmentation(new ArrayList<>());
-               projectAdminBaseInfoDto.setEstablishedTime("");
-               projectAdminBaseInfoDto.setCompanyEmail("");
-               projectAdminBaseInfoDto.setCity("");
-               projectAdminBaseInfoDto.setCompanyHrEmail("");
-               projectAdminBaseInfoDto.setAddress("");
-               projectAdminBaseInfoDto.setForeignInvestmentYn("");
-            }
+           info = projectsMapper.getBaseInfoById(projectId);
+            if(info !=null) {
+            	//数据结构的转换  
+            	if(info.getItemLabelStr() != null) {
+            		info.setItemLabel(Arrays.asList(info.getItemLabelStr().split("、")));
+            	}
+            	if(info.getProjectCompetitiveProductsStr() != null) {
+            		info.setProjectCompetitiveProducts(Arrays.asList(info.getProjectCompetitiveProductsStr().split("、")));
+            	}
+            	if(info.getProjectSegmentationStr() != null) {
+            		info.setProjectSegmentation(Arrays.asList(info.getProjectSegmentationStr().split("、")));
+            	}
+            }         
+            
 
-        }else {
-            //todo 不是项目的情况
+        }else if(projectType == 2) {
+            //TODO 不是项目的情况
         }
 
         result.setStatus(200);
-        result.setData(projectAdminBaseInfoDto);
-        result.setMessage("success");
+        result.setData(info);
+        result.setMessage("success"); 
 
         return result;
     }
@@ -463,18 +389,12 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
 
             //更新项目主体信息
             Projects projects = new Projects();
+            
             projects.setId(body.getProjectId());
             projects.setFullName(body.getFullName());
             projects.setKernelDesc(body.getKernelDesc());
             projects.setUrl(body.getUrl());
-            String establishString = body.getEstablishedTime();
-            try {
-                Date establishTime = sdf.parse(establishString);
-                projects.setEstablishedTime(establishTime);
-            }catch (Exception e){
-                this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
-                this.LOGGER.info("时间格式化出错");
-            }
+            projects.setEstablishedTime(body.getEstablishedTime());
             projects.setCompanyEmail(body.getCompanyEmail());
             projects.setCompanyHrEmail(body.getCompanyHrEmail());
             projects.setCity(body.getCity());
@@ -524,8 +444,8 @@ public class ProjectAdminServiceImpl extends GenericService implements ProjectAd
                 }
             }
 
-        }else {
-            //todo 机构信息编辑的处理
+        }else if(body.getProjectType() == 2) {
+            //TODO 机构信息编辑的处理
         }
 
         result.setMessage("success");

@@ -9,6 +9,7 @@ import com.lhjl.tzzs.proxy.service.ProjectAdminFinancingService;
 import com.lhjl.tzzs.proxy.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -62,7 +63,8 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
         result.setData(financingLogOutputDto);
         return result;
     }
-
+    
+    @Transactional
     @Override
     public CommonDto<String> addOrUpdateFinancingLog(FinancingLogInputDto body) {
         CommonDto<String> result = new CommonDto<>();

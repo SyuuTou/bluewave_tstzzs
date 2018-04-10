@@ -1,8 +1,11 @@
 package com.lhjl.tzzs.proxy.dto;
 
+import java.util.Date;
 import java.util.List;
 
 public class ProjectAdminBaseInfoDto {
+	/**项目全称*/
+    private Integer id;
     /**项目全称*/
     private String fullName;
 
@@ -11,18 +14,34 @@ public class ProjectAdminBaseInfoDto {
 
     /**官网*/
     private String url;
-
+    
+    /**
+     * 项目标签字符串
+     */
+    private String itemLabelStr;
     /**项目标签*/
     private List<String> itemLabel;
 
-    /**项目竞品*/
+    /**
+     * 项目竞品字符串
+     */
+    private String projectCompetitiveProductsStr;
+    /**
+     * 项目竞品
+     */
     private List<String> projectCompetitiveProducts;
 
-    /**项目领域*/
+    /**
+     * 项目领域字符串
+     */
+    private String projectSegmentationStr;
+    /**
+     * 项目领域
+     */
     private List<String> projectSegmentation;
 
     /**创建时间*/
-    private String establishedTime;
+    private Date establishedTime;
 
     /**公司邮箱*/
     private String companyEmail;
@@ -42,7 +61,40 @@ public class ProjectAdminBaseInfoDto {
     /**是否对外投资*/
     private String foreignInvestmentYn;
 
-    public String getFullName() {
+    
+    public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getItemLabelStr() {
+		return itemLabelStr;
+	}
+
+	public void setItemLabelStr(String itemLabelStr) {
+		this.itemLabelStr = itemLabelStr;
+	}
+
+	public String getProjectCompetitiveProductsStr() {
+		return projectCompetitiveProductsStr;
+	}
+
+	public void setProjectCompetitiveProductsStr(String projectCompetitiveProductsStr) {
+		this.projectCompetitiveProductsStr = projectCompetitiveProductsStr;
+	}
+
+	public String getProjectSegmentationStr() {
+		return projectSegmentationStr;
+	}
+
+	public void setProjectSegmentationStr(String projectSegmentationStr) {
+		this.projectSegmentationStr = projectSegmentationStr;
+	}
+
+	public String getFullName() {
         return fullName;
     }
 
@@ -90,19 +142,27 @@ public class ProjectAdminBaseInfoDto {
         this.projectSegmentation = projectSegmentation;
     }
 
-    public String getEstablishedTime() {
+/*    public String getEstablishedTime() {
         return establishedTime;
     }
 
     public void setEstablishedTime(String establishedTime) {
         this.establishedTime = establishedTime;
-    }
+    }*/
 
     public String getCompanyEmail() {
         return companyEmail;
     }
 
-    public void setCompanyEmail(String companyEmail) {
+    public Date getEstablishedTime() {
+		return establishedTime;
+	}
+
+	public void setEstablishedTime(Date establishedTime) {
+		this.establishedTime = establishedTime;
+	}
+
+	public void setCompanyEmail(String companyEmail) {
         this.companyEmail = companyEmail;
     }
 

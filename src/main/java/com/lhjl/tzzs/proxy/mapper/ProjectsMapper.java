@@ -2,6 +2,7 @@ package com.lhjl.tzzs.proxy.mapper;
 
 import com.lhjl.tzzs.proxy.dto.HistogramList;
 import com.lhjl.tzzs.proxy.dto.ProInfoDto;
+import com.lhjl.tzzs.proxy.dto.ProjectAdminBaseInfoDto;
 import com.lhjl.tzzs.proxy.dto.ProjectAdminLogoOutputDto;
 import com.lhjl.tzzs.proxy.dto.ProjectReqDto;
 import com.lhjl.tzzs.proxy.dto.ProjectResDto;
@@ -134,8 +135,13 @@ public interface ProjectsMapper extends OwnerMapper<Projects> {
      * @return
      */
 	ProjectAdminLogoOutputDto getLogoAndOtherInfoById(@Param("projectId") Integer projectId);
-
-	Map<String,Object> getBaseInfoById(@Param("projectId") Integer projectId);
+	/**
+	 * 获取项目的基本信息
+	 * @param projectId 项目id
+	 * @return
+	 */
+	ProjectAdminBaseInfoDto getBaseInfoById(@Param("projectId") Integer projectId);
+//	Map<String,Object> getBaseInfoById(@Param("projectId") Integer projectId);
 	/**
 	 * 获取项目的简单相关信息
 	 * @param projectId

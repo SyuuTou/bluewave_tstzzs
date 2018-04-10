@@ -1,5 +1,6 @@
 package com.lhjl.tzzs.proxy.controller.project.platform.details;
 
+import com.google.common.base.Joiner;
 import com.lhjl.tzzs.proxy.controller.GenericController;
 import com.lhjl.tzzs.proxy.dto.*;
 import com.lhjl.tzzs.proxy.service.ProjectAdminService;
@@ -64,16 +65,16 @@ public class ProjectAdminController extends GenericController{
     
     /**
      * 获取项目基本信息的接口
-     * @param projectId
-     * @param projectType
+     * @param projectId 主体id
+     * @param subjectType 主体类型 1 项目 2 机构
      * @return
      */
     @GetMapping("get/project/baseinfo")
-    public CommonDto<ProjectAdminBaseInfoDto> getProjectBaseInfo(Integer projectId, Integer projectType){
+    public CommonDto<ProjectAdminBaseInfoDto> getProjectBaseInfo(Integer projectId, Integer subjectType){
         CommonDto<ProjectAdminBaseInfoDto> result = new CommonDto<>();
 
         try {
-            result = projectAdminService.getProjectBaseInfo(projectId,projectType);
+            result = projectAdminService.getProjectBaseInfo(projectId,subjectType);
         }catch (Exception e){
             this.LOGGER.error(e.getMessage(),e.fillInStackTrace());
             result.setMessage("服务器端发生错误");
@@ -85,13 +86,13 @@ public class ProjectAdminController extends GenericController{
     }
 
     /**
-     * 更新项目信息的接口
+     * 更新项目基本信息
+     * @param body 项目基本信息输入DTO
      * @return
      */
     @PostMapping("update/project/baseinfo")
     public CommonDto<String> updateProjectBaseInfo(@RequestBody ProjectAdminBaseInfoInputDto body){
         CommonDto<String> result = new CommonDto<>();
-
         try {
             result = projectAdminService.updateProjectBaseInfo(body);
         }catch (Exception e){

@@ -3,7 +3,6 @@ package com.lhjl.tzzs.proxy.dto;
 public class ProjectAdminLogoInputDto {
     /**
      * 主体id
-     * 联合主体类型判断是属于项目还是机构
      */
     private Integer subjectId;
 

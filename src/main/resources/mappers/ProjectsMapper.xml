@@ -968,6 +968,42 @@ SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.calculation_amou
         <result column="status_name" jdbcType="VARCHAR" property="followStatus" />
         <result column="admin_name" jdbcType="VARCHAR" property="projectAdmin" />
     </resultMap>
+    <!-- 项目基本信息回显DTO -->
+    <resultMap id="projectBaseInfoEchoDto" type="com.lhjl.tzzs.proxy.dto.ProjectAdminBaseInfoDto">
+     	<id column="id" jdbcType="INTEGER" property="id" />
+        <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+        <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="item_label" jdbcType="VARCHAR" property="itemLabelStr" />
+        <result column="competitive_products_name" jdbcType="VARCHAR" property="projectCompetitiveProductsStr" />
+        <result column="segmentation_name" jdbcType="VARCHAR" property="projectSegmentationStr" />
+        <result column="established_time" jdbcType="TIMESTAMP" property="establishedTime" />
+        <result column="company_email" jdbcType="VARCHAR" property="companyEmail" />
+        <result column="city" jdbcType="VARCHAR" property="city" />
+        <result column="company_hr_email" jdbcType="VARCHAR" property="companyHrEmail" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="territory" jdbcType="VARCHAR" property="territory" />
+        <result column="foreign_investment_yn" jdbcType="VARCHAR" property="foreignInvestmentYn" />
+    </resultMap>
+    <select id="getBaseInfoById" resultMap="projectBaseInfoEchoDto">
+        SELECT 
+	        p.id,p.full_name,p.kernel_desc,p.url,p.item_label,cpn.competitive_products_name,ps.segmentation_name,
+	        p.established_time,p.company_email,p.city,p.company_hr_email,p.address,p.territory,
+	        case when p.foreign_investment_yn = 1 then "是" else "否" end foreign_investment_yn
+        FROM projects p
+        LEFT JOIN
+	        (SELECT project_id,GROUP_CONCAT(competitive_products_name) competitive_products_name
+	        FROM
+	        project_competitive_products
+	        GROUP BY project_id) cpn ON p.id = cpn.project_id
+        LEFT JOIN
+	        (SELECT project_id,GROUP_CONCAT(segmentation_name) segmentation_name
+	        FROM
+	        project_segmentation
+	        GROUP BY project_id) ps ON p.id = ps.project_id
+        where p.id = #{projectId}
+    </select>
+    
     <select id="getLogoAndOtherInfoById" parameterType="java.lang.Integer" resultMap="subjectHeadInfoOutputDto">
         SELECT p.id,p.short_name,p.project_logo,aprl.rating_stage,mfs.status_name,pau.admin_name
         FROM projects p
@@ -1038,25 +1074,7 @@ SELECT m.short_name,f.segmentation_name,n.ID,n.stage,n.amount,n.calculation_amou
     </select>
     
     
-    <select id="getBaseInfoById" resultType="java.util.HashMap">
-        SELECT
-        p.id,p.full_name,p.kernel_desc,p.url,p.item_label,cpn.competitive_products_name,ps.segmentation_name,
-        p.established_time,p.company_email,p.city,p.company_hr_email,p.address,p.territory,
-        case when p.foreign_investment_yn = 1 then "是" else "否" end foreign_investment_yn
-        FROM
-        projects p
-        LEFT JOIN
-        (SELECT project_id,GROUP_CONCAT(competitive_products_name) competitive_products_name
-        FROM
-        project_competitive_products
-        GROUP BY project_id) cpn ON p.id = cpn.project_id
-        LEFT JOIN
-        (SELECT project_id,GROUP_CONCAT(segmentation_name) segmentation_name
-        FROM
-        project_segmentation
-        GROUP BY project_id) ps ON p.id = ps.project_id
-        where p.id = #{projectId}
-    </select>
+    
 
     <select id="selectByCaseName" resultMap="BaseResultMap">
         select * from projects where 1=1

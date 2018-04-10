@@ -1,12 +1,15 @@
 package com.lhjl.tzzs.proxy.dto;
 
+import java.util.Date;
 import java.util.List;
 
 public class ProjectAdminBaseInfoInputDto {
     /**项目id*/
     private Integer projectId;
 
-    /**项目类型*/
+    /**
+     * 主体类型
+     */
     private Integer projectType;
 
     /**项目全称*/
@@ -28,7 +31,7 @@ public class ProjectAdminBaseInfoInputDto {
     private List<String> projectSegmentation;
 
     /**创建时间*/
-    private String establishedTime;
+    private Date establishedTime;
 
     /**公司邮箱*/
     private String companyEmail;
@@ -47,8 +50,20 @@ public class ProjectAdminBaseInfoInputDto {
 
     /**是否对外投资(这里要数字)*/
     private Integer foreignInvestmentYn;
+    /**
+     * 主体类型
+     */
+    /*private Integer subjectType;
+    
+    public Integer getSubjectType() {
+		return subjectType;
+	}
 
-    public Integer getProjectId() {
+	public void setSubjectType(Integer subjectType) {
+		this.subjectType = subjectType;
+	}*/
+
+	public Integer getProjectId() {
         return projectId;
     }
 
@@ -112,15 +127,16 @@ public class ProjectAdminBaseInfoInputDto {
         this.projectSegmentation = projectSegmentation;
     }
 
-    public String getEstablishedTime() {
-        return establishedTime;
-    }
 
-    public void setEstablishedTime(String establishedTime) {
-        this.establishedTime = establishedTime;
-    }
+    public Date getEstablishedTime() {
+		return establishedTime;
+	}
 
-    public String getCompanyEmail() {
+	public void setEstablishedTime(Date establishedTime) {
+		this.establishedTime = establishedTime;
+	}
+
+	public String getCompanyEmail() {
         return companyEmail;
     }
 
