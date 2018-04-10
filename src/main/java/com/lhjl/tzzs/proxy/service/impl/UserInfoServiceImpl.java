@@ -838,10 +838,11 @@ public class UserInfoServiceImpl implements UserInfoService{
     /**
      * 设置记录的联系状态
      * @param logId
+     * @param contactStatus
      * @return
      */
     @Override
-    public CommonDto<String> setElegantServiceLogStatus(Integer logId) {
+    public CommonDto<String> setElegantServiceLogStatus(Integer logId, Integer contactStatus) {
         CommonDto<String> result = new CommonDto<>();
         Date now = new Date();
 
@@ -859,6 +860,7 @@ public class UserInfoServiceImpl implements UserInfoService{
             adminContactLogMapper.insertSelective(adminContactLog1);
         }else {
             adminContactLogForUpdate.setConcactTime(now);
+            adminContactLogForUpdate.setContactStatus(contactStatus);
 
             adminContactLogMapper.updateByPrimaryKeySelective(adminContactLogForUpdate);
         }

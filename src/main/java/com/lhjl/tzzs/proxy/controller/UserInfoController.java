@@ -200,11 +200,11 @@ public class UserInfoController {
      * @return
      */
     @GetMapping("set/elegantservice/log/status")
-    public CommonDto<String> setElegantServiceLogStatus(Integer logId){
+    public CommonDto<String> setElegantServiceLogStatus(Integer logId, Integer contactStatus){
         CommonDto<String> result  =new CommonDto<>();
 
         try {
-            result = userInfoService.setElegantServiceLogStatus(logId);
+            result = userInfoService.setElegantServiceLogStatus(logId,contactStatus);
         }catch (Exception e){
             logger.error(e.getMessage(),e.fillInStackTrace());
             result.setData(null);

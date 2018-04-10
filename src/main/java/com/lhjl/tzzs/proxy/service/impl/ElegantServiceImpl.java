@@ -1496,8 +1496,8 @@ public class ElegantServiceImpl implements ElegantServiceService{
         Date beginTime = null;
         Date endTime =null;
         try {
-            beginTime = sdf.parse(body.getBeginTime());
-            endTime = sdf.parse(body.getEndTime());
+            beginTime = body.getBeginTime();
+            endTime = body.getEndTime();
 
         }catch (java.lang.Exception e){
             log.error("时间解析出错");
