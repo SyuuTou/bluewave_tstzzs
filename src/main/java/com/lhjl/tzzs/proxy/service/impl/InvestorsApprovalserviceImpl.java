@@ -534,7 +534,6 @@ public class InvestorsApprovalserviceImpl extends GenericService implements Inve
 
     /**
      * 获取投资审核信息列表（新）
-     *
      * @param body
      * @return
      */

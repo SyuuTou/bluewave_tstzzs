@@ -20,7 +20,8 @@ public class ProjectAdminFinancingController extends GenericController {
 
     /**
      * 获取项目融资需求
-     * @param projectId
+     * @param subjectId 主体id
+     * @param subjectType 主体类型: 1项目 2机构
      * @return
      */
     @GetMapping("/getFinancingLog")

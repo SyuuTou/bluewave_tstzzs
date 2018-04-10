@@ -26,8 +26,14 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
     public CommonDto<FinancingLogOutputDto> getFinancingLog(Integer subjectId,Integer subjectType) {
         CommonDto<FinancingLogOutputDto> result = new CommonDto<>();
         if(subjectId == null){
-            result.setStatus(300);
-            result.setMessage("failed");
+            result.setStatus(500);
+            result.setMessage("请输入相应的主体id");
+            result.setData(null);
+            return result;
+        }
+        if(subjectType == null){
+            result.setStatus(500);
+            result.setMessage("请输入相应的主体类型");
             result.setData(null);
             return result;
         }
@@ -80,6 +86,7 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
             return result;
         }
         
+        //项目的融资历史
         ProjectFinancingLog projectFinancingLog = new ProjectFinancingLog();
         projectFinancingLog.setId(body.getId());
         projectFinancingLog.setProjectId(body.getProjectId());
@@ -89,19 +96,17 @@ public class ProjectAdminFinancingServiceImpl implements ProjectAdminFinancingSe
         projectFinancingLog.setProjectFinancingUseful(body.getFinancingApplication());
         projectFinancingLog.setShareDivest(body.getShareDivest());
         
-        
         //固有信息设置
         projectFinancingLog.setApprovalStatus(1);
         projectFinancingLog.setYn(0);
         
         if(Integer.valueOf(1).equals(body.getSubjectType())) {//项目
-            Date now = new Date();
             if(null == body.getId()){
-                projectFinancingLog.setCreateTime(now);
+                projectFinancingLog.setCreateTime(new Date());
                 projectFinancingLogMapper.insertSelective(projectFinancingLog);
                 result.setData("保存成功");
             }else{
-                projectFinancingLog.setUpdateTime(now);
+                projectFinancingLog.setUpdateTime(new Date());
                 projectFinancingLogMapper.updateByPrimaryKeySelective(projectFinancingLog);
                 result.setData("更新成功");
             }

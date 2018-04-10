@@ -6,7 +6,7 @@ import java.math.BigDecimal;
  * Created by lanhaijulang on 2018/1/20.
  */
 public class FinancingLogInputDto {
-
+	
     private Integer id;
 
     private Integer projectId;
