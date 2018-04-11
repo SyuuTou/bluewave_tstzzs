@@ -1455,6 +1455,12 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	@Override
 	public CommonDto<List<InvestmentInstitutionsProject>> getFinancingLogDetails(Integer appid, Integer financingLogId,Integer subjectType) {
 		CommonDto<List<InvestmentInstitutionsProject>> result =new CommonDto<>();
+		if(subjectType==null) {
+			result.setData(null);
+	        result.setStatus(500);
+	        result.setMessage("主体类型不能为null");
+			return result;
+		}
 		List<InvestmentInstitutionsProject> iips=null;
 		if(Integer.valueOf(1).equals(subjectType)) {//项目
 			InvestmentInstitutionsProject iip=new InvestmentInstitutionsProject();
@@ -1466,10 +1472,12 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			if(iips !=null) {  
 				for(InvestmentInstitutionsProject temp:iips) {
 					InvestmentInstitutions ii = investmentInstitutionsMapper.selectByPrimaryKey(temp.getInvestmentInstitutionsId()); 
-					temp.setInvestmentShortName(ii.getShortName());
-					if(temp.getAccountingDate() != null) {
-						temp.setAccountingDateOutputStr(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(temp.getAccountingDate()));
+					if(ii != null) {
+						temp.setInvestmentShortName(ii.getShortName());
 					}
+					/*if(temp.getAccountingDate() != null) {
+						temp.setAccountingDateOutputStr(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(temp.getAccountingDate()));
+					}*/
 				}
 			}
         }else if(Integer.valueOf(2).equals(subjectType)) {//机构
@@ -1486,6 +1494,25 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	@Override
 	public CommonDto<Boolean> removeSingleInvestment(Integer appid, Integer projectId,Integer investmentInstitutionsId,Integer subjectType) {
 		CommonDto<Boolean> result=new CommonDto<>();
+		if(projectId==null) {
+			result.setData(null);
+	        result.setStatus(500);
+	        result.setMessage("主体id不能为null");
+			return result;
+		}
+		if(investmentInstitutionsId==null) {
+			result.setData(null);
+	        result.setStatus(500);
+	        result.setMessage("机构id不能为null");
+			return result;
+		}
+		if(subjectType==null) {
+			result.setData(null);
+	        result.setStatus(500);
+	        result.setMessage("主体类型不能为null");
+			return result;
+		}
+		
 		if(Integer.valueOf(1).equals(subjectType)) {//项目
 			investmentInstitutionsProjectMapper.updateDelStatus(projectId,investmentInstitutionsId);
         }else if(Integer.valueOf(2).equals(subjectType)) {//机构
@@ -1502,14 +1529,28 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 	@Override
 	public CommonDto<Boolean> updateRelativeInvestmentInfo(Integer appid, InvestmentInstitutionsProject body) {
 		CommonDto<Boolean> result=new CommonDto<>();
-		
-		try {
+		if(body.getSubjectType()==null) {
+			result.setData(null);
+	        result.setStatus(500);
+	        result.setMessage("主体类型不能为null");
+			return result;
+		}
+		if(body.getProjectId()==null) {
+			result.setData(null);
+	        result.setStatus(500);
+	        result.setMessage("融资历史id不能为null");
+			return result;
+		}
+		//Deprecated
+		/*try {
 			body.setAccountingDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(body.getAccountingDateStr()));
 		}catch(Exception e) {
 			result.setData(false);
 	        result.setStatus(500);
 	        result.setMessage("日期字符串不正确");
-		}
+		}*/
+		
+		
 		if(Integer.valueOf(1).equals(body.getSubjectType())) {//项目
 			investmentInstitutionsProjectMapper.updateLogRelativeInvestmentInfo(body);
         }else if(Integer.valueOf(2).equals(body.getSubjectType())) {//机构

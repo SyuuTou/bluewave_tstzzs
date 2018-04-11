@@ -49,12 +49,12 @@ public class ProjectsFinancingLogController extends GenericController{
 	    }
     	return result;
     }
-    /**   
-	 * 更新融资历史相关的投资机构信息
+    /**
+     * 更新融资历史相关的投资机构信息
 	 * @param appid
 	 * @param body 融资历史单阶段对应的投资机构信息
-	 * @return
-	 */
+     * @return
+     */
     @PutMapping("/v{appid}/editrelativeinvest")
     public CommonDto<Boolean> editRelativeInvestmentInfo(@PathVariable("appid") Integer appid,@RequestBody InvestmentInstitutionsProject body){
     	CommonDto<Boolean> result =new CommonDto<>();
@@ -74,6 +74,7 @@ public class ProjectsFinancingLogController extends GenericController{
      * @param appid
      * @param projectId  融资历史表中的主键id
      * @param investmentInstitutionsId  投资机构id
+     * @param subjectType 主体类型 1项目 2机构
      * @return
      */
     @DeleteMapping("/v{appid}/removesingleinvest")  
@@ -93,7 +94,8 @@ public class ProjectsFinancingLogController extends GenericController{
     /**
      * 返回单条融资历史记录的详细信息
      * @param appid
-     * @param financingLodId 融资历史记录的id
+     * @param financingLogId 融资历史表记录主键id
+     * @param subjectType
      * @return
      */
     @GetMapping("/v{appid}/singlefinancinglogDetails")
@@ -136,6 +138,7 @@ public class ProjectsFinancingLogController extends GenericController{
      * 获取项目的融资历史信息列表
      * @param appid
      * @param projectId
+     * @param subjectType
      * @return
      */
     @GetMapping("/v{appid}/financinglogs")
