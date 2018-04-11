@@ -36,6 +36,15 @@ public class ProjectAdminPreferServiceImpl implements ProjectAdminPreferService 
 
     @Autowired
     private InvestmentInstitutionPreferSegmentationService investmentInstitutionPreferSegmentationService;
+    
+    @Autowired
+    private InvestmentInstitutionFeatureMapper investmentInstitutionFeatureMapper;
+    
+    @Autowired
+    private InvestmentInstitutionPreferStageMapper investmentInstitutionPreferStageMapper;
+    
+    @Autowired
+    private InvestmentInstitutionPreferSegmentationMapper investmentInstitutionPreferSegmentationMapper;
 
 
     public CommonDto<ProjectPreferDto> getProjectprefer(Integer projectId,Integer subjectType) {
@@ -60,37 +69,36 @@ public class ProjectAdminPreferServiceImpl implements ProjectAdminPreferService 
         	InvestmentInstitutionFeature investmentInstitutionFeature = investmentInstitutionFeatureService.selectByPrimaryKey(projectId);
             if(investmentInstitutionFeature !=null) {
             	projectPreferDto.setProjectId(investmentInstitutionFeature.getCompanyId());
+            	//投资理念
                 projectPreferDto.setInvestmengRequirement(investmentInstitutionFeature.getInvestmentRequirement());
+                //投资要求
                 projectPreferDto.setInvestmentPhilosophy(investmentInstitutionFeature.getInvestmentPhilosophy());
-
+                
+                //投资偏好的投资领域
                 InvestmentInstitutionPreferSegmentation investmentInstitutionPreferSegmentation = new InvestmentInstitutionPreferSegmentation();
                 investmentInstitutionPreferSegmentation.setCompanyId(projectId);
-                List<InvestmentInstitutionPreferSegmentation> investmentInstitutionPreferSegmentations = investmentInstitutionPreferSegmentationService.select(investmentInstitutionPreferSegmentation);
-                Integer[] investmentInstitutionPreferSegmentationArr = null;
-                if(null != investmentInstitutionPreferSegmentations && investmentInstitutionPreferSegmentations.size() !=0){
-                    investmentInstitutionPreferSegmentationArr = new Integer[investmentInstitutionPreferSegmentations.size()];
-                    List<Integer> investmentInstitutionPreferSegmentationIds = new ArrayList<>();
-                    investmentInstitutionPreferSegmentations.forEach( investmentInstitutionPreferSegmentation_i -> {
-                        investmentInstitutionPreferSegmentationIds.add(investmentInstitutionPreferSegmentation_i.getSegmentationPreferId());
+                List<InvestmentInstitutionPreferSegmentation> segmentations = investmentInstitutionPreferSegmentationService.select(investmentInstitutionPreferSegmentation);
+                
+                if(null != segmentations && segmentations.size() !=0){
+                    List<Integer> segs = new ArrayList<>();
+                    segmentations.forEach( e -> {
+                    	segs.add(e.getSegmentationPreferId());
                     });
-                    investmentInstitutionPreferSegmentationIds.toArray(investmentInstitutionPreferSegmentationArr);
+                    projectPreferDto.setSegmentationPreferIds(segs);
                 }
-                projectPreferDto.setSegmentationPreferIds(investmentInstitutionPreferSegmentationArr);
 
 
                 InvestmentInstitutionPreferStage investmentInstitutionPreferStage = new InvestmentInstitutionPreferStage();
                 investmentInstitutionPreferStage.setCompanyId(projectId);
                 List<InvestmentInstitutionPreferStage> investmentInstitutionPreferStages = investmentInstitutionPreferStageService.select(investmentInstitutionPreferStage);
-                Integer[] investmentInstitutionPreferStageArr = null;
+                //投资偏好的投资阶段
                 if (null != investmentInstitutionPreferStages && investmentInstitutionPreferStages.size() != 0){
-                    List<Integer> investmentInstitutionPreferStageIds = new ArrayList<>();
-                    investmentInstitutionPreferStages.forEach( investmentInstitutionPreferStage_i -> {
-                        investmentInstitutionPreferStageIds.add(investmentInstitutionPreferStage_i.getStageId());
+                    List<Integer> stages = new ArrayList<>();
+                    investmentInstitutionPreferStages.forEach( e -> {
+                    	stages.add(e.getStageId());
                     });
-                    investmentInstitutionPreferStageArr = new Integer[investmentInstitutionPreferStages.size()];
-                    investmentInstitutionPreferStageIds.toArray(investmentInstitutionPreferStageArr);
+                    projectPreferDto.setStageId(stages);
                 }
-                projectPreferDto.setStageId(investmentInstitutionPreferStageArr);
                 /**
                  * 投资机构单笔投资金额
                  * 0人民币
@@ -98,15 +106,15 @@ public class ProjectAdminPreferServiceImpl implements ProjectAdminPreferService 
                  */
                 InvestmentInstitutionSingleAmount investmentInstitutionSingleAmount = new InvestmentInstitutionSingleAmount();
                 investmentInstitutionSingleAmount.setCompanyId(projectId);
-                List<InvestmentInstitutionSingleAmount> investmentInstitutionSingleAmounts = investmentInstitutionSingleAmountService.select(investmentInstitutionSingleAmount);
+                List<InvestmentInstitutionSingleAmount> singleAmounts = investmentInstitutionSingleAmountService.select(investmentInstitutionSingleAmount);
 
-                for(InvestmentInstitutionSingleAmount investmentInstitutionSingleAmount_i : investmentInstitutionSingleAmounts){
-                    if(investmentInstitutionSingleAmount_i.getCurrencyId() == 0){
-                        projectPreferDto.setInvestmentAmountSingleLowRmb(investmentInstitutionSingleAmount_i.getInvestmentAmountSingleLow());
-                        projectPreferDto.setInvestmentAmountSingleHighRmb(investmentInstitutionSingleAmount_i.getInvestmentAmountSingleHigh());
-                    }else if(investmentInstitutionSingleAmount_i.getCurrencyId() == 1){
-                        projectPreferDto.setInvestmentAmountSingleLowDollar(investmentInstitutionSingleAmount_i.getInvestmentAmountSingleLow());
-                        projectPreferDto.setInvestmentAmountSingleHighDollar(investmentInstitutionSingleAmount_i.getInvestmentAmountSingleHigh());
+                for(InvestmentInstitutionSingleAmount obj : singleAmounts){
+                    if(obj.getCurrencyId() == 0){
+                        projectPreferDto.setInvestmentAmountSingleLowRmb(obj.getInvestmentAmountSingleLow());
+                        projectPreferDto.setInvestmentAmountSingleHighRmb(obj.getInvestmentAmountSingleHigh());
+                    }else if(obj.getCurrencyId() == 1){
+                        projectPreferDto.setInvestmentAmountSingleLowDollar(obj.getInvestmentAmountSingleLow());
+                        projectPreferDto.setInvestmentAmountSingleHighDollar(obj.getInvestmentAmountSingleHigh());
                     }else{
 //                        continue;
                     }
@@ -124,16 +132,17 @@ public class ProjectAdminPreferServiceImpl implements ProjectAdminPreferService 
     @Override
     public CommonDto<String> addOrUpdatePrefer(ProjectPreferDto body) {
         CommonDto<String> result = new CommonDto<>();
-        if(null == body){
+        
+        if(null == body.getProjectId()){
             result.setStatus(500);
-            result.setMessage("failed");
-            result.setData("请输入相关信息");
+            result.setMessage("请输入公司id");
+            result.setData(null);
             return result;
         }
         if(null == body.getSubjectType()){
             result.setStatus(500);
-            result.setMessage("failed");
-            result.setData("请输入主体id");
+            result.setMessage("请输入主体类型");
+            result.setData(null);
             return result;
         }
         
@@ -147,52 +156,52 @@ public class ProjectAdminPreferServiceImpl implements ProjectAdminPreferService 
             investmentInstitutionFeature.setCreator(body.getToken());
 
             //主体信息的更新
-            Integer autoIncreId=body.getProjectId();
-            if(null == body.getProjectId()){//新增
-                investmentInstitutionFeature.setCreateTime(new Date());
-                investmentInstitutionFeatureService.save(investmentInstitutionFeature);
-                autoIncreId=investmentInstitutionFeature.getCompanyId();
-            }else{
-                investmentInstitutionFeature.setUpdateTime(new Date());
+            if(investmentInstitutionFeatureMapper.existsWithPrimaryKey(body.getProjectId())) {
+            	investmentInstitutionFeature.setUpdateTime(new Date());
                 investmentInstitutionFeatureService.updateByPrimaryKey(investmentInstitutionFeature);
+            }else {//新增
+            	investmentInstitutionFeature.setCreateTime(new Date());
+                investmentInstitutionFeatureService.save(investmentInstitutionFeature);
             }
-            //投资阶段
-            List<InvestmentInstitutionPreferStage> investmentInstitutionPreferStageList = new ArrayList<>();
-            investmentInstitutionPreferStageService.deleteAll(autoIncreId);
-            if(null != body.getStageId() && body.getStageId().length != 0){
-                for(Integer stageId : body.getStageId()){
-                    InvestmentInstitutionPreferStage investmentInstitutionPreferStage1  = new InvestmentInstitutionPreferStage();
-                    investmentInstitutionPreferStage1.setStageId(stageId);
-                    investmentInstitutionPreferStage1.setCompanyId(autoIncreId);
-                    investmentInstitutionPreferStageList.add(investmentInstitutionPreferStage1);
-                }
-            }
-            investmentInstitutionPreferStageService.insertList(investmentInstitutionPreferStageList);
-            //投资领域
-            List<InvestmentInstitutionPreferSegmentation> investmentInstitutionPreferSegmentationList = new ArrayList<>();
-            investmentInstitutionPreferSegmentationService.deleteAll(autoIncreId);
-            if(null != body.getSegmentationPreferIds() && body.getSegmentationPreferIds().length != 0){
-                for(Integer segmentationId : body.getSegmentationPreferIds()){
-                    InvestmentInstitutionPreferSegmentation investmentInstitutionPreferSegmentation1  = new InvestmentInstitutionPreferSegmentation();
-                    investmentInstitutionPreferSegmentation1.setSegmentationPreferId(segmentationId);
-                    investmentInstitutionPreferSegmentation1.setCompanyId(autoIncreId);
-                    investmentInstitutionPreferSegmentationList.add(investmentInstitutionPreferSegmentation1);
-                }
-            }
-            investmentInstitutionPreferSegmentationService.insertList(investmentInstitutionPreferSegmentationList);
-            //单笔投资金额
-            InvestmentInstitutionSingleAmount investmentInstitutionSingleAmount = new InvestmentInstitutionSingleAmount();
-            InvestmentInstitutionSingleAmount investmentInstitutionSingleAmount1 = new InvestmentInstitutionSingleAmount();
-            investmentInstitutionSingleAmountService.deleteAll(autoIncreId);
             
-            investmentInstitutionSingleAmount.setCompanyId(autoIncreId);
+            //投资阶段
+            investmentInstitutionPreferStageService.deleteAll(body.getProjectId());
+            
+            if(null != body.getStageId() && body.getStageId().size() != 0){
+                for(Integer e : body.getStageId()){
+                    InvestmentInstitutionPreferStage stage  = new InvestmentInstitutionPreferStage();
+                    stage.setStageId(e);
+                    stage.setCompanyId(body.getProjectId());
+                    
+                    investmentInstitutionPreferStageMapper.insertSelective(stage);
+                }
+            }
+            
+            //投资领域
+            investmentInstitutionPreferSegmentationService.deleteAll(body.getProjectId());
+            
+            if(null != body.getSegmentationPreferIds() && body.getSegmentationPreferIds().size() != 0){
+                for(Integer e : body.getSegmentationPreferIds()){
+                    InvestmentInstitutionPreferSegmentation seg  = new InvestmentInstitutionPreferSegmentation();
+                    seg.setSegmentationPreferId(e);
+                    seg.setCompanyId(body.getProjectId());
+                    
+                    investmentInstitutionPreferSegmentationMapper.insertSelective(seg);
+                }
+            }
+            //单笔投资金额
+            investmentInstitutionSingleAmountService.deleteAll(body.getProjectId());
+            
+            InvestmentInstitutionSingleAmount investmentInstitutionSingleAmount = new InvestmentInstitutionSingleAmount();
+            investmentInstitutionSingleAmount.setCompanyId(body.getProjectId());
             //人民币
-            investmentInstitutionSingleAmount.setCurrencyId(0);
+            investmentInstitutionSingleAmount.setCurrencyId(0);  
             investmentInstitutionSingleAmount.setInvestmentAmountSingleLow(body.getInvestmentAmountSingleLowRmb());
             investmentInstitutionSingleAmount.setInvestmentAmountSingleHigh(body.getInvestmentAmountSingleHighRmb());
             investmentInstitutionSingleAmountService.save(investmentInstitutionSingleAmount);
 
-            investmentInstitutionSingleAmount1.setCompanyId(autoIncreId);
+            InvestmentInstitutionSingleAmount investmentInstitutionSingleAmount1 = new InvestmentInstitutionSingleAmount();
+            investmentInstitutionSingleAmount1.setCompanyId(body.getProjectId());
             //美元
             investmentInstitutionSingleAmount1.setCurrencyId(1);
             investmentInstitutionSingleAmount1.setInvestmentAmountSingleLow(body.getInvestmentAmountSingleLowDollar());

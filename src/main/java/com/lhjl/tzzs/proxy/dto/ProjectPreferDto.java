@@ -1,6 +1,7 @@
 package com.lhjl.tzzs.proxy.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by lanhaijulang on 2018/1/23.
@@ -10,21 +11,37 @@ public class ProjectPreferDto {
     private String token;
 
     private Integer projectId;
-
-    private Integer[] stageId;
-
-    private Integer[] segmentationPreferIds;
-
+    /**
+     * 投资阶段
+     */
+    private List<Integer> stageId;
+    /**
+     * 投资领域
+     */
+    private List<Integer> segmentationPreferIds;
+    /**
+     * 投资理念
+     */
     private String investmentPhilosophy;
-
+    /**
+     * 项目需求
+     */
     private String investmengRequirement;
-
+    /**
+     * 人民币单笔投资金额下限
+     */
     private BigDecimal investmentAmountSingleLowRmb;
-
+    /**
+     * 人民币单笔投资金额上限
+     */
     private BigDecimal investmentAmountSingleHighRmb;
-
+    /**
+     * 美元单笔投资金额下限
+     */
     private BigDecimal investmentAmountSingleLowDollar;
-
+    /**
+     * 美元单笔投资金额上限
+     */
     private BigDecimal investmentAmountSingleHighDollar;
     /**
      * 主体类型
@@ -48,17 +65,6 @@ public class ProjectPreferDto {
         this.projectId = projectId;
     }
 
-    public Integer[] getStageId() {
-        return stageId;
-    }
-
-    public void setStageId(Integer[] stageId) {
-        this.stageId = stageId;
-    }
-
-    public Integer[] getSegmentationPreferIds() {
-        return segmentationPreferIds;
-    }
 
     public String getToken() {
         return token;
@@ -68,11 +74,24 @@ public class ProjectPreferDto {
         this.token = token;
     }
 
-    public void setSegmentationPreferIds(Integer[] segmentationPreferIds) {
-        this.segmentationPreferIds = segmentationPreferIds;
-    }
+    
+    public List<Integer> getStageId() {
+		return stageId;
+	}
 
-    public String getInvestmentPhilosophy() {
+	public void setStageId(List<Integer> stageId) {
+		this.stageId = stageId;
+	}
+
+	public List<Integer> getSegmentationPreferIds() {
+		return segmentationPreferIds;
+	}
+
+	public void setSegmentationPreferIds(List<Integer> segmentationPreferIds) {
+		this.segmentationPreferIds = segmentationPreferIds;
+	}
+
+	public String getInvestmentPhilosophy() {
         return investmentPhilosophy;
     }
 

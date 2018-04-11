@@ -22,7 +22,9 @@ public class ProjectAdminPreferController extends GenericController{
     private ProjectAdminPreferService projectPreferService;
 
     /**
-     * 获取投资偏好和理念
+     * 获取投资偏好和理念(目前属于机构的模块信息)
+     * @param projectId
+     * @param subjectType 1项目 2机构
      * @return
      */
     @GetMapping("/getprojectprefer")
@@ -41,6 +43,7 @@ public class ProjectAdminPreferController extends GenericController{
 
     /**
      * 添加或更新投资偏好和理念
+     * (目前书记机构的主体相关)
      * @param body
      * @return
      */
