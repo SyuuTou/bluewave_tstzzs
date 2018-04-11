@@ -22,7 +22,8 @@ public class ProjectAdminFundController extends GenericController{
 
     /**
      * 获取项目旗下基金列表
-     * @param projectId
+     * @param subjectId
+     * @param subjectType
      * @return
      */
     @GetMapping("/getfundList")

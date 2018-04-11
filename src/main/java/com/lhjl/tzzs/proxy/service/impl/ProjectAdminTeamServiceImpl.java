@@ -29,6 +29,15 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
 
     @Autowired
     private ProjectTeamMemberMapper projectTeamMemberMapper;
+    
+    @Autowired
+    private ProjectTeamMemberSelfteamMapper projectTeamMemberSelfteamMapper;
+    
+    @Autowired
+    private ProjectTeamMemberSegmentationMapper projectTeamMemberSegmentationMapper;
+    
+    @Autowired
+    private ProjectTeamMemberWorkMapper projectTeamMemberWorkMapper;
 
     @Resource
     private ProjectTeamMemberWorkService projectTeamMemberWorkService;
@@ -50,6 +59,9 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
 
     @Resource
     private ProjectTeamMemberStageService projectTeamMemberStageService;
+    
+    @Autowired
+    private ProjectTeamMemberEducationMapper projectTeamMemberEducationMapper;
 
     @Autowired
     private ProjectTeamMemberBusinessService projectTeamMemberBusinessService;
@@ -70,6 +82,15 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
     private InvestmentInstitutionsMemberEducationMapper investmentInstitutionsMemberEducationMapper;
     @Autowired
     private InvestmentInstitutionsMemberWorkMapper investmentInstitutionsMemberWorkMapper;
+    
+    @Autowired
+    private ProjectTeamMemberBusinessMapper projectTeamMemberBusinessMapper;
+    
+    @Autowired
+    private ProjectTeamMemberCityMapper projectTeamMemberCityMapper;
+    
+    @Autowired
+    private ProjectTeamMemberStageMapper projectTeamMemberStageMapper;
 
     @Override
     public CommonDto<Map<String, List<LabelList>>> queryHotCity() {
@@ -351,14 +372,8 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
             projectTeamMember.setHeadPicture(body.getHeadPicture());
             projectTeamMember.setPicture(body.getPicture());
             projectTeamMember.setEmail(body.getEmail());
-
-            if(null != body.getBirthDay()){
-                projectTeamMember.setBirthDay(DateUtils.parse1(body.getBirthDay()));
-            }
-
-            if(null != body.getTenureTime()){
-                projectTeamMember.setTenureTime(DateUtils.parse1(body.getTenureTime()));
-            }
+            projectTeamMember.setBirthDay(body.getBirthDay());
+            projectTeamMember.setTenureTime(body.getTenureTime());
             projectTeamMember.setSex(body.getSex());
             projectTeamMember.setDiploma(body.getDiploma());
             projectTeamMember.setNationality(body.getNationality());
@@ -378,126 +393,126 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
             }else{
                 projectTeamMemberMapper.updateByPrimaryKey(projectTeamMember);
             }
+            
             //自定义创业经历
             ProjectTeamMemberBusiness projectTeamMemberBusiness = new ProjectTeamMemberBusiness();
             projectTeamMemberBusiness.setMemberId(projectTeamMember.getId());
             projectTeamMemberBusinessService.delete(projectTeamMemberBusiness);
             
             List<ProjectTeamMemberBusiness> projectTeamMemberBusinessList = new ArrayList<>();
-            if(body.getBusinesses() != null && body.getBusinesses().length != 0 ){
-                for(int i = 0; i<body.getBusinesses().length; i++){
-                    ProjectTeamMemberBusiness projectTeamMemberBusiness1 = new ProjectTeamMemberBusiness();
-                    projectTeamMemberBusiness1.setMemberId(projectTeamMember.getId());
-                    projectTeamMemberBusiness1.setCompanyName(body.getBusinesses()[i]);
-                    projectTeamMemberBusinessList.add(projectTeamMemberBusiness1);
+            if(body.getBusinesses() != null && body.getBusinesses().size() != 0 ){
+                for(String e : body.getBusinesses()){
+                    ProjectTeamMemberBusiness obj = new ProjectTeamMemberBusiness();
+                    obj.setMemberId(projectTeamMember.getId());
+                    obj.setCompanyName(e);
+                    
+                    projectTeamMemberBusinessMapper.insertSelective(obj);
                 }
             }
-            projectTeamMemberBusinessService.insertList(projectTeamMemberBusinessList);
+            
             //自定义城市
             ProjectTeamMemberSelfcity projectTeamMemberSelfcity = new ProjectTeamMemberSelfcity();
             projectTeamMemberSelfcity.setMemberId(projectTeamMember.getId());
             projectTeamMemberSelfcityMapper.delete(projectTeamMemberSelfcity);
             
-            List<ProjectTeamMemberSelfcity> projectTeamMemberSelfcityList = new ArrayList<>();
-            if(body.getSelfcitys() != null && body.getSelfcitys().length != 0 ){
-                for(int i = 0; i < body.getSelfcitys().length; i++){
-                    ProjectTeamMemberSelfcity projectTeamMemberSelfcity1 = new ProjectTeamMemberSelfcity();
-                    projectTeamMemberSelfcity1.setMemberId(projectTeamMember.getId());
-                    projectTeamMemberSelfcity1.setCity(body.getBusinesses()[i]);
-                    projectTeamMemberSelfcityList.add(projectTeamMemberSelfcity1);
+            if(body.getSelfcitys() != null && body.getSelfcitys().size() != 0 ){
+                for(String e : body.getSelfcitys()){
+                    ProjectTeamMemberSelfcity obj = new ProjectTeamMemberSelfcity();
+                    obj.setMemberId(projectTeamMember.getId());
+                    obj.setCity(e);
+                    
+                    projectTeamMemberSelfcityMapper.insertSelective(obj);
                 }
             }
-            projectTeamMemberSelfcityMapper.insertList(projectTeamMemberSelfcityList);
             //团队成员所在城市
             ProjectTeamMemberCity projectTeamMemberCity = new ProjectTeamMemberCity();
             projectTeamMemberCity.setMemberId(projectTeamMember.getId());
             projectTeamMemberCityService.delete(projectTeamMemberCity);
             
-            List<ProjectTeamMemberCity> projectTeamMemberCityList = new ArrayList<>();
-            if(body.getCitys() != null && body.getCitys().length != 0){
-                for(int i = 0; i < body.getCitys().length; i++){
-                    ProjectTeamMemberCity projectTeamMemberCity1 = new ProjectTeamMemberCity();
-                    projectTeamMemberCity1.setMemberId(projectTeamMember.getId());
-                    projectTeamMemberCity1.setCityName(body.getCitys()[i]);
-                    projectTeamMemberCityList.add(projectTeamMemberCity1);
+            if(body.getCitys() != null && body.getCitys().size() != 0){
+                for(String e : body.getCitys()){
+                    ProjectTeamMemberCity obj = new ProjectTeamMemberCity();
+                    obj.setMemberId(projectTeamMember.getId());
+                    obj.setCityName(e);
+                    
+                    projectTeamMemberCityMapper.insertSelective(obj);
                 }
             }
-            projectTeamMemberCityService.insertList(projectTeamMemberCityList);
+            
             //团队成员投资阶段
             ProjectTeamMemberStage projectTeamMemberStage = new ProjectTeamMemberStage();
             projectTeamMemberStage.setMemberId(projectTeamMember.getId());
             projectTeamMemberStageService.delete(projectTeamMemberStage);
             
-            List<ProjectTeamMemberStage> projectTeamMemberStageList = new ArrayList<>();
-            if(body.getInvestStages() != null && body.getInvestStages().length != 0 ){
-                for(int i = 0; i < body.getInvestStages().length; i++){
-                    ProjectTeamMemberStage projectTeamMemberStage1 = new ProjectTeamMemberStage();
-                    projectTeamMemberStage1.setMemberId(projectTeamMember.getId());
-                    projectTeamMemberStage1.setStageId(body.getInvestStages()[i]);
-                    projectTeamMemberStageList.add(projectTeamMemberStage1);
+            if(body.getInvestStages() != null && body.getInvestStages().size() != 0 ){
+                for(Integer e : body.getInvestStages()){
+                    ProjectTeamMemberStage obj = new ProjectTeamMemberStage();
+                    obj.setMemberId(projectTeamMember.getId());
+                    obj.setStageId(e);
+                    
+                    projectTeamMemberStageMapper.insertSelective(obj);
                 }
             }
-            projectTeamMemberStageService.insertList(projectTeamMemberStageList);
+            
             //教育经历
             ProjectTeamMemberEducation projectTeamMemberEducation = new ProjectTeamMemberEducation();
             projectTeamMemberEducation.setProjectTeamMemberId(projectTeamMember.getId());
             projectTeamMemberEducationService.delete(projectTeamMemberEducation);
             
-            List<ProjectTeamMemberEducation> projectTeamMemberEducationList = new ArrayList<>();
-            if(body.getEducationExperience() != null && body.getEducationExperience().length != 0){
-                for(int i = 0; i < body.getEducationExperience().length; i++){
-                    ProjectTeamMemberEducation projectTeamMemberEducation1 = new ProjectTeamMemberEducation();
-                    projectTeamMemberEducation1.setProjectTeamMemberId(projectTeamMember.getId());
-                    projectTeamMemberEducation1.setEducationExperience(body.getEducationExperience()[i]);
-                    projectTeamMemberEducationList.add(projectTeamMemberEducation1);
+            if(body.getEducationExperience() != null && body.getEducationExperience().size() != 0){
+                for(String e : body.getEducationExperience()){
+                    ProjectTeamMemberEducation obj = new ProjectTeamMemberEducation();
+                    obj.setProjectTeamMemberId(projectTeamMember.getId());
+                    obj.setEducationExperience(e);
+                    
+                    projectTeamMemberEducationMapper.insertSelective(obj);
                 }
             }
-            projectTeamMemberEducationService.insertList(projectTeamMemberEducationList);
             
             //工作经历
             ProjectTeamMemberWork projectTeamMemberWork = new ProjectTeamMemberWork();
             projectTeamMemberWork.setProjectTeamMemberId(projectTeamMember.getId());
             projectTeamMemberWorkService.delete(projectTeamMemberWork);
-            List<ProjectTeamMemberWork> projectTeamMemberWorkList = new ArrayList<>();
-            if(body.getWorkExperiences() != null && body.getWorkExperiences().length != 0){
-                for(int i = 0; i < body.getWorkExperiences().length; i++){
-                    ProjectTeamMemberWork projectTeamMemberWork1 = new ProjectTeamMemberWork();
-                    projectTeamMemberWork1.setProjectTeamMemberId(projectTeamMember.getId());
-                    projectTeamMemberWork1.setWorkExperience(body.getWorkExperiences()[i]);
-                    projectTeamMemberWorkList.add(projectTeamMemberWork1);
+            
+            if(body.getWorkExperiences() != null && body.getWorkExperiences().size() != 0){
+                for(String e : body.getWorkExperiences()){
+                    ProjectTeamMemberWork obj = new ProjectTeamMemberWork();
+                    obj.setProjectTeamMemberId(projectTeamMember.getId());
+                    obj.setWorkExperience(e);
+                    
+                    projectTeamMemberWorkMapper.insertSelective(obj);
                 }
             }
-            projectTeamMemberWorkService.insertList(projectTeamMemberWorkList);
             
             //领域
             ProjectTeamMemberSegmentation projectTeamMemberSegmentation = new ProjectTeamMemberSegmentation();
             projectTeamMemberSegmentation.setMemberId(projectTeamMember.getId());
             projectTeamMemberSegmentationService.delete(projectTeamMemberSegmentation);
-            List<ProjectTeamMemberSegmentation> projectTeamMemberSegmentationList = new ArrayList<>();
             
-            if(body.getFocusDomain() != null && body.getFocusDomain().length != 0){
-                for(int i = 0; i < body.getFocusDomain().length; i++){
-                    ProjectTeamMemberSegmentation projectTeamMemberSegmentation1 = new ProjectTeamMemberSegmentation();
-                    projectTeamMemberSegmentation1.setMemberId(projectTeamMember.getId());
-                    projectTeamMemberSegmentation1.setSegmentationId(body.getFocusDomain()[i]);
-                    projectTeamMemberSegmentationList.add(projectTeamMemberSegmentation1);
+            if(body.getFocusDomain() != null && body.getFocusDomain().size() != 0){
+                for(Integer e : body.getFocusDomain()){
+                    ProjectTeamMemberSegmentation obj = new ProjectTeamMemberSegmentation();
+                    obj.setMemberId(projectTeamMember.getId());
+                    obj.setSegmentationId(e);
+                    
+                    projectTeamMemberSegmentationMapper.insertSelective(obj);
                 }
             }
-            projectTeamMemberSegmentationService.insertList(projectTeamMemberSegmentationList);
             
             //自定义团队
             ProjectTeamMemberSelfteam projectTeamMemberSelfteam = new ProjectTeamMemberSelfteam();
             projectTeamMemberSelfteam.setMemberId(projectTeamMember.getId());
             projectTeamMemberSelfteamService.delete(projectTeamMemberSelfteam);
-            //自定义团队
-            List<ProjectTeamMemberSelfteam> projectTeamMemberSelfteamsList = new ArrayList<>();
+            //一个团队成员只属于一个自定义团队
             if(body.getSelfDefTeam() != null && body.getSelfDefTeam().toString() != ""){
-                ProjectTeamMemberSelfteam obj = new ProjectTeamMemberSelfteam();
+            	
+            	ProjectTeamMemberSelfteam obj = new ProjectTeamMemberSelfteam();
                 obj.setMemberId(projectTeamMember.getId());
                 obj.setTeamName(body.getSelfDefTeam());
-                projectTeamMemberSelfteamsList.add(obj);
+                
+                projectTeamMemberSelfteamMapper.insertSelective(obj);                
+                
             }
-            projectTeamMemberSelfteamService.insertList(projectTeamMemberSelfteamsList);
         }else if(Integer.valueOf(2).equals(body.getSubjectType())) {//机构
         	
         	InvestmentInstitutionTeam team=new InvestmentInstitutionTeam();
@@ -529,11 +544,12 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
             edu.setMemberId(team.getId());
             investmentInstitutionsMemberEducationMapper.delete(edu);
             
-            if(body.getEducationExperience() != null && body.getEducationExperience().length != 0){
-                for(int i = 0; i < body.getEducationExperience().length; i++){
+            if(body.getEducationExperience() != null && body.getEducationExperience().size() != 0){
+                for(String e : body.getEducationExperience()){
                 	InvestmentInstitutionsMemberEducation obj = new InvestmentInstitutionsMemberEducation();
                     obj.setMemberId(team.getId());
-                    obj.setEducationExperience(body.getEducationExperience()[i]);
+                    obj.setEducationExperience(e);
+                    
                     investmentInstitutionsMemberEducationMapper.insertSelective(obj);
                 }
             }
@@ -543,11 +559,12 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
             work.setMemberId(team.getId());
             investmentInstitutionsMemberWorkMapper.delete(work);
             
-            if(body.getWorkExperiences() != null && body.getWorkExperiences().length != 0){
-                for(int i = 0; i < body.getWorkExperiences().length; i++){
+            if(body.getWorkExperiences() != null && body.getWorkExperiences().size() != 0){
+                for(String e : body.getWorkExperiences()){
                 	InvestmentInstitutionsMemberWork obj = new InvestmentInstitutionsMemberWork();
                 	obj.setMemberId(team.getId());
-                    obj.setWorkExperience(body.getWorkExperiences()[i]);
+                    obj.setWorkExperience(e);
+                    
                     investmentInstitutionsMemberWorkMapper.insertSelective(obj);
                 }
             }

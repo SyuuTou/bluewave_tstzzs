@@ -29,7 +29,7 @@ public class ProjectTeamMemberOutputDto implements Comparable<ProjectTeamMemberO
     private String name;
 
     /**
-     * 职务
+     * 姓名
      */
     private String jobTitle;
 
@@ -163,6 +163,10 @@ public class ProjectTeamMemberOutputDto implements Comparable<ProjectTeamMemberO
      */
     private String educationDesc;
     
+    /**
+     * 是否隐藏，默认不隐藏，不隐藏为1
+     */
+    private Integer isHide;
 
     public List<String> getEducationExperience() {
 		return educationExperience;
@@ -172,10 +176,6 @@ public class ProjectTeamMemberOutputDto implements Comparable<ProjectTeamMemberO
 		this.educationExperience = educationExperience;
 	}
 
-	/**
-     * 是否隐藏，默认不隐藏，不隐藏为1
-     */
-    private Integer isHide;
 
     public String getBirthDay() {
         return birthDay;

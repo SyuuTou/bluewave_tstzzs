@@ -4,6 +4,8 @@ import com.lhjl.tzzs.proxy.dto.CommonDto;
 import com.lhjl.tzzs.proxy.dto.FundDto.FundInputDto;
 import com.lhjl.tzzs.proxy.dto.FundDto.FundOutputDto;
 import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsFundsMapper;
+import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsFundsSegmentationMapper;
+import com.lhjl.tzzs.proxy.mapper.InvestmentInstitutionsFundsStagesMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaProjectStageMapper;
 import com.lhjl.tzzs.proxy.mapper.MetaSegmentationMapper;
 import com.lhjl.tzzs.proxy.model.*;
@@ -45,6 +47,12 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
 
     @Resource
     private InvestmentInstitutionsFundsStagesService investmentInstitutionsFundsStagesService;
+    
+    @Autowired
+    private InvestmentInstitutionsFundsStagesMapper investmentInstitutionsFundsStagesMapper;
+    
+    @Autowired
+    private InvestmentInstitutionsFundsSegmentationMapper investmentInstitutionsFundsSegmentationMapper;
 
     @Override
     public CommonDto<List<FundOutputDto>> getFundList(Integer subjectId,Integer subjectType) {
@@ -57,13 +65,11 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
             if(null != fundsList && fundsList.size() != 0){
                 for(InvestmentInstitutionsFunds e: fundsList){
                     FundOutputDto fundOutputDto = new FundOutputDto();
-                    
+                    //基金id
                     fundOutputDto.setFundId(e.getId());
                     fundOutputDto.setShortName(e.getName());
                     fundOutputDto.setFullName(e.getFullName());
-                    if(e.getCreateTime()!=null) {
-                    	fundOutputDto.setEstablishedTime(DateUtils.format(e.getCreateTime()));
-                    }
+                	fundOutputDto.setEstablishedTime(e.getCreateTime());
                     fundOutputDto.setSurvivalPeriod(e.getDuration());
                     fundOutputDto.setCurrencyType(e.getCurrency());
                     fundOutputDto.setFundManageScale(e.getScale());
@@ -92,7 +98,7 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
                         
                         fundOutputDto.setInvestStages(fundsStageNames);
                     }
-                    //投资领域设置
+                    //投资领域设置  
                     InvestmentInstitutionsFundsSegmentation investmentInstitutionsFundsSegmentation = new InvestmentInstitutionsFundsSegmentation();
                     investmentInstitutionsFundsSegmentation.setInvestmentInstitutionsFundsId(e.getId());
                     List<InvestmentInstitutionsFundsSegmentation> fundsSegmentations = investmentInstitutionsFundsSegmentationService.select(investmentInstitutionsFundsSegmentation);
@@ -105,13 +111,13 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
                         	fundsSegmentationIds.add(obj.getSegmentationId());
                         });
                         List<MetaSegmentation> metaSegmentationList = metaSegmentationMapper.selectBySegmentationIds(fundsSegmentationIds);
-                        
+                          
                         if(metaSegmentationList!=null && metaSegmentationList.size()!=0) {
                         	metaSegmentationList.forEach(obj -> {
                                 fundsSegmentationNames.add(obj.getName());
                             });
                         }
-                        
+                           
                         fundOutputDto.setFocusDomains(fundsSegmentationNames);
                     }
                     
@@ -131,16 +137,16 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
     @Override
     public CommonDto<String> addOrUpdateFund(FundInputDto body) {
         CommonDto<String> result = new CommonDto<>();
-        if(null == body ){
-            result.setMessage("failed");
+        if(null == body.getProjectId() ){
+            result.setMessage("请输入机构id");
             result.setStatus(500);
-            result.setData("请输入基金相关信息");
+            result.setData(null);
             return result;
         }
         if(null == body.getSubjectType() ){
-            result.setMessage("failed");
+            result.setMessage("请输入主体类型");
             result.setStatus(500);
-            result.setData("请输入主体类型");
+            result.setData(null);
             return result;
         }
         
@@ -148,10 +154,11 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
         	//TODO 基金和项目之间的关系有待完善，目前以机构为主
         }else if (Integer.valueOf(2).equals(body.getSubjectType())) {//机构
         	InvestmentInstitutionsFunds investmentInstitutionsFunds = new InvestmentInstitutionsFunds();
+        	
+        	investmentInstitutionsFunds.setId(body.getFundId());
             investmentInstitutionsFunds.setInvestmentInstitutionsId(body.getProjectId());
-            investmentInstitutionsFunds.setId(body.getFundId());
-            
-            investmentInstitutionsFunds.setCreateTime(DateUtils.parse(body.getEstablishedTime()));
+            //成立时间
+            investmentInstitutionsFunds.setCreateTime(body.getEstablishedTime());
             investmentInstitutionsFunds.setCreator(body.getCreator());
             investmentInstitutionsFunds.setCurrency(body.getCurrencyType());
             investmentInstitutionsFunds.setInvestmentAmountBegin(body.getInvestmentAmountLow());
@@ -159,7 +166,7 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
             investmentInstitutionsFunds.setDuration(body.getSurvivalPeriod());
             investmentInstitutionsFunds.setName(body.getShortName());
             investmentInstitutionsFunds.setFullName(body.getFullName());
-            
+            //设置有效标志
             investmentInstitutionsFunds.setYn(0);
 
             //更新主体信息
@@ -173,30 +180,30 @@ public class ProjectAdminFundServiceImpl implements ProjectAdminFundService {
             }
             
             //更新基金下的投资阶段
-            List<InvestmentInstitutionsFundsStages> fundsStages = new ArrayList<>();
             investmentInstitutionsFundsStagesService.deleteAll(autoIncreId);
-            if(body.getInvestStages().length != 0 && body.getInvestStages() != null){
-                for(int i = 0; i<body.getInvestStages().length; i++){
-                    InvestmentInstitutionsFundsStages investmentInstitutionsFundsStages = new InvestmentInstitutionsFundsStages();
-                    investmentInstitutionsFundsStages.setInvestmentInstitutionsFundsId(autoIncreId);
-                    investmentInstitutionsFundsStages.setStageId(body.getInvestStages()[i]);
-                    fundsStages.add(investmentInstitutionsFundsStages);
+            if(body.getInvestStages().size() != 0 && body.getInvestStages() != null){
+                for(Integer e : body.getInvestStages()){
+                    InvestmentInstitutionsFundsStages stage = new InvestmentInstitutionsFundsStages();
+                    stage.setInvestmentInstitutionsFundsId(autoIncreId);
+                    stage.setStageId(e);
+                    
+                    investmentInstitutionsFundsStagesMapper.insertSelective(stage);
                 }
             }
-            investmentInstitutionsFundsStagesService.insertList(fundsStages);
-
+            
             //更新基金下的投资领域
-            List<InvestmentInstitutionsFundsSegmentation> fundsSegmentations = new ArrayList<>();
             investmentInstitutionsFundsSegmentationService.deleteAll(autoIncreId);
-            if(body.getFocusDomains().length != 0 && body.getFocusDomains() != null){
-                for(int i = 0; i<body.getFocusDomains().length; i++){
-                    InvestmentInstitutionsFundsSegmentation investmentInstitutionsFundsSegmentation = new InvestmentInstitutionsFundsSegmentation();
-                    investmentInstitutionsFundsSegmentation.setInvestmentInstitutionsFundsId(autoIncreId);
-                    investmentInstitutionsFundsSegmentation.setSegmentationId(body.getFocusDomains()[i]);
-                    fundsSegmentations.add(investmentInstitutionsFundsSegmentation);
+            
+            if(body.getFocusDomains().size() != 0 && body.getFocusDomains() != null){
+                for(Integer e:body.getFocusDomains()){
+                    InvestmentInstitutionsFundsSegmentation seg = new InvestmentInstitutionsFundsSegmentation();
+                    seg.setInvestmentInstitutionsFundsId(autoIncreId);
+                    seg.setSegmentationId(e);
+                    
+                    investmentInstitutionsFundsSegmentationMapper.insertSelective(seg);
                 }
             }
-            investmentInstitutionsFundsSegmentationService.insertList(fundsSegmentations);
+            
         }
 
         result.setData("保存成功");

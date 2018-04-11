@@ -37,8 +37,6 @@ public class InvestmentInstitutionsFundsStagesServiceImpl implements InvestmentI
 
     @Override
     public List<InvestmentInstitutionsFundsStages> select(InvestmentInstitutionsFundsStages investmentInstitutionsFundsStages) {
-       List<InvestmentInstitutionsFundsStages> investmentInstitutionsFundsStagesList = new ArrayList<>();
-        investmentInstitutionsFundsStagesList = investmentInstitutionsFundsStagesMapper.select(investmentInstitutionsFundsStages);
-        return investmentInstitutionsFundsStagesList;
+        return investmentInstitutionsFundsStagesMapper.select(investmentInstitutionsFundsStages);
     }
 }

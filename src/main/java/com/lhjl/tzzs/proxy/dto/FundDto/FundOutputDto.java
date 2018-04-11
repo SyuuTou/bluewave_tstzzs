@@ -1,33 +1,57 @@
 package com.lhjl.tzzs.proxy.dto.FundDto;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by lanhaijulang on 2018/1/19.
  */
 public class FundOutputDto {
-
+	
+	/**
+	 * 基金id
+	 */
     private Integer fundId;
-
+    /**
+     * 简称
+     */
     private String shortName;
-
+    /**
+     * 全称
+     */
     private String fullName;
-
-    private String establishedTime;
-
+    /**
+     * 成立时间
+     */
+    private Date establishedTime;
+    /**
+     * 存续期
+     */
     private Integer survivalPeriod;
-
+    /**
+     * 币种
+     */
     private String currencyType;
-
+    /**
+     * 基金管理规模
+     */
     private BigDecimal fundManageScale;
-
+    /**
+     * 单笔起始投资金额
+     */
     private BigDecimal investmentAmountLow;
-
+    /**
+     * 单笔限制投资金额
+     */
     private BigDecimal investmentAmountHigh;
-
+    /**
+     * 投资阶段
+     */
     private List<String> investStages;
-
+    /**
+     * 投资领域
+     */
     private List<String> focusDomains;
 
 
@@ -71,15 +95,16 @@ public class FundOutputDto {
         this.fullName = fullName;
     }
 
-    public String getEstablishedTime() {
-        return establishedTime;
-    }
 
-    public void setEstablishedTime(String establishedTime) {
-        this.establishedTime = establishedTime;
-    }
+    public Date getEstablishedTime() {
+		return establishedTime;
+	}
 
-    public Integer getSurvivalPeriod() {
+	public void setEstablishedTime(Date establishedTime) {
+		this.establishedTime = establishedTime;
+	}
+
+	public Integer getSurvivalPeriod() {
         return survivalPeriod;
     }
 

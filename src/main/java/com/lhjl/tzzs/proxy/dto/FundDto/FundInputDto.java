@@ -2,6 +2,8 @@ package com.lhjl.tzzs.proxy.dto.FundDto;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by lanhaijulang on 2018/1/19.
@@ -22,7 +24,7 @@ public class FundInputDto {
 
     private String fullName;
 
-    private String establishedTime;
+    private Date establishedTime;
 
     private Integer survivalPeriod;
 
@@ -34,9 +36,9 @@ public class FundInputDto {
 
     private BigDecimal investmentAmountHigh;
 
-    private Integer[] investStages;
+    private List<Integer> investStages;
 
-    private Integer[] focusDomains;
+    private List<Integer> focusDomains;
     /**
      * 主体类型
      */
@@ -98,15 +100,16 @@ public class FundInputDto {
         this.fullName = fullName;
     }
 
-    public String getEstablishedTime() {
-        return establishedTime;
-    }
 
-    public void setEstablishedTime(String establishedTime) {
-        this.establishedTime = establishedTime;
-    }
+    public Date getEstablishedTime() {
+		return establishedTime;
+	}
 
-    public Integer getSurvivalPeriod() {
+	public void setEstablishedTime(Date establishedTime) {
+		this.establishedTime = establishedTime;
+	}
+
+	public Integer getSurvivalPeriod() {
         return survivalPeriod;
     }
 
@@ -146,30 +149,21 @@ public class FundInputDto {
         this.investmentAmountHigh = investmentAmountHigh;
     }
 
-    public Integer[] getInvestStages() {
-        return investStages;
-    }
-
-    public void setInvestStages(Integer[] investStages) {
-        this.investStages = investStages;
-    }
-
-    public Integer[] getFocusDomains() {
-        return focusDomains;
-    }
-
-    public void setFocusDomains(Integer[] focusDomains) {
-        this.focusDomains = focusDomains;
-    }
-
-	@Override
-	public String toString() {
-		return "FundInputDto [projectId=" + projectId + ", institutionId=" + institutionId + ", creator=" + creator
-				+ ", fundId=" + fundId + ", shortName=" + shortName + ", fullName=" + fullName + ", establishedTime="
-				+ establishedTime + ", survivalPeriod=" + survivalPeriod + ", currencyType=" + currencyType
-				+ ", fundManageScale=" + fundManageScale + ", investmentAmountLow=" + investmentAmountLow
-				+ ", investmentAmountHigh=" + investmentAmountHigh + ", investStages=" + Arrays.toString(investStages)
-				+ ", focusDomains=" + Arrays.toString(focusDomains) + ", subjectType=" + subjectType + "]";
+	public List<Integer> getInvestStages() {
+		return investStages;
 	}
+
+	public void setInvestStages(List<Integer> investStages) {
+		this.investStages = investStages;
+	}
+
+	public List<Integer> getFocusDomains() {
+		return focusDomains;
+	}
+
+	public void setFocusDomains(List<Integer> focusDomains) {
+		this.focusDomains = focusDomains;
+	}
+
     
 }

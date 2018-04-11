@@ -1,6 +1,8 @@
 package com.lhjl.tzzs.proxy.dto.ProjectTeamMemberDto;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by lanhaijulang on 2018/1/18.
@@ -40,12 +42,12 @@ public class ProjectTeamMemberInputDto {
     /**
      * 工作经历
      */
-    private String[] workExperiences;
+    private List<String> workExperiences;
 
     /**
      * 教育经历
      */
-    private String[] educationExperience;
+    private List<String> educationExperience;
 
     /**
      * 是否在职
@@ -90,12 +92,12 @@ public class ProjectTeamMemberInputDto {
     /**
      * 出生日期
      */
-    private String birthDay;
+    private Date birthDay;
 
     /**
      * 任职时间
      */
-    private String tenureTime;
+    private Date tenureTime;
 
     /**
      * 性别
@@ -115,12 +117,12 @@ public class ProjectTeamMemberInputDto {
     /**
      * 关注领域
      */
-    private Integer[] focusDomain;
+    private List<Integer> focusDomain;
 
     /**
      * 投资阶段
      */
-    private Integer[] investStages;
+    private List<Integer> investStages;
 
     /**
      * 股票
@@ -130,17 +132,17 @@ public class ProjectTeamMemberInputDto {
     /**
      * 所在城市
      */
-    private String[] citys;
+    private List<String> citys;
 
     /**
      * 自定义城市
      */
-    private String[] selfcitys;
+    private List<String> selfcitys;
 
     /**
      * 创业经历
      */
-    private String[] businesses;
+    private List<String> businesses;
 
     /**
      * 创业经历描述
@@ -175,23 +177,24 @@ public class ProjectTeamMemberInputDto {
 		this.subjectType = subjectType;
 	}
 
-	public String getBirthDay() {
-        return birthDay;
-    }
 
-    public void setBirthDay(String birthDay) {
-        this.birthDay = birthDay;
-    }
+    public Date getBirthDay() {
+		return birthDay;
+	}
 
-    public String getTenureTime() {
-        return tenureTime;
-    }
+	public void setBirthDay(Date birthDay) {
+		this.birthDay = birthDay;
+	}
 
-    public void setTenureTime(String tenureTime) {
-        this.tenureTime = tenureTime;
-    }
+	public Date getTenureTime() {
+		return tenureTime;
+	}
 
-    public Integer getSex() {
+	public void setTenureTime(Date tenureTime) {
+		this.tenureTime = tenureTime;
+	}
+
+	public Integer getSex() {
         return sex;
     }
 
@@ -279,23 +282,24 @@ public class ProjectTeamMemberInputDto {
         this.selfDefTeam = selfDefTeam;
     }
 
-    public Integer[] getFocusDomain() {
-        return focusDomain;
-    }
 
-    public void setFocusDomain(Integer[] focusDomain) {
-        this.focusDomain = focusDomain;
-    }
+    public List<Integer> getFocusDomain() {
+		return focusDomain;
+	}
 
-    public Integer[] getInvestStages() {
-        return investStages;
-    }
+	public void setFocusDomain(List<Integer> focusDomain) {
+		this.focusDomain = focusDomain;
+	}
 
-    public void setInvestStages(Integer[] investStages) {
-        this.investStages = investStages;
-    }
+	public List<Integer> getInvestStages() {
+		return investStages;
+	}
 
-    public BigDecimal getStockPer() {
+	public void setInvestStages(List<Integer> investStages) {
+		this.investStages = investStages;
+	}
+
+	public BigDecimal getStockPer() {
         return stockPer;
     }
 
@@ -303,31 +307,32 @@ public class ProjectTeamMemberInputDto {
         this.stockPer = stockPer;
     }
 
-    public String[] getCitys() {
-        return citys;
-    }
 
-    public void setCitys(String[] citys) {
-        this.citys = citys;
-    }
+    public List<String> getCitys() {
+		return citys;
+	}
 
-    public String[] getSelfcitys() {
-        return selfcitys;
-    }
+	public void setCitys(List<String> citys) {
+		this.citys = citys;
+	}
 
-    public void setSelfcitys(String[] selfcitys) {
-        this.selfcitys = selfcitys;
-    }
+	public List<String> getSelfcitys() {
+		return selfcitys;
+	}
 
-    public String[] getBusinesses() {
-        return businesses;
-    }
+	public void setSelfcitys(List<String> selfcitys) {
+		this.selfcitys = selfcitys;
+	}
 
-    public void setBusinesses(String[] businesses) {
-        this.businesses = businesses;
-    }
+	public List<String> getBusinesses() {
+		return businesses;
+	}
 
-    public String getBusinessDesc() {
+	public void setBusinesses(List<String> businesses) {
+		this.businesses = businesses;
+	}
+
+	public String getBusinessDesc() {
         return businessDesc;
     }
 
@@ -399,23 +404,24 @@ public class ProjectTeamMemberInputDto {
         this.memberDesc = memberDesc;
     }
 
-    public String[] getWorkExperiences() {
-        return workExperiences;
-    }
 
-    public void setWorkExperiences(String[] workExperiences) {
-        this.workExperiences = workExperiences;
-    }
+    public List<String> getWorkExperiences() {
+		return workExperiences;
+	}
 
-    public String[] getEducationExperience() {
-        return educationExperience;
-    }
+	public void setWorkExperiences(List<String> workExperiences) {
+		this.workExperiences = workExperiences;
+	}
 
-    public void setEducationExperience(String[] educationExperience) {
-        this.educationExperience = educationExperience;
-    }
+	public List<String> getEducationExperience() {
+		return educationExperience;
+	}
 
-    public Integer getIsOnJob() {
+	public void setEducationExperience(List<String> educationExperience) {
+		this.educationExperience = educationExperience;
+	}
+
+	public Integer getIsOnJob() {
         return isOnJob;
     }
 

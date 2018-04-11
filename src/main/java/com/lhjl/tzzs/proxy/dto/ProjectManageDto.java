@@ -11,22 +11,35 @@ public class ProjectManageDto {
     private String token;
 
     private Integer companyId;
-
-    private String interiorOrganization;
-
-    private String investmentDecisionProcess;
-
-    private BigDecimal totalAmount;
-
-    private BigDecimal rmbAmount;
-
-    private BigDecimal dollarAmount;
-
-    private String bpEmail;
     /**
      * 投资类型
      */
     private List<String> investTypes;
+    /**
+     * 内组织结构
+     */
+    private String interiorOrganization;
+    /**
+     * 投资决策流程
+     */
+    private String investmentDecisionProcess;
+    /**
+     * 总基金管理规模
+     */
+    private BigDecimal totalAmount;
+    /**
+     * 人民币基金管理规模
+     */
+    private BigDecimal rmbAmount;
+    /**
+     * 美元基金管理规模
+     */
+    private BigDecimal dollarAmount;
+    /**
+     * BP邮箱
+     */
+    private String bpEmail;
+
     /**
      * 经典案例
      */
