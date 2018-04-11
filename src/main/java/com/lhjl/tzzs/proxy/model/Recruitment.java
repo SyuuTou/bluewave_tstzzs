@@ -93,7 +93,7 @@ public class Recruitment {
     private Date lastUpdateTime;
 
     /**
-     * 创建用户
+     *  
      */
     @Column(name = "created_user_id")
     private Integer createdUserId;
@@ -110,7 +110,7 @@ public class Recruitment {
     private Integer yn;
     
     /**
-     * 主体类型
+     * 主体类型 1项目 2机构
      */
     @Transient
     private Integer subjectType;

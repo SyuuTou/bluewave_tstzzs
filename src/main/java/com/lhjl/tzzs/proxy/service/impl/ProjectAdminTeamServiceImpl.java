@@ -13,6 +13,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -274,8 +275,8 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
         			ProjectTeamMemberOutputDto output = new ProjectTeamMemberOutputDto();
         			
         			//TODO 机构团队缺失字段
-        			/*output.setBirthDay(DateUtils.format1(e.getBirthDay()));
-                    output.setTenureTime(DateUtils.format1(e.getTenureTime()));
+        			/*output.setBirthDay(e.getBirthDay());
+                    output.setTenureTime(e.getTenureTime());
                     output.setSex(e.getSex());
                     output.setDiploma(e.getDiploma());
                     output.setNationality(e.getNationality());
@@ -339,7 +340,7 @@ public class ProjectAdminTeamServiceImpl implements ProjectAdminTeamService {
     }
 
 
-
+    @Transactional
     @Override
     public CommonDto<String> addOrUpdatePojectTeamMember(ProjectTeamMemberInputDto body) {
         CommonDto<String> result = new CommonDto<>();

@@ -37,11 +37,14 @@ public class ProjectProgress {
      * 删除标志:0代表有效；1代表无效
      */
     private Integer yn;
+    /**
+     * 用户姓名
+     */
     @Transient
     private String userName;
     
     /**
-     * 主体类型
+     * 主体类型 1项目 2机构
      */
     @Transient
     private Integer subjectType;

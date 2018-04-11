@@ -1836,7 +1836,9 @@ public class ProjectsServiceImpl extends GenericService implements ProjectsServi
 			if(pps!=null) {
 				pps.forEach((e)->{
 					Users user = usersMapper.selectByPrimaryKey(e.getOperationUser());
-					e.setUserName(user.getActualName());
+//					if(user != null) {
+						e.setUserName(user.getActualName());
+//					}
 				});
 			}
         }else if(Integer.valueOf(2).equals(subjectType)) {//机构

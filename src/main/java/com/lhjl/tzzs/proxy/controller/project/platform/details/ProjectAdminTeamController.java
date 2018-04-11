@@ -66,6 +66,7 @@ public class ProjectAdminTeamController extends  GenericController{
     /**
      * 删除项目成员
      * @param memberId
+     * @param subjectType
      * @return
      */
     @DeleteMapping("deleteprojectteammember")
