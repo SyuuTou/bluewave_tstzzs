@@ -53,30 +53,7 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
     public CommonDto<PagingOutputDto<ProjectFinancingLogOutputDto>> getProjectFinancingLogList(ProjectFinancingLogInputDto body) {
         CommonDto<PagingOutputDto<ProjectFinancingLogOutputDto>> result = new CommonDto<>();
         
-        /*SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd");
-        //输入实际字符串格式化对象
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //输出时间字符串格式化对象
-        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy/MM/dd HH:mm");*/
-//        System.err.println(body.getBeginTime());
-//        System.err.println(body.getEndTime());
-        
         PagingOutputDto<ProjectFinancingLogOutputDto> pod = new PagingOutputDto<ProjectFinancingLogOutputDto>();
-        //格式化输入时间字符串
-       /* if (body.getBeginTimeInputStr() != null){
-            try {
-				body.setBeginTime(sdf2.parse(body.getBeginTimeInputStr()));
-			} catch (ParseException e1) {
-				e1.printStackTrace();
-			}
-        }
-        if (body.getEndTimeInputStr() != null){
-            try {
-				body.setEndTime(sdf2.parse(body.getEndTimeInputStr() ));
-			} catch (ParseException e1) {
-				e1.printStackTrace();
-			}
-        }*/
       //格式化页码的默认值
         if (body.getCurrentPage() == null){
             body.setCurrentPage(defalutPageNum);
@@ -86,28 +63,8 @@ public class ProjectFinancingLogServiceImpl extends GenericService implements Pr
             body.setPageSize(defalutPageSize);  
         }
         body.setStart( (body.getCurrentPage()-1) * body.getPageSize() );
-        this.LOGGER.info("**"+body);
-        //数据输出
         List<ProjectFinancingLogOutputDto> projectFinancingLogList = projectFinancingLogMapper.getProjectFinancingLogLists(body);
         Long totalcount = projectFinancingLogMapper.getProjectFinancingLogListCount(body);
-        /**
-         * 格式化输出时间转换为字符串
-         */
-        /*projectFinancingLogList.forEach((e)->{
-        	if(e.getFinancingTime() != null) {
-        		e.setFinancingTimeOutputStr(sdf.format(e.getFinancingTime()));
-        	}
-			if(e.getCreateTime() != null) {
-				e.setCreateTimeOutputStr(sdf3.format(e.getCreateTime()));	
-		  	}
-			if(e.getUpdateTime() != null) {
-				e.setUpdateTimeOutputStr(sdf3.format(e.getUpdateTime()));
-			}
-//			格式化审核时间输出字符串
-			if(e.getApprovalTime() != null) {
-				e.setApprovalTimeOutputStr(sdf3.format(e.getApprovalTime()));
-			}
-        });*/
         
         pod.setTotal((long)totalcount);
         pod.setList(projectFinancingLogList);
