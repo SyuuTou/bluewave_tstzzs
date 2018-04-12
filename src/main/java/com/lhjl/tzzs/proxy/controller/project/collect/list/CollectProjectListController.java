@@ -25,6 +25,8 @@ public class CollectProjectListController extends GenericService{
 
     /**
      * 采集项目审核列表
+     * @param body
+     * @param appid
      * @return
      */
     @PostMapping("/v{appid}/get/project/send/list")

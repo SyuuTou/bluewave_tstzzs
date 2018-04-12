@@ -33,22 +33,13 @@ public interface ProjectSendAuditBMapper extends OwnerMapper<ProjectSendAuditB> 
      * 管理员获取采集提交项目列表
      * @return
      */
-  /*  List<Map<String,Object>> adminGetProjectSendList(@Param("searchWord") String searchWord,@Param("begainTime") String begainTime,
-                                                     @Param("endTime") String endTime,@Param("projetcSource") Integer projetcSource,
-                                                     @Param("creatTimeOrder") Integer creatTimeOrder,@Param("creatTimeOrderDesc") Integer creatTimeOrderDesc,
-                                                     @Param("auditTimeOrder") Integer auditTimeOrder,@Param("auditTimeOrderDesc") Integer auditTimeOrderDesc,
-                                                     @Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
-   */
-//    List<Map<String,Object>> adminGetProjectSendList(ProjectSendBAdminListInputDto body);
     List<ProjectSendBAdminListOutputDto> adminGetProjectSendList(ProjectSendBAdminListInputDto body);
 
-
-    /*Integer adminGetProjectSendListCount(@Param("searchWord") String searchWord,@Param("begainTime") String begainTime,
-                                                             @Param("endTime") String endTime,@Param("projetcSource") Integer projetcSource,
-                                                             @Param("creatTimeOrder") Integer creatTimeOrder,@Param("creatTimeOrderDesc") Integer creatTimeOrderDesc,
-                                                             @Param("auditTimeOrder") Integer auditTimeOrder,@Param("auditTimeOrderDesc") Integer auditTimeOrderDesc,
-                                                             @Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
-    */
+    /**
+     * 获取项目审核列表的总数
+     * @param body
+     * @return
+     */
     Long adminGetProjectSendListCount(ProjectSendBAdminListInputDto body);
 
     Map<String,Object> searchProjectSendLogoInfo(@Param("projectSendId") Integer projectSendId,@Param("appid") Integer appid);

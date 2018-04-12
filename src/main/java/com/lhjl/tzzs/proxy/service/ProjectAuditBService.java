@@ -11,7 +11,9 @@ import java.util.Map;
 
 public interface ProjectAuditBService {
     /**
-     * 读取审核项目列表
+     * 采集项目审核列表
+     * @param body
+     * @param appid
      * @return
      */
     CommonDto<PagingOutputDto<ProjectSendBAdminListOutputDto>> getProjectSendList(ProjectSendBAdminListInputDto body, Integer appid);

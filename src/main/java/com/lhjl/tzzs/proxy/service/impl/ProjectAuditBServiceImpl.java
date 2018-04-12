@@ -87,16 +87,11 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
     @Autowired
     private ProjectTeamMemberBusinessMapper projectTeamMemberBusinessMapper;
 
-    /**
-     * 读取项目审核列表接口
-     * @return
-     */
     @Override
     public CommonDto<PagingOutputDto<ProjectSendBAdminListOutputDto>> getProjectSendList(ProjectSendBAdminListInputDto body,Integer appid) {
         CommonDto<PagingOutputDto<ProjectSendBAdminListOutputDto>> result =  new CommonDto<>();
         
         PagingOutputDto<ProjectSendBAdminListOutputDto> pod=new PagingOutputDto<>();
-//        SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm");
         
         if (body.getCurrentPage() == null){
             body.setCurrentPage(defalutPageNum);
@@ -112,9 +107,9 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
 
         body.setStart( (long)(body.getCurrentPage() -1 ) * body.getPageSize() ); 
 
-//        List<Map<String,Object>> projectSendList = projectSendAuditBMapper.adminGetProjectSendList(body);
         List<ProjectSendBAdminListOutputDto> list = projectSendAuditBMapper.adminGetProjectSendList(body);
-        
+        Long total = projectSendAuditBMapper.adminGetProjectSendListCount(body);
+        //输出数据格式化
         if(list != null && list.size() !=0) {
         	for(ProjectSendBAdminListOutputDto e : list) {
         		
@@ -156,78 +151,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
         		
         	}
         }
-        Long total = projectSendAuditBMapper.adminGetProjectSendListCount(body);
         
-        /*if (projectSendList.size() > 0){
-            for (Map<String,Object> m:projectSendList){
-                ProjectSendBAdminListOutputDto projectSendBAdminListOutputDto = new ProjectSendBAdminListOutputDto();
-                projectSendBAdminListOutputDto.setId((Integer) m.get("id"));
-                
-                String projectSoruce = null;
-                Integer projectSoruceInt = (Integer)m.get("project_source");
-                if(projectSoruceInt != null) {
-                	switch (projectSoruceInt){
-	                    case 1:projectSoruce = "创业者提交";  
-	                    break;
-	                    default:projectSoruce="";
-                	}
-                }
-                projectSendBAdminListOutputDto.setProjectSource(projectSoruce);
-                
-                projectSendBAdminListOutputDto.setProjectShortName((String) m.get("short_name"));
-                projectSendBAdminListOutputDto.setProjectFullName((String)m.get("full_name"));
-                projectSendBAdminListOutputDto.setKernelDesc((String)m.get("kernel_desc"));
-                projectSendBAdminListOutputDto.setSegmentationName((String)m.get("segmentation_name"));
-                projectSendBAdminListOutputDto.setCity((String) m.get("city"));
-                projectSendBAdminListOutputDto.setUserName((String)m.get("actual_name"));
-                projectSendBAdminListOutputDto.setCompanyName((String)m.get("company_name"));
-                projectSendBAdminListOutputDto.setCompanyDuties((String)m.get("company_duties"));
-                projectSendBAdminListOutputDto.setPhonenumber((String)m.get("phonenumber"));
-                
-                String projectLevel = null;
-                Integer projectLevelInt = (Integer)m.get("rating_stage");
-                if(projectLevelInt != null) {
-                	switch (projectLevelInt){
-	                    case 0:projectLevel = "D级";
-	                    break;
-	                    case 1:projectLevel = "C级";
-	                        break;
-	                    case 2:projectLevel = "B级";
-	                        break;
-	                    case 3:projectLevel = "A级";
-	                        break;
-	                    case 4:projectLevel = "S级";
-	                        break;
-	                    default:projectLevel = "";
-                	}
-                }
-                
-                projectSendBAdminListOutputDto.setProjectLevel(projectLevel);
-                projectSendBAdminListOutputDto.setCreatTime((Date)m.get("create_time"));
-                
-                String auditStatus = null;
-                Integer auditStatusInt = (Integer)m.get("audit_status");
-                if(auditStatusInt!=null) {
-                	switch (auditStatusInt){
-	                    case 0:auditStatus = "待审核";
-	                    break;
-	                    case 1:auditStatus = "审核通过";
-	                    break;
-	                    case 2:auditStatus = "审核未通过";
-	                    break;
-	                    default : auditStatus = "";
-                	}
-                }
-                
-                projectSendBAdminListOutputDto.setAuditStatus(auditStatus);
-                projectSendBAdminListOutputDto.setAuditTime((Date)m.get("audit_time"));
-                
-                list.add(projectSendBAdminListOutputDto);
-            }
-        }
-*/
-
-
         pod.setList(list);
         pod.setCurrentPage(body.getCurrentPage());
         pod.setTotal(total);
