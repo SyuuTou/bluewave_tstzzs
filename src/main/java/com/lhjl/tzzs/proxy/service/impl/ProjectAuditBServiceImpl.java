@@ -98,8 +98,6 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
         PagingOutputDto<ProjectSendBAdminListOutputDto> pod=new PagingOutputDto<>();
 //        SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm");
         
-        List<ProjectSendBAdminListOutputDto> list = new ArrayList<>();
-
         if (body.getCurrentPage() == null){
             body.setCurrentPage(defalutPageNum);
         }
@@ -114,11 +112,53 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
 
         body.setStart( (long)(body.getCurrentPage() -1 ) * body.getPageSize() ); 
 
-        List<Map<String,Object>> projectSendList = projectSendAuditBMapper.adminGetProjectSendList(body);
+//        List<Map<String,Object>> projectSendList = projectSendAuditBMapper.adminGetProjectSendList(body);
+        List<ProjectSendBAdminListOutputDto> list = projectSendAuditBMapper.adminGetProjectSendList(body);
         
+        if(list != null && list.size() !=0) {
+        	for(ProjectSendBAdminListOutputDto e : list) {
+        		
+        		if(e.getProjectSourceFlag()!=null) {
+        			switch(e.getProjectSourceFlag()) {
+        			case 1:e.setProjectSource("创业者提交");
+        			break;
+                    default:e.setProjectLevel("");
+        			}
+        		}
+            
+        		if(e.getRatingStage() != null) {
+        			switch(e.getRatingStage()) {
+        			case 0:e.setProjectLevel("D级");
+                    break;
+                    case 1:e.setProjectLevel("C级");
+                        break;
+                    case 2:e.setProjectLevel("B级");
+                        break;
+                    case 3:e.setProjectLevel("A级");
+                        break;
+                    case 4:e.setProjectLevel("S级");
+                        break;
+                    default:e.setProjectLevel("");
+        			}
+        		}
+        		
+        		if(e.getAuditStatusFlag() != null) {
+        			switch(e.getAuditStatusFlag()) {
+        			case 0:e.setAuditStatus("待审核");
+                    	break;
+                    case 1:e.setAuditStatus("审核通过");
+                        break;
+                    case 2:e.setAuditStatus("审核未通过");
+                        break;
+                    default:e.setAuditStatus("");
+        			}
+        		}
+        		
+        	}
+        }
         Long total = projectSendAuditBMapper.adminGetProjectSendListCount(body);
         
-        if (projectSendList.size() > 0){
+        /*if (projectSendList.size() > 0){
             for (Map<String,Object> m:projectSendList){
                 ProjectSendBAdminListOutputDto projectSendBAdminListOutputDto = new ProjectSendBAdminListOutputDto();
                 projectSendBAdminListOutputDto.setId((Integer) m.get("id"));
@@ -185,7 +225,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
                 list.add(projectSendBAdminListOutputDto);
             }
         }
-
+*/
 
 
         pod.setList(list);

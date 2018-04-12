@@ -3,6 +3,7 @@ package com.lhjl.tzzs.proxy.mapper;
 
 import com.lhjl.tzzs.proxy.dto.ProjectSendAuditBListDto;
 import com.lhjl.tzzs.proxy.dto.ProjectSendBAdminListInputDto;
+import com.lhjl.tzzs.proxy.dto.ProjectSendBAdminListOutputDto;
 import com.lhjl.tzzs.proxy.model.ProjectSendAuditB;
 import com.lhjl.tzzs.proxy.utils.OwnerMapper;
 import org.apache.ibatis.annotations.Param;
@@ -38,7 +39,8 @@ public interface ProjectSendAuditBMapper extends OwnerMapper<ProjectSendAuditB> 
                                                      @Param("auditTimeOrder") Integer auditTimeOrder,@Param("auditTimeOrderDesc") Integer auditTimeOrderDesc,
                                                      @Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize);
    */
-    List<Map<String,Object>> adminGetProjectSendList(ProjectSendBAdminListInputDto body);
+//    List<Map<String,Object>> adminGetProjectSendList(ProjectSendBAdminListInputDto body);
+    List<ProjectSendBAdminListOutputDto> adminGetProjectSendList(ProjectSendBAdminListInputDto body);
 
 
     /*Integer adminGetProjectSendListCount(@Param("searchWord") String searchWord,@Param("begainTime") String begainTime,
