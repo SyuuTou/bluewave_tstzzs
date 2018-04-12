@@ -8,5 +8,5 @@
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="configuration_type" property="configurationType" jdbcType="INTEGER" />
     <result column="configuration_value" property="configurationValue" jdbcType="VARCHAR" />
-  </resultMap>
+  </resultMap>  
 </mapper>
