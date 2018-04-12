@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.lhjl.tzzs.proxy.model.AdminUser">
     <!--
       WARNING - @mbg.generated
-    -->
+    -->  
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="admin_type" jdbcType="INTEGER" property="adminType" />
