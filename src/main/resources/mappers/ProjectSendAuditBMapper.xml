@@ -17,40 +17,26 @@
     <result column="project_source" jdbcType="INTEGER" property="projectSource" />
     <result column="audit_introductions" jdbcType="VARCHAR" property="auditIntroductions"/>
   </resultMap>
-  <select id="searchProjectSendAuditB" resultMap="BaseResultMap">
-    SELECT * FROM project_send_audit_b
-    where user_id = #{userid}
-    and appid = #{appid}
-    and audit_status = 0
-    order by create_time desc
-    limit 0,1;
-  </select>
-
-  <resultMap id="AdutiList" type="com.lhjl.tzzs.proxy.dto.ProjectSendAuditBListDto">
-    <!--
-      WARNING - @mbg.generated
-    -->
+  
+  <resultMap id="CollectProjectAuditListOutputDto" type="com.lhjl.tzzs.proxy.dto.ProjectSendBAdminListOutputDto">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="uid" jdbcType="INTEGER" property="uid" />
-    <result column="actual_name" jdbcType="VARCHAR" property="actualName" />
-    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="audit_status" jdbcType="INTEGER" property="auditStatus" />
-    <result column="prepare_id" jdbcType="INTEGER" property="prepareId" />
+    <result column="project_source" jdbcType="INTEGER" property="projectSourceFlag" />
+    <result column="short_name" jdbcType="VARCHAR" property="projectShortName" />
+    <result column="full_name" jdbcType="VARCHAR" property="projectFullName" />
+    <result column="kernel_desc" jdbcType="VARCHAR" property="kernelDesc" />
+    <result column="segmentation_name" jdbcType="VARCHAR" property="segmentationName"/>
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="actual_name" jdbcType="VARCHAR" property="userName" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_duties" jdbcType="VARCHAR" property="companyDuties" />
+    <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber" />
+    <result column="rating_stage" jdbcType="INTEGER" property="ratingStage"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="creatTime"/>
+    <result column="audit_status" jdbcType="INTEGER" property="auditStatusFlag"/>
+    <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime"/>
+    
   </resultMap>
-  <select id="searchProjectSendAuditBList" resultMap="AdutiList">
-    SELECT psab.id,u.ID as uid,u.actual_name,psb.short_name,psb.create_time,psab.audit_status,psab.prepare_id
-    FROM project_send_audit_b psab
-    left join users u on psab.user_id = u.ID
-    left join project_send_b psb on psab.project_send_b_id = psb.id
-    where psab.appid = #{appid}
-    <if test="shortName != null and shortName !=''">
-      and psb.short_name like CONCAT('%',#{shortName},'%')
-    </if>
-    order by psab.create_time desc
-    limit #{startPage},#{pageSize}
-  </select>
-
+  
   <select id="adminGetProjectSendList" resultType="java.util.HashMap">
     SELECT psab.id,psab.project_source,psb.short_name,psb.full_name,psb.kernel_desc,
     psb.city,u.actual_name,u.company_name,u.company_duties,u.phonenumber,aprl.rating_stage,psb.create_time,psab.audit_status,psab.audit_time,
@@ -117,6 +103,43 @@
       and psab.project_source =#{projetcSource}
     </if>
   </select>
+  
+  <select id="searchProjectSendAuditB" resultMap="BaseResultMap">
+    SELECT * FROM project_send_audit_b
+    where user_id = #{userid}
+    and appid = #{appid}
+    and audit_status = 0
+    order by create_time desc
+    limit 0,1;
+  </select>
+
+  <resultMap id="AdutiList" type="com.lhjl.tzzs.proxy.dto.ProjectSendAuditBListDto">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="actual_name" jdbcType="VARCHAR" property="actualName" />
+    <result column="short_name" jdbcType="VARCHAR" property="shortName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="audit_status" jdbcType="INTEGER" property="auditStatus" />
+    <result column="prepare_id" jdbcType="INTEGER" property="prepareId" />
+  </resultMap>
+  <select id="searchProjectSendAuditBList" resultMap="AdutiList">
+    SELECT psab.id,u.ID as uid,u.actual_name,psb.short_name,psb.create_time,psab.audit_status,psab.prepare_id
+    FROM project_send_audit_b psab
+    left join users u on psab.user_id = u.ID
+    left join project_send_b psb on psab.project_send_b_id = psb.id
+    where psab.appid = #{appid}
+    <if test="shortName != null and shortName !=''">
+      and psb.short_name like CONCAT('%',#{shortName},'%')
+    </if>
+    order by psab.create_time desc
+    limit #{startPage},#{pageSize}
+  </select>
+
+  
+  
 
   <select id="searchProjectSendLogoInfo" resultType="java.util.HashMap">
     SELECT psab.id,psab.audit_status,psab.project_source,psb.short_name,psb.project_logo,u.actual_name,u.id as userid

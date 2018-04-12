@@ -96,7 +96,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
         CommonDto<PagingOutputDto<ProjectSendBAdminListOutputDto>> result =  new CommonDto<>();
         
         PagingOutputDto<ProjectSendBAdminListOutputDto> pod=new PagingOutputDto<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm");
+//        SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm");
         
         List<ProjectSendBAdminListOutputDto> list = new ArrayList<>();
 
@@ -163,10 +163,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
                 }
                 
                 projectSendBAdminListOutputDto.setProjectLevel(projectLevel);
-                
-                if (m.get("create_time") != null){
-                	projectSendBAdminListOutputDto.setCreatTime(sdf.format((Date)m.get("create_time")));
-                }
+                projectSendBAdminListOutputDto.setCreatTime((Date)m.get("create_time"));
                 
                 String auditStatus = null;
                 Integer auditStatusInt = (Integer)m.get("audit_status");
@@ -183,9 +180,7 @@ public class ProjectAuditBServiceImpl implements ProjectAuditBService{
                 }
                 
                 projectSendBAdminListOutputDto.setAuditStatus(auditStatus);
-                if (m.get("audit_time") != null){
-                	projectSendBAdminListOutputDto.setAuditTime(sdf.format((Date)m.get("audit_time")));
-                }
+                projectSendBAdminListOutputDto.setAuditTime((Date)m.get("audit_time"));
                 
                 list.add(projectSendBAdminListOutputDto);
             }
