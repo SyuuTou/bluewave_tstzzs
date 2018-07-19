@@ -48,6 +48,7 @@ public class TestDemo {
 		try {
 			result = investorSegmentationService.edit(body);
 			System.out.println("qwe");
+			System.out.println("asdasd");
 		}catch(Exception e) {
 			return "异常发生";
 		}
@@ -60,7 +61,7 @@ public class TestDemo {
 		Integer ids=-1;
 		try{
 			 ids = investmentInstitutionsMapper.selectByCompanyName("隆领投资");
-			
+			System.out.println("测试");
 		}catch(Exception e) {
 			e.printStackTrace();
 			return "false";
