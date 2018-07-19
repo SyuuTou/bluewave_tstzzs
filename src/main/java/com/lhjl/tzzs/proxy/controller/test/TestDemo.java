@@ -47,6 +47,7 @@ public class TestDemo {
 		Integer result=-1;
 		try {
 			result = investorSegmentationService.edit(body);
+			System.out.println("qwe");
 		}catch(Exception e) {
 			return "异常发生";
 		}
