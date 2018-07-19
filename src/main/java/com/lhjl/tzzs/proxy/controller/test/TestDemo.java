@@ -61,7 +61,7 @@ public class TestDemo {
 		Integer ids=-1;
 		try{
 			 ids = investmentInstitutionsMapper.selectByCompanyName("隆领投资");
-			System.out.println("测试");
+			System.out.println("测试的接口实打实大脑壳sss");
 		}catch(Exception e) {
 			e.printStackTrace();
 			return "false";
